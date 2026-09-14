@@ -79,26 +79,39 @@ Memória entre sessões. Atualizar depois de cada mudança.
   rubber-band, `Grace()` para dash/blink/spawn). Mapa placeholder sem sombras nas paredes.
   `CHECKLIST_PUBLICACAO.md` criado.
 
+- 2026-09-14 — Núcleo mudou para **MAPA LIVRE** (`MatchConfig.FreeRoam = true`): sem fila/rounds,
+  combate sempre ligado, kill dá moedas na hora (`DataService.RecordKill/RecordDeath`), placar
+  por `SessionKills`. Loop de rounds preservado para modos futuros.
+- 2026-09-14 — Mapa `Workspace.Sahur.Arena` (src/workspace/Arena.model.json): 320×320, praça,
+  anel, 8 pilares, 4 plataformas com rampas, coberturas, muros, 12 SpawnLocations.
+  `Workspace.Lobby` removido.
+- 2026-09-14 — Bugs do teste: regen padrão do Roblox removida (`StarterCharacterScripts.Health`
+  vazio) e substituída por regen fora de combate (6 s sem dano, 3 HP/s); block com "intenção"
+  (ativa sozinho ao sair do cooldown/stun se F continuar pressionado); seleção de personagem
+  movida para uma faixa no topo (não bloqueia mais o shift lock); `StarterGui.ShowDevelopmentGui
+  = false` via project.json.
+- 2026-09-14 — Game feel: knockback no finisher do combo e no GroundSlam (`NotifyKnockback`),
+  números de dano flutuantes, tremor leve de câmera ao apanhar, indicador de combo, banner
+  "Você eliminou X". `FX.Push/Shake/DamageNumber`.
+
 ## Em andamento
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.
 - Receber ids das animações/sons da equipe e preencher `src/assets/Animations.model.json`
   e `Sounds.model.json`; VFX por nome no Studio (lista em CHECKLIST_PUBLICACAO.md §1).
-- Levantamento do mapa/lobby reais no Studio (posição do `Lobby.LobbySpawn`, mapa em
-  `ServerStorage.Maps`).
+- Avaliar o mapa `Sahur.Arena` no Team Test e ajustar layout/escala.
 
 ## Próximos passos (ordem sugerida)
-1. **Sensação de combate (game feel)**: knockback no finisher e no GroundSlam (servidor manda
-   impulso, cliente aplica; `AntiExploit.Grace`), hitstop curto, tremor de câmera leve,
-   dano flutuante (números) sobre a vítima, indicador de combo na HUD.
-2. **Espectador**: eliminado assiste a câmera de quem ainda luta até o fim do round
-   (troca com Mouse1/setas), em vez de esperar no lobby.
+1. **Game feel, parte 2**: hitstop curto, trilha de dash, som de "whoosh" no finisher,
+   feedback de energia cheia (ult pronta).
+2. **Mapa**: detalhar `Sahur.Arena` (props, iluminação, zonas), ou substituir pelo mapa
+   da equipe mantendo `Spawns`.
 3. **Mobile**: botões na tela para block e Q/E/R (hoje toque = soco); testar no
    Device Emulator.
 4. **Mais personagens** (escalar `CharacterDefs`): 3º e 4º estilos com novos tipos de efeito
    (projétil, contra-ataque, cura), preços de desbloqueio balanceados.
-5. **Modos Duel (1v1) e Teams (2v2)**: seleção de modo na fila (ou rotação), cor de time na
-   HUD/overhead, sem dano entre aliados (`TeamId` já existe no MatchService).
+5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
+   desafio, arena separada (`ServerStorage.Maps`), `FreeRoam` continua para os demais.
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. **Lobby vivo**: dummies R6 para treinar (Hitbox já aceita NPC), placar de líderes
