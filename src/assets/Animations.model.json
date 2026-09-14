@@ -1,0 +1,114 @@
+{
+  "className": "Folder",
+  "children": [
+    {
+      "name": "Shared",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "M1_1",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "M1_2",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "M1_3",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "M1_4",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Block",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Parry",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Hit",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Brawler",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "ShoulderBash",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "GroundSlam",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Rampage",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Swift",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "Blink",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "SweepKick",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Tempest",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        }
+      ]
+    }
+  ]
+}

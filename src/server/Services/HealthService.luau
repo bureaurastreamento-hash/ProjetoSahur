@@ -1,0 +1,171 @@
+--!strict
+--[[
+	HealthService (servidor)
+	Autoridade sobre vida: vida máxima, dano, cura, morte, respawn.
+	Usa o Humanoid como armazenamento (replica de graça pro cliente), mas
+	TODA alteração passa por aqui. Nenhum outro script deve mexer em Humanoid.Health.
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
+local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+
+local HealthService = {}
+
+local ATTR_LAST_ATTACKER = "LastAttackerUserId"
+local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
+local KILL_CREDIT_WINDOW = 8 -- segundos que o último atacante recebe crédito do kill
+
+local notifyHealth: RemoteEvent
+local notifyKill: RemoteEvent
+
+--- Disparado no servidor quando um jogador morre: (victim: Player, killer: Player?)
+HealthService.Died = Instance.new("BindableEvent")
+
+--- Jogadores com atributo CanFight == false não dão nem recebem dano (ex.: lobby).
+function HealthService.CanFight(player: Player?): boolean
+	return player == nil or player:GetAttribute("CanFight") ~= false
+end
+
+-- ---------------------------------------------------------------------------
+-- Helpers
+-- ---------------------------------------------------------------------------
+
+local function getHumanoid(character: Model?): Humanoid?
+	if not character then
+		return nil
+	end
+	return character:FindFirstChildOfClass("Humanoid")
+end
+
+function HealthService.IsAlive(character: Model?): boolean
+	local humanoid = getHumanoid(character)
+	return humanoid ~= nil and humanoid.Health > 0
+end
+
+local function setupCharacter(player: Player, character: Model)
+	local humanoid = character:WaitForChild("Humanoid", 5) :: Humanoid?
+	if not humanoid then
+		warn(("[HealthService] %s spawnou sem Humanoid"):format(player.Name))
+		return
+	end
+
+	humanoid.MaxHealth = CombatConfig.MaxHealth
+	humanoid.Health = CombatConfig.MaxHealth
+	humanoid.WalkSpeed = CombatConfig.WalkSpeed
+	humanoid.BreakJointsOnDeath = false
+
+	character:SetAttribute(ATTR_LAST_ATTACKER, nil)
+	character:SetAttribute(ATTR_LAST_ATTACK_TIME, nil)
+
+	humanoid.Died:Once(function()
+		local killer: Player? = nil
+		local lastId = character:GetAttribute(ATTR_LAST_ATTACKER)
+		local lastTime = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
+		if typeof(lastId) == "number" and typeof(lastTime) == "number" and (os.clock() - lastTime) <= KILL_CREDIT_WINDOW then
+			killer = Players:GetPlayerByUserId(lastId)
+		end
+		-- TODO(launch): reduzir log
+		print(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
+		notifyKill:FireAllClients(killer, player)
+		HealthService.Died:Fire(player, killer)
+	end)
+
+	-- TODO(launch): reduzir log
+	print(("[HealthService] %s pronto: %d HP"):format(player.Name, CombatConfig.MaxHealth))
+end
+
+-- ---------------------------------------------------------------------------
+-- API pública (usada por outros services)
+-- ---------------------------------------------------------------------------
+
+--- Aplica dano. Retorna o dano efetivamente aplicado (0 se alvo inválido/morto).
+function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Player?): number
+	local humanoid = getHumanoid(victim)
+	if not humanoid or humanoid.Health <= 0 or amount <= 0 then
+		return 0
+	end
+	if not HealthService.CanFight(attacker) or not HealthService.CanFight(Players:GetPlayerFromCharacter(victim)) then
+		return 0
+	end
+
+	local before = humanoid.Health
+	humanoid.Health = math.max(0, before - amount)
+	local dealt = before - humanoid.Health
+
+	if attacker then
+		victim:SetAttribute(ATTR_LAST_ATTACKER, attacker.UserId)
+		victim:SetAttribute(ATTR_LAST_ATTACK_TIME, os.clock())
+	end
+
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	if victimPlayer then
+		notifyHealth:FireClient(victimPlayer, humanoid.Health, humanoid.MaxHealth)
+	end
+
+	return dealt
+end
+
+--- Cura. Retorna quanto curou de fato.
+function HealthService.Heal(target: Model, amount: number): number
+	local humanoid = getHumanoid(target)
+	if not humanoid or humanoid.Health <= 0 or amount <= 0 then
+		return 0
+	end
+	local before = humanoid.Health
+	humanoid.Health = math.min(humanoid.MaxHealth, before + amount)
+	local healed = humanoid.Health - before
+
+	local targetPlayer = Players:GetPlayerFromCharacter(target)
+	if targetPlayer then
+		notifyHealth:FireClient(targetPlayer, humanoid.Health, humanoid.MaxHealth)
+	end
+	return healed
+end
+
+--- Mata imediatamente (sem crédito de kill).
+function HealthService.Kill(target: Model)
+	local humanoid = getHumanoid(target)
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Ciclo de vida
+-- ---------------------------------------------------------------------------
+
+function HealthService.Init()
+	notifyHealth = Remotes.GetEvent(Remotes.Events.NotifyHealth)
+	notifyKill = Remotes.GetEvent(Remotes.Events.NotifyKill)
+	Players.RespawnTime = CombatConfig.RespawnTime
+end
+
+function HealthService.Start()
+	local function onPlayer(player: Player)
+		player.CharacterAdded:Connect(function(character)
+			setupCharacter(player, character)
+		end)
+		if player.Character then
+			setupCharacter(player, player.Character)
+		end
+	end
+
+	Players.PlayerAdded:Connect(onPlayer)
+	for _, player in Players:GetPlayers() do
+		onPlayer(player)
+	end
+
+	local requestRespawn = Remotes.GetEvent(Remotes.Events.RequestRespawn)
+	requestRespawn.OnServerEvent:Connect(function(player)
+		-- Só permite respawn manual se estiver morto (evita "reset" como fuga de combate)
+		if not HealthService.IsAlive(player.Character) then
+			player:LoadCharacter()
+		end
+	end)
+end
+
+return HealthService

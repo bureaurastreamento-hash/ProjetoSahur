@@ -1,0 +1,49 @@
+{
+  "className": "Part",
+  "properties": {
+    "Name": "Placeholder",
+    "Anchored": true,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "Transparency": 1,
+    "Size": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Emitter",
+      "className": "ParticleEmitter",
+      "properties": {
+        "Rate": 0,
+        "Lifetime": {
+          "NumberRange": [
+            0.3,
+            0.7
+          ]
+        },
+        "Speed": {
+          "NumberRange": [
+            12,
+            25
+          ]
+        },
+        "SpreadAngle": {
+          "Vector2": [
+            180,
+            180
+          ]
+        },
+        "LightEmission": 1,
+        "Brightness": 3,
+        "Enabled": true
+      },
+      "attributes": {
+        "EmitCount": 40
+      }
+    }
+  ]
+}
