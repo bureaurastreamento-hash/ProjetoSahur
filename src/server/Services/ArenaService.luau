@@ -10,6 +10,9 @@
 
 local ServerStorage = game:GetService("ServerStorage")
 local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Log = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("Log"))
 
 local ArenaService = {}
 
@@ -81,8 +84,7 @@ function ArenaService.LoadNextMap(mapName: string?): Model?
 	map.Parent = Workspace
 	current = map
 
-	-- TODO(launch): reduzir log
-	print(("[ArenaService] mapa carregado: %s (%d spawns)"):format(template.Name, #ArenaService.GetSpawnCFrames()))
+	Log.debug(("[ArenaService] mapa carregado: %s (%d spawns)"):format(template.Name, #ArenaService.GetSpawnCFrames()))
 	return map
 end
 
@@ -144,8 +146,7 @@ function ArenaService.Init()
 	mapsFolder = ServerStorage:WaitForChild("Maps") :: Folder
 	ArenaService.Unload()
 	refreshRotation()
-	-- TODO(launch): reduzir log
-	print(("[ArenaService] %d mapa(s): %s"):format(#rotation, table.concat(ArenaService.GetMapNames(), ", ")))
+	Log.debug(("[ArenaService] %d mapa(s): %s"):format(#rotation, table.concat(ArenaService.GetMapNames(), ", ")))
 end
 
 return ArenaService

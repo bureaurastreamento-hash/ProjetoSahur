@@ -67,6 +67,10 @@
       },
       "$ignoreUnknownInstances": true
     },
-    "$ignoreUnknownInstances": true
+    "$ignoreUnknownInstances": true,
+    "StarterGui": {
+      "$path": "src/ui",
+      "$ignoreUnknownInstances": true
+    }
   }
 }

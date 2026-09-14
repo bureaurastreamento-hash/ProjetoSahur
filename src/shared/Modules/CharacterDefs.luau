@@ -37,6 +37,7 @@ export type AbilityDef = {
 export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
+	UnlockCost: number, -- moedas; 0 = todos começam com ele
 	Abilities: { AbilityDef }, -- índice = slot (1, 2, 3...)
 }
 
@@ -54,6 +55,7 @@ CharacterDefs.Characters = {
 	Brawler = {
 		Id = "Brawler",
 		DisplayName = "Brawler",
+		UnlockCost = 0,
 		Abilities = {
 			{
 				Id = "ShoulderBash",
@@ -85,6 +87,7 @@ CharacterDefs.Characters = {
 	Swift = {
 		Id = "Swift",
 		DisplayName = "Swift",
+		UnlockCost = 100,
 		Abilities = {
 			{
 				Id = "Blink",

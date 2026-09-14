@@ -14,7 +14,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Log = require(Modules:WaitForChild("Log"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
+local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+
+local queueLimiter = RateLimiter.new(2, 1)
 
 local LobbyService = {}
 
@@ -40,8 +44,7 @@ local function setInQueue(player: Player, inQueue: boolean)
 	end
 	player:SetAttribute("InQueue", inQueue)
 	LobbyService.QueueChanged:Fire(#queueOrder)
-	-- TODO(launch): reduzir log
-	print(("[LobbyService] %s %s da fila (%d na fila)"):format(player.Name, inQueue and "entrou" or "saiu", #queueOrder))
+	Log.debug(("[LobbyService] %s %s da fila (%d na fila)"):format(player.Name, inQueue and "entrou" or "saiu", #queueOrder))
 end
 
 --- Jogadores na fila, em ordem de chegada.
@@ -98,6 +101,9 @@ end
 
 function LobbyService.Start()
 	Remotes.GetEvent(Remotes.Events.RequestQueue).OnServerEvent:Connect(function(player, inQueue)
+		if not queueLimiter:Allow(player) then
+			return
+		end
 		if typeof(inQueue) ~= "boolean" then
 			return
 		end

@@ -1,7 +1,7 @@
 {
   "className": "Part",
   "properties": {
-    "Name": "Placeholder",
+    "Name": "Parry",
     "Anchored": true,
     "CanCollide": false,
     "CanQuery": false,
@@ -22,14 +22,14 @@
         "Rate": 0,
         "Lifetime": {
           "NumberRange": [
-            0.3,
-            0.7
+            0.2,
+            0.5
           ]
         },
         "Speed": {
           "NumberRange": [
-            12,
-            25
+            14,
+            26
           ]
         },
         "SpreadAngle": {
@@ -39,11 +39,32 @@
           ]
         },
         "LightEmission": 1,
-        "Brightness": 3,
-        "Enabled": true
+        "Brightness": 2,
+        "Color": {
+          "ColorSequence": {
+            "keypoints": [
+              {
+                "time": 0,
+                "color": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              {
+                "time": 1,
+                "color": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            ]
+          }
+        }
       },
       "attributes": {
-        "EmitCount": 40
+        "EmitCount": 30
       }
     }
   ]

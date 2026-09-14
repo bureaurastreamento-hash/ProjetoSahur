@@ -16,10 +16,14 @@ local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
+local DataService = require(script.Parent:WaitForChild("DataService"))
+local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 
 local AbilityService = {}
 
@@ -30,7 +34,6 @@ type PlayerState = {
 	busyUntil: number,
 	damageMultiplier: number,
 	damageMultiplierUntil: number,
-	lastRequestAt: number,
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -39,8 +42,9 @@ local notifyAbility: RemoteEvent
 local notifyAbilityCooldown: RemoteEvent
 local notifyAbilityDenied: RemoteEvent
 
-local MIN_REQUEST_INTERVAL = 0.05
 local MAX_AREA_TARGETS = 8
+local abilityLimiter = RateLimiter.new(8, 1)
+local selectLimiter = RateLimiter.new(2, 1)
 
 -- ---------------------------------------------------------------------------
 -- Estado
@@ -54,7 +58,6 @@ local function newState(characterId: string?): PlayerState
 		busyUntil = 0,
 		damageMultiplier = 1,
 		damageMultiplierUntil = 0,
-		lastRequestAt = -math.huge,
 	}
 end
 
@@ -115,21 +118,32 @@ end
 
 local effects: { [string]: (Player, Model, CharacterDefs.AbilityDef) -> () } = {}
 
--- Movimento é feito no cliente (dono da física); dano checado aqui ao final.
+-- Movimento é feito no cliente (dono da física); dano checado aqui, amostrando a
+-- hitbox várias vezes durante o dash (cada alvo é atingido no máximo uma vez).
+local DASH_SAMPLE_INTERVAL = 0.05
 effects.Dash = function(player, character, ability)
 	local e = ability.Effect
+	AntiExploitService.Grace(player, e.Duration + 0.5)
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", {
 		Speed = e.Speed,
 		Duration = e.Duration,
 	})
-	task.delay(e.Duration, function()
-		if not stillValid(player, character) or CombatService.IsStunned(player) then
-			return
+	task.spawn(function()
+		local hitAlready: { [Model]: boolean } = {}
+		local endsAt = os.clock() + e.Duration + DASH_SAMPLE_INTERVAL
+		while os.clock() < endsAt do
+			if not stillValid(player, character) or CombatService.IsStunned(player) then
+				return
+			end
+			for _, victim in Hitbox.InFront(character, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
+				if not hitAlready[victim] then
+					hitAlready[victim] = true
+					CombatService.ResolveHit(player, character, victim, e.Damage, false)
+					notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit")
+				end
+			end
+			task.wait(DASH_SAMPLE_INTERVAL)
 		end
-		for _, victim in Hitbox.InFront(character, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
-			CombatService.ResolveHit(player, character, victim, e.Damage, false)
-		end
-		notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit")
 	end)
 end
 
@@ -139,6 +153,7 @@ effects.Teleport = function(player, character, ability)
 	if not root then
 		return
 	end
+	AntiExploitService.Grace(player, 1)
 	local direction = root.CFrame.LookVector * e.Distance
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
@@ -190,18 +205,16 @@ end
 -- ---------------------------------------------------------------------------
 
 local function deny(player: Player, slot: number, reason: string)
-	-- TODO(launch): reduzir log
-	print(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
+	Log.debug(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
 	notifyAbilityDenied:FireClient(player, slot, reason)
 end
 
 local function onRequestAbility(player: Player, slot: any)
-	local state = getState(player)
-	local now = os.clock()
-	if now - state.lastRequestAt < MIN_REQUEST_INTERVAL then
+	if not abilityLimiter:Allow(player) then
 		return
 	end
-	state.lastRequestAt = now
+	local state = getState(player)
+	local now = os.clock()
 
 	if typeof(slot) ~= "number" or slot ~= math.floor(slot) or slot < 1 or slot > 8 then
 		return
@@ -243,8 +256,7 @@ local function onRequestAbility(player: Player, slot: any)
 	state.busyUntil = now + ability.CastTime
 	notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
 
-	-- TODO(launch): reduzir log
-	print(("[AbilityService] %s usou %s.%s (energia restante %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
+	Log.debug(("[AbilityService] %s usou %s.%s (energia restante %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
 	local ok, err = pcall(handler :: any, player, character, ability)
 	if not ok then
@@ -253,6 +265,9 @@ local function onRequestAbility(player: Player, slot: any)
 end
 
 local function onRequestSelectCharacter(player: Player, characterId: any)
+	if not selectLimiter:Allow(player) then
+		return
+	end
 	if typeof(characterId) ~= "string" or not CharacterDefs.Get(characterId) then
 		return
 	end
@@ -263,12 +278,15 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	if player:GetAttribute("InMatch") == true then
 		return -- troca só fora do round
 	end
+	if not DataService.HasCharacter(player, characterId) then
+		Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied):FireClient(player, characterId, "locked")
+		return
+	end
 	state.characterId = characterId
 	state.cooldownReadyAt = {}
 	state.damageMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
-	-- TODO(launch): reduzir log
-	print(("[AbilityService] %s agora é %s"):format(player.Name, characterId))
+	Log.debug(("[AbilityService] %s agora é %s"):format(player.Name, characterId))
 end
 
 -- ---------------------------------------------------------------------------

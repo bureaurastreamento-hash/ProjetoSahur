@@ -13,12 +13,18 @@
 	├── Animations
 	│   ├── Shared         (Animation) M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit
 	│   └── <CharacterId>  (Animation) <AbilityId>   ex: Brawler/ShoulderBash
-	└── VFX
-	    ├── Shared         Placeholder
-	    └── <CharacterId>  (Model|BasePart|Attachment) <AbilityId>, <AbilityId>_Hit
+	├── VFX
+	│   ├── Shared         Hit, Block, Parry, Placeholder
+	│   └── <CharacterId>  (Model|BasePart|Attachment) <AbilityId>, <AbilityId>_Hit
+	└── Sounds
+	    ├── Shared         (Sound) Punch_Whoosh, Punch_Hit, Block, Parry, Death
+	    ├── Match          (Sound) RoundStart, Victory, Defeat
+	    └── <CharacterId>  (Sound) <AbilityId>, <AbilityId>_Hit
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Log = require(script.Parent:WaitForChild("Log"))
 
 local Assets = {}
 
@@ -39,8 +45,7 @@ end
 local function warnOnce(path: string)
 	if not warned[path] then
 		warned[path] = true
-		-- TODO(launch): reduzir log
-		warn(("[Assets] não encontrado: ReplicatedStorage.%s.%s (seguindo sem)"):format(ROOT, path))
+		Log.debug(("[Assets] não encontrado: ReplicatedStorage.%s.%s (seguindo sem)"):format(ROOT, path))
 	end
 end
 
@@ -62,6 +67,16 @@ function Assets.GetVFX(folder: string, name: string): Instance?
 	end
 	warnOnce(("VFX.%s.%s (usando Placeholder)"):format(folder, name))
 	return find("VFX", "Shared", "Placeholder")
+end
+
+--- Sound em Assets.Sounds.<folder>.<name>. nil se não existir ou se o SoundId estiver vazio.
+function Assets.GetSound(folder: string, name: string): Sound?
+	local inst = find("Sounds", folder, name)
+	if inst and inst:IsA("Sound") and inst.SoundId ~= "" then
+		return inst
+	end
+	warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
+	return nil
 end
 
 --- Existe VFX específico (sem fallback)?

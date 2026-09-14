@@ -47,7 +47,6 @@ for name, service in loaded do
 	end
 end
 
--- TODO(launch): reduzir log
 local count = 0
 for _ in loaded do
 	count += 1

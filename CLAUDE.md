@@ -42,14 +42,27 @@ ainda não existe, mesmo que pareça óbvio.
 - Shift Lock nativo não é totalmente controlável via script; ajustes finos de câmera/mouse
   às vezes exigem configuração manual em StarterPlayer dentro do Studio, não só código.
 
+## Como eu (Claude) verifico coisas sem o Studio aberto na minha frente
+- Análise estática: `tools/analisar.sh` (luau-lsp com tipos do Roblox). Rodar após cada mudança.
+- Output do Studio: `~/.var/app/org.vinegarhq.Vinegar/data/vinegar/appdata/Roblox/logs/*_last.log`
+  (linhas `[FLog::Output]`, `[FLog::Error]`); o mais recente é a sessão atual do Studio.
+- Árvore que o Rojo está servindo: API msgpack em `http://localhost:34872/api/rojo` e
+  `/api/read/<id>` (decoder em scratchpad/rojotree.py quando existir).
+- `ss -tnp | grep 34872` mostra se o Studio está conectado ao Rojo.
+- O place no Studio é o publicado (placeId 85844807133499, ~5.5k instâncias, mapa da equipe).
+  O `default.project.json` DEVE continuar 100% aditivo (`$ignoreUnknownInstances` em tudo).
+
 ## Fluxo de trabalho
 - Trabalhe em mudanças pequenas e testáveis, um sistema de cada vez.
 - Depois de cada mudança, explique em português, de forma direta, o que mudou e
   exatamente o que eu devo testar no Studio antes de seguir para o próximo passo.
 - Mantenha um arquivo `PROGRESSO.md` atualizado com o que foi feito, o que está em
   andamento e o que falta, isso serve de memória entre sessões futuras.
-- Logs verbosos (print/warn) são bem-vindos durante o desenvolvimento; deixe marcado
-  com TODO o que deve ser reduzido perto do lançamento.
+- Logs: use `Log.debug(...)` (só aparece em Studio) para verboso e `warn` para problemas.
+  Nunca `print` solto fora do boot.
+- Feedback visual/sonoro no cliente passa por `FX.luau` (tem tetos de performance);
+  assets por nome via `Assets.luau`. Quem mover personagem no servidor chama
+  `AntiExploitService.Grace()` antes.
 - Nunca rode comandos destrutivos de git (reset --hard, force push, etc) sem perguntar
   antes.
 

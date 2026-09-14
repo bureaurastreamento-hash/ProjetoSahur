@@ -11,7 +11,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+
+local respawnLimiter = RateLimiter.new(1, 1)
+local timeLimiter = RateLimiter.new(2, 1)
 
 local HealthService = {}
 
@@ -68,14 +73,13 @@ local function setupCharacter(player: Player, character: Model)
 		if typeof(lastId) == "number" and typeof(lastTime) == "number" and (os.clock() - lastTime) <= KILL_CREDIT_WINDOW then
 			killer = Players:GetPlayerByUserId(lastId)
 		end
-		-- TODO(launch): reduzir log
-		print(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
+		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
 		notifyKill:FireAllClients(killer, player)
 		HealthService.Died:Fire(player, killer)
 	end)
 
-	-- TODO(launch): reduzir log
-	print(("[HealthService] %s pronto: %d HP"):format(player.Name, CombatConfig.MaxHealth))
+	notifyHealth:FireClient(player, humanoid.Health, humanoid.MaxHealth)
+	Log.debug(("[HealthService] %s pronto: %d HP"):format(player.Name, CombatConfig.MaxHealth))
 end
 
 -- ---------------------------------------------------------------------------
@@ -161,11 +165,21 @@ function HealthService.Start()
 
 	local requestRespawn = Remotes.GetEvent(Remotes.Events.RequestRespawn)
 	requestRespawn.OnServerEvent:Connect(function(player)
+		if not respawnLimiter:Allow(player) then
+			return
+		end
 		-- Só permite respawn manual se estiver morto (evita "reset" como fuga de combate)
 		if not HealthService.IsAlive(player.Character) then
 			player:LoadCharacter()
 		end
 	end)
+
+	Remotes.GetFunction(Remotes.Functions.FetchServerTime).OnServerInvoke = function(player)
+		if not timeLimiter:Allow(player) then
+			return nil
+		end
+		return workspace:GetServerTimeNow()
+	end
 end
 
 return HealthService

@@ -17,10 +17,13 @@ local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Log = require(Modules:WaitForChild("Log"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local LobbyService = require(script.Parent:WaitForChild("LobbyService"))
 local ArenaService = require(script.Parent:WaitForChild("ArenaService"))
+local DataService = require(script.Parent:WaitForChild("DataService"))
+local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 
 local MatchService = {}
 
@@ -55,8 +58,7 @@ end
 local function setState(newState: string, data: { [string]: any })
 	state = newState
 	data.state = newState
-	-- TODO(launch): reduzir log
-	print(("[MatchService] -> %s"):format(newState))
+	Log.debug(("[MatchService] -> %s"):format(newState))
 	notifyMatchState:FireAllClients(newState, data)
 end
 
@@ -132,6 +134,21 @@ local function checkWinner(r: Round, timedOut: boolean): number?
 	return nil
 end
 
+--- Placar serializável para a HUD: { {name, kills, alive, teamId}, ... }
+local function scoresData(r: Round): { { [string]: any } }
+	local out = {}
+	for _, p in r.participants do
+		table.insert(out, { name = p.player.Name, kills = p.kills, alive = p.alive, teamId = p.teamId })
+	end
+	table.sort(out, function(a, b)
+		if a.kills ~= b.kills then
+			return a.kills > b.kills
+		end
+		return a.name < b.name
+	end)
+	return out
+end
+
 local function winnerNames(r: Round, teamId: number?): { string }
 	local names = {}
 	if not teamId or teamId < 0 then
@@ -167,6 +184,7 @@ local function eliminate(participant: Participant, killer: Player?)
 			endsAt = serverTimeIn(round.endsAt - os.clock()),
 			mapName = round.mapName,
 			alive = countAlive(round),
+			scores = scoresData(round),
 			eliminated = participant.player.Name,
 		})
 	end
@@ -204,6 +222,7 @@ local function spawnParticipant(participant: Participant, cf: CFrame)
 	local character = player.Character or player.CharacterAdded:Wait()
 	character:WaitForChild("HumanoidRootPart", 5)
 	task.wait() -- deixa o spawn padrão assentar antes de mover
+	AntiExploitService.Grace(player, 2)
 	character:PivotTo(cf)
 end
 
@@ -259,6 +278,7 @@ local function startRound(players: { Player }): Round?
 		endsAt = serverTimeIn(MatchConfig.RoundTime),
 		mapName = r.mapName,
 		alive = countAlive(r),
+		scores = scoresData(r),
 		mode = MatchConfig.Mode,
 	})
 	return r
@@ -282,15 +302,23 @@ local function endingPhase(r: Round)
 		p.player:SetAttribute("CanFight", false)
 	end
 	local names = winnerNames(r, r.winnerTeam)
-	-- TODO(launch): reduzir log
-	print(("[MatchService] fim do round: %s"):format(if #names > 0 then table.concat(names, ", ") else "empate"))
-	setState("Ending", { winners = names, endsAt = serverTimeIn(MatchConfig.EndTime), mapName = r.mapName })
+	for _, p in r.participants do
+		if p.player.Parent == Players then
+			local won = r.winnerTeam ~= nil and r.winnerTeam >= 0 and p.teamId == r.winnerTeam
+			DataService.RecordMatchResult(p.player, won, p.kills, not p.alive)
+		end
+	end
+	Log.debug(("[MatchService] fim do round: %s"):format(if #names > 0 then table.concat(names, ", ") else "empate"))
+	setState("Ending", { winners = names, endsAt = serverTimeIn(MatchConfig.EndTime), mapName = r.mapName, scores = scoresData(r) })
 	task.wait(MatchConfig.EndTime)
 
 	for _, p in r.participants do
 		if p.player.Parent == Players then
 			LobbyService.SendToLobby(p.player, true)
-			p.player:LoadCharacter()
+			-- quem morreu já renasceu no lobby sozinho; só recarrega quem ainda está na arena
+			if p.alive then
+				p.player:LoadCharacter()
+			end
 		end
 	end
 	round = nil
@@ -345,6 +373,7 @@ function MatchService.Start()
 				endsAt = serverTimeIn(round.endsAt - os.clock()),
 				mapName = round.mapName,
 				alive = countAlive(round),
+				scores = scoresData(round),
 			})
 		else
 			notifyMatchState:FireClient(player, state, { state = state, queued = LobbyService.GetQueueCount() })

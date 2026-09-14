@@ -46,7 +46,8 @@
           0.5,
           0.5,
           0.55
-        ]
+        ],
+        "CastShadow": false
       }
     },
     {
@@ -70,7 +71,8 @@
           0.5,
           0.5,
           0.55
-        ]
+        ],
+        "CastShadow": false
       }
     },
     {
@@ -94,7 +96,8 @@
           0.5,
           0.5,
           0.55
-        ]
+        ],
+        "CastShadow": false
       }
     },
     {
@@ -118,7 +121,8 @@
           0.5,
           0.5,
           0.55
-        ]
+        ],
+        "CastShadow": false
       }
     },
     {
@@ -144,7 +148,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -166,7 +171,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -188,7 +194,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -210,7 +217,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -232,7 +240,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -254,7 +263,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -276,7 +286,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         },
         {
@@ -298,7 +309,8 @@
             "Transparency": 1,
             "CanCollide": false,
             "CanQuery": false,
-            "CanTouch": false
+            "CanTouch": false,
+            "CastShadow": false
           }
         }
       ]

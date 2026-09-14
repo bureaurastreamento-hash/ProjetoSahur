@@ -23,6 +23,8 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Log = require(script.Parent:WaitForChild("Log"))
 local RunService = game:GetService("RunService")
 
 local FOLDER_NAME = "Remotes"
@@ -44,6 +46,7 @@ RemoteEvents.Events = ({
 	RequestAbility = "RequestAbility", -- (slot: number)
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
+	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: string, comboIndex: number)
@@ -56,6 +59,8 @@ RemoteEvents.Events = ({
 	NotifyAbility = "NotifyAbility", -- all: (character: Model, characterId: string, abilityId: string, phase: string, data: table?)
 	NotifyAbilityCooldown = "NotifyAbilityCooldown", -- dono: (slot: number, abilityId: string, readyAtServerTime: number)
 	NotifyAbilityDenied = "NotifyAbilityDenied", -- dono: (slot: number, reason: string)
+	NotifyProfile = "NotifyProfile", -- dono: (profile: DataConfig.Profile, sessionOnly: boolean)
+	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)
@@ -106,8 +111,7 @@ function RemoteEvents.Init()
 		end
 	end
 
-	-- TODO(launch): reduzir log
-	print(("[RemoteEvents] Init: %d RemoteEvents, %d RemoteFunctions criados"):format(createdEvents, createdFunctions))
+	Log.debug(("[RemoteEvents] Init: %d RemoteEvents, %d RemoteFunctions criados"):format(createdEvents, createdFunctions))
 end
 
 local function getRemote(subfolder: string, name: string, className: string): Instance

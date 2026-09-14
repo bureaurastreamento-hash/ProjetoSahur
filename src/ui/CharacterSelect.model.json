@@ -1,0 +1,387 @@
+{
+  "className": "ScreenGui",
+  "properties": {
+    "ResetOnSpawn": false,
+    "IgnoreGuiInset": true,
+    "DisplayOrder": 2
+  },
+  "children": [
+    {
+      "name": "Panel",
+      "className": "Frame",
+      "properties": {
+        "Size": {
+          "UDim2": [
+            [
+              0,
+              380
+            ],
+            [
+              0,
+              300
+            ]
+          ]
+        },
+        "Position": {
+          "UDim2": [
+            [
+              0.5,
+              0
+            ],
+            [
+              0.5,
+              0
+            ]
+          ]
+        },
+        "BackgroundColor3": {
+          "Color3": [
+            0.0784313725490196,
+            0.0784313725490196,
+            0.10980392156862745
+          ]
+        },
+        "BackgroundTransparency": 0.1,
+        "BorderSizePixel": 0,
+        "AnchorPoint": {
+          "Vector2": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "children": [
+        {
+          "name": "UICorner",
+          "className": "UICorner",
+          "properties": {
+            "CornerRadius": {
+              "UDim": [
+                0,
+                10
+              ]
+            }
+          }
+        },
+        {
+          "name": "Title",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  40
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  4
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "Escolha seu personagem",
+            "TextSize": 20,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "TextXAlignment": "Center",
+            "TextStrokeTransparency": 0.6
+          }
+        },
+        {
+          "name": "Hint",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  0,
+                  20
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  40
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "",
+            "TextSize": 13,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                0.7058823529411765,
+                0.7058823529411765,
+                0.7058823529411765
+              ]
+            },
+            "TextXAlignment": "Center",
+            "TextStrokeTransparency": 0.6
+          }
+        },
+        {
+          "name": "List",
+          "className": "Frame",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -30
+                ],
+                [
+                  1,
+                  -120
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  15
+                ],
+                [
+                  0,
+                  66
+                ]
+              ]
+            },
+            "BackgroundColor3": {
+              "Color3": [
+                0.0784313725490196,
+                0.0784313725490196,
+                0.10980392156862745
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "BorderSizePixel": 0
+          },
+          "children": [
+            {
+              "name": "UIListLayout",
+              "className": "UIListLayout",
+              "properties": {
+                "SortOrder": "LayoutOrder",
+                "Padding": {
+                  "UDim": [
+                    0,
+                    8
+                  ]
+                },
+                "HorizontalAlignment": "Center",
+                "FillDirection": "Vertical"
+              }
+            },
+            {
+              "name": "Template",
+              "className": "TextButton",
+              "properties": {
+                "Size": {
+                  "UDim2": [
+                    [
+                      1,
+                      0
+                    ],
+                    [
+                      0,
+                      40
+                    ]
+                  ]
+                },
+                "Position": {
+                  "UDim2": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                },
+                "Text": "Personagem",
+                "TextSize": 16,
+                "Font": "GothamBold",
+                "TextColor3": {
+                  "Color3": [
+                    1.0,
+                    1.0,
+                    1.0
+                  ]
+                },
+                "BackgroundColor3": {
+                  "Color3": [
+                    0.19607843137254902,
+                    0.19607843137254902,
+                    0.23529411764705882
+                  ]
+                },
+                "BorderSizePixel": 0,
+                "AutoButtonColor": true,
+                "Visible": false
+              },
+              "children": [
+                {
+                  "name": "UICorner",
+                  "className": "UICorner",
+                  "properties": {
+                    "CornerRadius": {
+                      "UDim": [
+                        0,
+                        6
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "QueueButton",
+          "className": "TextButton",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  200
+                ],
+                [
+                  0,
+                  36
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  1,
+                  -14
+                ]
+              ]
+            },
+            "Text": "Entrar na fila",
+            "TextSize": 16,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "BackgroundColor3": {
+              "Color3": [
+                0.1568627450980392,
+                0.5490196078431373,
+                0.3137254901960784
+              ]
+            },
+            "BorderSizePixel": 0,
+            "AutoButtonColor": true,
+            "AnchorPoint": {
+              "Vector2": [
+                0.5,
+                1
+              ]
+            }
+          },
+          "children": [
+            {
+              "name": "UICorner",
+              "className": "UICorner",
+              "properties": {
+                "CornerRadius": {
+                  "UDim": [
+                    0,
+                    6
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Coins",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -20
+                ],
+                [
+                  0,
+                  20
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  4
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "",
+            "TextSize": 14,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                1.0,
+                0.8235294117647058,
+                0.35294117647058826
+              ]
+            },
+            "TextXAlignment": "Right",
+            "TextStrokeTransparency": 0.6
+          }
+        }
+      ]
+    }
+  ]
+}

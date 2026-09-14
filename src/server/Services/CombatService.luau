@@ -12,8 +12,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 
 -- AbilityService depende deste módulo; é carregado tardiamente em Start() para evitar ciclo.
@@ -29,7 +31,6 @@ type PlayerState = {
 	stunnedUntil: number,
 	combo: number, -- índice do PRÓXIMO golpe (1..ComboLength)
 	lastAttackAt: number,
-	lastRequestAt: number, -- rate limit bruto
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -39,7 +40,8 @@ local notifyDamage: RemoteEvent
 local notifyCooldown: RemoteEvent
 local notifyBlock: RemoteEvent
 
-local MIN_REQUEST_INTERVAL = 0.05 -- anti-flood
+local attackLimiter = RateLimiter.new(10, 1)
+local blockLimiter = RateLimiter.new(10, 1)
 
 -- ---------------------------------------------------------------------------
 -- Estado
@@ -54,7 +56,6 @@ local function newState(): PlayerState
 		stunnedUntil = 0,
 		combo = 1,
 		lastAttackAt = -math.huge,
-		lastRequestAt = -math.huge,
 	}
 end
 
@@ -65,15 +66,6 @@ local function getState(player: Player): PlayerState
 		states[player] = s
 	end
 	return s
-end
-
-local function rateLimited(state: PlayerState): boolean
-	local now = os.clock()
-	if now - state.lastRequestAt < MIN_REQUEST_INTERVAL then
-		return true
-	end
-	state.lastRequestAt = now
-	return false
 end
 
 -- ---------------------------------------------------------------------------
@@ -162,16 +154,15 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 		end
 	end
 
-	-- TODO(launch): reduzir log
-	print(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
+	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
 end
 
 local function onRequestAttack(player: Player, attackId: any)
-	local state = getState(player)
-	if rateLimited(state) then
+	if not attackLimiter:Allow(player) then
 		return
 	end
+	local state = getState(player)
 
 	-- Validação de entrada
 	if typeof(attackId) ~= "string" then
@@ -227,10 +218,10 @@ local function onRequestAttack(player: Player, attackId: any)
 end
 
 local function onRequestBlock(player: Player, active: any)
-	local state = getState(player)
-	if rateLimited(state) then
+	if not blockLimiter:Allow(player) then
 		return
 	end
+	local state = getState(player)
 	if typeof(active) ~= "boolean" then
 		return
 	end
