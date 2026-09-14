@@ -191,6 +191,15 @@ local function eliminate(participant: Participant, killer: Player?)
 end
 
 local function onDied(victim: Player, killer: Player?)
+	if MatchConfig.FreeRoam then
+		DataService.RecordDeath(victim)
+		victim:SetAttribute("SessionDeaths", ((victim:GetAttribute("SessionDeaths") :: number?) or 0) + 1)
+		if killer and killer ~= victim then
+			DataService.RecordKill(killer)
+			killer:SetAttribute("SessionKills", ((killer:GetAttribute("SessionKills") :: number?) or 0) + 1)
+		end
+		return
+	end
 	if state ~= "InProgress" or not round then
 		return
 	end
@@ -364,6 +373,23 @@ end
 function MatchService.Start()
 	HealthService.Died.Event:Connect(onDied)
 	Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+	if MatchConfig.FreeRoam then
+		state = "FreeRoam"
+		local function onPlayer(player: Player)
+			player:SetAttribute("SessionKills", 0)
+			player:SetAttribute("SessionDeaths", 0)
+			task.wait(1)
+			notifyMatchState:FireClient(player, "FreeRoam", { state = "FreeRoam" })
+		end
+		Players.PlayerAdded:Connect(onPlayer)
+		for _, p in Players:GetPlayers() do
+			task.spawn(onPlayer, p)
+		end
+		Log.info("[MatchService] modo MAPA LIVRE (sem rounds)")
+		return
+	end
+
 	-- jogador que entra no meio recebe o estado atual
 	Players.PlayerAdded:Connect(function(player)
 		task.wait(1)

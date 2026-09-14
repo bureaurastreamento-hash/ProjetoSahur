@@ -1,0 +1,1009 @@
+{
+  "className": "Model",
+  "children": [
+    {
+      "name": "Ground",
+      "className": "Part",
+      "properties": {
+        "Name": "Ground",
+        "Anchored": true,
+        "Position": [
+          0,
+          -1,
+          0
+        ],
+        "Size": [
+          320,
+          2,
+          320
+        ],
+        "Color": [
+          0.33,
+          0.36,
+          0.33
+        ],
+        "Material": "Grass",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Plaza",
+      "className": "Part",
+      "properties": {
+        "Name": "Plaza",
+        "Anchored": true,
+        "Position": [
+          0,
+          0.25,
+          0
+        ],
+        "Size": [
+          90,
+          0.5,
+          90
+        ],
+        "Color": [
+          0.55,
+          0.55,
+          0.58
+        ],
+        "Material": "Slate",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Ring",
+      "className": "Part",
+      "properties": {
+        "Name": "Ring",
+        "Anchored": true,
+        "Position": [
+          0,
+          1,
+          0
+        ],
+        "Size": [
+          24,
+          2,
+          24
+        ],
+        "Color": [
+          0.62,
+          0.5,
+          0.35
+        ],
+        "Material": "WoodPlanks",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "WallN",
+      "className": "Part",
+      "properties": {
+        "Name": "WallN",
+        "Anchored": true,
+        "Position": [
+          0,
+          12,
+          -160.0
+        ],
+        "Size": [
+          320,
+          24,
+          4
+        ],
+        "Color": [
+          0.3,
+          0.3,
+          0.34
+        ],
+        "Material": "Concrete",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "CastShadow": false,
+        "Transparency": 0.35
+      }
+    },
+    {
+      "name": "WallS",
+      "className": "Part",
+      "properties": {
+        "Name": "WallS",
+        "Anchored": true,
+        "Position": [
+          0,
+          12,
+          160.0
+        ],
+        "Size": [
+          320,
+          24,
+          4
+        ],
+        "Color": [
+          0.3,
+          0.3,
+          0.34
+        ],
+        "Material": "Concrete",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "CastShadow": false,
+        "Transparency": 0.35
+      }
+    },
+    {
+      "name": "WallE",
+      "className": "Part",
+      "properties": {
+        "Name": "WallE",
+        "Anchored": true,
+        "Position": [
+          160.0,
+          12,
+          0
+        ],
+        "Size": [
+          4,
+          24,
+          320
+        ],
+        "Color": [
+          0.3,
+          0.3,
+          0.34
+        ],
+        "Material": "Concrete",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "CastShadow": false,
+        "Transparency": 0.35
+      }
+    },
+    {
+      "name": "WallW",
+      "className": "Part",
+      "properties": {
+        "Name": "WallW",
+        "Anchored": true,
+        "Position": [
+          -160.0,
+          12,
+          0
+        ],
+        "Size": [
+          4,
+          24,
+          320
+        ],
+        "Color": [
+          0.3,
+          0.3,
+          0.34
+        ],
+        "Material": "Concrete",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth",
+        "CastShadow": false,
+        "Transparency": 0.35
+      }
+    },
+    {
+      "name": "Pillar1",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar1",
+        "Anchored": true,
+        "Position": [
+          60.0,
+          8,
+          0.0
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar2",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar2",
+        "Anchored": true,
+        "Position": [
+          42.42640687119285,
+          8,
+          42.426406871192846
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar3",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar3",
+        "Anchored": true,
+        "Position": [
+          3.67394039744206e-15,
+          8,
+          60.0
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar4",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar4",
+        "Anchored": true,
+        "Position": [
+          -42.426406871192846,
+          8,
+          42.42640687119285
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar5",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar5",
+        "Anchored": true,
+        "Position": [
+          -60.0,
+          8,
+          7.34788079488412e-15
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar6",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar6",
+        "Anchored": true,
+        "Position": [
+          -42.42640687119286,
+          8,
+          -42.426406871192846
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar7",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar7",
+        "Anchored": true,
+        "Position": [
+          -1.1021821192326178e-14,
+          8,
+          -60.0
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Pillar8",
+      "className": "Part",
+      "properties": {
+        "Name": "Pillar8",
+        "Anchored": true,
+        "Position": [
+          42.42640687119284,
+          8,
+          -42.42640687119286
+        ],
+        "Size": [
+          6,
+          16,
+          6
+        ],
+        "Color": [
+          0.5,
+          0.48,
+          0.52
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Platform1",
+      "className": "Part",
+      "properties": {
+        "Name": "Platform1",
+        "Anchored": true,
+        "Position": [
+          100,
+          4,
+          100
+        ],
+        "Size": [
+          50,
+          8,
+          50
+        ],
+        "Color": [
+          0.45,
+          0.5,
+          0.6
+        ],
+        "Material": "Metal",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Ramp1",
+      "className": "WedgePart",
+      "properties": {
+        "Name": "Ramp1",
+        "Anchored": true,
+        "Position": [
+          65,
+          4,
+          100
+        ],
+        "Size": [
+          20,
+          8,
+          20
+        ],
+        "Orientation": [
+          0,
+          90,
+          0
+        ],
+        "Color": [
+          0.5,
+          0.5,
+          0.54
+        ],
+        "Material": "Concrete"
+      }
+    },
+    {
+      "name": "Platform2",
+      "className": "Part",
+      "properties": {
+        "Name": "Platform2",
+        "Anchored": true,
+        "Position": [
+          -100,
+          4,
+          100
+        ],
+        "Size": [
+          50,
+          8,
+          50
+        ],
+        "Color": [
+          0.45,
+          0.5,
+          0.6
+        ],
+        "Material": "Metal",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Ramp2",
+      "className": "WedgePart",
+      "properties": {
+        "Name": "Ramp2",
+        "Anchored": true,
+        "Position": [
+          -65,
+          4,
+          100
+        ],
+        "Size": [
+          20,
+          8,
+          20
+        ],
+        "Orientation": [
+          0,
+          -90,
+          0
+        ],
+        "Color": [
+          0.5,
+          0.5,
+          0.54
+        ],
+        "Material": "Concrete"
+      }
+    },
+    {
+      "name": "Platform3",
+      "className": "Part",
+      "properties": {
+        "Name": "Platform3",
+        "Anchored": true,
+        "Position": [
+          -100,
+          4,
+          -100
+        ],
+        "Size": [
+          50,
+          8,
+          50
+        ],
+        "Color": [
+          0.45,
+          0.5,
+          0.6
+        ],
+        "Material": "Metal",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Ramp3",
+      "className": "WedgePart",
+      "properties": {
+        "Name": "Ramp3",
+        "Anchored": true,
+        "Position": [
+          -65,
+          4,
+          -100
+        ],
+        "Size": [
+          20,
+          8,
+          20
+        ],
+        "Orientation": [
+          0,
+          -90,
+          0
+        ],
+        "Color": [
+          0.5,
+          0.5,
+          0.54
+        ],
+        "Material": "Concrete"
+      }
+    },
+    {
+      "name": "Platform4",
+      "className": "Part",
+      "properties": {
+        "Name": "Platform4",
+        "Anchored": true,
+        "Position": [
+          100,
+          4,
+          -100
+        ],
+        "Size": [
+          50,
+          8,
+          50
+        ],
+        "Color": [
+          0.45,
+          0.5,
+          0.6
+        ],
+        "Material": "Metal",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Ramp4",
+      "className": "WedgePart",
+      "properties": {
+        "Name": "Ramp4",
+        "Anchored": true,
+        "Position": [
+          65,
+          4,
+          -100
+        ],
+        "Size": [
+          20,
+          8,
+          20
+        ],
+        "Orientation": [
+          0,
+          90,
+          0
+        ],
+        "Color": [
+          0.5,
+          0.5,
+          0.54
+        ],
+        "Material": "Concrete"
+      }
+    },
+    {
+      "name": "Cover1",
+      "className": "Part",
+      "properties": {
+        "Name": "Cover1",
+        "Anchored": true,
+        "Position": [
+          0,
+          2,
+          110
+        ],
+        "Size": [
+          20,
+          4,
+          6
+        ],
+        "Color": [
+          0.6,
+          0.35,
+          0.3
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Cover2",
+      "className": "Part",
+      "properties": {
+        "Name": "Cover2",
+        "Anchored": true,
+        "Position": [
+          0,
+          2,
+          -110
+        ],
+        "Size": [
+          20,
+          4,
+          6
+        ],
+        "Color": [
+          0.6,
+          0.35,
+          0.3
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Cover3",
+      "className": "Part",
+      "properties": {
+        "Name": "Cover3",
+        "Anchored": true,
+        "Position": [
+          110,
+          2,
+          0
+        ],
+        "Size": [
+          6,
+          4,
+          20
+        ],
+        "Color": [
+          0.6,
+          0.35,
+          0.3
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Cover4",
+      "className": "Part",
+      "properties": {
+        "Name": "Cover4",
+        "Anchored": true,
+        "Position": [
+          -110,
+          2,
+          0
+        ],
+        "Size": [
+          6,
+          4,
+          20
+        ],
+        "Color": [
+          0.6,
+          0.35,
+          0.3
+        ],
+        "Material": "Brick",
+        "TopSurface": "Smooth",
+        "BottomSurface": "Smooth"
+      }
+    },
+    {
+      "name": "Spawns",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "Spawn1",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn1",
+            "Anchored": true,
+            "Position": [
+              120.0,
+              1,
+              0.0
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn2",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn2",
+            "Anchored": true,
+            "Position": [
+              103.92304845413264,
+              1,
+              59.99999999999999
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn3",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn3",
+            "Anchored": true,
+            "Position": [
+              60.000000000000014,
+              1,
+              103.92304845413263
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn4",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn4",
+            "Anchored": true,
+            "Position": [
+              7.34788079488412e-15,
+              1,
+              120.0
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn5",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn5",
+            "Anchored": true,
+            "Position": [
+              -59.99999999999997,
+              1,
+              103.92304845413264
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn6",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn6",
+            "Anchored": true,
+            "Position": [
+              -103.92304845413264,
+              1,
+              59.99999999999999
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn7",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn7",
+            "Anchored": true,
+            "Position": [
+              -120.0,
+              1,
+              1.469576158976824e-14
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn8",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn8",
+            "Anchored": true,
+            "Position": [
+              -103.92304845413265,
+              1,
+              -59.999999999999964
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn9",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn9",
+            "Anchored": true,
+            "Position": [
+              -60.00000000000006,
+              1,
+              -103.92304845413261
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn10",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn10",
+            "Anchored": true,
+            "Position": [
+              -2.2043642384652355e-14,
+              1,
+              -120.0
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn11",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn11",
+            "Anchored": true,
+            "Position": [
+              60.000000000000014,
+              1,
+              -103.92304845413263
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        },
+        {
+          "name": "Spawn12",
+          "className": "SpawnLocation",
+          "properties": {
+            "Name": "Spawn12",
+            "Anchored": true,
+            "Position": [
+              103.92304845413261,
+              1,
+              -60.00000000000006
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Neutral": true,
+            "Duration": 0,
+            "Transparency": 1,
+            "CanCollide": false,
+            "CastShadow": false
+          }
+        }
+      ]
+    }
+  ]
+}

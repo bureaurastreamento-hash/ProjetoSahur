@@ -24,6 +24,7 @@ local AbilityService: any = nil
 local CombatService = {}
 
 type PlayerState = {
+	wantBlock: boolean, -- jogador está segurando o botão de block
 	blocking: boolean,
 	blockStart: number,
 	blockReleased: number,
@@ -39,6 +40,10 @@ local notifyAttack: RemoteEvent
 local notifyDamage: RemoteEvent
 local notifyCooldown: RemoteEvent
 local notifyBlock: RemoteEvent
+local notifyKnockback: RemoteEvent
+
+-- AntiExploit é opcional aqui (carregado tardiamente para evitar ciclo)
+local AntiExploitService: any = nil
 
 local attackLimiter = RateLimiter.new(10, 1)
 local blockLimiter = RateLimiter.new(10, 1)
@@ -49,6 +54,7 @@ local blockLimiter = RateLimiter.new(10, 1)
 
 local function newState(): PlayerState
 	return {
+		wantBlock = false,
 		blocking = false,
 		blockStart = -math.huge,
 		blockReleased = -math.huge,
@@ -72,6 +78,8 @@ end
 -- Block
 -- ---------------------------------------------------------------------------
 
+local tryActivateBlock: (Player) -> ()
+
 local function setBlocking(player: Player, active: boolean)
 	local state = getState(player)
 	local character = player.Character
@@ -82,8 +90,11 @@ local function setBlocking(player: Player, active: boolean)
 
 	local now = os.clock()
 	if active then
-		if now - state.blockReleased < CombatConfig.Block.Cooldown then
-			return -- spam de block/parry
+		local readyAt = math.max(state.blockReleased + CombatConfig.Block.Cooldown, state.stunnedUntil)
+		if now < readyAt then
+			-- Ainda em cooldown/stun: ativa sozinho quando liberar, se o botão continuar pressionado
+			task.delay(readyAt - now + 0.01, tryActivateBlock, player)
+			return
 		end
 		state.blocking = true
 		state.blockStart = now
@@ -100,6 +111,13 @@ local function setBlocking(player: Player, active: boolean)
 
 	if character then
 		notifyBlock:FireAllClients(character, active)
+	end
+end
+
+tryActivateBlock = function(player: Player)
+	local state = states[player]
+	if state and state.wantBlock and not state.blocking and HealthService.IsAlive(player.Character) then
+		setBlocking(player, true)
 	end
 end
 
@@ -125,7 +143,24 @@ end
 
 --- Resolve um acerto contra `victim` considerando block/parry e buffs.
 --- Usado pelos socos e pelas habilidades (AbilityService).
-function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?)
+--- Empurra a vítima na direção do atacante (aplicado no cliente dono da física; sem efeito de gameplay além do deslocamento).
+function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number)
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not victimPlayer or not aRoot or not vRoot then
+		return
+	end
+	local flat = vRoot.Position - aRoot.Position
+	flat = Vector3.new(flat.X, 0, flat.Z)
+	local direction = if flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
+	if AntiExploitService then
+		AntiExploitService.Grace(victimPlayer, duration + 0.5)
+	end
+	notifyKnockback:FireClient(victimPlayer, direction, speed, duration)
+end
+
+function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?, knockback: { Speed: number, Duration: number }?)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local victimState = victimPlayer and states[victimPlayer]
 	local kind = "hit"
@@ -156,6 +191,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 
 	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
+	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
+		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration)
+	end
 end
 
 local function onRequestAttack(player: Player, attackId: any)
@@ -184,7 +222,8 @@ local function onRequestAttack(player: Player, attackId: any)
 		return -- em cooldown/stun: ignorado silenciosamente
 	end
 
-	-- Atacar cancela o block
+	-- Atacar cancela o block (e a intenção; o jogador precisa apertar F de novo)
+	state.wantBlock = false
 	if state.blocking then
 		setBlocking(player, false)
 	end
@@ -212,7 +251,7 @@ local function onRequestAttack(player: Player, attackId: any)
 			return -- foi parryado/stunado durante o wind-up
 		end
 		for _, victim in Hitbox.InFront(character, attackCfg.Range, attackCfg.Width, attackCfg.Height, attackCfg.MaxTargets) do
-			CombatService.ResolveHit(player, character, victim, damage)
+			CombatService.ResolveHit(player, character, victim, damage, nil, if isFinisher then attackCfg.FinisherKnockback else nil)
 		end
 	end)
 end
@@ -228,9 +267,7 @@ local function onRequestBlock(player: Player, active: any)
 	if not HealthService.IsAlive(player.Character) or not HealthService.CanFight(player) then
 		return
 	end
-	if active and os.clock() < state.stunnedUntil then
-		return
-	end
+	state.wantBlock = active
 	setBlocking(player, active)
 end
 
@@ -243,6 +280,7 @@ function CombatService.Init()
 	notifyDamage = Remotes.GetEvent(Remotes.Events.NotifyDamage)
 	notifyCooldown = Remotes.GetEvent(Remotes.Events.NotifyCooldown)
 	notifyBlock = Remotes.GetEvent(Remotes.Events.NotifyBlock)
+	notifyKnockback = Remotes.GetEvent(Remotes.Events.NotifyKnockback)
 end
 
 function CombatService.Start()
@@ -251,6 +289,10 @@ function CombatService.Start()
 		AbilityService = result
 	else
 		warn("[CombatService] AbilityService indisponível; buffs/energia desligados: " .. tostring(result))
+	end
+	local ok2, anti = pcall(require, script.Parent:WaitForChild("AntiExploitService"))
+	if ok2 then
+		AntiExploitService = anti
 	end
 
 	Remotes.GetEvent(Remotes.Events.RequestAttack).OnServerEvent:Connect(onRequestAttack)

@@ -11,6 +11,12 @@ CombatConfig.MaxHealth = 100
 CombatConfig.RespawnTime = 3
 CombatConfig.WalkSpeed = 16
 
+-- Regeneração fora de combate (substitui o script Health padrão do Roblox)
+CombatConfig.Regen = {
+	Delay = 6, -- segundos sem tomar dano para começar a regenerar
+	PerSecond = 3,
+}
+
 -- Ataques disponíveis. Chave = attackId enviado pelo cliente em RequestAttack.
 CombatConfig.Attacks = {
 	M1 = {
@@ -26,6 +32,7 @@ CombatConfig.Attacks = {
 		Width = 5,
 		Height = 6,
 		MaxTargets = 3,
+		FinisherKnockback = { Speed = 45, Duration = 0.2 }, -- empurrão no último golpe do combo
 	},
 }
 

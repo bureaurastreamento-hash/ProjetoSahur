@@ -71,7 +71,7 @@ CharacterDefs.Characters = {
 				Cooldown = 10,
 				EnergyCost = 30,
 				CastTime = 0.6,
-				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4 },
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25 } },
 			},
 			{
 				Id = "Rampage",

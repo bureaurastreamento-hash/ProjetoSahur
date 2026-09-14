@@ -39,6 +39,8 @@ local blockHeld = false
 local COLOR_HIT = Color3.fromRGB(255, 60, 60)
 local COLOR_BLOCK = Color3.fromRGB(80, 160, 255)
 local COLOR_PARRY = Color3.fromRGB(255, 255, 255)
+local COLOR_NUMBER_HIT = Color3.fromRGB(255, 230, 90)
+local COLOR_NUMBER_BLOCK = Color3.fromRGB(140, 190, 255)
 
 -- ---------------------------------------------------------------------------
 -- Handlers do servidor
@@ -56,16 +58,23 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 	if not victimChar then
 		return
 	end
+	local isMe = victimChar == localPlayer.Character
 	if kind == "parry" then
+		FX.DamageNumber(victimChar, "PARRY", COLOR_PARRY)
 		FX.Flash(victimChar, COLOR_PARRY, 0.25)
 		FX.SpawnVFX(victimChar, SHARED, "Parry", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Parry")
 		FX.PlayAnimation(victimChar, SHARED, "Parry")
 	elseif kind == "blocked" then
+		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_BLOCK)
 		FX.Flash(victimChar, COLOR_BLOCK, 0.15)
 		FX.SpawnVFX(victimChar, SHARED, "Block", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Block")
 	else
+		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_HIT)
+		if isMe then
+			FX.Shake(0.35, 0.15)
+		end
 		FX.Flash(victimChar, COLOR_HIT, 0.15)
 		FX.SpawnVFX(victimChar, SHARED, "Hit", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Punch_Hit")
@@ -98,6 +107,14 @@ local function onNotifyCooldown(reason: string, seconds: number)
 	Log.debug(("[CombatController] cooldown: %s por %.2fs"):format(reason, seconds))
 	if reason == "parried" and blockHeld then
 		blockHeld = false -- servidor cancelou o block; fica em sincronia
+	end
+end
+
+local function onNotifyKnockback(direction: Vector3, speed: number, duration: number)
+	local character = localPlayer.Character
+	if character and typeof(direction) == "Vector3" then
+		FX.Push(character, direction * speed + Vector3.new(0, speed * 0.25, 0), duration)
+		FX.Shake(0.5, 0.2)
 	end
 end
 
@@ -146,6 +163,7 @@ function CombatController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyBlock).OnClientEvent:Connect(onNotifyBlock)
 	Remotes.GetEvent(Remotes.Events.NotifyCooldown).OnClientEvent:Connect(onNotifyCooldown)
 	Remotes.GetEvent(Remotes.Events.NotifyKill).OnClientEvent:Connect(onNotifyKill)
+	Remotes.GetEvent(Remotes.Events.NotifyKnockback).OnClientEvent:Connect(onNotifyKnockback)
 
 	UserInputService.InputBegan:Connect(onInputBegan)
 	UserInputService.InputEnded:Connect(onInputEnded)

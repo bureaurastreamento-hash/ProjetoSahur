@@ -240,6 +240,26 @@ function DataService.UnlockCharacter(player: Player, characterId: string): (bool
 	return true, "ok"
 end
 
+--- Mapa livre: recompensa imediata por kill / registro de morte.
+function DataService.RecordKill(killer: Player)
+	local profile = DataService.GetProfile(killer)
+	if not profile then
+		return
+	end
+	profile.stats.kills += 1
+	profile.coins += DataConfig.Rewards.Kill
+	touch(killer)
+end
+
+function DataService.RecordDeath(victim: Player)
+	local profile = DataService.GetProfile(victim)
+	if not profile then
+		return
+	end
+	profile.stats.deaths += 1
+	touch(victim)
+end
+
 --- Registra o resultado de um round para um participante.
 function DataService.RecordMatchResult(player: Player, won: boolean, kills: number, died: boolean)
 	local profile = DataService.GetProfile(player)

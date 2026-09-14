@@ -44,30 +44,6 @@ local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 AbilityController.CooldownChanged = Instance.new("BindableEvent")
 
 -- ---------------------------------------------------------------------------
--- Dash local: só para o próprio personagem
--- ---------------------------------------------------------------------------
-
-local function applyDash(character: Model, speed: number, duration: number)
-	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
-	if not root then
-		return
-	end
-	local attachment = Instance.new("Attachment")
-	attachment.Parent = root
-	local lv = Instance.new("LinearVelocity")
-	lv.Attachment0 = attachment
-	lv.RelativeTo = Enum.ActuatorRelativeTo.World
-	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
-	lv.MaxForce = math.huge
-	lv.VectorVelocity = root.CFrame.LookVector * speed
-	lv.Parent = root
-	task.delay(duration, function()
-		lv:Destroy()
-		attachment:Destroy()
-	end)
-end
-
--- ---------------------------------------------------------------------------
 -- Handlers do servidor
 -- ---------------------------------------------------------------------------
 
@@ -80,7 +56,10 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.SpawnVFX(character, characterId, abilityId)
 		FX.PlaySoundAt(character, characterId, abilityId)
 		if character == localPlayer.Character and typeof(data) == "table" and data.Speed and data.Duration then
-			applyDash(character, data.Speed, data.Duration)
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root then
+				FX.Push(character, root.CFrame.LookVector * data.Speed, data.Duration)
+			end
 		end
 	elseif phase == "hit" then
 		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true)

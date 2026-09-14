@@ -14,11 +14,11 @@
           "UDim2": [
             [
               0,
-              380
+              520
             ],
             [
               0,
-              300
+              64
             ]
           ]
         },
@@ -29,8 +29,8 @@
               0
             ],
             [
-              0.5,
-              0
+              0,
+              64
             ]
           ]
         },
@@ -41,12 +41,12 @@
             0.10980392156862745
           ]
         },
-        "BackgroundTransparency": 0.1,
+        "BackgroundTransparency": 0.25,
         "BorderSizePixel": 0,
         "AnchorPoint": {
           "Vector2": [
             0.5,
-            0.5
+            0
           ]
         }
       },
@@ -58,7 +58,7 @@
             "CornerRadius": {
               "UDim": [
                 0,
-                10
+                8
               ]
             }
           }
@@ -70,12 +70,12 @@
             "Size": {
               "UDim2": [
                 [
-                  1,
-                  0
+                  0,
+                  110
                 ],
                 [
-                  0,
-                  40
+                  1,
+                  0
                 ]
               ]
             },
@@ -83,27 +83,76 @@
               "UDim2": [
                 [
                   0,
-                  0
+                  10
                 ],
                 [
                   0,
-                  4
+                  0
                 ]
               ]
             },
             "BackgroundTransparency": 1,
-            "Text": "Escolha seu personagem",
-            "TextSize": 20,
+            "Text": "Personagem",
+            "TextSize": 14,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                0.7843137254901961,
+                0.7843137254901961,
+                0.7843137254901961
+              ]
+            },
+            "TextXAlignment": "Left",
+            "TextStrokeTransparency": 0.6
+          }
+        },
+        {
+          "name": "Coins",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  0,
+                  110
+                ],
+                [
+                  0,
+                  18
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  1,
+                  -10
+                ],
+                [
+                  1,
+                  -4
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "",
+            "TextSize": 12,
             "Font": "GothamBold",
             "TextColor3": {
               "Color3": [
                 1.0,
-                1.0,
-                1.0
+                0.8235294117647058,
+                0.35294117647058826
               ]
             },
-            "TextXAlignment": "Center",
-            "TextStrokeTransparency": 0.6
+            "TextXAlignment": "Right",
+            "TextStrokeTransparency": 0.6,
+            "AnchorPoint": {
+              "Vector2": [
+                1,
+                1
+              ]
+            }
           }
         },
         {
@@ -113,40 +162,46 @@
             "Size": {
               "UDim2": [
                 [
-                  1,
-                  0
+                  0,
+                  200
                 ],
                 [
                   0,
-                  20
+                  16
                 ]
               ]
             },
             "Position": {
               "UDim2": [
                 [
-                  0,
-                  0
+                  1,
+                  -10
                 ],
                 [
                   0,
-                  40
+                  4
                 ]
               ]
             },
             "BackgroundTransparency": 1,
             "Text": "",
-            "TextSize": 13,
+            "TextSize": 11,
             "Font": "GothamBold",
             "TextColor3": {
               "Color3": [
-                0.7058823529411765,
-                0.7058823529411765,
-                0.7058823529411765
+                0.6274509803921569,
+                0.6274509803921569,
+                0.6274509803921569
               ]
             },
-            "TextXAlignment": "Center",
-            "TextStrokeTransparency": 0.6
+            "TextXAlignment": "Right",
+            "TextStrokeTransparency": 0.6,
+            "AnchorPoint": {
+              "Vector2": [
+                1,
+                0
+              ]
+            }
           }
         },
         {
@@ -157,11 +212,11 @@
               "UDim2": [
                 [
                   1,
-                  -30
+                  -130
                 ],
                 [
                   1,
-                  -120
+                  -16
                 ]
               ]
             },
@@ -169,11 +224,11 @@
               "UDim2": [
                 [
                   0,
-                  15
+                  120
                 ],
                 [
                   0,
-                  66
+                  8
                 ]
               ]
             },
@@ -199,8 +254,9 @@
                     8
                   ]
                 },
-                "HorizontalAlignment": "Center",
-                "FillDirection": "Vertical"
+                "HorizontalAlignment": "Left",
+                "VerticalAlignment": "Center",
+                "FillDirection": "Horizontal"
               }
             },
             {
@@ -210,12 +266,12 @@
                 "Size": {
                   "UDim2": [
                     [
-                      1,
-                      0
+                      0,
+                      120
                     ],
                     [
-                      0,
-                      40
+                      1,
+                      0
                     ]
                   ]
                 },
@@ -232,7 +288,7 @@
                   ]
                 },
                 "Text": "Personagem",
-                "TextSize": 16,
+                "TextSize": 14,
                 "Font": "GothamBold",
                 "TextColor3": {
                   "Color3": [
@@ -277,28 +333,28 @@
               "UDim2": [
                 [
                   0,
-                  200
+                  110
                 ],
                 [
                   0,
-                  36
+                  26
                 ]
               ]
             },
             "Position": {
               "UDim2": [
                 [
-                  0.5,
-                  0
+                  1,
+                  -10
                 ],
                 [
-                  1,
-                  -14
+                  0.5,
+                  0
                 ]
               ]
             },
             "Text": "Entrar na fila",
-            "TextSize": 16,
+            "TextSize": 14,
             "Font": "GothamBold",
             "TextColor3": {
               "Color3": [
@@ -318,10 +374,11 @@
             "AutoButtonColor": true,
             "AnchorPoint": {
               "Vector2": [
-                0.5,
-                1
+                1,
+                0.5
               ]
-            }
+            },
+            "Visible": false
           },
           "children": [
             {
@@ -337,49 +394,6 @@
               }
             }
           ]
-        },
-        {
-          "name": "Coins",
-          "className": "TextLabel",
-          "properties": {
-            "Size": {
-              "UDim2": [
-                [
-                  1,
-                  -20
-                ],
-                [
-                  0,
-                  20
-                ]
-              ]
-            },
-            "Position": {
-              "UDim2": [
-                [
-                  0,
-                  10
-                ],
-                [
-                  0,
-                  4
-                ]
-              ]
-            },
-            "BackgroundTransparency": 1,
-            "Text": "",
-            "TextSize": 14,
-            "Font": "GothamBold",
-            "TextColor3": {
-              "Color3": [
-                1.0,
-                0.8235294117647058,
-                0.35294117647058826
-              ]
-            },
-            "TextXAlignment": "Right",
-            "TextStrokeTransparency": 0.6
-          }
         }
       ]
     }

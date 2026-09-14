@@ -17,6 +17,9 @@ export type ModeDef = {
 
 local MatchConfig = {}
 
+-- Núcleo atual: MAPA LIVRE (todos lutam o tempo todo no mesmo mapa, sem rounds).
+-- Com FreeRoam = false, volta o loop de rounds (fila → seleção → round) usando Mode.
+MatchConfig.FreeRoam = true
 MatchConfig.Mode = "FFA"
 
 MatchConfig.Modes = {

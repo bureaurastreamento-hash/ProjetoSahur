@@ -163,6 +163,24 @@ function HealthService.Start()
 		onPlayer(player)
 	end
 
+	-- Regeneração controlada: só depois de Regen.Delay segundos sem tomar dano
+	task.spawn(function()
+		while true do
+			task.wait(1)
+			local now = os.clock()
+			for _, player in Players:GetPlayers() do
+				local character = player.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				if character and humanoid and humanoid.Health > 0 and humanoid.Health < humanoid.MaxHealth then
+					local lastHit = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
+					if typeof(lastHit) ~= "number" or now - lastHit >= CombatConfig.Regen.Delay then
+						HealthService.Heal(character, CombatConfig.Regen.PerSecond)
+					end
+				end
+			end
+		end
+	end)
+
 	local requestRespawn = Remotes.GetEvent(Remotes.Events.RequestRespawn)
 	requestRespawn.OnServerEvent:Connect(function(player)
 		if not respawnLimiter:Allow(player) then

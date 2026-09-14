@@ -9,7 +9,9 @@
 	Todos os assets são localizados por nome via Assets.luau; ausência = ignora.
 ]]
 
+local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
+local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Assets = require(script.Parent:WaitForChild("Assets"))
@@ -178,6 +180,98 @@ function FX.SpawnVFX(character: Model, folder: string, name: string, exact: bool
 	task.delay(FX.VFXLifetime, function()
 		activeVFX -= 1
 		clone:Destroy()
+	end)
+end
+
+-- ---------------------------------------------------------------------------
+-- Movimento / câmera / números
+-- ---------------------------------------------------------------------------
+
+--- Aplica velocidade constante ao HRP por `duration` (só faz sentido no personagem local).
+function FX.Push(character: Model, velocity: Vector3, duration: number)
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local attachment = Instance.new("Attachment")
+	attachment.Parent = root
+	local lv = Instance.new("LinearVelocity")
+	lv.Attachment0 = attachment
+	lv.RelativeTo = Enum.ActuatorRelativeTo.World
+	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+	lv.MaxForce = math.huge
+	lv.VectorVelocity = velocity
+	lv.Parent = root
+	task.delay(duration, function()
+		lv:Destroy()
+		attachment:Destroy()
+	end)
+end
+
+local shakeUntil = 0
+local shakeMagnitude = 0
+local shakeConnected = false
+
+--- Tremor leve de câmera (magnitude em studs, ~0.3 é sutil).
+function FX.Shake(magnitude: number, duration: number)
+	shakeMagnitude = math.max(shakeMagnitude, magnitude)
+	shakeUntil = math.max(shakeUntil, os.clock() + duration)
+	if shakeConnected then
+		return
+	end
+	shakeConnected = true
+	local conn: RBXScriptConnection
+	conn = RunService.RenderStepped:Connect(function()
+		local camera = Workspace.CurrentCamera
+		if not camera then
+			return
+		end
+		local remaining = shakeUntil - os.clock()
+		if remaining <= 0 then
+			conn:Disconnect()
+			shakeConnected = false
+			shakeMagnitude = 0
+			return
+		end
+		local m = shakeMagnitude * math.min(1, remaining / 0.15)
+		camera.CFrame = camera.CFrame * CFrame.new((math.random() - 0.5) * m, (math.random() - 0.5) * m, 0)
+	end)
+end
+
+local activeNumbers = 0
+FX.MaxDamageNumbers = 20
+
+--- Número flutuante sobre o personagem.
+function FX.DamageNumber(character: Model, text: string, color: Color3)
+	if activeNumbers >= FX.MaxDamageNumbers then
+		return
+	end
+	local head = character:FindFirstChild("Head") or character:FindFirstChild("HumanoidRootPart")
+	if not head then
+		return
+	end
+	local gui = Instance.new("BillboardGui")
+	gui.Size = UDim2.fromOffset(100, 40)
+	gui.StudsOffset = Vector3.new(math.random(-1, 1), 2.5, 0)
+	gui.AlwaysOnTop = true
+	gui.MaxDistance = 80
+	gui.Adornee = head
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Text = text
+	label.TextColor3 = color
+	label.TextStrokeTransparency = 0.3
+	label.Font = Enum.Font.GothamBlack
+	label.TextSize = 22
+	label.Parent = gui
+	gui.Parent = character
+	activeNumbers += 1
+	TweenService:Create(gui, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { StudsOffset = gui.StudsOffset + Vector3.new(0, 2.5, 0) }):Play()
+	TweenService:Create(label, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1, TextStrokeTransparency = 1 }):Play()
+	task.delay(0.75, function()
+		activeNumbers -= 1
+		gui:Destroy()
 	end)
 end
 

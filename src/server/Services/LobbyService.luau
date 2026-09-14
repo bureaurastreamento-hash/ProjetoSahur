@@ -79,9 +79,12 @@ end
 
 --- Coloca o jogador no estado "lobby": sem combate, na fila (se quiser).
 function LobbyService.SendToLobby(player: Player, autoQueue: boolean?)
-	player:SetAttribute("CanFight", MatchConfig.AllowLobbyCombat == true)
+	player:SetAttribute("CanFight", MatchConfig.FreeRoam or MatchConfig.AllowLobbyCombat == true)
 	player:SetAttribute("InMatch", false)
 	player:SetAttribute("TeamId", nil)
+	if MatchConfig.FreeRoam then
+		return -- mapa livre: não existe fila
+	end
 	if autoQueue ~= false then
 		setInQueue(player, true)
 	end
@@ -107,8 +110,8 @@ function LobbyService.Start()
 		if typeof(inQueue) ~= "boolean" then
 			return
 		end
-		if player:GetAttribute("InMatch") == true then
-			return -- não mexe na fila durante o round
+		if player:GetAttribute("InMatch") == true or MatchConfig.FreeRoam then
+			return -- não mexe na fila durante o round / sem fila no mapa livre
 		end
 		setInQueue(player, inQueue)
 	end)

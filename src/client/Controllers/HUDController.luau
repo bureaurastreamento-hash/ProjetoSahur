@@ -25,6 +25,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
 
@@ -38,6 +39,7 @@ local KILLFEED_MAX = 5
 local KILLFEED_LIFETIME = 6
 
 local STATE_TEXT = {
+	FreeRoam = "Mapa livre — lute!",
 	Waiting = "Aguardando jogadores",
 	Selecting = "Escolha seu personagem",
 	InProgress = "Round em andamento",
@@ -61,6 +63,8 @@ local scoreboard: Frame
 local scoreList: Frame
 local scoreTemplate: TextLabel
 local banner: TextLabel
+local comboLabel: TextLabel
+local comboToken = 0
 local selectList: Frame
 local selectTemplate: TextButton
 local selectHint: TextLabel
@@ -70,7 +74,7 @@ local selectCoinsLabel: TextLabel
 local characterButtons: { [string]: TextButton } = {}
 local profile: any = nil
 
-local currentState = "Waiting"
+local currentState = if MatchConfig.FreeRoam then "FreeRoam" else "Waiting"
 local stateData: { [string]: any } = {}
 local overheads: { [Model]: BillboardGui } = {}
 
@@ -170,7 +174,23 @@ local function refreshScoreboard()
 		end
 	end
 	local scores = stateData.scores
-	local visible = typeof(scores) == "table" and #scores > 0 and (currentState == "InProgress" or currentState == "Ending")
+	if MatchConfig.FreeRoam then
+		scores = {}
+		for _, p in Players:GetPlayers() do
+			local k = p:GetAttribute("SessionKills")
+			table.insert(scores, { name = p.Name, kills = if typeof(k) == "number" then k else 0, alive = true })
+		end
+		table.sort(scores, function(a, b)
+			if a.kills ~= b.kills then
+				return a.kills > b.kills
+			end
+			return a.name < b.name
+		end)
+		while #scores > 6 do
+			table.remove(scores)
+		end
+	end
+	local visible = typeof(scores) == "table" and #scores > 0 and (currentState == "InProgress" or currentState == "Ending" or currentState == "FreeRoam")
 	scoreboard.Visible = visible
 	if not visible then
 		return
@@ -197,10 +217,11 @@ local function refreshMatchUI()
 	end
 
 	local inMatch = localPlayer:GetAttribute("InMatch") == true
-	selectGui.Enabled = not inMatch and (currentState == "Waiting" or currentState == "Selecting")
+	selectGui.Enabled = not inMatch and (currentState == "FreeRoam" or currentState == "Waiting" or currentState == "Selecting")
+	queueButton.Visible = not MatchConfig.FreeRoam
 	queueButton.Text = if localPlayer:GetAttribute("InQueue") == true then "Sair da fila" else "Entrar na fila"
 	queueButton.BackgroundColor3 = if localPlayer:GetAttribute("InQueue") == true then Color3.fromRGB(160, 60, 60) else Color3.fromRGB(40, 140, 80)
-	selectHint.Text = if currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
+	selectHint.Text = if MatchConfig.FreeRoam then "clique para trocar" elseif currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
 
 	local currentId = localPlayer:GetAttribute("CharacterId")
 	for id, b in characterButtons do
@@ -365,6 +386,7 @@ function HUDController.Init()
 	scoreList = get(scoreboard, "List") :: Frame
 	scoreTemplate = get(scoreList, "Template") :: TextLabel
 	banner = get(hud, "Banner") :: TextLabel
+	comboLabel = get(hud, "Combo") :: TextLabel
 
 	local panel = get(selectGui, "Panel")
 	selectList = get(panel, "List") :: Frame
@@ -410,6 +432,24 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyMatchState).OnClientEvent:Connect(onNotifyMatchState)
 	Remotes.GetEvent(Remotes.Events.NotifyKill).OnClientEvent:Connect(onNotifyKill)
+	Remotes.GetEvent(Remotes.Events.NotifyKill).OnClientEvent:Connect(function(killer: Player?, victim: Player)
+		if killer == localPlayer then
+			showBanner(("Você eliminou %s"):format(victim.Name), 2)
+		end
+	end)
+	Remotes.GetEvent(Remotes.Events.NotifyAttack).OnClientEvent:Connect(function(attackerChar: Model?, _attackId: string, comboIndex: number)
+		if attackerChar ~= localPlayer.Character then
+			return
+		end
+		comboLabel.Text = if comboIndex > 1 then ("x%d"):format(comboIndex) else ""
+		comboToken += 1
+		local token = comboToken
+		task.delay(1.2, function()
+			if comboToken == token then
+				comboLabel.Text = ""
+			end
+		end)
+	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)
 		profile = data
 		if sessionOnly then
@@ -442,6 +482,21 @@ function HUDController.Start()
 	end)
 	for _, attr in { "InMatch", "InQueue" } do
 		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshMatchUI)
+	end
+
+	-- Placar do mapa livre reage a kills e entradas/saídas
+	local function watchKills(p: Player)
+		p:GetAttributeChangedSignal("SessionKills"):Connect(refreshScoreboard)
+	end
+	Players.PlayerAdded:Connect(function(p)
+		watchKills(p)
+		refreshScoreboard()
+	end)
+	Players.PlayerRemoving:Connect(function()
+		task.defer(refreshScoreboard)
+	end)
+	for _, p in Players:GetPlayers() do
+		watchKills(p)
 	end
 
 	-- Barras dos outros jogadores

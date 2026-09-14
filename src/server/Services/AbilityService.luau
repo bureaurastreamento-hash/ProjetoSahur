@@ -101,7 +101,7 @@ end
 
 local function areaHit(player: Player, character: Model, effect: CharacterDefs.Effect, damage: number)
 	for _, victim in Hitbox.Around(character, effect.Radius, MAX_AREA_TARGETS) do
-		CombatService.ResolveHit(player, character, victim, damage, false)
+		CombatService.ResolveHit(player, character, victim, damage, false, effect.Knockback)
 		local stunSeconds = effect.StunSeconds
 		if typeof(stunSeconds) == "number" then
 			local victimPlayer = Players:GetPlayerFromCharacter(victim)

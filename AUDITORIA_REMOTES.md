@@ -27,7 +27,8 @@ somente dados que o servidor calculou. O cliente trata `Model?` como possivelmen
 
 `NotifyAttack`, `NotifyDamage`, `NotifyHealth`, `NotifyKill`, `NotifyCooldown`,
 `NotifyBlock`, `NotifyMatchState`, `NotifyAbility`, `NotifyAbilityCooldown`,
-`NotifyAbilityDenied`, `NotifyProfile`, `NotifyUnlockDenied`.
+`NotifyAbilityDenied`, `NotifyProfile`, `NotifyUnlockDenied`, `NotifyKnockback` (o cliente
+vítima aplica o empurrão na própria física; o servidor concede `AntiExploit.Grace` antes).
 
 ## Onde o servidor ainda confia (ou depende) do cliente
 

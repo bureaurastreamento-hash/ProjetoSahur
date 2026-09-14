@@ -55,6 +55,7 @@ RemoteEvents.Events = ({
 	NotifyKill = "NotifyKill", -- all: (killer: Player?, victim: Player)
 	NotifyCooldown = "NotifyCooldown", -- atacante: (reason: string, seconds: number)
 	NotifyBlock = "NotifyBlock", -- all: (character: Model, active: boolean)
+	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number)
 	NotifyMatchState = "NotifyMatchState", -- all: (state: "Waiting"|"Selecting"|"InProgress"|"Ending", data: table)
 	NotifyAbility = "NotifyAbility", -- all: (character: Model, characterId: string, abilityId: string, phase: string, data: table?)
 	NotifyAbilityCooldown = "NotifyAbilityCooldown", -- dono: (slot: number, abilityId: string, readyAtServerTime: number)

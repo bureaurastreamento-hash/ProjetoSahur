@@ -7,9 +7,10 @@ elas não mexem em código. Você nunca deve modificar, mover ou apagar assets d
 apenas referenciá-los pelo nome a partir do código.
 
 ## O jogo
-Sahur, um battlegrounds de luta no Roblox. Núcleo do jogo: free-for-all (FFA) primeiro;
-depois evoluir para 1v1 e 2v2, então todo sistema de partida deve ser desenhado pensando
-nesses modos futuros. Rig: R6 (configurar em Game Settings > Avatar no Studio; não é
+Sahur, um battlegrounds de luta no Roblox. Núcleo do jogo: **mapa livre** (todos lutam o
+tempo todo no mesmo mapa, sem rounds; `MatchConfig.FreeRoam = true`). O loop de rounds
+(fila → seleção → round, modos FFA/Duel/Teams) existe no MatchService e volta com
+`FreeRoam = false` — usar para 1v1/2v2 opt-in no futuro. Rig: R6 (configurar em Game Settings > Avatar no Studio; não é
 controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITORIA.md);
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
