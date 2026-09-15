@@ -3,8 +3,9 @@
 	CombatController (cliente)
 	Só captura input e mostra feedback. NUNCA decide dano.
 	  - Botão esquerdo do mouse: RequestAttack("M1"); segurar = combo de 4 automático
-	    · no ar SUBINDO (logo após pular) = "Uppercut" (levanta o alvo e você) · no ar CAINDO =
-	    "Downslam" (ignora block, esmaga). O servidor confere subindo/caindo; aqui só se escolhe o pedido.
+	    · SÓ NO 4º GOLPE do combo (no lugar do finisher com empurrão): no ar SUBINDO = "Uppercut"
+	    (levanta o alvo e você) · no ar CAINDO = "Downslam" (ignora block, esmaga). O servidor confere
+	    combo e subindo/caindo; aqui só se escolhe o pedido.
 	  - Segurar F: RequestBlock(true) / soltar: RequestBlock(false)
 	  - Acerto de M1 puxa o atacante ~1 stud para a vítima (cliente dono da física).
 
@@ -44,18 +45,31 @@ local blockHeld = false
 --- Toque no mundo = soco (MobileController desliga quando há botões na tela)
 CombatController.TouchAttackEnabled = true
 
---- Soco (M1). Usado pelo input e pelos botões de toque. No ar subindo vira Uppercut, caindo vira
---- Downslam (o servidor valida os dois com a mesma regra).
+-- Combo próprio (espelho do servidor via NotifyAttack): o especial só sai quando o próximo é o 4º
+local myNextCombo = 1
+local myLastAttackAt = -math.huge
+local myFollowUpUntil = 0 -- depois do uppercut: downslam livre
+
+--- Soco (M1). Usado pelo input e pelos botões de toque. No 4º golpe, no ar subindo vira Uppercut,
+--- caindo vira Downslam (o servidor valida com a mesma regra).
 function CombatController.Attack()
 	local character = localPlayer.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local attackId = "M1"
-	if humanoid and root then
+	local m1 = CombatConfig.Attacks.M1
+	local finisherNext = myNextCombo >= m1.ComboLength and os.clock() - myLastAttackAt <= m1.ComboResetTime
+	local followUp = os.clock() < myFollowUpUntil
+	if humanoid and root and (finisherNext or followUp) then
 		local st = humanoid:GetState()
 		local airborne = st == Enum.HumanoidStateType.Freefall or st == Enum.HumanoidStateType.Jumping
 		if airborne then
-			attackId = if root.AssemblyLinearVelocity.Y > CombatConfig.AirRisingSpeed then "Uppercut" else "Downslam"
+			local rising = root.AssemblyLinearVelocity.Y > CombatConfig.AirRisingSpeed
+			if finisherNext and rising then
+				attackId = "Uppercut"
+			elseif not rising then
+				attackId = "Downslam"
+			end
 		end
 	end
 	requestAttack:FireServer(attackId)
@@ -127,6 +141,11 @@ local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex
 		return
 	end
 	local attackDef = CombatConfig.Attacks[attackId]
+	if attackerChar == localPlayer.Character then
+		myLastAttackAt = os.clock()
+		myNextCombo = if attackId == "M1" and comboIndex < CombatConfig.Attacks.M1.ComboLength then comboIndex + 1 else 1
+		myFollowUpUntil = if attackId == "Uppercut" then os.clock() + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
+	end
 	if attackId ~= "M1" then
 		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
 		FX.PlayAnimation(attackerChar, SHARED, attackId)

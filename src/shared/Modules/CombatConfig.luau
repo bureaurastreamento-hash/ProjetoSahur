@@ -41,6 +41,8 @@ CombatConfig.Attacks = {
 		MaxTargets = 3,
 		FinisherKnockback = { Speed = 45, Duration = 0.2, Ragdoll = 1.2 } :: Knockback, -- empurrão + ragdoll no 4º golpe
 	},
+	-- Golpes especiais só saem como 4º GOLPE do combo (no lugar do finisher com empurrão); o downslam
+	-- também sai como continuação do uppercut (FollowUpWindow).
 	-- Soco CAINDO (no ar, já descendo): ignora block, esmaga no chão (ragdoll). Não repete no mesmo ragdoll.
 	Downslam = {
 		Damage = 5,
@@ -67,6 +69,7 @@ CombatConfig.Attacks = {
 		MaxTargets = 3,
 		Knockback = { Speed = 8, Duration = 0.3, Up = 42 } :: Knockback,
 		AttackerUp = 42, -- o atacante também sobe (cliente)
+		FollowUpWindow = 1.6, -- s após o uppercut em que o downslam sai sem precisar de combo novo
 	},
 }
 

@@ -281,7 +281,7 @@ write("ProfileGui.model.json", profile)
 # =============================================================================
 HELP = "\n".join([
     "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático",
-    "UPPERCUT — pular e socar subindo (levanta o alvo com você) · DOWNSLAM — socar caindo (ignora block, esmaga)",
+    "4º GOLPE: no chão empurra · pular e socar subindo = UPPERCUT (levanta o alvo com você) · socar caindo = DOWNSLAM (ignora block, esmaga)",
     "BLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe",
     "PARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)",
     "CORRER — automático ao andar para a frente (W)",

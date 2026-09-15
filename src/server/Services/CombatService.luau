@@ -42,6 +42,7 @@ type PlayerState = {
 	critArmedUntil: number, -- 1º crítico saiu: parry+crítico até aqui = Black Flash
 	lastRagdollHitAt: number, -- (vítima) último downslam que derrubou (RagdollOnce)
 	superArmorUntil: number, -- agarrão/ult: não toma hitstun nem cai (dano entra normal)
+	followUpUntil: number, -- depois do uppercut: janela para o downslam no ar (sem precisar de combo)
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -80,6 +81,7 @@ local function newState(): PlayerState
 		critArmedUntil = 0,
 		lastRagdollHitAt = -math.huge,
 		superArmorUntil = 0,
+		followUpUntil = 0,
 	}
 end
 
@@ -529,6 +531,15 @@ local function onRequestAttack(player: Player, attackId: any)
 	if typeof(dashingUntil) == "number" and now < dashingUntil then
 		return -- no meio do dash (MovementService)
 	end
+	-- Golpes especiais (uppercut/downslam) só como 4º GOLPE do combo, no lugar do finisher com empurrão
+	local m1 = CombatConfig.Attacks.M1
+	if attackId ~= "M1" then
+		local comboAlive = now - state.lastAttackAt <= m1.ComboResetTime
+		local followUp = attackId == "Downslam" and now < state.followUpUntil -- uppercut -> downslam no ar
+		if not followUp and (not comboAlive or state.combo < m1.ComboLength) then
+			return
+		end
+	end
 	-- Downslam só caindo; uppercut só subindo (o cliente escolhe, o servidor confere)
 	local air = airState(character, humanoid)
 	local falling, rising = air == "falling", air == "rising"
@@ -565,6 +576,7 @@ local function onRequestAttack(player: Player, attackId: any)
 		knockback = attackCfg.Knockback
 		state.combo = 1
 		state.nextAttackAt = now + attackCfg.Cooldown
+		state.followUpUntil = if attackId == "Uppercut" then now + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
 	end
 	state.lastAttackAt = now
 
