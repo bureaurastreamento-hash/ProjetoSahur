@@ -33,10 +33,11 @@ root = {"name": "Root", "className": "Frame", "properties": {
     button("Attack", "SOCO", 96, udim2(1, -24, 1, -24), [0.85, 0.3, 0.25], 20),
     button("Block", "BLOCK", 72, udim2(1, -136, 1, -24), [0.3, 0.55, 0.9], 15),
     button("Dash", "DASH", 56, udim2(1, -236, 1, -30), [0.2, 0.5, 0.45], 14),
-    button("Slot1", "E", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
-    button("Slot2", "R", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
-    button("Slot3", "T", 62, udim2(1, -60, 1, -160), [0.6, 0.45, 0.15]),
-    button("Awaken", "G", 48, udim2(1, -128, 1, -236), [0.75, 0.6, 0.2], 16),
+    button("Slot1", "1", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
+    button("Slot2", "2", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
+    button("Slot3", "3", 56, udim2(1, -60, 1, -160), [0.25, 0.25, 0.32]),
+    button("Slot4", "4", 50, udim2(1, -270, 1, -160), [0.25, 0.25, 0.32]),
+    button("Awaken", "ULT", 56, udim2(1, -128, 1, -236), [0.75, 0.6, 0.2], 14),
     # correr (toggle) no canto inferior esquerdo, acima do joystick
     button("Sprint", "CORRER", 64, udim2(0, 150, 1, -140), [0.3, 0.3, 0.38], 13),
 ]}

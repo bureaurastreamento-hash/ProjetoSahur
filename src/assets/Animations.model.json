@@ -377,6 +377,92 @@
           }
         }
       ]
+    },
+    {
+      "name": "Emotes",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "wave",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "taunt",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "dance",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "bow",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "flex",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "scene_power",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "scene_dark",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "scene_storm",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        }
+      ]
     }
   ]
 }

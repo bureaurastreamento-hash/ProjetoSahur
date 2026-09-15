@@ -78,13 +78,15 @@ function FX.SetOutline(character: Model, color: Color3?)
 	end
 end
 
---- Aura persistente (partículas no HRP; ex.: kill streak). `nil` desliga.
-function FX.SetAura(character: Model, color: Color3?)
+--- Aura persistente (partículas no HRP; ex.: kill streak, cosmético, cena). `nil` desliga.
+--- `name` separa auras diferentes no mesmo boneco (padrão "Aura").
+function FX.SetAura(character: Model, color: Color3?, name: string?)
 	local root = character:FindFirstChild("HumanoidRootPart")
 	if not root then
 		return
 	end
-	local existing = root:FindFirstChild("Aura")
+	local auraName = name or "Aura"
+	local existing = root:FindFirstChild(auraName)
 	if not color then
 		if existing then
 			existing:Destroy()
@@ -92,7 +94,7 @@ function FX.SetAura(character: Model, color: Color3?)
 		return
 	end
 	local emitter = (existing :: ParticleEmitter?) or Instance.new("ParticleEmitter")
-	emitter.Name = "Aura"
+	emitter.Name = auraName
 	emitter.Color = ColorSequence.new(color)
 	emitter.LightEmission = 0.8
 	emitter.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(1, 0) })

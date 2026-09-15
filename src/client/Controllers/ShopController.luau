@@ -4,7 +4,7 @@
 	Preenche ShopGui.Panel com o catálogo de ShopConfig (moedas via Developer Product, passes)
 	e pede a compra ao servidor (RequestShop), que abre o prompt oficial da Roblox.
 	Só reflete: moedas vêm do atributo Coins; passes possuídos do atributo Pass_<key>.
-	O painel é aberto/fechado pelo ícone "Loja" (B) no TopbarController.
+	O painel é aberto/fechado pelo ícone "Loja" (L) no TopbarController.
 	API: ShopController.Panel (Frame) para o topbar ligar.
 ]]
 

@@ -1,8 +1,8 @@
 --!strict
 --[[
 	AbilityController (cliente)
-	  - E / R / T (ou Gamepad Y / B / R2) -> RequestAbility(1 / 2 / 3, direção)
-	  - G (ou Gamepad L2) -> RequestAwaken (Awakening com a carga cheia; libera o T por 20 s)
+	  - 1 / 2 / 3 / 4 (ou Gamepad Y / B / R2 / L2... só Y/B/R2 por enquanto) -> RequestAbility(slot, direção)
+	  - G (ou Gamepad L2) -> RequestAwaken: ULTIMATE + Awakening (carga cheia)
 	  (Q é o dash universal: MovementController.)
 	Não decide nada: cooldown mostrado é o que o servidor informou.
 	Direção: a do WASD/analógico no momento (ou a frente do personagem se parado). Serve para
@@ -22,6 +22,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -35,9 +36,10 @@ local AbilityController = {}
 local localPlayer = Players.LocalPlayer
 
 local SLOT_KEYS: { [Enum.KeyCode]: number } = {
-	[Enum.KeyCode.E] = 1,
-	[Enum.KeyCode.R] = 2,
-	[Enum.KeyCode.T] = 3,
+	[Enum.KeyCode.One] = 1,
+	[Enum.KeyCode.Two] = 2,
+	[Enum.KeyCode.Three] = 3,
+	[Enum.KeyCode.Four] = 4,
 	[Enum.KeyCode.ButtonY] = 1,
 	[Enum.KeyCode.ButtonB] = 2,
 	[Enum.KeyCode.ButtonR2] = 3,
@@ -55,6 +57,43 @@ local AWAKEN_COLOR = Color3.fromRGB(255, 200, 70)
 
 local requestAbility: RemoteEvent
 local requestAwaken: RemoteEvent
+local grabConn: RBXScriptConnection? = nil -- eu estou sendo carregado por um agarrão
+
+local function stopGrabbed()
+	if grabConn then
+		grabConn:Disconnect()
+		grabConn = nil
+	end
+	local character = localPlayer.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and localPlayer:GetAttribute("Ragdolled") ~= true then
+		humanoid.PlatformStand = false -- (caído, o RagdollService é quem manda)
+	end
+end
+
+--- Preso num agarrão: meu boneco (eu sou dono da física) fica colado à frente do atacante por `seconds`.
+local function startGrabbed(attacker: Model, seconds: number, offset: number)
+	stopGrabbed()
+	local character = localPlayer.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local aRoot = attacker:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root or not humanoid or not aRoot then
+		return
+	end
+	humanoid.PlatformStand = true
+	local endsAt = os.clock() + seconds
+	grabConn = RunService.RenderStepped:Connect(function()
+		if os.clock() >= endsAt or not aRoot.Parent or not root.Parent then
+			stopGrabbed()
+			return
+		end
+		-- de frente para o atacante, colado à frente dele
+		local target = aRoot.CFrame * CFrame.new(0, 0, -offset)
+		root.CFrame = CFrame.lookAt(target.Position, aRoot.Position)
+		root.AssemblyLinearVelocity = Vector3.zero
+	end)
+end
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 
 AbilityController.CooldownChanged = Instance.new("BindableEvent")
@@ -103,7 +142,24 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		elseif typeof(data) == "table" and data.Teleported then
 			FX.Trail(character, trailColor(characterId), 0.15, 3)
 		end
+	elseif phase == "grab" then
+		-- agarrou: a vítima segue o atacante (no cliente dela); todos veem a animação de carregar
+		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
+		local victim = if typeof(data) == "table" then data.Victim else nil
+		if typeof(victim) == "Instance" and victim == localPlayer.Character then
+			startGrabbed(character, tonumber(data.Carry) or 0.8, tonumber(data.Offset) or 3)
+			FX.Shake(0.4, 0.2)
+		end
+	elseif phase == "release" then
+		local victim = if typeof(data) == "table" then data.Victim else nil
+		if typeof(victim) == "Instance" and victim == localPlayer.Character then
+			stopGrabbed()
+		end
 	elseif phase == "hit" then
+		local victim = if typeof(data) == "table" then data.Victim else nil
+		if typeof(victim) == "Instance" and victim == localPlayer.Character then
+			stopGrabbed()
+		end
 		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true, at)
 		FX.PlaySoundAt(character, characterId, abilityId .. "_Hit")
 	end
@@ -167,6 +223,7 @@ function AbilityController.Start()
 
 	local function onCharacter(character: Model)
 		table.clear(cooldowns)
+		stopGrabbed()
 		-- Battlegrounds: o boneco nunca cai/ragdolla por empurrão (dash em parede, knockback)
 		local humanoid = character:WaitForChild("Humanoid", 10) :: Humanoid?
 		if humanoid then
@@ -182,7 +239,7 @@ function AbilityController.Start()
 		table.clear(cooldowns)
 	end)
 
-	Log.debug("[AbilityController] pronto. E/R/T = habilidades (direção pelo WASD), G = Awakening")
+	Log.debug("[AbilityController] pronto. 1/2/3/4 = habilidades (direção pelo WASD), G = ultimate")
 end
 
 return AbilityController

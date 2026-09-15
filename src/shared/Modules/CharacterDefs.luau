@@ -5,20 +5,23 @@
 	Lido pelo servidor (autoridade: cooldown, energia, efeito) e pelo cliente
 	(só teclas, nomes e feedback).
 
-	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — E/R são só cooldown
-	(EnergyCost = 0). A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano e
-	parryando; cheia, G ativa o AWAKENING (CombatConfig.Awakening: modo de 20 s com +dano/+velocidade)
-	e só nele a ultimate (slot 3, T, marcada com EnergyCost = Max) pode ser usada. HUD mostra "ULT".
+	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — teclas 1/2/3/4 são só
+	cooldown (EnergyCost = 0). A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano
+	e parryando; cheia, G dispara a ULTIMATE (a Ability com EnergyCost = Max, última da lista) e ativa o
+	AWAKENING (CombatConfig.Awakening: 20 s com +dano/+velocidade). HUD mostra "ULT".
 
 	Assets esperados (por nome, ver Assets.luau):
 	  Animations.<CharacterId>.<AbilityId>
 	  VFX.<CharacterId>.<AbilityId>
 
-	Slots: 1 = E, 2 = R, 3 = T (ultimate, EnergyCost = Max). O dash universal fica no Q e é de
-	TODOS os personagens (CombatConfig.Dash, MovementService) — não é habilidade daqui.
+	Slots: índice = tecla (1..4); a ultimate (EnergyCost = Max) fica por último e sai pelo G. O dash
+	universal fica no Q e é de TODOS os personagens (CombatConfig.Dash, MovementService).
 
 	Tipos de efeito (implementados em AbilityService):
 	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> investida COM dano (movimento no cliente, hitbox no servidor)
+	  Grab        { Speed, Duration, Range, Width, Height, Carry, Damage, Knockback?, StunSeconds? }
+	                                                                 -> investida; ao encostar SEGURA o alvo por Carry s (ele vai junto,
+	                                                                    sem poder agir; o atacante não é interrompido) e solta com o golpe
 	  Teleport    { Distance }                                       -> servidor move o HRP para frente (com raycast contra parede)
 	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
 	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
@@ -52,7 +55,7 @@ export type CharacterDef = {
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
-	Abilities: { AbilityDef }, -- índice = slot (1 = E, 2 = R, 3 = T = ultimate)
+	Abilities: { AbilityDef }, -- índice = tecla (1..4); a última com EnergyCost = Max é a ultimate (G)
 }
 
 local CharacterDefs = {}
@@ -70,7 +73,7 @@ CharacterDefs.DefaultCharacter = "Brawler"
 CharacterDefs.DashTuning = {
 	ForwardScale = 1.4, -- frente/trás
 	SideScale = 1.0, -- lados
-	SteerRate = 8, -- rad/s de correção pelo WASD durante o dash
+	SteerRate = 14, -- rad/s de correção pelo WASD durante o dash (liberdade de curvar)
 	MinDistanceHold = true, -- bateu em parede/jogador: a duração continua contando (sem "dash grátis")
 }
 
@@ -88,11 +91,12 @@ CharacterDefs.Characters = {
 		Abilities = {
 			{
 				Id = "ShoulderBash",
-				DisplayName = "Investida",
-				Cooldown = 6,
+				DisplayName = "Agarrão",
+				Cooldown = 8,
 				EnergyCost = 0,
-				CastTime = 0.35,
-				Effect = { Type = "Dash", Speed = 70, Duration = 0.25, Damage = 15, Range = 7, Width = 6, Height = 6 },
+				CastTime = 0.4,
+				-- agarra, carrega 0,8 s e esmaga no chão
+				Effect = { Type = "Grab", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 35, Duration = 0.25, Ragdoll = 1.5 } },
 			},
 			{
 				Id = "GroundSlam",
@@ -196,10 +200,11 @@ CharacterDefs.Characters = {
 			{
 				Id = "ShieldBash",
 				DisplayName = "Golpe de Escudo",
-				Cooldown = 7,
+				Cooldown = 8,
 				EnergyCost = 0,
 				CastTime = 0.4,
-				Effect = { Type = "Dash", Speed = 55, Duration = 0.2, Damage = 10, Range = 6, Width = 7, Height = 6, StunSeconds = 0.6 },
+				-- prende no escudo, empurra 0,6 s e arremessa atordoado
+				Effect = { Type = "Grab", Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.6, Damage = 12, StunSeconds = 0.6, Knockback = { Speed = 45, Duration = 0.25 } },
 			},
 			{
 				Id = "Fortify",

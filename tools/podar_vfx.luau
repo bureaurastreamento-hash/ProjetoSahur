@@ -37,13 +37,9 @@ local function ensureDir(p)
 end
 ensureDir(DESTINO)
 
--- limpa os arquivos podados antigos (só subpastas; ParticlePack.rbxm fica)
-for _, n in fs.readDir(DESTINO) do
-	local p = DESTINO .. "/" .. n
-	if fs.isDir(p) then
-		fs.removeDir(p)
-	end
-end
+-- Arquivos escritos nesta rodada; no fim apaga só os .rbxm que sobraram (arquivo a arquivo).
+-- NUNCA remover as pastas: o Rojo em `serve` crasha quando um diretório observado some.
+local escritos: { [string]: boolean } = {}
 
 local LIXO = { Script = true, LocalScript = true, ModuleScript = true, Sound = true, KeyframeSequence = true, Animation = true, BillboardGui = true }
 
@@ -105,7 +101,22 @@ for _, chave in chaves do
 	totalInst += n
 	arquivos += 1
 	ensureDir(DESTINO .. "/" .. pack)
-	fs.writeFile(("%s/%s/%s.rbxm"):format(DESTINO, pack, arquivo), roblox.serializeModel({ raiz }))
+	local caminhoSaida = ("%s/%s/%s.rbxm"):format(DESTINO, pack, arquivo)
+	escritos[caminhoSaida] = true
+	fs.writeFile(caminhoSaida, roblox.serializeModel({ raiz }))
 	print(("  %-45s %5d instâncias  (%d efeito(s))"):format(chave .. ".rbxm", n, #caminhos))
+end
+-- apaga o que ficou obsoleto (só arquivos; pastas vazias ficam para o Rojo não cair)
+for _, n in fs.readDir(DESTINO) do
+	local pasta = DESTINO .. "/" .. n
+	if fs.isDir(pasta) then
+		for _, f in fs.readDir(pasta) do
+			local caminho = pasta .. "/" .. f
+			if not escritos[caminho] and f:match("%.rbxm$") then
+				fs.removeFile(caminho)
+				print("  removido: " .. caminho)
+			end
+		end
+	end
 end
 print(("FIM: %d arquivos, %d instâncias em %s"):format(arquivos, totalInst, DESTINO))

@@ -17,11 +17,11 @@
      "UDim2": [
       [
        0,
-       640
+       460
       ],
       [
        0,
-       420
+       440
       ]
      ]
     },
@@ -152,7 +152,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "LOJA",
+      "Text": "COSMÉTICOS",
       "Font": "GothamBold",
       "TextSize": 16,
       "TextColor3": {
@@ -177,7 +177,7 @@
        "UDim2": [
         [
          0,
-         200
+         160
         ],
         [
          0,
@@ -221,10 +221,10 @@
      }
     },
     {
-     "name": "ProductsTitle",
-     "className": "TextLabel",
+     "name": "Tabs",
+     "className": "Frame",
      "properties": {
-      "Name": "ProductsTitle",
+      "Name": "Tabs",
       "Size": {
        "UDim2": [
         [
@@ -233,7 +233,7 @@
         ],
         [
          0,
-         16
+         28
         ]
        ]
       },
@@ -246,58 +246,6 @@
         [
          0,
          34
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "MOEDAS",
-      "Font": "GothamBold",
-      "TextSize": 11,
-      "TextColor3": {
-       "Color3": [
-        0.62,
-        0.62,
-        0.68
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Center",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
-    },
-    {
-     "name": "Products",
-     "className": "Frame",
-     "properties": {
-      "Name": "Products",
-      "Size": {
-       "UDim2": [
-        [
-         1,
-         0
-        ],
-        [
-         0,
-         96
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         54
         ]
        ]
       },
@@ -328,7 +276,7 @@
         "Padding": {
          "UDim": [
           0,
-          10
+          6
          ]
         },
         "HorizontalAlignment": "Left",
@@ -337,19 +285,19 @@
        }
       },
       {
-       "name": "Template",
+       "name": "TabSkin",
        "className": "TextButton",
        "properties": {
-        "Name": "Template",
+        "Name": "TabSkin",
         "Size": {
          "UDim2": [
           [
            0,
-           120
+           100
           ],
           [
-           0,
-           96
+           1,
+           0
           ]
          ]
         },
@@ -378,10 +326,10 @@
           0.12
          ]
         },
-        "BackgroundTransparency": 0.1,
-        "Text": "",
+        "BackgroundTransparency": 0.0,
+        "Text": "SKINS",
         "Font": "GothamBold",
-        "TextSize": 14,
+        "TextSize": 12,
         "TextColor3": {
          "Color3": [
           0.96,
@@ -391,7 +339,7 @@
         },
         "AutoButtonColor": true,
         "BorderSizePixel": 0,
-        "Visible": false
+        "LayoutOrder": 1
        },
        "children": [
         {
@@ -423,192 +371,275 @@
           "Transparency": 0.86,
           "ApplyStrokeMode": "Border"
          }
+        }
+       ]
+      },
+      {
+       "name": "TabCape",
+       "className": "TextButton",
+       "properties": {
+        "Name": "TabCape",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           100
+          ],
+          [
+           1,
+           0
+          ]
+         ]
         },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.1,
+          0.1,
+          0.12
+         ]
+        },
+        "BackgroundTransparency": 0.0,
+        "Text": "CAPAS",
+        "Font": "GothamBold",
+        "TextSize": 12,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "LayoutOrder": 2
+       },
+       "children": [
         {
-         "name": "UIPadding",
-         "className": "UIPadding",
+         "name": "UICorner",
+         "className": "UICorner",
          "properties": {
-          "Name": "UIPadding",
-          "PaddingLeft": {
+          "Name": "UICorner",
+          "CornerRadius": {
            "UDim": [
             0,
-            8
-           ]
-          },
-          "PaddingRight": {
-           "UDim": [
-            0,
-            8
-           ]
-          },
-          "PaddingTop": {
-           "UDim": [
-            0,
-            8
-           ]
-          },
-          "PaddingBottom": {
-           "UDim": [
-            0,
-            8
+            6
            ]
           }
          }
         },
         {
-         "name": "Amount",
-         "className": "TextLabel",
+         "name": "UIStroke",
+         "className": "UIStroke",
          "properties": {
-          "Name": "Amount",
-          "Size": {
-           "UDim2": [
-            [
-             1,
-             0
-            ],
-            [
-             0,
-             26
-            ]
-           ]
-          },
-          "Position": {
-           "UDim2": [
-            [
-             0,
-             0
-            ],
-            [
-             0,
-             0
-            ]
-           ]
-          },
-          "AnchorPoint": {
-           "Vector2": [
-            0,
-            0
-           ]
-          },
-          "BackgroundTransparency": 1,
-          "Text": "",
-          "Font": "GothamBold",
-          "TextSize": 20,
-          "TextColor3": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
            "Color3": [
-            1.0,
-            0.8,
-            0.3
-           ]
-          },
-          "TextXAlignment": "Left",
-          "TextYAlignment": "Center",
-          "BorderSizePixel": 0,
-          "RichText": false
-         }
-        },
-        {
-         "name": "Name",
-         "className": "TextLabel",
-         "properties": {
-          "Name": "Name",
-          "Size": {
-           "UDim2": [
-            [
-             1,
-             0
-            ],
-            [
-             0,
-             16
-            ]
-           ]
-          },
-          "Position": {
-           "UDim2": [
-            [
-             0,
-             0
-            ],
-            [
-             0,
-             28
-            ]
-           ]
-          },
-          "AnchorPoint": {
-           "Vector2": [
-            0,
-            0
-           ]
-          },
-          "BackgroundTransparency": 1,
-          "Text": "",
-          "Font": "GothamMedium",
-          "TextSize": 11,
-          "TextColor3": {
-           "Color3": [
-            0.62,
-            0.62,
-            0.68
-           ]
-          },
-          "TextXAlignment": "Left",
-          "TextYAlignment": "Center",
-          "BorderSizePixel": 0,
-          "RichText": false
-         }
-        },
-        {
-         "name": "Price",
-         "className": "TextLabel",
-         "properties": {
-          "Name": "Price",
-          "Size": {
-           "UDim2": [
-            [
-             1,
-             0
-            ],
-            [
-             0,
-             18
-            ]
-           ]
-          },
-          "Position": {
-           "UDim2": [
-            [
-             0,
-             0
-            ],
-            [
-             1,
-             0
-            ]
-           ]
-          },
-          "AnchorPoint": {
-           "Vector2": [
-            0,
+            1,
+            1,
             1
            ]
           },
-          "BackgroundTransparency": 1,
-          "Text": "",
-          "Font": "GothamBold",
-          "TextSize": 13,
-          "TextColor3": {
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        }
+       ]
+      },
+      {
+       "name": "TabAura",
+       "className": "TextButton",
+       "properties": {
+        "Name": "TabAura",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           100
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.1,
+          0.1,
+          0.12
+         ]
+        },
+        "BackgroundTransparency": 0.0,
+        "Text": "AURAS",
+        "Font": "GothamBold",
+        "TextSize": 12,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "LayoutOrder": 3
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
            "Color3": [
-            0.35,
-            0.8,
-            0.5
+            1,
+            1,
+            1
            ]
           },
-          "TextXAlignment": "Left",
-          "TextYAlignment": "Center",
-          "BorderSizePixel": 0,
-          "RichText": false
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        }
+       ]
+      },
+      {
+       "name": "TabEmote",
+       "className": "TextButton",
+       "properties": {
+        "Name": "TabEmote",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           100
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.1,
+          0.1,
+          0.12
+         ]
+        },
+        "BackgroundTransparency": 0.0,
+        "Text": "EMOTES",
+        "Font": "GothamBold",
+        "TextSize": 12,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "LayoutOrder": 4
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
          }
         }
        ]
@@ -616,10 +647,10 @@
      ]
     },
     {
-     "name": "PassesTitle",
+     "name": "Hint",
      "className": "TextLabel",
      "properties": {
-      "Name": "PassesTitle",
+      "Name": "Hint",
       "Size": {
        "UDim2": [
         [
@@ -640,7 +671,7 @@
         ],
         [
          0,
-         166
+         68
         ]
        ]
       },
@@ -651,8 +682,8 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "PASSES",
-      "Font": "GothamBold",
+      "Text": "Só visual: nada aqui dá vantagem. Clique para comprar / equipar.",
+      "Font": "GothamMedium",
       "TextSize": 11,
       "TextColor3": {
        "Color3": [
@@ -668,10 +699,10 @@
      }
     },
     {
-     "name": "Passes",
+     "name": "List",
      "className": "Frame",
      "properties": {
-      "Name": "Passes",
+      "Name": "List",
       "Size": {
        "UDim2": [
         [
@@ -680,7 +711,7 @@
         ],
         [
          1,
-         -206
+         -92
         ]
        ]
       },
@@ -692,7 +723,7 @@
         ],
         [
          0,
-         186
+         92
         ]
        ]
       },
@@ -744,7 +775,7 @@
           ],
           [
            0,
-           52
+           40
           ]
          ]
         },
@@ -839,16 +870,78 @@
           "PaddingTop": {
            "UDim": [
             0,
-            6
+            4
            ]
           },
           "PaddingBottom": {
            "UDim": [
             0,
-            6
+            4
            ]
           }
          }
+        },
+        {
+         "name": "Swatch",
+         "className": "Frame",
+         "properties": {
+          "Name": "Swatch",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             18
+            ],
+            [
+             0,
+             18
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0.5,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0.5
+           ]
+          },
+          "BackgroundColor3": {
+           "Color3": [
+            0.35,
+            0.75,
+            1.0
+           ]
+          },
+          "BackgroundTransparency": 0,
+          "BorderSizePixel": 0,
+          "Visible": true
+         },
+         "children": [
+          {
+           "name": "UICorner",
+           "className": "UICorner",
+           "properties": {
+            "Name": "UICorner",
+            "CornerRadius": {
+             "UDim": [
+              0,
+              9
+             ]
+            }
+           }
+          }
+         ]
         },
         {
          "name": "Name",
@@ -858,12 +951,12 @@
           "Size": {
            "UDim2": [
             [
-             0.7,
-             0
+             0.6,
+             -30
             ],
             [
-             0,
-             20
+             1,
+             0
             ]
            ]
           },
@@ -871,7 +964,7 @@
            "UDim2": [
             [
              0,
-             0
+             28
             ],
             [
              0,
@@ -888,7 +981,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamBold",
-          "TextSize": 14,
+          "TextSize": 13,
           "TextColor3": {
            "Color3": [
             0.96,
@@ -903,66 +996,14 @@
          }
         },
         {
-         "name": "Desc",
+         "name": "State",
          "className": "TextLabel",
          "properties": {
-          "Name": "Desc",
+          "Name": "State",
           "Size": {
            "UDim2": [
             [
-             0.7,
-             0
-            ],
-            [
-             0,
-             16
-            ]
-           ]
-          },
-          "Position": {
-           "UDim2": [
-            [
-             0,
-             0
-            ],
-            [
-             0,
-             20
-            ]
-           ]
-          },
-          "AnchorPoint": {
-           "Vector2": [
-            0,
-            0
-           ]
-          },
-          "BackgroundTransparency": 1,
-          "Text": "",
-          "Font": "GothamMedium",
-          "TextSize": 11,
-          "TextColor3": {
-           "Color3": [
-            0.62,
-            0.62,
-            0.68
-           ]
-          },
-          "TextXAlignment": "Left",
-          "TextYAlignment": "Center",
-          "BorderSizePixel": 0,
-          "RichText": false
-         }
-        },
-        {
-         "name": "Price",
-         "className": "TextLabel",
-         "properties": {
-          "Name": "Price",
-          "Size": {
-           "UDim2": [
-            [
-             0.3,
+             0.4,
              0
             ],
             [
@@ -992,7 +1033,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamBold",
-          "TextSize": 13,
+          "TextSize": 12,
           "TextColor3": {
            "Color3": [
             0.35,
@@ -1009,58 +1050,6 @@
        ]
       }
      ]
-    },
-    {
-     "name": "Hint",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "Hint",
-      "Size": {
-       "UDim2": [
-        [
-         1,
-         0
-        ],
-        [
-         0,
-         16
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         1,
-         0
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        1
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "Personagens são comprados com moedas na tela Personagens (V).",
-      "Font": "GothamMedium",
-      "TextSize": 11,
-      "TextColor3": {
-       "Color3": [
-        0.62,
-        0.62,
-        0.68
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Center",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
     }
    ]
   }

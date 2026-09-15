@@ -39,7 +39,7 @@ HUDController.OpenShop = Instance.new("BindableEvent")
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local SLOT_KEYS = { "E", "R", "T" } -- slots de habilidade; Q = dash universal (frame "Dash")
+local SLOT_KEYS = { "1", "2", "3", "4" } -- slots de habilidade; Q = dash universal (frames "Dash"/"DashSide"); G = ultimate (frame "Ult")
 local KILLFEED_MAX = 5
 local KILLFEED_LIFETIME = 6
 
@@ -63,7 +63,9 @@ local energyFill: Frame
 local energyText: TextLabel
 local characterNameLabel: TextLabel
 local slots: { Frame } = {}
-local dashSlot: Frame
+local dashSlot: Frame -- Q frente/trás (caído: ragdoll cancel)
+local dashSideSlot: Frame -- Q lateral
+local ultSlot: Frame -- G
 local killFeed: Frame
 local killTemplate: TextLabel
 local scoreboard: Frame
@@ -148,18 +150,22 @@ local function refreshSlots()
 	local characterId = localPlayer:GetAttribute("CharacterId")
 	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
 	characterNameLabel.Text = if def then def.DisplayName else ""
+	local ultDef: CharacterDefs.AbilityDef? = nil
 	for i, slot in slots do
 		local ability = def and def.Abilities[i]
 		local nameLabel = slot:FindFirstChild("Name") :: TextLabel
-		local costLabel = slot:FindFirstChild("Cost") :: TextLabel
+		if ability and ability.EnergyCost >= CharacterDefs.Energy.Max then
+			ultDef = ability
+			ability = nil -- a ultimate não ocupa slot numérico: sai pelo G
+		end
 		if ability then
 			slot.Visible = true
 			nameLabel.Text = ability.DisplayName
-			costLabel.Text = if ability.EnergyCost > 0 then "ULT" else "" -- só a ultimate tem custo (carga)
 		else
 			slot.Visible = false
 		end
 	end
+	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if ultDef then ultDef.DisplayName else "Ultimate"
 end
 
 local function setCooldownOverlay(slot: Frame, remaining: number, total: number)
@@ -184,43 +190,40 @@ local function updateCooldowns()
 		local cd = cooldowns[i]
 		local remaining = if cd then cd.readyAt - now else 0
 		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i) else nil
-		if ability and ability.EnergyCost >= CharacterDefs.Energy.Max and not awakened then
-			-- Ultimate trancada fora do Awakening: overlay cheio com a tecla que destranca
-			local overlay = slot:FindFirstChild("Cooldown") :: Frame
-			local text = slot:FindFirstChild("CooldownText") :: TextLabel
-			overlay.Size = UDim2.fromScale(1, 1)
-			text.Text = "G"
-		else
-			setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
-		end
+		setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
+	end
+	-- Ultimate (G): trancada até a carga encher; no Awakening mostra o tempo restante do modo
+	local e = localPlayer:GetAttribute("Energy")
+	local charged = typeof(e) == "number" and e >= CharacterDefs.Energy.Max
+	local ultOverlay = ultSlot:FindFirstChild("Cooldown") :: Frame
+	local ultText = ultSlot:FindFirstChild("CooldownText") :: TextLabel
+	if awakened then
+		ultOverlay.Size = UDim2.fromScale(1, math.clamp((awakenedUntil - now) / CombatConfig.Awakening.Duration, 0, 1))
+		ultText.Text = ("%d"):format(math.ceil(awakenedUntil - now))
+	elseif charged then
+		ultOverlay.Size = UDim2.fromScale(1, 0)
+		ultText.Text = ""
+	else
+		ultOverlay.Size = UDim2.fromScale(1, 1)
+		ultText.Text = if typeof(e) == "number" then ("%d%%"):format(math.floor(100 * e / CharacterDefs.Energy.Max + 0.5)) else ""
 	end
 	-- Awakening: a barra da ult vira contagem regressiva dourada
 	if awakened then
 		energyFill.Size = UDim2.fromScale(math.clamp((awakenedUntil - now) / CombatConfig.Awakening.Duration, 0, 1), 1)
 		energyText.Text = ("DESPERTO %ds"):format(math.ceil(awakenedUntil - now))
 	end
-	-- Dash universal (Q): caído mostra o cooldown do ragdoll cancel
+	-- Dash universal (Q): frente/trás e lateral têm cooldowns próprios; caído, o 1º mostra o ragdoll cancel
 	local dashCds = MovementController.GetDashCooldowns()
 	local ragdolled = localPlayer:GetAttribute("Ragdolled") == true
-	local cd = if ragdolled then dashCds.cancel else dashCds.dash
+	local cd = if ragdolled then dashCds.cancel else dashCds.forward
 	local remaining = if cd then cd.readyAt - now else 0
 	setCooldownOverlay(dashSlot, remaining, if cd then cd.total else remaining)
 	local nameLabel = dashSlot:FindFirstChild("Name") :: TextLabel
-	nameLabel.Text = if ragdolled then "Levantar" else "Dash"
-end
-
---- Slot da ultimate do personagem atual (a que custa toda a energia); 3 se não achar.
-local function ultSlotIndex(): number
-	local characterId = localPlayer:GetAttribute("CharacterId")
-	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
-	if def then
-		for i, ability in def.Abilities do
-			if ability.EnergyCost >= CharacterDefs.Energy.Max then
-				return i
-			end
-		end
-	end
-	return 3
+	nameLabel.Text = if ragdolled then "Levantar" else "Dash ↑↓"
+	local side = dashCds.side
+	local sideRemaining = if side then side.readyAt - now else 0
+	setCooldownOverlay(dashSideSlot, sideRemaining, if side then side.total else sideRemaining)
+	;(dashSideSlot:FindFirstChild("Name") :: TextLabel).Text = "Dash ←→"
 end
 
 local function flashSlot(slot: number, color: Color3)
@@ -493,6 +496,8 @@ function HUDController.Init()
 
 	local abilities = get(hud, "Abilities")
 	dashSlot = get(abilities, "Dash") :: Frame
+	dashSideSlot = get(abilities, "DashSide") :: Frame
+	ultSlot = get(abilities, "Ult") :: Frame
 	for i = 1, #SLOT_KEYS do
 		slots[i] = get(abilities, "Slot" .. i) :: Frame
 	end
@@ -544,7 +549,8 @@ function HUDController.Start()
 		local lines = {}
 		if def then
 			for slot, ability in def.Abilities do
-				table.insert(lines, ("%s  %s"):format(SLOT_KEYS[slot] or "?", ability.DisplayName))
+				local key = if ability.EnergyCost >= CharacterDefs.Energy.Max then "G" else (SLOT_KEYS[slot] or "?")
+				table.insert(lines, ("%s  %s"):format(key, ability.DisplayName))
 			end
 		end
 		;(b:FindFirstChild("Abilities") :: TextLabel).Text = table.concat(lines, "\n")
@@ -608,7 +614,7 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
 		local msgs = { coins = "Moedas insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",
-			vip = "Exclusivo do passe VIP (Loja, tecla B)", early = "Acesso antecipado: ainda não liberado" }
+			vip = "Exclusivo do passe VIP (Loja, tecla L)", early = "Acesso antecipado: ainda não liberado" }
 		local remaining = reason:match("^in_combat:(%d+)")
 		if remaining then
 			showBanner(("Em combate: fique %ss sem levar dano para trocar"):format(remaining), 2.5)
@@ -624,11 +630,12 @@ function HUDController.Start()
 		flashSlot(slot, Color3.fromRGB(60, 120, 200))
 		updateCooldowns()
 	end)
-	MovementController.DashCooldownChanged.Event:Connect(function()
-		local original = dashSlot.BackgroundColor3
-		dashSlot.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+	MovementController.DashCooldownChanged.Event:Connect(function(kind: string)
+		local frame = if kind == "side" then dashSideSlot else dashSlot
+		local original = frame.BackgroundColor3
+		frame.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
 		task.delay(0.15, function()
-			dashSlot.BackgroundColor3 = original
+			frame.BackgroundColor3 = original
 		end)
 		updateCooldowns()
 	end)
@@ -660,10 +667,12 @@ function HUDController.Start()
 			local pulse = TweenService:Create(energyFill, TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.45 })
 			pulse:Play()
 			ultPulse = pulse
-			local ultSlot = ultSlotIndex()
-			flashSlot(ultSlot, ULT_COLOR)
+			ultSlot.BackgroundColor3 = ULT_COLOR
+			task.delay(0.3, function()
+				ultSlot.BackgroundColor3 = slots[1].BackgroundColor3
+			end)
 			FX.PlaySoundUI("Shared", "UltReady")
-			showBanner("ULT PRONTA — G para despertar", 1.5)
+			showBanner("ULT PRONTA — G", 1.5)
 		elseif not full and wasFull then
 			if ultPulse then
 				ultPulse:Cancel()
@@ -679,7 +688,7 @@ function HUDController.Start()
 		local untilT = localPlayer:GetAttribute("AwakenedUntil")
 		if typeof(untilT) == "number" and untilT > Workspace:GetServerTimeNow() then
 			energyFill.BackgroundColor3 = ULT_COLOR
-			showBanner(("DESPERTAR! %ds — T liberado"):format(CombatConfig.Awakening.Duration), 2)
+			showBanner(("DESPERTAR! %ds de +dano/+velocidade"):format(CombatConfig.Awakening.Duration), 2)
 		else
 			energyFill.BackgroundColor3 = ENERGY_COLOR
 			refreshEnergy()

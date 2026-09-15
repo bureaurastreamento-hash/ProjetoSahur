@@ -44,7 +44,7 @@ RemoteEvents.Events = ({
 	RequestBlock = "RequestBlock", -- (active: boolean)
 	RequestRespawn = "RequestRespawn", -- ()
 	RequestSprint = "RequestSprint", -- (active: boolean)
-	RequestDash = "RequestDash", -- (direction: Vector3?) — dash universal (Q); ragdollado = ragdoll cancel
+	RequestDash = "RequestDash", -- (direction: Vector3?, cameraLook: Vector3?) — dash universal (Q); ragdollado = ragdoll cancel
 	RequestAbility = "RequestAbility", -- (slot: number, direction: Vector3?)
 	RequestAwaken = "RequestAwaken", -- () — G: ativa o Awakening se a carga da ult estiver cheia
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
@@ -53,6 +53,8 @@ RemoteEvents.Events = ({
 	RequestAdminCommand = "RequestAdminCommand", -- (command: string, args: table) — só após FetchAdminLogin ok
 	RequestProfile = "RequestProfile", -- () — cliente pronto pede o perfil de novo (o 1º NotifyProfile pode sair antes do boot do cliente)
 	RequestShop = "RequestShop", -- (kind: "product"|"pass", key: string) — abre o prompt de compra da Roblox
+	RequestCosmetic = "RequestCosmetic", -- (action: "buy"|"equip"|"unequip"|"buy_emote", id: string)
+	RequestEmote = "RequestEmote", -- (emoteId: string) — roda de emotes (B)
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 
 	-- Notify: servidor -> cliente
@@ -64,8 +66,8 @@ RemoteEvents.Events = ({
 	NotifyCooldown = "NotifyCooldown", -- dono: (reason: "parried"|"guardbreak"|"hit"|"stunned"|"crit_ready", seconds: number)
 	NotifyBlock = "NotifyBlock", -- all: (character: Model, active: boolean)
 	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number, up: number?)
-	NotifyDash = "NotifyDash", -- all: (character: Model, data: { Direction: Vector3, Speed: number, Duration: number, Cancel: boolean? })
-	NotifyDashCooldown = "NotifyDashCooldown", -- dono: (kind: "dash"|"cancel", readyAtServerTime: number, total: number)
+	NotifyDash = "NotifyDash", -- all: (character: Model, data: { Direction: Vector3, Facing: Vector3, Speed: number, Duration: number, Kind: "forward"|"side", Cancel: boolean? })
+	NotifyDashCooldown = "NotifyDashCooldown", -- dono: (kind: "forward"|"side"|"cancel", readyAtServerTime: number, total: number)
 	NotifyRagdoll = "NotifyRagdoll", -- all: (character: Model, active: boolean, seconds: number?)
 	NotifyMatchState = "NotifyMatchState", -- all: (state: "Waiting"|"Selecting"|"InProgress"|"Ending", data: table)
 	NotifyAbility = "NotifyAbility", -- all: (character: Model, characterId: string, abilityId: string, phase: string, data: table?)
@@ -77,6 +79,8 @@ RemoteEvents.Events = ({
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
 	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done", data: table)
+	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "bought"|"equipped"|"denied", data: table)
+	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }

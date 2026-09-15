@@ -40,6 +40,7 @@ type PlayerState = {
 	critUntil: number, -- parryou: próximo M1 até aqui é crítico
 	critArmedUntil: number, -- 1º crítico saiu: parry+crítico até aqui = Black Flash
 	lastRagdollHitAt: number, -- (vítima) último downslam que derrubou (RagdollOnce)
+	superArmorUntil: number, -- agarrão/ult: não toma hitstun nem cai (dano entra normal)
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -77,6 +78,7 @@ local function newState(): PlayerState
 		critUntil = 0,
 		critArmedUntil = 0,
 		lastRagdollHitAt = -math.huge,
+		superArmorUntil = 0,
 	}
 end
 
@@ -188,11 +190,24 @@ function CombatService.CancelBlock(player: Player)
 	end
 end
 
+--- Super armor: por `seconds` o jogador não entra em hitstun nem cai em ragdoll (agarrão em curso).
+function CombatService.SetSuperArmor(player: Player, seconds: number)
+	local state = getState(player)
+	state.superArmorUntil = math.max(state.superArmorUntil, os.clock() + seconds)
+end
+
+function CombatService.HasSuperArmor(player: Player): boolean
+	return os.clock() < getState(player).superArmorUntil
+end
+
 --- Hitstun: interrompe o combo/ações da vítima por HitStun.Duration e freia o andar.
 function CombatService.HitStun(player: Player)
 	local state = getState(player)
 	local cfg = CombatConfig.HitStun
 	local now = os.clock()
+	if now < state.superArmorUntil then
+		return
+	end
 	local until_ = now + cfg.Duration
 	if until_ <= state.hitStunUntil then
 		return -- já está em hitstun maior
@@ -242,13 +257,17 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	local flat = vRoot.Position - aRoot.Position
 	flat = Vector3.new(flat.X, 0, flat.Z)
 	local direction = if flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
+	if CombatService.HasSuperArmor(victimPlayer) then
+		return -- agarrando alguém: nem empurrão nem queda
+	end
 	if ragdollSeconds and ragdollSeconds > 0 then
 		CombatService.CancelBlock(victimPlayer)
 		RagdollService.Ragdoll(victimPlayer, ragdollSeconds)
 		duration = math.max(duration, 0.3) -- corpo solto voa um pouco mais
 	end
 	if AntiExploitService then
-		AntiExploitService.Grace(victimPlayer, duration + (ragdollSeconds or 0) + 0.5)
+		-- folga generosa: o corpo continua deslizando/voando depois do empurrão
+		AntiExploitService.Grace(victimPlayer, duration + (ragdollSeconds or 0) + 2.0)
 	end
 	notifyKnockback:FireClient(victimPlayer, direction, speed, duration, up)
 end
@@ -314,6 +333,12 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 		attackerState.critArmedUntil = 0 -- soco normal no meio quebra a corrente do Black Flash
 	end
 	local finalDamage = damage
+
+	-- NPC bloqueando (boneco de treino com atributo Blocking): só reduz, sem parry/guarda
+	if not victimPlayer and victim:GetAttribute("Blocking") == true and not opts.BreaksBlock and blockCovers(victim, attackerChar) then
+		kind = "blocked"
+		finalDamage = damage * CombatConfig.Block.DamageMultiplier
+	end
 
 	if victimState and victimState.blocking and victimPlayer and blockCovers(victim, attackerChar) then
 		local blockAge = now - victimState.blockStart
@@ -387,6 +412,31 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	return kind
 end
 
+--- Soco de NPC (boneco atacante): anima em todos (NotifyAttack) e, após o wind-up, acerta jogadores à
+--- frente com ResolveNpcHit. `comboIndex` só para a animação/knockback do 4º.
+function CombatService.NpcPunch(attackerChar: Model, comboIndex: number, damage: number)
+	local cfg = CombatConfig.Attacks.M1
+	notifyAttack:FireAllClients(attackerChar, "M1", comboIndex)
+	task.delay(cfg.HitDelay, function()
+		if not attackerChar.Parent or not HealthService.IsAlive(attackerChar) then
+			return
+		end
+		local kb = if comboIndex >= cfg.ComboLength then cfg.FinisherKnockback else nil
+		for _, victim in Hitbox.InFront(attackerChar, cfg.Range, cfg.Width, cfg.Height, cfg.MaxTargets) do
+			CombatService.ResolveNpcHit(attackerChar, victim, damage, kb)
+		end
+	end)
+end
+
+--- Aviso de block de NPC para os clientes (contorno/animação).
+function CombatService.NotifyNpcBlock(character: Model, active: boolean, player: Player?)
+	if player then
+		notifyBlock:FireClient(player, character, active)
+	else
+		notifyBlock:FireAllClients(character, active)
+	end
+end
+
 --- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
 function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: Knockback?): number
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
@@ -450,6 +500,10 @@ local function onRequestAttack(player: Player, attackId: any)
 	local now = os.clock()
 	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) then
 		return -- em cooldown/stun/ragdoll: ignorado silenciosamente
+	end
+	local dashingUntil = player:GetAttribute("DashingUntil")
+	if typeof(dashingUntil) == "number" and now < dashingUntil then
+		return -- no meio do dash (MovementService)
 	end
 	-- Downslam só caindo; uppercut só subindo (o cliente escolhe, o servidor confere)
 	local air = airState(character, humanoid)

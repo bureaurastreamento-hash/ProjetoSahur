@@ -22,6 +22,7 @@ local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
+local CosmeticsController = require(script.Parent:WaitForChild("CosmeticsController"))
 
 local TopbarController = {}
 
@@ -188,10 +189,18 @@ function TopbarController.Start()
 	shopIcon = Icon.new()
 		:setLabel("Loja")
 		:setCaption("Moedas e passes")
-		:setCaptionHint(Enum.KeyCode.B)
-		:bindToggleKey(Enum.KeyCode.B)
+		:setCaptionHint(Enum.KeyCode.L)
+		:bindToggleKey(Enum.KeyCode.L)
 		:bindToggleItem(shopPanel)
 		:setOrder(0)
+
+	Icon.new()
+		:setLabel("Cosméticos")
+		:setCaption("Skins, capas, auras e emotes (roda: B)")
+		:setCaptionHint(Enum.KeyCode.K)
+		:bindToggleKey(Enum.KeyCode.K)
+		:bindToggleItem(CosmeticsController.GetPanel())
+		:setOrder(6)
 
 	charactersIcon = Icon.new()
 		:setLabel("Personagens")

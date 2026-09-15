@@ -99,8 +99,9 @@ def screen(name, children, order=1, enabled=True, ignore_inset=True):
 
 
 def panel(name, w, h, title, children, hidden=True):
-    """Painel central padrão (aberto pelo TopbarPlus): título em caixa alta + conteúdo."""
-    return frame(name, ud(0, w, 0, h), ud(0.5, 0, 0.5, 0), anchor=(0.5, 0.5), visible=not hidden, children=[
+    """Painel padrão (aberto pelo TopbarPlus): título em caixa alta + conteúdo.
+    Fica encostado à ESQUERDA (jogo competitivo: o centro da tela nunca é coberto)."""
+    return frame(name, ud(0, w, 0, h), ud(0, 16, 0.5, 0), anchor=(0, 0.5), visible=not hidden, children=[
         corner(8), stroke(), padding(16),
         label("Title", title.upper(), ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=MUTED),
     ] + children)
@@ -115,12 +116,11 @@ def write(fname, data):
 # HUD
 # =============================================================================
 SLOT = 64
-SLOT_KEYS = ["E", "R", "T"]  # habilidades; o Q é o dash universal (frame "Dash", igual mas fixo)
+SLOT_KEYS = ["1", "2", "3", "4"]  # habilidades; Q = dash universal (frames Dash/DashSide); G = ultimate (frame Ult)
 
 
-def slot(i, name=None, key=None, ult=None):
+def slot(i, name=None, key=None, ult=False):
     key = key or SLOT_KEYS[i - 1]
-    ult = (i == 3) if ult is None else ult
     return frame(name or f"Slot{i}", ud(0, SLOT, 0, SLOT), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": i,
                  "ClipsDescendants": True}, children=[
         corner(6), stroke(0.8 if not ult else 0.5, 1, LINE if not ult else GOLD),
@@ -168,9 +168,10 @@ hud = screen("HUD", [
         ]),
     ]),
     # Habilidades
-    frame("Abilities", ud(0, SLOT * 4 + 8 * 3, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
+    frame("Abilities", ud(0, SLOT * 7 + 8 * 6, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
         listlayout("Horizontal", 8, "Center", "Center"),
-        slot(0, name="Dash", key="Q", ult=False), slot(1), slot(2), slot(3),
+        slot(-1, name="Dash", key="Q"), slot(0, name="DashSide", key="Q"),
+        slot(1), slot(2), slot(3), slot(4), slot(5, name="Ult", key="G", ult=True),
     ]),
     # Placar (Tab)
     frame("Scoreboard", ud(0, 240, 0, 260), ud(1, -16, 0.5, 0), anchor=(1, 0.5), visible=False, children=[
@@ -283,14 +284,15 @@ HELP = "\n".join([
     "PARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)",
     "CORRER — automático ao andar para a frente (W)",
     "SHIFT LOCK — Shift",
-    "DASH — Q (segue o WASD; lados/trás 2 s, frente 4,5 s; sai até durante o hitstun)",
+    "DASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)",
     "CAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)",
-    "HABILIDADES — E · R por cooldown · G = DESPERTAR com a carga cheia (20 s: +30% dano, +10% vel.)",
-    "T = ULTIMATE — só durante o Despertar · CARGA — dar golpe +6, receber +4, parry +10",
+    "HABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões carregam o alvo",
+    "G = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)",
+    "CARGA — dar golpe +6, receber +4, parry +10",
     "VIDA — regenera após 6 s sem dano",
-    "PERSONAGENS — V · LOJA — B · PERFIL — P · PLACAR — Tab · DUELO — J (Y aceita / N recusa)",
+    "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J",
     "BOSS — segure E no altar; anel vermelho = saia da área",
-    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 despertar",
+    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 ultimate",
 ])
 helpgui = screen("HelpGui", [
     panel("Panel", 640, 380, "Controles", [
@@ -336,3 +338,53 @@ shop = screen("ShopGui", [
     ]),
 ], order=3)
 write("ShopGui.model.json", shop)
+
+# =============================================================================
+# Cosméticos (skins, capas, auras, emotes): lista por categoria, comprar/equipar
+# =============================================================================
+cos_row = button("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), bg=CARD, t=0.1, extra={"Visible": False}, children=[
+    padding(10, 4),
+    frame("Swatch", ud(0, 18, 0, 18), ud(0, 0, 0.5, 0), anchor=(0, 0.5), bg=ACCENT, t=0, children=[corner(9)]),
+    label("Name", "", ud(0.6, -30, 1, 0), ud(0, 28, 0, 0), font=FONT_B, ts=13),
+    label("State", "", ud(0.4, 0, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=12, color=GREEN,
+          xalign="Right"),
+])
+tab_w = 100
+cosmetics = screen("CosmeticsGui", [
+    panel("Panel", 460, 440, "Cosméticos", [
+        label("Coins", "", ud(0, 160, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+              xalign="Right"),
+        frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, 34), t=1, children=[
+            listlayout("Horizontal", 6),
+            button("TabSkin", "SKINS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 1}),
+            button("TabCape", "CAPAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 2}),
+            button("TabAura", "AURAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 3}),
+            button("TabEmote", "EMOTES", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 4}),
+        ]),
+        label("Hint", "Só visual: nada aqui dá vantagem. Clique para comprar / equipar.", ud(1, 0, 0, 16),
+              ud(0, 0, 0, 68), ts=11, color=MUTED),
+        frame("List", ud(1, 0, 1, -92), ud(0, 0, 0, 92), t=1, children=[listlayout("Vertical", 6), cos_row]),
+    ]),
+], order=3)
+write("CosmeticsGui.model.json", cosmetics)
+
+# =============================================================================
+# Roda de emotes (B): 8 botões em círculo no centro-baixo, aparece enquanto aberta
+# =============================================================================
+import math as _m
+wheel_children = [
+    frame("Center", ud(0, 70, 0, 70), ud(0.5, 0, 0.5, 0), anchor=(0.5, 0.5), bg=BG, t=0.2, children=[
+        corner(35), stroke(),
+        label("Label", "EMOTES", ud(1, 0, 1, 0), ud(0, 0, 0, 0), font=FONT_B, ts=11, color=MUTED, xalign="Center"),
+    ]),
+]
+for i in range(8):
+    a = -_m.pi / 2 + i * (2 * _m.pi / 8)
+    x, y = round(_m.cos(a) * 120), round(_m.sin(a) * 120)
+    wheel_children.append(button(f"Slot{i + 1}", "", ud(0, 92, 0, 40), ud(0.5, x, 0.5, y), anchor=(0.5, 0.5),
+                                 bg=CARD, t=0.1, ts=12))
+emotes = screen("EmoteGui", [
+    frame("Wheel", ud(0, 340, 0, 300), ud(0.5, 0, 0.5, 40), anchor=(0.5, 0.5), t=1, visible=False,
+          children=wheel_children),
+], order=4)
+write("EmoteGui.model.json", emotes)

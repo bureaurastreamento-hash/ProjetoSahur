@@ -4,10 +4,11 @@
 	Corrida automática ao andar para a frente (cliente decide a direção; botão CORRER no mobile força).
 	  RequestSprint(active) -> WalkSpeed = CombatConfig.Sprint.Speed (não enquanto bloqueia)
 	Atributo Sprinting no Player: CombatService lê ao soltar o block; MovementController anima.
-	Dash UNIVERSAL (Q, CombatConfig.Dash): RequestDash(direction) -> valida cooldown (frontal maior
-	que lateral/trás), NotifyDash a todos (o dono move; os outros veem rastro/animação). Sem dano.
-	Sai durante hitstun; não sai em stun duro (parry/guard break). Ragdollado = RAGDOLL CANCEL:
-	levanta na hora com i-frames curtos e cooldown próprio (CombatConfig.CombatRagdoll).
+	Dash UNIVERSAL (Q, CombatConfig.Dash): RequestDash(direction, cameraLook) -> classifica lateral ×
+	frente/trás (dois cooldowns independentes), NotifyDash a todos (o dono move; os outros veem
+	rastro/animação). Sem dano. Não sai em stun (hitstun incluído). Durante o dash o atributo
+	DashingUntil bloqueia soco/habilidade. Ragdollado = RAGDOLL CANCEL: levanta na hora com i-frames
+	curtos e cooldown próprio (CombatConfig.CombatRagdoll).
 	Cooldowns vão por NotifyDashCooldown(kind, readyAtServerTime, total).
 ]]
 
@@ -18,6 +19,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
@@ -31,7 +33,8 @@ local dashLimiter = RateLimiter.new(6, 1)
 
 local ATTR_NO_COOLDOWN = "DevNoCooldown"
 
-type DashState = { dashReadyAt: number, cancelReadyAt: number }
+type DashState = { forwardReadyAt: number, sideReadyAt: number, cancelReadyAt: number }
+local ATTR_DASHING_UNTIL = "DashingUntil" -- os.clock(); CombatService/AbilityService recusam ações até aqui
 local dashStates: { [Player]: DashState } = {}
 
 local notifyDash: RemoteEvent
@@ -40,7 +43,7 @@ local notifyDashCooldown: RemoteEvent
 local function dashState(player: Player): DashState
 	local s = dashStates[player]
 	if not s then
-		s = { dashReadyAt = 0, cancelReadyAt = 0 }
+		s = { forwardReadyAt = 0, sideReadyAt = 0, cancelReadyAt = 0 }
 		dashStates[player] = s
 	end
 	return s
@@ -62,7 +65,7 @@ local function sanitizeDirection(root: BasePart, raw: any): Vector3
 	return facing(root)
 end
 
-local function onRequestDash(player: Player, rawDirection: any)
+local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	if not dashLimiter:Allow(player) then
 		return
 	end
@@ -76,7 +79,11 @@ local function onRequestDash(player: Player, rawDirection: any)
 	local now = os.clock()
 	local noCooldown = player:GetAttribute(ATTR_NO_COOLDOWN) == true
 	local direction = sanitizeDirection(root, rawDirection)
+	-- frente da câmera do cliente (só decide lateral × frente/trás e a orientação do strafe)
+	local facing = sanitizeDirection(root, rawLook)
 	local serverNow = workspace:GetServerTimeNow()
+	local sideways = math.abs(direction:Dot(facing)) < cfg.SideDot
+	local kind = if sideways then "side" else "forward"
 
 	-- Ragdoll cancel: Q caído = levanta agora (i-frames) e sai em dash; cooldown próprio
 	if RagdollService.IsRagdolled(player) then
@@ -92,25 +99,40 @@ local function onRequestDash(player: Player, rawDirection: any)
 			notifyDashCooldown:FireClient(player, "cancel", serverNow + rc.CancelCooldown, rc.CancelCooldown)
 		end
 		AntiExploitService.Grace(player, cfg.Duration * 2 + 1)
-		notifyDash:FireAllClients(character, { Direction = direction, Speed = cfg.Speed, Duration = cfg.Duration, Cancel = true })
+		player:SetAttribute(ATTR_DASHING_UNTIL, now + cfg.Duration * 1.4)
+		notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind, Cancel = true })
 		Log.debug(("[MovementService] %s ragdoll cancel"):format(player.Name))
 		return
 	end
 
-	if CombatService.IsHardStunned(player) then
+	-- Preso no combo/stun: não sai (a brecha é quando o atacante para de bater)
+	if CombatService.IsStunned(player) then
 		return
 	end
-	if now < state.dashReadyAt and not noCooldown then
+	local readyAt = if sideways then state.sideReadyAt else state.forwardReadyAt
+	if now < readyAt and not noCooldown then
 		return
 	end
-	local forward = direction:Dot(facing(root)) >= cfg.ForwardDot
-	local cooldown = if forward then cfg.ForwardCooldown else cfg.SideCooldown
+	local cooldown = if sideways then cfg.SideCooldown else cfg.ForwardBackCooldown
 	if not noCooldown then
-		state.dashReadyAt = now + cooldown
-		notifyDashCooldown:FireClient(player, "dash", serverNow + cooldown, cooldown)
+		if sideways then
+			state.sideReadyAt = now + cooldown
+		else
+			state.forwardReadyAt = now + cooldown
+		end
+		notifyDashCooldown:FireClient(player, kind, serverNow + cooldown, cooldown)
 	end
 	AntiExploitService.Grace(player, cfg.Duration * 2 + 1)
-	notifyDash:FireAllClients(character, { Direction = direction, Speed = cfg.Speed, Duration = cfg.Duration })
+	-- durante o dash não dá para socar/usar habilidade (lateral é mais curto: SideScale)
+	local scale = if sideways then CharacterDefs.DashTuning.SideScale else CharacterDefs.DashTuning.ForwardScale
+	player:SetAttribute(ATTR_DASHING_UNTIL, now + cfg.Duration * scale)
+	notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind })
+end
+
+--- Está no meio de um dash (Q)?
+function MovementService.IsDashing(player: Player): boolean
+	local untilT = player:GetAttribute(ATTR_DASHING_UNTIL)
+	return typeof(untilT) == "number" and os.clock() < untilT
 end
 
 local function setSprint(player: Player, active: boolean)

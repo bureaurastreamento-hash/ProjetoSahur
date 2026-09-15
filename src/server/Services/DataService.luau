@@ -122,6 +122,31 @@ local function migrate(raw: any): DataConfig.Profile
 		end
 		profile.missions = { day = math.floor((raw.missions :: any).day), list = list }
 	end
+	-- cosméticos/emotes (campos novos)
+	if typeof(raw.cosmetics) == "table" then
+		local c = raw.cosmetics :: any
+		if typeof(c.owned) == "table" then
+			for _, id in c.owned do
+				if typeof(id) == "string" then
+					table.insert(profile.cosmetics.owned, id)
+				end
+			end
+		end
+		if typeof(c.equipped) == "table" then
+			for category, id in c.equipped do
+				if typeof(category) == "string" and typeof(id) == "string" then
+					profile.cosmetics.equipped[category] = id
+				end
+			end
+		end
+	end
+	if typeof(raw.emotes) == "table" then
+		for _, id in raw.emotes do
+			if typeof(id) == "string" then
+				table.insert(profile.emotes, id)
+			end
+		end
+	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile

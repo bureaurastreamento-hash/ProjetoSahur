@@ -2,12 +2,13 @@
 --[[
 	AbilityService (servidor)
 	Autoridade sobre personagem escolhido, carga da ult, cooldowns e efeito de cada
-	habilidade (slots 1..3 = E/R/T). O dash universal (Q) é do MovementService.
+	habilidade (slots 1..4 = teclas 1/2/3/4; G = ultimate). O dash universal (Q) é do MovementService.
 	O cliente só envia RequestAbility(slot, direção) e RequestSelectCharacter(id).
 
-	Awakening (G, CombatConfig.Awakening): com a carga cheia, RequestAwaken zera a carga e liga o modo por
-	Duration s (+dano, +velocidade, aura por NotifyAbility "Awakening"); só nele o slot T (ultimate,
-	EnergyCost = Max) pode ser usado, sem custo.
+	Ultimate (G, CombatConfig.Awakening): com a carga cheia, RequestAwaken zera a carga, liga o modo
+	Awakening por Duration s (+dano, +velocidade, aura por NotifyAbility "Awakening") e dispara na hora a
+	ultimate do personagem (a Ability com EnergyCost = Max, sempre a última da lista). Slots 1..4 = só
+	habilidades normais.
 
 	Replicação de estado (para HUD): atributos no Player
 	  "CharacterId" (string), "Energy" (number), "AwakenedUntil" (number, GetServerTimeNow; 0 = fora)
@@ -257,6 +258,61 @@ effects.Dash = function(player, character, ability, direction)
 	end)
 end
 
+-- Agarrão: investida curta (como Dash) e, ao encostar no 1º alvo, SEGURA ele por Carry s (a vítima
+-- fica em stun duro e segue o atacante no cliente dela; o atacante ganha super armor: não pode ser
+-- interrompido) e solta com o golpe final (Damage + Knockback/ragdoll). Sem alvo = só a investida.
+local GRAB_OFFSET = 3 -- studs à frente do atacante onde a vítima fica presa
+effects.Grab = function(player, character, ability, direction)
+	local e = ability.Effect
+	local characterId = getState(player).characterId
+	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
+	AntiExploitService.Grace(player, maxDuration + e.Carry + 1.0)
+	CombatService.SetSuperArmor(player, maxDuration + e.Carry + 0.2)
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", {
+		Speed = e.Speed,
+		Duration = e.Duration,
+		Direction = direction,
+	})
+	task.spawn(function()
+		local endsAt = os.clock() + maxDuration + DASH_SAMPLE_INTERVAL
+		local caught: Model? = nil
+		while os.clock() < endsAt and not caught do
+			if not stillValid(player, character) then
+				return
+			end
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local vel = if root then Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z) else Vector3.zero
+			local dir = if vel.Magnitude > 5 then vel.Unit else direction
+			caught = Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 1)[1]
+			if not caught then
+				task.wait(DASH_SAMPLE_INTERVAL)
+			end
+		end
+		if not caught then
+			return
+		end
+		local victim = caught :: Model
+		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		if victimPlayer then
+			CombatService.CancelBlock(victimPlayer)
+			CombatService.Stun(victimPlayer, e.Carry + 0.3, "grabbed")
+			AntiExploitService.Grace(victimPlayer, e.Carry + 1.5)
+		end
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", { Victim = victim, Carry = e.Carry, Offset = GRAB_OFFSET })
+		task.wait(e.Carry)
+		if not stillValid(player, character) or not HealthService.IsAlive(victim) then
+			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
+			return
+		end
+		-- golpe final: a vítima está colada; ResolveHit sem parry (está presa)
+		CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
+		if victimPlayer and typeof(e.StunSeconds) == "number" then
+			CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
+		end
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Victim = victim })
+	end)
+end
+
 effects.Teleport = function(player, character, ability, direction)
 	local e = ability.Effect
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -451,6 +507,10 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if RagdollService.IsRagdolled(player) then
 		return deny(player, slot, "ragdoll")
 	end
+	local dashingUntil = player:GetAttribute("DashingUntil")
+	if typeof(dashingUntil) == "number" and now < dashingUntil then
+		return deny(player, slot, "dashing")
+	end
 	local noCooldown = player:GetAttribute(ATTR_NO_COOLDOWN) == true
 	if now < state.busyUntil and not noCooldown then
 		return deny(player, slot, "busy")
@@ -459,9 +519,8 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if now < readyAt and not noCooldown then
 		return deny(player, slot, "cooldown")
 	end
-	local isUltimate = ability.EnergyCost >= CharacterDefs.Energy.Max
-	if isUltimate and not AbilityService.IsAwakened(player) and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
-		return deny(player, slot, "awaken") -- ultimate só durante o Awakening (G)
+	if ability.EnergyCost >= CharacterDefs.Energy.Max then
+		return deny(player, slot, "use_g") -- a ultimate sai pelo G (RequestAwaken), não pelo slot
 	end
 	local handler = effects[ability.Effect.Type]
 	if not handler then
@@ -511,6 +570,26 @@ local function onRequestAwaken(player: Player)
 	CombatService.RestoreWalkSpeed(player)
 	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration })
 	Log.debug(("[AbilityService] %s DESPERTOU por %ds"):format(player.Name, cfg.Duration))
+	-- A ultimate do personagem (Abilities com EnergyCost = Max) sai junto com o despertar
+	local def = CharacterDefs.Get(state.characterId)
+	local ult: CharacterDefs.AbilityDef? = nil
+	if def then
+		for _, ability in def.Abilities do
+			if ability.EnergyCost >= CharacterDefs.Energy.Max then
+				ult = ability
+			end
+		end
+	end
+	if ult then
+		local handler = effects[ult.Effect.Type]
+		if handler then
+			state.busyUntil = now + ult.CastTime
+			local ok, err = pcall(handler :: any, player, character, ult, facing(character))
+			if not ok then
+				warn(("[AbilityService] erro na ultimate %s: %s"):format(ult.Id, tostring(err)))
+			end
+		end
+	end
 	task.delay(cfg.Duration, function()
 		if states[player] == state and player.Character == character and os.clock() >= state.awakenedUntil then
 			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)

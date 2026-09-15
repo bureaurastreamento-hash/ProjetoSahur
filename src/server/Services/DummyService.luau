@@ -5,6 +5,9 @@
 	(Players:CreateHumanoidModelFromDescription), tag "Combatant" para a Hitbox
 	aceitar, vida via HealthService (dano normal, sem crédito de kill/moedas: não é Player).
 	Posições: Parts "DummyPad*" em Workspace.Sahur (ArenaExtras); sem pads = nada.
+	Comportamento pelo NOME do pad (ordem alfabética): DummyPad0 = parado, DummyPad1 = bloqueando
+	sempre (atributo Blocking; testa block/guard break), DummyPad2 = ATACANTE (soca quem chegar perto,
+	combo de 4 com o ritmo do M1; testa hitstun/ragdoll/parry). Atributo "Behavior" no Model.
 	Respawn RESPAWN_SECONDS depois de morrer.
 ]]
 
@@ -16,6 +19,13 @@ local Workspace = game:GetService("Workspace")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local HealthService = require(script.Parent:WaitForChild("HealthService"))
+local CombatService = require(script.Parent:WaitForChild("CombatService"))
+
+local BEHAVIORS = { "idle", "block", "attack" } -- pelo índice do pad (ordenado por nome)
+local ATTACK_RANGE = 7 -- studs: começa a socar quem chegar a isto
+local ATTACK_DAMAGE = 3
 
 local DummyService = {}
 
@@ -38,6 +48,9 @@ local function findPads(): { BasePart }
 			table.insert(pads, d)
 		end
 	end
+	table.sort(pads, function(a, b)
+		return a.Name < b.Name
+	end)
 	table.sort(pads, function(a, b)
 		return a.Name < b.Name
 	end)
@@ -99,6 +112,41 @@ local function spawnAt(pad: BasePart, index: number)
 	model:PivotTo(cf)
 	model.Parent = folder
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	local behavior = BEHAVIORS[index] or "idle"
+	model:SetAttribute("Behavior", behavior)
+	if humanoid then
+		humanoid.DisplayName = if behavior == "block" then "Boneco (bloqueia)" elseif behavior == "attack" then "Boneco (ataca)" else "Boneco de treino"
+	end
+	if behavior == "block" then
+		model:SetAttribute("Blocking", true)
+		CombatService.NotifyNpcBlock(model, true)
+	elseif behavior == "attack" and humanoid then
+		-- soca quem chegar perto: combo de 4 no ritmo do M1, vira para o alvo (fica ancorado no lugar)
+		task.spawn(function()
+			local combo = 1
+			local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
+			while model.Parent and humanoid.Health > 0 and root do
+				local m1 = CombatConfig.Attacks.M1
+				local targets = Hitbox.Around(model, ATTACK_RANGE, 1)
+				local target = targets[1]
+				local tRoot = target and target:FindFirstChild("HumanoidRootPart") :: BasePart?
+				if tRoot and HealthService.IsAlive(target) then
+					local to = tRoot.Position - root.Position
+					to = Vector3.new(to.X, 0, to.Z)
+					if to.Magnitude > 0.1 then
+						model:PivotTo(CFrame.lookAt(root.Position, root.Position + to.Unit))
+					end
+					local isFinisher = combo >= m1.ComboLength
+					CombatService.NpcPunch(model, combo, ATTACK_DAMAGE)
+					combo = if isFinisher then 1 else combo + 1
+					task.wait(if isFinisher then m1.ComboEndCooldown else m1.Cooldown)
+				else
+					combo = 1
+					task.wait(0.3)
+				end
+			end
+		end)
+	end
 	if humanoid then
 		-- regen própria fora de combate (a do HealthService só cobre Players)
 		local lastHit = os.clock()
@@ -164,7 +212,16 @@ function DummyService.Start()
 	for i, pad in pads do
 		spawnAt(pad, i)
 	end
-	Log.debug(("[DummyService] %d boneco(s) de treino"):format(#pads))
+	-- quem entra depois vê o boneco bloqueador com o contorno
+	Players.PlayerAdded:Connect(function(player)
+		task.wait(2)
+		for _, model in folder:GetChildren() do
+			if model:IsA("Model") and model:GetAttribute("Blocking") == true then
+				CombatService.NotifyNpcBlock(model, true, player)
+			end
+		end
+	end)
+	Log.debug(("[DummyService] %d boneco(s) de treino (parado / bloqueia / ataca)"):format(#pads))
 end
 
 return DummyService

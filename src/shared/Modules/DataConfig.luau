@@ -37,6 +37,9 @@ export type Profile = {
 	level: number,
 	daily: { lastDay: number, streak: number }, -- lastDay = ProgressionConfig.DayIndex
 	missions: { day: number, list: { Mission } },
+	-- cosméticos (CosmeticsService): ids de CosmeticsConfig
+	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
+	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -49,6 +52,8 @@ function DataConfig.DefaultProfile(): Profile
 		level = 1,
 		daily = { lastDay = 0, streak = 0 },
 		missions = { day = 0, list = {} },
+		cosmetics = { owned = {}, equipped = {} },
+		emotes = {},
 	}
 end
 

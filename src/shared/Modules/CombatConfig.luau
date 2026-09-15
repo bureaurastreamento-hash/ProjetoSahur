@@ -71,15 +71,17 @@ CombatConfig.Attacks = {
 }
 
 -- Dash UNIVERSAL (Q, todo personagem; MovementService/MovementController). Sem dano.
--- Direção = WASD (frente do boneco se parado). Frente = fechar distância (cooldown maior);
--- lados/trás = esquiva (cooldown curto). Pode usar durante hitstun (é a saída defensiva), não
--- durante stun "duro" (parry/guard break). Q enquanto ragdollado = ragdoll cancel (abaixo).
+-- Direção = WASD relativo à CÂMERA (A/D = lateral puro, S = para trás, W/nada = frente); o boneco
+-- mantém a frente virada para a câmera durante o dash (strafe), sem girar para o lado.
+-- Dois cooldowns independentes: frente/trás e lateral. Não sai em stun nenhum (hitstun incluído:
+-- preso no combo só se sai quando o atacante para) nem caído; Q caído = ragdoll cancel (abaixo).
+-- Durante o dash (DashingUntil no Player) não dá para socar nem usar habilidade.
 CombatConfig.Dash = {
-	Speed = 70,
-	Duration = 0.22, -- base; CharacterDefs.DashTuning escala frente/lado
-	ForwardCooldown = 4.5,
-	SideCooldown = 2.0, -- lados e trás
-	ForwardDot = 0.5, -- direção·frente do boneco acima disso = dash frontal
+	Speed = 74,
+	Duration = 0.24, -- base; CharacterDefs.DashTuning escala frente/lado
+	ForwardBackCooldown = 4.0,
+	SideCooldown = 2.0,
+	SideDot = 0.5, -- |direção·frente da câmera| abaixo disso = lateral
 }
 
 -- Ragdoll de combate: cai por `seconds` (juntas soltas, sem agir), permite follow-ups.

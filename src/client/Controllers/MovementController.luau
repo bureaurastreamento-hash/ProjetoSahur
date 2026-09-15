@@ -11,9 +11,11 @@
 	    com pulo/queda). Assim funciona mesmo se o place trocar/remover o Animate.
 	    Diagnóstico: se a track carrega com Length 0, avisa no Output (id não é da conta dona
 	    do jogo ou foi feita para outro rig).
-	  - DASH UNIVERSAL no Q (gamepad X): RequestDash(direção do WASD). O servidor valida cooldown
-	    (CombatConfig.Dash) e manda NotifyDash; o movimento (LinearVelocity dirigível) é feito aqui
-	    no dono da física. Q caído = ragdoll cancel (o servidor decide). Sem dano.
+	  - DASH UNIVERSAL no Q (gamepad X): RequestDash(direção do WASD, frente da câmera). O servidor
+	    valida os dois cooldowns (lateral × frente/trás, CombatConfig.Dash) e manda NotifyDash; o
+	    movimento (LinearVelocity dirigível) é feito aqui no dono da física. Durante o dash o boneco
+	    fica virado para a câmera (A/D = strafe lateral de verdade, S = de costas). Q caído = ragdoll
+	    cancel (o servidor decide). Sem dano.
 	  - Ragdoll (NotifyRagdoll): para as animações de movimento; ao levantar força GettingUp.
 	API: MovementController.SetSprint(active) (mobile) · MovementController.Dash() (mobile)
 	     MovementController.SteerableDash(character, speed, duration, dir) (AbilityController: investidas)
@@ -200,6 +202,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local requestDash: RemoteEvent
+local shiftLock = false -- (shift lock; seção abaixo) o dash restaura AutoRotate só se não estiver ligado
 local dashConn: RBXScriptConnection? = nil
 local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
 local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -2, 0) } -- cabeça, tronco, pés
@@ -235,17 +238,24 @@ end
 --- Dash dirigível: LinearVelocity cujo vetor segue o WASD enquanto durar (mantém a última direção
 --- se soltar as teclas). Sem componente vertical: o Humanoid continua cuidando da gravidade/pulo.
 --- Usado pelo dash universal (Q) e pelas investidas de personagem (AbilityController).
-function MovementController.SteerableDash(character: Model, speed: number, duration: number, initial: Vector3)
+--- `facing` (opcional): frente a manter durante o dash (strafe); sem ela o boneco gira livre.
+function MovementController.SteerableDash(character: Model, speed: number, duration: number, initial: Vector3, facing: Vector3?)
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	if not root then
 		return
 	end
 	local tuning = CharacterDefs.DashTuning
 	-- Lateral vs frente/trás: escala da duração (distância) conforme a direção inicial
-	local look = root.CFrame.LookVector
+	local look = if facing then facing else root.CFrame.LookVector
 	local flatLook = Vector3.new(look.X, 0, look.Z)
 	local sideways = flatLook.Magnitude > 0.01 and math.abs(initial:Dot(flatLook.Unit)) < 0.5
 	duration *= if sideways then tuning.SideScale else tuning.ForwardScale
+	local keepFacing: Vector3? = if facing and flatLook.Magnitude > 0.01 then flatLook.Unit else nil
+	if keepFacing and humanoid then
+		humanoid.AutoRotate = false
+		root.CFrame = CFrame.lookAt(root.Position, root.Position + keepFacing)
+	end
 
 	if dashConn then
 		dashConn:Disconnect()
@@ -275,6 +285,9 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 		end
 		lv:Destroy()
 		attachment:Destroy()
+		if keepFacing and humanoid and not shiftLock then
+			humanoid.AutoRotate = true
+		end
 		if root.Parent then
 			-- sem momento residual (era isso que o AntiExploit via como "moveu demais" e o
 			-- que devolvia o boneco para o lado contrário na parede)
@@ -317,7 +330,24 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 		else
 			lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
 		end
+		if keepFacing then
+			-- strafe: a frente não gira para o lado do dash (lateral é lateral)
+			root.CFrame = CFrame.lookAt(root.Position, root.Position + keepFacing)
+		end
 	end)
+end
+
+--- Frente da câmera no plano (ou a frente do boneco se a câmera olhar reto para baixo).
+local function cameraLook(character: Model): Vector3
+	local camera = Workspace.CurrentCamera
+	local look = if camera then camera.CFrame.LookVector else Vector3.zero
+	local flat = Vector3.new(look.X, 0, look.Z)
+	if flat.Magnitude > 0.05 then
+		return flat.Unit
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local rl = if root then root.CFrame.LookVector else Vector3.new(0, 0, -1)
+	return Vector3.new(rl.X, 0, rl.Z).Unit
 end
 
 --- Pede o dash universal (Q / botão de toque). Caído = ragdoll cancel.
@@ -326,7 +356,7 @@ function MovementController.Dash()
 	if not character then
 		return
 	end
-	requestDash:FireServer(MovementController.MoveDirection(character))
+	requestDash:FireServer(MovementController.MoveDirection(character), cameraLook(character))
 end
 
 local function characterColor(character: Model): Color3
@@ -358,7 +388,8 @@ local function onNotifyDash(character: Model?, data: any)
 		FX.PlayAnimation(character, SHARED, "Dash")
 	end
 	if character == localPlayer.Character then
-		MovementController.SteerableDash(character, data.Speed, data.Duration, direction)
+		local facing = if typeof(data.Facing) == "Vector3" then data.Facing else nil
+		MovementController.SteerableDash(character, data.Speed, data.Duration, direction, facing)
 	end
 end
 
@@ -403,7 +434,6 @@ end
 -- Shift lock próprio no Shift (o nativo está desligado: StarterPlayer.EnableMouseLockOption=false)
 -- ---------------------------------------------------------------------------
 
-local shiftLock = false
 local shiftLockConn: RBXScriptConnection? = nil
 local SHIFTLOCK_OFFSET = Vector3.new(1.75, 0, 0)
 
@@ -532,7 +562,7 @@ function MovementController.Start()
 	localPlayer.CharacterAdded:Connect(function(character)
 		sprintSent = false
 		table.clear(dashCooldowns)
-		MovementController.DashCooldownChanged:Fire("dash", 0, 0)
+		MovementController.DashCooldownChanged:Fire("forward", 0, 0)
 		setup(character)
 		if shiftLock then
 			applyShiftLock(true) -- reaplica no personagem novo

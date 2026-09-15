@@ -200,7 +200,49 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite)
+## Retomar aqui (última sessão: 2026-09-15, noite — leva 2 de pedidos do dono)
+
+### Leva 2 (NÃO testada) — pedidos do dono depois do 1º teste
+- **AntiExploit** mais tolerante (2,2× WalkSpeed + 10 studs, 4 strikes; ignora caído/PlatformStand;
+  knockback dá 2 s extras de graça). Era o boss empurrando que disparava o rubber-band.
+- **Dash**: 2 cooldowns separados (`ForwardBackCooldown` 4 s, `SideCooldown` 2 s); direção pelo WASD
+  relativo à CÂMERA e o boneco fica de frente para a câmera durante o dash (A/D = strafe lateral, S =
+  de costas — nada de "virar e ir para frente"); SteerRate 14. HUD: 2 slots ("Dash ↑↓" e "Dash ←→").
+  **Não sai em stun nenhum** (preso no combo só sai quando o atacante para) e durante o dash
+  (`DashingUntil`) não dá para socar/usar habilidade.
+- **Teclas**: habilidades em **1/2/3/4**, **G = ULTIMATE** (dispara a ult do personagem + Awakening
+  20 s), F block, Q dash, **B = roda de emotes**, **K = cosméticos**, **L = loja** (era B), V/P/Tab/J iguais.
+- **Agarrões** (`Effect.Type = "Grab"`): Brawler `Agarrão` e Guardian `Golpe de Escudo` agora agarram:
+  investida curta → prende o 1º alvo por `Carry` s (vítima em stun duro, segue o atacante no cliente
+  dela: `AbilityController.startGrabbed`; atacante com **super armor**: sem hitstun/ragdoll) → golpe
+  final com dano/knockback. Animação opcional `<Char>.<Ability>_Carry`.
+- **Bonecos de treino** por pad (ordem alfabética): `DummyPad0` parado, `DummyPad1` **bloqueia sempre**
+  (atributo Blocking; −90%), `DummyPad2` **ataca** (combo de 4 no ritmo do M1 em quem chega a 7 studs;
+  `CombatService.NpcPunch`). Servem para testar block/parry/hitstun/ragdoll.
+- **Painéis** (Perfil/Loja/Controles/Cosméticos/Personagens) encostados à ESQUERDA (centro livre).
+- **Cosméticos** (`CosmeticsConfig` + `CosmeticsService` + `CosmeticsController` + `CosmeticsGui`):
+  skins (placeholder = cor do corpo até a arte chegar), capas (Part soldada ao Torso), auras
+  (`FX.SetAura "Cosmetic"`), tudo por moedas ou VIP; salvo no perfil (`cosmetics`, `emotes`).
+  Só visual. **Roda de emotes (B)**: 8 posições; "cenas" = emote + aura/VFX por 5 s (sem buff).
+  Animações em `Animations.Emotes.<id>` (ids vazios = a equipe faz).
+- **Rojo crash** ao rodar `podar_vfx`: era o script apagando a pasta observada; agora só sobrescreve /
+  apaga arquivo a arquivo.
+- **Fica com a arte/dono**: modelo do boss (é R6 escalado por código, `BossService.buildBoss`) e o
+  altar ambientado (`tools/gerar_arena.py` gera um pedestal simples ao sul da praça) — precisam de meshes
+  da equipe; eu só referencio por nome.
+
+### Roteiro de teste da leva 2
+1. Boss empurrando/ragdoll: NÃO deve mais aparecer `[AntiExploit] ... rubber-band`.
+2. Sem shift lock, câmera olhando para um lado: D+Q = dash lateral de verdade (boneco continua de
+   frente para a câmera), S+Q = de costas. Slots "Dash ↑↓" e "Dash ←→" contam separados.
+3. Apanhar do boneco atacante (DummyPad2): durante o combo, Q/F/habilidade NÃO saem; quando ele para
+   (após o 4º), F/Q funcionam. Bloquear na frente do boneco atacante: parry → crítico.
+4. Boneco bloqueador (DummyPad1): soco dá ~0; downslam (socar caindo) = "GUARDA QUEBRADA".
+5. Brawler 1 (Agarrão) no boneco/jogador: prende, carrega 0,8 s (quem é carregado não age) e esmaga.
+   Enquanto carrega, tomar soco não interrompe.
+6. G com carga cheia: ult sai na hora + despertar; 1/2/3 = habilidades.
+7. K: comprar capa/aura/skin (aparece no boneco; outro cliente vê); B: roda, clicar emote (sem
+   animação ainda; cena mostra aura 5 s).
 
 ### Onde paramos
 - **Feito nesta sessão (NÃO testado no Studio)** — PESQUISA_BATTLEGROUNDS §10 item 1:
@@ -276,7 +318,8 @@ Memória entre sessões. Atualizar depois de cada mudança.
 14. Boss: bater 6+ vezes em 3 s → "ENRAIVECEU", rugido, contorno vermelho, cura visível na barra.
 
 ### Próximo passo
-- §10 está TODO implementado; agora é o dono testar (roteiro acima) e balancear.
+- §10 está TODO implementado + leva 2 do dono; agora é testar (roteiros acima) e balancear.
+- Converter mais habilidades em agarrão se o dono quiser (só as corpo a corpo); versões "despertas".
 - Depois: wall splat (4º M1 perto de parede + dash), versões "despertas" das habilidades, mastery por
   personagem, gamepass "Servidor privado+", emotes (B), drop raro do boss para o top de dano.
 - Pendências do dono: apagar `Workspace.TopbarPlus` (Example); ids dos produtos/passes no
