@@ -202,6 +202,14 @@ Memória entre sessões. Atualizar depois de cada mudança.
 
 ## Retomar aqui (última sessão: 2026-09-15, noite — fase 5)
 
+### Boss com modelo 3D — 3ª versão (`src/shared/Modules/BossRig.luau`)
+- Output do dono mostrou: 71 MeshParts em 6 grupos (Tronco, Cabeça, BracoDir, BracoEsq, PernaDir,
+  PernaEsq), 21 Motor6D SÓ dentro de cada grupo (RigEdit), NENHUMA junta entre tronco e membros,
+  44 partes sem junta, hubs ancorados. `BossRig.Assemble` resolve: acha o hub de cada grupo, cria
+  Motor6D tronco→membros (Neck/Right Shoulder/…), solda soltas no mesmo grupo, HRP+RootJoint+Humanoid
+  R15, HipHeight. Runtime usa num clone achatado; `tools/montar_rig_boss.luau` (Command Bar, modo
+  Edit) aplica no `ServerStorage.BossModel` para animar no Animation Editor.
+
 ### Boss com modelo 3D (NÃO testado)
 - `BossService.rigFromModel`: monta rig por cima de um Model sem Humanoid — HRP invisível que colide
   (45% da largura, 60% da altura), Humanoid R6 com HipHeight calculado, Head/Torso invisíveis, todas as
@@ -636,6 +644,14 @@ Encaixar sons por nome a partir dos packs; anims restantes quando vierem ids; ba
 - Testar o topbar (V/P/Tab), a tela de perfil e os VFX do Particle Pack nas habilidades.
 - Asset "Textures" (id 18221073047) foi inserido no Studio pelo usuário em local desconhecido;
   decidir se vira VFX nomeado em `Assets.VFX.<Personagem>`.
+
+## Planos futuros (pedidos do dono, ainda não começados)
+- **Guerra de clã/máfia** (2026-09-15): modo em mapa próprio de DOMINAÇÃO (ainda pequeno): um grupo
+  contra o outro, pontos de controle a capturar/segurar, placar por clã. Precisa de: sistema de clãs
+  (criar/entrar/sair, tag no nome, cofre de pontos), fila/portal para o mapa de dominação, zonas de
+  captura (Parts nomeadas + progresso), rodada com tempo e vencedor, recompensas (pontos/roleta).
+  Reaproveita: MatchService (modo Teams com FreeRoam=false), DuelService (arenas separadas),
+  TeamId/CanFight, ArenaService. Desenvolver depois do polimento do combate.
 
 ## Próximos passos (ordem sugerida)
 1. ~~Game feel, parte 2~~ (feito).

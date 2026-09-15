@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local BossRig = require(Modules:WaitForChild("BossRig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
@@ -158,168 +159,19 @@ local function findModelTemplate(): Model?
 	return nil
 end
 
---- Monta/arruma o rig do modelo 3D. Aceita qualquer combinação: Model aninhado, com ou sem Humanoid,
---- com ou sem HumanoidRootPart, Motor6D feitos no RigEdit (dentro das partes). Regras:
----   • todas as partes viram filhas DIRETAS do boss (a Hitbox só conta filhos diretos);
----   • Motor6D são preservados (é o que anima); partes SEM junta (micro-detalhes) são soldadas
----     (WeldConstraint) à parte com junta mais próxima, então seguem a animação do membro;
----   • se não houver HumanoidRootPart, cria um HRP invisível na raiz da árvore de juntas com um
----     Motor6D "RootJoint"; só o HRP colide; Humanoid R15 com HipHeight calculado;
----   • escala para BossConfig.ModelHeight (ScaleTo escala as juntas junto).
+--- Rig do modelo 3D: BossRig.Assemble num clone (achatado para a Hitbox), escala para ModelHeight.
 local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
 	local model = template:Clone()
 	model.Name = BossConfig.Name
-	for _, d in model:GetDescendants() do
-		if d:IsA("Script") or d:IsA("LocalScript") or d:IsA("BodyMover") then
-			d:Destroy()
-		end
-	end
-	-- 1) achata: partes como filhas diretas (Motor6D/Weld dentro delas vêm junto; Part0/Part1 seguem válidos)
-	local parts: { BasePart } = {}
-	for _, d in model:GetDescendants() do
-		if d:IsA("BasePart") then
-			table.insert(parts, d)
-		end
-	end
-	if #parts == 0 then
+	local ok, report = pcall(BossRig.Assemble, model, { Flatten = true, Height = BossConfig.ModelHeight, FaceOffset = BossConfig.FaceOffset })
+	if not ok then
+		warn("[BossService] rig do boss falhou: " .. tostring(report))
 		model:Destroy()
 		return nil, nil, nil
 	end
-	for _, part in parts do
-		part.Parent = model
-	end
-	for _, d in model:GetChildren() do
-		if d:IsA("Model") or d:IsA("Folder") then
-			if #d:GetDescendants() == 0 then
-				d:Destroy()
-			end
-		end
-	end
-	-- 2) juntas existentes: quem está ligado por Motor6D
-	local jointed: { [BasePart]: boolean } = {}
-	local isChild: { [BasePart]: boolean } = {}
-	local motors: { Motor6D } = {}
-	for _, d in model:GetDescendants() do
-		if d:IsA("Motor6D") and d.Part0 and d.Part1 then
-			table.insert(motors, d)
-			jointed[d.Part0] = true
-			jointed[d.Part1] = true
-			isChild[d.Part1] = true
-		elseif (d:IsA("Weld") or d:IsA("WeldConstraint")) and d.Part0 and d.Part1 then
-			-- solda manual da equipe: a parte já está presa em algo, não soldar de novo
-			jointed[d.Part1] = true
-			isChild[d.Part1] = true
-		end
-	end
-	-- 3) raiz: HumanoidRootPart existente, senão a parte que é Part0 mas nunca Part1, senão a maior
-	local existingRoot = model:FindFirstChild("HumanoidRootPart")
-	local treeRoot: BasePart? = nil
-	for part in jointed do
-		if not isChild[part] and part.Name ~= "HumanoidRootPart" then
-			treeRoot = part
-			break
-		end
-	end
-	if not treeRoot then
-		local biggest = 0
-		for _, part in parts do
-			local v = part.Size.X * part.Size.Y * part.Size.Z
-			if v > biggest and part.Name ~= "HumanoidRootPart" then
-				biggest, treeRoot = v, part
-			end
-		end
-	end
-	local bcf, bbox = model:GetBoundingBox()
-	local root: BasePart
-	if existingRoot and existingRoot:IsA("BasePart") then
-		root = existingRoot
-	else
-		local newRoot = Instance.new("Part")
-		newRoot.Name = "HumanoidRootPart"
-		newRoot.Transparency = 1
-		newRoot.CastShadow = false
-		newRoot.Size = Vector3.new(math.clamp(bbox.X * 0.3, 2, 8), math.clamp(bbox.Y * 0.5, 2, 30), math.clamp(bbox.Z * 0.3, 2, 8))
-		newRoot.CFrame = CFrame.new(bcf.Position) * CFrame.Angles(0, math.rad(BossConfig.FaceOffset), 0)
-		newRoot.Parent = model
-		root = newRoot
-		if treeRoot then
-			local rj = Instance.new("Motor6D")
-			rj.Name = "RootJoint"
-			rj.Part0 = root
-			rj.Part1 = treeRoot
-			rj.C0 = root.CFrame:ToObjectSpace(treeRoot.CFrame)
-			rj.C1 = CFrame.identity
-			rj.Parent = root
-			jointed[treeRoot] = true
-		end
-	end
-	jointed[root] = true
-	-- 4) partes soltas (micro-detalhes): solda na parte com junta mais próxima
-	local anchorsList: { BasePart } = {}
-	for part in jointed do
-		table.insert(anchorsList, part)
-	end
-	local welded = 0
-	for _, part in parts do
-		if not jointed[part] and part ~= root then
-			local best: BasePart? = nil
-			local bestDist = math.huge
-			for _, cand in anchorsList do
-				local dist = (cand.Position - part.Position).Magnitude
-				if dist < bestDist then
-					best, bestDist = cand, dist
-				end
-			end
-			local weld = Instance.new("WeldConstraint")
-			weld.Part0 = best or root
-			weld.Part1 = part
-			weld.Parent = part
-			welded += 1
-		end
-	end
-	-- 5) física: só o HRP colide; nada ancorado; resto sem massa
-	for _, part in parts do
-		part.Anchored = false
-		part.CanCollide = false
-		part.CanQuery = true
-		part.Massless = true
-	end
-	root.Anchored = false
-	root.CanCollide = true
-	root.CanQuery = true
-	root.Massless = false
-	model.PrimaryPart = root
-	-- 6) Head para nome/vida (se o modelo não tiver)
-	if not model:FindFirstChild("Head") then
-		local head = Instance.new("Part")
-		head.Name = "Head"
-		head.Size = Vector3.new(1, 1, 1)
-		head.Transparency = 1
-		head.CanCollide = false
-		head.CanQuery = false
-		head.Massless = true
-		head.CFrame = CFrame.new(bcf.Position + Vector3.new(0, bbox.Y * 0.45, 0))
-		local hw = Instance.new("WeldConstraint")
-		hw.Part0 = root
-		hw.Part1 = head
-		hw.Parent = head
-		head.Parent = model
-	end
-	-- 7) Humanoid (R15 respeita HipHeight; R6 calcularia pelas pernas e "voa")
-	local humanoid = model:FindFirstChildOfClass("Humanoid") or Instance.new("Humanoid")
-	humanoid.RigType = Enum.HumanoidRigType.R15
-	humanoid.Parent = model
-	-- 8) escala (juntas e soldas acompanham) e HipHeight = do pé do HRP até o pé do modelo
-	if bbox.Y > 0.1 then
-		pcall(function()
-			model:ScaleTo(model:GetScale() * BossConfig.ModelHeight / bbox.Y)
-		end)
-	end
-	local cf2, size2 = model:GetBoundingBox()
-	local bottom = cf2.Position.Y - size2.Y / 2
-	humanoid.HipHeight = math.max(0, (root.Position.Y - root.Size.Y / 2) - bottom)
-	print(("[BossService] rig do boss: %d partes, %d Motor6D, %d soldadas automaticamente, altura %.1f, HipHeight %.1f, raiz %s"):format(#parts, #motors, welded, size2.Y, humanoid.HipHeight, treeRoot and treeRoot.Name or "?"))
-	return model, humanoid, root
+	local r = report :: BossRig.Report
+	print(("[BossService] rig do boss: %d partes em %d grupos, %d Motor6D, %d soldadas, raiz %s, HipHeight %.1f"):format(r.parts, r.groups, r.motors, r.welded, r.root, r.hipHeight))
+	return model, model:FindFirstChildOfClass("Humanoid"), model:FindFirstChild("HumanoidRootPart") :: BasePart?
 end
 
 --- [Admin] Imprime no Output a estrutura do BossModel (template) e do rig montado.
