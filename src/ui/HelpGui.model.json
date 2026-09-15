@@ -204,7 +204,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "SOCO — botão esquerdo do mouse (combo de 4; o 4º empurra)\nBLOQUEAR — segurar F (−70% de dano) · PARRY — apertar F até 0,2 s antes do golpe\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nHABILIDADES — Q (dash / teleporte, segue o WASD) · E · R · T (T = ultimate, 100 de energia)\nENERGIA — ganha ao dar (+6) e receber (+4) golpes · VIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — B · PERFIL — P · PLACAR — Tab · DUELO — J (Y aceita / N recusa)\nBOSS — segure E no altar; anel vermelho = saia da área\nGamepad: R1 soco · L1 block · X / Y / B / R2 habilidades",
+      "Text": "SOCO — botão esquerdo do mouse (combo de 4; o 4º empurra)\nBLOQUEAR — segurar F (−70% de dano) · PARRY — apertar F até 0,2 s antes do golpe\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nHABILIDADES — Q (dash / teleporte, segue o WASD) · E · R por cooldown · T = ULTIMATE (precisa da carga cheia)\nCARGA DA ULT — enche ao dar (+6) e receber (+4) golpes · VIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — B · PERFIL — P · PLACAR — Tab · DUELO — J (Y aceita / N recusa)\nBOSS — segure E no altar; anel vermelho = saia da área\nGamepad: R1 soco · L1 block · X / Y / B / R2 habilidades",
       "Font": "GothamMedium",
       "TextSize": 13,
       "TextColor3": {

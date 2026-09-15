@@ -200,7 +200,22 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, manhã/tarde — balanço completo antes de limpar o contexto)
+## Retomar aqui (última sessão: 2026-09-15, fim de tarde)
+
+### Onde paramos
+- Tudo commitado e enviado. Estado testado pelo dono: rig R6 ✓, HUD/topbar ✓, dash ✓, combo ✓, loja
+  "em breve" ✓, personagens (cartões) ✓, boss com IA nova (testado por cima).
+- **Última mudança (não testada)**: sem energia nas habilidades — Q/E/R só cooldown (`EnergyCost = 0`),
+  barra virou "ULT %" (carga enche dando/recebendo golpe), T custa carga cheia.
+- **Pesquisa feita**: `PESQUISA_BATTLEGROUNDS.md` (TSB / JJS / HB: M1, block, parry/crítico, dash,
+  ragdoll cancel, awakening, modos, boss). Tem "Sahur hoje / Fazer" por seção e a ordem sugerida (§10).
+- **Próximo passo**: começar pelo §10 item 1 (dash universal no Q + ragdoll de combate + ragdoll
+  cancel), depois M1 em %, block frontal + crítico, Awakening por G.
+- Pendências do dono: apagar `Workspace.TopbarPlus` (Example); ids dos produtos/passes no
+  `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animações Boss.Slam/Charge/Shockwave/Leap e
+  Sahur.*; passada de sons/VFX olhando junto (alguns não combinam com a ação).
+
+## Histórico (2026-09-15, manhã/tarde — balanço antes de limpar o contexto)
 
 ### Estado geral
 - Place OFICIAL: **126518739287432** (jogo de GRUPO). O antigo 85844807133499 ficou para trás. O Rojo é

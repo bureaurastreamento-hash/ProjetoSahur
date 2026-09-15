@@ -7,7 +7,7 @@
 
 	Fontes de verdade:
 	  NotifyHealth(current, max)                 -> barra de vida própria
-	  Player attr Energy / CharacterId           -> barra de energia, slots, seleção
+	  Player attr Energy / CharacterId           -> barra de carga da ult, slots, seleção
 	  NotifyAbilityCooldown (via AbilityController.CooldownChanged) -> overlay dos slots
 	  NotifyAbilityDenied                        -> pisca o slot
 	  NotifyMatchState(state, data)              -> topo, placar, banner, tela de seleção
@@ -152,7 +152,7 @@ local function refreshSlots()
 		if ability then
 			slot.Visible = true
 			nameLabel.Text = ability.DisplayName
-			costLabel.Text = if ability.EnergyCost > 0 then ("%d"):format(ability.EnergyCost) else ""
+			costLabel.Text = if ability.EnergyCost > 0 then "ULT" else "" -- só a ultimate tem custo (carga)
 		else
 			slot.Visible = false
 		end
@@ -604,6 +604,7 @@ function HUDController.Start()
 		local e = localPlayer:GetAttribute("Energy")
 		local energy = if typeof(e) == "number" then e else 0
 		setBar(energyFill, energyText, energy, CharacterDefs.Energy.Max)
+		energyText.Text = ("ULT %d%%"):format(math.floor(100 * energy / CharacterDefs.Energy.Max + 0.5))
 		-- Ult pronta: barra dourada pulsando + flash no slot da ult + som (uma vez por carga)
 		local full = energy >= CharacterDefs.Energy.Max
 		if full and not wasFull then

@@ -5,8 +5,9 @@
 	Lido pelo servidor (autoridade: cooldown, energia, efeito) e pelo cliente
 	(só teclas, nomes e feedback).
 
-	Energia: 0..MaxEnergy. Ganha ao dar/receber dano (ver Energy abaixo).
-	Ultimate = habilidade com EnergyCost = MaxEnergy.
+	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — Q/E/R são só cooldown
+	(EnergyCost = 0). A barra "Energy" virou a CARGA DA ULT (0..Max): enche dando/recebendo dano
+	durante a luta; a ultimate (slot 4, T) custa Max. HUD mostra como "ULT".
 
 	Assets esperados (por nome, ver Assets.luau):
 	  Animations.<CharacterId>.<AbilityId>
@@ -92,7 +93,7 @@ CharacterDefs.Characters = {
 				Id = "GroundSlam",
 				DisplayName = "Pancada no Chão",
 				Cooldown = 10,
-				EnergyCost = 30,
+				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25 } },
 			},
@@ -127,7 +128,7 @@ CharacterDefs.Characters = {
 				Id = "SweepKick",
 				DisplayName = "Rasteira",
 				Cooldown = 8,
-				EnergyCost = 25,
+				EnergyCost = 0,
 				CastTime = 0.4,
 				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 },
 			},
@@ -170,7 +171,7 @@ CharacterDefs.Characters = {
 				Id = "Mend",
 				DisplayName = "Restaurar",
 				Cooldown = 16,
-				EnergyCost = 35,
+				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "Heal", Amount = 30 },
 			},
@@ -206,7 +207,7 @@ CharacterDefs.Characters = {
 				Id = "Fortify",
 				DisplayName = "Fortificar",
 				Cooldown = 18,
-				EnergyCost = 30,
+				EnergyCost = 0,
 				CastTime = 0.3,
 				Effect = { Type = "Shield", Multiplier = 0.4, Duration = 6 },
 			},
@@ -243,7 +244,7 @@ CharacterDefs.Characters = {
 				Id = "Bombo",
 				DisplayName = "Bombo",
 				Cooldown = 9,
-				EnergyCost = 25,
+				EnergyCost = 0,
 				CastTime = 0.5,
 				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25 } },
 			},
@@ -251,7 +252,7 @@ CharacterDefs.Characters = {
 				Id = "Toque",
 				DisplayName = "Toque de Guerra",
 				Cooldown = 18,
-				EnergyCost = 35,
+				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "DamageBuff", Multiplier = 1.5, Duration = 6 },
 			},
