@@ -255,11 +255,23 @@ local function onNotifyDuel(event: string, data: any)
 		myRoomHost = nil
 		hideInvite()
 		panel.Visible = false
-		timerPrefix = "Preparar... "
+		local round = tonumber(data.round) or 1
+		timerPrefix = ("Round %d — Preparar... "):format(round)
 		timerEndsAt = tonumber(data.endsAt)
 		duelStatus.Visible = true
-		setStatus("Em duelo.")
+		setStatus(("Em duelo (round %d, melhor de %d)."):format(round, (tonumber(data.roundsToWin) or 2) * 2 - 1))
 		FX.PlaySoundUI("Match", "RoundStart")
+	elseif event == "round_end" then
+		-- Placar da série entre rounds; o "end" vem logo depois quando a série fecha
+		timerEndsAt = nil
+		local wins = if typeof(data.wins) == "table" then data.wins else { 0, 0 }
+		local rw = data.roundWinners
+		local mine = typeof(rw) == "table" and table.find(rw, localPlayer.Name) ~= nil
+		local who = if typeof(rw) == "table" and #rw > 0 then (if mine then "Você venceu o round" else "Round de " .. table.concat(rw, ", ")) else "Round empatado"
+		local text = ("%s  •  %d x %d"):format(who, tonumber(wins[1]) or 0, tonumber(wins[2]) or 0)
+		duelStatus.Text = text
+		duelStatus.Visible = true
+		setStatus(text)
 	elseif event == "state" then
 		if data.eliminated == localPlayer.Name then
 			setStatus(if data.reason == "fell" then "Você caiu da arena." else "Você foi eliminado.")
@@ -277,7 +289,8 @@ local function onNotifyDuel(event: string, data: any)
 		timerEndsAt = nil
 		local winners = data.winners
 		local won = typeof(winners) == "table" and table.find(winners, localPlayer.Name) ~= nil
-		local text = if typeof(winners) == "table" and #winners > 0 then (if won then "VITÓRIA!" else "Derrota — venceu " .. table.concat(winners, ", ")) else "Empate"
+		local wins = if typeof(data.wins) == "table" then (" (%d x %d)"):format(tonumber(data.wins[1]) or 0, tonumber(data.wins[2]) or 0) else ""
+		local text = (if typeof(winners) == "table" and #winners > 0 then (if won then "VITÓRIA!" else "Derrota — venceu " .. table.concat(winners, ", ")) else "Empate") .. wins
 		duelStatus.Text = text
 		duelStatus.Visible = true
 		setStatus(text)
@@ -296,8 +309,8 @@ local function tickTimer()
 		return
 	end
 	local remaining = math.max(0, timerEndsAt - Workspace:GetServerTimeNow())
-	if timerPrefix == "Preparar... " then
-		duelStatus.Text = ("Preparar... %d"):format(math.ceil(remaining))
+	if timerPrefix:find("Preparar") then
+		duelStatus.Text = ("%s%d"):format(timerPrefix, math.ceil(remaining))
 	else
 		duelStatus.Text = ("%d:%02d"):format(remaining // 60, math.floor(remaining % 60))
 	end

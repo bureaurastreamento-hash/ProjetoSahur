@@ -95,16 +95,18 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
   vermelho quando levam combo (empurra todos, +dano, +velocidade, cura o último dano, resiste a stun).
 - **Sahur hoje**: mapa livre ✓, duelo 1v1/2v2 ✓ (round único), placar/leaderboard ✓, XP/nível/missões,
   loja (ids pendentes) com VIP/Todos os personagens/Moedas x2, Early Access = personagem Sahur.
-- **Fazer**: kill streak com aura + anúncio; duelo melhor de 3; gamepass "Servidor privado+" (sem cd,
-  dummies); mastery por personagem (substitui parte do XP genérico) — opcional; emotes.
+- **FEITO 2026-09-15 noite (falta testar)**: kill streak (marcos 3/5/10/+5, aura a partir de 10, bônus
+  por encerrar sequência); duelo melhor de 3.
+- **Fazer**: gamepass "Servidor privado+" (sem cd, dummies); mastery por personagem — opcional; emotes.
 
 ## 8. Boss (referência HB/TSB)
 - Spawn por timer/altar, avisos de wind-up claros, **enrage** (contorno vermelho: +dano, +velocidade,
   cura o último dano, menos stun) quando os jogadores estendem combo nele; empurrão em área ao enraivecer;
   recompensa dividida por dano com bônus para o top.
 - **Sahur hoje**: altar, 6 golpes com telegraph, alvo por agressão, fase 2, recompensa por dano ✓.
-- **Fazer**: enrage reativo (levou N golpes em 3 s → Roar + contorno vermelho + cura parcial), resistência
-  a hitstun (boss nunca entra em hitstun), horário fixo além do altar, drop raro (emote/título) para o top.
+- **FEITO 2026-09-15 noite (falta testar)**: enrage reativo (6 golpes em 3 s → Roar + contorno vermelho +
+  cura de 50% da janela, +30% dano/vel. por 8 s). O boss já não entra em hitstun (só jogadores).
+- **Fazer**: horário fixo além do altar, drop raro (emote/título) para o top.
 
 ## 9. IA de NPC/dummies
 - Dummies de treino estáticos (private server+). Bosses são a única IA: máquina de estados

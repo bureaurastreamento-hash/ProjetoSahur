@@ -78,6 +78,33 @@ function FX.SetOutline(character: Model, color: Color3?)
 	end
 end
 
+--- Aura persistente (partículas no HRP; ex.: kill streak). `nil` desliga.
+function FX.SetAura(character: Model, color: Color3?)
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	local existing = root:FindFirstChild("Aura")
+	if not color then
+		if existing then
+			existing:Destroy()
+		end
+		return
+	end
+	local emitter = (existing :: ParticleEmitter?) or Instance.new("ParticleEmitter")
+	emitter.Name = "Aura"
+	emitter.Color = ColorSequence.new(color)
+	emitter.LightEmission = 0.8
+	emitter.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(1, 0) })
+	emitter.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.2), NumberSequenceKeypoint.new(1, 1) })
+	emitter.Lifetime = NumberRange.new(0.6, 1)
+	emitter.Rate = 25
+	emitter.Speed = NumberRange.new(3, 5)
+	emitter.SpreadAngle = Vector2.new(180, 180)
+	emitter.Acceleration = Vector3.new(0, 6, 0)
+	emitter.Parent = root
+end
+
 -- ---------------------------------------------------------------------------
 -- Animação
 -- ---------------------------------------------------------------------------

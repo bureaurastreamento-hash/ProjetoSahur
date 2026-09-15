@@ -694,9 +694,34 @@ function HUDController.Start()
 		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshMatchUI)
 	end
 
+	-- Kill streak: anúncio para todos + aura (atributo KillStreak replicado) em quem passa de AuraFrom
+	local STREAK_COLOR = Color3.fromRGB(255, 220, 90)
+	Remotes.GetEvent(Remotes.Events.NotifyStreak).OnClientEvent:Connect(function(event: string, who: Player, streak: number, data: any)
+		local coins = if typeof(data) == "table" and typeof(data.coins) == "number" and data.coins > 0 and who == localPlayer then (" (+%d moedas)"):format(data.coins) else ""
+		if event == "milestone" then
+			showBanner(("%s: %d eliminações seguidas!%s"):format(if who == localPlayer then "VOCÊ" else who.Name, streak, coins), 2.5)
+			FX.PlaySoundUI("Shared", "Streak")
+		elseif event == "shutdown" and typeof(data) == "table" then
+			showBanner(("%s encerrou a sequência de %s (%d)%s"):format(if who == localPlayer then "Você" else who.Name, tostring(data.victim), tonumber(data.ended) or 0, coins), 2.5)
+		end
+	end)
+	local function refreshAura(p: Player)
+		local character = p.Character
+		if not character then
+			return
+		end
+		local streak = p:GetAttribute("KillStreak")
+		FX.SetAura(character, if typeof(streak) == "number" and streak >= MatchConfig.KillStreak.AuraFrom then STREAK_COLOR else nil)
+	end
 	-- Placar do mapa livre reage a kills e entradas/saídas
 	local function watchKills(p: Player)
 		p:GetAttributeChangedSignal("SessionKills"):Connect(refreshScoreboard)
+		p:GetAttributeChangedSignal("KillStreak"):Connect(function()
+			refreshAura(p)
+		end)
+		p.CharacterAdded:Connect(function()
+			task.delay(0.5, refreshAura, p)
+		end)
 	end
 	Players.PlayerAdded:Connect(function(p)
 		watchKills(p)

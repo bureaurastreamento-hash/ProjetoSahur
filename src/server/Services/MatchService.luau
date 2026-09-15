@@ -47,6 +47,7 @@ type Round = {
 local state = "Waiting"
 local round: Round? = nil
 local notifyMatchState: RemoteEvent
+local notifyStreak: RemoteEvent
 
 -- ---------------------------------------------------------------------------
 -- Broadcast
@@ -191,13 +192,36 @@ local function eliminate(participant: Participant, killer: Player?)
 	end
 end
 
+local function isMilestone(streak: number): boolean
+	local cfg = MatchConfig.KillStreak
+	if table.find(cfg.Milestones, streak) then
+		return true
+	end
+	local last = cfg.Milestones[#cfg.Milestones]
+	return streak > last and (streak - last) % cfg.Every == 0
+end
+
 local function onDied(victim: Player, killer: Player?)
 	if MatchConfig.FreeRoam then
 		DataService.RecordDeath(victim)
 		victim:SetAttribute("SessionDeaths", ((victim:GetAttribute("SessionDeaths") :: number?) or 0) + 1)
+		local victimStreak = (victim:GetAttribute("KillStreak") :: number?) or 0
+		victim:SetAttribute("KillStreak", 0)
 		if killer and killer ~= victim then
 			DataService.RecordKill(killer)
 			killer:SetAttribute("SessionKills", ((killer:GetAttribute("SessionKills") :: number?) or 0) + 1)
+			-- Kill streak: marcos anunciados + moedas; encerrar a sequência de alguém paga bônus
+			local cfg = MatchConfig.KillStreak
+			local streak = ((killer:GetAttribute("KillStreak") :: number?) or 0) + 1
+			killer:SetAttribute("KillStreak", streak)
+			if isMilestone(streak) then
+				local coins = DataService.RewardCoins(killer, cfg.MilestoneCoins)
+				notifyStreak:FireAllClients("milestone", killer, streak, { coins = coins })
+			end
+			if victimStreak >= cfg.ShutdownMin then
+				local coins = DataService.RewardCoins(killer, victimStreak * cfg.ShutdownCoinsPerKill)
+				notifyStreak:FireAllClients("shutdown", killer, streak, { coins = coins, victim = victim.Name, ended = victimStreak })
+			end
 		end
 		return
 	end
@@ -369,6 +393,7 @@ end
 
 function MatchService.Init()
 	notifyMatchState = Remotes.GetEvent(Remotes.Events.NotifyMatchState)
+	notifyStreak = Remotes.GetEvent(Remotes.Events.NotifyStreak)
 end
 
 function MatchService.Start()
@@ -380,6 +405,7 @@ function MatchService.Start()
 		local function onPlayer(player: Player)
 			player:SetAttribute("SessionKills", 0)
 			player:SetAttribute("SessionDeaths", 0)
+			player:SetAttribute("KillStreak", 0)
 			task.wait(1)
 			notifyMatchState:FireClient(player, "FreeRoam", { state = "FreeRoam" })
 		end

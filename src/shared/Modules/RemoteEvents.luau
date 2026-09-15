@@ -60,6 +60,7 @@ RemoteEvents.Events = ({
 	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash")
 	NotifyHealth = "NotifyHealth", -- vítima: (current: number, max: number)
 	NotifyKill = "NotifyKill", -- all: (killer: Player?, victim: Player)
+	NotifyStreak = "NotifyStreak", -- all: (event: "milestone"|"shutdown", player: Player, streak: number, data: { coins: number?, victim: string?, ended: number? })
 	NotifyCooldown = "NotifyCooldown", -- dono: (reason: "parried"|"guardbreak"|"hit"|"stunned"|"crit_ready", seconds: number)
 	NotifyBlock = "NotifyBlock", -- all: (character: Model, active: boolean)
 	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number, up: number?)
@@ -74,10 +75,10 @@ RemoteEvents.Events = ({
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
-	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"attack"|"defeated"|"despawned"|"denied", data: table)
+	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
 	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done", data: table)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
-	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table); todos: "rooms" (lista de salas 2v2)
+	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

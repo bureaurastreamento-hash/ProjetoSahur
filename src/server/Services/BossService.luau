@@ -42,6 +42,9 @@ type Fight = {
 	finished: boolean,
 	target: Player?,
 	targetChosenAt: number,
+	recentHits: { { t: number, amount: number } }, -- golpes recebidos (janela do enrage)
+	enragedUntil: number,
+	enrageReadyAt: number,
 }
 
 local state = "Ready" -- Ready | Fighting | Cooldown | Missing
@@ -187,8 +190,15 @@ local function telegraph(position: Vector3, radius: number, seconds: number)
 	end)
 end
 
+local function isEnraged(f: Fight): boolean
+	return os.clock() < f.enragedUntil
+end
+
 local function hitAround(f: Fight, center: Vector3, attack: BossConfig.Attack)
 	local damage = attack.Damage * (if f.phase >= 2 then BossConfig.AI.Phase2DamageScale else 1)
+	if isEnraged(f) then
+		damage *= BossConfig.Enrage.DamageScale
+	end
 	for _, victim in Hitbox.AroundPoint(f.model, center, attack.Radius, 12) do
 		local victimPlayer = Players:GetPlayerFromCharacter(victim)
 		if victimPlayer then
@@ -198,6 +208,12 @@ local function hitAround(f: Fight, center: Vector3, attack: BossConfig.Attack)
 			end
 		end
 	end
+end
+
+--- WalkSpeed conforme fase e enrage.
+local function baseWalkSpeed(f: Fight): number
+	local speed = if f.phase >= 2 then BossConfig.PhaseTwoSpeed else BossConfig.WalkSpeed
+	return if isEnraged(f) then speed * BossConfig.Enrage.SpeedScale else speed
 end
 
 --- Move o boss até `goal` em `seconds` com um arco (pulo). Servidor é dono do rig.
@@ -243,13 +259,13 @@ local function doAttack(f: Fight, name: string, target: BasePart)
 			return
 		end
 		local goal = target.Position
-		f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed * 3
+		f.humanoid.WalkSpeed = baseWalkSpeed(f) * 3
 		f.humanoid:MoveTo(goal)
 		local t0 = os.clock()
 		while not f.finished and os.clock() - t0 < 1.2 and (f.root.Position - goal).Magnitude > 4 do
 			task.wait(0.05)
 		end
-		f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed
+		f.humanoid.WalkSpeed = baseWalkSpeed(f)
 		if not f.finished then
 			broadcast("attack", { model = f.model, name = name, phase = "hit", position = f.root.Position, radius = attack.Radius })
 			hitAround(f, f.root.Position, attack)
@@ -436,11 +452,42 @@ local function aiLoop(f: Fight)
 		-- fase 2
 		if f.phase == 1 and f.humanoid.Health <= f.humanoid.MaxHealth * BossConfig.PhaseTwoAt then
 			f.phase = 2
-			f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed
+			f.humanoid.WalkSpeed = baseWalkSpeed(f)
 			broadcast("phase", { phase = 2, model = f.model })
 			-- virada de fase: rugido na hora (atordoa quem estiver colado)
 			f.cooldowns.Roar = 0
 			doAttack(f, "Roar", f.root)
+		end
+		-- enrage: levou golpes demais em pouco tempo (combo estendido) -> ruge, cura parte, fica mais forte
+		local now = os.clock()
+		local e = BossConfig.Enrage
+		if not isEnraged(f) and now >= f.enrageReadyAt then
+			local count, taken = 0, 0
+			for i = #f.recentHits, 1, -1 do
+				local h = f.recentHits[i]
+				if now - h.t <= e.Window then
+					count += 1
+					taken += h.amount
+				else
+					table.remove(f.recentHits, i)
+				end
+			end
+			if count >= e.Hits then
+				f.enragedUntil = now + e.Duration
+				f.enrageReadyAt = now + e.Cooldown
+				table.clear(f.recentHits)
+				HealthService.Heal(f.model, taken * e.HealFraction)
+				f.humanoid.WalkSpeed = baseWalkSpeed(f)
+				broadcast("enrage", { model = f.model, duration = e.Duration, active = true })
+				f.cooldowns.Roar = 0
+				doAttack(f, "Roar", f.root)
+				task.delay(e.Duration, function()
+					if not f.finished and f.model.Parent then
+						f.humanoid.WalkSpeed = baseWalkSpeed(f)
+						broadcast("enrage", { model = f.model, active = false })
+					end
+				end)
+			end
 		end
 		if os.clock() - lastState > 0.5 then
 			lastState = os.clock()
@@ -485,6 +532,9 @@ local function summon(player: Player)
 		summoner = player,
 		damageBy = {},
 		phase = 1,
+		recentHits = {},
+		enragedUntil = 0,
+		enrageReadyAt = 0,
 		cooldowns = {},
 		lastSeenPlayer = os.clock(),
 		finished = false,
@@ -579,6 +629,7 @@ function BossService.Start()
 		local f = fight
 		if f and attacker and victim == f.model then
 			f.damageBy[attacker] = (f.damageBy[attacker] or 0) + amount
+			table.insert(f.recentHits, { t = os.clock(), amount = amount })
 		end
 	end)
 

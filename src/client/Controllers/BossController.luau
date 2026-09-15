@@ -73,6 +73,19 @@ local function onNotifyBoss(event: string, data: any)
 			FX.SpawnVFX(model, "Boss", "Roar")
 			FX.PlaySoundAt(model, "Boss", "Roar")
 		end
+	elseif event == "enrage" then
+		-- combo estendido no boss: contorno vermelho + aviso; some quando acaba
+		local model = if typeof(data.model) == "Instance" and data.model:IsA("Model") then data.model :: Model else nil
+		if data.active then
+			showBanner("O boss ENRAIVECEU — afaste-se!", 2.5)
+			FX.Shake(0.8, 0.5)
+			if model then
+				FX.SetOutline(model, Color3.fromRGB(255, 40, 40))
+				FX.Flash(model, Color3.fromRGB(255, 40, 40), 0.4)
+			end
+		elseif model then
+			FX.SetOutline(model, nil)
+		end
 	elseif event == "attack" then
 		-- golpes do boss: animação + VFX/som por nome (Assets Boss/<Nome> e Boss/<Nome>_Hit)
 		local model = data.model

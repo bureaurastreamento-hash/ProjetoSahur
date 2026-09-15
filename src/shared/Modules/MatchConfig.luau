@@ -33,6 +33,18 @@ MatchConfig.RoundTime = 180 -- duração máxima do round
 MatchConfig.EndTime = 6 -- tela de resultado
 MatchConfig.AllowLobbyCombat = true -- DEBUG: permite socos/habilidades no lobby. TODO(launch): false
 
+-- Kill streak (mapa livre): kills seguidas sem morrer (atributo KillStreak no Player).
+-- Marcos anunciados a todos (NotifyStreak "milestone") com moedas extras; a partir de AuraFrom o
+-- jogador ganha aura (cliente lê o atributo). Encerrar a sequência de alguém (>= ShutdownMin) paga bônus.
+MatchConfig.KillStreak = {
+	Milestones = { 3, 5, 10 }, -- depois de 10, a cada Every
+	Every = 5,
+	MilestoneCoins = 10,
+	AuraFrom = 10,
+	ShutdownMin = 5,
+	ShutdownCoinsPerKill = 2, -- bônus = streak da vítima × isto
+}
+
 -- Atributos no Player usados como "contrato" entre serviços (sem acoplamento direto):
 --   CanFight (boolean) : CombatService/AbilityService/HealthService só agem se ~= false
 --   InMatch  (boolean) : está participando do round atual

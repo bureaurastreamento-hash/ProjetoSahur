@@ -51,6 +51,18 @@ BossConfig.Attacks = {
 	Charge = { Damage = 25, Windup = 0.6, Range = 40, MinRange = 12, Radius = 7, Cooldown = 7, Weight = 2, Phase = 2, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } } :: Attack,
 }
 
+-- Enrage reativo (ref. HB): levou Hits golpes em Window s -> ruge (empurra/atordoa quem está colado),
+-- cura HealFraction do dano dessa janela, contorno vermelho e +dano/+velocidade por Duration s.
+BossConfig.Enrage = {
+	Hits = 6,
+	Window = 3,
+	Duration = 8,
+	Cooldown = 25, -- s entre um enrage e o próximo
+	HealFraction = 0.5,
+	DamageScale = 1.3,
+	SpeedScale = 1.3,
+}
+
 -- IA
 BossConfig.AI = {
 	RetargetSeconds = 5, -- reavalia o alvo (quem mais bateu ganha prioridade)

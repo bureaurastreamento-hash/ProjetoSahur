@@ -242,6 +242,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
     só funciona no modo** (slot mostra "G" trancado) e não gasta carga. Parry dá +10 de carga.
     Brawler `Rampage` virou golpe em área (30 de dano, ragdoll) porque o buff já é do modo.
     `CombatService.RestoreWalkSpeed` é público (MovementService/AbilityService usam).
+- **Também nesta sessão (NÃO testado)** — §10 item 5:
+  - **Kill streak** (`MatchConfig.KillStreak`, atributo `KillStreak` no Player, zera ao morrer): marcos
+    3/5/10 e a cada 5 → `NotifyStreak "milestone"` (banner para todos, +10 moedas); ≥ 10 → aura dourada
+    (`FX.SetAura`, por atributo replicado); matar quem tinha ≥ 5 → "shutdown" (+2 moedas × streak).
+  - **Duelo melhor de 3** (`DuelConfig.RoundsToWin = 2`, `MaxRounds = 3`, `BetweenRounds = 3`): cada
+    round = contagem → luta → `round_end` (placar); quem morre renasce no mapa com CanFight=false e
+    volta à arena no round seguinte; série fecha em 2 vitórias (ou 3 rounds, mais vitórias ganha).
+    DuelController mostra "Round N — Preparar…", placar entre rounds e no fim.
+  - **Enrage do boss** (`BossConfig.Enrage`): 6 golpes em 3 s → ruge (Roar), cura 50% do dano da janela,
+    +30% dano/velocidade por 8 s, contorno vermelho + banner (`NotifyBoss "enrage"`); recarga 25 s.
 - **Anterior, também não testado**: sem energia nas habilidades (só cooldown), barra "ULT %".
 
 ### Roteiro de teste (Studio, 2 clientes ou boneco de treino)
@@ -260,10 +270,15 @@ Memória entre sessões. Atualizar depois de cada mudança.
     você → próximo soco "CRÍTICO"; repetir parry+crítico em 4 s → "BLACK FLASH".
 11. Carga cheia → G: banner "DESPERTAR", aura, barra dourada contando 20 s, T destrava; antes disso T
     mostra "G" e não sai.
+12. Kill streak (2 clientes): 3 kills seguidas → banner para todos; morrer zera. (10 = aura.)
+13. Duelo 1v1: morrer no round 1 → renasce no mapa, 3 s depois volta à arena para o round 2; placar
+    "1 x 0"; série acaba em 2 vitórias.
+14. Boss: bater 6+ vezes em 3 s → "ENRAIVECEU", rugido, contorno vermelho, cura visível na barra.
 
 ### Próximo passo
-- §10 item 5: kill streak (banner/moedas), duelo melhor de 3, enrage do boss (§8). Depois wall splat e
-  versões "despertas" das habilidades (só o buff por enquanto). Balancear com testes.
+- §10 está TODO implementado; agora é o dono testar (roteiro acima) e balancear.
+- Depois: wall splat (4º M1 perto de parede + dash), versões "despertas" das habilidades, mastery por
+  personagem, gamepass "Servidor privado+", emotes (B), drop raro do boss para o top de dano.
 - Pendências do dono: apagar `Workspace.TopbarPlus` (Example); ids dos produtos/passes no
   `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animações `Shared.Dash`, `Shared.Downslam`,
   `Shared.Uppercut`, `<Char>.Awakening` (opcional), Boss.Slam/Charge/Shockwave/Leap e Sahur.*;

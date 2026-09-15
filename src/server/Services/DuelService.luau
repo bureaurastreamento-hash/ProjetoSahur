@@ -44,6 +44,7 @@ type Participant = {
 	player: Player,
 	teamId: number,
 	alive: boolean,
+	left: boolean, -- saiu do servidor: não volta nos próximos rounds
 }
 
 type Duel = {
@@ -57,6 +58,8 @@ type Duel = {
 	endsAt: number,
 	finished: boolean,
 	winnerTeam: number?, -- -1 = empate
+	round: number, -- round atual (1..MaxRounds)
+	wins: { [number]: number }, -- teamId -> rounds vencidos
 }
 
 type Invite = {
@@ -187,6 +190,9 @@ local function stateData(duel: Duel): { [string]: any }
 		duelId = duel.id,
 		endsAt = serverTimeIn(duel.endsAt - os.clock()),
 		players = players,
+		round = duel.round,
+		wins = { duel.wins[1] or 0, duel.wins[2] or 0 },
+		roundsToWin = DuelConfig.RoundsToWin,
 	}
 end
 
@@ -457,8 +463,8 @@ local function finishDuel(duel: Duel)
 			ProgressionService.OnDuelResult(p.player, won)
 		end
 	end
-	Log.debug(("[DuelService] duelo %d: %s"):format(duel.id, if #names > 0 then "venceu " .. table.concat(names, ", ") else "empate"))
-	notifyAll(duel, "end", { winners = names, endsAt = serverTimeIn(DuelConfig.EndTime) })
+	Log.debug(("[DuelService] duelo %d: %s (%d x %d)"):format(duel.id, if #names > 0 then "venceu " .. table.concat(names, ", ") else "empate", duel.wins[1] or 0, duel.wins[2] or 0))
+	notifyAll(duel, "end", { winners = names, endsAt = serverTimeIn(DuelConfig.EndTime), wins = { duel.wins[1] or 0, duel.wins[2] or 0 } })
 	task.wait(DuelConfig.EndTime)
 	for _, p in duel.participants do
 		-- quem morreu já renasceu no mapa livre; quem ainda está na arena recarrega
@@ -468,12 +474,12 @@ local function finishDuel(duel: Duel)
 	slotsInUse[duel.slot] = nil
 end
 
-local function runDuel(duel: Duel)
-	-- contagem
-	notifyAll(duel, "start", { countdown = DuelConfig.Countdown, endsAt = serverTimeIn(DuelConfig.Countdown), players = stateData(duel).players })
+--- Um round: contagem, combate, vencedor do round (teamId ou -1 = empate). nil se o duelo acabou antes.
+local function runRound(duel: Duel): number?
+	notifyAll(duel, "start", { countdown = DuelConfig.Countdown, endsAt = serverTimeIn(DuelConfig.Countdown), players = stateData(duel).players, round = duel.round, wins = { duel.wins[1] or 0, duel.wins[2] or 0 }, roundsToWin = DuelConfig.RoundsToWin })
 	task.wait(DuelConfig.Countdown)
 	if duel.finished then
-		return
+		return nil
 	end
 	duel.startedAt = os.clock()
 	duel.endsAt = duel.startedAt + DuelConfig.RoundTime
@@ -500,11 +506,67 @@ local function runDuel(duel: Duel)
 		end
 		local winner = checkWinner(duel, os.clock() >= duel.endsAt)
 		if winner ~= nil then
-			duel.winnerTeam = winner
+			return winner
+		end
+		task.wait(0.25)
+	end
+	return nil
+end
+
+--- Time com mais rounds vencidos (-1 = empate).
+local function seriesLeader(duel: Duel): number
+	local w1, w2 = duel.wins[1] or 0, duel.wins[2] or 0
+	if w1 == w2 then
+		return -1
+	end
+	return if w1 > w2 then 1 else 2
+end
+
+local function runDuel(duel: Duel)
+	local spawns = spawnCFrames(duel.map)
+	local half = math.max(1, #spawns // 2)
+	while not duel.finished do
+		duel.round += 1
+		if duel.round > 1 then
+			-- Round novo: todo mundo que ainda está no servidor volta para a arena, vivo
+			local used: { [number]: number } = {}
+			for _, p in duel.participants do
+				if not p.left and p.player.Parent == Players then
+					p.alive = true
+					local base = if p.teamId == 1 then 1 else half + 1
+					local k = (used[p.teamId] or 0)
+					used[p.teamId] = k + 1
+					task.spawn(spawnParticipant, duel, p, spawns[((base - 1 + k) % #spawns) + 1])
+				end
+			end
+			task.wait(0.5)
+		end
+		local roundWinner = runRound(duel)
+		if roundWinner == nil then
+			return
+		end
+		if roundWinner >= 0 then
+			duel.wins[roundWinner] = (duel.wins[roundWinner] or 0) + 1
+		end
+		for _, p in duel.participants do
+			p.player:SetAttribute("CanFight", false)
+		end
+		local w1, w2 = duel.wins[1] or 0, duel.wins[2] or 0
+		local seriesOver = w1 >= DuelConfig.RoundsToWin or w2 >= DuelConfig.RoundsToWin or duel.round >= DuelConfig.MaxRounds
+		notifyAll(duel, "round_end", {
+			round = duel.round,
+			roundWinners = winnerNames(duel, roundWinner),
+			wins = { w1, w2 },
+			roundsToWin = DuelConfig.RoundsToWin,
+			seriesOver = seriesOver,
+			endsAt = serverTimeIn(DuelConfig.BetweenRounds),
+		})
+		if seriesOver then
+			duel.winnerTeam = seriesLeader(duel)
 			finishDuel(duel)
 			return
 		end
-		task.wait(0.25)
+		task.wait(DuelConfig.BetweenRounds)
 	end
 end
 
@@ -542,10 +604,12 @@ function DuelService.StartDuel(teams: { { Player } }): (boolean, string)
 		endsAt = os.clock() + DuelConfig.Countdown + DuelConfig.RoundTime,
 		finished = false,
 		winnerTeam = nil,
+		round = 0,
+		wins = {},
 	}
 	for teamId, members in teams do
 		for _, player in members do
-			local participant: Participant = { player = player, teamId = teamId, alive = true }
+			local participant: Participant = { player = player, teamId = teamId, alive = true, left = false }
 			table.insert(duel.participants, participant)
 			duel.byPlayer[player] = participant
 			duelByPlayer[player] = duel
@@ -634,8 +698,8 @@ local function onDied(victim: Player, killer: Player?)
 	local participant = duel and duel.byPlayer[victim]
 	if duel and participant then
 		eliminate(duel, participant, "died")
-		-- o respawn automático vai para o mapa livre; solta os atributos já
-		returnToWorld(victim, false)
+		-- Melhor de 3: continua no duelo. O respawn automático cai no mapa (CanFight=false) e o
+		-- próximo round traz de volta; se a série acabou, finishDuel devolve ao mapa livre.
 	end
 end
 
@@ -648,6 +712,7 @@ local function onPlayerRemoving(player: Player)
 	local duel = duelByPlayer[player]
 	local participant = duel and duel.byPlayer[player]
 	if duel and participant then
+		participant.left = true
 		eliminate(duel, participant, "left")
 		duelByPlayer[player] = nil
 	end
