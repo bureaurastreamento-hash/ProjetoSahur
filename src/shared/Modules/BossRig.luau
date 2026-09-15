@@ -290,12 +290,24 @@ end
 --- Studio (modo Edit, Command Bar), UMA LINHA:
 ---   require(game.ReplicatedStorage.Shared.Modules.BossRig).Studio()
 --- Aplica o rig em cima de ServerStorage.BossModel (mantém os grupos) para animar no Animation Editor.
-function BossRig.Studio(): Report?
+--- `removeManualWelds = true` apaga os Weld/WeldConstraint feitos à mão antes (o rig cria tudo o que
+--- precisa; welds entre membros diferentes travam a animação).
+function BossRig.Studio(removeManualWelds: boolean?): Report?
 	local ServerStorage = game:GetService("ServerStorage")
 	local model = ServerStorage:FindFirstChild("BossModel", true)
 	if not model or not model:IsA("Model") then
 		warn("[BossRig] ServerStorage.BossModel não encontrado")
 		return nil
+	end
+	if removeManualWelds then
+		local removed = 0
+		for _, d in model:GetDescendants() do
+			if (d:IsA("Weld") or d:IsA("WeldConstraint")) then
+				d:Destroy()
+				removed += 1
+			end
+		end
+		print(("[BossRig] %d welds removidos (manuais e automáticos); refazendo"):format(removed))
 	end
 	local report = BossRig.Assemble(model, { Flatten = false })
 	print(("[BossRig] pronto: %d partes em %d grupos, %d Motor6D, %d soldadas, raiz %s, HipHeight %.1f"):format(
