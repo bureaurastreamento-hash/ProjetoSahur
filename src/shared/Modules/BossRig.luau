@@ -300,6 +300,20 @@ function BossRig.Studio(): Report?
 	local report = BossRig.Assemble(model, { Flatten = false })
 	print(("[BossRig] pronto: %d partes em %d grupos, %d Motor6D, %d soldadas, raiz %s, HipHeight %.1f"):format(
 		report.parts, report.groups, report.motors, report.welded, report.root, report.hipHeight))
+	-- diagnóstico: juntas saindo do tronco e hubs presos por weld manual (esses não animam)
+	local torsoHub = model:FindFirstChild(report.root, true)
+	if torsoHub then
+		for _, m in torsoHub:GetChildren() do
+			if m:IsA("Motor6D") and m.Part1 then
+				print(("  junta %s: %s -> %s"):format(m.Name, torsoHub.Name, m.Part1.Name))
+			end
+		end
+	end
+	for _, d in model:GetDescendants() do
+		if (d:IsA("Weld") or d:IsA("WeldConstraint")) and d.Name ~= "AutoWeld" and d.Part0 and d.Part1 then
+			print(("  weld manual: %s -> %s (em %s) — se for um hub de membro, ele NÃO vai animar; apague o weld e rode de novo"):format(d.Part0.Name, d.Part1.Name, d.Parent and d.Parent:GetFullName() or "?"))
+		end
+	end
 	print("[BossRig] agora: selecione o BossModel, Avatar > Animation Editor; depois File > Save to Roblox.")
 	return report
 end
