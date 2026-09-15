@@ -205,7 +205,8 @@ local requestDash: RemoteEvent
 local shiftLock = false -- (shift lock; seção abaixo) o dash restaura AutoRotate só se não estiver ligado
 local dashConn: RBXScriptConnection? = nil
 local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
-local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0) } -- cabeça, tronco (pés não: meio-fio/degrau o Humanoid sobe)
+local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -1.2, 0) } -- cabeça, tronco, joelho (pés não: degrau baixo o Humanoid sobe)
+local DASH_MAX_UP = 6 -- studs/s: teto da velocidade vertical durante o dash (barreira baixa não lança para cima)
 local dashCleanup: (() -> ())? = nil -- encerra o dash em andamento (destrói o LinearVelocity)
 local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
 
@@ -331,6 +332,11 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
 		else
 			lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
+			-- subir um degrau no meio do dash lançava o boneco para cima: limita a velocidade vertical
+			local v = root.AssemblyLinearVelocity
+			if v.Y > DASH_MAX_UP then
+				root.AssemblyLinearVelocity = Vector3.new(v.X, DASH_MAX_UP, v.Z)
+			end
 		end
 		if keepFacing then
 			-- strafe: a frente não gira para o lado do dash (lateral é lateral)
