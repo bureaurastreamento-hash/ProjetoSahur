@@ -74,7 +74,7 @@ function MobileController.Start()
 	block.MouseLeave:Connect(function()
 		CombatController.SetBlock(false)
 	end)
-	for slot = 1, 3 do
+	for slot = 1, 4 do
 		local b = get(root, "Slot" .. slot) :: TextButton
 		b.MouseButton1Down:Connect(function()
 			AbilityController.Use(slot)

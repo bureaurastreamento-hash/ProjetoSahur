@@ -265,7 +265,7 @@ local function rewardAndFinish(f: Fight)
 			if player == top then
 				coins += BossConfig.RewardTopBonus
 			end
-			DataService.AddCoins(player, coins)
+			coins = DataService.RewardCoins(player, coins)
 			ProgressionService.OnBossDefeated(player, dmg, dmg / total, player == top)
 			table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg) })
 		end

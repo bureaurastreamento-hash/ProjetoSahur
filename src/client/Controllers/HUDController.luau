@@ -34,7 +34,7 @@ local HUDController = {}
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local SLOT_KEYS = { "Q", "E", "R" }
+local SLOT_KEYS = { "Q", "E", "R", "T" }
 local KILLFEED_MAX = 5
 local KILLFEED_LIFETIME = 6
 
@@ -49,6 +49,7 @@ local STATE_TEXT = {
 -- refs de UI
 local hud: ScreenGui
 local selectGui: ScreenGui
+local topBar: Frame
 local stateLabel: TextLabel
 local timerLabel: TextLabel
 local healthFill: Frame
@@ -73,6 +74,10 @@ local coinsLabel: TextLabel
 local selectCoinsLabel: TextLabel
 local characterButtons: { [string]: TextButton } = {}
 local profile: any = nil
+
+local CARD_SELECTED = Color3.fromRGB(90, 190, 255)
+local CARD_ACTION = Color3.fromRGB(240, 240, 245)
+local CARD_LOCKED = Color3.fromRGB(255, 204, 77)
 
 local currentState = if MatchConfig.FreeRoam then "FreeRoam" else "Waiting"
 local stateData: { [string]: any } = {}
@@ -123,7 +128,7 @@ local function refreshSlots()
 		if ability then
 			slot.Visible = true
 			nameLabel.Text = ability.DisplayName
-			costLabel.Text = if ability.EnergyCost > 0 then ("%d energia"):format(ability.EnergyCost) else ""
+			costLabel.Text = if ability.EnergyCost > 0 then ("%d"):format(ability.EnergyCost) else ""
 		else
 			slot.Visible = false
 		end
@@ -149,6 +154,20 @@ local function updateCooldowns()
 			text.Text = ""
 		end
 	end
+end
+
+--- Slot da ultimate do personagem atual (a que custa toda a energia); 3 se não achar.
+local function ultSlotIndex(): number
+	local characterId = localPlayer:GetAttribute("CharacterId")
+	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
+	if def then
+		for i, ability in def.Abilities do
+			if ability.EnergyCost >= CharacterDefs.Energy.Max then
+				return i
+			end
+		end
+	end
+	return 3
 end
 
 local function flashSlot(slot: number, color: Color3)
@@ -223,18 +242,24 @@ local function refreshMatchUI()
 	queueButton.Visible = not MatchConfig.FreeRoam
 	queueButton.Text = if localPlayer:GetAttribute("InQueue") == true then "Sair da fila" else "Entrar na fila"
 	queueButton.BackgroundColor3 = if localPlayer:GetAttribute("InQueue") == true then Color3.fromRGB(160, 60, 60) else Color3.fromRGB(40, 140, 80)
-	selectHint.Text = if MatchConfig.FreeRoam then "clique para trocar" elseif currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
+	selectHint.Text = if MatchConfig.FreeRoam then "Clique para usar ou comprar. Trocar faz respawn (fora de combate)." elseif currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
 
 	local currentId = localPlayer:GetAttribute("CharacterId")
 	for id, b in characterButtons do
 		local def = CharacterDefs.Get(id)
 		local owned = def ~= nil and (def.UnlockCost <= 0 or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
+		local status = b:FindFirstChild("Status") :: TextLabel
+		local stroke = b:FindFirstChildOfClass("UIStroke")
 		if owned then
-			b.Text = if def then def.DisplayName else id
-			b.BackgroundColor3 = if id == currentId then Color3.fromRGB(40, 120, 220) else Color3.fromRGB(50, 50, 60)
+			status.Text = if id == currentId then "SELECIONADO" else "USAR"
+			status.TextColor3 = if id == currentId then CARD_SELECTED else CARD_ACTION
 		else
-			b.Text = ("%s  🔒 %d"):format(if def then def.DisplayName else id, if def then def.UnlockCost else 0)
-			b.BackgroundColor3 = Color3.fromRGB(70, 60, 30)
+			status.Text = ("%d MOEDAS"):format(if def then def.UnlockCost else 0)
+			status.TextColor3 = CARD_LOCKED
+		end
+		if stroke then
+			stroke.Color = if id == currentId then CARD_SELECTED else Color3.new(1, 1, 1)
+			stroke.Transparency = if id == currentId then 0.2 else 0.86
 		end
 	end
 	local coins = localPlayer:GetAttribute("Coins")
@@ -329,7 +354,12 @@ local function attachOverhead(player: Player, character: Model)
 	overheads[character] = gui
 	local nameLabel = gui:FindFirstChild("Name") :: TextLabel
 	local fill = (gui:FindFirstChild("Bar") :: Frame):FindFirstChild("Fill") :: Frame
-	nameLabel.Text = player.Name
+	local function refreshName()
+		local tag = player:GetAttribute("NameTag")
+		nameLabel.Text = if typeof(tag) == "string" and tag ~= "" then ("[%s] %s"):format(tag, player.Name) else player.Name
+	end
+	refreshName()
+	player:GetAttributeChangedSignal("NameTag"):Connect(refreshName)
 	local function update()
 		local ratio = if humanoid.MaxHealth > 0 then math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1) else 0
 		fill.Size = UDim2.fromScale(ratio, 1)
@@ -363,9 +393,11 @@ function HUDController.Init()
 	hud = get(playerGui, "HUD") :: ScreenGui
 	selectGui = get(playerGui, "CharacterSelect") :: ScreenGui
 
-	local topBar = get(hud, "TopBar")
+	topBar = get(hud, "TopBar") :: Frame
 	stateLabel = get(topBar, "State") :: TextLabel
 	timerLabel = get(topBar, "Timer") :: TextLabel
+	topBar.Visible = not MatchConfig.FreeRoam -- no mapa livre não há round/timer para mostrar
+	coinsLabel = get(hud, "Coins") :: TextLabel
 
 	local vitals = get(hud, "Vitals")
 	local health = get(vitals, "Health")
@@ -375,7 +407,6 @@ function HUDController.Init()
 	energyFill = get(energy, "Fill") :: Frame
 	energyText = get(energy, "Text") :: TextLabel
 	characterNameLabel = get(vitals, "CharacterName") :: TextLabel
-	coinsLabel = get(vitals, "Coins") :: TextLabel
 
 	local abilities = get(hud, "Abilities")
 	for i = 1, #SLOT_KEYS do
@@ -412,7 +443,14 @@ function HUDController.Start()
 		local b = selectTemplate:Clone()
 		b.Visible = true
 		b.LayoutOrder = i
-		b.Text = if def then def.DisplayName else id
+		;(b:FindFirstChild("Name") :: TextLabel).Text = if def then def.DisplayName else id
+		local lines = {}
+		if def then
+			for slot, ability in def.Abilities do
+				table.insert(lines, ("%s  %s"):format(SLOT_KEYS[slot] or "?", ability.DisplayName))
+			end
+		end
+		;(b:FindFirstChild("Abilities") :: TextLabel).Text = table.concat(lines, "\n")
 		b.Parent = selectList
 		b.Activated:Connect(function()
 			local owned = def ~= nil and (def.UnlockCost <= 0 or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
@@ -457,8 +495,6 @@ function HUDController.Start()
 		if event == "levelup" then
 			showBanner(("NÍVEL %d! +%d moedas"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
 			FX.PlaySoundUI("Shared", "UltReady")
-		elseif event == "daily" then
-			showBanner(("Recompensa diária: +%d moedas (dia %d/%d)"):format(tonumber(data.coins) or 0, tonumber(data.streak) or 1, tonumber(data.maxStreak) or 7), 4)
 		elseif event == "mission_done" then
 			showBanner(("Missão concluída: %s (+%d moedas)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
 			FX.PlaySoundUI("Match", "Victory")
@@ -498,16 +534,17 @@ function HUDController.Start()
 		local e = localPlayer:GetAttribute("Energy")
 		local energy = if typeof(e) == "number" then e else 0
 		setBar(energyFill, energyText, energy, CharacterDefs.Energy.Max)
-		-- Ult pronta: barra dourada pulsando + flash no slot 3 + som (uma vez por carga)
+		-- Ult pronta: barra dourada pulsando + flash no slot da ult + som (uma vez por carga)
 		local full = energy >= CharacterDefs.Energy.Max
 		if full and not wasFull then
 			energyFill.BackgroundColor3 = ULT_COLOR
 			local pulse = TweenService:Create(energyFill, TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.45 })
 			pulse:Play()
 			ultPulse = pulse
-			flashSlot(3, ULT_COLOR)
+			local ultSlot = ultSlotIndex()
+			flashSlot(ultSlot, ULT_COLOR)
 			FX.PlaySoundUI("Shared", "UltReady")
-			showBanner("ULT PRONTA — R", 1.5)
+			showBanner(("ULT PRONTA — %s"):format(SLOT_KEYS[ultSlot] or "?"), 1.5)
 		elseif not full and wasFull then
 			if ultPulse then
 				ultPulse:Cancel()

@@ -28,14 +28,7 @@ function ProgressionConfig.LevelUpCoins(level: number): number
 	return 20 + level * 5
 end
 
--- Recompensa diária ---------------------------------------------------------
--- Entra no dia (UTC) -> ganha Base + PerStreak * (streak - 1). Streak sobe se entrou ontem,
--- volta a 1 se pulou um dia. Limitada a MaxStreak.
-ProgressionConfig.Daily = {
-	Base = 25,
-	PerStreak = 10,
-	MaxStreak = 7,
-}
+-- Recompensa diária: removida (2026-09-15). Só o campo `daily` do perfil sobrevive, sem uso.
 
 -- Missões diárias -----------------------------------------------------------
 export type MissionDef = {

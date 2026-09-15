@@ -19,6 +19,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
+local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local LobbyService = require(script.Parent:WaitForChild("LobbyService"))
 local ArenaService = require(script.Parent:WaitForChild("ArenaService"))
@@ -227,7 +228,7 @@ local function spawnParticipant(participant: Participant, cf: CFrame)
 	player:SetAttribute("InMatch", true)
 	player:SetAttribute("TeamId", participant.teamId)
 	player:SetAttribute("CanFight", true)
-	player:LoadCharacter() -- reseta vida/energia/cooldowns (services escutam CharacterAdded)
+	CharacterService.Load(player) -- reseta vida/energia/cooldowns (services escutam CharacterAdded)
 	local character = player.Character or player.CharacterAdded:Wait()
 	character:WaitForChild("HumanoidRootPart", 5)
 	task.wait() -- deixa o spawn padrão assentar antes de mover
@@ -326,7 +327,7 @@ local function endingPhase(r: Round)
 			LobbyService.SendToLobby(p.player, true)
 			-- quem morreu já renasceu no lobby sozinho; só recarrega quem ainda está na arena
 			if p.alive then
-				p.player:LoadCharacter()
+				CharacterService.Load(p.player)
 			end
 		end
 	end

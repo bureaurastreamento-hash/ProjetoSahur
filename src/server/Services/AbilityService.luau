@@ -20,6 +20,7 @@ local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
@@ -162,17 +163,41 @@ local function stillValid(player: Player, character: Model): boolean
 	return player.Parent == Players and player.Character == character and HealthService.IsAlive(character)
 end
 
-local effects: { [string]: (Player, Model, CharacterDefs.AbilityDef) -> () } = {}
+-- direction = horizontal unitária pedida pelo cliente (WASD), já validada; frente do HRP se não veio
+local effects: { [string]: (Player, Model, CharacterDefs.AbilityDef, Vector3) -> () } = {}
+
+local function facing(character: Model): Vector3
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if root then
+		local look = root.CFrame.LookVector
+		local flat = Vector3.new(look.X, 0, look.Z)
+		if flat.Magnitude > 0.01 then
+			return flat.Unit
+		end
+	end
+	return Vector3.new(0, 0, -1)
+end
+
+local function sanitizeDirection(character: Model, raw: any): Vector3
+	if typeof(raw) == "Vector3" then
+		local flat = Vector3.new(raw.X, 0, raw.Z)
+		if flat.Magnitude > 0.5 and flat.Magnitude < 1.5 and flat.X == flat.X and flat.Z == flat.Z then
+			return flat.Unit
+		end
+	end
+	return facing(character)
+end
 
 -- Movimento é feito no cliente (dono da física); dano checado aqui, amostrando a
 -- hitbox várias vezes durante o dash (cada alvo é atingido no máximo uma vez).
 local DASH_SAMPLE_INTERVAL = 0.05
-effects.Dash = function(player, character, ability)
+effects.Dash = function(player, character, ability, direction)
 	local e = ability.Effect
 	AntiExploitService.Grace(player, e.Duration + 0.5)
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", {
 		Speed = e.Speed,
 		Duration = e.Duration,
+		Direction = direction,
 	})
 	task.spawn(function()
 		local hitAlready: { [Model]: boolean } = {}
@@ -181,7 +206,11 @@ effects.Dash = function(player, character, ability)
 			if not stillValid(player, character) or CombatService.IsStunned(player) then
 				return
 			end
-			for _, victim in Hitbox.InFront(character, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
+			-- o dash é dirigível no cliente: a caixa segue a velocidade real, não a frente do boneco
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local vel = if root then Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z) else Vector3.zero
+			local dir = if vel.Magnitude > 5 then vel.Unit else direction
+			for _, victim in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
 				if not hitAlready[victim] then
 					hitAlready[victim] = true
 					CombatService.ResolveHit(player, character, victim, e.Damage, false)
@@ -197,20 +226,19 @@ effects.Dash = function(player, character, ability)
 	end)
 end
 
-effects.Teleport = function(player, character, ability)
+effects.Teleport = function(player, character, ability, direction)
 	local e = ability.Effect
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
 		return
 	end
 	AntiExploitService.Grace(player, 1)
-	local direction = root.CFrame.LookVector * e.Distance
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	params.FilterDescendantsInstances = { character }
-	local hit = Workspace:Raycast(root.Position, direction, params)
+	local hit = Workspace:Raycast(root.Position, direction * e.Distance, params)
 	local distance = if hit then math.max(0, hit.Distance - 2) else e.Distance
-	root.CFrame = root.CFrame + root.CFrame.LookVector * distance
+	root.CFrame = root.CFrame + direction * distance
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Teleported = true })
 end
 
@@ -364,7 +392,7 @@ local function deny(player: Player, slot: number, reason: string)
 	notifyAbilityDenied:FireClient(player, slot, reason)
 end
 
-local function onRequestAbility(player: Player, slot: any)
+local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if not abilityLimiter:Allow(player) then
 		return
 	end
@@ -416,7 +444,7 @@ local function onRequestAbility(player: Player, slot: any)
 
 	Log.debug(("[AbilityService] %s usou %s.%s (energia restante %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
-	local ok, err = pcall(handler :: any, player, character, ability)
+	local ok, err = pcall(handler :: any, player, character, ability, sanitizeDirection(character, rawDirection))
 	if not ok then
 		warn(("[AbilityService] erro em %s: %s"):format(ability.Id, tostring(err)))
 	end
@@ -454,7 +482,7 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	player:SetAttribute("CharacterId", characterId)
 	Log.debug(("[AbilityService] %s agora é %s (respawn)"):format(player.Name, characterId))
 	AntiExploitService.Grace(player, 3)
-	player:LoadCharacter()
+	CharacterService.Load(player)
 end
 
 -- ---------------------------------------------------------------------------

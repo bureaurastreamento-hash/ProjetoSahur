@@ -49,6 +49,7 @@ RemoteEvents.Events = ({
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
 	RequestAdminCommand = "RequestAdminCommand", -- (command: string, args: table) — só após FetchAdminLogin ok
+	RequestShop = "RequestShop", -- (kind: "product"|"pass", key: string) — abre o prompt de compra da Roblox
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 
 	-- Notify: servidor -> cliente
@@ -68,7 +69,8 @@ RemoteEvents.Events = ({
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"attack"|"defeated"|"despawned"|"denied", data: table)
-	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"daily"|"mission_done", data: table)
+	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done", data: table)
+	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 

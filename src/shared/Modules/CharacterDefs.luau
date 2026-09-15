@@ -42,7 +42,7 @@ export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
 	UnlockCost: number, -- moedas; 0 = todos começam com ele
-	Abilities: { AbilityDef }, -- índice = slot (1, 2, 3...)
+	Abilities: { AbilityDef }, -- índice = slot (1 = Q, 2 = E, 3 = R, 4 = T). Slot 1 é sempre a mobilidade (dash; Swift teleporta)
 }
 
 local CharacterDefs = {}
@@ -128,6 +128,14 @@ CharacterDefs.Characters = {
 		DisplayName = "Mystic",
 		UnlockCost = 250,
 		Abilities = {
+			{
+				Id = "ArcaneStep",
+				DisplayName = "Passo Arcano",
+				Cooldown = 6,
+				EnergyCost = 0,
+				CastTime = 0.2,
+				Effect = { Type = "Dash", Speed = 65, Duration = 0.22, Damage = 8, Range = 6, Width = 6, Height = 6 },
+			},
 			{
 				Id = "ArcaneBolt",
 				DisplayName = "Projétil Arcano",

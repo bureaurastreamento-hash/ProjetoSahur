@@ -1,10 +1,11 @@
 --!strict
 --[[
 	MovementController (cliente)
-	  - Correr: segurar Shift esquerdo (gamepad L3; mobile botão CORRER) -> RequestSprint.
-	  - Shift lock na tecla Ctrl esquerdo, implementado aqui (mouse travado no centro, personagem
+	  - Correr é AUTOMÁTICO ao andar para a frente (W / analógico para a frente): RequestSprint(true).
+	    Para os lados e para trás só anda. Mobile: botão CORRER força a corrida em qualquer direção.
+	  - Shift lock no Shift esquerdo, implementado aqui (mouse travado no centro, personagem
 	    vira com a câmera, ombro deslocado). O nativo está desligado no project.json
-	    (StarterPlayer.EnableMouseLockOption = false) para o Shift ficar livre para correr.
+	    (StarterPlayer.EnableMouseLockOption = false) para termos controle total. Ctrl fica livre.
 	  - Animações de movimento da equipe (Assets.Animations.Shared.Idle/Walk/Run) tocadas por
 	    nós mesmos com prioridade Movement, por cima do script "Animate" padrão (que fica só
 	    com pulo/queda). Assim funciona mesmo se o place trocar/remover o Animate.
@@ -28,14 +29,16 @@ local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MovementController = {}
 
 local localPlayer = Players.LocalPlayer
-local SPRINT_KEY = Enum.KeyCode.LeftShift
-local SPRINT_GAMEPAD = Enum.KeyCode.ButtonL3
-local SHIFTLOCK_KEY = Enum.KeyCode.LeftControl
+local SHIFTLOCK_KEY = Enum.KeyCode.LeftShift
+local FORWARD_DOT = 0.6 -- MoveDirection·frente da câmera acima disso = "indo para a frente"
+local SPRINT_MIN_INTERVAL = 0.15 -- segundos entre pedidos ao servidor (RateLimiter lá é 10/s)
 local SHARED = "Shared"
 local MOVE_THRESHOLD = 0.5 -- studs/s a partir do qual conta como andando
 
 local requestSprint: RemoteEvent
-local sprintHeld = false
+local sprintForced = false -- botão CORRER do mobile
+local sprintSent = false
+local lastSprintRequest = 0
 
 -- ---------------------------------------------------------------------------
 -- Animações de movimento
@@ -182,7 +185,7 @@ local function setup(character: Model)
 end
 
 -- ---------------------------------------------------------------------------
--- Shift lock próprio no Ctrl (o nativo está desligado: StarterPlayer.EnableMouseLockOption=false)
+-- Shift lock próprio no Shift (o nativo está desligado: StarterPlayer.EnableMouseLockOption=false)
 -- ---------------------------------------------------------------------------
 
 local shiftLock = false
@@ -231,38 +234,70 @@ local function toggleShiftLock()
 end
 
 -- ---------------------------------------------------------------------------
--- Correr
+-- Correr (automático para a frente)
 -- ---------------------------------------------------------------------------
 
-function MovementController.SetSprint(active: boolean)
-	if sprintHeld == active then
+local function sendSprint(active: boolean)
+	if sprintSent == active then
 		return
 	end
-	sprintHeld = active
+	local now = os.clock()
+	if now - lastSprintRequest < SPRINT_MIN_INTERVAL then
+		return -- tenta de novo no próximo frame
+	end
+	lastSprintRequest = now
+	sprintSent = active
 	requestSprint:FireServer(active)
+end
+
+--- Mobile: botão CORRER liga/desliga corrida em qualquer direção.
+function MovementController.SetSprint(active: boolean)
+	sprintForced = active
+end
+
+--- "Para a frente" = direção do movimento alinhada com a frente da câmera (ou do personagem
+--- em shift lock, que é a mesma coisa).
+local function isMovingForward(humanoid: Humanoid): boolean
+	local move = humanoid.MoveDirection
+	if move.Magnitude < 0.1 then
+		return false
+	end
+	local camera = Workspace.CurrentCamera
+	if not camera then
+		return false
+	end
+	local look = camera.CFrame.LookVector
+	local flat = Vector3.new(look.X, 0, look.Z)
+	if flat.Magnitude < 0.01 then
+		return false
+	end
+	return move.Unit:Dot(flat.Unit) >= FORWARD_DOT
+end
+
+local function updateSprint()
+	local character = localPlayer.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then
+		return
+	end
+	local moving = humanoid.MoveDirection.Magnitude > 0.1
+	local want = moving and (sprintForced or isMovingForward(humanoid))
+	sendSprint(want)
 end
 
 local function onInputBegan(input: InputObject, processed: boolean)
 	if processed then
 		return
 	end
-	if input.KeyCode == SPRINT_KEY or input.KeyCode == SPRINT_GAMEPAD then
-		MovementController.SetSprint(true)
-	elseif input.KeyCode == SHIFTLOCK_KEY then
+	if input.KeyCode == SHIFTLOCK_KEY then
 		toggleShiftLock()
-	end
-end
-
-local function onInputEnded(input: InputObject)
-	if input.KeyCode == SPRINT_KEY or input.KeyCode == SPRINT_GAMEPAD then
-		MovementController.SetSprint(false)
 	end
 end
 
 function MovementController.Start()
 	requestSprint = Remotes.GetEvent(Remotes.Events.RequestSprint)
 	UserInputService.InputBegan:Connect(onInputBegan)
-	UserInputService.InputEnded:Connect(onInputEnded)
+	RunService.Heartbeat:Connect(updateSprint)
 	localPlayer:GetAttributeChangedSignal("Sprinting"):Connect(function()
 		local a = anims
 		if a then
@@ -271,19 +306,16 @@ function MovementController.Start()
 		end
 	end)
 	localPlayer.CharacterAdded:Connect(function(character)
-		sprintHeld = false
+		sprintSent = false
 		setup(character)
 		if shiftLock then
 			applyShiftLock(true) -- reaplica no personagem novo
-		end
-		if UserInputService:IsKeyDown(SPRINT_KEY) then
-			MovementController.SetSprint(true)
 		end
 	end)
 	if localPlayer.Character then
 		task.spawn(setup, localPlayer.Character)
 	end
-	Log.debug(("[MovementController] pronto (Shift corre a %d, Ctrl = shift lock)"):format(CombatConfig.Sprint.Speed))
+	Log.debug(("[MovementController] pronto (corre sozinho para a frente a %d, Shift = shift lock)"):format(CombatConfig.Sprint.Speed))
 end
 
 return MovementController

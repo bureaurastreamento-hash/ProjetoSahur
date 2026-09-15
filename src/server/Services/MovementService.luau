@@ -1,7 +1,7 @@
 --!strict
 --[[
 	MovementService (servidor)
-	Corrida (Shift segurado / botão CORRER no mobile) para todos os personagens.
+	Corrida automática ao andar para a frente (cliente decide a direção; botão CORRER no mobile força).
 	  RequestSprint(active) -> WalkSpeed = CombatConfig.Sprint.Speed (não enquanto bloqueia)
 	Atributo Sprinting no Player: CombatService lê ao soltar o block; MovementController anima.
 	Dash/teleporte são habilidades de personagem no Q (AbilityService), não existe dash genérico.
@@ -59,7 +59,7 @@ function MovementService.Start()
 	for _, player in Players:GetPlayers() do
 		onPlayer(player)
 	end
-	Log.debug("[MovementService] pronto (Shift corre)")
+	Log.debug("[MovementService] pronto (corrida automática para a frente)")
 end
 
 return MovementService

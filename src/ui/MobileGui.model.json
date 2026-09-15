@@ -208,11 +208,11 @@
        "UDim2": [
         [
          0,
-         60
+         56
         ],
         [
          0,
-         60
+         56
         ]
        ]
       },
@@ -220,11 +220,11 @@
        "UDim2": [
         [
          1,
-         -232
+         -236
         ],
         [
          1,
-         -46
+         -30
         ]
        ]
       },
@@ -294,11 +294,11 @@
        "UDim2": [
         [
          0,
-         60
+         56
         ],
         [
          0,
-         60
+         56
         ]
        ]
       },
@@ -306,11 +306,11 @@
        "UDim2": [
         [
          1,
-         -168
+         -206
         ],
         [
          1,
-         -116
+         -104
         ]
        ]
       },
@@ -380,11 +380,11 @@
        "UDim2": [
         [
          0,
-         66
+         56
         ],
         [
          0,
-         66
+         56
         ]
        ]
       },
@@ -392,11 +392,97 @@
        "UDim2": [
         [
          1,
-         -80
+         -140
         ],
         [
          1,
-         -136
+         -150
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.25,
+        0.32
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "R",
+      "TextSize": 18,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Slot4",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Slot4",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         62
+        ],
+        [
+         0,
+         62
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -60
+        ],
+        [
+         1,
+         -160
         ]
        ]
       },
@@ -414,7 +500,7 @@
        ]
       },
       "BackgroundTransparency": 0.35,
-      "Text": "R",
+      "Text": "T",
       "TextSize": 18,
       "Font": "GothamBold",
       "TextColor3": {

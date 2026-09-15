@@ -219,8 +219,42 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Sons dos packs: `TestSounds` → **1477/1477 OK** (pode-se escolher sons dos packs por id).
 - Brawler ShoulderBash/GroundSlam executam (dano nos bonecos OK), cooldown/energia negam certo.
 
+### Sessão 2026-09-15 (tarde) — leva de correções pedida pelo dono (FALTA TESTAR tudo)
+- **Rig R6 forçado** (`CharacterService`): TESTADO OK — animações tocam no jogador.
+- **Dash direcional e dirigível**: cliente manda a direção do WASD no `RequestAbility(slot, dir)`;
+  servidor valida (`sanitizeDirection`) e usa na hitbox (`Hitbox.InDirection`) e no teleporte do
+  Swift. Durante o dash o `LinearVelocity` (modo Plane) segue o WASD frame a frame.
+- **Mystic ganhou dash** (`ArcaneStep`, Q); Projétil Arcano foi para E, Restaurar R, Meteoro T.
+  Agora existem **4 slots** (Q/E/R/T; gamepad X/Y/B/R2). HUD/Mobile/Help atualizados.
+- **Corrida automática** ao andar para a frente (W ou analógico; `FORWARD_DOT = 0.6`); lados/trás
+  só anda. Mobile: botão CORRER força. **Shift = shift lock**; Ctrl livre.
+- **Recompensa diária removida** (ProgressionService/ProgressionConfig); missões e nível ficam.
+- **UI refeita, minimalista** por `tools/gerar_ui.py` (HUD, CharacterSelect com cartões, Perfil,
+  Controles, **Loja**). Rodar o script depois de editar; controllers ligam pelo nome.
+- **Loja** (`ShopConfig` + `ShopService` + `ShopController` + `ShopGui`, ícone "Loja"/B):
+  moedas por Developer Product (3 pacotes) e 3 Game Passes (Moedas x2, Todos os personagens, VIP).
+  Ids = 0 → "EM BREVE". O dono cria no Creator Dashboard (grupo) e cola em `ShopConfig.luau`.
+  Perks por atributo: `CoinMultiplier` (DataService.RewardCoins), `XpMultiplier`, `NameTag`.
+- Topbar: HUD e topbar aprovados pelo dono. "Personagens" virou DROPDOWN (sub-ícone por personagem,
+  usar/comprar; `refreshCharacterIcons`); CharacterSelect.Panel ficou de reserva. `reportForeignTopbar`
+  avisa no Output o caminho de outro `Icon`/"Example" do place (o dono apaga).
+- Dash: direção travada no início, correção máxima `DASH_STEER_RATE` (2,2 rad/s); lateral dura 65%
+  (`DASH_SIDE_SCALE`). Dev icon agora fecha junto com os outros (autoDeselect padrão).
+- "Example" do topbar: é o `READ_ME` (Script RunContext Client) dentro da pasta TopbarPlus do place —
+  o dono apaga a pasta TopbarPlus alheia inteira (a nossa é ReplicatedStorage.Shared.Packages.Icon).
+- Dash em parede/personagem: raycast (cabeça/tronco/pés) encerra o LinearVelocity antes do obstáculo;
+  FallingDown/Ragdoll desligados no cliente. Hitbox só conta partes diretas do personagem (acessório
+  gigante não aumenta hitbox). FALTA TESTAR.
+
 ### BUGS / PENDÊNCIAS ABERTAS (ordem de prioridade)
-1. **Animações não aparecem no boneco.** Todas carregam (AnimCheck OK) mas o personagem não mexe.
+1. **Animações não aparecem no jogador** (boss/bonecos OK). Causa confirmada em 2026-09-15 11:00: o
+   jogador nasce **R15** mesmo com Game Settings em R6 e sem StarterCharacter. Solução aplicada
+   (FALTA TESTAR): `CharacterService` desliga `Players.CharacterAutoLoads` e monta o personagem R6
+   no servidor com `CreateHumanoidModelFromDescription(avatar do jogador, R6)`; todos os
+   `player:LoadCharacter()` viraram `CharacterService.Load(player)`; respawn automático após
+   `CombatConfig.RespawnTime`. Esperado no Output: `[CharacterService] rig R6 forçado...` e SEM o
+   aviso `[HealthService] rig do jogador é R15`. Histórico do problema:
+   Todas carregam (AnimCheck OK) mas o personagem não mexe.
    O log de 10:42 dizia `[HealthService] rig do jogo é R15`; o dono garante que o Game Settings está
    em R6 e que NÃO há StarterCharacter/StarterHumanoid. PRÓXIMO PASSO: dar Play e ler a linha
    `[HealthService] rig do jogador é ...` (aviso reescrito em 1381d25). Se ainda for R15: o Game

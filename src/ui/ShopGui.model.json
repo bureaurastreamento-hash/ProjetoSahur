@@ -17,11 +17,11 @@
      "UDim2": [
       [
        0,
-       560
+       640
       ],
       [
        0,
-       400
+       420
       ]
      ]
     },
@@ -152,7 +152,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "PERFIL",
+      "Text": "LOJA",
       "Font": "GothamBold",
       "TextSize": 16,
       "TextColor3": {
@@ -221,10 +221,10 @@
      }
     },
     {
-     "name": "Warning",
+     "name": "ProductsTitle",
      "className": "TextLabel",
      "properties": {
-      "Name": "Warning",
+      "Name": "ProductsTitle",
       "Size": {
        "UDim2": [
         [
@@ -245,7 +245,7 @@
         ],
         [
          0,
-         24
+         34
         ]
        ]
       },
@@ -256,14 +256,14 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "",
-      "Font": "GothamMedium",
+      "Text": "MOEDAS",
+      "Font": "GothamBold",
       "TextSize": 11,
       "TextColor3": {
        "Color3": [
-        0.9,
-        0.27,
-        0.27
+        0.62,
+        0.62,
+        0.68
        ]
       },
       "TextXAlignment": "Left",
@@ -273,71 +273,19 @@
      }
     },
     {
-     "name": "Level",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "Level",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         18
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         44
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "",
-      "Font": "GothamBold",
-      "TextSize": 14,
-      "TextColor3": {
-       "Color3": [
-        0.96,
-        0.96,
-        0.97
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Center",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
-    },
-    {
-     "name": "XPBar",
+     "name": "Products",
      "className": "Frame",
      "properties": {
-      "Name": "XPBar",
+      "Name": "Products",
       "Size": {
        "UDim2": [
         [
-         0.48,
+         1,
          0
         ],
         [
          0,
-         4
+         96
         ]
        ]
       },
@@ -349,7 +297,7 @@
         ],
         [
          0,
-         66
+         54
         ]
        ]
       },
@@ -361,30 +309,47 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0,
-        0,
-        0
+        0.05,
+        0.05,
+        0.06
        ]
       },
-      "BackgroundTransparency": 0.5,
+      "BackgroundTransparency": 1,
       "BorderSizePixel": 0,
       "Visible": true
      },
      "children": [
       {
-       "name": "Fill",
-       "className": "Frame",
+       "name": "UIListLayout",
+       "className": "UIListLayout",
        "properties": {
-        "Name": "Fill",
+        "Name": "UIListLayout",
+        "FillDirection": "Horizontal",
+        "Padding": {
+         "UDim": [
+          0,
+          10
+         ]
+        },
+        "HorizontalAlignment": "Left",
+        "VerticalAlignment": "Top",
+        "SortOrder": "LayoutOrder"
+       }
+      },
+      {
+       "name": "Template",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Template",
         "Size": {
          "UDim2": [
           [
            0,
-           0
+           120
           ],
           [
-           1,
-           0
+           0,
+           96
           ]
          ]
         },
@@ -408,449 +373,15 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.35,
-          0.75,
-          1.0
+          0.1,
+          0.1,
+          0.12
          ]
         },
-        "BackgroundTransparency": 0,
-        "BorderSizePixel": 0,
-        "Visible": true
-       }
-      }
-     ]
-    },
-    {
-     "name": "Stats",
-     "className": "Frame",
-     "properties": {
-      "Name": "Stats",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         130
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         80
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.05,
-        0.05,
-        0.06
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "BorderSizePixel": 0,
-      "Visible": true
-     },
-     "children": [
-      {
-       "name": "UIListLayout",
-       "className": "UIListLayout",
-       "properties": {
-        "Name": "UIListLayout",
-        "FillDirection": "Vertical",
-        "Padding": {
-         "UDim": [
-          0,
-          2
-         ]
-        },
-        "HorizontalAlignment": "Left",
-        "VerticalAlignment": "Top",
-        "SortOrder": "LayoutOrder"
-       }
-      },
-      {
-       "name": "Template",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Template",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           0,
-           18
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamMedium",
-        "TextSize": 13,
-        "TextColor3": {
-         "Color3": [
-          0.96,
-          0.96,
-          0.97
-         ]
-        },
-        "TextXAlignment": "Left",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false,
-        "Visible": false
-       }
-      }
-     ]
-    },
-    {
-     "name": "Characters",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "Characters",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         34
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         214
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "",
-      "Font": "GothamMedium",
-      "TextSize": 12,
-      "TextColor3": {
-       "Color3": [
-        0.62,
-        0.62,
-        0.68
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Top",
-      "BorderSizePixel": 0,
-      "RichText": false,
-      "TextWrapped": true
-     }
-    },
-    {
-     "name": "TopTitle",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "TopTitle",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         16
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         252
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "TOP GLOBAL (KILLS)",
-      "Font": "GothamBold",
-      "TextSize": 11,
-      "TextColor3": {
-       "Color3": [
-        0.62,
-        0.62,
-        0.68
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Center",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
-    },
-    {
-     "name": "Top",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "Top",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         100
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         270
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "",
-      "Font": "Code",
-      "TextSize": 12,
-      "TextColor3": {
-       "Color3": [
-        0.96,
-        0.96,
-        0.97
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Top",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
-    },
-    {
-     "name": "MissionsTitle",
-     "className": "TextLabel",
-     "properties": {
-      "Name": "MissionsTitle",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         0,
-         16
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         1,
-         0
-        ],
-        [
-         0,
-         44
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        1,
-        0
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "Text": "MISSÕES DE HOJE",
-      "Font": "GothamBold",
-      "TextSize": 11,
-      "TextColor3": {
-       "Color3": [
-        0.62,
-        0.62,
-        0.68
-       ]
-      },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Center",
-      "BorderSizePixel": 0,
-      "RichText": false
-     }
-    },
-    {
-     "name": "Missions",
-     "className": "Frame",
-     "properties": {
-      "Name": "Missions",
-      "Size": {
-       "UDim2": [
-        [
-         0.48,
-         0
-        ],
-        [
-         1,
-         -70
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         1,
-         0
-        ],
-        [
-         0,
-         64
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        1,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.05,
-        0.05,
-        0.06
-       ]
-      },
-      "BackgroundTransparency": 1,
-      "BorderSizePixel": 0,
-      "Visible": true
-     },
-     "children": [
-      {
-       "name": "UIListLayout",
-       "className": "UIListLayout",
-       "properties": {
-        "Name": "UIListLayout",
-        "FillDirection": "Vertical",
-        "Padding": {
-         "UDim": [
-          0,
-          8
-         ]
-        },
-        "HorizontalAlignment": "Left",
-        "VerticalAlignment": "Top",
-        "SortOrder": "LayoutOrder"
-       }
-      },
-      {
-       "name": "Template",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Template",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           0,
-           40
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
+        "BackgroundTransparency": 0.1,
         "Text": "",
         "Font": "GothamBold",
-        "TextSize": 13,
+        "TextSize": 14,
         "TextColor3": {
          "Color3": [
           0.96,
@@ -858,19 +389,77 @@
           0.97
          ]
         },
-        "TextXAlignment": "Left",
-        "TextYAlignment": "Top",
+        "AutoButtonColor": true,
         "BorderSizePixel": 0,
-        "RichText": false,
-        "Visible": false,
-        "TextWrapped": true
+        "Visible": false
        },
        "children": [
         {
-         "name": "Progress",
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        },
+        {
+         "name": "UIPadding",
+         "className": "UIPadding",
+         "properties": {
+          "Name": "UIPadding",
+          "PaddingLeft": {
+           "UDim": [
+            0,
+            8
+           ]
+          },
+          "PaddingRight": {
+           "UDim": [
+            0,
+            8
+           ]
+          },
+          "PaddingTop": {
+           "UDim": [
+            0,
+            8
+           ]
+          },
+          "PaddingBottom": {
+           "UDim": [
+            0,
+            8
+           ]
+          }
+         }
+        },
+        {
+         "name": "Amount",
          "className": "TextLabel",
          "properties": {
-          "Name": "Progress",
+          "Name": "Amount",
           "Size": {
            "UDim2": [
             [
@@ -879,7 +468,7 @@
             ],
             [
              0,
-             14
+             26
             ]
            ]
           },
@@ -891,7 +480,59 @@
             ],
             [
              0,
-             18
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 20,
+          "TextColor3": {
+           "Color3": [
+            1.0,
+            0.8,
+            0.3
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Name",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Name",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             16
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0,
+             28
             ]
            ]
           },
@@ -919,10 +560,10 @@
          }
         },
         {
-         "name": "Bar",
-         "className": "Frame",
+         "name": "Price",
+         "className": "TextLabel",
          "properties": {
-          "Name": "Bar",
+          "Name": "Price",
           "Size": {
            "UDim2": [
             [
@@ -931,7 +572,7 @@
             ],
             [
              0,
-             3
+             18
             ]
            ]
           },
@@ -943,7 +584,7 @@
             ],
             [
              1,
-             -2
+             0
             ]
            ]
           },
@@ -953,70 +594,473 @@
             1
            ]
           },
-          "BackgroundColor3": {
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 13,
+          "TextColor3": {
            "Color3": [
-            0,
-            0,
-            0
+            0.35,
+            0.8,
+            0.5
            ]
           },
-          "BackgroundTransparency": 0.5,
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
           "BorderSizePixel": 0,
-          "Visible": true
-         },
-         "children": [
-          {
-           "name": "Fill",
-           "className": "Frame",
-           "properties": {
-            "Name": "Fill",
-            "Size": {
-             "UDim2": [
-              [
-               0,
-               0
-              ],
-              [
-               1,
-               0
-              ]
-             ]
-            },
-            "Position": {
-             "UDim2": [
-              [
-               0,
-               0
-              ],
-              [
-               0,
-               0
-              ]
-             ]
-            },
-            "AnchorPoint": {
-             "Vector2": [
-              0,
-              0
-             ]
-            },
-            "BackgroundColor3": {
-             "Color3": [
-              0.35,
-              0.8,
-              0.5
-             ]
-            },
-            "BackgroundTransparency": 0,
-            "BorderSizePixel": 0,
-            "Visible": true
-           }
-          }
-         ]
+          "RichText": false
+         }
         }
        ]
       }
      ]
+    },
+    {
+     "name": "PassesTitle",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "PassesTitle",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         166
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "PASSES",
+      "Font": "GothamBold",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "Passes",
+     "className": "Frame",
+     "properties": {
+      "Name": "Passes",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         -206
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         186
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.05,
+        0.05,
+        0.06
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UIListLayout",
+       "className": "UIListLayout",
+       "properties": {
+        "Name": "UIListLayout",
+        "FillDirection": "Vertical",
+        "Padding": {
+         "UDim": [
+          0,
+          6
+         ]
+        },
+        "HorizontalAlignment": "Left",
+        "VerticalAlignment": "Top",
+        "SortOrder": "LayoutOrder"
+       }
+      },
+      {
+       "name": "Template",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Template",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           0,
+           52
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.1,
+          0.1,
+          0.12
+         ]
+        },
+        "BackgroundTransparency": 0.1,
+        "Text": "",
+        "Font": "GothamBold",
+        "TextSize": 14,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": false
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        },
+        {
+         "name": "UIPadding",
+         "className": "UIPadding",
+         "properties": {
+          "Name": "UIPadding",
+          "PaddingLeft": {
+           "UDim": [
+            0,
+            10
+           ]
+          },
+          "PaddingRight": {
+           "UDim": [
+            0,
+            10
+           ]
+          },
+          "PaddingTop": {
+           "UDim": [
+            0,
+            6
+           ]
+          },
+          "PaddingBottom": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "Name",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Name",
+          "Size": {
+           "UDim2": [
+            [
+             0.7,
+             0
+            ],
+            [
+             0,
+             20
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 14,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Desc",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Desc",
+          "Size": {
+           "UDim2": [
+            [
+             0.7,
+             0
+            ],
+            [
+             0,
+             16
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0,
+             20
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamMedium",
+          "TextSize": 11,
+          "TextColor3": {
+           "Color3": [
+            0.62,
+            0.62,
+            0.68
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Price",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Price",
+          "Size": {
+           "UDim2": [
+            [
+             0.3,
+             0
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            1,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 13,
+          "TextColor3": {
+           "Color3": [
+            0.35,
+            0.8,
+            0.5
+           ]
+          },
+          "TextXAlignment": "Right",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hint",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "Hint",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         1,
+         0
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        1
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "Personagens são comprados com moedas na tela Personagens (V).",
+      "Font": "GothamMedium",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
     }
    ]
   }

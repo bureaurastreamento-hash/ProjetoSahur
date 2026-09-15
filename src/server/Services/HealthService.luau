@@ -14,6 +14,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 
 local respawnLimiter = RateLimiter.new(1, 1)
 local timeLimiter = RateLimiter.new(2, 1)
@@ -78,10 +79,10 @@ local function setupCharacter(player: Player, character: Model)
 		local starterChar = StarterPlayer:FindFirstChild("StarterCharacter")
 		local starterHum = StarterPlayer:FindFirstChild("StarterHumanoid")
 		local causa = if starterChar
-			then "existe um StarterPlayer.StarterCharacter (rig R15 do pack) que IGNORA o Game Settings — apague-o"
+			then "existe um StarterPlayer.StarterCharacter (rig R15 do pack) — apague-o"
 			elseif starterHum then "existe um StarterPlayer.StarterHumanoid com RigType R15 — apague-o"
-			else "confira Game Settings > Avatar > Avatar Type = R6 e salve/publique"
-		warn(("[HealthService] rig do jogador é %s; o projeto foi feito para R6. As animações da equipe (R6) NÃO vão tocar. Causa provável: %s."):format(humanoid.RigType.Name, causa))
+			else "o CharacterService não montou o rig (ver warns acima) ou algum script do place recarregou o personagem"
+		warn(("[HealthService] rig do jogador é %s; o projeto foi feito para R6 (CharacterService força R6). As animações da equipe (R6) NÃO vão tocar. Causa provável: %s."):format(humanoid.RigType.Name, causa))
 	end
 	humanoid.MaxHealth = CombatConfig.MaxHealth
 	humanoid.Health = CombatConfig.MaxHealth
@@ -232,7 +233,7 @@ function HealthService.Start()
 		end
 		-- Só permite respawn manual se estiver morto (evita "reset" como fuga de combate)
 		if not HealthService.IsAlive(player.Character) then
-			player:LoadCharacter()
+			CharacterService.Load(player)
 		end
 	end)
 

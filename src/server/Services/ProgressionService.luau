@@ -1,8 +1,8 @@
 --!strict
 --[[
 	ProgressionService (servidor)
-	XP/nível, recompensa diária e missões diárias, tudo salvo no perfil do DataService
-	(campos xp/level/daily/missions) e replicado pelo NotifyProfile normal.
+	XP/nível e missões diárias, tudo salvo no perfil do DataService
+	(campos xp/level/missions; daily ficou só no save por compatibilidade) e replicado pelo NotifyProfile normal.
 
 	Fontes de progresso:
 	  - kill de jogador (HealthService.Died)            -> XP.Kill, missão "kills"
@@ -11,7 +11,6 @@
 	  - tempo jogado (loop de 60 s)                     -> missão "playtime"
 	Ao subir de nível: moedas (ProgressionConfig.LevelUpCoins) + NotifyProgression("levelup").
 	Missão concluída: recompensa na hora + NotifyProgression("mission_done").
-	Recompensa diária: ao carregar o perfil, 1x por dia UTC, com streak.
 	Atributo Level no Player (para HUD/placar).
 ]]
 
@@ -49,7 +48,8 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 	if not profile or amount <= 0 then
 		return
 	end
-	amount = math.floor(amount)
+	local mult = player:GetAttribute("XpMultiplier") -- passe VIP (ShopService)
+	amount = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1))
 	profile.xp += amount
 	local leveled = false
 	while profile.level < ProgressionConfig.MaxLevel do
@@ -60,8 +60,7 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 		profile.xp -= need
 		profile.level += 1
 		leveled = true
-		local coins = ProgressionConfig.LevelUpCoins(profile.level)
-		profile.coins += coins
+		local coins = DataService.RewardCoins(player, ProgressionConfig.LevelUpCoins(profile.level))
 		Log.debug(("[Progression] %s subiu para o nível %d (+%d moedas)"):format(player.Name, profile.level, coins))
 		notify(player, "levelup", { level = profile.level, coins = coins })
 	end
@@ -119,8 +118,8 @@ function ProgressionService.Progress(player: Player, kind: string, amount: numbe
 			changed = true
 			if m.progress >= def.goal then
 				m.done = true
-				profile.coins += def.coins
-				notify(player, "mission_done", { id = def.id, text = def.text:format(def.goal), coins = def.coins, xp = def.xp })
+				local coins = DataService.RewardCoins(player, def.coins)
+				notify(player, "mission_done", { id = def.id, text = def.text:format(def.goal), coins = coins, xp = def.xp })
 				Log.debug(("[Progression] %s concluiu a missão %s"):format(player.Name, def.id))
 				ProgressionService.AddXP(player, def.xp, "mission")
 			end
@@ -135,20 +134,8 @@ end
 -- Recompensa diária
 -- ---------------------------------------------------------------------------
 
-local function claimDaily(player: Player, profile: DataConfig.Profile)
-	local day = ProgressionConfig.DayIndex()
-	if profile.daily.lastDay == day then
-		return
-	end
-	local cfg = ProgressionConfig.Daily
-	local streak = if profile.daily.lastDay == day - 1 then profile.daily.streak + 1 else 1
-	streak = math.clamp(streak, 1, cfg.MaxStreak)
-	local coins = cfg.Base + cfg.PerStreak * (streak - 1)
-	profile.daily = { lastDay = day, streak = streak }
-	profile.coins += coins
-	Log.debug(("[Progression] %s: recompensa diária +%d (dia %d da sequência)"):format(player.Name, coins, streak))
-	notify(player, "daily", { coins = coins, streak = streak, maxStreak = cfg.MaxStreak })
-end
+-- Recompensa diária REMOVIDA (decisão do dono, 2026-09-15: battlegrounds puro, sem login bonus).
+-- O campo profile.daily continua existindo no DataStore só por compatibilidade.
 
 -- ---------------------------------------------------------------------------
 -- Ganchos chamados por outros services
@@ -199,10 +186,6 @@ function ProgressionService.Init()
 	DataService.ProfileLoaded.Event:Connect(function(player: Player, profile: DataConfig.Profile, sessionOnly: boolean)
 		player:SetAttribute("Level", profile.level)
 		local changed = ensureMissions(player, profile)
-		if not sessionOnly then
-			claimDaily(player, profile)
-			changed = true
-		end
 		if changed then
 			DataService.MarkDirty(player)
 		end
@@ -225,7 +208,7 @@ function ProgressionService.Start()
 			end
 		end
 	end)
-	Log.debug("[ProgressionService] pronto (XP/nível, diária, missões)")
+	Log.debug("[ProgressionService] pronto (XP/nível, missões)")
 end
 
 return ProgressionService

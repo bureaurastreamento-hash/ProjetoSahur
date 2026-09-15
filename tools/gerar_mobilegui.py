@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Gera src/ui/MobileGui.model.json: botões de toque (soco, block, Q/E/R).
+Gera src/ui/MobileGui.model.json: botões de toque (soco, block, Q/E/R/T).
 Uso: python3 tools/gerar_mobilegui.py
 MobileController só mostra em dispositivos com toque e sem teclado.
 """
@@ -32,9 +32,10 @@ root = {"name": "Root", "className": "Frame", "properties": {
     # soco grande no canto inferior direito; block à esquerda dele; Q/E/R em arco acima
     button("Attack", "SOCO", 96, udim2(1, -24, 1, -24), [0.85, 0.3, 0.25], 20),
     button("Block", "BLOCK", 72, udim2(1, -136, 1, -24), [0.3, 0.55, 0.9], 15),
-    button("Slot1", "Q", 60, udim2(1, -232, 1, -46), [0.25, 0.25, 0.32]),
-    button("Slot2", "E", 60, udim2(1, -168, 1, -116), [0.25, 0.25, 0.32]),
-    button("Slot3", "R", 66, udim2(1, -80, 1, -136), [0.6, 0.45, 0.15]),
+    button("Slot1", "Q", 56, udim2(1, -236, 1, -30), [0.25, 0.25, 0.32]),
+    button("Slot2", "E", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
+    button("Slot3", "R", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
+    button("Slot4", "T", 62, udim2(1, -60, 1, -160), [0.6, 0.45, 0.15]),
     # correr (toggle) no canto inferior esquerdo, acima do joystick
     button("Sprint", "CORRER", 64, udim2(0, 150, 1, -140), [0.3, 0.3, 0.38], 13),
 ]}

@@ -31,6 +31,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local DuelConfig = require(Modules:WaitForChild("DuelConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local LobbyService = require(script.Parent:WaitForChild("LobbyService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
@@ -392,7 +393,7 @@ local function spawnParticipant(duel: Duel, participant: Participant, cf: CFrame
 	player:SetAttribute("TeamId", participant.teamId)
 	player:SetAttribute("DuelId", duel.id)
 	player:SetAttribute("CanFight", false) -- libera depois da contagem
-	player:LoadCharacter() -- reseta vida/energia/cooldowns (services escutam CharacterAdded)
+	CharacterService.Load(player) -- reseta vida/energia/cooldowns (services escutam CharacterAdded)
 	local character = player.Character or player.CharacterAdded:Wait()
 	character:WaitForChild("HumanoidRootPart", 5)
 	task.wait()
@@ -410,7 +411,7 @@ local function returnToWorld(player: Player, reloadCharacter: boolean)
 	LobbyService.SendToLobby(player, false)
 	if reloadCharacter then
 		AntiExploitService.Grace(player, 3)
-		player:LoadCharacter()
+		CharacterService.Load(player)
 	end
 end
 

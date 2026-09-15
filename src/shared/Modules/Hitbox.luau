@@ -25,8 +25,10 @@ local function collect(parts: { BasePart }, exclude: Model, maxTargets: number):
 	local found: { Model } = {}
 	local seen: { [Model]: boolean } = {}
 	for _, part in parts do
-		local model = part:FindFirstAncestorOfClass("Model")
-		if model and model ~= exclude and not seen[model] and isAlive(model) then
+		-- Só partes DIRETAS do personagem (Head/Torso/braços/pernas/HRP). Handles de acessórios
+		-- (chapéu gigante, asas) ficam de fora: skin nunca muda a hitbox.
+		local model = part.Parent
+		if model and model:IsA("Model") and model ~= exclude and not seen[model] and isAlive(model) then
 			seen[model] = true
 			table.insert(found, model)
 			if #found >= maxTargets then
@@ -51,6 +53,21 @@ function Hitbox.InFront(attacker: Model, range: number, width: number, height: n
 		return {}
 	end
 	local cf = root.CFrame * CFrame.new(0, 0, -range / 2)
+	local size = Vector3.new(width, height, range)
+	return collect(Workspace:GetPartBoundsInBox(cf, size, params(attacker)), attacker, maxTargets)
+end
+
+--- Caixa a partir do atacante numa direção horizontal qualquer (dash lateral/para trás).
+function Hitbox.InDirection(attacker: Model, direction: Vector3, range: number, width: number, height: number, maxTargets: number): { Model }
+	local root = attacker:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return {}
+	end
+	local flat = Vector3.new(direction.X, 0, direction.Z)
+	if flat.Magnitude < 0.01 then
+		return Hitbox.InFront(attacker, range, width, height, maxTargets)
+	end
+	local cf = CFrame.lookAt(root.Position, root.Position + flat.Unit) * CFrame.new(0, 0, -range / 2)
 	local size = Vector3.new(width, height, range)
 	return collect(Workspace:GetPartBoundsInBox(cf, size, params(attacker)), attacker, maxTargets)
 end

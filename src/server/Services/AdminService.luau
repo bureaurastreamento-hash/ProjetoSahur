@@ -35,6 +35,7 @@ local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local AdminConfig = require(script.Parent.Parent:WaitForChild("AdminConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
+local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local DummyService = require(script.Parent:WaitForChild("DummyService"))
@@ -380,7 +381,7 @@ end
 
 perTarget.Respawn = function(_, target)
 	AntiExploitService.Grace(target, 3)
-	target:LoadCharacter()
+	CharacterService.Load(target)
 	return true, ("%s respawnado"):format(target.Name)
 end
 

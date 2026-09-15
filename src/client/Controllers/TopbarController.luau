@@ -2,7 +2,9 @@
 --[[
 	TopbarController (cliente)
 	Ícones do topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon):
-	  Personagens (V) -> CharacterSelect.Panel
+	  Loja (B)        -> ShopGui.Panel (conteúdo no ShopController)
+	  Personagens (V) -> DROPDOWN abaixo do ícone com um sub-ícone por personagem (usar/comprar);
+	                     a tela CharacterSelect ficou como reserva (não é mais aberta)
 	  Perfil (P)      -> ProfileGui.Panel (stats/moedas/nível/missões vindos de NotifyProfile)
 	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
 	  Controles       -> HelpGui.Panel
@@ -35,11 +37,14 @@ local profileCharacters: TextLabel
 local profileTop: TextLabel
 local profileLevel: TextLabel
 local xpFill: Frame
-local dailyLabel: TextLabel
 local missionsList: Frame
 local missionTemplate: TextLabel
 local charactersIcon: any
+local characterIcons: { [string]: any } = {}
+local profileCache: any = nil
 local notifiedAffordable = false
+local requestSelectCharacter: RemoteEvent
+local requestUnlockCharacter: RemoteEvent
 
 local STAT_LABELS = {
 	{ "wins", "Vitórias" },
@@ -72,10 +77,6 @@ local function renderProgression(profile: any)
 		xpFill.Size = UDim2.fromScale(math.clamp(xp / need, 0, 1), 1)
 	end
 
-	local daily = if typeof(profile.daily) == "table" then profile.daily else {}
-	local streak = tonumber(daily.streak) or 0
-	dailyLabel.Text = if streak > 0 then ("🔥 Sequência diária: %d/%d dias"):format(streak, ProgressionConfig.Daily.MaxStreak) else ""
-
 	for _, child in missionsList:GetChildren() do
 		if child:IsA("TextLabel") and child ~= missionTemplate then
 			child:Destroy()
@@ -91,7 +92,7 @@ local function renderProgression(profile: any)
 		row.Visible = true
 		row.LayoutOrder = i
 		local done = m.done == true
-		row.Text = (if done then "✅ " else "") .. def.text:format(def.goal)
+		row.Text = (if done then "✓ " else "") .. def.text:format(def.goal)
 		row.TextColor3 = if done then Color3.fromRGB(150, 230, 170) else Color3.fromRGB(255, 255, 255)
 		local progress = row:FindFirstChild("Progress") :: TextLabel
 		progress.Text = ("%d/%d · +%d moedas · +%d XP"):format(tonumber(m.progress) or 0, def.goal, def.coins, def.xp)
@@ -101,7 +102,69 @@ local function renderProgression(profile: any)
 	end
 end
 
+local function ownsCharacter(id: string): boolean
+	local def = CharacterDefs.Get(id)
+	if not def then
+		return false
+	end
+	return def.UnlockCost <= 0 or (profileCache ~= nil and table.find(profileCache.unlockedCharacters or {}, id) ~= nil)
+end
+
+--- Rótulo de cada sub-ícone: "● Brawler" (selecionado), "Swift", "Mystic · 250 moedas".
+local function refreshCharacterIcons()
+	local currentId = localPlayer:GetAttribute("CharacterId")
+	for id, icon in characterIcons do
+		local def = CharacterDefs.Get(id)
+		local name = if def then def.DisplayName else id
+		if id == currentId then
+			icon:setLabel("● " .. name)
+		elseif ownsCharacter(id) then
+			icon:setLabel(name)
+		else
+			icon:setLabel(("%s · %d moedas"):format(name, if def then def.UnlockCost else 0))
+		end
+	end
+end
+
+local function buildCharacterDropdown()
+	local children = {}
+	for i, id in CharacterDefs.Order do
+		local icon = Icon.new()
+			:setName("Char_" .. id)
+			:setLabel(id)
+			:setWidth(190)
+			:setOrder(i)
+			:oneClick()
+		icon.selected:Connect(function()
+			if ownsCharacter(id) then
+				requestSelectCharacter:FireServer(id)
+			else
+				requestUnlockCharacter:FireServer(id)
+			end
+		end)
+		characterIcons[id] = icon
+		table.insert(children, icon)
+	end
+	charactersIcon:setDropdown(children)
+	refreshCharacterIcons()
+end
+
+--- Diagnóstico: aponta cópias alheias do TopbarPlus/"Example" que vieram com o place.
+local function reportForeignTopbar()
+	local ours = ReplicatedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("Packages")
+	for _, inst in game:GetDescendants() do
+		local name = inst.Name:lower()
+		if inst:IsA("ModuleScript") and inst.Name == "Icon" and not (ours and inst:IsDescendantOf(ours)) then
+			warn(("[TopbarController] outro TopbarPlus no place: %s — apague no Studio"):format(inst:GetFullName()))
+		elseif name:find("example", 1, true) and (inst:IsA("LuaSourceContainer") or inst:IsA("GuiObject")) then
+			warn(("[TopbarController] script/GUI 'Example' alheio: %s — apague no Studio"):format(inst:GetFullName()))
+		end
+	end
+end
+
 local function renderProfile(profile: any, sessionOnly: boolean)
+	profileCache = profile
+	refreshCharacterIcons()
 	profileCoins.Text = ("%d moedas"):format(profile.coins or 0)
 	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
@@ -148,6 +211,8 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 end
 
 function TopbarController.Init()
+	requestSelectCharacter = Remotes.GetEvent(Remotes.Events.RequestSelectCharacter)
+	requestUnlockCharacter = Remotes.GetEvent(Remotes.Events.RequestUnlockCharacter)
 	local profileGui = get(playerGui, "ProfileGui")
 	profilePanel = get(profileGui, "Panel") :: Frame
 	profileCoins = get(profilePanel, "Coins") :: TextLabel
@@ -158,30 +223,37 @@ function TopbarController.Init()
 	statsTemplate = get(statsList, "Template") :: TextLabel
 	profileLevel = get(profilePanel, "Level") :: TextLabel
 	xpFill = get(get(profilePanel, "XPBar"), "Fill") :: Frame
-	dailyLabel = get(profilePanel, "Daily") :: TextLabel
 	missionsList = get(profilePanel, "Missions") :: Frame
 	missionTemplate = get(missionsList, "Template") :: TextLabel
 end
 
 function TopbarController.Start()
-	local selectPanel = get(get(playerGui, "CharacterSelect"), "Panel") :: Frame
 	local scoreboard = get(get(playerGui, "HUD"), "Scoreboard") :: Frame
 	local helpPanel = get(get(playerGui, "HelpGui"), "Panel") :: Frame
 	local duelPanel = get(get(playerGui, "DuelGui"), "Panel") :: Frame
+	local shopPanel = get(get(playerGui, "ShopGui"), "Panel") :: Frame
 
 	-- Nossa lista substitui a PlayerList padrão (Tab)
 	pcall(function()
 		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
 	end)
 
+	Icon.new()
+		:setLabel("Loja")
+		:setCaption("Moedas e passes")
+		:setCaptionHint(Enum.KeyCode.B)
+		:bindToggleKey(Enum.KeyCode.B)
+		:bindToggleItem(shopPanel)
+		:setOrder(0)
+
 	charactersIcon = Icon.new()
 		:setLabel("Personagens")
 		:setCaption("Trocar personagem")
 		:setCaptionHint(Enum.KeyCode.V)
 		:bindToggleKey(Enum.KeyCode.V)
-		:bindToggleItem(selectPanel)
 		:setOrder(1)
-		:autoDeselect(false)
+	buildCharacterDropdown()
+	localPlayer:GetAttributeChangedSignal("CharacterId"):Connect(refreshCharacterIcons)
 
 	Icon.new()
 		:setLabel("Perfil")
@@ -230,6 +302,7 @@ function TopbarController.Start()
 		profileTop.Text = if #lines > 0 then table.concat(lines, "\n") else "ninguém ainda"
 	end)
 
+	task.delay(5, reportForeignTopbar)
 	Log.debug("[TopbarController] pronto (TopbarPlus)")
 end
 

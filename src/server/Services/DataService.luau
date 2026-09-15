@@ -233,6 +233,29 @@ function DataService.AddCoins(player: Player, amount: number)
 	touch(player)
 end
 
+--- Recompensa de jogo (kill, duelo, boss, missão, nível): aplica o multiplicador do passe
+--- "Moedas x2" (Player attr CoinMultiplier, ShopService). Retorna o valor realmente dado.
+function DataService.RewardCoins(player: Player, amount: number): number
+	local mult = player:GetAttribute("CoinMultiplier")
+	local final = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1) + 0.5)
+	DataService.AddCoins(player, final)
+	return final
+end
+
+--- Salva agora (compras). Se estiver salvando, espera terminar. false = não salvou.
+function DataService.SaveNow(player: Player, reason: string): boolean
+	local session = sessions[player]
+	if not session or not session.loaded or session.sessionOnly then
+		return false
+	end
+	local waited = 0
+	while session.saving and waited < 10 do
+		waited += task.wait(0.2)
+	end
+	session.dirty = true
+	return save(player, reason)
+end
+
 --- [Admin] Define moedas direto.
 function DataService.SetCoins(player: Player, amount: number)
 	local profile = DataService.GetProfile(player)
@@ -322,8 +345,8 @@ function DataService.RecordKill(killer: Player)
 		return
 	end
 	profile.stats.kills += 1
-	profile.coins += DataConfig.Rewards.Kill
 	touch(killer)
+	DataService.RewardCoins(killer, DataConfig.Rewards.Kill)
 end
 
 function DataService.RecordDeath(victim: Player)
@@ -355,8 +378,8 @@ function DataService.RecordMatchResult(player: Player, won: boolean, kills: numb
 		stats.losses += 1
 		reward += DataConfig.Rewards.Loss
 	end
-	profile.coins += reward
 	touch(player)
+	DataService.RewardCoins(player, reward)
 end
 
 -- ---------------------------------------------------------------------------
