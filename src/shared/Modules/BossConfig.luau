@@ -15,7 +15,14 @@ BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
 BossConfig.AutoSpawnMinutes = 12 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado)
 BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
-BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6
+BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6 (só no fallback sem modelo 3D)
+-- Modelo 3D do boss (sem rig): BossService monta o rig por cima (HumanoidRootPart + Humanoid + partes
+-- soldadas). Procura por nome em ServerStorage/ReplicatedStorage.Assets/Workspace (ModelName) e, se
+-- não achar, carrega o asset (ModelAssetId, precisa ser do grupo/dono ou público). 0 = só o rig R6.
+BossConfig.ModelName = "BossModel"
+BossConfig.ModelAssetId = 138493793469412
+BossConfig.ModelHeight = 16 -- studs de altura final do modelo (escala automática)
+BossConfig.FaceOffset = 0 -- graus para girar a frente do modelo se ele andar de lado/costas
 BossConfig.ArenaRadius = 55 -- studs a partir de BossArena; fora disso o boss ignora/volta
 BossConfig.AbandonSeconds = 30 -- sem jogador vivo na arena por esse tempo = boss some (sem recompensa)
 BossConfig.WalkSpeed = 14

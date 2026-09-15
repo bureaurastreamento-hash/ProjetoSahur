@@ -15,6 +15,8 @@
 
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
+local InsertService = game:GetService("InsertService")
+local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
@@ -118,58 +120,190 @@ end
 -- Rig
 -- ---------------------------------------------------------------------------
 
-local function buildBoss(): (Model?, Humanoid?, BasePart?)
-	local ok, model = pcall(function()
-		return Players:CreateHumanoidModelFromDescription(Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
-	end)
-	if not ok or not model then
-		warn("[BossService] não consegui criar o rig: " .. tostring(model))
-		return nil, nil, nil
+--- Acha o modelo 3D do boss (template): por nome nas pastas conhecidas, senão pelo asset id.
+local modelTemplate: Model? = nil
+local function findModelTemplate(): Model?
+	if modelTemplate and modelTemplate.Parent then
+		return modelTemplate
 	end
-	model.Name = BossConfig.Name
-	local humanoid = model:FindFirstChildOfClass("Humanoid")
-	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
-	if not humanoid or not root then
-		model:Destroy()
-		return nil, nil, nil
-	end
-	for _, d in model:GetDescendants() do
-		if d:IsA("Script") or d:IsA("LocalScript") then
-			d:Destroy()
-		elseif d:IsA("BasePart") then
-			d.Color = Color3.fromRGB(70, 30, 35)
-			d.Material = Enum.Material.Slate
+	local name = BossConfig.ModelName
+	local assets = ReplicatedStorage:FindFirstChild("Assets")
+	for _, container in { ServerStorage, assets, Workspace } do
+		local found = container and container:FindFirstChild(name, true)
+		if found and found:IsA("Model") then
+			if found.Parent == Workspace or found:IsDescendantOf(Workspace) then
+				found.Parent = ServerStorage -- o dono largou no mapa: vira template escondido
+			end
+			modelTemplate = found
+			return found
 		end
 	end
-	-- Animator criado no servidor para as animações do cliente replicarem (FX.PlayAnimation)
-	if not humanoid:FindFirstChildOfClass("Animator") then
-		Instance.new("Animator").Parent = humanoid
+	if BossConfig.ModelAssetId > 0 then
+		local ok, result = pcall(function()
+			return InsertService:LoadAsset(BossConfig.ModelAssetId)
+		end)
+		if ok and result then
+			local inner = result:FindFirstChildWhichIsA("Model") or result
+			if inner:IsA("Model") then
+				inner.Name = name
+				inner.Parent = ServerStorage
+				modelTemplate = inner
+				Log.debug(("[BossService] modelo do boss carregado do asset %d"):format(BossConfig.ModelAssetId))
+				return inner
+			end
+		else
+			warn(("[BossService] não carregou o asset %d do boss: %s (coloque o Model como %s em ServerStorage)"):format(BossConfig.ModelAssetId, tostring(result), name))
+		end
 	end
-	humanoid.DisplayName = BossConfig.Name
-	humanoid.MaxHealth = BossConfig.MaxHealth
-	humanoid.Health = BossConfig.MaxHealth
-	humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOn
-	humanoid.NameDisplayDistance = 120
-	humanoid.HealthDisplayDistance = 120
-	humanoid.BreakJointsOnDeath = false
-	humanoid.WalkSpeed = BossConfig.WalkSpeed
-	humanoid.JumpPower = 0
-	humanoid.AutoRotate = true
-	pcall(function()
-		model:ScaleTo(BossConfig.Scale)
-	end)
-	-- olhos: neon para ler a direção
-	local head = model:FindFirstChild("Head") :: BasePart?
-	if head then
-		head.Color = Color3.fromRGB(120, 20, 25)
+	return nil
+end
+
+--- Monta um rig por cima de um modelo 3D sem Humanoid: HRP invisível (colide), Humanoid, partes do
+--- modelo achatadas como filhas diretas (hitbox conta só filhos diretos), soldadas ao HRP, sem colisão.
+local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
+	local mesh = template:Clone()
+	for _, d in mesh:GetDescendants() do
+		if d:IsA("Script") or d:IsA("LocalScript") or d:IsA("Humanoid") or d:IsA("BodyMover") or d:IsA("Constraint") or d:IsA("JointInstance") then
+			d:Destroy()
+		end
 	end
-	CollectionService:AddTag(model, "Combatant")
+	local parts: { BasePart } = {}
+	for _, d in mesh:GetDescendants() do
+		if d:IsA("BasePart") then
+			table.insert(parts, d)
+		end
+	end
+	if #parts == 0 then
+		mesh:Destroy()
+		return nil, nil, nil
+	end
+	-- escala para a altura desejada
+	local _, size = mesh:GetBoundingBox()
+	if size.Y > 0.1 then
+		pcall(function()
+			mesh:ScaleTo(mesh:GetScale() * BossConfig.ModelHeight / size.Y)
+		end)
+	end
+	local cf, bbox = mesh:GetBoundingBox()
+
+	local model = Instance.new("Model")
+	model.Name = BossConfig.Name
+	local root = Instance.new("Part")
+	root.Name = "HumanoidRootPart"
+	root.Size = Vector3.new(math.max(4, bbox.X * 0.45), math.max(4, bbox.Y * 0.6), math.max(4, bbox.Z * 0.45))
+	root.Transparency = 1
+	root.CanCollide = true
+	root.CanQuery = true
+	root.CastShadow = false
+	root.CFrame = CFrame.new(cf.Position) * CFrame.Angles(0, math.rad(BossConfig.FaceOffset), 0)
+	root.Parent = model
+	model.PrimaryPart = root
+	-- partes do modelo: filhas diretas, soldadas, sem colisão/massa (o HRP é quem anda)
+	for _, part in parts do
+		part.Anchored = false
+		part.CanCollide = false
+		part.Massless = true
+		part.CanQuery = true
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = root
+		weld.Part1 = part
+		weld.Parent = part
+		part.Parent = model
+	end
+	mesh:Destroy()
+	-- Head/Torso invisíveis: o Humanoid (nome/vida flutuante, estado) espera esses nomes
+	local head = Instance.new("Part")
+	head.Name = "Head"
+	head.Size = Vector3.new(2, 2, 2)
+	head.Transparency = 1
+	head.CanCollide = false
+	head.Massless = true
+	head.CanQuery = false
+	head.CFrame = root.CFrame * CFrame.new(0, bbox.Y * 0.45, 0)
+	local headWeld = Instance.new("WeldConstraint")
+	headWeld.Part0 = root
+	headWeld.Part1 = head
+	headWeld.Parent = head
+	head.Parent = model
+	local torso = Instance.new("Part")
+	torso.Name = "Torso"
+	torso.Size = Vector3.new(2, 2, 1)
+	torso.Transparency = 1
+	torso.CanCollide = false
+	torso.Massless = true
+	torso.CanQuery = false
+	torso.CFrame = root.CFrame
+	local torsoWeld = Instance.new("WeldConstraint")
+	torsoWeld.Part0 = root
+	torsoWeld.Part1 = torso
+	torsoWeld.Parent = torso
+	torso.Parent = model
+	local humanoid = Instance.new("Humanoid")
+	humanoid.RigType = Enum.HumanoidRigType.R6
+	humanoid.HipHeight = (bbox.Y - root.Size.Y) / 2 -- HRP fica centrado no modelo; pés no chão
+	humanoid.Parent = model
 	return model, humanoid, root
 end
 
--- ---------------------------------------------------------------------------
--- Telegraph + golpes
--- ---------------------------------------------------------------------------
+local function buildBoss(): (Model?, Humanoid?, BasePart?)
+	local model: Model?, humanoid: Humanoid?, root: BasePart?
+	local template = findModelTemplate()
+	if template then
+		model, humanoid, root = rigFromModel(template)
+		if not model then
+			warn("[BossService] modelo do boss sem partes; usando o rig R6")
+		end
+	end
+	if not model then
+		local ok, r6 = pcall(function()
+			return Players:CreateHumanoidModelFromDescription(Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
+		end)
+		if not ok or not r6 then
+			warn("[BossService] não consegui criar o rig: " .. tostring(r6))
+			return nil, nil, nil
+		end
+		model = r6
+		humanoid = r6:FindFirstChildOfClass("Humanoid")
+		root = r6:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if not humanoid or not root then
+			r6:Destroy()
+			return nil, nil, nil
+		end
+		for _, d in r6:GetDescendants() do
+			if d:IsA("Script") or d:IsA("LocalScript") then
+				d:Destroy()
+			elseif d:IsA("BasePart") then
+				d.Color = Color3.fromRGB(70, 30, 35)
+				d.Material = Enum.Material.Slate
+			end
+		end
+		pcall(function()
+			r6:ScaleTo(BossConfig.Scale)
+		end)
+		local head = r6:FindFirstChild("Head") :: BasePart?
+		if head then
+			head.Color = Color3.fromRGB(120, 20, 25)
+		end
+	end
+	local m, h, rt = model :: Model, humanoid :: Humanoid, root :: BasePart
+	m.Name = BossConfig.Name
+	-- Animator criado no servidor para as animações do cliente replicarem (FX.PlayAnimation)
+	if not h:FindFirstChildOfClass("Animator") then
+		Instance.new("Animator").Parent = h
+	end
+	h.DisplayName = BossConfig.Name
+	h.MaxHealth = BossConfig.MaxHealth
+	h.Health = BossConfig.MaxHealth
+	h.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOn
+	h.NameDisplayDistance = 120
+	h.HealthDisplayDistance = 120
+	h.BreakJointsOnDeath = false
+	h.WalkSpeed = BossConfig.WalkSpeed
+	h.JumpPower = 0
+	h.AutoRotate = true
+	CollectionService:AddTag(m, "Combatant")
+	return m, h, rt
+end
 
 local function telegraph(position: Vector3, radius: number, seconds: number)
 	local ring = Instance.new("Part")
@@ -524,7 +658,8 @@ local function summon(player: Player, byName: string?)
 		prompt.Enabled = false
 	end
 	local spawnCf = if spawnPart then spawnPart.CFrame else CFrame.new(arenaCenter())
-	model:PivotTo(CFrame.new(spawnCf.Position + Vector3.new(0, 3 * BossConfig.Scale + 1, 0)))
+	local lift = humanoid.HipHeight + root.Size.Y / 2 + 1
+	model:PivotTo(CFrame.new(spawnCf.Position + Vector3.new(0, lift, 0)))
 	model.Parent = Workspace
 	pcall(function()
 		root:SetNetworkOwner(nil) -- servidor simula

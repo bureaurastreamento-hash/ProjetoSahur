@@ -202,6 +202,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
 
 ## Retomar aqui (última sessão: 2026-09-15, noite — fase 5)
 
+### Boss com modelo 3D (NÃO testado)
+- `BossService.rigFromModel`: monta rig por cima de um Model sem Humanoid — HRP invisível que colide
+  (45% da largura, 60% da altura), Humanoid R6 com HipHeight calculado, Head/Torso invisíveis, todas as
+  partes do modelo viram filhas DIRETAS (hitbox conta só filhos diretos), soldadas ao HRP, sem colisão e
+  sem massa. Escala automática para `BossConfig.ModelHeight` (16 studs). `FaceOffset` gira a frente.
+- Onde o modelo é procurado: `ServerStorage.BossModel` → `ReplicatedStorage.Assets.BossModel` →
+  `Workspace` (qualquer profundidade; é movido para ServerStorage ao iniciar) → `InsertService:LoadAsset
+  (138493793469412)` (só funciona se o asset for do grupo/dono ou público). Fallback: rig R6 antigo.
+- Dono: renomear o Model inserido para **BossModel** (de preferência em ServerStorage) e salvar o place.
+
 ### Fase 5 (NÃO testada)
 - **Uppercut/downslam só como 4º golpe** do combo (no lugar do finisher com empurrão; cliente e
   servidor conferem `combo == 4`); depois do uppercut, o downslam sai como continuação por 1,6 s
