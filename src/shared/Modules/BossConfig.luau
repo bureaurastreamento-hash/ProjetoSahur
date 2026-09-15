@@ -24,6 +24,7 @@ BossConfig.PhaseTwoSpeed = 20
 BossConfig.RewardPool = 300
 BossConfig.RewardMin = 20
 BossConfig.RewardTopBonus = 50 -- quem mais causou dano
+BossConfig.TopDropChance = 0.35 -- chance de o top de dano ganhar um giro grátis da roleta (drop raro)
 
 export type Attack = {
 	Damage: number,

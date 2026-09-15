@@ -143,6 +143,14 @@ CombatConfig.Awakening = {
 	ChargeOnParry = 10, -- carga extra ao parryar
 }
 
+-- Wall splat: golpe que derruba (4º M1, finisher, agarrão) com parede a até Distance studs na direção
+-- do empurrão = dano extra + ragdoll mais longo + efeito pesado (kind "wallsplat").
+CombatConfig.WallSplat = {
+	Distance = 12,
+	Damage = 6,
+	ExtraRagdoll = 0.8,
+}
+
 -- Morte: personagem vira ragdoll (juntas soltas) até o respawn; empurrado na direção do golpe.
 CombatConfig.Ragdoll = {
 	Enabled = true,

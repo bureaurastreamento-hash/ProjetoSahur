@@ -40,6 +40,18 @@ export type MissionDef = {
 	text: string, -- %d = goal
 }
 
+-- Maestria por personagem (ref. HB): usar = ganha; nível = título no cartão. Só cosmético/progresso.
+ProgressionConfig.Mastery = {
+	Kill = 25,
+	DuelWin = 30,
+	Boss = 40,
+	PerLevel = 150, -- XP de maestria por nível
+	MaxLevel = 10,
+}
+function ProgressionConfig.MasteryLevel(xp: number): number
+	return math.min(ProgressionConfig.Mastery.MaxLevel, math.floor(xp / ProgressionConfig.Mastery.PerLevel) + 1)
+end
+
 ProgressionConfig.MissionsPerDay = 3
 local MissionPool: { MissionDef } = {
 	{ id = "kills10", kind = "kills", goal = 10, coins = 80, xp = 100, text = "Elimine %d jogadores" },

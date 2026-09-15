@@ -197,6 +197,17 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		if isMe or attackerChar == localPlayer.Character then
 			FX.Shake(if black then 1.2 else 0.8, 0.35)
 		end
+	elseif kind == "wallsplat" then
+		-- Bateu na parede: número extra, tela treme forte, efeito pesado no ponto
+		FX.DamageNumber(victimChar, ("PAREDE %d"):format(math.floor(amount + 0.5)), COLOR_FINISHER)
+		FX.Flash(victimChar, COLOR_FINISHER, 0.3)
+		FX.SpawnVFX(victimChar, SHARED, "WallSplat", true)
+		if not FX.PlaySoundAt(victimChar, SHARED, "WallSplat") then
+			FX.PlaySoundAt(victimChar, SHARED, "Finisher_Hit")
+		end
+		if isMe or attackerChar == localPlayer.Character then
+			FX.Shake(1.0, 0.35)
+		end
 	elseif kind == "finisher" then
 		-- 4º golpe em alvo quase morto: peso máximo
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_FINISHER)

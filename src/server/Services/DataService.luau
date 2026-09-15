@@ -147,6 +147,13 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
+	if typeof(raw.mastery) == "table" then
+		for id, xp in raw.mastery do
+			if typeof(id) == "string" and typeof(xp) == "number" and xp >= 0 then
+				profile.mastery[id] = math.floor(xp)
+			end
+		end
+	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile

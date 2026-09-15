@@ -40,6 +40,7 @@ export type Profile = {
 	-- cosméticos (CosmeticsService): ids de CosmeticsConfig
 	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
 	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
+	mastery: { [string]: number }, -- characterId -> XP de maestria (ProgressionConfig.Mastery)
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -54,6 +55,7 @@ function DataConfig.DefaultProfile(): Profile
 		missions = { day = 0, list = {} },
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
+		mastery = {},
 	}
 end
 

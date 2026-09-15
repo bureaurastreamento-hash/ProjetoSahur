@@ -45,6 +45,7 @@ export type AbilityDef = {
 	EnergyCost: number,
 	CastTime: number, -- tempo em que o jogador fica "ocupado" (não pode usar outra habilidade)
 	Effect: Effect,
+	AwakenedEffect: Effect?, -- versão DESPERTA (durante o Awakening); sem ela, só o buff de dano/velocidade
 }
 
 export type CharacterDef = {
@@ -105,6 +106,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 18, Damage = 26, Delay = 0.3, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } },
 			},
 			{
 				Id = "Rampage",
@@ -141,6 +143,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.4,
 				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 11, Damage = 16, Delay = 0.15, StunSeconds = 1.2, Knockback = { Speed = 30, Duration = 0.2, Ragdoll = 1.2 } },
 			},
 			{
 				Id = "Tempest",
@@ -168,6 +171,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.3,
 				Effect = { Type = "Projectile", Speed = 90, Range = 70, Radius = 3, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } },
+				AwakenedEffect = { Type = "Projectile", Speed = 110, Range = 90, Radius = 5, Damage = 22, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } },
 			},
 			{
 				Id = "Mend",
@@ -213,6 +217,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.3,
 				Effect = { Type = "Shield", Multiplier = 0.4, Duration = 6 },
+				AwakenedEffect = { Type = "Shield", Multiplier = 0.2, Duration = 8 },
 			},
 			{
 				Id = "Quake",
@@ -242,6 +247,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.5,
 				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 15, Damage = 24, Delay = 0.25, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } },
 			},
 			{
 				Id = "Toque",

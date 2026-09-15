@@ -9,6 +9,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -406,6 +407,29 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 		local ragdoll = kb.Ragdoll
 		if ragdoll and opts.RagdollOnce and victimPlayer and RagdollService.IsRagdolled(victimPlayer) then
 			ragdoll = nil -- downslam em quem já está no chão: só o dano
+		end
+		-- Wall splat: vai cair contra uma parede próxima na direção do empurrão
+		if ragdoll and victimPlayer then
+			local ws = CombatConfig.WallSplat
+			local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if aRoot and vRoot then
+				local dir = vRoot.Position - aRoot.Position
+				dir = Vector3.new(dir.X, 0, dir.Z)
+				if dir.Magnitude > 0.1 then
+					local params = RaycastParams.new()
+					params.FilterType = Enum.RaycastFilterType.Exclude
+					params.FilterDescendantsInstances = { victim, attackerChar }
+					params.RespectCanCollide = true
+					local hit = Workspace:Raycast(vRoot.Position, dir.Unit * ws.Distance, params)
+					if hit and hit.Instance.Anchored and math.abs(hit.Normal.Y) < 0.5 then
+						local extra = HealthService.ApplyDamage(victim, ws.Damage, attacker)
+						ragdoll += ws.ExtraRagdoll
+						notifyDamage:FireAllClients(attackerChar, victim, extra, "wallsplat")
+						Log.debug(("[CombatService] %s: wall splat em %s"):format(attacker.Name, victim.Name))
+					end
+				end
+			end
 		end
 		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, ragdoll, kb.Up)
 	end

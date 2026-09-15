@@ -115,6 +115,7 @@ Assets.VFXPack = {
 	["Shared/Ragdoll"] = { Path = "Packs/OfficialJJS/Damage/RagdollWind", Follow = true, Lifetime = 1.5 },
 	["Shared/Dash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash", -- dash universal (Q)
 	["Shared/Crit"] = "Packs/OfficialJJS/Todo/HeavyHit", -- crítico do parry
+	["Shared/WallSplat"] = "Packs/OfficialJJS/Hakari/RoughSlam", -- caiu contra a parede
 	["Shared/BlackFlash"] = { Path = "Packs/OfficialJJS/Hakari/RoughImpact", Lifetime = 1.5 }, -- 2º crítico seguido
 	["Shared/Awakening"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 20 }, -- aura do modo (G)
 	["Shared/RagdollCancel"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact", -- Q caído: levantou

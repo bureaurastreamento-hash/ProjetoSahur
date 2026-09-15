@@ -26,6 +26,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
@@ -82,6 +83,7 @@ local coinsLabel: TextLabel
 local selectCoinsLabel: TextLabel
 local characterButtons: { [string]: TextButton } = {}
 local profile: any = nil
+local cardRefreshers: { () -> () } = {} -- cartões de personagem: reescrever maestria quando o perfil chega
 
 local CARD_SELECTED = Color3.fromRGB(90, 190, 255)
 local CARD_ACTION = Color3.fromRGB(240, 240, 245)
@@ -565,7 +567,14 @@ function HUDController.Start()
 				table.insert(lines, ("%s  %s"):format(key, ability.DisplayName))
 			end
 		end
-		;(b:FindFirstChild("Abilities") :: TextLabel).Text = table.concat(lines, "\n")
+		local function renderAbilities()
+			local xp = if profile and typeof(profile.mastery) == "table" then (tonumber(profile.mastery[id]) or 0) else 0
+			local shown = table.clone(lines)
+			table.insert(shown, ("Maestria %d · %d XP"):format(ProgressionConfig.MasteryLevel(xp), xp))
+			;(b:FindFirstChild("Abilities") :: TextLabel).Text = table.concat(shown, "\n")
+		end
+		renderAbilities()
+		table.insert(cardRefreshers, renderAbilities)
 		b.Parent = selectList
 		b.Activated:Connect(function()
 			local access = if def then CharacterDefs.AccessOf(def) else "coins"
@@ -612,6 +621,9 @@ function HUDController.Start()
 		if event == "levelup" then
 			showBanner(("NÍVEL %d! +%d pontos"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
 			FX.PlaySoundUI("Shared", "UltReady")
+		elseif event == "mastery_up" then
+			showBanner(("MAESTRIA %d — %s"):format(tonumber(data.level) or 0, tostring(data.characterId)), 3)
+			FX.PlaySoundUI("Match", "Victory")
 		elseif event == "mission_done" then
 			showBanner(("Missão concluída: %s (+%d pontos)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
 			FX.PlaySoundUI("Match", "Victory")
@@ -623,6 +635,9 @@ function HUDController.Start()
 			showBanner("Sem conexão com os dados: progresso desta sessão não será salvo", 6)
 		end
 		refreshMatchUI()
+		for _, fn in cardRefreshers do
+			fn()
+		end
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
 		local msgs = { coins = "Pontos insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",

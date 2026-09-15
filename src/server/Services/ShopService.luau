@@ -45,6 +45,11 @@ local function applyPerk(player: Player, key: string)
 	elseif key == "vip" then
 		player:SetAttribute("XpMultiplier", ShopConfig.VipXpMultiplier)
 		player:SetAttribute("NameTag", "VIP")
+	elseif key == "private_plus" then
+		-- só vale dentro de um servidor privado (VIP server) — em público não muda nada
+		if game.PrivateServerId ~= "" then
+			player:SetAttribute("DevNoCooldown", true) -- AbilityService/MovementService/CombatService leem
+		end
 	elseif key == "all_characters" then
 		for _, id in CharacterDefs.Order do
 			local def = CharacterDefs.Get(id)

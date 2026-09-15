@@ -200,7 +200,28 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite — leva 3)
+## Retomar aqui (última sessão: 2026-09-15, noite — fase 4)
+
+### Fase 4 (NÃO testada) — "próximos passos" da lista
+- **Wall splat** (`CombatConfig.WallSplat`): golpe que derruba (4º M1, finisher, agarrão, habilidade com
+  Ragdoll) com parede a até 12 studs na direção do empurrão → +6 de dano, ragdoll +0,8 s, kind
+  `wallsplat` (número "PAREDE", tremor forte, VFX `Shared/WallSplat`).
+- **Versões despertas**: `AbilityDef.AwakenedEffect` — durante o Awakening a habilidade usa esse efeito
+  (GroundSlam, SweepKick, ArcaneBolt, Fortify, Bombo têm; as outras só ganham o buff).
+- **Maestria por personagem** (`profile.mastery[characterId]`, `ProgressionConfig.Mastery`): kill +25,
+  duelo +30, boss +40; nível a cada 150 XP (máx 10); cartão do personagem mostra "Maestria N · XP";
+  banner "MAESTRIA N" ao subir (`NotifyProgression "mastery_up"`).
+- **Passe "Servidor privado+"** (`ShopConfig` `private_plus`, id 0): dentro de um servidor privado liga
+  `DevNoCooldown` no dono do passe (sem cooldowns; bonecos já existem).
+- **Drop raro do boss**: top de dano tem 35% (`BossConfig.TopDropChance`) de ganhar um giro grátis da
+  roleta (`CosmeticsService.FreeRoll`); banner do boss mostra "DROP RARO: item".
+- Bugs que o dono viu no 3º teste ficaram para a próxima sessão ("depois a gente volta nisso").
+
+### Roteiro de teste da fase 4
+1. Combo de 4 com o alvo de costas para uma parede: "PAREDE 6" + cai mais tempo.
+2. G (despertar) e usar 1 (GroundSlam/Bombo/SweepKick/ArcaneBolt): área/dano maiores.
+3. Matar alguém: cartão do personagem (V) mostra a maestria subindo; a cada 150 XP banner.
+4. Boss derrotado sendo o top: às vezes "DROP RARO".
 
 ### Leva 3 (NÃO testada) — pedidos do dono depois do 2º teste
 - **Boneco atacante caía no void**: `PivotTo` usava a posição do HRP e não do pivô do Model → afundava a

@@ -59,7 +59,7 @@ RemoteEvents.Events = ({
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: "M1"|"Downslam"|"Uppercut", comboIndex: number)
-	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash")
+	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash"|"wallsplat")
 	NotifyHealth = "NotifyHealth", -- vítima: (current: number, max: number)
 	NotifyKill = "NotifyKill", -- all: (killer: Player?, victim: Player)
 	NotifyWarning = "NotifyWarning", -- dono: (kind: "antiexploit", level: number, message: string) — aviso grande na tela
@@ -79,7 +79,7 @@ RemoteEvents.Events = ({
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
-	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done", data: table)
+	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done"|"mastery_up", data: table)
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)
 	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)

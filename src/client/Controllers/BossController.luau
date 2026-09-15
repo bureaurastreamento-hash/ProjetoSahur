@@ -119,6 +119,13 @@ local function onNotifyBoss(event: string, data: any)
 		end
 		if mine > 0 then
 			table.insert(lines, ("+%d pontos"):format(mine))
+			if typeof(data.rewards) == "table" then
+				for _, r in data.rewards do
+					if r.name == localPlayer.Name and typeof(r.drop) == "string" then
+						table.insert(lines, ("DROP RARO: %s!"):format(r.drop))
+					end
+				end
+			end
 		end
 		if data.top then
 			table.insert(lines, ("Maior dano: %s"):format(tostring(data.top)))

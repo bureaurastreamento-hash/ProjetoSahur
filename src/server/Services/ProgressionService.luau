@@ -141,8 +141,29 @@ end
 -- Ganchos chamados por outros services
 -- ---------------------------------------------------------------------------
 
+--- Maestria do personagem ATUAL do jogador (atributo CharacterId). Avisa ao subir de nível.
+function ProgressionService.AddMastery(player: Player, amount: number, reason: string)
+	local profile = DataService.GetProfile(player)
+	local characterId = player:GetAttribute("CharacterId")
+	if not profile or typeof(characterId) ~= "string" or amount <= 0 then
+		return
+	end
+	local before = profile.mastery[characterId] or 0
+	local after = before + amount
+	profile.mastery[characterId] = after
+	DataService.MarkDirty(player)
+	local lb, la = ProgressionConfig.MasteryLevel(before), ProgressionConfig.MasteryLevel(after)
+	if la > lb then
+		notify(player, "mastery_up", { characterId = characterId, level = la })
+		Log.debug(("[ProgressionService] %s: maestria %s nível %d (%s)"):format(player.Name, characterId, la, reason))
+	end
+end
+
 function ProgressionService.OnDuelResult(player: Player, won: boolean)
 	ProgressionService.AddXP(player, if won then ProgressionConfig.XP.DuelWin else ProgressionConfig.XP.DuelLoss, "duel")
+	if won then
+		ProgressionService.AddMastery(player, ProgressionConfig.Mastery.DuelWin, "duel")
+	end
 	ProgressionService.Progress(player, "duels", 1)
 	if won then
 		ProgressionService.Progress(player, "duel_wins", 1)
@@ -156,6 +177,7 @@ function ProgressionService.OnBossDefeated(player: Player, damage: number, share
 		xp += ProgressionConfig.XP.BossTopBonus
 	end
 	ProgressionService.AddXP(player, xp, "boss")
+	ProgressionService.AddMastery(player, ProgressionConfig.Mastery.Boss, "boss")
 	ProgressionService.Progress(player, "boss_damage", math.floor(damage))
 	ProgressionService.Progress(player, "boss_kills", 1)
 end
@@ -196,6 +218,7 @@ function ProgressionService.Start()
 	HealthService.Died.Event:Connect(function(victim: Player, killer: Player?)
 		if killer and killer ~= victim and killer.Parent == Players then
 			ProgressionService.AddXP(killer, ProgressionConfig.XP.Kill, "kill")
+			ProgressionService.AddMastery(killer, ProgressionConfig.Mastery.Kill, "kill")
 			ProgressionService.Progress(killer, "kills", 1)
 		end
 	end)

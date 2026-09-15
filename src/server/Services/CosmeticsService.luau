@@ -130,6 +130,22 @@ local function rollOnce(player: Player, profile: any): PoolEntry?
 	return list[#list]
 end
 
+--- Giro grátis (drop do boss, eventos). Retorna o nome do item ou nil (já tem tudo / sem perfil).
+function CosmeticsService.FreeRoll(player: Player, reason: string): string?
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return nil
+	end
+	local e = rollOnce(player, profile)
+	if not e then
+		return nil
+	end
+	DataService.MarkDirty(player)
+	notifyCosmetics:FireClient(player, "rolled", { items = { { id = e.id, name = e.name, kind = e.kind } }, reason = reason })
+	Log.debug(("[CosmeticsService] %s ganhou %s (%s)"):format(player.Name, e.id, reason))
+	return e.name
+end
+
 --- Recibo de produto (ShopService): giros ou item escolhido. Retorna false se não entregou.
 function CosmeticsService.OnProduct(player: Player, product: any): boolean
 	local profile = DataService.GetProfile(player)

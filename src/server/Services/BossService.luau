@@ -27,6 +27,7 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
+local CosmeticsService: any = nil -- carregado no Start (evita ciclo)
 
 local BossService = {}
 
@@ -361,7 +362,11 @@ local function rewardAndFinish(f: Fight)
 			end
 			coins = DataService.RewardCoins(player, coins)
 			ProgressionService.OnBossDefeated(player, dmg, dmg / total, player == top)
-			table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg) })
+			local drop: string? = nil
+			if player == top and math.random() < BossConfig.TopDropChance and CosmeticsService then
+				drop = CosmeticsService.FreeRoll(player, "boss")
+			end
+			table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg), drop = drop })
 		end
 	end
 	table.sort(rewards, function(a, b)
@@ -587,6 +592,10 @@ function BossService.Init()
 end
 
 function BossService.Start()
+	local okC, cos = pcall(require, script.Parent:WaitForChild("CosmeticsService"))
+	if okC then
+		CosmeticsService = cos
+	end
 	findExtras()
 	if not altar then
 		state = "Missing"

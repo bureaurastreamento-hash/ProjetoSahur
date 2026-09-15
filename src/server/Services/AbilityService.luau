@@ -537,7 +537,17 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 
 	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
-	local ok, err = pcall(handler :: any, player, character, ability, sanitizeDirection(character, rawDirection))
+	-- Despertou: usa a versão desperta da habilidade se existir (mesmo Id: animação/VFX iguais)
+	local used = ability
+	if ability.AwakenedEffect and AbilityService.IsAwakened(player) then
+		used = table.clone(ability)
+		used.Effect = ability.AwakenedEffect :: CharacterDefs.Effect
+		local awakenedHandler = effects[used.Effect.Type]
+		if awakenedHandler then
+			handler = awakenedHandler
+		end
+	end
+	local ok, err = pcall(handler :: any, player, character, used, sanitizeDirection(character, rawDirection))
 	if not ok then
 		warn(("[AbilityService] erro em %s: %s"):format(ability.Id, tostring(err)))
 	end
