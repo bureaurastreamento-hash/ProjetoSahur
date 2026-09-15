@@ -21,6 +21,7 @@
 	  DamageBuff  { Multiplier, Duration }                           -> multiplica dano dos socos/habilidades
 	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
 	  Heal        { Amount }                                         -> cura o próprio lançador
+	  Shield      { Multiplier, Duration }                           -> multiplica dano RECEBIDO (0.5 = metade)
 ]]
 
 export type Effect = {
@@ -153,10 +154,42 @@ CharacterDefs.Characters = {
 			},
 		},
 	} :: CharacterDef,
+
+	Guardian = {
+		Id = "Guardian",
+		DisplayName = "Guardian",
+		UnlockCost = 400,
+		Abilities = {
+			{
+				Id = "ShieldBash",
+				DisplayName = "Golpe de Escudo",
+				Cooldown = 7,
+				EnergyCost = 0,
+				CastTime = 0.4,
+				Effect = { Type = "Dash", Speed = 55, Duration = 0.2, Damage = 10, Range = 6, Width = 7, Height = 6, StunSeconds = 0.6 },
+			},
+			{
+				Id = "Fortify",
+				DisplayName = "Fortificar",
+				Cooldown = 18,
+				EnergyCost = 30,
+				CastTime = 0.3,
+				Effect = { Type = "Shield", Multiplier = 0.4, Duration = 6 },
+			},
+			{
+				Id = "Quake",
+				DisplayName = "Terremoto",
+				Cooldown = 30,
+				EnergyCost = 100,
+				CastTime = 1.2,
+				Effect = { Type = "MultiHitArea", Radius = 16, Damage = 12, Hits = 3, Interval = 0.4, Knockback = { Speed = 35, Duration = 0.2 } },
+			},
+		},
+	} :: CharacterDef,
 }
 
 --- Lista ordenada de ids (ordem na seleção de personagem)
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic" }
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian" }
 
 function CharacterDefs.Get(characterId: string): CharacterDef?
 	return CharacterDefs.Characters[characterId]

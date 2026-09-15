@@ -35,6 +35,8 @@ type PlayerState = {
 	busyUntil: number,
 	damageMultiplier: number,
 	damageMultiplierUntil: number,
+	incomingMultiplier: number,
+	incomingMultiplierUntil: number,
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -59,6 +61,8 @@ local function newState(characterId: string?): PlayerState
 		busyUntil = 0,
 		damageMultiplier = 1,
 		damageMultiplierUntil = 0,
+		incomingMultiplier = 1,
+		incomingMultiplierUntil = 0,
 	}
 end
 
@@ -94,6 +98,15 @@ function AbilityService.GetDamageMultiplier(player: Player): number
 		return 1
 	end
 	return state.damageMultiplier
+end
+
+--- Multiplicador de dano RECEBIDO (escudo). 1 = normal.
+function AbilityService.GetIncomingMultiplier(player: Player): number
+	local state = states[player]
+	if not state or os.clock() > state.incomingMultiplierUntil then
+		return 1
+	end
+	return state.incomingMultiplier
 end
 
 -- ---------------------------------------------------------------------------
@@ -160,6 +173,10 @@ effects.Dash = function(player, character, ability)
 				if not hitAlready[victim] then
 					hitAlready[victim] = true
 					CombatService.ResolveHit(player, character, victim, e.Damage, false)
+					local victimPlayer = Players:GetPlayerFromCharacter(victim)
+					if victimPlayer and typeof(e.StunSeconds) == "number" then
+						CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
+					end
 					notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit")
 				end
 			end
@@ -310,6 +327,14 @@ effects.Projectile = function(player, character, ability)
 	end)
 end
 
+effects.Shield = function(player, character, ability)
+	local e = ability.Effect
+	local state = getState(player)
+	state.incomingMultiplier = e.Multiplier
+	state.incomingMultiplierUntil = os.clock() + e.Duration
+	notifyAbility:FireAllClients(character, state.characterId, ability.Id, "start", { Duration = e.Duration })
+end
+
 effects.DamageBuff = function(player, character, ability)
 	local e = ability.Effect
 	local state = getState(player)
@@ -410,6 +435,7 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	state.characterId = characterId
 	state.cooldownReadyAt = {}
 	state.damageMultiplierUntil = 0
+	state.incomingMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
 	Log.debug(("[AbilityService] %s agora é %s (respawn)"):format(player.Name, characterId))
 	AntiExploitService.Grace(player, 3)

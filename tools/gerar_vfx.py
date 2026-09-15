@@ -293,6 +293,46 @@ vfx["Mystic/Meteor_Hit"] = model("Meteor_Hit", [
 ], lifetime=3)
 
 # ---------------------------------------------------------------------------
+# Guardian
+# ---------------------------------------------------------------------------
+STEEL = (0.75, 0.8, 0.9)
+GOLD = (1.0, 0.8, 0.3)
+vfx["Guardian/ShieldBash"] = model("ShieldBash", [
+    part("Shield", "Cylinder", (0.4, 5, 5), STEEL, 1.6, 0.35, offset=(0, 0, -2.5), transparency=0.3, rot=(0, 90, 0)),
+    anchor("Feet", [
+        emitter("Dust", SMOKE, cseq((0, DUST), (1, GREY)), nseq((0, 2), (1, 4)), (0.4, 0.8), (4, 8), 12, spread=(60, 60),
+                light=0, drag=2, transparency=nseq((0, 0.4), (1, 1))),
+    ], offset=(0, -2.5, 0)),
+])
+vfx["Guardian/ShieldBash_Hit"] = model("ShieldBash_Hit", [
+    part("Flash", "Ball", (2, 2, 2), STEEL, 2.5, 0.25, transparency=0.3),
+    anchor("Burst", [
+        emitter("Sparks", SPARK, cseq((0, WHITE), (1, GOLD)), nseq((0, 0.8), (1, 0)), (0.25, 0.5), (18, 30), 22, drag=4),
+    ]),
+    light("Light", GOLD, 2, 12, 0.3),
+])
+vfx["Guardian/Fortify"] = model("Fortify", [
+    part("Dome", "Ball", (7, 7, 7), GOLD, 1.15, 0.6, transparency=0.75),
+    ring("Ring", GOLD, 2, 3.5, 0.6, y=-2.6, height=0.25),
+    anchor("Aura", [
+        emitter("Motes", SPARK, cseq((0, WHITE), (1, GOLD)), nseq((0, 0.4), (1, 0)), (0.8, 1.2), (2, 5), 10,
+                spread=(90, 90), accel=(0, 3, 0), duration=6),
+    ], offset=(0, -1, 0)),
+    light("Light", GOLD, 2, 14, 6),
+], lifetime=7, follow=True)
+vfx["Guardian/Quake"] = model("Quake", [
+    ring("Shockwave", DUST, 3, 10, 0.8, y=-2.6, height=0.4),
+    anchor("Ground", [
+        emitter("Dust", SMOKE, cseq((0, DUST), (1, (0.3, 0.25, 0.2))), nseq((0, 4), (1, 9)), (1.0, 1.6), (12, 22), 22,
+                spread=(90, 10), light=0, accel=(0, -6, 0), drag=3, duration=1.4, transparency=nseq((0, 0.4), (1, 1))),
+        emitter("Rocks", SPARK, cseq((0, (0.5, 0.4, 0.3)), (1, (0.3, 0.25, 0.2))), nseq((0, 1.2), (1, 0.8)), (0.7, 1.2),
+                (20, 32), 14, spread=(60, 60), light=0, accel=(0, -45, 0), rotspeed=(-400, 400), duration=1.4),
+    ], offset=(0, -2.6, 0)),
+    light("Light", GOLD, 1.5, 20, 1.6),
+], lifetime=3)
+vfx["Guardian/Quake_Hit"] = vfx["Brawler/ShoulderBash_Hit"]
+
+# ---------------------------------------------------------------------------
 # Shared
 # ---------------------------------------------------------------------------
 vfx["Shared/Finisher"] = model("Finisher", [

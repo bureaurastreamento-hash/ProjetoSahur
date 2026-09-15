@@ -22,7 +22,8 @@ local HealthService = {}
 
 local ATTR_LAST_ATTACKER = "LastAttackerUserId"
 local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
-local KILL_CREDIT_WINDOW = 8 -- segundos que o último atacante recebe crédito do kill
+local KILL_CREDIT_WINDOW = 8
+local warnedRig = false -- segundos que o último atacante recebe crédito do kill
 
 local notifyHealth: RemoteEvent
 local notifyKill: RemoteEvent
@@ -68,6 +69,10 @@ local function setupCharacter(player: Player, character: Model)
 		return
 	end
 
+	if humanoid.RigType ~= Enum.HumanoidRigType.R6 and not warnedRig then
+		warnedRig = true
+		warn("[HealthService] rig do jogo é R15; o projeto foi feito para R6 (Game Settings > Avatar > R6). Animações caem no id R15 alternativo.")
+	end
 	humanoid.MaxHealth = CombatConfig.MaxHealth
 	humanoid.Health = CombatConfig.MaxHealth
 	humanoid.WalkSpeed = CombatConfig.WalkSpeed

@@ -10,6 +10,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         },
         {
@@ -17,6 +20,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         },
         {
@@ -24,6 +30,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         },
         {
@@ -31,6 +40,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522638767"
           }
         },
         {
@@ -38,6 +50,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://182393478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507768375"
           }
         },
         {
@@ -45,6 +60,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://182393478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507768375"
           }
         },
         {
@@ -52,6 +70,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://180436148"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507767968"
           }
         }
       ]
@@ -65,6 +86,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522638767"
           }
         },
         {
@@ -72,6 +96,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         },
         {
@@ -79,6 +106,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129423030"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507770677"
           }
         }
       ]
@@ -92,6 +122,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://128853357"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507770453"
           }
         },
         {
@@ -99,6 +132,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         },
         {
@@ -106,6 +142,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://182491248"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507771019"
           }
         }
       ]
@@ -119,6 +158,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://128853357"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507770453"
           }
         },
         {
@@ -126,6 +168,9 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://129423030"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507770677"
           }
         },
         {
@@ -133,6 +178,45 @@
           "className": "Animation",
           "properties": {
             "AnimationId": "rbxassetid://128777973"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507770239"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guardian",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "ShieldBash",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://129967478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522638767"
+          }
+        },
+        {
+          "name": "Fortify",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://182393478"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://507768375"
+          }
+        },
+        {
+          "name": "Quake",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://129967390"
+          },
+          "attributes": {
+            "R15Id": "rbxassetid://522635514"
           }
         }
       ]

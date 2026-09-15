@@ -84,10 +84,12 @@ end
 
 local tracks: { [Model]: { [string]: AnimationTrack } } = {}
 
+local r15Animations: { [Animation]: Animation } = {}
+
 local function trackFor(character: Model, folder: string, name: string): AnimationTrack?
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
-	if not animator then
+	if not humanoid or not animator then
 		return nil
 	end
 	local byName = tracks[character]
@@ -106,6 +108,19 @@ local function trackFor(character: Model, folder: string, name: string): Animati
 	local anim = Assets.GetAnimation(folder, name)
 	if not anim then
 		return nil
+	end
+	-- Rig R15 com id alternativo (atributo R15Id): animação R6 não toca em R15 e vice-versa
+	local r15Id = anim:GetAttribute("R15Id")
+	if humanoid.RigType == Enum.HumanoidRigType.R15 and typeof(r15Id) == "string" and r15Id ~= "" then
+		local alt = r15Animations[anim]
+		if not alt then
+			local created = Instance.new("Animation")
+			created.Name = anim.Name .. "_R15"
+			created.AnimationId = r15Id
+			r15Animations[anim] = created
+			alt = created
+		end
+		anim = alt
 	end
 	track = animator:LoadAnimation(anim)
 	byName[key] = track

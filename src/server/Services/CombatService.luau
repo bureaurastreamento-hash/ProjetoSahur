@@ -166,6 +166,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	local kind = "hit"
 	if AbilityService then
 		damage *= AbilityService.GetDamageMultiplier(attacker)
+		if victimPlayer then
+			damage *= AbilityService.GetIncomingMultiplier(victimPlayer)
+		end
 	end
 	local finalDamage = damage
 

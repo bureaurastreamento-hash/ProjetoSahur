@@ -43,6 +43,7 @@ local TRAIL_COLORS: { [string]: Color3 } = {
 	Brawler = Color3.fromRGB(255, 150, 60),
 	Swift = Color3.fromRGB(110, 230, 255),
 	Mystic = Color3.fromRGB(170, 110, 255),
+	Guardian = Color3.fromRGB(255, 205, 80),
 }
 
 local requestAbility: RemoteEvent

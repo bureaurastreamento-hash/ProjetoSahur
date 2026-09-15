@@ -158,6 +158,18 @@ Memória entre sessões. Atualizar depois de cada mudança.
   + `MobileController` (só aparece com toque e sem teclado; desliga "toque no mundo = soco").
   `CombatController.Attack/SetBlock`, `AbilityController.Use`.
 
+- 2026-09-15 — Teste em Team Test OK (menu dev, Mystic, hitstop). Animações não apareciam:
+  provável rig R15 no place (avisado no boot por `HealthService`). Cada Animation agora tem
+  atributo `R15Id` (id Roblox equivalente) e `FX` escolhe pelo `Humanoid.RigType`.
+- 2026-09-15 — **Lobby vivo**: `DummyService` (3 bonecos R6 de treino nos `DummyPad*` da praça,
+  tag Combatant, regen própria, respawn 4 s, sem crédito de kill) e `LeaderboardService`
+  (OrderedDataStore `Leaderboard_Kills_v1`, publica kills totais ao sair/120 s, top 10 num
+  SurfaceGui na Part `LeaderboardBoard` ao lado do caminho norte, atualiza a cada 60 s).
+- 2026-09-15 — **4º personagem: Guardian** (400 moedas): Q `ShieldBash` (Dash curto com stun 0,6 s —
+  Dash agora aceita `StunSeconds`), E `Fortify` (novo efeito `Shield`: recebe 40% do dano por 6 s,
+  `AbilityService.GetIncomingMultiplier` aplicado em `CombatService.ResolveHit`), R `Quake`
+  (3 ondas de área com knockback). VFX/anims/sons/aliases. Painel de seleção 780 px.
+
 ## Em andamento
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.
@@ -166,7 +178,9 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Avaliar o mapa novo (`Sahur.Arena`) no Team Test: escala das zonas, se o lago/bosque atrapalham
   o combate, performance (662 parts + ~20 PointLights).
 - Testar Mystic: projétil contra parede/jogador, cura, meteoro (o alvo consegue sair?).
-- Testar os VFX gerados (escala/duração de cada um) e o menu Dev (login, alvo, comandos).
+- Testar os VFX gerados (escala/duração de cada um).
+- Confirmar rig: Game Settings > Avatar > R6 (CLAUDE.md). Se ficar R15, as anims usam o R15Id.
+- Testar bonecos de treino, placar (precisa de "Enable Studio Access to API Services") e Guardian.
 - Se o ícone Dev não aparecer: conferir que `StarterGui.DevGui` existe no Explorer (Rojo
   conectado e sincronizado) e que o nick está em `AdminConfig.Developers`.
 - Testar o topbar (V/P/Tab), a tela de perfil e os VFX do Particle Pack nas habilidades.
@@ -178,12 +192,11 @@ Memória entre sessões. Atualizar depois de cada mudança.
 2. **Mapa**: quando a equipe de arte trouxer meshes, trocar props do `gerar_arena.py` por
    modelos deles (manter nomes/zonas e a pasta `Spawns`).
 3. ~~Mobile~~ (feito; falta testar no Device Emulator e ajustar tamanho/posição).
-4. **4º personagem** (contra-ataque/parry ofensivo, escudo) e balanceamento de preços.
+4. ~~4º personagem~~ (Guardian feito); balancear preços/dano com dados de teste.
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
    desafio, arena separada (`ServerStorage.Maps`), `FreeRoam` continua para os demais.
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
-7. **Lobby vivo**: dummies R6 para treinar (Hitbox já aceita NPC), placar de líderes
-   (OrderedDataStore de vitórias).
+7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.
 8. **Lançamento**: `AllowLobbyCombat = false`, `Log.Verbose` automático, publicar privado,
    rodar `CHECKLIST_PUBLICACAO.md` completo.

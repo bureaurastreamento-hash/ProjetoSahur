@@ -280,6 +280,62 @@
           }
         }
       ]
+    },
+    {
+      "name": "Guardian",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "ShieldBash",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "ShieldBash_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Fortify",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Quake",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Quake_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        }
+      ]
     }
   ]
 }

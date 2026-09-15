@@ -79,6 +79,11 @@ Assets.VFXAliases = {
 	["Mystic/Mend"] = "Sphere",
 	["Mystic/Meteor"] = "Sun Portal",
 	["Mystic/Meteor_Hit"] = "Fire V.1",
+	["Guardian/ShieldBash"] = "Wind",
+	["Guardian/ShieldBash_Hit"] = "Slashes",
+	["Guardian/Fortify"] = "Sphere",
+	["Guardian/Quake"] = "Smoke V.2",
+	["Guardian/Quake_Hit"] = "Stripes",
 }
 
 local function findPackVFX(name: string): Instance?

@@ -6939,6 +6939,188 @@
       "BottomSurface": "Smooth",
       "Shape": "Ball"
      }
+    },
+    {
+     "name": "LeaderboardBase",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardBase",
+      "Anchored": true,
+      "Position": [
+       -16,
+       0.5,
+       -62
+      ],
+      "Size": [
+       12,
+       1,
+       3
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "LeaderboardBoard",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardBoard",
+      "Anchored": true,
+      "Position": [
+       -16,
+       5.5,
+       -62
+      ],
+      "Size": [
+       11,
+       9,
+       1
+      ],
+      "Color": [
+       0.12,
+       0.12,
+       0.15
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "LeaderboardFrame",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardFrame",
+      "Anchored": true,
+      "Position": [
+       -16,
+       5.5,
+       -61.6
+      ],
+      "Size": [
+       12,
+       10,
+       0.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "DummyPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad0",
+      "Anchored": true,
+      "Position": [
+       13.856,
+       0.55,
+       8.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "DummyPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad1",
+      "Anchored": true,
+      "Position": [
+       -13.856,
+       0.55,
+       8.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "DummyPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad2",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       0.55,
+       -16.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
     }
    ]
   },

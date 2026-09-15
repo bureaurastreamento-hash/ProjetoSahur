@@ -189,6 +189,16 @@ for i in range(4):
     part(f"PlanterSoil{i}", (3.4, 0.3, 3.4), (x, 1.85, z), DIRT)
     ball(f"PlanterBush{i}", 1.8, (x, 2.9, z), LEAF2)
 
+# placar de líderes: painel de pedra ao lado do caminho norte (SurfaceGui vem do LeaderboardService)
+part("LeaderboardBase", (12, 1, 3), (-16, 0.5, -62), BASALT)
+part("LeaderboardBoard", (11, 9, 1), (-16, 5.5, -62), ("Slate", (0.12, 0.12, 0.15)), rot=(0, 0, 0))
+part("LeaderboardFrame", (12, 10, 0.6), (-16, 5.5, -61.6), STONE_LIGHT)
+# bonecos de treino: pontos marcados (o DummyService cria os rigs aqui)
+for i, a in enumerate((30, 150, 270)):
+    ar = math.radians(a)
+    x, z = math.cos(ar) * 16, math.sin(ar) * 16
+    cylinder(f"DummyPad{i}", 3, 0.3, (x, 0.55, z), BASALT, CastShadow=False)
+
 # ---------------------------------------------------------------------------
 # NORTE — Ruínas
 # ---------------------------------------------------------------------------
@@ -428,7 +438,7 @@ prefix_map = [
     ("Woods", "Woods"), ("Trunk", "Woods"), ("Canopy", "Woods"), ("Log", "Woods"), ("Stump", "Woods"),
     ("Bush", "Woods"), ("Mush", "Woods"), ("Rune", "Woods"),
     ("Wall", "Walls"), ("Barrier", "Walls"), ("Tower", "Walls"),
-    ("Plaza", "Plaza"), ("Medallion", "Plaza"), ("Curb", "Plaza"), ("Lamp", "Plaza"), ("Bench", "Plaza"),
+    ("Plaza", "Plaza"), ("Medallion", "Plaza"), ("Leaderboard", "Plaza"), ("DummyPad", "Plaza"), ("Curb", "Plaza"), ("Lamp", "Plaza"), ("Bench", "Plaza"),
     ("Planter", "Plaza"), ("Path", "Plaza"), ("Slab", "Plaza"), ("Trail", "Plaza"),
 ]
 for p in parts:
