@@ -69,7 +69,17 @@
           "name": "Block",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://113541104537435"
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "BlockHit",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://132956120594921"
           },
           "attributes": {
             "R15Id": ""

@@ -10,7 +10,7 @@
 	  - Acerto de M1 puxa o atacante ~1 stud para a vítima (cliente dono da física).
 
 	Feedback (tudo por nome em ReplicatedStorage.Assets, ver Assets.luau):
-	  Animations.Shared: M1_1..M1_4, Downslam, Uppercut, Block (loop), Parry, Hit
+	  Animations.Shared: M1_1..M1_4, Downslam, Uppercut, Block (pose, loop), BlockHit (golpe absorvido), Parry, Hit
 	  VFX.Shared:        Hit, Block, Parry, Crit, BlackFlash
 	  Sounds.Shared:     Punch_Whoosh, Punch_Hit, Block, Parry, Death, Crit, BlackFlash
 ]]
@@ -182,6 +182,7 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 	elseif kind == "blocked" then
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_BLOCK)
 		FX.Flash(victimChar, COLOR_BLOCK, 0.15)
+		FX.PlayAnimation(victimChar, SHARED, "BlockHit") -- impacto absorvido (por cima da pose Block)
 		FX.SpawnVFX(victimChar, SHARED, "Block", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Block")
 	elseif kind == "guardbreak" then

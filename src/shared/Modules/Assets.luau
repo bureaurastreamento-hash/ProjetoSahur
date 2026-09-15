@@ -11,7 +11,7 @@
 
 	ReplicatedStorage.Assets
 	├── Animations
-	│   ├── Shared         (Animation) M1_1..M1_4, Downslam, Uppercut, Block, Parry, Hit, Idle, Walk, Run, Dash, DashBack
+	│   ├── Shared         (Animation) M1_1..M1_4, Downslam, Uppercut, Block, BlockHit, Parry, Hit, Idle, Walk, Run, Dash, DashBack
 	│   ├── Emotes         (Animation) wave, taunt, dance, bow, flex, scene_* (CosmeticsConfig.Emotes)
 	│   ├── <Personagem>   (Animation) <AbilityId>, <AbilityId>_Carry (agarrão), Awakening
 	│   └── <CharacterId>  (Animation) <AbilityId>   ex: Brawler/ShoulderBash
