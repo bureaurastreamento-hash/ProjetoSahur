@@ -133,6 +133,13 @@ Assets.VFXPack = {
 	["Guardian/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
 	["Guardian/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
 	["Guardian/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	["Sahur/DrumStep"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
+	["Sahur/DrumStep_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
+	["Sahur/Bombo"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Sahur/Bombo_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
+	["Sahur/Toque"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 6 },
+	["Sahur/Ritmo"] = { Path = "Packs/ShadowBattlegroundsfull/Garou/Spin", Lifetime = 2 },
+	["Sahur/Ritmo_Hit"] = "Packs/OfficialJJS/Misc/M/Hit",
 	-- Boss reaproveita efeitos já podados (tools/podar_vfx.luau só gera os caminhos citados aqui)
 	["Boss/Swipe_Hit"] = "Packs/OfficialJJS/Todo/HeavyHit",
 	["Boss/Slam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",

@@ -41,7 +41,8 @@ export type AbilityDef = {
 export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
-	UnlockCost: number, -- moedas; 0 = todos começam com ele
+	UnlockCost: number, -- moedas; 0 = todos começam com ele (só vale com Access = "coins"/nil)
+	Access: string?, -- nil/"coins" = moedas | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs)
 	Abilities: { AbilityDef }, -- índice = slot (1 = Q, 2 = E, 3 = R, 4 = T). Slot 1 é sempre a mobilidade (dash; Swift teleporta)
 }
 
@@ -166,7 +167,8 @@ CharacterDefs.Characters = {
 	Guardian = {
 		Id = "Guardian",
 		DisplayName = "Guardian",
-		UnlockCost = 400,
+		UnlockCost = 0,
+		Access = "vip", -- exclusivo do passe VIP (ou "Todos os personagens")
 		Abilities = {
 			{
 				Id = "ShieldBash",
@@ -194,10 +196,57 @@ CharacterDefs.Characters = {
 			},
 		},
 	} :: CharacterDef,
+
+	-- Acesso antecipado: aparece bloqueado na lista; só devs (IsDeveloper) conseguem usar para testar.
+	Sahur = {
+		Id = "Sahur",
+		DisplayName = "Sahur",
+		UnlockCost = 0,
+		Access = "early",
+		Abilities = {
+			{
+				Id = "DrumStep",
+				DisplayName = "Passo do Tambor",
+				Cooldown = 6,
+				EnergyCost = 0,
+				CastTime = 0.2,
+				Effect = { Type = "Dash", Speed = 68, Duration = 0.24, Damage = 10, Range = 6, Width = 6, Height = 6, StunSeconds = 0.4 },
+			},
+			{
+				Id = "Bombo",
+				DisplayName = "Bombo",
+				Cooldown = 9,
+				EnergyCost = 25,
+				CastTime = 0.5,
+				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25 } },
+			},
+			{
+				Id = "Toque",
+				DisplayName = "Toque de Guerra",
+				Cooldown = 18,
+				EnergyCost = 35,
+				CastTime = 0.6,
+				Effect = { Type = "DamageBuff", Multiplier = 1.5, Duration = 6 },
+			},
+			{
+				Id = "Ritmo",
+				DisplayName = "Ritmo Final",
+				Cooldown = 30,
+				EnergyCost = 100,
+				CastTime = 1.5,
+				Effect = { Type = "MultiHitArea", Radius = 12, Damage = 9, Hits = 6, Interval = 0.25, Knockback = { Speed = 30, Duration = 0.15 } },
+			},
+		},
+	} :: CharacterDef,
 }
 
 --- Lista ordenada de ids (ordem na seleção de personagem)
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian" }
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Sahur" }
+
+--- "coins" | "vip" | "early"
+function CharacterDefs.AccessOf(def: CharacterDef): string
+	return def.Access or "coins"
+end
 
 function CharacterDefs.Get(characterId: string): CharacterDef?
 	return CharacterDefs.Characters[characterId]

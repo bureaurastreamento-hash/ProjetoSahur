@@ -44,7 +44,10 @@ local function applyPerk(player: Player, key: string)
 		player:SetAttribute("NameTag", "VIP")
 	elseif key == "all_characters" then
 		for _, id in CharacterDefs.Order do
-			DataService.GrantCharacter(player, id)
+			local def = CharacterDefs.Get(id)
+			if def and CharacterDefs.AccessOf(def) ~= "early" then
+				DataService.GrantCharacter(player, id) -- moedas e VIP; acesso antecipado continua fechado
+			end
 		end
 	end
 end

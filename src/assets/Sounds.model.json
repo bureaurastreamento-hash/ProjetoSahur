@@ -9,7 +9,7 @@
           "name": "Punch_Whoosh",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://102672006215074",
+            "SoundId": "rbxassetid://4059009185",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -19,7 +19,7 @@
           "name": "Punch_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://94107281648467",
+            "SoundId": "rbxassetid://8595975878",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -59,7 +59,7 @@
           "name": "Finisher_Whoosh",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://133644222097997",
+            "SoundId": "rbxassetid://9114362943",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -89,7 +89,7 @@
           "name": "Finisher_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://71283069341606",
+            "SoundId": "rbxassetid://9118609396",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -115,7 +115,7 @@
           "name": "RoundStart",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://114694152385335",
+            "SoundId": "rbxassetid://3084314259",
             "Volume": 0.7,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -151,7 +151,7 @@
           "name": "ShoulderBash",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://17169364965",
+            "SoundId": "rbxassetid://3755636152",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -191,7 +191,7 @@
           "name": "Rampage",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://119654508166149",
+            "SoundId": "rbxassetid://5795505380",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -247,7 +247,7 @@
           "name": "Tempest_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://16773286330",
+            "SoundId": "rbxassetid://8595975458",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -313,7 +313,7 @@
           "name": "ArcaneStep",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://17169364809",
+            "SoundId": "rbxassetid://9118159096",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -339,7 +339,7 @@
           "name": "ShieldBash",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://133212067497301",
+            "SoundId": "rbxassetid://858508159",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -349,7 +349,7 @@
           "name": "ShieldBash_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://75355001910260",
+            "SoundId": "rbxassetid://9066673412",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -359,7 +359,7 @@
           "name": "Fortify",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://109731283975341",
+            "SoundId": "rbxassetid://4299624634",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -369,7 +369,7 @@
           "name": "Quake",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://18205736907",
+            "SoundId": "rbxassetid://9116684884",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -379,7 +379,7 @@
           "name": "Quake_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://18205737353",
+            "SoundId": "rbxassetid://7093763783",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -395,7 +395,7 @@
           "name": "Swipe",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://88980176364383",
+            "SoundId": "rbxassetid://9126228977",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -405,7 +405,7 @@
           "name": "Swipe_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://112347897421173",
+            "SoundId": "rbxassetid://8595974357",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -435,7 +435,7 @@
           "name": "Charge",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://17101065425",
+            "SoundId": "rbxassetid://9056932358",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -455,7 +455,83 @@
           "name": "Roar",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://125901185360744",
+            "SoundId": "rbxassetid://7817336081",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sahur",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "DrumStep",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://3755636152",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "DrumStep_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://8595974357",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Bombo",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9113504593",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Bombo_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7093763783",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Toque",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://5795505380",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Ritmo",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://8120249833",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Ritmo_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://8595975458",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10

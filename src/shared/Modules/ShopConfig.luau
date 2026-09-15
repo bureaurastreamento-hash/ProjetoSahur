@@ -33,8 +33,8 @@ ShopConfig.Products = ({
 
 ShopConfig.Passes = ({
 	{ key = "double_coins", gamepassId = 0, name = "Moedas x2", desc = "Dobra as moedas de kills, duelos, boss e missões" },
-	{ key = "all_characters", gamepassId = 0, name = "Todos os personagens", desc = "Desbloqueia todos os personagens atuais e futuros" },
-	{ key = "vip", gamepassId = 0, name = "VIP", desc = "Tag VIP no nome e +25% de XP" },
+	{ key = "all_characters", gamepassId = 0, name = "Todos os personagens", desc = "Desbloqueia todos os personagens (inclui o Guardian VIP)" },
+	{ key = "vip", gamepassId = 0, name = "VIP", desc = "Personagem Guardian, tag VIP no nome e +25% de XP" },
 }) :: { Pass }
 
 --- Perks lidos por outros services (via atributos Pass_<key> = true no Player).

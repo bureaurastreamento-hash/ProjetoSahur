@@ -40,6 +40,7 @@ local xpFill: Frame
 local missionsList: Frame
 local missionTemplate: TextLabel
 local charactersIcon: any
+local shopIcon: any
 local characterIcons: { [string]: any } = {}
 local profileCache: any = nil
 local notifiedAffordable = false
@@ -102,24 +103,41 @@ local function renderProgression(profile: any)
 	end
 end
 
+--- Espelha DataService.HasCharacter (o servidor é quem decide; isto é só para o rótulo).
 local function ownsCharacter(id: string): boolean
 	local def = CharacterDefs.Get(id)
 	if not def then
 		return false
 	end
-	return def.UnlockCost <= 0 or (profileCache ~= nil and table.find(profileCache.unlockedCharacters or {}, id) ~= nil)
+	if profileCache ~= nil and table.find(profileCache.unlockedCharacters or {}, id) ~= nil then
+		return true
+	end
+	local access = CharacterDefs.AccessOf(def)
+	local dev = localPlayer:GetAttribute("IsDeveloper") == true
+	if access == "early" then
+		return dev
+	elseif access == "vip" then
+		return dev or localPlayer:GetAttribute("Pass_vip") == true or localPlayer:GetAttribute("Pass_all_characters") == true
+	end
+	return def.UnlockCost <= 0
 end
 
---- Rótulo de cada sub-ícone: "● Brawler" (selecionado), "Swift", "Mystic · 250 moedas".
+--- Rótulo de cada sub-ícone: "● Brawler" (selecionado), "Swift", "Mystic · 250 moedas",
+--- "Guardian · VIP", "Sahur · em breve".
 local function refreshCharacterIcons()
 	local currentId = localPlayer:GetAttribute("CharacterId")
 	for id, icon in characterIcons do
 		local def = CharacterDefs.Get(id)
 		local name = if def then def.DisplayName else id
+		local access = if def then CharacterDefs.AccessOf(def) else "coins"
 		if id == currentId then
 			icon:setLabel("● " .. name)
 		elseif ownsCharacter(id) then
 			icon:setLabel(name)
+		elseif access == "vip" then
+			icon:setLabel(name .. " · VIP")
+		elseif access == "early" then
+			icon:setLabel(name .. " · em breve")
 		else
 			icon:setLabel(("%s · %d moedas"):format(name, if def then def.UnlockCost else 0))
 		end
@@ -136,16 +154,25 @@ local function buildCharacterDropdown()
 			:setOrder(i)
 			:oneClick()
 		icon.selected:Connect(function()
+			local def = CharacterDefs.Get(id)
+			local access = if def then CharacterDefs.AccessOf(def) else "coins"
 			if ownsCharacter(id) then
 				requestSelectCharacter:FireServer(id)
+			elseif access == "vip" and shopIcon then
+				shopIcon:select() -- VIP se compra na loja
 			else
-				requestUnlockCharacter:FireServer(id)
+				requestUnlockCharacter:FireServer(id) -- moedas (ou "early": o servidor responde e a HUD avisa)
 			end
 		end)
 		characterIcons[id] = icon
 		table.insert(children, icon)
 	end
 	charactersIcon:setDropdown(children)
+	-- joinFeature (Utility) desliga o autoDeselect de quem tem dropdown; religa para o
+	-- "Personagens" fechar quando outro menu abre (e vice-versa)
+	task.defer(function()
+		charactersIcon:autoDeselect(true)
+	end)
 	refreshCharacterIcons()
 end
 
@@ -201,7 +228,7 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 	if not notifiedAffordable then
 		for _, id in CharacterDefs.Order do
 			local def = CharacterDefs.Get(id)
-			if def and def.UnlockCost > 0 and not table.find(profile.unlockedCharacters or {}, id) and (profile.coins or 0) >= def.UnlockCost then
+			if def and CharacterDefs.AccessOf(def) == "coins" and def.UnlockCost > 0 and not table.find(profile.unlockedCharacters or {}, id) and (profile.coins or 0) >= def.UnlockCost then
 				notifiedAffordable = true
 				charactersIcon:notify()
 				break
@@ -238,7 +265,7 @@ function TopbarController.Start()
 		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
 	end)
 
-	Icon.new()
+	shopIcon = Icon.new()
 		:setLabel("Loja")
 		:setCaption("Moedas e passes")
 		:setCaptionHint(Enum.KeyCode.B)
@@ -254,6 +281,9 @@ function TopbarController.Start()
 		:setOrder(1)
 	buildCharacterDropdown()
 	localPlayer:GetAttributeChangedSignal("CharacterId"):Connect(refreshCharacterIcons)
+	for _, attr in { "IsDeveloper", "Pass_vip", "Pass_all_characters" } do
+		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshCharacterIcons)
+	end
 
 	Icon.new()
 		:setLabel("Perfil")
@@ -302,6 +332,7 @@ function TopbarController.Start()
 		profileTop.Text = if #lines > 0 then table.concat(lines, "\n") else "ninguém ainda"
 	end)
 
+	Remotes.GetEvent(Remotes.Events.RequestProfile):FireServer() -- o 1º NotifyProfile pode ter saído antes do boot
 	task.delay(5, reportForeignTopbar)
 	Log.debug("[TopbarController] pronto (TopbarPlus)")
 end

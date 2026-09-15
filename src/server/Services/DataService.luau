@@ -308,11 +308,18 @@ function DataService.HasCharacter(player: Player, characterId: string): boolean
 	if not def then
 		return false
 	end
-	if def.UnlockCost <= 0 then
-		return true
-	end
 	local profile = DataService.GetProfile(player)
-	return profile ~= nil and table.find(profile.unlockedCharacters, characterId) ~= nil
+	if profile ~= nil and table.find(profile.unlockedCharacters, characterId) ~= nil then
+		return true -- concedido (admin GrantAll / passe "Todos os personagens")
+	end
+	local access = CharacterDefs.AccessOf(def)
+	if access == "early" then
+		return player:GetAttribute("IsDeveloper") == true
+	elseif access == "vip" then
+		return player:GetAttribute("Pass_vip") == true or player:GetAttribute("Pass_all_characters") == true
+			or player:GetAttribute("IsDeveloper") == true
+	end
+	return def.UnlockCost <= 0
 end
 
 --- Tenta comprar. Retorna (ok, motivo).
@@ -327,6 +334,10 @@ function DataService.UnlockCharacter(player: Player, characterId: string): (bool
 	end
 	if DataService.HasCharacter(player, characterId) then
 		return false, "already_owned"
+	end
+	local access = CharacterDefs.AccessOf(def)
+	if access ~= "coins" then
+		return false, access -- "vip": compra na loja; "early": ainda não liberado
 	end
 	if profile.coins < def.UnlockCost then
 		return false, "coins"
@@ -388,6 +399,12 @@ end
 
 function DataService.Init()
 	notifyProfile = Remotes.GetEvent(Remotes.Events.NotifyProfile)
+	Remotes.GetEvent(Remotes.Events.RequestProfile).OnServerEvent:Connect(function(player)
+		local session = sessions[player]
+		if session and session.loaded then
+			pushToClient(player, session)
+		end
+	end)
 	local ok, result = pcall(function()
 		return DataStoreService:GetDataStore(DataConfig.StoreName .. "_v" .. DataConfig.SchemaVersion)
 	end)

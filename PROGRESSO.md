@@ -260,6 +260,20 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - VFX novos em `Assets.VFXPack`: Shared/FinisherHit, GuardBreak, Stun (Dizzy, segue), Ragdoll (segue),
   Mystic/ArcaneStep(_Hit). `tools/podar_vfx.luau` rodado (288 instâncias).
 
+### Rodada de polimento 2026-09-15 (FALTA TESTAR)
+- Decisão do dono: **chega de sistemas novos**; polir. Só mais um personagem: **Sahur** (acesso
+  antecipado, `Access = "early"`, só devs usam) e **Guardian virou VIP** (`Access = "vip"`: passe VIP
+  ou "Todos os personagens"). `CharacterDefs.AccessOf`, `DataService.HasCharacter` decide.
+- Dropdown Personagens: rótulos "· VIP" (clique abre a Loja) / "· em breve"; `RequestProfile` novo
+  (o 1º NotifyProfile saía antes do boot do cliente → "pede pra comprar mas já tenho").
+- Dropdown fecha com os outros menus: `Utility.joinFeature` desliga autoDeselect do pai; religado.
+- Dash: `DASH_STEER_RATE` 5.0 (curva, não inverte), folga 3,5; ao parar em obstáculo zera a
+  velocidade horizontal (era isso que jogava para o lado contrário).
+- Sons: 18 ids eram uploads recentes/privados (User is not authorized) → trocados por ids antigos
+  públicos. Regra: preferir ids < 10 bilhões do catálogo; TestSounds (PreloadAsync) NÃO detecta.
+- "Example": é `Workspace.TopbarPlus` (pasta inteira, com READ_ME) — o dono apaga.
+- Boss: dono acha "incompletinho"; aguardando lista do que falta (visual do rig, mais golpes, barra).
+
 ### BUGS / PENDÊNCIAS ABERTAS (ordem de prioridade)
 1. **Animações não aparecem no jogador** (boss/bonecos OK). Causa confirmada em 2026-09-15 11:00: o
    jogador nasce **R15** mesmo com Game Settings em R6 e sem StarterCharacter. Solução aplicada

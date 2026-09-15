@@ -56,8 +56,8 @@ local TRAIL_COLORS: { [string]: Color3 } = {
 local requestAbility: RemoteEvent
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 local dashConn: RBXScriptConnection? = nil
-local DASH_STOP_DISTANCE = 2.5 -- studs de folga antes do obstáculo
-local DASH_STEER_RATE = 2.2 -- rad/s de correção máxima durante o dash (pouca: "ir pro lado é ir pro lado")
+local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
+local DASH_STEER_RATE = 5.0 -- rad/s de correção máxima durante o dash (dá para curvar, não para inverter)
 local DASH_SIDE_SCALE = 0.65 -- dash lateral dura (e anda) 65% do dash para frente/trás
 local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -2, 0) } -- cabeça, tronco, pés
 
@@ -114,13 +114,18 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 	rayParams.FilterType = Enum.RaycastFilterType.Exclude
 	rayParams.FilterDescendantsInstances = { character }
 	rayParams.RespectCanCollide = true
-	local function finish()
+	local function finish(blocked: boolean?)
 		if dashConn then
 			dashConn:Disconnect()
 			dashConn = nil
 		end
 		lv:Destroy()
 		attachment:Destroy()
+		if blocked and root.Parent then
+			-- mata o momento horizontal: sem isso a física "devolve" o boneco para o lado contrário
+			local v = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
+		end
 	end
 	dashConn = RunService.Heartbeat:Connect(function(dt)
 		if os.clock() >= endsAt or lv.Parent == nil or root.Parent == nil then
@@ -148,7 +153,7 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 			end
 		end
 		if blocked then
-			finish()
+			finish(true)
 			return
 		end
 		lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed

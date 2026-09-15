@@ -49,6 +49,7 @@ RemoteEvents.Events = ({
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
 	RequestAdminCommand = "RequestAdminCommand", -- (command: string, args: table) — só após FetchAdminLogin ok
+	RequestProfile = "RequestProfile", -- () — cliente pronto pede o perfil de novo (o 1º NotifyProfile pode sair antes do boot do cliente)
 	RequestShop = "RequestShop", -- (kind: "product"|"pass", key: string) — abre o prompt de compra da Roblox
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 

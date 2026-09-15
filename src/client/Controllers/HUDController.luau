@@ -247,14 +247,15 @@ local function refreshMatchUI()
 	local currentId = localPlayer:GetAttribute("CharacterId")
 	for id, b in characterButtons do
 		local def = CharacterDefs.Get(id)
-		local owned = def ~= nil and (def.UnlockCost <= 0 or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
+		local access = if def then CharacterDefs.AccessOf(def) else "coins"
+		local owned = def ~= nil and ((access == "coins" and def.UnlockCost <= 0) or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
 		local status = b:FindFirstChild("Status") :: TextLabel
 		local stroke = b:FindFirstChildOfClass("UIStroke")
 		if owned then
 			status.Text = if id == currentId then "SELECIONADO" else "USAR"
 			status.TextColor3 = if id == currentId then CARD_SELECTED else CARD_ACTION
 		else
-			status.Text = ("%d MOEDAS"):format(if def then def.UnlockCost else 0)
+			status.Text = if access == "vip" then "VIP" elseif access == "early" then "EM BREVE" else ("%d MOEDAS"):format(if def then def.UnlockCost else 0)
 			status.TextColor3 = CARD_LOCKED
 		end
 		if stroke then
@@ -508,7 +509,8 @@ function HUDController.Start()
 		refreshMatchUI()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
-		local msgs = { coins = "Moedas insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado" }
+		local msgs = { coins = "Moedas insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",
+			vip = "Exclusivo do passe VIP (Loja, tecla B)", early = "Acesso antecipado: ainda não liberado" }
 		local remaining = reason:match("^in_combat:(%d+)")
 		if remaining then
 			showBanner(("Em combate: fique %ss sem levar dano para trocar"):format(remaining), 2.5)
