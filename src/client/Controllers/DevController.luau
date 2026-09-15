@@ -20,6 +20,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local Log = require(Modules:WaitForChild("Log"))
 local ContentProvider = game:GetService("ContentProvider")
 local PackSounds = require(Modules:WaitForChild("PackSounds"))
+local VfxPreviewController = require(script.Parent:WaitForChild("VfxPreviewController"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
 
 local DevController = {}
@@ -311,6 +312,9 @@ function DevController.Start()
 
 	;(get(panel, "Close") :: TextButton).MouseButton1Click:Connect(function()
 		setOpen(false)
+	end)
+	;(get(panel, "PreviewVfx") :: TextButton).MouseButton1Click:Connect(function()
+		VfxPreviewController.SetOpen(true)
 	end)
 	for command, boxName in NUMBER_COMMANDS do
 		local box = get(panel, boxName) :: TextBox

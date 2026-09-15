@@ -23,6 +23,7 @@ local HealthService = {}
 local ATTR_LAST_ATTACKER = "LastAttackerUserId"
 local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
 local KILL_CREDIT_WINDOW = 8
+local VOID_Y = -80 -- abaixo disso = caiu do mapa
 local warnedRig = false -- segundos que o último atacante recebe crédito do kill
 
 local notifyHealth: RemoteEvent
@@ -189,6 +190,12 @@ function HealthService.Start()
 			for _, player in Players:GetPlayers() do
 				local character = player.Character
 				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				-- Caiu do mapa: mata (respawn normal) em vez de cair para sempre
+				local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+				if root and humanoid and humanoid.Health > 0 and root.Position.Y < VOID_Y then
+					HealthService.Kill(character :: Model)
+					continue
+				end
 				if character and humanoid and humanoid.Health > 0 and humanoid.Health < humanoid.MaxHealth then
 					local lastHit = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
 					if typeof(lastHit) ~= "number" or now - lastHit >= CombatConfig.Regen.Delay then

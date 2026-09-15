@@ -163,10 +163,17 @@ end
 ---   ParticleEmitter: EmitCount (rajada única), EmitDuration (fica ligado N s)
 ---   PointLight:      FadeTime (apaga em N s)
 function FX.SpawnVFX(character: Model, folder: string, name: string, exact: boolean?, at: Vector3?)
+	local template = if exact then (if Assets.HasVFX(folder, name) then Assets.GetVFX(folder, name) else nil) else Assets.GetVFX(folder, name)
+	if template then
+		FX.SpawnVFXTemplate(character, template, at)
+	end
+end
+
+--- Instancia um template qualquer (usado pelo preview de VFX do menu Dev).
+function FX.SpawnVFXTemplate(character: Model, template: Instance, at: Vector3?)
 	if activeVFX >= FX.MaxActiveVFX then
 		return
 	end
-	local template = if exact then (if Assets.HasVFX(folder, name) then Assets.GetVFX(folder, name) else nil) else Assets.GetVFX(folder, name)
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not template or (not root and not at) then
 		return

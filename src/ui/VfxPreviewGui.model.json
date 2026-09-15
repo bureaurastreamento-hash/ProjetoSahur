@@ -1,0 +1,514 @@
+{
+ "className": "ScreenGui",
+ "properties": {
+  "ResetOnSpawn": false,
+  "DisplayOrder": 11,
+  "IgnoreGuiInset": false
+ },
+ "children": [
+  {
+   "name": "Panel",
+   "className": "Frame",
+   "properties": {
+    "Name": "Panel",
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       360
+      ],
+      [
+       0,
+       560
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       1,
+       -16
+      ],
+      [
+       0.5,
+       0
+      ]
+     ]
+    },
+    "AnchorPoint": {
+     "Vector2": [
+      1,
+      0.5
+     ]
+    },
+    "BackgroundColor3": {
+     "Color3": [
+      0.078,
+      0.078,
+      0.11
+     ]
+    },
+    "BackgroundTransparency": 0.08,
+    "Visible": false,
+    "Active": true,
+    "BorderSizePixel": 0
+   },
+   "children": [
+    {
+     "name": "UICorner",
+     "className": "UICorner",
+     "properties": {
+      "Name": "UICorner",
+      "CornerRadius": {
+       "UDim": [
+        0,
+        8
+       ]
+      }
+     },
+     "children": []
+    },
+    {
+     "name": "Title",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "Title",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -60
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         6
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "PREVIEW DE VFX",
+      "TextSize": 16,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        0.35,
+        0.65,
+        1.0
+       ]
+      },
+      "TextXAlignment": "Left"
+     },
+     "children": []
+    },
+    {
+     "name": "Close",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Close",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         26
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -38
+        ],
+        [
+         0,
+         8
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "X",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "Search",
+     "className": "TextBox",
+     "properties": {
+      "Name": "Search",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         40
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "",
+      "PlaceholderText": "filtrar (ex.: hit, slam, aura, Gojo)",
+      "PlaceholderColor3": {
+       "Color3": [
+        0.5,
+        0.5,
+        0.55
+       ]
+      },
+      "TextSize": 13,
+      "Font": "Gotham",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "ClearTextOnFocus": false,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "Hint",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "Hint",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         72
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "clique = toca em voc\u00ea \u00b7 Shift = toca 12 studs \u00e0 frente\ncaminho vai para o log do menu Dev e para o Output",
+      "TextSize": 11,
+      "Font": "Gotham",
+      "TextColor3": {
+       "Color3": [
+        0.75,
+        0.75,
+        0.78
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Top"
+     },
+     "children": []
+    },
+    {
+     "name": "Count",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "Count",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         104
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "",
+      "TextSize": 11,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        0.75,
+        0.75,
+        0.78
+       ]
+      },
+      "TextXAlignment": "Left"
+     },
+     "children": []
+    },
+    {
+     "name": "List",
+     "className": "ScrollingFrame",
+     "properties": {
+      "Name": "List",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         1,
+         -134
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         122
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "BackgroundTransparency": 0.5,
+      "ScrollBarThickness": 4,
+      "AutomaticCanvasSize": "Y",
+      "CanvasSize": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      },
+      {
+       "name": "UIListLayout",
+       "className": "UIListLayout",
+       "properties": {
+        "Name": "UIListLayout",
+        "Padding": {
+         "UDim": [
+          0,
+          2
+         ]
+        },
+        "SortOrder": "LayoutOrder"
+       },
+       "children": []
+      },
+      {
+       "name": "UIPadding",
+       "className": "UIPadding",
+       "properties": {
+        "Name": "UIPadding",
+        "PaddingLeft": {
+         "UDim": [
+          0,
+          4
+         ]
+        },
+        "PaddingRight": {
+         "UDim": [
+          0,
+          4
+         ]
+        },
+        "PaddingTop": {
+         "UDim": [
+          0,
+          4
+         ]
+        }
+       },
+       "children": []
+      },
+      {
+       "name": "Template",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Template",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -8
+          ],
+          [
+           0,
+           22
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.078,
+          0.078,
+          0.11
+         ]
+        },
+        "Text": "x",
+        "TextSize": 11,
+        "Font": "Code",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextTruncate": "AtEnd",
+        "Visible": false,
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            4
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

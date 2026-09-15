@@ -189,7 +189,20 @@ Memória entre sessões. Atualizar depois de cada mudança.
   aceita caminho (`Packs/OfficialJJS/Damage/HitGlow`); `FX.SpawnVFX` converte Folder em Model.
   `tools/listar_sons.py` lê SoundIds direto do binário (Lune não expõe SoundId).
 
+- 2026-09-15 — **Mapa = MainMap do pack Shadow** (`tools/preparar_mapa.luau` → `src/workspace/Arena.rbxm`):
+  recentrado (piso 380×580 com topo em y=0), sem placares/GUIs/sons do pack, `CastShadow=false`
+  em piso/bordas/cantos. Extras nossos em `Workspace.Sahur.ArenaExtras` (12 spawns, 3 DummyPads,
+  LeaderboardBoard) gerados pelo `gerar_arena.py`; o mapa gerado virou reserva em
+  `ServerStorage.Maps.Arena_Gerada`. `HealthService` mata quem cair abaixo de y=-80.
+  Pós-processamento aliviado (sem SunRays, Bloom menor, sombras mais duras).
+- 2026-09-15 — **VFX dos packs ligados por nome** em `Assets.VFXPack` (prioridade máxima; string ou
+  `{Path, Follow, Lifetime}`), 23 habilidades/eventos mapeados. **Preview de VFX** (F7 ou botão no
+  menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
+  (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
+
 ## Em andamento
+- Ver FPS com o MainMap (2470 parts). Se ainda pesar: reduzir `Corners` (525 parts) / `Trees`.
+- Passar pelo Preview de VFX e me dizer trocas ("Meteoro = Sukuna/X").
 - Sons dos packs: rodar "Testar sons dos packs" no Studio e me mandar o Output (ou eu leio o log);
   os OK entram em `Sounds.model.json` por nome.
 - Animações dos packs: no Studio, `ServerStorage > Import > Animacoes`, clique direito no
@@ -220,7 +233,8 @@ Memória entre sessões. Atualizar depois de cada mudança.
 3. ~~Mobile~~ (feito; falta testar no Device Emulator e ajustar tamanho/posição).
 4. ~~4º personagem~~ (Guardian feito); balancear preços/dano com dados de teste.
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
-   desafio, arena separada (`ServerStorage.Maps`), `FreeRoam` continua para os demais.
+   desafio, arena separada (`ServerStorage.Maps.Arena_Gerada` ou `ArenaMap` do pack em
+   `ServerStorage.Import`), `FreeRoam` continua para os demais. ← PRÓXIMO
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.

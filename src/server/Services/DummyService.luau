@@ -4,7 +4,7 @@
 	Bonecos de treino no mapa livre. Rig R6 criado em runtime
 	(Players:CreateHumanoidModelFromDescription), tag "Combatant" para a Hitbox
 	aceitar, vida via HealthService (dano normal, sem crédito de kill/moedas: não é Player).
-	Posições: Parts "DummyPad*" no mapa (Workspace.Sahur.Arena); sem pads = nada.
+	Posições: Parts "DummyPad*" em Workspace.Sahur (ArenaExtras); sem pads = nada.
 	Respawn RESPAWN_SECONDS depois de morrer.
 ]]
 
@@ -29,8 +29,7 @@ local folder: Folder
 
 local function findPads(): { BasePart }
 	local pads: { BasePart } = {}
-	local sahur = Workspace:FindFirstChild("Sahur")
-	local arena = sahur and sahur:FindFirstChild("Arena")
+	local arena = Workspace:FindFirstChild("Sahur") -- Arena (importado) + ArenaExtras (spawns/pads/placar)
 	if not arena then
 		return pads
 	end

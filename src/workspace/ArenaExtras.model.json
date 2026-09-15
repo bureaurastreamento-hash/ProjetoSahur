@@ -1,0 +1,470 @@
+{
+ "className": "Model",
+ "children": [
+  {
+   "name": "Props",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "LeaderboardBase",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardBase",
+      "Anchored": true,
+      "Position": [
+       -30,
+       0.5,
+       -70
+      ],
+      "Size": [
+       12,
+       1,
+       3
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "LeaderboardBoard",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardBoard",
+      "Anchored": true,
+      "Position": [
+       -30,
+       5.5,
+       -70
+      ],
+      "Size": [
+       11,
+       9,
+       1
+      ],
+      "Color": [
+       0.12,
+       0.12,
+       0.15
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "LeaderboardFrame",
+     "className": "Part",
+     "properties": {
+      "Name": "LeaderboardFrame",
+      "Anchored": true,
+      "Position": [
+       -30,
+       5.5,
+       -69.6
+      ],
+      "Size": [
+       12,
+       10,
+       0.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "DummyPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad0",
+      "Anchored": true,
+      "Position": [
+       15.588,
+       0.15,
+       9.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "DummyPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad1",
+      "Anchored": true,
+      "Position": [
+       -15.588,
+       0.15,
+       9.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "DummyPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad2",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       0.15,
+       -18.0
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "Spawns",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Spawn01",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn01",
+      "Anchored": true,
+      "Position": [
+       110.0,
+       1,
+       0.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn02",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn02",
+      "Anchored": true,
+      "Position": [
+       95.26,
+       1,
+       85.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn03",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn03",
+      "Anchored": true,
+      "Position": [
+       55.0,
+       1,
+       147.22
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn04",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn04",
+      "Anchored": true,
+      "Position": [
+       0.0,
+       1,
+       170.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn05",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn05",
+      "Anchored": true,
+      "Position": [
+       -55.0,
+       1,
+       147.22
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn06",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn06",
+      "Anchored": true,
+      "Position": [
+       -95.26,
+       1,
+       85.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn07",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn07",
+      "Anchored": true,
+      "Position": [
+       -110.0,
+       1,
+       0.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn08",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn08",
+      "Anchored": true,
+      "Position": [
+       -95.26,
+       1,
+       -85.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn09",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn09",
+      "Anchored": true,
+      "Position": [
+       -55.0,
+       1,
+       -147.22
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn10",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn10",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       1,
+       -170.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn11",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn11",
+      "Anchored": true,
+      "Position": [
+       55.0,
+       1,
+       -147.22
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Spawn12",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "Spawn12",
+      "Anchored": true,
+      "Position": [
+       95.26,
+       1,
+       -85.0
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Neutral": true,
+      "Duration": 0,
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  }
+ ]
+}

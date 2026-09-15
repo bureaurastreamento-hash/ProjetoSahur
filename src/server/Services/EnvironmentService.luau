@@ -32,7 +32,7 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 		ColorShift_Bottom = Color3.fromRGB(180, 190, 210),
 		EnvironmentDiffuseScale = 0.55,
 		EnvironmentSpecularScale = 0.6,
-		ShadowSoftness = 0.25,
+		ShadowSoftness = 0.15,
 		GlobalShadows = true,
 		ExposureCompensation = 0.1,
 	},
@@ -53,7 +53,7 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 		{
 			Name = "SahurBloom",
 			ClassName = "BloomEffect",
-			Properties = { Intensity = 0.4, Size = 24, Threshold = 1.6 },
+			Properties = { Intensity = 0.25, Size = 16, Threshold = 1.8 },
 		},
 		{
 			Name = "SahurColor",
@@ -64,11 +64,6 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 				Brightness = 0.02,
 				TintColor = Color3.fromRGB(255, 250, 240),
 			},
-		},
-		{
-			Name = "SahurSunRays",
-			ClassName = "SunRaysEffect",
-			Properties = { Intensity = 0.06, Spread = 0.6 },
 		},
 	},
 }

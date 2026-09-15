@@ -94,8 +94,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function findBoard(): BasePart?
-	local sahur = Workspace:FindFirstChild("Sahur")
-	local arena = sahur and sahur:FindFirstChild("Arena")
+	local arena = Workspace:FindFirstChild("Sahur") -- Arena (importado) + ArenaExtras (spawns/pads/placar)
 	if not arena then
 		return nil
 	end

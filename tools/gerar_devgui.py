@@ -147,6 +147,7 @@ children.append(button("ListPlayers", "Listar online", udim2(0, COL_W, 0, 28), u
 children.append(button("GetState", "Atualizar estado", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y)))
 y += 32
 children.append(button("TestSounds", "Testar sons dos packs", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(button("PreviewVfx", "Preview VFX (F7)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y), GREEN))
 y += 36
 
 # ---- Log --------------------------------------------------------------------------

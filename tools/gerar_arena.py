@@ -21,7 +21,11 @@ import math
 import random
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent.parent / "src" / "workspace" / "Arena.model.json"
+# O mapa gerado agora é reserva (ServerStorage.Maps.Arena_Gerada); o mapa livre é o importado
+# (src/workspace/Arena.rbxm, ver tools/preparar_mapa.luau). Os extras (spawns, pads, placar)
+# saem daqui para src/workspace/ArenaExtras.model.json.
+OUT = Path(__file__).resolve().parent.parent / "src" / "maps" / "Arena_Gerada.model.json"
+OUT_EXTRAS = Path(__file__).resolve().parent.parent / "src" / "workspace" / "ArenaExtras.model.json"
 HALF = 160  # mapa de 320x320
 
 rng = random.Random(7)  # determinístico: regerar dá o mesmo mapa
@@ -457,3 +461,27 @@ tree = {
 
 OUT.write_text(json.dumps(tree, indent=1))
 print(f"{OUT}: {len(parts)} partes + {len(spawns)} spawns")
+
+# ---------------------------------------------------------------------------
+# Extras para o mapa importado (piso 380x580 centrado em 0, topo em y=0)
+# ---------------------------------------------------------------------------
+parts.clear()
+part("LeaderboardBase", (12, 1, 3), (-30, 0.5, -70), BASALT)
+part("LeaderboardBoard", (11, 9, 1), (-30, 5.5, -70), ("Slate", (0.12, 0.12, 0.15)))
+part("LeaderboardFrame", (12, 10, 0.6), (-30, 5.5, -69.6), STONE_LIGHT)
+for i, a in enumerate((30, 150, 270)):
+    ar = math.radians(a)
+    cylinder(f"DummyPad{i}", 3, 0.3, (math.cos(ar) * 18, 0.15, math.sin(ar) * 18), BASALT, CastShadow=False)
+extra_spawns = []
+for i in range(12):
+    a = i / 12 * math.tau
+    x, z = math.cos(a) * 110, math.sin(a) * 170
+    extra_spawns.append({
+        "name": f"Spawn{i + 1:02d}", "className": "SpawnLocation",
+        "properties": {"Name": f"Spawn{i + 1:02d}", "Anchored": True, "Position": [round(x, 2), 1, round(z, 2)],
+                       "Size": [8, 1, 8], "Neutral": True, "Duration": 0, "Transparency": 1,
+                       "CanCollide": False, "CastShadow": False},
+    })
+extras = {"className": "Model", "children": [folder("Props", list(parts)), folder("Spawns", extra_spawns)]}
+OUT_EXTRAS.write_text(json.dumps(extras, indent=1))
+print(f"{OUT_EXTRAS}: {len(parts)} partes + {len(extra_spawns)} spawns")

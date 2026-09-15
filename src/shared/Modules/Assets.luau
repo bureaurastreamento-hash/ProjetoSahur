@@ -97,7 +97,69 @@ local function findPackVFX(name: string): Instance?
 end
 
 --- Template de VFX em Assets.VFX.<folder>.<name>. Fallbacks: alias do Particle Pack, depois VFX.Shared.Placeholder.
+-- Escolha explícita de VFX dos packs por habilidade (tem prioridade sobre o VFX gerado/nomeado).
+-- Valor = caminho dentro de Assets.VFX, ou { Path, Follow?, Lifetime? } (aura que segue / dura mais).
+-- Para trocar: use o Preview de VFX no menu Dev, copie o caminho e edite aqui.
+export type PackChoice = string | { Path: string, Follow: boolean?, Lifetime: number? }
+Assets.VFXPack = {
+	["Shared/Hit"] = "Packs/OfficialJJS/Misc/C/M1/Hit1",
+	["Shared/Block"] = "Packs/OfficialJJS/Charles/ParryFX",
+	["Shared/Parry"] = "Packs/OfficialJJS/Megumi/Mahoraga/Parry",
+	["Shared/Finisher"] = "Packs/OfficialJJS/Itadori/RushWind",
+	["Brawler/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
+	["Brawler/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
+	["Brawler/GroundSlam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Brawler/GroundSlam_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
+	["Brawler/Rampage"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 8 },
+	["Swift/Blink"] = "Packs/OfficialJJS/Gojo/Teleport",
+	["Swift/SweepKick"] = "Packs/ShadowBattlegroundsfull/ShadowFist/Skick1",
+	["Swift/SweepKick_Hit"] = "Packs/ShadowBattlegroundsfull/Garou/punchhit",
+	["Swift/Tempest"] = { Path = "Packs/ShadowBattlegroundsfull/Garou/Spin", Lifetime = 2.5 },
+	["Swift/Tempest_Hit"] = "Packs/OfficialJJS/Misc/M/Hit",
+	["Mystic/ArcaneBolt"] = "Packs/OfficialJJS/Misc/S/Orb",
+	["Mystic/ArcaneBolt_Hit"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact",
+	["Mystic/Mend"] = "Packs/OfficialJJS/Yuta/SecondWind",
+	-- Mystic/Meteor (aviso no chão) continua o gerado: precisa do anel no ponto certo
+	["Mystic/Meteor_Hit"] = { Path = "Packs/ShadowBattlegroundsfull/MeteoricCombination/FinalImpact2", Lifetime = 3 },
+	["Guardian/ShieldBash"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
+	["Guardian/ShieldBash_Hit"] = "Packs/OfficialJJS/Todo/HeavyHit",
+	["Guardian/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
+	["Guardian/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
+	["Guardian/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+} :: { [string]: PackChoice }
+
+local function findPath(path: string): Instance?
+	return find("VFX", table.unpack(path:split("/")))
+end
+
+local function packChoice(folder: string, name: string): Instance?
+	local choice = Assets.VFXPack[folder .. "/" .. name]
+	if not choice then
+		return nil
+	end
+	local path = if typeof(choice) == "string" then choice else choice.Path
+	local inst = findPath(path)
+	if not inst then
+		warnOnce(("VFXPack %s/%s -> %s (não existe)"):format(folder, name, path))
+		return nil
+	end
+	if typeof(choice) == "table" then
+		-- atributos que FX.SpawnVFX entende (aplicados no template, só neste cliente)
+		if choice.Follow then
+			inst:SetAttribute("Follow", true)
+		end
+		if choice.Lifetime then
+			inst:SetAttribute("Lifetime", choice.Lifetime)
+		end
+	end
+	return inst
+end
+
 function Assets.GetVFX(folder: string, name: string): Instance?
+	local chosen = packChoice(folder, name)
+	if chosen then
+		return chosen
+	end
 	local inst = find("VFX", folder, name)
 	if inst then
 		return inst
@@ -105,7 +167,7 @@ function Assets.GetVFX(folder: string, name: string): Instance?
 	local alias = Assets.VFXAliases[folder .. "/" .. name]
 	if alias then
 		-- "Packs/OfficialJJS/Damage/HitGlow" = caminho dentro de Assets.VFX; sem "/" = Particle Pack
-		local packInst = if alias:find("/") then find("VFX", table.unpack(alias:split("/"))) else findPackVFX(alias)
+		local packInst = if alias:find("/") then findPath(alias) else findPackVFX(alias)
 		if packInst then
 			return packInst
 		end
@@ -126,11 +188,14 @@ end
 
 --- Existe VFX específico ou alias (sem cair no Placeholder)?
 function Assets.HasVFX(folder: string, name: string): boolean
-	if find("VFX", folder, name) ~= nil then
+	if packChoice(folder, name) ~= nil or find("VFX", folder, name) ~= nil then
 		return true
 	end
 	local alias = Assets.VFXAliases[folder .. "/" .. name]
-	return alias ~= nil and findPackVFX(alias) ~= nil
+	if not alias then
+		return false
+	end
+	return (if alias:find("/") then findPath(alias) else findPackVFX(alias)) ~= nil
 end
 
 return Assets
