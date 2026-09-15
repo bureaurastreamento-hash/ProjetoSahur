@@ -205,7 +205,9 @@ Estado: tudo commitado localmente até `fa49e7a` (push bloqueado na sessão do C
 `git push`). Fluxo de teste: Team Test no Studio, dono = `guilacartinhasgames` (dev; menu Dev F8).
 Pendências imediatas, em ordem:
 1. Rodar **Testar sons dos packs** no menu Dev e me avisar → leio `[SoundProbe]` no log e preencho
-   `Sounds.model.json` com os que tocam.
+   `Sounds.model.json` com os que tocam. (Os erros "Failed to load sound ... not authorized" ao abrir
+   o place eram Sounds dentro dos VFX extraídos; removidos com `tools/limpar_sons_packs.luau` e o
+   extrator já descarta Sound.)
 2. Publicar os KeyframeSequences de `ServerStorage.Import.Animacoes` (Save to Roblox) e me passar
    os ids → `Animations.model.json`. Prioridade: `Melee1`, `Charge Punch`, `run`, `teleport`,
    `finisher`, `beatdown`.

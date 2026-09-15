@@ -167,9 +167,10 @@ elseif mode == "vfx" or mode == "import" then
 	for _, inst in targets do
 		local path = fullName(inst)
 		local clone = inst:Clone()
-		-- sem scripts nem GUIs de demo
+		-- sem scripts, GUIs de demo nem Sounds (SoundId de outra conta -> "not authorized" no Studio;
+		-- som do jogo vem de Assets.Sounds via Sounds.model.json)
 		for _, d in clone:GetDescendants() do
-			if d.ClassName == "Script" or d.ClassName == "LocalScript" or d.ClassName == "ModuleScript" or d.ClassName == "BillboardGui" then
+			if d.ClassName == "Script" or d.ClassName == "LocalScript" or d.ClassName == "ModuleScript" or d.ClassName == "BillboardGui" or d.ClassName == "Sound" then
 				d:Destroy()
 			end
 		end
