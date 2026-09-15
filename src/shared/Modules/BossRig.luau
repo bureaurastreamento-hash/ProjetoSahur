@@ -225,7 +225,7 @@ function BossRig.Assemble(model: Model, options: Options?): Report
 		r.Transparency = 1
 		r.CastShadow = false
 		r.Size = Vector3.new(math.clamp(bbox.X * 0.3, 2, 8), math.clamp(bbox.Y * 0.5, 2, 30), math.clamp(bbox.Z * 0.3, 2, 8))
-		r.CFrame = CFrame.new(Vector3.new(torsoHub.Position.X, bcf.Position.Y, torsoHub.Position.Z)) * CFrame.Angles(0, math.rad(opts.FaceOffset or 0), 0)
+		r.CFrame = CFrame.new(Vector3.new(torsoHub.Position.X, bcf.Position.Y, torsoHub.Position.Z))
 		r.Parent = model
 		root = r
 	end
@@ -239,6 +239,21 @@ function BossRig.Assemble(model: Model, options: Options?): Report
 	if not hasRootJoint then
 		motor("RootJoint", rootPart, torsoHub)
 		motors += 1
+	end
+	-- Frente: FaceOffset gira o HRP (é para onde o Humanoid "olha" e anda) sem mover o mesh.
+	-- Vale também para HRP já existente (rig salvo no Studio): recalcula o C0 do RootJoint.
+	if opts.FaceOffset and opts.FaceOffset ~= 0 then
+		local rootJoint: Motor6D? = nil
+		for _, m in rootPart:GetChildren() do
+			if m:IsA("Motor6D") and m.Part1 == torsoHub then
+				rootJoint = m
+			end
+		end
+		rootPart.CFrame = CFrame.new(rootPart.Position) * CFrame.Angles(0, math.rad(opts.FaceOffset), 0)
+		if rootJoint then
+			rootJoint.C0 = rootPart.CFrame:ToObjectSpace(torsoHub.CFrame)
+			rootJoint.C1 = CFrame.identity
+		end
 	end
 	-- física: nada ancorado; só o HRP colide; partes sem massa
 	for _, p in allParts do

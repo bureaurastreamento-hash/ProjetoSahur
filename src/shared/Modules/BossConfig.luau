@@ -22,7 +22,7 @@ BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6 (só no fallback sem modelo 3D
 BossConfig.ModelName = "BossModel"
 BossConfig.ModelAssetId = 138493793469412
 BossConfig.ModelHeight = 16 -- studs de altura final do modelo (escala automática)
-BossConfig.FaceOffset = 0 -- graus para girar a frente do modelo se ele andar de lado/costas
+BossConfig.FaceOffset = 90 -- graus para girar a frente do modelo: anda de lado = 90 ou -90; de costas = 180
 BossConfig.ArenaRadius = 55 -- studs a partir de BossArena; fora disso o boss ignora/volta
 BossConfig.AbandonSeconds = 30 -- sem jogador vivo na arena por esse tempo = boss some (sem recompensa)
 BossConfig.WalkSpeed = 14
