@@ -41,10 +41,11 @@ local NUMBER_COMMANDS: { [string]: string } = {
 	SetHealth = "Health",
 	SetSpeed = "Speed",
 	SetDamageMult = "DamageMult",
+	AddXP = "XP",
 	SetTime = "Time",
 }
 local SIMPLE_COMMANDS = {
-	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill",
+	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteMissions",
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 }

@@ -452,6 +452,18 @@ function HUDController.Start()
 			end
 		end)
 	end)
+	Remotes.GetEvent(Remotes.Events.NotifyProgression).OnClientEvent:Connect(function(event: string, data: any)
+		data = if typeof(data) == "table" then data else {}
+		if event == "levelup" then
+			showBanner(("NÍVEL %d! +%d moedas"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
+			FX.PlaySoundUI("Shared", "UltReady")
+		elseif event == "daily" then
+			showBanner(("Recompensa diária: +%d moedas (dia %d/%d)"):format(tonumber(data.coins) or 0, tonumber(data.streak) or 1, tonumber(data.maxStreak) or 7), 4)
+		elseif event == "mission_done" then
+			showBanner(("Missão concluída: %s (+%d moedas)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
+			FX.PlaySoundUI("Match", "Victory")
+		end
+	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)
 		profile = data
 		if sessionOnly then

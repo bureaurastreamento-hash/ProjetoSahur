@@ -3,7 +3,7 @@
 	TopbarController (cliente)
 	Ícones do topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon):
 	  Personagens (V) -> CharacterSelect.Panel
-	  Perfil (P)      -> ProfileGui.Panel (stats/moedas vindos de NotifyProfile)
+	  Perfil (P)      -> ProfileGui.Panel (stats/moedas/nível/missões vindos de NotifyProfile)
 	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
 	  Controles       -> HelpGui.Panel
 	  Duelo (J)       -> DuelGui.Panel (lógica no DuelController)
@@ -17,6 +17,7 @@ local StarterGui = game:GetService("StarterGui")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
 
@@ -32,6 +33,11 @@ local profileCoins: TextLabel
 local profileWarning: TextLabel
 local profileCharacters: TextLabel
 local profileTop: TextLabel
+local profileLevel: TextLabel
+local xpFill: Frame
+local dailyLabel: TextLabel
+local missionsList: Frame
+local missionTemplate: TextLabel
 local charactersIcon: any
 local notifiedAffordable = false
 
@@ -49,8 +55,55 @@ local function get(parent: Instance, name: string): Instance
 	return child
 end
 
+local MISSION_DEFS: { [string]: ProgressionConfig.MissionDef } = {}
+for _, def in ProgressionConfig.MissionPool do
+	MISSION_DEFS[def.id] = def
+end
+
+local function renderProgression(profile: any)
+	local level = tonumber(profile.level) or 1
+	local xp = tonumber(profile.xp) or 0
+	local need = ProgressionConfig.XPForLevel(level)
+	if level >= ProgressionConfig.MaxLevel then
+		profileLevel.Text = ("Nível %d (máximo)"):format(level)
+		xpFill.Size = UDim2.fromScale(1, 1)
+	else
+		profileLevel.Text = ("Nível %d — %d/%d XP"):format(level, xp, need)
+		xpFill.Size = UDim2.fromScale(math.clamp(xp / need, 0, 1), 1)
+	end
+
+	local daily = if typeof(profile.daily) == "table" then profile.daily else {}
+	local streak = tonumber(daily.streak) or 0
+	dailyLabel.Text = if streak > 0 then ("🔥 Sequência diária: %d/%d dias"):format(streak, ProgressionConfig.Daily.MaxStreak) else ""
+
+	for _, child in missionsList:GetChildren() do
+		if child:IsA("TextLabel") and child ~= missionTemplate then
+			child:Destroy()
+		end
+	end
+	local missions = if typeof(profile.missions) == "table" and typeof(profile.missions.list) == "table" then profile.missions.list else {}
+	for i, m in ipairs(missions) do
+		local def = MISSION_DEFS[tostring(m.id)]
+		if not def then
+			continue
+		end
+		local row = missionTemplate:Clone()
+		row.Visible = true
+		row.LayoutOrder = i
+		local done = m.done == true
+		row.Text = (if done then "✅ " else "") .. def.text:format(def.goal)
+		row.TextColor3 = if done then Color3.fromRGB(150, 230, 170) else Color3.fromRGB(255, 255, 255)
+		local progress = row:FindFirstChild("Progress") :: TextLabel
+		progress.Text = ("%d/%d · +%d moedas · +%d XP"):format(tonumber(m.progress) or 0, def.goal, def.coins, def.xp)
+		local fill = (row:FindFirstChild("Bar") :: Frame):FindFirstChild("Fill") :: Frame
+		fill.Size = UDim2.fromScale(math.clamp((tonumber(m.progress) or 0) / def.goal, 0, 1), 1)
+		row.Parent = missionsList
+	end
+end
+
 local function renderProfile(profile: any, sessionOnly: boolean)
 	profileCoins.Text = ("%d moedas"):format(profile.coins or 0)
+	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
 	for _, child in statsList:GetChildren() do
 		if child:IsA("TextLabel") and child ~= statsTemplate then
@@ -103,6 +156,11 @@ function TopbarController.Init()
 	profileTop = get(profilePanel, "Top") :: TextLabel
 	statsList = get(profilePanel, "Stats") :: Frame
 	statsTemplate = get(statsList, "Template") :: TextLabel
+	profileLevel = get(profilePanel, "Level") :: TextLabel
+	xpFill = get(get(profilePanel, "XPBar"), "Fill") :: Frame
+	dailyLabel = get(profilePanel, "Daily") :: TextLabel
+	missionsList = get(profilePanel, "Missions") :: Frame
+	missionTemplate = get(missionsList, "Template") :: TextLabel
 end
 
 function TopbarController.Start()

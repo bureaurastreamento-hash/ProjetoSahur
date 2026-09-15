@@ -26,11 +26,17 @@ DataConfig.Rewards = {
 }
 
 export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number }
+export type Mission = { id: string, progress: number, done: boolean }
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
 	unlockedCharacters: { string },
 	stats: Stats,
+	-- progressão (ProgressionService)
+	xp: number, -- XP dentro do nível atual
+	level: number,
+	daily: { lastDay: number, streak: number }, -- lastDay = ProgressionConfig.DayIndex
+	missions: { day: number, list: { Mission } },
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -39,6 +45,10 @@ function DataConfig.DefaultProfile(): Profile
 		coins = 0,
 		unlockedCharacters = { "Brawler" },
 		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0 },
+		xp = 0,
+		level = 1,
+		daily = { lastDay = 0, streak = 0 },
+		missions = { day = 0, list = {} },
 	}
 end
 

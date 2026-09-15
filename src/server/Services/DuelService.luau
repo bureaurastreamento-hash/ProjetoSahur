@@ -35,6 +35,7 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local LobbyService = require(script.Parent:WaitForChild("LobbyService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
+local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
 
 local DuelService = {}
 
@@ -452,6 +453,7 @@ local function finishDuel(duel: Duel)
 		if p.player.Parent == Players then
 			local won = duel.winnerTeam ~= nil and duel.winnerTeam >= 0 and p.teamId == duel.winnerTeam
 			DataService.RecordMatchResult(p.player, won, 0, false)
+			ProgressionService.OnDuelResult(p.player, won)
 		end
 	end
 	Log.debug(("[DuelService] duelo %d: %s"):format(duel.id, if #names > 0 then "venceu " .. table.concat(names, ", ") else "empate"))

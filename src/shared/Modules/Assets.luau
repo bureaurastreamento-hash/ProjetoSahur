@@ -127,6 +127,13 @@ Assets.VFXPack = {
 	["Guardian/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
 	["Guardian/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
 	["Guardian/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	-- Boss reaproveita efeitos já podados (tools/podar_vfx.luau só gera os caminhos citados aqui)
+	["Boss/Swipe_Hit"] = "Packs/OfficialJJS/Todo/HeavyHit",
+	["Boss/Slam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Boss/Slam_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	["Boss/Charge"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
+	["Boss/Charge_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
+	["Boss/Roar"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 3 },
 } :: { [string]: PackChoice }
 
 local function findPath(path: string): Instance?

@@ -26,6 +26,7 @@ local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
+local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
 
 local BossService = {}
 
@@ -50,7 +51,6 @@ local arenaPart: BasePart? = nil
 local prompt: ProximityPrompt? = nil
 local statusLabel: TextLabel? = nil
 local notifyBoss: RemoteEvent
-local notifyAttack: RemoteEvent
 
 -- ---------------------------------------------------------------------------
 -- Utilidades
@@ -135,6 +135,10 @@ local function buildBoss(): (Model?, Humanoid?, BasePart?)
 			d.Material = Enum.Material.Slate
 		end
 	end
+	-- Animator criado no servidor para as animações do cliente replicarem (FX.PlayAnimation)
+	if not humanoid:FindFirstChildOfClass("Animator") then
+		Instance.new("Animator").Parent = humanoid
+	end
 	humanoid.DisplayName = BossConfig.Name
 	humanoid.MaxHealth = BossConfig.MaxHealth
 	humanoid.Health = BossConfig.MaxHealth
@@ -193,6 +197,7 @@ local function doAttack(f: Fight, name: string, target: BasePart)
 	local attack = BossConfig.Attacks[name]
 	f.cooldowns[name] = os.clock() + attack.Cooldown
 	f.humanoid:MoveTo(f.root.Position) -- para durante o golpe
+	broadcast("attack", { model = f.model, name = name, phase = "windup", windup = attack.Windup })
 	if name == "Charge" then
 		telegraph(target.Position, attack.Radius, attack.Windup + 0.6)
 		task.wait(attack.Windup)
@@ -208,7 +213,7 @@ local function doAttack(f: Fight, name: string, target: BasePart)
 		end
 		f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed
 		if not f.finished then
-			notifyAttack:FireAllClients(f.model, "Melee", 4)
+			broadcast("attack", { model = f.model, name = name, phase = "hit", position = f.root.Position, radius = attack.Radius })
 			hitAround(f, f.root.Position, attack)
 		end
 		return
@@ -219,8 +224,8 @@ local function doAttack(f: Fight, name: string, target: BasePart)
 	if f.finished then
 		return
 	end
-	notifyAttack:FireAllClients(f.model, "Melee", if name == "Slam" then 4 else 2)
 	local hitCenter = if name == "Slam" then f.root.Position else f.root.Position + f.root.CFrame.LookVector * (attack.Radius * 0.6)
+	broadcast("attack", { model = f.model, name = name, phase = "hit", position = hitCenter, radius = attack.Radius })
 	hitAround(f, hitCenter, attack)
 end
 
@@ -261,6 +266,7 @@ local function rewardAndFinish(f: Fight)
 				coins += BossConfig.RewardTopBonus
 			end
 			DataService.AddCoins(player, coins)
+			ProgressionService.OnBossDefeated(player, dmg, dmg / total, player == top)
 			table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg) })
 		end
 	end
@@ -331,7 +337,7 @@ local function aiLoop(f: Fight)
 		if f.phase == 1 and f.humanoid.Health <= f.humanoid.MaxHealth * BossConfig.PhaseTwoAt then
 			f.phase = 2
 			f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed
-			broadcast("phase", { phase = 2 })
+			broadcast("phase", { phase = 2, model = f.model })
 		end
 		if os.clock() - lastState > 0.5 then
 			lastState = os.clock()
@@ -423,7 +429,6 @@ end
 
 function BossService.Init()
 	notifyBoss = Remotes.GetEvent(Remotes.Events.NotifyBoss)
-	notifyAttack = Remotes.GetEvent(Remotes.Events.NotifyAttack)
 end
 
 function BossService.Start()

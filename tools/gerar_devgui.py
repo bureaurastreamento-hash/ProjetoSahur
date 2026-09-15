@@ -21,7 +21,7 @@ GREY = [0.75, 0.75, 0.78]
 RED = [0.75, 0.25, 0.25]
 GREEN = [0.25, 0.55, 0.35]
 
-W, H = 620, 640
+W, H = 620, 672
 PAD = 12
 COL_W = (W - PAD * 2 - 8 * 3) // 4  # 4 colunas
 
@@ -109,6 +109,7 @@ rows = [
     ("Health", "vida", "SetHealth", "Definir", "Heal", "Curar"),
     ("Speed", "WalkSpeed (16)", "SetSpeed", "Definir", "Respawn", "Respawn"),
     ("DamageMult", "dano x (1)", "SetDamageMult", "Definir", "Kill", "Matar"),
+    ("XP", "XP", "AddXP", "Somar XP", "CompleteMissions", "Missões OK"),
 ]
 for i, (box, ph, cmd1, t1, cmd2, t2) in enumerate(rows):
     yy = y + i * 32

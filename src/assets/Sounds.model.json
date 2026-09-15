@@ -1,341 +1,417 @@
 {
-  "className": "Folder",
-  "children": [
+ "className": "Folder",
+ "children": [
+  {
+   "name": "Shared",
+   "className": "Folder",
+   "children": [
     {
-      "name": "Shared",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "Punch_Whoosh",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Punch_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Block",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Parry",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Death",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Finisher_Whoosh",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "UltReady",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Punch_Whoosh",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     },
     {
-      "name": "Match",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "RoundStart",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.7,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Victory",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.7,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Defeat",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.7,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Punch_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     },
     {
-      "name": "Brawler",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ShoulderBash",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "ShoulderBash_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "GroundSlam",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "GroundSlam_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Rampage",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Block",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     },
     {
-      "name": "Swift",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "Blink",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "SweepKick",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "SweepKick_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Tempest",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Tempest_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Parry",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     },
     {
-      "name": "Mystic",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ArcaneBolt",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "ArcaneBolt_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Mend",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Meteor",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Meteor_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Death",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     },
     {
-      "name": "Guardian",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ShieldBash",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "ShieldBash_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Fortify",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Quake",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "Quake_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        }
-      ]
+     "name": "Finisher_Whoosh",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "UltReady",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
     }
-  ]
+   ]
+  },
+  {
+   "name": "Match",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "RoundStart",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.7,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Victory",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.7,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Defeat",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.7,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  },
+  {
+   "name": "Brawler",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ShoulderBash",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "ShoulderBash_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "GroundSlam",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "GroundSlam_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Rampage",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  },
+  {
+   "name": "Swift",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Blink",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "SweepKick",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "SweepKick_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Tempest",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Tempest_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  },
+  {
+   "name": "Mystic",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ArcaneBolt",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "ArcaneBolt_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Mend",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Meteor",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Meteor_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  },
+  {
+   "name": "Guardian",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ShieldBash",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "ShieldBash_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Fortify",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Quake",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Quake_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  },
+  {
+   "name": "Boss",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Swipe",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Swipe_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Slam",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Slam_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Charge",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Charge_Hit",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    },
+    {
+     "name": "Roar",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "",
+      "Volume": 0.5,
+      "RollOffMaxDistance": 80,
+      "RollOffMinDistance": 10
+     }
+    }
+   ]
+  }
+ ]
 }

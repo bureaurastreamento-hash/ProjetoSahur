@@ -66,7 +66,8 @@ RemoteEvents.Events = ({
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
-	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"defeated"|"despawned"|"denied", data: table)
+	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"attack"|"defeated"|"despawned"|"denied", data: table)
+	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"daily"|"mission_done", data: table)
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 

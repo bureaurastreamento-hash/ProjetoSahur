@@ -100,6 +100,28 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
+	-- progressão (campos novos; perfis antigos ficam no default)
+	if typeof(raw.xp) == "number" and raw.xp >= 0 then
+		profile.xp = math.floor(raw.xp)
+	end
+	if typeof(raw.level) == "number" and raw.level >= 1 then
+		profile.level = math.floor(raw.level)
+	end
+	if typeof(raw.daily) == "table" then
+		local d = raw.daily :: any
+		if typeof(d.lastDay) == "number" and typeof(d.streak) == "number" then
+			profile.daily = { lastDay = math.floor(d.lastDay), streak = math.max(0, math.floor(d.streak)) }
+		end
+	end
+	if typeof(raw.missions) == "table" and typeof((raw.missions :: any).day) == "number" and typeof((raw.missions :: any).list) == "table" then
+		local list: { DataConfig.Mission } = {}
+		for _, m in (raw.missions :: any).list do
+			if typeof(m) == "table" and typeof(m.id) == "string" and typeof(m.progress) == "number" then
+				table.insert(list, { id = m.id, progress = math.floor(m.progress), done = m.done == true })
+			end
+		end
+		profile.missions = { day = math.floor((raw.missions :: any).day), list = list }
+	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
@@ -194,6 +216,12 @@ local function touch(player: Player)
 		session.dirty = true
 		pushToClient(player, session)
 	end
+end
+
+--- Marca o perfil como alterado (salva no próximo autosave) e reenvia ao cliente.
+--- Para services que mexem direto em campos do perfil (ProgressionService).
+function DataService.MarkDirty(player: Player)
+	touch(player)
 end
 
 function DataService.AddCoins(player: Player, amount: number)

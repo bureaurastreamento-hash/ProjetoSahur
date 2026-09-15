@@ -1,225 +1,271 @@
 {
-  "className": "Folder",
-  "children": [
+ "className": "Folder",
+ "children": [
+  {
+   "name": "Shared",
+   "className": "Folder",
+   "children": [
     {
-      "name": "Shared",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "M1_1",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        },
-        {
-          "name": "M1_2",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        },
-        {
-          "name": "M1_3",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        },
-        {
-          "name": "M1_4",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522638767"
-          }
-        },
-        {
-          "name": "Block",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://182393478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507768375"
-          }
-        },
-        {
-          "name": "Parry",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://182393478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507768375"
-          }
-        },
-        {
-          "name": "Hit",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://180436148"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507767968"
-          }
-        }
-      ]
+     "name": "M1_1",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
     },
     {
-      "name": "Brawler",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ShoulderBash",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522638767"
-          }
-        },
-        {
-          "name": "GroundSlam",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        },
-        {
-          "name": "Rampage",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129423030"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507770677"
-          }
-        }
-      ]
+     "name": "M1_2",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
     },
     {
-      "name": "Swift",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "Blink",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://128853357"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507770453"
-          }
-        },
-        {
-          "name": "SweepKick",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        },
-        {
-          "name": "Tempest",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://182491248"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507771019"
-          }
-        }
-      ]
+     "name": "M1_3",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
     },
     {
-      "name": "Mystic",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ArcaneBolt",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://128853357"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507770453"
-          }
-        },
-        {
-          "name": "Mend",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129423030"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507770677"
-          }
-        },
-        {
-          "name": "Meteor",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://128777973"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507770239"
-          }
-        }
-      ]
+     "name": "M1_4",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522638767"
+     }
     },
     {
-      "name": "Guardian",
-      "className": "Folder",
-      "children": [
-        {
-          "name": "ShieldBash",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522638767"
-          }
-        },
-        {
-          "name": "Fortify",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://182393478"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://507768375"
-          }
-        },
-        {
-          "name": "Quake",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": "rbxassetid://129967390"
-          },
-          "attributes": {
-            "R15Id": "rbxassetid://522635514"
-          }
-        }
-      ]
+     "name": "Block",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://182393478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507768375"
+     }
+    },
+    {
+     "name": "Parry",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://182393478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507768375"
+     }
+    },
+    {
+     "name": "Hit",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://180436148"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507767968"
+     }
     }
-  ]
+   ]
+  },
+  {
+   "name": "Brawler",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ShoulderBash",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522638767"
+     }
+    },
+    {
+     "name": "GroundSlam",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
+    },
+    {
+     "name": "Rampage",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129423030"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770677"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Swift",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Blink",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://128853357"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770453"
+     }
+    },
+    {
+     "name": "SweepKick",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
+    },
+    {
+     "name": "Tempest",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://182491248"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507771019"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Mystic",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ArcaneBolt",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://128853357"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770453"
+     }
+    },
+    {
+     "name": "Mend",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129423030"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770677"
+     }
+    },
+    {
+     "name": "Meteor",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://128777973"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770239"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Guardian",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ShieldBash",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522638767"
+     }
+    },
+    {
+     "name": "Fortify",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://182393478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507768375"
+     }
+    },
+    {
+     "name": "Quake",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Boss",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Swipe",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967390"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522635514"
+     }
+    },
+    {
+     "name": "Slam",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129423030"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770677"
+     }
+    },
+    {
+     "name": "Charge",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129967478"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://522638767"
+     }
+    },
+    {
+     "name": "Roar",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://129423030"
+     },
+     "attributes": {
+      "R15Id": "rbxassetid://507770677"
+     }
+    }
+   ]
+  }
+ ]
 }

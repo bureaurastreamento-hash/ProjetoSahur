@@ -12,7 +12,7 @@
 	  4. NotifyAdminResult(ok, message) devolve o resultado para o painel.
 
 	Comandos por alvo (args.target = nome/UserId; ausente = o próprio dev; "*" = todos):
-	  SetCoins/AddCoins/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount},
+	  SetCoins/AddCoins/AddXP/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount}, CompleteMissions,
 	  InfiniteEnergy/NoCooldown/God {enabled?} (toggle), ResetCooldowns, ClearFlags,
 	  GrantCharacter/RevokeCharacter/SetCharacter {characterId}, GrantAll, RevokeAll,
 	  Heal, Kill, Respawn, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason}, ResetData
@@ -30,9 +30,11 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local AdminConfig = require(script.Parent.Parent:WaitForChild("AdminConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
+local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local DummyService = require(script.Parent:WaitForChild("DummyService"))
@@ -177,6 +179,33 @@ perTarget.SetCoins = function(_, target, args)
 	end
 	DataService.SetCoins(target, amount)
 	return true, ("%s: %d moedas"):format(target.Name, math.max(0, math.floor(amount)))
+end
+
+perTarget.AddXP = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount or amount <= 0 then
+		return false, "quantidade inválida"
+	end
+	ProgressionService.AddXP(target, amount, "admin")
+	local profile = DataService.GetProfile(target)
+	return true, ("%s: +%d XP (nível %d)"):format(target.Name, amount, if profile then profile.level else 0)
+end
+
+perTarget.CompleteMissions = function(_, target)
+	for _, m in ProgressionService.GetMissions(target) do
+		if not m.done then
+			local def = nil
+			for _, d in ProgressionConfig.MissionPool do
+				if d.id == m.id then
+					def = d
+				end
+			end
+			if def then
+				ProgressionService.Progress(target, def.kind, def.goal)
+			end
+		end
+	end
+	return true, ("%s: missões de hoje concluídas"):format(target.Name)
 end
 
 perTarget.AddCoins = function(_, target, args)

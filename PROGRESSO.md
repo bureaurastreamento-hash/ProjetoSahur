@@ -216,6 +216,20 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    "Criar sala 2v2" → outros entram pela lista (auto-balanceia times, "Trocar de time" se houver
    vaga) → com 4 jogadores começa sozinho (times 1/2 = `TeamId`, sem fogo amigo). Precisa de
    4 clientes (Test > Clients and Servers > 4 Players). `DuelConfig.TeamSize` = 2.
+5. **Progressão** (`ProgressionConfig`/`ProgressionService`, campos novos no perfil: xp/level/daily/
+   missions, migração tolerante): XP por kill (20), duelo (60/20) e boss (bolo 300 por dano); nível
+   sobe com `XPForLevel` (100 + 40/nível, máx 50) e paga moedas; **recompensa diária** com sequência
+   (25 + 10/dia, máx 7) ao entrar; **3 missões diárias** sorteadas por jogador (kills, duelos,
+   vitória em duelo, dano/vitória no boss, minutos jogados), recompensa automática ao concluir.
+   Perfil (P) ficou 620 px: nível + barra de XP à esquerda, missões + sequência à direita.
+   Banners na HUD (`NotifyProgression`). Menu dev: campo XP → "Somar XP" e "Missões OK".
+   Dá para testar SOZINHO: entrar (banner da diária), matar bonecos NÃO conta (só Players), usar
+   o menu dev para XP e missões, ou matar o boss.
+6. **Boss com animação/VFX/som por nome**: `NotifyBoss("attack", {model, name, phase="windup"|"hit",
+   position, radius})` → cliente toca `Animations.Boss.<Swipe|Slam|Charge|Roar>` (placeholders da
+   Roblox), VFX `Assets.VFXPack["Boss/..."]` (reaproveita efeitos já podados), sons `Sounds.Boss.*`
+   (ids vazios) e shake perto do impacto. Boss e bonecos agora têm `Animator` (antes nenhuma
+   animação tocava neles).
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
@@ -223,10 +237,13 @@ Pendências do dono:
 - Bonecos R15 "de teste" no mapa são do place (os nossos são criados em runtime em R6).
 - Sons: escolher referências (soco/block/etc.) para eu preencher `Sounds.model.json` com ids OK.
 - Animações: `packs/Import/Animacoes` → Insert from File → Save to Roblox → ids.
-Próximo passo de código: animações do boss quando houver ids; depois do teste do 1v1/2v2/boss,
-balancear `BossConfig`/`DuelConfig` e seguir para Progressão (item 6).
+Próximo passo de código: testar tudo acima; depois loja/cosméticos (títulos por nível?) ou
+lançamento (item 9). Ids reais de animação/som do boss quando a arte publicar.
 
 ## Em andamento
+- 2026-09-15 — **Progressão** (item 6): ver "Retomar aqui" (XP/nível, diária, missões). FALTA TESTAR.
+  Balancear valores em `ProgressionConfig.luau`. Ideia seguinte: títulos/cores de nome por nível.
+- 2026-09-15 — Boss com evento `attack` (anim/VFX/som por nome) + Animator nos NPCs. FALTA TESTAR.
 - 2026-09-15 — **Altar do boss** (item 8): ver "Retomar aqui". Testar: E no altar, anel vermelho,
   dano com block (70% a menos), fase 2, morte → banner com moedas, altar recarrega 45 s, boss some se
   ninguém ficar na arena por 30 s. Ajustes finos em `BossConfig.luau`.
@@ -278,8 +295,8 @@ balancear `BossConfig`/`DuelConfig` e seguir para Progressão (item 6).
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
    desafio, arena separada (`ServerStorage.Maps.Arena_Gerada` ou `ArenaMap` do pack em
    `ServerStorage.Import`), `FreeRoam` continua para os demais. ← 1v1 e 2v2 FEITOS (testar)
-6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
-   Robux só depois de validar a economia.
+6. **Progressão**: ~~tela de perfil~~, ~~XP/nível, diária, missões~~ (feito 2026-09-15; testar/
+   balancear); loja simples/cosméticos e gamepass/Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.
 8. ~~Altar para invocar o boss~~ (feito 2026-09-15; falta testar/balancear e animações). Era: altar no mapa (usar meshes de `ServerStorage.Import` ou
    `Arena_Gerada`), interação (ProximityPrompt) que junta jogadores/moedas e invoca um boss NPC

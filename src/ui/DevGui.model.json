@@ -19,7 +19,7 @@
       ],
       [
        0,
-       640
+       672
       ]
      ]
     },
@@ -1838,6 +1838,214 @@
      ]
     },
     {
+     "name": "XP",
+     "className": "TextBox",
+     "properties": {
+      "Name": "XP",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         338
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "",
+      "PlaceholderText": "XP",
+      "PlaceholderColor3": {
+       "Color3": [
+        0.5,
+        0.5,
+        0.55
+       ]
+      },
+      "TextSize": 13,
+      "Font": "Gotham",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "ClearTextOnFocus": false,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "AddXP",
+     "className": "TextButton",
+     "properties": {
+      "Name": "AddXP",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         143
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         338
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Somar XP",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "CompleteMissions",
+     "className": "TextButton",
+     "properties": {
+      "Name": "CompleteMissions",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         143
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         465
+        ],
+        [
+         0,
+         338
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Miss\u00f5es OK",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
      "name": "CharSection",
      "className": "TextLabel",
      "properties": {
@@ -1862,7 +2070,7 @@
         ],
         [
          0,
-         342
+         374
         ]
        ]
       },
@@ -1907,7 +2115,7 @@
         ],
         [
          0,
-         360
+         392
         ]
        ]
       },
@@ -2024,7 +2232,7 @@
         ],
         [
          0,
-         360
+         392
         ]
        ]
       },
@@ -2091,7 +2299,7 @@
         ],
         [
          0,
-         360
+         392
         ]
        ]
       },
@@ -2158,7 +2366,7 @@
         ],
         [
          0,
-         396
+         428
         ]
        ]
       },
@@ -2203,7 +2411,7 @@
         ],
         [
          0,
-         414
+         446
         ]
        ]
       },
@@ -2270,7 +2478,7 @@
         ],
         [
          0,
-         414
+         446
         ]
        ]
       },
@@ -2337,7 +2545,7 @@
         ],
         [
          0,
-         414
+         446
         ]
        ]
       },
@@ -2404,7 +2612,7 @@
         ],
         [
          0,
-         414
+         446
         ]
        ]
       },
@@ -2471,7 +2679,7 @@
         ],
         [
          0,
-         450
+         482
         ]
        ]
       },
@@ -2516,7 +2724,7 @@
         ],
         [
          0,
-         468
+         500
         ]
        ]
       },
@@ -2583,7 +2791,7 @@
         ],
         [
          0,
-         468
+         500
         ]
        ]
       },
@@ -2650,7 +2858,7 @@
         ],
         [
          0,
-         468
+         500
         ]
        ]
       },
@@ -2717,7 +2925,7 @@
         ],
         [
          0,
-         468
+         500
         ]
        ]
       },
@@ -2784,7 +2992,7 @@
         ],
         [
          0,
-         500
+         532
         ]
        ]
       },
@@ -2858,7 +3066,7 @@
         ],
         [
          0,
-         500
+         532
         ]
        ]
       },
@@ -2925,7 +3133,7 @@
         ],
         [
          0,
-         500
+         532
         ]
        ]
       },
@@ -2992,7 +3200,7 @@
         ],
         [
          0,
-         500
+         532
         ]
        ]
       },
@@ -3059,7 +3267,7 @@
         ],
         [
          0,
-         532
+         564
         ]
        ]
       },
@@ -3126,7 +3334,7 @@
         ],
         [
          0,
-         532
+         564
         ]
        ]
       },
@@ -3193,7 +3401,7 @@
         ],
         [
          0,
-         568
+         600
         ]
        ]
       },
@@ -3226,7 +3434,7 @@
         ],
         [
          1,
-         -598
+         -630
         ]
        ]
       },
@@ -3238,7 +3446,7 @@
         ],
         [
          0,
-         586
+         618
         ]
        ]
       },

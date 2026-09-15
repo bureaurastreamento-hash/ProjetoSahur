@@ -67,6 +67,32 @@ local function onNotifyBoss(event: string, data: any)
 	elseif event == "phase" then
 		showBanner("O boss entrou em FÚRIA!", 3)
 		FX.Shake(0.8, 0.5)
+		if typeof(data.model) == "Instance" and data.model:IsA("Model") then
+			local model = data.model :: Model
+			FX.PlayAnimation(model, "Boss", "Roar")
+			FX.SpawnVFX(model, "Boss", "Roar")
+			FX.PlaySoundAt(model, "Boss", "Roar")
+		end
+	elseif event == "attack" then
+		-- golpes do boss: animação + VFX/som por nome (Assets Boss/<Nome> e Boss/<Nome>_Hit)
+		local model = data.model
+		if typeof(model) ~= "Instance" or not model:IsA("Model") then
+			return
+		end
+		local name = tostring(data.name)
+		if data.phase == "windup" then
+			FX.PlayAnimation(model, "Boss", name)
+			FX.SpawnVFX(model, "Boss", name, true)
+			FX.PlaySoundAt(model, "Boss", name)
+		else
+			local at = if typeof(data.position) == "Vector3" then data.position else nil
+			FX.SpawnVFX(model, "Boss", name .. "_Hit", true, at)
+			FX.PlaySoundAt(model, "Boss", name .. "_Hit")
+			local root = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root and at and (root.Position - at).Magnitude < (tonumber(data.radius) or 10) + 20 then
+				FX.Shake(if name == "Swipe" then 0.3 else 0.7, 0.35)
+			end
+		end
 	elseif event == "defeated" then
 		bar.Visible = false
 		local lines = { "BOSS DERROTADO!" }

@@ -55,6 +55,9 @@ local function buildRig(index: number): Model?
 	model.Name = "Boneco " .. index
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
 	if humanoid then
+		if not humanoid:FindFirstChildOfClass("Animator") then
+			Instance.new("Animator").Parent = humanoid -- animação de "Hit" do cliente precisa dele
+		end
 		humanoid.DisplayName = "Boneco de treino"
 		humanoid.MaxHealth = HEALTH
 		humanoid.Health = HEALTH
