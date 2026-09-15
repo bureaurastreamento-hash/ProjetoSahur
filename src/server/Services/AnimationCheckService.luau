@@ -38,9 +38,16 @@ local function rigOf(ks: KeyframeSequence): string
 	return "misturada/custom"
 end
 
+local checked: { [string]: boolean } = {} -- o provider devolve a MESMA instância para o mesmo id
+
 local function check(anim: Animation)
 	local id = anim.AnimationId
 	local path = anim:GetFullName():gsub("^ReplicatedStorage%.Assets%.Animations%.", "")
+	if checked[id] then
+		print(("[AnimCheck] %s (%s): mesmo id já verificado acima"):format(path, id))
+		return
+	end
+	checked[id] = true
 	local ok, result = pcall(function()
 		return KeyframeSequenceProvider:GetKeyframeSequenceAsync(id)
 	end)
@@ -60,7 +67,6 @@ local function check(anim: Animation)
 	else
 		warn(("[AnimCheck] %s (%s): rig %s — o jogo é %s, esta animação NÃO vai mexer o personagem. Reexportar em rig %s."):format(path, id, rig, expected, expected))
 	end
-	ks:Destroy()
 end
 
 function AnimationCheckService.Start()
