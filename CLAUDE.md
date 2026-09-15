@@ -50,8 +50,13 @@ ainda não existe, mesmo que pareça óbvio.
 - Árvore que o Rojo está servindo: API msgpack em `http://localhost:34872/api/rojo` e
   `/api/read/<id>` (decoder em scratchpad/rojotree.py quando existir).
 - `ss -tnp | grep 34872` mostra se o Studio está conectado ao Rojo.
-- O place no Studio é o publicado (placeId 85844807133499, ~5.5k instâncias, mapa da equipe).
+- O place OFICIAL é o 126518739287432 (jogo de GRUPO; o 85844807133499 é o antigo, não usar).
   O `default.project.json` DEVE continuar 100% aditivo (`$ignoreUnknownInstances` em tudo).
+- Jogo de grupo: animações/sons só carregam se publicados com o GRUPO como criador. Rig R6
+  (Game Settings > Avatar); o `AnimationCheckService` imprime `[AnimCheck]` no Studio (rig/acesso) e o
+  `HealthService` avisa se o jogador nasceu R15.
+- O place veio de um pack e tem lixo alheio (Workspace."Animation Maker", 2º TopbarPlus "Example",
+  Workspace.Textures): não é nosso, o dono apaga no Studio.
 
 ## Assets externos e UI
 - `AssetsPacks/` (ignorado no git) tem packs; ler com `python3 tools/rbx_tree.py arquivo` e
@@ -64,6 +69,10 @@ ainda não existe, mesmo que pareça óbvio.
   VFX/meshes extraídos ficam completos em `packs/VFX/<Pack>` (fora do Rojo, ~95k instâncias);
   `tools/podar_vfx.luau` gera em `Assets.VFX.Packs.<Pack>` SÓ os caminhos citados em `Assets.luau`.
   Nunca colocar packs inteiros dentro de `src/` (foi isso que derrubou o FPS em 2026-09-15).
+- Animações: ids da equipe em `src/assets/Animations.model.json` (sem placeholders da Roblox; id vazio =
+  não toca). Para escolher animações dos packs: `lune run tools/juntar_animacoes.luau` gera
+  `packs/Import/AnimPreview.rbxm` (preview clicável num place em branco → Save to Roblox no grupo).
+  Idle/Walk/Run são tocadas pelo `MovementController` (não pelo Animate padrão).
 - VFX: nome exato em `Assets.VFX.<Personagem>` > alias do Particle Pack (`Assets.VFXAliases`)
   > `Shared.Placeholder`.
 - UI de topo usa TopbarPlus (`src/shared/Packages/Icon`, v3.4.0). Telas ficam em `src/ui/*.model.json`

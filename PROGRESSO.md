@@ -200,73 +200,95 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite)
-Estado: tudo commitado localmente (o dono roda `git push`). Rig R6 confirmado no Studio. FPS normal
-depois de tirar os packs do Rojo (`ServerStorage.Import` já apagado pelo dono).
-Feito nesta sessão, AINDA NÃO TESTADO no Studio:
-1. **Duelo 1v1** (`DuelService`/`DuelController`/`DuelGui`, ícone Duelo = J). Precisa de 2 clientes
-   (Test > Clients and Servers > 2 Players). Roteiro em "Em andamento".
-2. **Altar do boss** (`BossService`/`BossController`/`BossGui`/`BossConfig`): altar em
-   `Workspace.Sahur.ArenaExtras` (BossAltar em (0, 3.5, 95), boss nasce em BossSpawn (0, 0.5, 125)).
-   Segurar E no altar → boss R6 escalado 1.9x, 1500 HP, Swipe/Slam (+ Charge na fase 2 abaixo de 50%),
-   anel vermelho antes de cada golpe, recompensa por dano (bolo 300 + mín 20 + 50 top). Dá para
-   testar SOZINHO. Cooldown do altar 45 s. Sem animação própria ainda (usa o NotifyAttack "Melee").
-3. Bonecos de treino agora 100% anchored e com os pés no chão por raycast (estavam afundando).
-4. **2v2 por salas** (mesmo `DuelService`/`DuelController`/`DuelGui`): aba "2v2" no painel Duelo →
-   "Criar sala 2v2" → outros entram pela lista (auto-balanceia times, "Trocar de time" se houver
-   vaga) → com 4 jogadores começa sozinho (times 1/2 = `TeamId`, sem fogo amigo). Precisa de
-   4 clientes (Test > Clients and Servers > 4 Players). `DuelConfig.TeamSize` = 2.
-5. **Progressão** (`ProgressionConfig`/`ProgressionService`, campos novos no perfil: xp/level/daily/
-   missions, migração tolerante): XP por kill (20), duelo (60/20) e boss (bolo 300 por dano); nível
-   sobe com `XPForLevel` (100 + 40/nível, máx 50) e paga moedas; **recompensa diária** com sequência
-   (25 + 10/dia, máx 7) ao entrar; **3 missões diárias** sorteadas por jogador (kills, duelos,
-   vitória em duelo, dano/vitória no boss, minutos jogados), recompensa automática ao concluir.
-   Perfil (P) ficou 620 px: nível + barra de XP à esquerda, missões + sequência à direita.
-   Banners na HUD (`NotifyProgression`). Menu dev: campo XP → "Somar XP" e "Missões OK".
-   Dá para testar SOZINHO: entrar (banner da diária), matar bonecos NÃO conta (só Players), usar
-   o menu dev para XP e missões, ou matar o boss.
-6. **Boss com animação/VFX/som por nome**: `NotifyBoss("attack", {model, name, phase="windup"|"hit",
-   position, radius})` → cliente toca `Animations.Boss.<Swipe|Slam|Charge|Roar>` (placeholders da
-   Roblox), VFX `Assets.VFXPack["Boss/..."]` (reaproveita efeitos já podados), sons `Sounds.Boss.*`
-   (ids vazios) e shake perto do impacto. Boss e bonecos agora têm `Animator` (antes nenhuma
-   animação tocava neles).
-7. **Movimento** (`MovementService`/`MovementController`, `CombatConfig.Sprint`): **correr** segurando
-   Shift (WalkSpeed 24, não enquanto bloqueia; ao soltar o block volta para a corrida). Mobile: botão
-   CORRER (toggle). **Shift lock foi para o Ctrl** (rebind do `BoundKeys` do MouseLockController do
-   PlayerModule). Dash genérico foi REMOVIDO a pedido do dono: dash/teleporte é o Q de cada personagem.
-8. **Animações da equipe ligadas** (ids de 2026-09-15): `Animations.Shared.{Idle,Walk,Run}` e o
-   "Dash frontal" em `Brawler/ShoulderBash` e `Guardian/ShieldBash`. O `MovementController` toca
-   Idle/Walk/Run por conta própria (prioridade Movement, por cima do `Animate` padrão, que fica só
-   com pulo/queda) — 1ª versão trocava os ids do Animate e o dono relatou que não tocava. Se ainda
-   não tocar, o Output avisa "carregou com duração 0" = id não é da conta/grupo dono do jogo ou foi
-   animado em outro rig (jogo é R6). O place tem um script estranho `Workspace."Animation Maker"`
-   (não é nosso, dá erro ao sair) — apagar. **2ª rodada (dono: "não tocam", "Ctrl não trava")**:
-   shift lock agora é NOSSO (`MovementController`: mouse no centro + AutoRotate off + CameraOffset;
-   nativo desligado via `StarterPlayer.EnableMouseLockOption=false` no project.json) porque o
-   PlayerModule.CameraModule.MouseLockController não foi encontrado no place. Novo
-   `AnimationCheckService` (só Studio): baixa cada KeyframeSequence dos ids da equipe e imprime
-   `[AnimCheck] ... OK R6` / `rig R15 — não vai mexer` / `NÃO CARREGOU` (grupo sem acesso).
-   O jogo é de GRUPO: animações precisam ser publicadas com o grupo como criador.
-   Existem 2 places/universos de grupo: 85844807133499 (antigo) e 126518739287432 (OFICIAL, escolhido
-   pelo dono em 2026-09-15); o Rojo é aditivo e serve para o que estiver aberto no Studio.
-9. **Ids da equipe (2026-09-15, publicados no grupo)** encaixados e TODAS as placeholders da Roblox
-   removidas (AnimationId vazio = sem animação): Melee1 → M1_1..3; Blue (agarra e taca) → M1_4;
-   Charge Punch → Brawler/GroundSlam e Boss/Swipe; Desafiando → Boss/Roar; Vergil practice →
-   Swift/Tempest; Beatdown → Brawler/Rampage; Dash frontal → ShoulderBash/ShieldBash; Idle/Walk/Run.
-   `Shared/DashBack` (dash para trás) guardado sem uso. Sem animação ainda: Block/Parry/Hit, Swift
-   Blink/SweepKick, Mystic (3), Guardian Fortify/Quake, Boss Slam/Charge.
-   Ferramenta: `lune run tools/juntar_animacoes.luau` → `packs/Import/AnimPreview.rbxm` (todas as
-   KeyframeSequences + preview clicável num place em branco).
-   Place oficial: **126518739287432** (rig trocado para R6 pelo dono em 2026-09-15).
-Pendências do dono:
-- Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
-  é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
-  ReplicatedStorage, provavelmente veio junto com o mapa do pack) — apagar no Studio e salvar.
-- Bonecos R15 "de teste" no mapa são do place (os nossos são criados em runtime em R6).
-- Sons: escolher referências (soco/block/etc.) para eu preencher `Sounds.model.json` com ids OK.
-- Animações: `packs/Import/Animacoes` → Insert from File → Save to Roblox → ids.
-Próximo passo de código: testar tudo acima; depois loja/cosméticos (títulos por nível?) ou
-lançamento (item 9). Ids reais de animação/som do boss quando a arte publicar.
+## Retomar aqui (última sessão: 2026-09-15, manhã/tarde — balanço completo antes de limpar o contexto)
+
+### Estado geral
+- Place OFICIAL: **126518739287432** (jogo de GRUPO). O antigo 85844807133499 ficou para trás. O Rojo é
+  aditivo e serve para o place aberto no Studio; conectar só no oficial.
+- Tudo commitado e enviado (`git push` feito por mim em 2026-09-15).
+- Sistemas existentes (todos em `src/`): combate M1/block/parry, 4 personagens (Brawler, Swift, Mystic,
+  Guardian) com Q/E/R, mapa livre (MainMap do pack Shadow + `ArenaExtras`), DataStore (moedas,
+  personagens, stats), bonecos de treino, placar global, menu Dev, mobile, topbar (TopbarPlus),
+  duelo 1v1 (desafio) e 2v2 (salas), altar do boss, progressão (XP/nível, diária, missões), corrida
+  (Shift), shift lock próprio (Ctrl), animações da equipe por nome, diagnóstico de animações.
+
+### O que foi TESTADO e está OK (Output de 2026-09-15 10:42)
+- Boot: 17 services / 10 controllers sem erro. DataStore carregando e salvando (605 moedas).
+- Progressão: recompensa diária caiu no login (+25). AnimCheck: **todas as 15 animações da equipe
+  são R6 e o grupo tem acesso** (Idle/Walk/Run/M1/Blue/Charge Punch/Dash/Vergil/Beatdown/Taunt).
+- Sons dos packs: `TestSounds` → **1477/1477 OK** (pode-se escolher sons dos packs por id).
+- Brawler ShoulderBash/GroundSlam executam (dano nos bonecos OK), cooldown/energia negam certo.
+
+### BUGS / PENDÊNCIAS ABERTAS (ordem de prioridade)
+1. **Animações não aparecem no boneco.** Todas carregam (AnimCheck OK) mas o personagem não mexe.
+   O log de 10:42 dizia `[HealthService] rig do jogo é R15`; o dono garante que o Game Settings está
+   em R6 e que NÃO há StarterCharacter/StarterHumanoid. PRÓXIMO PASSO: dar Play e ler a linha
+   `[HealthService] rig do jogador é ...` (aviso reescrito em 1381d25). Se ainda for R15: o Game
+   Settings pode não ter sido salvo/publicado, ou o place tem outro script que troca o personagem
+   (ver item 2). Se for R6 e mesmo assim não tocar: investigar prioridade (MovementController toca
+   Idle/Walk/Run em `Movement`; M1 em `Action` via FX.PlayAnimation) e se o `Animate` padrão foi
+   substituído por algo do place.
+2. **Scripts estranhos do place** (vieram com o mapa do pack, não são nossos, apagar no Studio):
+   `Workspace."Animation Maker"` (erra `attempt to index nil with 'findFirstChild'` ao sair; mexe em
+   animação do jogador), o **"♡ Example"** no topbar (segundo TopbarPlus, script de exemplo — achar
+   com Find All "Example"/"Icon" fora das nossas pastas), plugin "Ro-Defender" (inofensivo).
+   Também `Workspace.Textures.*` (asset 18221073047 inserido pelo dono) gera dezenas de erros de
+   textura "not approved" no log — decidir se fica.
+3. **Topbar "fora do padrão do Roblox"** segundo o dono (no place-cópia estava certo). Print mostra
+   nossos 6 ícones + "Example". Hipótese principal: o Example (2º TopbarPlus) bagunça o layout.
+   Se após removê-lo continuar diferente, pedir print do "certo" para comparar (pode ser
+   `StarterGui.ScreenOrientation`/`IgnoreGuiInset`/tema do TopbarPlus).
+4. **Shift lock no Ctrl**: 1ª versão (rebind do MouseLockController) falhou porque o PlayerModule
+   desse place não é o padrão. 2ª versão (nossa, `MovementController` + `EnableMouseLockOption=false`
+   no project.json) AINDA NÃO FOI TESTADA pelo dono.
+5. **Não testado ainda** (precisa de gente ou de tempo): duelo 1v1 (2 clientes), 2v2 (4 clientes),
+   boss completo (anel, fases, recompensa, XP), missões concluindo, subir de nível, corrida (Shift),
+   Swift/Mystic/Guardian com as anims novas, mobile (botão CORRER).
+6. **Sem animação ainda** (AnimationId vazio = não toca nada): Shared Block/Parry/Hit, Swift
+   Blink/SweepKick, Mystic ArcaneBolt/Mend/Meteor, Guardian Fortify/Quake, Boss Slam/Charge.
+   Escolher no preview (`packs/Import/AnimPreview.rbxm`) e publicar no GRUPO.
+7. **Sons**: todos os `Sounds.model.json` continuam com id vazio. Os 1477 dos packs estão OK;
+   preciso que o dono escolha (ou eu escolho por nome: Misc/Swing/Fist*, Misc/Block/Block*,
+   Misc/Items/Parry, Misc/Dash, Impact/Players/Death…). `PackSounds.luau` tem a lista.
+8. **Mapeamento das anims** foi decisão minha (ver item 9 abaixo); o dono pode querer trocar
+   (ex.: Charge Punch no 4º soco, Blue no Rampage). `Shared/DashBack` está sem uso.
+9. Mystic não tem mobilidade no Q (ArcaneBolt); o dono disse "Q = dash/teleporte de cada
+   personagem" — confirmar se quer trocar o Q do Mystic.
+10. `Studio access to APIs` está ligado no place oficial (DataStore OK). O LeaderboardService
+    ainda avisa no boot antes de conseguir — normal.
+11. Avisos DeprecatedApi `LoadCharacter` (6 lugares) — cosmético.
+
+### Feito nesta sessão (2026-09-15), em ordem
+1. **2v2 por salas** (`DuelService`: create_room/join_room/switch_team/leave_room/list_rooms;
+   `DuelGui` abas 1v1/2v2; `DuelConfig.TeamSize=2`). Auto-inicia com 4.
+2. **Progressão**: `ProgressionConfig`/`ProgressionService`; perfil ganhou xp/level/daily/missions
+   (migração tolerante). XP kill 20, duelo 60/20, boss bolo 300; nível `100+40·n`, máx 50, paga
+   moedas; diária 25+10/dia (máx 7); 3 missões/dia por jogador, recompensa automática.
+   ProfileGui 620 px (nível/XP à esquerda, missões à direita). `NotifyProgression` → banners.
+   Menu dev: "Somar XP", "Missões OK".
+3. **Boss com feedback por nome**: `NotifyBoss("attack", {model,name,phase,position,radius})`;
+   `Animations.Boss.{Swipe,Slam,Charge,Roar}`, `VFXPack Boss/*`, `Sounds.Boss.*`. Boss e bonecos
+   ganharam `Animator` (antes nenhuma animação tocava em NPC).
+4. **Movimento**: `MovementService`/`MovementController`. Correr = Shift (WalkSpeed 24, não com
+   block; ao soltar o block volta a correr). Dash genérico foi criado e depois REMOVIDO a pedido
+   (Q é o dash/teleporte do personagem). Shift lock próprio no Ctrl. Mobile: botão CORRER.
+5. **Animações**: `MovementController` toca Idle/Walk/Run por conta própria (prioridade Movement,
+   por cima do Animate padrão). `AnimationCheckService` (só Studio) imprime `[AnimCheck]` por id
+   (rig/acesso). Ids da equipe encaixados e TODAS as placeholders da Roblox removidas.
+6. **Ferramentas**: `tools/juntar_animacoes.luau` → `packs/Import/AnimPreview.rbxm` (32
+   KeyframeSequences + preview clicável num place em branco). Fluxo: Insert from File → Play →
+   clicar → Save to Roblox com o GRUPO como criador → id.
+7. `default.project.json`: `StarterPlayer.EnableMouseLockOption=false`.
+
+### Mapeamento atual das animações (Animations.model.json)
+Melee1 → M1_1..3 | Blue (agarra e taca) → M1_4 | Charge Punch → Brawler/GroundSlam + Boss/Swipe |
+Vergil practice → Swift/Tempest | Beatdown → Brawler/Rampage | Desafiando → Boss/Roar |
+Dash frontal → Brawler/ShoulderBash + Guardian/ShieldBash | Parado/Andando/Correndo → Shared
+Idle/Walk/Run | Dash pra trás → Shared/DashBack (sem uso).
+
+### Próximo passo de código (depois dos testes acima)
+Encaixar sons por nome a partir dos packs; anims restantes quando vierem ids; balancear
+`ProgressionConfig`/`BossConfig`/`DuelConfig`; loja/cosméticos; lançamento (item 9).
 
 ## Em andamento
 - 2026-09-15 — **Movimento** (correr/dash) + animações de movimento da equipe. FALTA TESTAR: Shift
