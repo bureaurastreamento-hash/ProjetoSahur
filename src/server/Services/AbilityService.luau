@@ -78,8 +78,15 @@ local function getState(player: Player): PlayerState
 	return s
 end
 
+-- Flags do menu de desenvolvedor (atributos no Player, definidos por AdminService)
+local ATTR_INFINITE_ENERGY = "DevInfiniteEnergy"
+local ATTR_NO_COOLDOWN = "DevNoCooldown"
+
 local function setEnergy(player: Player, value: number)
 	local state = getState(player)
+	if player:GetAttribute(ATTR_INFINITE_ENERGY) == true then
+		value = CharacterDefs.Energy.Max
+	end
 	state.energy = math.clamp(value, 0, CharacterDefs.Energy.Max)
 	player:SetAttribute("Energy", state.energy)
 end
@@ -377,14 +384,15 @@ local function onRequestAbility(player: Player, slot: any)
 	if CombatService.IsStunned(player) then
 		return deny(player, slot, "stunned")
 	end
-	if now < state.busyUntil then
+	local noCooldown = player:GetAttribute(ATTR_NO_COOLDOWN) == true
+	if now < state.busyUntil and not noCooldown then
 		return deny(player, slot, "busy")
 	end
 	local readyAt = state.cooldownReadyAt[ability.Id] or 0
-	if now < readyAt then
+	if now < readyAt and not noCooldown then
 		return deny(player, slot, "cooldown")
 	end
-	if state.energy < ability.EnergyCost then
+	if state.energy < ability.EnergyCost and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
 		return deny(player, slot, "energy")
 	end
 	local handler = effects[ability.Effect.Type]
@@ -395,9 +403,11 @@ local function onRequestAbility(player: Player, slot: any)
 
 	-- Tudo validado: cobra antes de executar
 	setEnergy(player, state.energy - ability.EnergyCost)
-	state.cooldownReadyAt[ability.Id] = now + ability.Cooldown
-	state.busyUntil = now + ability.CastTime
-	notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
+	if not noCooldown then
+		state.cooldownReadyAt[ability.Id] = now + ability.Cooldown
+		state.busyUntil = now + ability.CastTime
+		notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
+	end
 
 	Log.debug(("[AbilityService] %s usou %s.%s (energia restante %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
@@ -464,14 +474,31 @@ local function forceCharacter(player: Player, characterId: string)
 	player:SetAttribute("CharacterId", characterId)
 end
 
+--- [Admin] Zera cooldowns/busy.
+local function resetCooldowns(player: Player)
+	local state = getState(player)
+	state.cooldownReadyAt = {}
+	state.busyUntil = 0
+	for slot = 1, 3 do
+		local ability = CharacterDefs.GetAbility(state.characterId, slot)
+		if ability then
+			notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow())
+		end
+	end
+end
+
 function AbilityService.Start()
 	AdminService.ForceCharacter = forceCharacter
 	AdminService.SetEnergy = setEnergy
+	AdminService.ResetCooldowns = resetCooldowns
 	Remotes.GetEvent(Remotes.Events.RequestAbility).OnServerEvent:Connect(onRequestAbility)
 	Remotes.GetEvent(Remotes.Events.RequestSelectCharacter).OnServerEvent:Connect(onRequestSelectCharacter)
 
 	local function onPlayer(player: Player)
 		getState(player)
+		player:GetAttributeChangedSignal(ATTR_INFINITE_ENERGY):Connect(function()
+			setEnergy(player, getState(player).energy)
+		end)
 		player.CharacterAdded:Connect(function()
 			-- Respawn mantém o personagem escolhido, zera energia/cooldowns/buffs
 			local prev = getState(player)

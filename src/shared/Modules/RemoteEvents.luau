@@ -63,7 +63,8 @@ RemoteEvents.Events = ({
 	NotifyAbilityDenied = "NotifyAbilityDenied", -- dono: (slot: number, reason: string)
 	NotifyProfile = "NotifyProfile", -- dono: (profile: DataConfig.Profile, sessionOnly: boolean)
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
-	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string)
+	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
+	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

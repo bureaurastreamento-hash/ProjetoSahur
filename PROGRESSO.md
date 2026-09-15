@@ -170,6 +170,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
   `AbilityService.GetIncomingMultiplier` aplicado em `CombatService.ResolveHit`), R `Quake`
   (3 ondas de área com knockback). VFX/anims/sons/aliases. Painel de seleção 780 px.
 
+- 2026-09-15 — **Menu Dev completo** (`tools/gerar_devgui.py`, 620x640): alvo (eu / TODOS / cada
+  jogador) com linha de estado vinda do servidor (`GetState`); toggles que refletem o estado real:
+  **Energia ∞** (`DevInfiniteEnergy`: AbilityService mantém no máximo e não cobra), **Sem cooldown**
+  (`DevNoCooldown`: ignora cooldown/busy), **Modo deus**, Limpar flags; campos moedas/energia/
+  vida/WalkSpeed/multiplicador de dano (`DevDamageMult` em `ResolveHit`, `DevSpeed` reaplicado no
+  respawn); personagens coloridos por posse; Dar/Tirar todos; Ir até/Trazer/Kick/Zerar dados;
+  mundo: recriar/ligar bonecos, atualizar placar, hora do dia, listar online, info do servidor.
+  Comandos por alvo aceitam `target = "*"`.
+- 2026-09-15 — Placar de líderes também na tela de perfil (`NotifyLeaderboard`, ProfileGui 520 px).
+
 ## Em andamento
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.

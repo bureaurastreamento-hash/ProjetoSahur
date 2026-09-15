@@ -11,11 +11,15 @@
 	  3. RequestAdminCommand(command, args) só funciona com sessão aberta.
 	  4. NotifyAdminResult(ok, message) devolve o resultado para o painel.
 
-	Comandos (args.target = nome ou UserId do alvo; ausente = o próprio dev):
-	  SetCoins {amount}, AddCoins {amount}, GrantCharacter {characterId},
-	  RevokeCharacter {characterId}, SetCharacter {characterId}, Heal, Kill,
-	  God {enabled}, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason},
-	  ResetData, SetEnergy {amount}, ListPlayers
+	Comandos por alvo (args.target = nome/UserId; ausente = o próprio dev; "*" = todos):
+	  SetCoins/AddCoins/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount},
+	  InfiniteEnergy/NoCooldown/God {enabled?} (toggle), ResetCooldowns, ClearFlags,
+	  GrantCharacter/RevokeCharacter/SetCharacter {characterId}, GrantAll, RevokeAll,
+	  Heal, Kill, Respawn, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason}, ResetData
+	Globais: GetState {target} (devolve data), ListPlayers, RespawnDummies, ToggleDummies,
+	  RefreshLeaderboard, SetTime {amount}, ServerInfo
+	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
+	  DevDamageMult, DevSpeed (lidos por HealthService/AbilityService/CombatService).
 ]]
 
 local Players = game:GetService("Players")
@@ -31,12 +35,20 @@ local AdminConfig = require(script.Parent.Parent:WaitForChild("AdminConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
+local DummyService = require(script.Parent:WaitForChild("DummyService"))
+local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
+local Lighting = game:GetService("Lighting")
+local Stats = game:GetService("Stats")
+local Workspace = game:GetService("Workspace")
 
 local AdminService = {}
 
 -- Ganchos preenchidos por AbilityService no Start (evita require circular)
 AdminService.ForceCharacter = function(_player: Player, _characterId: string) end
 AdminService.SetEnergy = function(_player: Player, _amount: number) end
+AdminService.ResetCooldowns = function(_player: Player) end
 
 local sessions: { [Player]: boolean } = {}
 local loginLimiter = RateLimiter.new(5, 60)
@@ -72,62 +84,193 @@ end
 -- Comandos
 -- ---------------------------------------------------------------------------
 
-local function findTarget(admin: Player, raw: any): Player?
+local ALL = "*"
+
+--- Alvos: nil/"" = o próprio dev; "*" = todos; nome/UserId = um jogador.
+local function findTargets(admin: Player, raw: any): { Player }
 	if raw == nil or raw == "" then
-		return admin
+		return { admin }
+	end
+	if raw == ALL then
+		return Players:GetPlayers()
 	end
 	if typeof(raw) == "number" then
-		return Players:GetPlayerByUserId(raw)
+		local p = Players:GetPlayerByUserId(raw)
+		return if p then { p } else {}
 	end
 	if typeof(raw) == "string" then
 		local lowered = raw:lower()
 		for _, p in Players:GetPlayers() do
 			if p.Name:lower() == lowered or p.DisplayName:lower() == lowered then
-				return p
+				return { p }
 			end
 		end
 		for _, p in Players:GetPlayers() do
 			if p.Name:lower():sub(1, #lowered) == lowered then
-				return p
+				return { p }
 			end
 		end
 	end
-	return nil
+	return {}
 end
 
-local function number(value: any, default: number?): number?
+local function number(value: any): number?
 	if typeof(value) == "number" then
 		return value
 	end
 	if typeof(value) == "string" then
 		return tonumber(value)
 	end
-	return default
+	return nil
 end
 
-type Handler = (admin: Player, target: Player, args: { [string]: any }) -> (boolean, string)
-local commands: { [string]: Handler } = {}
+local function toggleAttribute(target: Player, attr: string, value: any): boolean
+	local enabled = if typeof(value) == "boolean" then value else target:GetAttribute(attr) ~= true
+	target:SetAttribute(attr, if enabled then true else nil)
+	return enabled
+end
 
-commands.SetCoins = function(_, target, args)
+local function applySpeed(target: Player)
+	local speed = target:GetAttribute("DevSpeed")
+	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid and typeof(speed) == "number" then
+		humanoid.WalkSpeed = speed
+	end
+end
+
+--- Estado do alvo para o painel.
+local function stateOf(target: Player): { [string]: any }
+	local profile = DataService.GetProfile(target)
+	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+	return {
+		name = target.Name,
+		userId = target.UserId,
+		coins = if profile then profile.coins else 0,
+		kills = if profile then profile.stats.kills else 0,
+		characterId = target:GetAttribute("CharacterId"),
+		unlocked = if profile then profile.unlockedCharacters else {},
+		energy = target:GetAttribute("Energy"),
+		health = if humanoid then humanoid.Health else 0,
+		maxHealth = if humanoid then humanoid.MaxHealth else 0,
+		speed = if humanoid then humanoid.WalkSpeed else 0,
+		god = target:GetAttribute("Invulnerable") == true,
+		infiniteEnergy = target:GetAttribute("DevInfiniteEnergy") == true,
+		noCooldown = target:GetAttribute("DevNoCooldown") == true,
+		damageMult = target:GetAttribute("DevDamageMult") or 1,
+		sessionOnly = DataService.IsSessionOnly(target),
+	}
+end
+
+-- Handlers por alvo: (admin, target, args) -> (ok, mensagem)
+type Handler = (admin: Player, target: Player, args: { [string]: any }) -> (boolean, string)
+local perTarget: { [string]: Handler } = {}
+-- Handlers globais (sem alvo): (admin, args) -> (ok, mensagem, data?)
+type GlobalHandler = (admin: Player, args: { [string]: any }) -> (boolean, string, any?)
+local global: { [string]: GlobalHandler } = {}
+
+-- Moedas / energia / vida / velocidade / dano ---------------------------------
+
+perTarget.SetCoins = function(_, target, args)
 	local amount = number(args.amount)
 	if not amount then
-		return false, "amount inválido"
+		return false, "quantidade inválida"
 	end
 	DataService.SetCoins(target, amount)
-	return true, ("%s agora tem %d moedas"):format(target.Name, math.max(0, math.floor(amount)))
+	return true, ("%s: %d moedas"):format(target.Name, math.max(0, math.floor(amount)))
 end
 
-commands.AddCoins = function(_, target, args)
+perTarget.AddCoins = function(_, target, args)
 	local amount = number(args.amount)
 	if not amount then
-		return false, "amount inválido"
+		return false, "quantidade inválida"
 	end
 	DataService.AddCoins(target, amount)
 	local profile = DataService.GetProfile(target)
 	return true, ("%s: %+d moedas (total %d)"):format(target.Name, amount, if profile then profile.coins else 0)
 end
 
-commands.GrantCharacter = function(_, target, args)
+perTarget.SetEnergy = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount then
+		return false, "quantidade inválida"
+	end
+	AdminService.SetEnergy(target, amount)
+	return true, ("%s: energia %d (máx %d; use Energia infinita para não gastar)"):format(target.Name, math.clamp(amount, 0, CharacterDefs.Energy.Max), CharacterDefs.Energy.Max)
+end
+
+perTarget.InfiniteEnergy = function(_, target, args)
+	local on = toggleAttribute(target, "DevInfiniteEnergy", args.enabled)
+	return true, ("%s: energia infinita %s"):format(target.Name, if on then "ON" else "OFF")
+end
+
+perTarget.NoCooldown = function(_, target, args)
+	local on = toggleAttribute(target, "DevNoCooldown", args.enabled)
+	if on then
+		AdminService.ResetCooldowns(target)
+	end
+	return true, ("%s: sem cooldown %s"):format(target.Name, if on then "ON" else "OFF")
+end
+
+perTarget.ResetCooldowns = function(_, target)
+	AdminService.ResetCooldowns(target)
+	return true, ("%s: cooldowns zerados"):format(target.Name)
+end
+
+perTarget.God = function(_, target, args)
+	local on = toggleAttribute(target, "Invulnerable", args.enabled)
+	return true, ("%s: modo deus %s"):format(target.Name, if on then "ON" else "OFF")
+end
+
+perTarget.SetHealth = function(_, target, args)
+	local amount = number(args.amount)
+	local character = target.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not amount or not humanoid or not character then
+		return false, "valor inválido ou sem personagem"
+	end
+	if amount > humanoid.MaxHealth then
+		humanoid.MaxHealth = amount
+	end
+	if amount <= 0 then
+		HealthService.Kill(character)
+	elseif amount > humanoid.Health then
+		HealthService.Heal(character, amount - humanoid.Health)
+	else
+		humanoid.Health = amount
+	end
+	return true, ("%s: vida %d/%d"):format(target.Name, amount, humanoid.MaxHealth)
+end
+
+perTarget.SetSpeed = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount or amount < 0 or amount > 500 then
+		return false, "velocidade inválida (0–500)"
+	end
+	if amount == CombatConfig.WalkSpeed then
+		target:SetAttribute("DevSpeed", nil)
+	else
+		target:SetAttribute("DevSpeed", amount)
+	end
+	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = amount
+	end
+	AntiExploitService.Grace(target, 2)
+	return true, ("%s: WalkSpeed %d"):format(target.Name, amount)
+end
+
+perTarget.SetDamageMult = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount or amount < 0 or amount > 1000 then
+		return false, "multiplicador inválido (0–1000)"
+	end
+	target:SetAttribute("DevDamageMult", if amount == 1 then nil else amount)
+	return true, ("%s: dano x%s"):format(target.Name, tostring(amount))
+end
+
+-- Personagens ------------------------------------------------------------------
+
+perTarget.GrantCharacter = function(_, target, args)
 	local id = args.characterId
 	if typeof(id) ~= "string" or not CharacterDefs.Get(id) then
 		return false, "personagem desconhecido"
@@ -138,7 +281,7 @@ commands.GrantCharacter = function(_, target, args)
 	return true, ("%s recebeu %s"):format(target.Name, id)
 end
 
-commands.RevokeCharacter = function(_, target, args)
+perTarget.RevokeCharacter = function(_, target, args)
 	local id = args.characterId
 	if typeof(id) ~= "string" or not CharacterDefs.Get(id) then
 		return false, "personagem desconhecido"
@@ -152,7 +295,7 @@ commands.RevokeCharacter = function(_, target, args)
 	return true, ("%s perdeu %s"):format(target.Name, id)
 end
 
-commands.SetCharacter = function(_, target, args)
+perTarget.SetCharacter = function(_, target, args)
 	local id = args.characterId
 	if typeof(id) ~= "string" or not CharacterDefs.Get(id) then
 		return false, "personagem desconhecido"
@@ -164,20 +307,40 @@ commands.SetCharacter = function(_, target, args)
 	return true, ("%s agora é %s"):format(target.Name, id)
 end
 
-commands.Heal = function(_, target)
-	local character = target.Character
-	if not character then
-		return false, "sem personagem"
+perTarget.GrantAll = function(_, target)
+	local n = 0
+	for _, id in CharacterDefs.Order do
+		if DataService.GrantCharacter(target, id) then
+			n += 1
+		end
 	end
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-	if not humanoid then
-		return false, "sem humanoid"
+	return true, ("%s: +%d personagens"):format(target.Name, n)
+end
+
+perTarget.RevokeAll = function(_, target)
+	local n = 0
+	for _, id in CharacterDefs.Order do
+		if DataService.RevokeCharacter(target, id) then
+			n += 1
+		end
+	end
+	AdminService.ForceCharacter(target, CharacterDefs.DefaultCharacter)
+	return true, ("%s: -%d personagens"):format(target.Name, n)
+end
+
+-- Ações --------------------------------------------------------------------------
+
+perTarget.Heal = function(_, target)
+	local character = target.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not character or not humanoid then
+		return false, "sem personagem"
 	end
 	HealthService.Heal(character, humanoid.MaxHealth)
 	return true, ("%s curado"):format(target.Name)
 end
 
-commands.Kill = function(_, target)
+perTarget.Kill = function(_, target)
 	local character = target.Character
 	if not character then
 		return false, "sem personagem"
@@ -186,13 +349,10 @@ commands.Kill = function(_, target)
 	return true, ("%s eliminado"):format(target.Name)
 end
 
-commands.God = function(_, target, args)
-	local enabled = args.enabled
-	if typeof(enabled) ~= "boolean" then
-		enabled = target:GetAttribute("Invulnerable") ~= true
-	end
-	target:SetAttribute("Invulnerable", if enabled then true else nil)
-	return true, ("%s: modo deus %s"):format(target.Name, if enabled then "ON" else "OFF")
+perTarget.Respawn = function(_, target)
+	AntiExploitService.Grace(target, 3)
+	target:LoadCharacter()
+	return true, ("%s respawnado"):format(target.Name)
 end
 
 local function moveTo(who: Player, destination: Player): (boolean, string)
@@ -206,44 +366,99 @@ local function moveTo(who: Player, destination: Player): (boolean, string)
 	return true, ("%s -> %s"):format(who.Name, destination.Name)
 end
 
-commands.Teleport = function(admin, target)
+perTarget.Teleport = function(admin, target)
 	return moveTo(admin, target)
 end
 
-commands.Bring = function(admin, target)
+perTarget.Bring = function(admin, target)
+	if target == admin then
+		return false, "você mesmo"
+	end
 	return moveTo(target, admin)
 end
 
-commands.Kick = function(admin, target, args)
+perTarget.Kick = function(admin, target, args)
 	if target == admin then
 		return false, "não dá pra se kickar"
 	end
-	local reason = if typeof(args.reason) == "string" then args.reason else "Removido por um desenvolvedor"
+	local reason = if typeof(args.reason) == "string" and args.reason ~= "" then args.reason else "Removido por um desenvolvedor"
 	target:Kick(reason)
 	return true, ("%s kickado"):format(target.Name)
 end
 
-commands.ResetData = function(_, target)
+perTarget.ResetData = function(_, target)
 	DataService.ResetProfile(target)
 	AdminService.ForceCharacter(target, CharacterDefs.DefaultCharacter)
 	return true, ("dados de %s zerados (salva no próximo autosave)"):format(target.Name)
 end
 
-commands.SetEnergy = function(_, target, args)
-	local amount = number(args.amount)
-	if not amount then
-		return false, "amount inválido"
+perTarget.ClearFlags = function(_, target)
+	for _, attr in { "Invulnerable", "DevInfiniteEnergy", "DevNoCooldown", "DevDamageMult", "DevSpeed" } do
+		target:SetAttribute(attr, nil)
 	end
-	AdminService.SetEnergy(target, amount)
-	return true, ("%s: energia %d"):format(target.Name, amount)
+	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = CombatConfig.WalkSpeed
+	end
+	return true, ("%s: flags de dev limpas"):format(target.Name)
 end
 
-commands.ListPlayers = function()
+-- Globais / mundo -------------------------------------------------------------
+
+global.GetState = function(admin, args)
+	local targets = findTargets(admin, args.target)
+	local target = targets[1]
+	if not target then
+		return false, "alvo não encontrado"
+	end
+	return true, "", stateOf(target)
+end
+
+global.ListPlayers = function()
 	local names = {}
 	for _, p in Players:GetPlayers() do
 		table.insert(names, ("%s (%d)"):format(p.Name, p.UserId))
 	end
-	return true, table.concat(names, ", ")
+	return true, "online: " .. table.concat(names, ", ")
+end
+
+global.RespawnDummies = function()
+	local n = DummyService.Respawn()
+	return true, ("%d boneco(s) recriados"):format(n)
+end
+
+global.ToggleDummies = function()
+	local n = DummyService.SetEnabled(not DummyService.Enabled)
+	return true, ("bonecos %s (%d)"):format(if DummyService.Enabled then "ON" else "OFF", n)
+end
+
+global.RefreshLeaderboard = function()
+	LeaderboardService.Refresh()
+	return true, "placar publicado e atualizado"
+end
+
+global.SetTime = function(_, args)
+	local hour = number(args.amount)
+	if not hour then
+		return false, "hora inválida (0–24)"
+	end
+	Lighting.ClockTime = hour % 24
+	return true, ("ClockTime = %.1f"):format(Lighting.ClockTime)
+end
+
+global.ServerInfo = function()
+	local stats = AntiExploitService.GetStats()
+	local flagged = {}
+	for k, v in stats do
+		table.insert(flagged, ("%s=%d"):format(k, v))
+	end
+	return true, ("jogadores %d · uptime %ds · memória %.0f MB · FreeRoam %s · anti-exploit {%s}"):format(
+		#Players:GetPlayers(),
+		math.floor(Workspace.DistributedGameTime),
+		Stats:GetTotalMemoryUsageMb(),
+		tostring(MatchConfig.FreeRoam),
+		table.concat(flagged, " ")
+	)
 end
 
 -- ---------------------------------------------------------------------------
@@ -270,31 +485,52 @@ local function onCommand(player: Player, command: any, args: any)
 	if not sessions[player] or not isDeveloper(player) then
 		return
 	end
-	if not commandLimiter:Allow(player) then
+	if not commandLimiter:Allow(player) or typeof(command) ~= "string" then
 		return
 	end
-	if typeof(command) ~= "string" then
+	local safeArgs: { [string]: any } = if typeof(args) == "table" then args else {}
+
+	local globalHandler = global[command]
+	if globalHandler then
+		local ok, result, message, data = pcall(globalHandler, player, safeArgs)
+		if not ok then
+			warn(("[AdminService] erro em %s: %s"):format(command, tostring(result)))
+			notifyResult:FireClient(player, false, "erro: " .. tostring(result))
+			return
+		end
+		if command ~= "GetState" then
+			warn(("[AdminService] %s -> %s: %s"):format(player.Name, command, tostring(message)))
+		end
+		notifyResult:FireClient(player, result == true, tostring(message), data)
 		return
 	end
-	local handler = commands[command]
+
+	local handler = perTarget[command]
 	if not handler then
 		notifyResult:FireClient(player, false, "comando desconhecido: " .. command)
 		return
 	end
-	local safeArgs: { [string]: any } = if typeof(args) == "table" then args else {}
-	local target = findTarget(player, safeArgs.target)
-	if not target then
+	local targets = findTargets(player, safeArgs.target)
+	if #targets == 0 then
 		notifyResult:FireClient(player, false, "jogador não encontrado: " .. tostring(safeArgs.target))
 		return
 	end
-	local ok, result, message = pcall(handler, player, target, safeArgs)
-	if not ok then
-		warn(("[AdminService] erro em %s: %s"):format(command, tostring(result)))
-		notifyResult:FireClient(player, false, "erro: " .. tostring(result))
-		return
+	local okCount, messages = 0, {}
+	for _, target in targets do
+		local ok, result, message = pcall(handler, player, target, safeArgs)
+		if not ok then
+			warn(("[AdminService] erro em %s(%s): %s"):format(command, target.Name, tostring(result)))
+			table.insert(messages, "erro: " .. tostring(result))
+		else
+			if result == true then
+				okCount += 1
+			end
+			table.insert(messages, tostring(message))
+		end
 	end
-	warn(("[AdminService] %s -> %s(%s): %s"):format(player.Name, command, target.Name, tostring(message)))
-	notifyResult:FireClient(player, result == true, tostring(message))
+	local summary = table.concat(messages, " | ")
+	warn(("[AdminService] %s -> %s(%s): %s"):format(player.Name, command, tostring(safeArgs.target or "eu"), summary))
+	notifyResult:FireClient(player, okCount > 0, summary, stateOf(targets[1]))
 end
 
 function AdminService.Init()
@@ -309,6 +545,9 @@ function AdminService.Start()
 		if isDeveloper(player) then
 			player:SetAttribute("IsDeveloper", true)
 		end
+		player.CharacterAdded:Connect(function()
+			task.defer(applySpeed, player) -- depois do HealthService setar o WalkSpeed padrão
+		end)
 	end
 	Players.PlayerAdded:Connect(onPlayer)
 	for _, p in Players:GetPlayers() do

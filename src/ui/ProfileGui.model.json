@@ -18,7 +18,7 @@
             ],
             [
               0,
-              320
+              520
             ]
           ]
         },
@@ -318,8 +318,8 @@
                   10
                 ],
                 [
-                  1,
-                  -60
+                  0,
+                  250
                 ]
               ]
             },
@@ -336,6 +336,93 @@
             },
             "TextXAlignment": "Left",
             "TextWrapped": true,
+            "TextYAlignment": "Top"
+          }
+        },
+        {
+          "name": "TopTitle",
+          "className": "TextLabel",
+          "properties": {
+            "Name": "TopTitle",
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -20
+                ],
+                [
+                  0,
+                  22
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  300
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "\ud83c\udfc6 Top kills (global)",
+            "TextSize": 15,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                1,
+                0.82,
+                0.35
+              ]
+            },
+            "TextXAlignment": "Left"
+          }
+        },
+        {
+          "name": "Top",
+          "className": "TextLabel",
+          "properties": {
+            "Name": "Top",
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -20
+                ],
+                [
+                  0,
+                  190
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  324
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "carregando...",
+            "TextSize": 13,
+            "Font": "Code",
+            "TextColor3": {
+              "Color3": [
+                0.85,
+                0.85,
+                0.85
+              ]
+            },
+            "TextXAlignment": "Left",
             "TextYAlignment": "Top"
           }
         }

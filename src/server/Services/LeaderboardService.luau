@@ -16,6 +16,7 @@ local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Log = require(Modules:WaitForChild("Log"))
+local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 
 local LeaderboardService = {}
@@ -30,6 +31,8 @@ local store: OrderedDataStore? = nil
 local nameCache: { [number]: string } = {}
 local rows: { TextLabel } = {}
 local lastPublished: { [Player]: number } = {}
+local lastRows: { { name: string, kills: number } } = {}
+local notifyLeaderboard: RemoteEvent
 
 local function getStore(): OrderedDataStore?
 	if store then
@@ -145,7 +148,7 @@ end
 
 local function refresh()
 	local s = getStore()
-	if not s or #rows == 0 then
+	if not s then
 		return
 	end
 	local ok, pages = pcall(s.GetSortedAsync, s, false, TOP_N)
@@ -154,23 +157,47 @@ local function refresh()
 		return
 	end
 	local entries = (pages :: DataStorePages):GetCurrentPage()
+	lastRows = {}
 	for i = 1, TOP_N do
 		local entry = entries[i]
 		local row = rows[i]
 		if entry then
 			local userId = tonumber(entry.key) or 0
-			row.Text = ("%2d.  %s  —  %d"):format(i, nameFor(userId), entry.value)
-		else
+			local name = nameFor(userId)
+			table.insert(lastRows, { name = name, kills = entry.value })
+			if row then
+				row.Text = ("%2d.  %s  —  %d"):format(i, name, entry.value)
+			end
+		elseif row then
 			row.Text = ("%2d.  —"):format(i)
 		end
 	end
+	notifyLeaderboard:FireAllClients(lastRows)
+end
+
+--- [Admin] Publica todo mundo e redesenha.
+function LeaderboardService.Refresh()
+	for _, player in Players:GetPlayers() do
+		lastPublished[player] = nil
+		publish(player)
+	end
+	refresh()
 end
 
 -- ---------------------------------------------------------------------------
 -- Ciclo de vida
 -- ---------------------------------------------------------------------------
 
+function LeaderboardService.Init()
+	notifyLeaderboard = Remotes.GetEvent(Remotes.Events.NotifyLeaderboard)
+end
+
 function LeaderboardService.Start()
+	Players.PlayerAdded:Connect(function(player)
+		if #lastRows > 0 then
+			notifyLeaderboard:FireClient(player, lastRows)
+		end
+	end)
 	if RunService:IsStudio() then
 		Log.debug("[LeaderboardService] Studio: DataStore só funciona com 'Enable Studio Access to API Services'")
 	end

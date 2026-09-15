@@ -170,6 +170,10 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			damage *= AbilityService.GetIncomingMultiplier(victimPlayer)
 		end
 	end
+	local devMult = attacker:GetAttribute("DevDamageMult")
+	if typeof(devMult) == "number" then
+		damage *= devMult -- menu de desenvolvedor
+	end
 	local finalDamage = damage
 
 	if victimState and victimState.blocking then

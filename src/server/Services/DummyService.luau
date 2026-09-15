@@ -115,6 +115,27 @@ local function spawnAt(pad: BasePart, index: number)
 	end
 end
 
+--- [Admin] Remove todos e recria (se Enabled).
+function DummyService.Respawn(): number
+	if folder then
+		folder:ClearAllChildren()
+	end
+	if not DummyService.Enabled then
+		return 0
+	end
+	local pads = findPads()
+	for i, pad in pads do
+		spawnAt(pad, i)
+	end
+	return #pads
+end
+
+--- [Admin] Liga/desliga.
+function DummyService.SetEnabled(enabled: boolean): number
+	DummyService.Enabled = enabled
+	return DummyService.Respawn()
+end
+
 function DummyService.Start()
 	if not DummyService.Enabled then
 		return

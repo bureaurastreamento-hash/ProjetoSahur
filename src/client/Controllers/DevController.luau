@@ -1,11 +1,13 @@
 --!strict
 --[[
 	DevController (cliente)
-	Menu de desenvolvedor (StarterGui.DevGui). Só aparece para Players com atributo
-	IsDeveloper (definido por AdminService a partir dos nicks em AdminConfig).
-	Nenhuma decisão aqui: todo botão vira RequestAdminCommand e o servidor valida.
+	Menu de desenvolvedor (StarterGui.DevGui, gerado por tools/gerar_devgui.py).
+	Só aparece para Players com atributo IsDeveloper (AdminService, nicks em AdminConfig).
+	Nenhuma decisão aqui: cada botão vira RequestAdminCommand(nomeDoBotão, args) e o
+	servidor valida; o resultado volta por NotifyAdminResult(ok, msg, state) e o painel
+	redesenha os toggles com o estado real do alvo.
 
-	Abrir: ícone "Dev" no topbar (TopbarPlus) ou a tecla TOGGLE_KEY (F8).
+	Abrir: ícone "Dev" no topbar (TopbarPlus) ou F8.
 ]]
 
 local Players = game:GetService("Players")
@@ -21,7 +23,29 @@ local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Pack
 local DevController = {}
 
 local TOGGLE_KEY = Enum.KeyCode.F8
-local MAX_LOG_LINES = 6
+local MAX_LOG_LINES = 5
+local ALL = "*"
+
+local COLOR_OFF = Color3.fromRGB(33, 33, 43)
+local COLOR_ON = Color3.fromRGB(60, 140, 90)
+local COLOR_SELECTED = Color3.fromRGB(90, 165, 255)
+
+-- Botão -> comando com o valor de qual TextBox (nil = sem args)
+local NUMBER_COMMANDS: { [string]: string } = {
+	SetCoins = "Coins",
+	AddCoins = "Coins",
+	SetEnergy = "Energy",
+	SetHealth = "Health",
+	SetSpeed = "Speed",
+	SetDamageMult = "DamageMult",
+	SetTime = "Time",
+}
+local SIMPLE_COMMANDS = {
+	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill",
+	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
+	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState",
+}
+local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god" }
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
@@ -31,11 +55,11 @@ local targetsList: ScrollingFrame
 local targetTemplate: TextButton
 local charactersList: Frame
 local charTemplate: TextButton
-local amountBox: TextBox
+local stateLabel: TextLabel
 local logLabel: TextLabel
 
 local loggedIn = false
-local selectedTarget: string? = nil -- nome do jogador; nil = eu
+local selectedTarget: string? = nil -- nil = eu; "*" = todos; senão nome
 local logLines: { string } = {}
 local requestCommand: RemoteEvent
 local devIcon: any = nil
@@ -47,6 +71,9 @@ local function get(parent: Instance, name: string): Instance
 end
 
 local function appendLog(ok: boolean, message: string)
+	if message == "" then
+		return
+	end
 	table.insert(logLines, 1, (if ok then "✔ " else "✖ ") .. message)
 	while #logLines > MAX_LOG_LINES do
 		table.remove(logLines)
@@ -61,8 +88,42 @@ local function send(command: string, args: { [string]: any }?)
 	requestCommand:FireServer(command, payload)
 end
 
-local function amount(): number?
-	return tonumber(amountBox.Text)
+local function requestState()
+	if selectedTarget ~= ALL then
+		send("GetState")
+	else
+		stateLabel.Text = "alvo: TODOS os jogadores"
+	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Estado do alvo
+-- ---------------------------------------------------------------------------
+
+local function renderState(state: { [string]: any })
+	local unlocked = if typeof(state.unlocked) == "table" then table.concat(state.unlocked, ",") else "?"
+	stateLabel.Text = ("%s (%d)%s · %s · moedas %d · kills %d · vida %d/%d · energia %s · speed %d · dano x%s\npersonagens: %s"):format(
+		tostring(state.name), tonumber(state.userId) or 0, if state.sessionOnly then " [SEM SAVE]" else "",
+		tostring(state.characterId), tonumber(state.coins) or 0, tonumber(state.kills) or 0,
+		math.floor(tonumber(state.health) or 0), math.floor(tonumber(state.maxHealth) or 0),
+		tostring(state.energy), math.floor(tonumber(state.speed) or 0), tostring(state.damageMult),
+		unlocked
+	)
+	for buttonName, key in TOGGLE_BUTTONS do
+		local b = panel:FindFirstChild(buttonName) :: TextButton?
+		if b then
+			b.BackgroundColor3 = if state[key] == true then COLOR_ON else COLOR_OFF
+		end
+	end
+	for _, id in CharacterDefs.Order do
+		local b = charactersList:FindFirstChild(id) :: TextButton?
+		if b then
+			local owned = typeof(state.unlocked) == "table" and table.find(state.unlocked, id) ~= nil
+			local def = CharacterDefs.Get(id)
+			owned = owned or (def ~= nil and def.UnlockCost <= 0)
+			b.BackgroundColor3 = if state.characterId == id then COLOR_SELECTED elseif owned then COLOR_ON else COLOR_OFF
+		end
+	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -75,24 +136,30 @@ local function refreshTargets()
 			child:Destroy()
 		end
 	end
+	local function add(text: string, value: string?, order: number)
+		local b = targetTemplate:Clone()
+		b.Name = value or "me"
+		b.Text = text
+		b.LayoutOrder = order
+		b.Visible = true
+		b.BackgroundColor3 = if selectedTarget == value then COLOR_SELECTED else COLOR_OFF
+		b.MouseButton1Click:Connect(function()
+			selectedTarget = value
+			refreshTargets()
+			requestState()
+		end)
+		b.Parent = targetsList
+	end
+	add("Eu (" .. localPlayer.Name .. ")", nil, 0)
+	add("TODOS", ALL, 1)
 	local list = Players:GetPlayers()
 	table.sort(list, function(a, b)
 		return a.Name < b.Name
 	end)
 	for i, p in list do
-		local b = targetTemplate:Clone()
-		local isMe = p == localPlayer
-		local isSelected = (selectedTarget == nil and isMe) or selectedTarget == p.Name
-		b.Name = p.Name
-		b.Text = if isMe then "Eu (" .. p.Name .. ")" else p.Name
-		b.LayoutOrder = if isMe then 0 else i
-		b.Visible = true
-		b.BackgroundColor3 = if isSelected then Color3.fromRGB(90, 165, 255) else Color3.fromRGB(33, 33, 43)
-		b.MouseButton1Click:Connect(function()
-			selectedTarget = if isMe then nil else p.Name
-			refreshTargets()
-		end)
-		b.Parent = targetsList
+		if p ~= localPlayer then
+			add(p.Name, p.Name, i + 1)
+		end
 	end
 end
 
@@ -120,7 +187,7 @@ local function buildCharacters()
 end
 
 -- ---------------------------------------------------------------------------
--- Abrir / login
+-- Abrir
 -- ---------------------------------------------------------------------------
 
 local function setOpen(open: boolean)
@@ -142,6 +209,7 @@ local function setOpen(open: boolean)
 	end
 	panel.Visible = true
 	refreshTargets()
+	requestState()
 end
 
 -- ---------------------------------------------------------------------------
@@ -150,7 +218,6 @@ end
 
 function DevController.Init()
 	requestCommand = Remotes.GetEvent(Remotes.Events.RequestAdminCommand)
-	-- PlayerGui recebe as telas do StarterGui só no spawn; espera em vez de falhar
 	local gui = playerGui:WaitForChild("DevGui", 15)
 	assert(gui, "[DevController] StarterGui.DevGui não chegou (Rojo conectado?)")
 	panel = get(gui, "Panel") :: Frame
@@ -158,7 +225,7 @@ function DevController.Init()
 	targetTemplate = get(targetsList, "Template") :: TextButton
 	charactersList = get(panel, "Characters") :: Frame
 	charTemplate = get(charactersList, "Template") :: TextButton
-	amountBox = get(panel, "Amount") :: TextBox
+	stateLabel = get(panel, "State") :: TextLabel
 	logLabel = get(panel, "Log") :: TextLabel
 end
 
@@ -191,26 +258,33 @@ function DevController.Start()
 	;(get(panel, "Close") :: TextButton).MouseButton1Click:Connect(function()
 		setOpen(false)
 	end)
-
-	;(get(panel, "SetCoins") :: TextButton).MouseButton1Click:Connect(function()
-		send("SetCoins", { amount = amount() })
-	end)
-	;(get(panel, "AddCoins") :: TextButton).MouseButton1Click:Connect(function()
-		send("AddCoins", { amount = amount() })
-	end)
-	;(get(panel, "SetEnergy") :: TextButton).MouseButton1Click:Connect(function()
-		send("SetEnergy", { amount = amount() })
-	end)
-	for _, command in { "Heal", "Kill", "God", "Teleport", "Bring", "Kick", "ResetData", "ListPlayers" } do
+	for command, boxName in NUMBER_COMMANDS do
+		local box = get(panel, boxName) :: TextBox
+		;(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
+			send(command, { amount = tonumber(box.Text) })
+		end)
+	end
+	for _, command in SIMPLE_COMMANDS do
 		(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
 			send(command)
 		end)
 	end
 	buildCharacters()
 
-	Remotes.GetEvent(Remotes.Events.NotifyAdminResult).OnClientEvent:Connect(function(ok: boolean, message: string)
+	Remotes.GetEvent(Remotes.Events.NotifyAdminResult).OnClientEvent:Connect(function(ok: boolean, message: string, state: any)
 		appendLog(ok == true, tostring(message))
+		if typeof(state) == "table" and selectedTarget ~= ALL then
+			renderState(state)
+		end
 	end)
+	-- Estado muda por fora (kill, moedas ganhas...): reflete nos toggles do alvo "eu"
+	for _, attr in { "Energy", "Coins", "CharacterId", "Invulnerable", "DevInfiniteEnergy", "DevNoCooldown" } do
+		localPlayer:GetAttributeChangedSignal(attr):Connect(function()
+			if panel.Visible and selectedTarget == nil then
+				requestState()
+			end
+		end)
+	end
 	Players.PlayerAdded:Connect(function()
 		if panel.Visible then
 			refreshTargets()

@@ -30,6 +30,7 @@ local statsTemplate: TextLabel
 local profileCoins: TextLabel
 local profileWarning: TextLabel
 local profileCharacters: TextLabel
+local profileTop: TextLabel
 local charactersIcon: any
 local notifiedAffordable = false
 
@@ -98,6 +99,7 @@ function TopbarController.Init()
 	profileCoins = get(profilePanel, "Coins") :: TextLabel
 	profileWarning = get(profilePanel, "Warning") :: TextLabel
 	profileCharacters = get(profilePanel, "Characters") :: TextLabel
+	profileTop = get(profilePanel, "Top") :: TextLabel
 	statsList = get(profilePanel, "Stats") :: Frame
 	statsTemplate = get(statsList, "Template") :: TextLabel
 end
@@ -147,6 +149,17 @@ function TopbarController.Start()
 		if typeof(profile) == "table" then
 			renderProfile(profile, sessionOnly == true)
 		end
+	end)
+
+	Remotes.GetEvent(Remotes.Events.NotifyLeaderboard).OnClientEvent:Connect(function(rows: any)
+		if typeof(rows) ~= "table" then
+			return
+		end
+		local lines = {}
+		for i, row in ipairs(rows) do
+			table.insert(lines, ("%2d. %-16s %d"):format(i, tostring(row.name), tonumber(row.kills) or 0))
+		end
+		profileTop.Text = if #lines > 0 then table.concat(lines, "\n") else "ninguém ainda"
 	end)
 
 	Log.debug("[TopbarController] pronto (TopbarPlus)")
