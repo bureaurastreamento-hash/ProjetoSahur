@@ -200,6 +200,19 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
+## Retomar aqui (última sessão: 2026-09-15)
+Estado: tudo commitado localmente até `fa49e7a` (push bloqueado na sessão do Claude; o dono roda
+`git push`). Fluxo de teste: Team Test no Studio, dono = `guilacartinhasgames` (dev; menu Dev F8).
+Pendências imediatas, em ordem:
+1. Rodar **Testar sons dos packs** no menu Dev e me avisar → leio `[SoundProbe]` no log e preencho
+   `Sounds.model.json` com os que tocam.
+2. Publicar os KeyframeSequences de `ServerStorage.Import.Animacoes` (Save to Roblox) e me passar
+   os ids → `Animations.model.json`. Prioridade: `Melee1`, `Charge Punch`, `run`, `teleport`,
+   `finisher`, `beatdown`.
+3. Passar pelo **Preview de VFX (F7)** e apontar trocas → `Assets.VFXPack`.
+4. Medir FPS no MainMap; se pesado, cortar `Corners`/`Trees` em `tools/preparar_mapa.luau`.
+5. Conferir rig R6 em Game Settings (HealthService avisa no boot se for R15).
+
 ## Em andamento
 - Ver FPS com o MainMap (2470 parts). Se ainda pesar: reduzir `Corners` (525 parts) / `Trees`.
 - Passar pelo Preview de VFX e me dizer trocas ("Meteoro = Sukuna/X").
@@ -238,5 +251,9 @@ Memória entre sessões. Atualizar depois de cada mudança.
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.
-8. **Lançamento**: `AllowLobbyCombat = false`, `Log.Verbose` automático, publicar privado,
+8. **Altar para invocar o boss**: altar no mapa (usar meshes de `ServerStorage.Import` ou
+   `Arena_Gerada`), interação (ProximityPrompt) que junta jogadores/moedas e invoca um boss NPC
+   (rig R6 como os dummies, tag `Combatant`, `Hitbox` já aceita NPC) com IA simples (persegue,
+   golpes de área, fases por vida), recompensa em moedas para quem participou; placar próprio.
+9. **Lançamento**: `AllowLobbyCombat = false`, `Log.Verbose` automático, publicar privado,
    rodar `CHECKLIST_PUBLICACAO.md` completo.
