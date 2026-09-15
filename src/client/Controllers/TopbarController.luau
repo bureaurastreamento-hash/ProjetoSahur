@@ -4,7 +4,7 @@
 	Ícones do topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon):
 	  Loja (B)        -> ShopGui.Panel (conteúdo no ShopController)
 	  Personagens (V) -> CharacterSelect.Panel (cartões; conteúdo no HUDController)
-	  Perfil (P)      -> ProfileGui.Panel (stats/moedas/nível/missões vindos de NotifyProfile)
+	  Perfil (P)      -> ProfileGui.Panel (stats/pontos/nível/missões vindos de NotifyProfile)
 	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
 	  Controles       -> HelpGui.Panel
 	  Duelo (J)       -> DuelGui.Panel (lógica no DuelController)
@@ -93,7 +93,7 @@ local function renderProgression(profile: any)
 		row.Text = (if done then "✓ " else "") .. def.text:format(def.goal)
 		row.TextColor3 = if done then Color3.fromRGB(150, 230, 170) else Color3.fromRGB(255, 255, 255)
 		local progress = row:FindFirstChild("Progress") :: TextLabel
-		progress.Text = ("%d/%d · +%d moedas · +%d XP"):format(tonumber(m.progress) or 0, def.goal, def.coins, def.xp)
+		progress.Text = ("%d/%d · +%d pontos · +%d XP"):format(tonumber(m.progress) or 0, def.goal, def.coins, def.xp)
 		local fill = (row:FindFirstChild("Bar") :: Frame):FindFirstChild("Fill") :: Frame
 		fill.Size = UDim2.fromScale(math.clamp((tonumber(m.progress) or 0) / def.goal, 0, 1), 1)
 		row.Parent = missionsList
@@ -114,7 +114,7 @@ local function reportForeignTopbar()
 end
 
 local function renderProfile(profile: any, sessionOnly: boolean)
-	profileCoins.Text = ("%d moedas"):format(profile.coins or 0)
+	profileCoins.Text = ("%d pontos"):format(profile.coins or 0)
 	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
 	for _, child in statsList:GetChildren() do
@@ -140,7 +140,7 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 	local owned = {}
 	for _, id in CharacterDefs.Order do
 		local def = CharacterDefs.Get(id)
-		if def and (def.UnlockCost <= 0 or table.find(profile.unlockedCharacters or {}, id)) then
+		if def and CharacterDefs.AccessOf(def) ~= "admin" and (def.UnlockCost <= 0 or table.find(profile.unlockedCharacters or {}, id)) then
 			table.insert(owned, def.DisplayName)
 		end
 	end
@@ -188,7 +188,7 @@ function TopbarController.Start()
 
 	shopIcon = Icon.new()
 		:setLabel("Loja")
-		:setCaption("Moedas e passes")
+		:setCaption("Pontos e passes")
 		:setCaptionHint(Enum.KeyCode.L)
 		:bindToggleKey(Enum.KeyCode.L)
 		:bindToggleItem(shopPanel)
@@ -215,7 +215,7 @@ function TopbarController.Start()
 
 	Icon.new()
 		:setLabel("Perfil")
-		:setCaption("Estatísticas e moedas")
+		:setCaption("Estatísticas e pontos")
 		:setCaptionHint(Enum.KeyCode.P)
 		:bindToggleKey(Enum.KeyCode.P)
 		:bindToggleItem(profilePanel)

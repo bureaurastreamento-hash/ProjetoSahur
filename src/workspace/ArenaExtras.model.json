@@ -183,6 +183,3142 @@
      }
     },
     {
+     "name": "BossPathSlab0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab0",
+      "Anchored": true,
+      "Position": [
+       0.475,
+       0.2,
+       40
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -4.415720478737846,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab1",
+      "Anchored": true,
+      "Position": [
+       -0.327,
+       0.2,
+       48
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       1.837301109336349,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab2",
+      "Anchored": true,
+      "Position": [
+       -0.573,
+       0.2,
+       56
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -5.968614080507651,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab3",
+      "Anchored": true,
+      "Position": [
+       -0.174,
+       0.2,
+       64
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -4.7236481735328955,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab4",
+      "Anchored": true,
+      "Position": [
+       -0.171,
+       0.2,
+       72
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -3.3088924515332176,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab5",
+      "Anchored": true,
+      "Position": [
+       0.1,
+       0.2,
+       80
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       1.0690992892140176,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab6",
+      "Anchored": true,
+      "Position": [
+       -0.355,
+       0.2,
+       88
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       1.4871547068779192,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab7",
+      "Anchored": true,
+      "Position": [
+       -0.03,
+       0.2,
+       96
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -4.383015631367682,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab8",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab8",
+      "Anchored": true,
+      "Position": [
+       0.524,
+       0.2,
+       104
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -3.0769408010715895,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab9",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab9",
+      "Anchored": true,
+      "Position": [
+       -0.421,
+       0.2,
+       112
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -4.850343966752114,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab10",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab10",
+      "Anchored": true,
+      "Position": [
+       0.166,
+       0.2,
+       120
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       4.455427199495361,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab11",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab11",
+      "Anchored": true,
+      "Position": [
+       0.339,
+       0.2,
+       128
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -1.1765653063442834,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab12",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab12",
+      "Anchored": true,
+      "Position": [
+       -0.283,
+       0.2,
+       136
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -5.862047548043976,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossPathSlab13",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPathSlab13",
+      "Anchored": true,
+      "Position": [
+       0.174,
+       0.2,
+       144
+      ],
+      "Size": [
+       6,
+       0.4,
+       6.5
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0.7479741179355877,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossFloor",
+     "className": "Part",
+     "properties": {
+      "Name": "BossFloor",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.0,
+       195
+      ],
+      "Size": [
+       1.2,
+       88,
+       88
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossFloorRing",
+     "className": "Part",
+     "properties": {
+      "Name": "BossFloorRing",
+      "Anchored": true,
+      "Position": [
+       0,
+       -0.2,
+       195
+      ],
+      "Size": [
+       0.8,
+       94,
+       94
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossFloorInner",
+     "className": "Part",
+     "properties": {
+      "Name": "BossFloorInner",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.75,
+       195
+      ],
+      "Size": [
+       0.3,
+       28,
+       28
+      ],
+      "Color": [
+       0.09,
+       0.09,
+       0.11
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossRune0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune0",
+      "Anchored": true,
+      "Position": [
+       22.0,
+       0.7,
+       195.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -0.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune1",
+      "Anchored": true,
+      "Position": [
+       19.053,
+       0.7,
+       206.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -29.999999999999996,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune2",
+      "Anchored": true,
+      "Position": [
+       11.0,
+       0.7,
+       214.053
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -59.99999999999999,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune3",
+      "Anchored": true,
+      "Position": [
+       0.0,
+       0.7,
+       217.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -90.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune4",
+      "Anchored": true,
+      "Position": [
+       -11.0,
+       0.7,
+       214.053
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -119.99999999999999,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune5",
+      "Anchored": true,
+      "Position": [
+       -19.053,
+       0.7,
+       206.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -150.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune6",
+      "Anchored": true,
+      "Position": [
+       -22.0,
+       0.7,
+       195.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune7",
+      "Anchored": true,
+      "Position": [
+       -19.053,
+       0.7,
+       184.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -210.00000000000003,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune8",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune8",
+      "Anchored": true,
+      "Position": [
+       -11.0,
+       0.7,
+       175.947
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -239.99999999999997,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune9",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune9",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       0.7,
+       173.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -270.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune10",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune10",
+      "Anchored": true,
+      "Position": [
+       11.0,
+       0.7,
+       175.947
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -300.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRune11",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRune11",
+      "Anchored": true,
+      "Position": [
+       19.053,
+       0.7,
+       184.0
+      ],
+      "Size": [
+       1.2,
+       0.15,
+       4
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -330.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossRuneLineA",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRuneLineA",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.72,
+       195
+      ],
+      "Size": [
+       0.6,
+       0.12,
+       30
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "BossRuneLineB",
+     "className": "Part",
+     "properties": {
+      "Name": "BossRuneLineB",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.72,
+       195
+      ],
+      "Size": [
+       30,
+       0.12,
+       0.6
+      ],
+      "Color": [
+       0.85,
+       0.2,
+       0.2
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "BossPillar0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar0",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       5.5,
+       207.052
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap0",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       11.4,
+       207.052
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier0",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       12.2,
+       207.052
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar1",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       5.5,
+       226.552
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap1",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       11.4,
+       226.552
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier1",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       12.2,
+       226.552
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar2",
+      "Anchored": true,
+      "Position": [
+       0.0,
+       5.5,
+       234.0
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap2",
+      "Anchored": true,
+      "Position": [
+       0.0,
+       11.4,
+       234.0
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier2",
+      "Anchored": true,
+      "Position": [
+       0.0,
+       12.2,
+       234.0
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar3",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       5.5,
+       226.552
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap3",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       11.4,
+       226.552
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier3",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       12.2,
+       226.552
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar4",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       5.5,
+       207.052
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap4",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       11.4,
+       207.052
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier4",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       12.2,
+       207.052
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar5",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       5.5,
+       182.948
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap5",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       11.4,
+       182.948
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier5",
+      "Anchored": true,
+      "Position": [
+       -37.091,
+       12.2,
+       182.948
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar6",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       5.5,
+       163.448
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap6",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       11.4,
+       163.448
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier6",
+      "Anchored": true,
+      "Position": [
+       -22.924,
+       12.2,
+       163.448
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar7",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       5.5,
+       156.0
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap7",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       11.4,
+       156.0
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier7",
+      "Anchored": true,
+      "Position": [
+       -0.0,
+       12.2,
+       156.0
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar8",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar8",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       5.5,
+       163.448
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap8",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap8",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       11.4,
+       163.448
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier8",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier8",
+      "Anchored": true,
+      "Position": [
+       22.924,
+       12.2,
+       163.448
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossPillar9",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillar9",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       5.5,
+       182.948
+      ],
+      "Size": [
+       11,
+       2.6,
+       2.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossPillarCap9",
+     "className": "Part",
+     "properties": {
+      "Name": "BossPillarCap9",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       11.4,
+       182.948
+      ],
+      "Size": [
+       3.4,
+       0.8,
+       3.4
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossBrazier9",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBrazier9",
+      "Anchored": true,
+      "Position": [
+       37.091,
+       12.2,
+       182.948
+      ],
+      "Size": [
+       0.8,
+       2.2,
+       2.2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 18,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.5,
+         0.2
+        ],
+        "Brightness": 2.0,
+        "Range": 22,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossStatueBaseW",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueBaseW",
+      "Anchored": true,
+      "Position": [
+       -32,
+       1.7,
+       195
+      ],
+      "Size": [
+       5,
+       2,
+       5
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossStatueBodyW",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueBodyW",
+      "Anchored": true,
+      "Position": [
+       -32,
+       5.7,
+       195
+      ],
+      "Size": [
+       2.6,
+       6,
+       2
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0,
+       -6
+      ]
+     }
+    },
+    {
+     "name": "BossStatueHeadW",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueHeadW",
+      "Anchored": true,
+      "Position": [
+       -32.6,
+       9.5,
+       195
+      ],
+      "Size": [
+       1.8,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -30,
+       -12
+      ]
+     }
+    },
+    {
+     "name": "BossStatueArmW",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueArmW",
+      "Anchored": true,
+      "Position": [
+       -30.0,
+       6.5,
+       195.5
+      ],
+      "Size": [
+       1,
+       4,
+       1
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0,
+       35
+      ]
+     }
+    },
+    {
+     "name": "BossStatueBaseE",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueBaseE",
+      "Anchored": true,
+      "Position": [
+       32,
+       1.7,
+       195
+      ],
+      "Size": [
+       5,
+       2,
+       5
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossStatueBodyE",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueBodyE",
+      "Anchored": true,
+      "Position": [
+       32,
+       5.7,
+       195
+      ],
+      "Size": [
+       2.6,
+       6,
+       2
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0,
+       6
+      ]
+     }
+    },
+    {
+     "name": "BossStatueHeadE",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueHeadE",
+      "Anchored": true,
+      "Position": [
+       32.6,
+       9.5,
+       195
+      ],
+      "Size": [
+       1.8,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       30,
+       12
+      ]
+     }
+    },
+    {
+     "name": "BossStatueArmE",
+     "className": "Part",
+     "properties": {
+      "Name": "BossStatueArmE",
+      "Anchored": true,
+      "Position": [
+       30.0,
+       6.5,
+       195.5
+      ],
+      "Size": [
+       1,
+       4,
+       1
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       0,
+       -35
+      ]
+     }
+    },
+    {
      "name": "BossAltarBase",
      "className": "Part",
      "properties": {
@@ -190,13 +3326,13 @@
       "Anchored": true,
       "Position": [
        0,
-       0.5,
-       95
+       1.2,
+       165
       ],
       "Size": [
-       14,
+       16,
        1,
-       14
+       16
       ],
       "Color": [
        0.3,
@@ -216,13 +3352,13 @@
       "Anchored": true,
       "Position": [
        0,
-       1.5,
-       95
+       2.2,
+       165
       ],
       "Size": [
-       10,
+       12,
        1,
-       10
+       12
       ],
       "Color": [
        0.6,
@@ -242,12 +3378,12 @@
       "Anchored": true,
       "Position": [
        0,
-       3.5,
-       95
+       4.3,
+       165
       ],
       "Size": [
        4,
-       3,
+       3.2,
        4
       ],
       "Color": [
@@ -268,24 +3404,40 @@
       "Anchored": true,
       "Position": [
        0,
-       5.1,
-       95
+       6.0,
+       165
       ],
       "Size": [
-       2.5,
+       2.6,
        0.2,
-       2.5
+       2.6
       ],
       "Color": [
        0.85,
-       0.25,
-       0.25
+       0.2,
+       0.2
       ],
       "Material": "Neon",
       "TopSurface": "Smooth",
       "BottomSurface": "Smooth",
       "CastShadow": false
-     }
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         0.9,
+         0.2,
+         0.2
+        ],
+        "Brightness": 2.5,
+        "Range": 24,
+        "Shadows": false
+       }
+      }
+     ]
     },
     {
      "name": "BossAltarPillar0",
@@ -294,9 +3446,9 @@
       "Name": "BossAltarPillar0",
       "Anchored": true,
       "Position": [
-       4.243,
-       3.5,
-       99.243
+       4.95,
+       4.7,
+       169.95
       ],
       "Size": [
        7,
@@ -318,6 +3470,141 @@
        90
       ]
      }
+    },
+    {
+     "name": "BossAltarTorch0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarTorch0",
+      "Anchored": true,
+      "Position": [
+       4.95,
+       8.4,
+       169.95
+      ],
+      "Size": [
+       0.5,
+       1.0,
+       1.0
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.8,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 12,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.45,
+         0.2
+        ],
+        "Brightness": 1.5,
+        "Range": 16,
+        "Shadows": false
+       }
+      }
+     ]
     },
     {
      "name": "BossAltarPillar1",
@@ -326,9 +3613,9 @@
       "Name": "BossAltarPillar1",
       "Anchored": true,
       "Position": [
-       -4.243,
-       3.5,
-       99.243
+       -4.95,
+       4.7,
+       169.95
       ],
       "Size": [
        7,
@@ -350,6 +3637,141 @@
        90
       ]
      }
+    },
+    {
+     "name": "BossAltarTorch1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarTorch1",
+      "Anchored": true,
+      "Position": [
+       -4.95,
+       8.4,
+       169.95
+      ],
+      "Size": [
+       0.5,
+       1.0,
+       1.0
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.8,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 12,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.45,
+         0.2
+        ],
+        "Brightness": 1.5,
+        "Range": 16,
+        "Shadows": false
+       }
+      }
+     ]
     },
     {
      "name": "BossAltarPillar2",
@@ -358,9 +3780,9 @@
       "Name": "BossAltarPillar2",
       "Anchored": true,
       "Position": [
-       -4.243,
-       3.5,
-       90.757
+       -4.95,
+       4.7,
+       160.05
       ],
       "Size": [
        7,
@@ -384,15 +3806,150 @@
      }
     },
     {
+     "name": "BossAltarTorch2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarTorch2",
+      "Anchored": true,
+      "Position": [
+       -4.95,
+       8.4,
+       160.05
+      ],
+      "Size": [
+       0.5,
+       1.0,
+       1.0
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.8,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 12,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.45,
+         0.2
+        ],
+        "Brightness": 1.5,
+        "Range": 16,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
      "name": "BossAltarPillar3",
      "className": "Part",
      "properties": {
       "Name": "BossAltarPillar3",
       "Anchored": true,
       "Position": [
-       4.243,
-       3.5,
-       90.757
+       4.95,
+       4.7,
+       160.05
       ],
       "Size": [
        7,
@@ -414,6 +3971,141 @@
        90
       ]
      }
+    },
+    {
+     "name": "BossAltarTorch3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarTorch3",
+      "Anchored": true,
+      "Position": [
+       4.95,
+       8.4,
+       160.05
+      ],
+      "Size": [
+       0.5,
+       1.0,
+       1.0
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.16
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     },
+     "children": [
+      {
+       "name": "Fire",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.45,
+             0.15
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.4,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.8,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.2,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 12,
+        "Lifetime": {
+         "NumberRange": [
+          0.6,
+          1.1
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          2,
+          4
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          12,
+          12
+         ]
+        },
+        "LightEmission": 1,
+        "Acceleration": {
+         "Vector3": [
+          0,
+          3,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.45,
+         0.2
+        ],
+        "Brightness": 1.5,
+        "Range": 16,
+        "Shadows": false
+       }
+      }
+     ]
     },
     {
      "name": "BossSpawn",
@@ -423,8 +4115,8 @@
       "Anchored": true,
       "Position": [
        0,
-       0.5,
-       125
+       1.5,
+       195
       ],
       "Size": [
        6,
@@ -452,8 +4144,8 @@
       "Anchored": true,
       "Position": [
        0,
-       1,
-       125
+       1.5,
+       195
       ],
       "Size": [
        1,

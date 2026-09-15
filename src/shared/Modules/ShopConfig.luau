@@ -2,18 +2,22 @@
 --[[
 	ShopConfig
 	Catálogo da loja (ShopService no servidor, ShopController/ShopGui no cliente).
-	  Products: Developer Products (compra repetível) que dão moedas.
+	  Products: Developer Products (compra repetível): giros da roleta de cosméticos (rolls) ou
+	            "escolher cosmético" (pick = 1: o item pendente em CosmeticsService); coins > 0 daria
+	            pontos, mas a moeda do jogo é PONTOS ganhos jogando (kills/duelos/boss) — não se vende.
 	  Passes:   Game Passes (compra única) com um perk cada.
 	Ids = 0 -> item aparece como "em breve" e não pode ser comprado. O dono cria os
 	produtos/passes no Creator Dashboard (jogo do GRUPO) e cola os ids aqui.
-	Personagens continuam sendo comprados com moedas (CharacterDefs.UnlockCost).
+	Personagens continuam sendo comprados com pontos (CharacterDefs.UnlockCost).
 ]]
 
 export type Product = {
 	key: string,
 	productId: number,
-	coins: number,
+	coins: number, -- pontos dados (0 = nenhum)
 	name: string,
+	rolls: number?, -- giros da roleta de cosméticos
+	pick: boolean?, -- cosmético à escolha (CosmeticsService.pendingPick)
 }
 
 export type Pass = {
@@ -26,13 +30,13 @@ export type Pass = {
 local ShopConfig = {}
 
 ShopConfig.Products = ({
-	{ key = "coins_500", productId = 0, coins = 500, name = "Punhado" },
-	{ key = "coins_1500", productId = 0, coins = 1500, name = "Saco" },
-	{ key = "coins_4000", productId = 0, coins = 4000, name = "Baú" },
+	{ key = "roll_1", productId = 0, coins = 0, rolls = 1, name = "1 giro da roleta" },
+	{ key = "roll_5", productId = 0, coins = 0, rolls = 5, name = "5 giros da roleta" },
+	{ key = "pick", productId = 0, coins = 0, pick = true, name = "Cosmético à escolha" },
 }) :: { Product }
 
 ShopConfig.Passes = ({
-	{ key = "double_coins", gamepassId = 0, name = "Moedas x2", desc = "Dobra as moedas de kills, duelos, boss e missões" },
+	{ key = "double_coins", gamepassId = 0, name = "Pontos x2", desc = "Dobra os pontos de kills, duelos, boss e missões" },
 	{ key = "all_characters", gamepassId = 0, name = "Todos os personagens", desc = "Desbloqueia todos os personagens (inclui o Guardian VIP)" },
 	{ key = "vip", gamepassId = 0, name = "VIP", desc = "Personagem Guardian, tag VIP no nome e +25% de XP" },
 }) :: { Pass }

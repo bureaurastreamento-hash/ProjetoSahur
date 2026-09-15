@@ -118,7 +118,7 @@ local function onNotifyBoss(event: string, data: any)
 			end
 		end
 		if mine > 0 then
-			table.insert(lines, ("+%d moedas"):format(mine))
+			table.insert(lines, ("+%d pontos"):format(mine))
 		end
 		if data.top then
 			table.insert(lines, ("Maior dano: %s"):format(tostring(data.top)))

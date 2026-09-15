@@ -53,7 +53,7 @@ local myRoomHost: number? = nil -- userId do dono da sala em que estou
 
 local TAB_ON = Color3.fromRGB(70, 140, 217)
 local TAB_OFF = Color3.fromRGB(46, 46, 61)
-local HINT_1V1 = "Clique em um jogador para desafiar. Vitória = +50 moedas."
+local HINT_1V1 = "Clique em um jogador para desafiar. Vitória = +50 pontos."
 local HINT_2V2 = "Entre em uma sala ou crie a sua. Com 4 jogadores o duelo começa sozinho."
 
 local REASONS = {

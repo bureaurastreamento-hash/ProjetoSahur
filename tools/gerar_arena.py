@@ -472,17 +472,75 @@ part("LeaderboardFrame", (12, 10, 0.6), (-30, 5.5, -69.6), STONE_LIGHT)
 for i, a in enumerate((30, 150, 270)):
     ar = math.radians(a)
     cylinder(f"DummyPad{i}", 3, 0.3, (math.cos(ar) * 18, 0.15, math.sin(ar) * 18), BASALT, CastShadow=False)
-# altar do boss (BossService): pedestal ao sul da praça; BossAltar recebe o ProximityPrompt,
-# BossSpawn é onde o boss nasce, BossArena marca o centro/raio da luta.
-part("BossAltarBase", (14, 1, 14), (0, 0.5, 95), BASALT)
-part("BossAltarStep", (10, 1, 10), (0, 1.5, 95), STONE_LIGHT)
-part("BossAltar", (4, 3, 4), (0, 3.5, 95), ("Slate", (0.10, 0.10, 0.13)))
-part("BossAltarRune", (2.5, 0.2, 2.5), (0, 5.1, 95), ("Neon", (0.85, 0.25, 0.25)), CastShadow=False)
+# ---------------------------------------------------------------------------
+# SANTUÁRIO DO BOSS (ao sul, z ~ 150..240): piso circular de pedra escura, anel de pilares com
+# braseiros, runas no chão, estátuas quebradas, caminho de lajes desde a praça. BossService acha
+# por nome: BossAltar (ProximityPrompt), BossSpawn (nasce), BossArena (centro/raio da luta).
+# ---------------------------------------------------------------------------
+def fire(node, color=(1.0, 0.45, 0.15), size=1.2, rate=18):
+    node.setdefault("children", []).append({
+        "name": "Fire", "className": "ParticleEmitter",
+        "properties": {
+            "Color": {"ColorSequence": {"keypoints": [{"time": 0, "color": list(color)}, {"time": 1, "color": [0.4, 0.05, 0.0]}]}},
+            "Size": {"NumberSequence": {"keypoints": [{"time": 0, "value": size, "envelope": 0}, {"time": 1, "value": 0, "envelope": 0}]}},
+            "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.2, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}},
+            "Rate": rate, "Lifetime": {"NumberRange": [0.6, 1.1]}, "Speed": {"NumberRange": [2, 4]},
+            "SpreadAngle": {"Vector2": [12, 12]}, "LightEmission": 1, "Acceleration": {"Vector3": [0, 3, 0]},
+        },
+    })
+
+SANCT_Z = 195
+SANCT_R = 44
+DARK_STONE = ("Slate", (0.13, 0.13, 0.16))
+RUNE_RED = ("Neon", (0.85, 0.20, 0.20))
+# caminho de lajes da praça até o santuário
+for i in range(14):
+    z = 40 + i * 8
+    part(f"BossPathSlab{i}", (6, 0.4, 6.5), (jitter(0.6), 0.2, z), STONE_LIGHT, rot=(0, jitter(6), 0))
+# piso: disco de pedra escura + anel externo claro + degrau
+cylinder("BossFloor", SANCT_R, 1.2, (0, 0.6 - 0.6, SANCT_Z), DARK_STONE)
+cylinder("BossFloorRing", SANCT_R + 3, 0.8, (0, 0.4 - 0.6, SANCT_Z), BASALT)
+cylinder("BossFloorInner", 14, 0.3, (0, 0.75, SANCT_Z), ("Slate", (0.09, 0.09, 0.11)))
+# runas no chão: cruz + anel de traços neon (só visual; o anel vermelho da luta é do BossService)
+for i in range(12):
+    a = i / 12 * math.tau
+    r = 22
+    part(f"BossRune{i}", (1.2, 0.15, 4), (math.cos(a) * r, 0.7, SANCT_Z + math.sin(a) * r), RUNE_RED,
+         rot=(0, -math.degrees(a), 0), CastShadow=False)
+part("BossRuneLineA", (0.6, 0.12, 30), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=False)
+part("BossRuneLineB", (30, 0.12, 0.6), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=False)
+# anel de pilares com braseiros
+for i in range(10):
+    a = i / 10 * math.tau + math.pi / 10
+    x, z = math.cos(a) * (SANCT_R - 5), SANCT_Z + math.sin(a) * (SANCT_R - 5)
+    cylinder(f"BossPillar{i}", 1.3, 11, (x, 5.5, z), STONE_LIGHT)
+    part(f"BossPillarCap{i}", (3.4, 0.8, 3.4), (x, 11.4, z), BASALT)
+    brazier = cylinder(f"BossBrazier{i}", 1.1, 0.8, (x, 12.2, z), ("Metal", (0.2, 0.18, 0.16)))
+    fire(brazier)
+    light(brazier, (1.0, 0.5, 0.2), 2.0, 22)
+# estátuas quebradas (guardiões) nas entradas leste/oeste
+for sx, name in ((-1, "W"), (1, "E")):
+    bx = sx * (SANCT_R - 12)
+    part(f"BossStatueBase{name}", (5, 2, 5), (bx, 1.7, SANCT_Z), BASALT)
+    part(f"BossStatueBody{name}", (2.6, 6, 2), (bx, 5.7, SANCT_Z), DARK_STONE, rot=(0, 0, sx * 6))
+    part(f"BossStatueHead{name}", (1.8, 1.8, 1.8), (bx + sx * 0.6, 9.5, SANCT_Z), DARK_STONE, rot=(0, sx * 30, sx * 12))
+    part(f"BossStatueArm{name}", (1, 4, 1), (bx - sx * 2.0, 6.5, SANCT_Z + 0.5), DARK_STONE, rot=(0, 0, -sx * 35))
+# altar ao NORTE do disco (quem chega da praça vê primeiro), boss nasce no centro
+ALTAR_Z = SANCT_Z - 30
+part("BossAltarBase", (16, 1, 16), (0, 1.2, ALTAR_Z), BASALT)
+part("BossAltarStep", (12, 1, 12), (0, 2.2, ALTAR_Z), STONE_LIGHT)
+part("BossAltar", (4, 3.2, 4), (0, 4.3, ALTAR_Z), ("Slate", (0.10, 0.10, 0.13)))
+altar_rune = part("BossAltarRune", (2.6, 0.2, 2.6), (0, 6.0, ALTAR_Z), RUNE_RED, CastShadow=False)
+light(altar_rune, (0.9, 0.2, 0.2), 2.5, 24)
 for i in range(4):
     a = math.radians(45 + i * 90)
-    cylinder(f"BossAltarPillar{i}", 0.8, 7, (math.cos(a) * 6, 3.5, 95 + math.sin(a) * 6), STONE_LIGHT)
-part("BossSpawn", (6, 1, 6), (0, 0.5, 125), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
-part("BossArena", (1, 1, 1), (0, 1, 125), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+    px, pz = math.cos(a) * 7, ALTAR_Z + math.sin(a) * 7
+    cylinder(f"BossAltarPillar{i}", 0.8, 7, (px, 4.7, pz), STONE_LIGHT)
+    torch = cylinder(f"BossAltarTorch{i}", 0.5, 0.5, (px, 8.4, pz), ("Metal", (0.2, 0.18, 0.16)))
+    fire(torch, size=0.8, rate=12)
+    light(torch, (1.0, 0.45, 0.2), 1.5, 16)
+part("BossSpawn", (6, 1, 6), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+part("BossArena", (1, 1, 1), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
 extra_spawns = []
 for i in range(12):
     a = i / 12 * math.tau

@@ -165,6 +165,15 @@ function MovementService.Init()
 end
 
 function MovementService.Start()
+	local okAdmin, AdminService = pcall(require, script.Parent:WaitForChild("AdminService"))
+	if okAdmin then
+		(AdminService :: any).ResetDash = function(player: Player)
+			dashStates[player] = nil
+			notifyDashCooldown:FireClient(player, "forward", 0, 0)
+			notifyDashCooldown:FireClient(player, "side", 0, 0)
+			notifyDashCooldown:FireClient(player, "cancel", 0, 0)
+		end
+	end
 	Remotes.GetEvent(Remotes.Events.RequestSprint).OnServerEvent:Connect(onRequestSprint)
 	Remotes.GetEvent(Remotes.Events.RequestDash).OnServerEvent:Connect(onRequestDash)
 	local function onPlayer(player: Player)

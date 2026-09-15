@@ -1,9 +1,9 @@
 --!strict
 --[[
 	ShopController (cliente)
-	Preenche ShopGui.Panel com o catálogo de ShopConfig (moedas via Developer Product, passes)
+	Preenche ShopGui.Panel com o catálogo de ShopConfig (pontos via Developer Product, passes)
 	e pede a compra ao servidor (RequestShop), que abre o prompt oficial da Roblox.
-	Só reflete: moedas vêm do atributo Coins; passes possuídos do atributo Pass_<key>.
+	Só reflete: pontos vêm do atributo Coins; passes possuídos do atributo Pass_<key>.
 	O painel é aberto/fechado pelo ícone "Loja" (L) no TopbarController.
 	API: ShopController.Panel (Frame) para o topbar ligar.
 ]]
@@ -42,7 +42,7 @@ local function get(parent: Instance, name: string): Instance
 end
 
 local function setHint(text: string, seconds: number?)
-	local original = "Personagens são comprados com moedas na tela Personagens (V)."
+	local original = "Personagens são comprados com pontos na tela Personagens (V)."
 	hint.Text = text
 	if seconds then
 		task.delay(seconds, function()
@@ -55,7 +55,7 @@ end
 
 local function refreshCoins()
 	local coins = localPlayer:GetAttribute("Coins")
-	coinsLabel.Text = if typeof(coins) == "number" then ("%d moedas"):format(coins) else ""
+	coinsLabel.Text = if typeof(coins) == "number" then ("%d pontos"):format(coins) else ""
 end
 
 local function refreshPass(key: string)
@@ -82,7 +82,8 @@ local function build()
 		local card = productTemplate:Clone()
 		card.Visible = true
 		card.LayoutOrder = i
-		;(card:FindFirstChild("Amount") :: TextLabel).Text = ("%d"):format(product.coins)
+		local amount = if product.rolls then ("%dx"):format(product.rolls) elseif product.pick then "★" else ("%d"):format(product.coins)
+		;(card:FindFirstChild("Amount") :: TextLabel).Text = amount
 		;(card:FindFirstChild("Name") :: TextLabel).Text = product.name
 		local price = card:FindFirstChild("Price") :: TextLabel
 		if product.productId > 0 then
@@ -134,7 +135,7 @@ function ShopController.Start()
 		data = if typeof(data) == "table" then data else {}
 		if event == "purchased" then
 			local coins = tonumber(data.coins)
-			setHint(if coins then ("Compra concluída: +%d moedas"):format(coins) else "Passe adquirido. Obrigado!", 4)
+			setHint(if coins then ("Compra concluída: +%d pontos"):format(coins) else "Passe adquirido. Obrigado!", 4)
 			FX.PlaySoundUI("Match", "Victory")
 		elseif event == "denied" then
 			setHint("Este item ainda não está disponível.", 3)

@@ -15,6 +15,17 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado do design (2026-09-15, noite) — decisões fechadas com o dono
+- Controles: Mouse1 soco (segurar = combo de 4; subindo = uppercut, caindo = downslam), F block
+  (só frontal; parry = crítico), Q dash universal (WASD relativo à câmera, cooldowns lateral ×
+  frente/trás separados, não sai em stun), 1/2/3/4 habilidades, G = ultimate + Awakening, B roda de
+  emotes, K cosméticos, L loja, V personagens, P perfil, Tab placar, J duelo.
+- Preso no combo não se age; dash/ataque bloqueiam habilidade; ragdoll de combate + ragdoll cancel (Q).
+- Moeda = PONTOS ganhos jogando (kills/duelo/boss/missões); cosméticos só pela ROLETA (pontos ou
+  Robux) ou "escolher" com Robux; nada cosmético dá buff. Devs (AdminConfig) têm todos os passes.
+- Menus = dropdown discreto abaixo do topbar, à esquerda, cores do TopbarPlus. Sem "AI slop".
+- Ver PROGRESSO.md "Retomar aqui" para o que falta testar; PESQUISA_BATTLEGROUNDS.md para as refs.
+
 ## Stack e ferramentas
 - Sincronização de arquivos com o Studio via Rojo (gerenciado pelo Rokit).
 - Roblox Studio rodando em Linux (CachyOS) via Vinegar.

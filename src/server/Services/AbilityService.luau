@@ -673,6 +673,7 @@ function AbilityService.Start()
 	AdminService.ForceCharacter = forceCharacter
 	AdminService.SetEnergy = setEnergy
 	AdminService.ResetCooldowns = resetCooldowns
+	AdminService.Awaken = onRequestAwaken
 	Remotes.GetEvent(Remotes.Events.RequestAbility).OnServerEvent:Connect(onRequestAbility)
 	Remotes.GetEvent(Remotes.Events.RequestAwaken).OnServerEvent:Connect(onRequestAwaken)
 	Remotes.GetEvent(Remotes.Events.RequestSelectCharacter).OnServerEvent:Connect(onRequestSelectCharacter)

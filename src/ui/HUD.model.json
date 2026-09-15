@@ -45,12 +45,12 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
-    "BackgroundTransparency": 0.25,
+    "BackgroundTransparency": 0.5,
     "BorderSizePixel": 0,
     "Visible": true
    },
@@ -281,9 +281,9 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
     "BackgroundTransparency": 1,
@@ -401,9 +401,9 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
     "BackgroundTransparency": 1,
@@ -856,9 +856,9 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
     "BackgroundTransparency": 1,
@@ -920,9 +920,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -1260,9 +1260,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -1600,9 +1600,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -1940,9 +1940,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -2280,9 +2280,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -2620,9 +2620,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -2960,9 +2960,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.15,
@@ -3302,12 +3302,12 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
-    "BackgroundTransparency": 0.25,
+    "BackgroundTransparency": 0.5,
     "BorderSizePixel": 0,
     "Visible": false
    },
@@ -3462,9 +3462,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.05,
-        0.05,
-        0.06
+        0.0,
+        0.0,
+        0.0
        ]
       },
       "BackgroundTransparency": 1,
@@ -3555,11 +3555,11 @@
      "UDim2": [
       [
        0,
-       700
+       760
       ],
       [
        0,
-       40
+       64
       ]
      ]
     },
@@ -3584,7 +3584,7 @@
     "BackgroundTransparency": 1,
     "Text": "",
     "Font": "GothamBold",
-    "TextSize": 26,
+    "TextSize": 24,
     "TextColor3": {
      "Color3": [
       0.96,
@@ -3597,7 +3597,8 @@
     "BorderSizePixel": 0,
     "RichText": false,
     "Visible": false,
-    "TextStrokeTransparency": 0.5
+    "TextStrokeTransparency": 0.5,
+    "TextWrapped": true
    }
   },
   {

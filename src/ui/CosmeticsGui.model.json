@@ -21,7 +21,7 @@
       ],
       [
        0,
-       440
+       470
       ]
      ]
     },
@@ -29,28 +29,28 @@
      "UDim2": [
       [
        0,
-       16
+       12
       ],
       [
-       0.5,
-       0
+       0,
+       52
       ]
      ]
     },
     "AnchorPoint": {
      "Vector2": [
       0,
-      0.5
+      0
      ]
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
-    "BackgroundTransparency": 0.25,
+    "BackgroundTransparency": 0.5,
     "BorderSizePixel": 0,
     "Visible": false
    },
@@ -257,9 +257,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.05,
-        0.05,
-        0.06
+        0.0,
+        0.0,
+        0.0
        ]
       },
       "BackgroundTransparency": 1,
@@ -321,9 +321,9 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.1,
-          0.1,
-          0.12
+          0.08,
+          0.08,
+          0.09
          ]
         },
         "BackgroundTransparency": 0.0,
@@ -411,9 +411,9 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.1,
-          0.1,
-          0.12
+          0.08,
+          0.08,
+          0.09
          ]
         },
         "BackgroundTransparency": 0.0,
@@ -501,9 +501,9 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.1,
-          0.1,
-          0.12
+          0.08,
+          0.08,
+          0.09
          ]
         },
         "BackgroundTransparency": 0.0,
@@ -591,9 +591,9 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.1,
-          0.1,
-          0.12
+          0.08,
+          0.08,
+          0.09
          ]
         },
         "BackgroundTransparency": 0.0,
@@ -647,6 +647,273 @@
      ]
     },
     {
+     "name": "Roll",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Roll",
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -4
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         68
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.45,
+        0.35,
+        0.1
+       ]
+      },
+      "BackgroundTransparency": 0.0,
+      "Text": "GIRAR",
+      "Font": "GothamBold",
+      "TextSize": 13,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Name": "UIStroke",
+        "Thickness": 1,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.86,
+        "ApplyStrokeMode": "Border"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Roll1",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Roll1",
+      "Size": {
+       "UDim2": [
+        [
+         0.25,
+         -4
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         4
+        ],
+        [
+         0,
+         68
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.08,
+        0.08,
+        0.09
+       ]
+      },
+      "BackgroundTransparency": 0.0,
+      "Text": "1 giro · Robux",
+      "Font": "GothamBold",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Name": "UIStroke",
+        "Thickness": 1,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.86,
+        "ApplyStrokeMode": "Border"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Roll5",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Roll5",
+      "Size": {
+       "UDim2": [
+        [
+         0.25,
+         -4
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.75,
+         4
+        ],
+        [
+         0,
+         68
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.08,
+        0.08,
+        0.09
+       ]
+      },
+      "BackgroundTransparency": 0.0,
+      "Text": "5 giros · Robux",
+      "Font": "GothamBold",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Name": "UIStroke",
+        "Thickness": 1,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.86,
+        "ApplyStrokeMode": "Border"
+       }
+      }
+     ]
+    },
+    {
      "name": "Hint",
      "className": "TextLabel",
      "properties": {
@@ -671,7 +938,7 @@
         ],
         [
          0,
-         68
+         104
         ]
        ]
       },
@@ -682,7 +949,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "Só visual: nada aqui dá vantagem. Clique para comprar / equipar.",
+      "Text": "Roleta da sorte: pontos (ganhos jogando) ou Robux. Só visual: nada dá vantagem.",
       "Font": "GothamMedium",
       "TextSize": 11,
       "TextColor3": {
@@ -711,7 +978,7 @@
         ],
         [
          1,
-         -92
+         -126
         ]
        ]
       },
@@ -723,7 +990,7 @@
         ],
         [
          0,
-         92
+         126
         ]
        ]
       },
@@ -735,9 +1002,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.05,
-        0.05,
-        0.06
+        0.0,
+        0.0,
+        0.0
        ]
       },
       "BackgroundTransparency": 1,
@@ -799,9 +1066,9 @@
         },
         "BackgroundColor3": {
          "Color3": [
-          0.1,
-          0.1,
-          0.12
+          0.08,
+          0.08,
+          0.09
          ]
         },
         "BackgroundTransparency": 0.1,

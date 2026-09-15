@@ -200,7 +200,48 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite — leva 2 de pedidos do dono)
+## Retomar aqui (última sessão: 2026-09-15, noite — leva 3)
+
+### Leva 3 (NÃO testada) — pedidos do dono depois do 2º teste
+- **Boneco atacante caía no void**: `PivotTo` usava a posição do HRP e não do pivô do Model → afundava a
+  cada golpe. Agora gira em torno do próprio pivô.
+- **Santuário do boss** (`tools/gerar_arena.py` → `ArenaExtras`): ao sul (z≈150–240): caminho de lajes
+  desde a praça, disco de pedra escura, anel de 10 pilares com braseiros (fogo + luz), runas neon no
+  chão, 2 estátuas quebradas, altar com 4 tochas ao norte do disco (z=165), boss nasce no centro
+  (z=195). Continua "por código"; a arte pode substituir mantendo os nomes BossAltar/BossSpawn/BossArena.
+- **PONTOS no lugar de moedas** (só o nome/UI; o campo do perfil continua `coins`). **Roleta** de
+  cosméticos: `RequestCosmetic("roll")` = 100 pontos → item aleatório (skin/capa/aura/emote) ponderado
+  por `Weight`, sem repetir; VIP fora da roleta. Robux: produtos `roll_1`/`roll_5`/`pick`
+  (`ShopConfig.Products`, ids 0 = em breve; `ShopService.CosmeticHook` → `CosmeticsService.OnProduct`).
+  Painel K: GIRAR + giros Robux + lista (equipar o que tem / "escolher com Robux" o que não tem).
+  Roda B: botão GIRAR à direita. Emote padrão de todos: `wave`.
+- **Devs têm todos os passes** (`ShopService.refreshOwnership`: IsDeveloper → todos os perks).
+- **Anti-exploit com avisos**: 1ª flag banner amarelo "Vá com calma...", 2ª vermelho sério, 3ª kick
+  (devs nunca são kickados). `NotifyWarning`. Dev menu: "Zerar anti-exploit".
+- **Menus** viraram dropdown abaixo do topbar (x=12, y=52), preto 50% como os ícones do TopbarPlus.
+- **Dev menu** (`tools/gerar_devgui.py`): Voar (toggle `DevFly`; Espaço sobe/Ctrl desce; anti-exploit
+  ignora), ULT + despertar, Ragdoll 2 s, Zerar anti-exploit, kill streak, Dar/Zerar cosméticos,
+  Invocar/Remover boss; "Zerar CDs" também zera o dash. **Personagem de admin `Overlord`**
+  (`Access = "admin"`: só devs veem o cartão; golpes absurdos para testar).
+- **Console (amigo no Xbox/PlayStation)**: ver instrução no fim desta seção.
+
+### Roteiro de teste da leva 3
+1. Boneco atacante fica no lugar enquanto soca.
+2. Ir ao sul da praça pelo caminho de lajes: santuário com braseiros acesos; E no altar invoca.
+3. K → GIRAR com 100+ pontos: banner "ROLETA: X", item entra na lista e (capa/aura) aparece no boneco.
+   Sem pontos: "Pontos insuficientes para girar". Clicar num item que não tem: abre prompt "em breve".
+4. Você (dev) vê VIP/Guardian liberados e o cartão "Overlord".
+5. Dev: Voar, ULT + despertar, Ragdoll, Invocar boss. Spam de dash sem cooldown: banner amarelo do
+   anti-exploit (não kicka dev).
+6. Menus abrem abaixo do topbar sem cobrir o centro.
+
+### Para o amigo de console jogar
+No Studio: **Game Settings → Basic Info → Playable Devices** marcar **Console** (e Computer/Phone/Tablet)
+e publicar (File → Publish to Roblox no place OFICIAL do grupo). Depois, no **Creator Dashboard** (jogo do
+GRUPO) → Experiência → **Access**: "Public" (ou, se quiser fechado, adicionar o amigo ao GRUPO e usar
+acesso restrito a membros; "Friends only" não existe para jogos de grupo). Console exige gamepad
+completo (já temos: R1 soco, L1 block, X dash, Y/B/R2 habilidades, L2 ultimate, D-pad cima emotes) e
+que o jogo não dependa de teclado. Ele acha o jogo pela busca/perfil do grupo.
 
 ### Leva 2 (NÃO testada) — pedidos do dono depois do 1º teste
 - **AntiExploit** mais tolerante (2,2× WalkSpeed + 10 studs, 4 strikes; ignora caído/PlatformStand;

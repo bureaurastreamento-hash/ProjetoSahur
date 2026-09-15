@@ -15,11 +15,13 @@
 	  SetCoins/AddCoins/AddXP/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount}, CompleteMissions,
 	  InfiniteEnergy/NoCooldown/God {enabled?} (toggle), ResetCooldowns, ClearFlags,
 	  GrantCharacter/RevokeCharacter/SetCharacter {characterId}, GrantAll, RevokeAll,
-	  Heal, Kill, Respawn, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason}, ResetData
+	  Heal, Kill, Respawn, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason}, ResetData,
+	  Fly (toggle: atributo DevFly; o cliente voa, AntiExploit ignora), Awaken (carga cheia + ultimate
+	  na hora), SetStreak {amount}, GrantCosmetics/ResetCosmetics, Ragdoll {amount}, ClearAntiExploit
 	Globais: GetState {target} (devolve data), ListPlayers, RespawnDummies, ToggleDummies,
-	  RefreshLeaderboard, SetTime {amount}, ServerInfo
+	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, DespawnBoss
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
-	  DevDamageMult, DevSpeed (lidos por HealthService/AbilityService/CombatService).
+	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
 
 local Players = game:GetService("Players")
@@ -40,6 +42,9 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local DummyService = require(script.Parent:WaitForChild("DummyService"))
 local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
+local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
+local BossService = require(script.Parent:WaitForChild("BossService"))
+local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local Lighting = game:GetService("Lighting")
@@ -52,6 +57,8 @@ local AdminService = {}
 AdminService.ForceCharacter = function(_player: Player, _characterId: string) end
 AdminService.SetEnergy = function(_player: Player, _amount: number) end
 AdminService.ResetCooldowns = function(_player: Player) end
+AdminService.Awaken = function(_player: Player) end -- AbilityService
+AdminService.ResetDash = function(_player: Player) end -- MovementService
 
 local sessions: { [Player]: boolean } = {}
 local loginLimiter = RateLimiter.new(5, 60)
@@ -159,6 +166,8 @@ local function stateOf(target: Player): { [string]: any }
 		god = target:GetAttribute("Invulnerable") == true,
 		infiniteEnergy = target:GetAttribute("DevInfiniteEnergy") == true,
 		noCooldown = target:GetAttribute("DevNoCooldown") == true,
+		fly = target:GetAttribute("DevFly") == true,
+		streak = target:GetAttribute("KillStreak") or 0,
 		damageMult = target:GetAttribute("DevDamageMult") or 1,
 		sessionOnly = DataService.IsSessionOnly(target),
 	}
@@ -243,7 +252,76 @@ end
 
 perTarget.ResetCooldowns = function(_, target)
 	AdminService.ResetCooldowns(target)
-	return true, ("%s: cooldowns zerados"):format(target.Name)
+	AdminService.ResetDash(target)
+	return true, ("%s: cooldowns zerados (habilidades e dash)"):format(target.Name)
+end
+
+perTarget.Fly = function(_, target, args)
+	local on = toggleAttribute(target, "DevFly", args.enabled)
+	AntiExploitService.Grace(target, 1)
+	return true, ("%s: voo %s (Espaço sobe, Ctrl desce)"):format(target.Name, if on then "ON" else "OFF")
+end
+
+perTarget.Awaken = function(_, target)
+	AdminService.SetEnergy(target, CharacterDefs.Energy.Max)
+	AdminService.Awaken(target)
+	return true, ("%s: ULTIMATE + despertar"):format(target.Name)
+end
+
+perTarget.SetStreak = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount or amount < 0 then
+		return false, "quantidade inválida"
+	end
+	target:SetAttribute("KillStreak", math.floor(amount))
+	return true, ("%s: kill streak = %d"):format(target.Name, math.floor(amount))
+end
+
+perTarget.GrantCosmetics = function(_, target)
+	local profile = DataService.GetProfile(target)
+	if not profile then
+		return false, "perfil não carregado"
+	end
+	local n = 0
+	for _, item in CosmeticsConfig.Items do
+		if not table.find(profile.cosmetics.owned, item.Id) then
+			table.insert(profile.cosmetics.owned, item.Id)
+			n += 1
+		end
+	end
+	for _, emote in CosmeticsConfig.Emotes do
+		if not table.find(profile.emotes, emote.Id) then
+			table.insert(profile.emotes, emote.Id)
+			n += 1
+		end
+	end
+	DataService.MarkDirty(target)
+	return true, ("%s: +%d cosméticos/emotes"):format(target.Name, n)
+end
+
+perTarget.ResetCosmetics = function(_, target)
+	local profile = DataService.GetProfile(target)
+	if not profile then
+		return false, "perfil não carregado"
+	end
+	profile.cosmetics = { owned = {}, equipped = {} }
+	profile.emotes = {}
+	DataService.MarkDirty(target)
+	for _, attr in { "CosmeticSkin", "CosmeticCape", "CosmeticAura" } do
+		target:SetAttribute(attr, "")
+	end
+	return true, ("%s: cosméticos zerados"):format(target.Name)
+end
+
+perTarget.Ragdoll = function(_, target, args)
+	local seconds = number(args.amount) or 2
+	RagdollService.Ragdoll(target, seconds)
+	return true, ("%s: ragdoll %.1fs"):format(target.Name, seconds)
+end
+
+perTarget.ClearAntiExploit = function(_, target)
+	AntiExploitService.ClearFlags(target)
+	return true, ("%s: flags do anti-exploit zeradas"):format(target.Name)
 end
 
 perTarget.God = function(_, target, args)
@@ -423,7 +501,7 @@ perTarget.ResetData = function(_, target)
 end
 
 perTarget.ClearFlags = function(_, target)
-	for _, attr in { "Invulnerable", "DevInfiniteEnergy", "DevNoCooldown", "DevDamageMult", "DevSpeed" } do
+	for _, attr in { "Invulnerable", "DevInfiniteEnergy", "DevNoCooldown", "DevDamageMult", "DevSpeed", "DevFly" } do
 		target:SetAttribute(attr, nil)
 	end
 	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
@@ -460,6 +538,16 @@ end
 global.ToggleDummies = function()
 	local n = DummyService.SetEnabled(not DummyService.Enabled)
 	return true, ("bonecos %s (%d)"):format(if DummyService.Enabled then "ON" else "OFF", n)
+end
+
+global.SummonBoss = function(admin)
+	local ok, msg = BossService.Summon(admin)
+	return ok, if ok then "boss invocado" else ("não invocou: %s"):format(tostring(msg))
+end
+
+global.DespawnBoss = function()
+	local ok = BossService.Despawn()
+	return true, if ok then "boss removido" else "não havia boss"
 end
 
 global.RefreshLeaderboard = function()

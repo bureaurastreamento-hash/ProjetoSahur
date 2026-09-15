@@ -12,9 +12,9 @@ from pathlib import Path
 UI = Path(__file__).resolve().parent.parent / "src" / "ui"
 
 # ---- tokens -----------------------------------------------------------------
-BG = [0.05, 0.05, 0.06]          # painéis
-BG_T = 0.25                      # transparência dos painéis
-CARD = [0.10, 0.10, 0.12]        # cartões/slots
+BG = [0.0, 0.0, 0.0]             # painéis: mesmo preto translúcido do TopbarPlus (discreto)
+BG_T = 0.5                       # transparência dos painéis (TopbarPlus usa 0.5)
+CARD = [0.08, 0.08, 0.09]        # cartões/slots
 LINE = [1, 1, 1]                 # borda (com transparência)
 LINE_T = 0.86
 TEXT = [0.96, 0.96, 0.97]
@@ -23,6 +23,7 @@ ACCENT = [0.35, 0.75, 1.0]       # energia / seleção
 HEALTH = [0.90, 0.27, 0.27]
 GOLD = [1.0, 0.80, 0.30]
 GREEN = [0.35, 0.80, 0.50]
+GOLD_BG = [0.45, 0.35, 0.10]      # botões da roleta
 FONT = "GothamMedium"
 FONT_B = "GothamBold"
 
@@ -100,8 +101,9 @@ def screen(name, children, order=1, enabled=True, ignore_inset=True):
 
 def panel(name, w, h, title, children, hidden=True):
     """Painel padrão (aberto pelo TopbarPlus): título em caixa alta + conteúdo.
-    Fica encostado à ESQUERDA (jogo competitivo: o centro da tela nunca é coberto)."""
-    return frame(name, ud(0, w, 0, h), ud(0, 16, 0.5, 0), anchor=(0, 0.5), visible=not hidden, children=[
+    Abre como um DROPDOWN logo abaixo do topbar, à esquerda, com a mesma cor/transparência dos
+    ícones (jogo competitivo: o centro da tela nunca é coberto)."""
+    return frame(name, ud(0, w, 0, h), ud(0, 12, 0, 52), anchor=(0, 0), visible=not hidden, children=[
         corner(8), stroke(), padding(16),
         label("Title", title.upper(), ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=MUTED),
     ] + children)
@@ -142,10 +144,10 @@ hud = screen("HUD", [
         label("State", "", ud(0.7, 0, 1, 0), ud(0, 12, 0, 0), font=FONT_B, ts=14),
         label("Timer", "", ud(0.3, -12, 1, 0), ud(1, -12, 0, 0), anchor=(1, 0), font=FONT_B, ts=16, xalign="Right"),
     ]),
-    # Moedas no canto superior direito
+    # Pontos no canto superior direito
     label("Coins", "", ud(0, 200, 0, 24), ud(1, -16, 0, 12), anchor=(1, 0), font=FONT_B, ts=15, color=GOLD,
           xalign="Right", extra={"TextStrokeTransparency": 0.7}),
-    # Killfeed abaixo das moedas
+    # Killfeed abaixo das pontos
     frame("KillFeed", ud(0, 300, 0, 140), ud(1, -16, 0, 44), anchor=(1, 0), t=1, children=[
         listlayout("Vertical", 2, "Right"),
         label("Template", "", ud(1, 0, 0, 18), ud(0, 0, 0, 0), ts=12, color=MUTED, xalign="Right",
@@ -183,8 +185,8 @@ hud = screen("HUD", [
         ]),
     ]),
     # Avisos grandes no centro-alto e contador de combo perto do centro
-    label("Banner", "", ud(0, 700, 0, 40), ud(0.5, 0, 0.22, 0), anchor=(0.5, 0.5), font=FONT_B, ts=26,
-          xalign="Center", extra={"Visible": False, "TextStrokeTransparency": 0.5}),
+    label("Banner", "", ud(0, 760, 0, 64), ud(0.5, 0, 0.22, 0), anchor=(0.5, 0.5), font=FONT_B, ts=24,
+          xalign="Center", extra={"Visible": False, "TextStrokeTransparency": 0.5, "TextWrapped": True}),
     label("Combo", "", ud(0, 80, 0, 30), ud(0.5, 120, 0.5, -40), anchor=(0.5, 0.5), font=FONT_B, ts=22,
           color=GOLD, xalign="Center", extra={"TextStrokeTransparency": 0.5}),
 ])
@@ -207,7 +209,7 @@ card = button("Template", "", ud(0, CARD_W, 0, CARD_H), ud(0, 0, 0, 0), bg=CARD,
         node("Glow", "UIGradient", {"Rotation": 90, "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.6, "envelope": 0},
                                                                           {"time": 1, "value": 0, "envelope": 0}]}}}),
     ]),
-    # selo: GRÁTIS / 250 MOEDAS / VIP / EM BREVE
+    # selo: GRÁTIS / 250 PONTOS / VIP / EM BREVE
     label("Badge", "", ud(0, 0, 0, 18), ud(1, -8, 0, 10), anchor=(1, 0), font=FONT_B, ts=10, color=TEXT,
           xalign="Center", extra={"AutomaticSize": "X", "BackgroundTransparency": 0.15,
                                   "BackgroundColor3": col([0.1, 0.1, 0.12]), "ZIndex": 2},
@@ -303,7 +305,7 @@ helpgui = screen("HelpGui", [
 write("HelpGui.model.json", helpgui)
 
 # =============================================================================
-# Loja (moedas por Developer Product, Game Passes, personagens por moedas)
+# Loja (pontos por Developer Product, Game Passes, personagens por pontos)
 # =============================================================================
 PW, PH = 120, 96
 product_card = button("Template", "", ud(0, PW, 0, PH), ud(0, 0, 0, 0), bg=CARD, t=0.1, extra={"Visible": False},
@@ -325,7 +327,7 @@ shop = screen("ShopGui", [
     panel("Panel", 640, 420, "Loja", [
         label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
-        label("ProductsTitle", "MOEDAS", ud(1, 0, 0, 16), ud(0, 0, 0, 34), font=FONT_B, ts=11, color=MUTED),
+        label("ProductsTitle", "ROLETA DE COSMÉTICOS (ROBUX)", ud(1, 0, 0, 16), ud(0, 0, 0, 34), font=FONT_B, ts=11, color=MUTED),
         frame("Products", ud(1, 0, 0, PH), ud(0, 0, 0, 54), t=1, children=[
             listlayout("Horizontal", 10), product_card,
         ]),
@@ -333,7 +335,7 @@ shop = screen("ShopGui", [
         frame("Passes", ud(1, 0, 1, -(54 + PH + 36 + 20)), ud(0, 0, 0, 54 + PH + 36), t=1, children=[
             listlayout("Vertical", 6), pass_row,
         ]),
-        label("Hint", "Personagens são comprados com moedas na tela Personagens (V).", ud(1, 0, 0, 16),
+        label("Hint", "Personagens são comprados com pontos na tela Personagens (V).", ud(1, 0, 0, 16),
               ud(0, 0, 1, 0), anchor=(0, 1), ts=11, color=MUTED),
     ]),
 ], order=3)
@@ -351,7 +353,7 @@ cos_row = button("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), bg=CARD, t=0.1
 ])
 tab_w = 100
 cosmetics = screen("CosmeticsGui", [
-    panel("Panel", 460, 440, "Cosméticos", [
+    panel("Panel", 460, 470, "Cosméticos", [
         label("Coins", "", ud(0, 160, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, 34), t=1, children=[
@@ -361,9 +363,12 @@ cosmetics = screen("CosmeticsGui", [
             button("TabAura", "AURAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 3}),
             button("TabEmote", "EMOTES", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 4}),
         ]),
-        label("Hint", "Só visual: nada aqui dá vantagem. Clique para comprar / equipar.", ud(1, 0, 0, 16),
-              ud(0, 0, 0, 68), ts=11, color=MUTED),
-        frame("List", ud(1, 0, 1, -92), ud(0, 0, 0, 92), t=1, children=[listlayout("Vertical", 6), cos_row]),
+        button("Roll", "GIRAR", ud(0.5, -4, 0, 30), ud(0, 0, 0, 68), bg=GOLD_BG, ts=13),
+        button("Roll1", "1 giro · Robux", ud(0.25, -4, 0, 30), ud(0.5, 4, 0, 68), ts=11),
+        button("Roll5", "5 giros · Robux", ud(0.25, -4, 0, 30), ud(0.75, 4, 0, 68), ts=11),
+        label("Hint", "Roleta da sorte: pontos (ganhos jogando) ou Robux. Só visual: nada dá vantagem.", ud(1, 0, 0, 16),
+              ud(0, 0, 0, 104), ts=11, color=MUTED),
+        frame("List", ud(1, 0, 1, -126), ud(0, 0, 0, 126), t=1, children=[listlayout("Vertical", 6), cos_row]),
     ]),
 ], order=3)
 write("CosmeticsGui.model.json", cosmetics)
@@ -377,6 +382,9 @@ wheel_children = [
         corner(35), stroke(),
         label("Label", "EMOTES", ud(1, 0, 1, 0), ud(0, 0, 0, 0), font=FONT_B, ts=11, color=MUTED, xalign="Center"),
     ]),
+    # roleta da sorte à direita da roda
+    button("Roll", "GIRAR", ud(0, 84, 0, 56), ud(0.5, 215, 0.5, 0), anchor=(0.5, 0.5), bg=GOLD_BG, ts=12,
+           extra={"TextWrapped": True}),
 ]
 for i in range(8):
     a = -_m.pi / 2 + i * (2 * _m.pi / 8)
@@ -384,7 +392,7 @@ for i in range(8):
     wheel_children.append(button(f"Slot{i + 1}", "", ud(0, 92, 0, 40), ud(0.5, x, 0.5, y), anchor=(0.5, 0.5),
                                  bg=CARD, t=0.1, ts=12))
 emotes = screen("EmoteGui", [
-    frame("Wheel", ud(0, 340, 0, 300), ud(0.5, 0, 0.5, 40), anchor=(0.5, 0.5), t=1, visible=False,
+    frame("Wheel", ud(0, 520, 0, 300), ud(0.5, 0, 0.5, 40), anchor=(0.5, 0.5), t=1, visible=False,
           children=wheel_children),
 ], order=4)
 write("EmoteGui.model.json", emotes)

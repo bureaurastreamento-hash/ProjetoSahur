@@ -21,7 +21,7 @@ GREY = [0.75, 0.75, 0.78]
 RED = [0.75, 0.25, 0.25]
 GREEN = [0.25, 0.55, 0.35]
 
-W, H = 620, 672
+W, H = 620, 772
 PAD = 12
 COL_W = (W - PAD * 2 - 8 * 3) // 4  # 4 colunas
 
@@ -137,10 +137,24 @@ for i, (cmd, text, color) in enumerate(actions):
     children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y), color))
 y += 36
 
+children.append(section("TestSection", "COMBATE / TESTES  (alvo)", y)); y += 18
+tests = [("Fly", "Voar", BG2), ("Awaken", "ULT + despertar", GREEN), ("Ragdoll", "Ragdoll 2 s", BG2), ("ClearAntiExploit", "Zerar anti-exploit", BG2)]
+for i, (cmd, text, color) in enumerate(tests):
+    children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y), color))
+y += 32
+children.append(textbox("Streak", "kill streak", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(button("SetStreak", "Definir streak", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y)))
+children.append(button("GrantCosmetics", "Dar cosméticos", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y), GREEN))
+children.append(button("ResetCosmetics", "Zerar cosméticos", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y), RED))
+y += 36
+
 children.append(section("WorldSection", "MUNDO / SERVIDOR", y)); y += 18
 world = [("RespawnDummies", "Recriar bonecos"), ("ToggleDummies", "Bonecos ON/OFF"), ("RefreshLeaderboard", "Atualizar placar"), ("ServerInfo", "Info servidor")]
 for i, (cmd, text) in enumerate(world):
     children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y)))
+y += 32
+children.append(button("SummonBoss", "Invocar boss", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y), GREEN))
+children.append(button("DespawnBoss", "Remover boss", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y), RED))
 y += 32
 children.append(textbox("Time", "hora 0-24", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
 children.append(button("SetTime", "Definir hora", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y)))

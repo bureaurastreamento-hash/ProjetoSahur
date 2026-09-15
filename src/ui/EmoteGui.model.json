@@ -17,7 +17,7 @@
      "UDim2": [
       [
        0,
-       340
+       520
       ],
       [
        0,
@@ -45,9 +45,9 @@
     },
     "BackgroundColor3": {
      "Color3": [
-      0.05,
-      0.05,
-      0.06
+      0.0,
+      0.0,
+      0.0
      ]
     },
     "BackgroundTransparency": 1,
@@ -92,9 +92,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.05,
-        0.05,
-        0.06
+        0.0,
+        0.0,
+        0.0
        ]
       },
       "BackgroundTransparency": 0.2,
@@ -187,6 +187,96 @@
      ]
     },
     {
+     "name": "Roll",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Roll",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         84
+        ],
+        [
+         0,
+         56
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         215
+        ],
+        [
+         0.5,
+         0
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0.5,
+        0.5
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.45,
+        0.35,
+        0.1
+       ]
+      },
+      "BackgroundTransparency": 0.0,
+      "Text": "GIRAR",
+      "Font": "GothamBold",
+      "TextSize": 12,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "TextWrapped": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Name": "UIStroke",
+        "Thickness": 1,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.86,
+        "ApplyStrokeMode": "Border"
+       }
+      }
+     ]
+    },
+    {
      "name": "Slot1",
      "className": "TextButton",
      "properties": {
@@ -223,9 +313,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -312,9 +402,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -401,9 +491,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -490,9 +580,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -579,9 +669,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -668,9 +758,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -757,9 +847,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,
@@ -846,9 +936,9 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.1,
-        0.1,
-        0.12
+        0.08,
+        0.08,
+        0.09
        ]
       },
       "BackgroundTransparency": 0.1,

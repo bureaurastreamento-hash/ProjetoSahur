@@ -1,8 +1,10 @@
 --!strict
 --[[
 	CosmeticsController (cliente)
-	  - Painel "Cosméticos" (K, TopbarPlus): abas Skins/Capas/Auras/Emotes; clique = comprar/equipar.
-	  - Roda de emotes (B): 8 posições (CosmeticsConfig.Emotes); clique = RequestEmote.
+	  - Painel "Cosméticos" (K, TopbarPlus): abas Skins/Capas/Auras/Emotes; clique = equipar (o que
+	    você tem) ou "escolher com Robux" (o que não tem). Botões: GIRAR (pontos) e giros com Robux.
+	  - Roda de emotes (B): 8 posições (CosmeticsConfig.Emotes); clique = RequestEmote; à direita
+	    o botão GIRAR (roleta da sorte com pontos).
 	  - Desenha em TODO personagem o que o servidor replicou por atributo do Player:
 	    CosmeticCape (Part fina soldada ao Torso) e CosmeticAura (FX.SetAura "Cosmetic").
 	  - NotifyEmote: animação Assets.Animations.Emotes.<Id>; cena = aura temporária + VFX.Emotes.<Id>.
@@ -19,6 +21,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
+local HUDController = require(script.Parent:WaitForChild("HUDController"))
 
 local CosmeticsController = {}
 
@@ -32,6 +35,8 @@ local SCENE_AURA = "Scene"
 
 local requestCosmetic: RemoteEvent
 local requestEmote: RemoteEvent
+local requestShop: RemoteEvent
+local hintLabel: TextLabel
 
 local panel: Frame
 local coinsLabel: TextLabel
@@ -122,17 +127,18 @@ end
 -- ---------------------------------------------------------------------------
 
 local function ownsItem(item: CosmeticsConfig.Item): boolean
-	if item.Cost <= 0 and item.Access == nil then
+	if item.Weight <= 0 and item.Access == nil then
 		return true
 	end
+	local inProfile = profile ~= nil and typeof(profile.cosmetics) == "table" and table.find(profile.cosmetics.owned or {}, item.Id) ~= nil
 	if item.Access == "vip" then
-		return localPlayer:GetAttribute("Pass_vip") == true
+		return localPlayer:GetAttribute("Pass_vip") == true or inProfile
 	end
-	return profile ~= nil and typeof(profile.cosmetics) == "table" and table.find(profile.cosmetics.owned or {}, item.Id) ~= nil
+	return inProfile
 end
 
 local function ownsEmote(emote: CosmeticsConfig.Emote): boolean
-	return emote.Cost <= 0 or (profile ~= nil and table.find(profile.emotes or {}, emote.Id) ~= nil)
+	return emote.Weight <= 0 or (profile ~= nil and table.find(profile.emotes or {}, emote.Id) ~= nil)
 end
 
 local function equippedId(category: string): string
@@ -179,9 +185,9 @@ local function refreshList()
 	if currentTab == "emote" then
 		for i, emote in CosmeticsConfig.Emotes do
 			local owned = ownsEmote(emote)
-			addRow(i, ("%d. %s"):format(i, emote.Name), emote.Color, if owned then "na roda (B)" else ("%d moedas"):format(emote.Cost), if owned then COLOR_OWNED else COLOR_PRICE, function()
+			addRow(i, ("%d. %s"):format(i, emote.Name), emote.Color, if owned then "na roda (B)" else "roleta · Robux", if owned then COLOR_OWNED else COLOR_PRICE, function()
 				if not owned then
-					requestCosmetic:FireServer("buy_emote", emote.Id)
+					requestCosmetic:FireServer("pick_robux", emote.Id)
 				else
 					requestEmote:FireServer(emote.Id)
 				end
@@ -206,15 +212,15 @@ local function refreshList()
 		elseif item.Access == "vip" then
 			state, color = "VIP", COLOR_PRICE
 		else
-			state, color = ("%d moedas"):format(item.Cost), COLOR_PRICE
+			state, color = "roleta · Robux", COLOR_PRICE
 		end
 		addRow(order, item.Name, item.Color, state, color, function()
 			if isEquipped then
 				requestCosmetic:FireServer("unequip", item.Id)
 			elseif owned then
 				requestCosmetic:FireServer("equip", item.Id)
-			else
-				requestCosmetic:FireServer("buy", item.Id)
+			elseif item.Access ~= "vip" then
+				requestCosmetic:FireServer("pick_robux", item.Id) -- escolher com Robux
 			end
 		end)
 	end
@@ -286,11 +292,13 @@ end
 function CosmeticsController.Init()
 	requestCosmetic = Remotes.GetEvent(Remotes.Events.RequestCosmetic)
 	requestEmote = Remotes.GetEvent(Remotes.Events.RequestEmote)
+	requestShop = Remotes.GetEvent(Remotes.Events.RequestShop)
 	local gui = playerGui:WaitForChild("CosmeticsGui", 15)
 	assert(gui, "[CosmeticsController] StarterGui.CosmeticsGui não chegou (Rojo conectado?)")
 	panel = get(gui, "Panel") :: Frame
 	coinsLabel = get(panel, "Coins") :: TextLabel
 	list = get(panel, "List") :: Frame
+	hintLabel = get(panel, "Hint") :: TextLabel
 	rowTemplate = get(list, "Template") :: TextButton
 	local tabs = get(panel, "Tabs")
 	tabButtons = {
@@ -336,6 +344,22 @@ function CosmeticsController.Start()
 			setWheel(not wheel.Visible)
 		end
 	end)
+	local rollBtn = get(panel, "Roll") :: TextButton
+	rollBtn.Text = ("GIRAR — %d pontos"):format(CosmeticsConfig.RollCost)
+	rollBtn.Activated:Connect(function()
+		requestCosmetic:FireServer("roll")
+	end)
+	;(get(panel, "Roll1") :: TextButton).Activated:Connect(function()
+		requestShop:FireServer("product", "roll_1")
+	end)
+	;(get(panel, "Roll5") :: TextButton).Activated:Connect(function()
+		requestShop:FireServer("product", "roll_5")
+	end)
+	local wheelRoll = get(wheel, "Roll") :: TextButton
+	wheelRoll.Text = ("GIRAR\n%d pts"):format(CosmeticsConfig.RollCost)
+	wheelRoll.Activated:Connect(function()
+		requestCosmetic:FireServer("roll")
+	end)
 	panel:GetPropertyChangedSignal("Visible"):Connect(function()
 		if panel.Visible then
 			refreshList()
@@ -344,7 +368,7 @@ function CosmeticsController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(p: any)
 		if typeof(p) == "table" then
 			profile = p
-			coinsLabel.Text = ("%d moedas"):format(tonumber(p.coins) or 0)
+			coinsLabel.Text = ("%d pontos"):format(tonumber(p.coins) or 0)
 			if panel.Visible then
 				refreshList()
 			end
@@ -352,11 +376,27 @@ function CosmeticsController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyCosmetics).OnClientEvent:Connect(function(event: string, data: any)
 		if event == "denied" and typeof(data) == "table" then
-			local msgs = { coins = "Moedas insuficientes", vip = "Exclusivo do passe VIP", locked = "Você não tem este item", not_loaded = "Dados ainda carregando", already_owned = "Você já tem" }
+			local msgs = { coins = "Pontos insuficientes para girar", vip = "Exclusivo do passe VIP", locked = "Você não tem este item", not_loaded = "Dados ainda carregando", already_owned = "Você já tem", all_owned = "Você já tem tudo da roleta!" }
 			Log.debug(("[CosmeticsController] negado: %s"):format(tostring(data.reason)))
-			coinsLabel.Text = msgs[data.reason] or tostring(data.reason)
-		elseif event == "bought" then
+			hintLabel.Text = msgs[data.reason] or tostring(data.reason)
+		elseif event == "rolled" and typeof(data) == "table" and typeof(data.items) == "table" then
+			local names = {}
+			for _, it in data.items do
+				table.insert(names, tostring(it.name))
+			end
+			hintLabel.Text = ("Roleta: %s!"):format(table.concat(names, ", "))
+			HUDController.ShowBanner(("ROLETA: %s"):format(table.concat(names, ", ")), 3)
 			FX.PlaySoundUI("Shared", "UltReady")
+			local character = localPlayer.Character
+			if character then
+				FX.Flash(character, Color3.fromRGB(255, 220, 90), 0.4)
+			end
+			if panel.Visible then
+				task.delay(0.3, refreshList)
+			end
+		elseif event == "pick_pending" and typeof(data) == "table" then
+			hintLabel.Text = "Abrindo compra do cosmético escolhido..."
+			requestShop:FireServer("product", "pick")
 		end
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyEmote).OnClientEvent:Connect(onNotifyEmote)

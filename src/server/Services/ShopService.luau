@@ -27,6 +27,9 @@ local DataService = require(script.Parent:WaitForChild("DataService"))
 
 local ShopService = {}
 
+--- (player, product) -> entregou? Preenchido por CosmeticsService (giros / pick).
+ShopService.CosmeticHook = nil :: ((Player, any) -> boolean)?
+
 local shopLimiter = RateLimiter.new(3, 1)
 local notifyShop: RemoteEvent
 local pending: { [Player]: { [string]: boolean } } = {} -- prompts abertos por jogador
@@ -55,6 +58,10 @@ end
 --- Reaplica perks de passes quando o perfil carrega (all_characters precisa do perfil).
 local function refreshOwnership(player: Player)
 	for _, pass in ShopConfig.Passes do
+		if player:GetAttribute("IsDeveloper") == true then
+			applyPerk(player, pass.key) -- dono/admin tem tudo (testar VIP, cosméticos, personagens)
+			continue
+		end
 		if pass.gamepassId <= 0 then
 			continue
 		end
@@ -149,7 +156,16 @@ local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseD
 	if not DataService.GetProfile(player) or DataService.IsSessionOnly(player) then
 		return Enum.ProductPurchaseDecision.NotProcessedYet -- sem DataStore não dá para garantir a entrega
 	end
-	DataService.AddCoins(player, product.coins) -- compra: sem multiplicador
+	if product.coins > 0 then
+		DataService.AddCoins(player, product.coins) -- compra: sem multiplicador
+	end
+	if product.rolls or product.pick then
+		-- giros / cosmético à escolha: CosmeticsService entrega (registrado no Start)
+		local hook = ShopService.CosmeticHook
+		if not hook or not hook(player, product) then
+			return Enum.ProductPurchaseDecision.NotProcessedYet
+		end
+	end
 	if pending[player] then
 		pending[player][product.key] = nil
 	end
@@ -158,7 +174,7 @@ local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseD
 		warn(("[ShopService] compra de %s por %s não salvou; Roblox vai reenviar o recibo"):format(product.key, player.Name))
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
-	Log.debug(("[ShopService] %s comprou %s (+%d moedas)"):format(player.Name, product.key, product.coins))
+	Log.debug(("[ShopService] %s comprou %s"):format(player.Name, product.key))
 	notifyShop:FireClient(player, "purchased", { key = product.key, coins = product.coins })
 	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
@@ -199,6 +215,11 @@ function ShopService.Start()
 
 	DataService.ProfileLoaded.Event:Connect(function(player: Player)
 		task.spawn(refreshOwnership, player)
+	end)
+	Players.PlayerAdded:Connect(function(player)
+		player:GetAttributeChangedSignal("IsDeveloper"):Connect(function()
+			task.spawn(refreshOwnership, player)
+		end)
 	end)
 	Players.PlayerRemoving:Connect(function(player)
 		pending[player] = nil

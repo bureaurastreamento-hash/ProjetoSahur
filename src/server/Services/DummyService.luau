@@ -131,10 +131,12 @@ local function spawnAt(pad: BasePart, index: number)
 				local target = targets[1]
 				local tRoot = target and target:FindFirstChild("HumanoidRootPart") :: BasePart?
 				if tRoot and HealthService.IsAlive(target) then
-					local to = tRoot.Position - root.Position
+					local pivot = model:GetPivot()
+					local to = tRoot.Position - pivot.Position
 					to = Vector3.new(to.X, 0, to.Z)
 					if to.Magnitude > 0.1 then
-						model:PivotTo(CFrame.lookAt(root.Position, root.Position + to.Unit))
+						-- gira no lugar em torno do PRÓPRIO pivô (usar root.Position afundava o boneco a cada golpe)
+						model:PivotTo(CFrame.lookAt(pivot.Position, pivot.Position + to.Unit))
 					end
 					local isFinisher = combo >= m1.ComboLength
 					CombatService.NpcPunch(model, combo, ATTACK_DAMAGE)

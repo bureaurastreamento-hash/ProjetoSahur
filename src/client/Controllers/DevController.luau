@@ -43,13 +43,15 @@ local NUMBER_COMMANDS: { [string]: string } = {
 	SetDamageMult = "DamageMult",
 	AddXP = "XP",
 	SetTime = "Time",
+	SetStreak = "Streak",
 }
 local SIMPLE_COMMANDS = {
 	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteMissions",
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
+	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss",
 }
-local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god" }
+local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
@@ -106,7 +108,7 @@ end
 
 local function renderState(state: { [string]: any })
 	local unlocked = if typeof(state.unlocked) == "table" then table.concat(state.unlocked, ",") else "?"
-	stateLabel.Text = ("%s (%d)%s · %s · moedas %d · kills %d · vida %d/%d · energia %s · speed %d · dano x%s\npersonagens: %s"):format(
+	stateLabel.Text = ("%s (%d)%s · %s · pontos %d · kills %d · vida %d/%d · energia %s · speed %d · dano x%s\npersonagens: %s"):format(
 		tostring(state.name), tonumber(state.userId) or 0, if state.sessionOnly then " [SEM SAVE]" else "",
 		tostring(state.characterId), tonumber(state.coins) or 0, tonumber(state.kills) or 0,
 		math.floor(tonumber(state.health) or 0), math.floor(tonumber(state.maxHealth) or 0),
@@ -246,6 +248,77 @@ end
 -- Abrir
 -- ---------------------------------------------------------------------------
 
+-- ---------------------------------------------------------------------------
+-- Voo (atributo DevFly do servidor): LinearVelocity no HRP seguindo a câmera/WASD, Espaço sobe,
+-- Ctrl desce. PlatformStand evita o Humanoid brigar com a velocidade.
+-- ---------------------------------------------------------------------------
+
+local FLY_SPEED = 60
+local flyConn: RBXScriptConnection? = nil
+local flyVelocity: LinearVelocity? = nil
+
+local function stopFly()
+	if flyConn then
+		flyConn:Disconnect()
+		flyConn = nil
+	end
+	if flyVelocity then
+		local att = flyVelocity.Attachment0
+		flyVelocity:Destroy()
+		if att then
+			att:Destroy()
+		end
+		flyVelocity = nil
+	end
+	local humanoid = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.PlatformStand = false
+	end
+end
+
+local function startFly()
+	stopFly()
+	local character = localPlayer.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not root or not humanoid then
+		return
+	end
+	local att = Instance.new("Attachment")
+	att.Parent = root
+	local lv = Instance.new("LinearVelocity")
+	lv.Attachment0 = att
+	lv.RelativeTo = Enum.ActuatorRelativeTo.World
+	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+	lv.MaxForce = math.huge
+	lv.VectorVelocity = Vector3.zero
+	lv.Parent = root
+	flyVelocity = lv
+	humanoid.PlatformStand = true
+	local UIS = game:GetService("UserInputService")
+	flyConn = game:GetService("RunService").RenderStepped:Connect(function()
+		local camera = workspace.CurrentCamera
+		if not camera or not root.Parent then
+			stopFly()
+			return
+		end
+		local move = humanoid.MoveDirection
+		local dir = Vector3.new(move.X, 0, move.Z)
+		-- WASD relativo à câmera já vem no MoveDirection; sobe/desce pelas teclas
+		local up = (if UIS:IsKeyDown(Enum.KeyCode.Space) then 1 else 0) - (if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then 1 else 0)
+		local look = camera.CFrame.LookVector
+		if dir.Magnitude > 0.1 and math.abs(look.Y) > 0.3 then
+			dir = dir + Vector3.new(0, look.Y * dir.Magnitude, 0) -- olhar para cima/baixo inclina o voo
+		end
+		lv.VectorVelocity = (dir + Vector3.new(0, up, 0)) * FLY_SPEED
+		-- boneco de pé, virado para onde a câmera olha
+		local flat = Vector3.new(look.X, 0, look.Z)
+		if flat.Magnitude > 0.01 then
+			root.CFrame = CFrame.lookAt(root.Position, root.Position + flat.Unit)
+		end
+	end)
+end
+
 local function setOpen(open: boolean)
 	if not open then
 		panel.Visible = false
@@ -329,6 +402,21 @@ function DevController.Start()
 	end
 	buildCharacters()
 
+	-- voo: segue o atributo replicado (o servidor liga/desliga pelo comando Fly)
+	localPlayer:GetAttributeChangedSignal("DevFly"):Connect(function()
+		if localPlayer:GetAttribute("DevFly") == true then
+			startFly()
+		else
+			stopFly()
+		end
+	end)
+	localPlayer.CharacterAdded:Connect(function()
+		stopFly()
+		if localPlayer:GetAttribute("DevFly") == true then
+			task.delay(1, startFly)
+		end
+	end)
+
 	Remotes.GetEvent(Remotes.Events.NotifyAdminResult).OnClientEvent:Connect(function(ok: boolean, message: string, state: any)
 		appendLog(ok == true, tostring(message))
 		if typeof(state) == "table" and state.testSounds == true then
@@ -337,7 +425,7 @@ function DevController.Start()
 			renderState(state)
 		end
 	end)
-	-- Estado muda por fora (kill, moedas ganhas...): reflete nos toggles do alvo "eu"
+	-- Estado muda por fora (kill, pontos ganhas...): reflete nos toggles do alvo "eu"
 	for _, attr in { "Energy", "Coins", "CharacterId", "Invulnerable", "DevInfiniteEnergy", "DevNoCooldown" } do
 		localPlayer:GetAttributeChangedSignal(attr):Connect(function()
 			if panel.Visible and selectedTarget == nil then

@@ -338,7 +338,7 @@ function DataService.HasCharacter(player: Player, characterId: string): boolean
 		return true -- concedido (admin GrantAll / passe "Todos os personagens")
 	end
 	local access = CharacterDefs.AccessOf(def)
-	if access == "early" then
+	if access == "early" or access == "admin" then
 		return player:GetAttribute("IsDeveloper") == true
 	elseif access == "vip" then
 		return player:GetAttribute("Pass_vip") == true or player:GetAttribute("Pass_all_characters") == true

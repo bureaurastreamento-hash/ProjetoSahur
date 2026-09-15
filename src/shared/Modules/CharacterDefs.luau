@@ -51,7 +51,7 @@ export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
 	UnlockCost: number, -- moedas; 0 = todos começam com ele (só vale com Access = "coins"/nil)
-	Access: string?, -- nil/"coins" = moedas | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs)
+	Access: string?, -- nil/"coins" = pontos | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs) | "admin" = só devs, escondido dos outros
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
@@ -261,12 +261,57 @@ CharacterDefs.Characters = {
 			},
 		},
 	} :: CharacterDef,
+
+	-- Personagem de ADMIN (Access = "admin"): só devs veem/usam; números absurdos para testar sistemas.
+	Overlord = {
+		Id = "Overlord",
+		DisplayName = "Overlord",
+		UnlockCost = 0,
+		Access = "admin",
+		Tagline = "Só admin: teste de sistemas",
+		Color = Color3.fromRGB(255, 80, 200),
+		Image = "",
+		Abilities = {
+			{
+				Id = "Smite",
+				DisplayName = "Golpe Divino",
+				Cooldown = 1,
+				EnergyCost = 0,
+				CastTime = 0.1,
+				Effect = { Type = "AreaDamage", Radius = 20, Damage = 60, Delay = 0.1, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } },
+			},
+			{
+				Id = "Warp",
+				DisplayName = "Teleporte Longo",
+				Cooldown = 1,
+				EnergyCost = 0,
+				CastTime = 0.1,
+				Effect = { Type = "Teleport", Distance = 60 },
+			},
+			{
+				Id = "Clutch",
+				DisplayName = "Agarrão Longo",
+				Cooldown = 2,
+				EnergyCost = 0,
+				CastTime = 0.2,
+				Effect = { Type = "Grab", Speed = 90, Duration = 0.4, Range = 10, Width = 10, Height = 8, Carry = 1.5, Damage = 30, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2.5 } },
+			},
+			{
+				Id = "Cataclysm",
+				DisplayName = "Cataclismo",
+				Cooldown = 5,
+				EnergyCost = 100,
+				CastTime = 0.5,
+				Effect = { Type = "MultiHitArea", Radius = 30, Damage = 25, Hits = 4, Interval = 0.3, Knockback = { Speed = 70, Duration = 0.3, Ragdoll = 2 } },
+			},
+		},
+	} :: CharacterDef,
 }
 
---- Lista ordenada de ids (ordem na seleção de personagem)
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Sahur" }
+--- Lista ordenada de ids (ordem na seleção de personagem). "admin" só aparece para devs (cliente filtra).
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Sahur", "Overlord" }
 
---- "coins" | "vip" | "early"
+--- "coins" | "vip" | "early" | "admin"
 function CharacterDefs.AccessOf(def: CharacterDef): string
 	return def.Access or "coins"
 end

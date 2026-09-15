@@ -100,7 +100,7 @@ local function ownsCharacter(id: string): boolean
 	end
 	local access = CharacterDefs.AccessOf(def)
 	local dev = localPlayer:GetAttribute("IsDeveloper") == true
-	if access == "early" then
+	if access == "early" or access == "admin" then
 		return dev
 	elseif access == "vip" then
 		return dev or localPlayer:GetAttribute("Pass_vip") == true or localPlayer:GetAttribute("Pass_all_characters") == true
@@ -132,7 +132,12 @@ local function setBar(fill: Frame, text: TextLabel, current: number, max: number
 	text.Text = ("%d / %d"):format(math.floor(current + 0.5), max)
 end
 
-local function showBanner(text: string, seconds: number)
+local showBanner: (string, number) -> ()
+--- Aviso grande no centro-alto (outros controllers usam).
+function HUDController.ShowBanner(text: string, seconds: number)
+	showBanner(text, seconds)
+end
+showBanner = function(text: string, seconds: number)
 	banner.Text = text
 	banner.Visible = true
 	task.delay(seconds, function()
@@ -337,7 +342,7 @@ local function refreshMatchUI()
 			badge.Text = "ACESSO ANTECIPADO"
 			badge.TextColor3 = CARD_EARLY
 		elseif def and def.UnlockCost > 0 then
-			badge.Text = if owned then "SEU" else ("%d MOEDAS"):format(def.UnlockCost)
+			badge.Text = if owned then "SEU" else ("%d PONTOS"):format(def.UnlockCost)
 			badge.TextColor3 = if owned then CARD_MUTED else CARD_LOCKED
 		else
 			badge.Text = "GRÁTIS"
@@ -349,7 +354,7 @@ local function refreshMatchUI()
 		end
 	end
 	local coins = localPlayer:GetAttribute("Coins")
-	local coinsText = if typeof(coins) == "number" then ("%d moedas"):format(coins) else ""
+	local coinsText = if typeof(coins) == "number" then ("%d pontos"):format(coins) else ""
 	coinsLabel.Text = coinsText
 	selectCoinsLabel.Text = coinsText
 	refreshScoreboard()
@@ -530,7 +535,14 @@ function HUDController.Start()
 	for i, id in CharacterDefs.Order do
 		local def = CharacterDefs.Get(id)
 		local b = selectTemplate:Clone()
-		b.Visible = true
+		-- personagem de admin: cartão só aparece para devs (atributo chega depois do boot)
+		local adminOnly = def ~= nil and CharacterDefs.AccessOf(def) == "admin"
+		b.Visible = not adminOnly or localPlayer:GetAttribute("IsDeveloper") == true
+		if adminOnly then
+			localPlayer:GetAttributeChangedSignal("IsDeveloper"):Connect(function()
+				b.Visible = localPlayer:GetAttribute("IsDeveloper") == true
+			end)
+		end
 		b.LayoutOrder = i
 		local color = if def and def.Color then def.Color else CARD_SELECTED
 		;(b:FindFirstChild("Name") :: TextLabel).Text = if def then def.DisplayName else id
@@ -562,7 +574,7 @@ function HUDController.Start()
 			elseif access == "vip" then
 				HUDController.OpenShop:Fire()
 			else
-				requestUnlockCharacter:FireServer(id) -- moedas; "early" o servidor nega e o banner avisa
+				requestUnlockCharacter:FireServer(id) -- pontos; "early" o servidor nega e o banner avisa
 			end
 		end)
 		characterButtons[id] = b
@@ -598,10 +610,10 @@ function HUDController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyProgression).OnClientEvent:Connect(function(event: string, data: any)
 		data = if typeof(data) == "table" then data else {}
 		if event == "levelup" then
-			showBanner(("NÍVEL %d! +%d moedas"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
+			showBanner(("NÍVEL %d! +%d pontos"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
 			FX.PlaySoundUI("Shared", "UltReady")
 		elseif event == "mission_done" then
-			showBanner(("Missão concluída: %s (+%d moedas)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
+			showBanner(("Missão concluída: %s (+%d pontos)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
 			FX.PlaySoundUI("Match", "Victory")
 		end
 	end)
@@ -613,7 +625,7 @@ function HUDController.Start()
 		refreshMatchUI()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
-		local msgs = { coins = "Moedas insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",
+		local msgs = { coins = "Pontos insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",
 			vip = "Exclusivo do passe VIP (Loja, tecla L)", early = "Acesso antecipado: ainda não liberado" }
 		local remaining = reason:match("^in_combat:(%d+)")
 		if remaining then
@@ -703,10 +715,20 @@ function HUDController.Start()
 		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshMatchUI)
 	end
 
+	-- Aviso do anti-exploit (1º calmo, 2º sério, 3º = kick)
+	Remotes.GetEvent(Remotes.Events.NotifyWarning).OnClientEvent:Connect(function(kind: string, level: number, message: string)
+		local color = if level >= 2 then Color3.fromRGB(255, 70, 70) else Color3.fromRGB(255, 200, 70)
+		banner.TextColor3 = color
+		showBanner(tostring(message), if level >= 2 then 8 else 5)
+		task.delay(if level >= 2 then 8 else 5, function()
+			banner.TextColor3 = Color3.fromRGB(235, 235, 240)
+		end)
+		FX.Shake(0.3, 0.2)
+	end)
 	-- Kill streak: anúncio para todos + aura (atributo KillStreak replicado) em quem passa de AuraFrom
 	local STREAK_COLOR = Color3.fromRGB(255, 220, 90)
 	Remotes.GetEvent(Remotes.Events.NotifyStreak).OnClientEvent:Connect(function(event: string, who: Player, streak: number, data: any)
-		local coins = if typeof(data) == "table" and typeof(data.coins) == "number" and data.coins > 0 and who == localPlayer then (" (+%d moedas)"):format(data.coins) else ""
+		local coins = if typeof(data) == "table" and typeof(data.coins) == "number" and data.coins > 0 and who == localPlayer then (" (+%d pontos)"):format(data.coins) else ""
 		if event == "milestone" then
 			showBanner(("%s: %d eliminações seguidas!%s"):format(if who == localPlayer then "VOCÊ" else who.Name, streak, coins), 2.5)
 			FX.PlaySoundUI("Shared", "Streak")

@@ -26,28 +26,28 @@
      "UDim2": [
       [
        0,
-       20
+       12
       ],
       [
-       0.5,
-       0
+       0,
+       52
       ]
      ]
     },
     "AnchorPoint": {
      "Vector2": [
       0,
-      0.5
+      0
      ]
     },
     "BackgroundColor3": {
      "Color3": [
-      0.0784313725490196,
-      0.0784313725490196,
-      0.10980392156862745
+      0,
+      0,
+      0
      ]
     },
-    "BackgroundTransparency": 0.15,
+    "BackgroundTransparency": 0.5,
     "BorderSizePixel": 0,
     "Visible": false
    },
@@ -136,7 +136,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "Clique em um jogador para desafiar. Vitória = +50 moedas.",
+      "Text": "Clique em um jogador para desafiar. Vit\u00f3ria = +50 moedas.",
       "TextSize": 13,
       "Font": "Gotham",
       "TextColor3": {
