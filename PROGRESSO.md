@@ -240,7 +240,15 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    com pulo/queda) — 1ª versão trocava os ids do Animate e o dono relatou que não tocava. Se ainda
    não tocar, o Output avisa "carregou com duração 0" = id não é da conta/grupo dono do jogo ou foi
    animado em outro rig (jogo é R6). O place tem um script estranho `Workspace."Animation Maker"`
-   (não é nosso, dá erro ao sair) — apagar.
+   (não é nosso, dá erro ao sair) — apagar. **2ª rodada (dono: "não tocam", "Ctrl não trava")**:
+   shift lock agora é NOSSO (`MovementController`: mouse no centro + AutoRotate off + CameraOffset;
+   nativo desligado via `StarterPlayer.EnableMouseLockOption=false` no project.json) porque o
+   PlayerModule.CameraModule.MouseLockController não foi encontrado no place. Novo
+   `AnimationCheckService` (só Studio): baixa cada KeyframeSequence dos ids da equipe e imprime
+   `[AnimCheck] ... OK R6` / `rig R15 — não vai mexer` / `NÃO CARREGOU` (grupo sem acesso).
+   O jogo é de GRUPO: animações precisam ser publicadas com o grupo como criador.
+   Existem 2 places/universos de grupo: 85844807133499 (original) e 126518739287432 (cópia do
+   autosave de 2026-09-14); o Rojo é aditivo e serve para o que estiver aberto no Studio.
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /

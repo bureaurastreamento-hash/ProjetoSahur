@@ -2,8 +2,9 @@
 --[[
 	MovementController (cliente)
 	  - Correr: segurar Shift esquerdo (gamepad L3; mobile botão CORRER) -> RequestSprint.
-	  - Shift lock na tecla Ctrl esquerdo: rebind do MouseLockController do PlayerModule
-	    (StringValue "BoundKeys"); o Shift fica livre para correr.
+	  - Shift lock na tecla Ctrl esquerdo, implementado aqui (mouse travado no centro, personagem
+	    vira com a câmera, ombro deslocado). O nativo está desligado no project.json
+	    (StarterPlayer.EnableMouseLockOption = false) para o Shift ficar livre para correr.
 	  - Animações de movimento da equipe (Assets.Animations.Shared.Idle/Walk/Run) tocadas por
 	    nós mesmos com prioridade Movement, por cima do script "Animate" padrão (que fica só
 	    com pulo/queda). Assim funciona mesmo se o place trocar/remover o Animate.
@@ -15,6 +16,8 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -27,7 +30,7 @@ local MovementController = {}
 local localPlayer = Players.LocalPlayer
 local SPRINT_KEY = Enum.KeyCode.LeftShift
 local SPRINT_GAMEPAD = Enum.KeyCode.ButtonL3
-local SHIFTLOCK_KEYS = "LeftControl" -- formato do BoundKeys do MouseLockController
+local SHIFTLOCK_KEY = Enum.KeyCode.LeftControl
 local SHARED = "Shared"
 local MOVE_THRESHOLD = 0.5 -- studs/s a partir do qual conta como andando
 
@@ -179,28 +182,52 @@ local function setup(character: Model)
 end
 
 -- ---------------------------------------------------------------------------
--- Shift lock no Ctrl
+-- Shift lock próprio no Ctrl (o nativo está desligado: StarterPlayer.EnableMouseLockOption=false)
 -- ---------------------------------------------------------------------------
 
-local function rebindShiftLock()
-	task.spawn(function()
-		local scripts = localPlayer:WaitForChild("PlayerScripts")
-		local playerModule = scripts:WaitForChild("PlayerModule", 15)
-		local cameraModule = playerModule and playerModule:WaitForChild("CameraModule", 5)
-		local mouseLock = cameraModule and cameraModule:WaitForChild("MouseLockController", 5)
-		if not mouseLock then
-			warn("[MovementController] MouseLockController não encontrado; shift lock continua no Shift")
+local shiftLock = false
+local shiftLockConn: RBXScriptConnection? = nil
+local SHIFTLOCK_OFFSET = Vector3.new(1.75, 0, 0)
+
+local function applyShiftLock(active: boolean)
+	shiftLock = active
+	local character = localPlayer.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if shiftLockConn then
+		shiftLockConn:Disconnect()
+		shiftLockConn = nil
+	end
+	if not active then
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		if humanoid then
+			humanoid.AutoRotate = true
+			humanoid.CameraOffset = Vector3.zero
+		end
+		return
+	end
+	shiftLockConn = RunService.RenderStepped:Connect(function()
+		local char = localPlayer.Character
+		local hum = char and char:FindFirstChildOfClass("Humanoid")
+		local root = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if not hum or not root or hum.Health <= 0 then
 			return
 		end
-		local bound = mouseLock:FindFirstChild("BoundKeys")
-		if not bound or not bound:IsA("StringValue") then
-			bound = Instance.new("StringValue")
-			bound.Name = "BoundKeys"
-			bound.Parent = mouseLock
+		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+		hum.AutoRotate = false
+		hum.CameraOffset = SHIFTLOCK_OFFSET
+		local look = Workspace.CurrentCamera.CFrame.LookVector
+		local flat = Vector3.new(look.X, 0, look.Z)
+		if flat.Magnitude > 0.01 then
+			root.CFrame = CFrame.lookAt(root.Position, root.Position + flat.Unit)
 		end
-		(bound :: StringValue).Value = SHIFTLOCK_KEYS
-		Log.debug("[MovementController] shift lock rebindado para " .. SHIFTLOCK_KEYS)
 	end)
+end
+
+local function toggleShiftLock()
+	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+		return
+	end
+	applyShiftLock(not shiftLock)
 end
 
 -- ---------------------------------------------------------------------------
@@ -221,6 +248,8 @@ local function onInputBegan(input: InputObject, processed: boolean)
 	end
 	if input.KeyCode == SPRINT_KEY or input.KeyCode == SPRINT_GAMEPAD then
 		MovementController.SetSprint(true)
+	elseif input.KeyCode == SHIFTLOCK_KEY then
+		toggleShiftLock()
 	end
 end
 
@@ -244,6 +273,9 @@ function MovementController.Start()
 	localPlayer.CharacterAdded:Connect(function(character)
 		sprintHeld = false
 		setup(character)
+		if shiftLock then
+			applyShiftLock(true) -- reaplica no personagem novo
+		end
 		if UserInputService:IsKeyDown(SPRINT_KEY) then
 			MovementController.SetSprint(true)
 		end
@@ -251,7 +283,6 @@ function MovementController.Start()
 	if localPlayer.Character then
 		task.spawn(setup, localPlayer.Character)
 	end
-	rebindShiftLock()
 	Log.debug(("[MovementController] pronto (Shift corre a %d, Ctrl = shift lock)"):format(CombatConfig.Sprint.Speed))
 end
 

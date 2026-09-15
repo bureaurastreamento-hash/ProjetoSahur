@@ -32,6 +32,9 @@
       "StarterCharacterScripts": {
         "$path": "src/character",
         "$ignoreUnknownInstances": true
+      },
+      "$properties": {
+        "EnableMouseLockOption": false
       }
     },
     "Workspace": {
