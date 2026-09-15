@@ -18,6 +18,8 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local Log = require(Modules:WaitForChild("Log"))
+local ContentProvider = game:GetService("ContentProvider")
+local PackSounds = require(Modules:WaitForChild("PackSounds"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
 
 local DevController = {}
@@ -43,7 +45,7 @@ local NUMBER_COMMANDS: { [string]: string } = {
 local SIMPLE_COMMANDS = {
 	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill",
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
-	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState",
+	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god" }
 
@@ -187,6 +189,58 @@ local function buildCharacters()
 end
 
 -- ---------------------------------------------------------------------------
+-- Teste de sons dos packs (quais ids a Roblox deixa este jogo tocar)
+-- ---------------------------------------------------------------------------
+
+local probing = false
+local function probeSounds()
+	if probing then
+		return
+	end
+	probing = true
+	task.spawn(function()
+		local okCount, failCount = 0, 0
+		local BATCH = 50
+		for start = 1, #PackSounds, BATCH do
+			local sounds: { Instance } = {}
+			local byInstance: { [Instance]: any } = {}
+			for i = start, math.min(start + BATCH - 1, #PackSounds) do
+				local entry = PackSounds[i]
+				local sound = Instance.new("Sound")
+				sound.SoundId = "rbxassetid://" .. tostring(entry.id)
+				table.insert(sounds, sound)
+				byInstance[sound] = entry
+			end
+			pcall(function()
+				ContentProvider:PreloadAsync(sounds, function(assetId: string, status: Enum.AssetFetchStatus)
+					local id = assetId:match("(%d+)")
+					for sound, entry in byInstance do
+						if tostring(entry.id) == id then
+							local ok = status == Enum.AssetFetchStatus.Success
+							if ok then
+								okCount += 1
+							else
+								failCount += 1
+							end
+							warn(("[SoundProbe] %s %s %d %s <%s>"):format(if ok then "OK" else "FAIL", entry.pack, entry.id, entry.name, entry.path))
+							byInstance[sound] = nil
+							break
+						end
+					end
+				end)
+			end)
+			for _, sound in sounds do
+				sound:Destroy()
+			end
+			appendLog(true, ("sons: %d/%d testados (ok %d, falha %d)"):format(math.min(start + BATCH - 1, #PackSounds), #PackSounds, okCount, failCount))
+			task.wait(0.1)
+		end
+		warn(("[SoundProbe] FIM ok=%d falha=%d"):format(okCount, failCount))
+		probing = false
+	end)
+end
+
+-- ---------------------------------------------------------------------------
 -- Abrir
 -- ---------------------------------------------------------------------------
 
@@ -273,7 +327,9 @@ function DevController.Start()
 
 	Remotes.GetEvent(Remotes.Events.NotifyAdminResult).OnClientEvent:Connect(function(ok: boolean, message: string, state: any)
 		appendLog(ok == true, tostring(message))
-		if typeof(state) == "table" and selectedTarget ~= ALL then
+		if typeof(state) == "table" and state.testSounds == true then
+			probeSounds()
+		elseif typeof(state) == "table" and selectedTarget ~= ALL then
 			renderState(state)
 		end
 	end)

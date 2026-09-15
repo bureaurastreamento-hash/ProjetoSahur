@@ -54,9 +54,14 @@ ainda não existe, mesmo que pareça óbvio.
   O `default.project.json` DEVE continuar 100% aditivo (`$ignoreUnknownInstances` em tudo).
 
 ## Assets externos e UI
-- `AssetsPacks/` (ignorado no git) tem packs; ler com `python3 tools/rbx_tree.py arquivo`.
-  Só o que for legítimo e usado vai para `src/assets/`. NUNCA integrar dumps de outros jogos
-  (os `[Rova Assets]*.rbxl`): direitos + animações/áudio de terceiros não tocam no Roblox.
+- `AssetsPacks/` (ignorado no git) tem packs; ler com `python3 tools/rbx_tree.py arquivo` e
+  extrair com `~/.rokit/bin/lune run tools/extrair_pack.luau <kfs|sons|listar|vfx|import> arquivo`.
+  Decisão do dono (2026-09-15): os packs `[Rova Assets]*.rbxl` são licenciados e PODEM ser usados.
+  Limites técnicos: Animation/Sound de lá são só ponteiros de outra conta (animação não toca;
+  som só se for público) — animações vêm dos KeyframeSequences em `ServerStorage.Import.Animacoes`
+  que o dono republica (Save to Roblox) e cola o id em `src/assets/Animations.model.json`;
+  sons passam pelo comando dev "Testar sons dos packs" antes de entrar em `Sounds.model.json`.
+  VFX/meshes extraídos ficam em `Assets.VFX.Packs.<Pack>` e são ligados por alias com caminho.
 - VFX: nome exato em `Assets.VFX.<Personagem>` > alias do Particle Pack (`Assets.VFXAliases`)
   > `Shared.Placeholder`.
 - UI de topo usa TopbarPlus (`src/shared/Packages/Icon`, v3.4.0). Telas ficam em `src/ui/*.model.json`

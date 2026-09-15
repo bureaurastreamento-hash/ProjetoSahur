@@ -446,6 +446,11 @@ global.SetTime = function(_, args)
 	return true, ("ClockTime = %.1f"):format(Lighting.ClockTime)
 end
 
+global.TestSounds = function()
+	local list = require(Modules:WaitForChild("PackSounds")) :: { any }
+	return true, ("testando %d sons no cliente (veja o Output: [SoundProbe])"):format(#list), { testSounds = true }
+end
+
 global.ServerInfo = function()
 	local stats = AntiExploitService.GetStats()
 	local flagged = {}

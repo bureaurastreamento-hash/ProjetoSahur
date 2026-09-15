@@ -193,6 +193,19 @@ function FX.SpawnVFX(character: Model, folder: string, name: string, exact: bool
 		end)
 	end
 	local clone = template:Clone()
+	if clone:IsA("Folder") then
+		-- Packs guardam efeitos em Folders: vira Model para poder posicionar
+		local model = Instance.new("Model")
+		model.Name = clone.Name
+		for _, child in clone:GetChildren() do
+			child.Parent = model
+		end
+		for k, v in clone:GetAttributes() do
+			model:SetAttribute(k, v)
+		end
+		clone:Destroy()
+		clone = model
+	end
 	local originRelative = clone:GetAttribute("OriginRelative") == true
 	if clone:IsA("Attachment") then
 		clone.Parent = anchor

@@ -180,7 +180,23 @@ Memória entre sessões. Atualizar depois de cada mudança.
   Comandos por alvo aceitam `target = "*"`.
 - 2026-09-15 — Placar de líderes também na tela de perfil (`NotifyLeaderboard`, ProfileGui 520 px).
 
+- 2026-09-15 — **Packs Rova liberados pelo dono.** Lune instalado (Rokit) + `tools/extrair_pack.luau`.
+  Extraído: 35 KeyframeSequences → `src/import/Animacoes/<Pack>/*.rbxm` (ServerStorage.Import;
+  republicar no Studio); VFX de todos os personagens → `src/assets/VFX/Packs/OfficialJJS/*.rbxm`
+  (26 arquivos) e `Packs/ShadowBattlegroundsfull/*.rbxm` (41); mapas/armas/dummies do pack →
+  `src/import/<Pack>/`. 1477 SoundIds em `PackSounds.luau` + botão dev "Testar sons dos packs"
+  (PreloadAsync no cliente, imprime `[SoundProbe] OK|FAIL` no Output). `Assets.VFXAliases`
+  aceita caminho (`Packs/OfficialJJS/Damage/HitGlow`); `FX.SpawnVFX` converte Folder em Model.
+  `tools/listar_sons.py` lê SoundIds direto do binário (Lune não expõe SoundId).
+
 ## Em andamento
+- Sons dos packs: rodar "Testar sons dos packs" no Studio e me mandar o Output (ou eu leio o log);
+  os OK entram em `Sounds.model.json` por nome.
+- Animações dos packs: no Studio, `ServerStorage > Import > Animacoes`, clique direito no
+  KeyframeSequence > *Save to Roblox* (conta dona do jogo), copiar o id para `Animations.model.json`.
+  Úteis para nós: `Charge Punch`, `run`, `finisher`, `beatdown`, `teleport`, `Melee1`.
+- Mapear VFX dos packs por nome nas habilidades (preciso da descrição visual de cada um ou de
+  você olhar no Studio e me dizer "usa X no Meteoro").
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.
 - Receber ids das animações/sons da equipe e preencher `src/assets/Animations.model.json`

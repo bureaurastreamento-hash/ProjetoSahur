@@ -59,9 +59,10 @@ function Assets.GetAnimation(folder: string, name: string): Animation?
 	return nil
 end
 
--- Enquanto a arte não entrega o VFX com o nome exato, usamos efeitos do
--- Particle Pack (Assets.VFX.Packs.ParticlePack.<nome>). Um VFX com o nome exato
--- na pasta do personagem sempre tem prioridade sobre o alias.
+-- Enquanto a arte não entrega o VFX com o nome exato, usamos efeitos dos packs:
+--   "Wind"                          -> Particle Pack (Assets.VFX.Packs.ParticlePack.<nome>)
+--   "Packs/OfficialJJS/Damage/HitGlow" -> caminho completo dentro de Assets.VFX
+-- Um VFX com o nome exato na pasta do personagem sempre tem prioridade sobre o alias.
 local PACK = { "Packs", "ParticlePack", "[Shiro Dev Patreon] - Particle Set" }
 Assets.VFXAliases = {
 	["Brawler/ShoulderBash"] = "Wind",
@@ -103,7 +104,8 @@ function Assets.GetVFX(folder: string, name: string): Instance?
 	end
 	local alias = Assets.VFXAliases[folder .. "/" .. name]
 	if alias then
-		local packInst = findPackVFX(alias)
+		-- "Packs/OfficialJJS/Damage/HitGlow" = caminho dentro de Assets.VFX; sem "/" = Particle Pack
+		local packInst = if alias:find("/") then find("VFX", table.unpack(alias:split("/"))) else findPackVFX(alias)
 		if packInst then
 			return packInst
 		end
