@@ -2,9 +2,9 @@
 	MONTA O RIG DO BOSS NO STUDIO (modo Edit, com o Rojo conectado), em cima de
 	ServerStorage.BossModel, para dar para animar no Animation Editor.
 
-	COMO USAR: abra este arquivo, selecione TUDO (Ctrl+A), copie (Ctrl+C), vá no Studio em
-	View > Command Bar, cole (Ctrl+V) e aperte Enter. Depois: File > Save to Roblox.
-	(Colar só o caminho "tools/montar_rig_boss.luau" não funciona — tem que ser o conteúdo.)
+	COMO USAR (o jeito fácil): com o Rojo conectado, cole ESTA linha na Command Bar do Studio:
+	    require(game.ReplicatedStorage.Shared.Modules.BossRig).Studio()
+	Alternativa: copiar o conteúdo inteiro deste arquivo para a Command Bar.
 
 	O que faz (BossRig.Assemble, o mesmo que o servidor usa em runtime):
 	  • usa os grupos Tronco / Cabeça / BracoDir / BracoEsq / PernaDir / PernaEsq;

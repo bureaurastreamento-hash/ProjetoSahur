@@ -282,4 +282,21 @@ function BossRig.Assemble(model: Model, options: Options?): Report
 	return { parts = #allParts, motors = motors, welded = welded, groups = #groups, root = torsoHub.Name, hipHeight = humanoid.HipHeight }
 end
 
+--- Studio (modo Edit, Command Bar), UMA LINHA:
+---   require(game.ReplicatedStorage.Shared.Modules.BossRig).Studio()
+--- Aplica o rig em cima de ServerStorage.BossModel (mantém os grupos) para animar no Animation Editor.
+function BossRig.Studio(): Report?
+	local ServerStorage = game:GetService("ServerStorage")
+	local model = ServerStorage:FindFirstChild("BossModel", true)
+	if not model or not model:IsA("Model") then
+		warn("[BossRig] ServerStorage.BossModel não encontrado")
+		return nil
+	end
+	local report = BossRig.Assemble(model, { Flatten = false })
+	print(("[BossRig] pronto: %d partes em %d grupos, %d Motor6D, %d soldadas, raiz %s, HipHeight %.1f"):format(
+		report.parts, report.groups, report.motors, report.welded, report.root, report.hipHeight))
+	print("[BossRig] agora: selecione o BossModel, Avatar > Animation Editor; depois File > Save to Roblox.")
+	return report
+end
+
 return BossRig
