@@ -136,16 +136,20 @@ function BossRig.Assemble(model: Model, options: Options?): Report
 		error("[BossRig] modelo sem partes")
 	end
 
-	-- quem já está preso em algo (Motor6D/Weld/WeldConstraint como Part1)
+	-- jointed = participa de alguma junta/solda (não precisa de solda automática)
+	-- attached = é Part1 de algo (já está PRESO a um pai): hub assim não ganha junta tronco->membro
 	local jointed: { [BasePart]: boolean } = {}
+	local attached: { [BasePart]: boolean } = {}
 	local motors = 0
 	for _, d in model:GetDescendants() do
 		if d:IsA("Motor6D") and d.Part0 and d.Part1 then
 			motors += 1
 			jointed[d.Part0] = true
 			jointed[d.Part1] = true
+			attached[d.Part1] = true
 		elseif (d:IsA("Weld") or d:IsA("WeldConstraint")) and d.Part0 and d.Part1 then
 			jointed[d.Part1] = true
+			attached[d.Part1] = true
 		end
 	end
 
@@ -173,11 +177,12 @@ function BossRig.Assemble(model: Model, options: Options?): Report
 
 	-- juntas tronco -> membros (só se o hub do membro ainda não estiver preso a nada)
 	for _, g in groups do
-		if g ~= torso and g.hub and not jointed[g.hub] then
+		if g ~= torso and g.hub and not attached[g.hub] then
 			local jointName = GROUP_JOINT_NAMES[norm(g.name)] or g.name
 			motor(jointName, torsoHub, g.hub)
 			motors += 1
 			jointed[g.hub] = true
+			attached[g.hub] = true
 		end
 	end
 	jointed[torsoHub] = true
