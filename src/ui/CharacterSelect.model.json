@@ -17,11 +17,11 @@
      "UDim2": [
       [
        0,
-       682
+       912
       ],
       [
        0,
-       340
+       400
       ]
      ]
     },
@@ -285,7 +285,7 @@
         ],
         [
          0,
-         230
+         300
         ]
        ]
       },
@@ -345,11 +345,11 @@
          "UDim2": [
           [
            0,
-           150
+           168
           ],
           [
            0,
-           230
+           300
           ]
          ]
         },
@@ -378,7 +378,7 @@
           0.12
          ]
         },
-        "BackgroundTransparency": 0.1,
+        "BackgroundTransparency": 0.05,
         "Text": "",
         "Font": "GothamBold",
         "TextSize": 14,
@@ -391,7 +391,8 @@
         },
         "AutoButtonColor": true,
         "BorderSizePixel": 0,
-        "Visible": false
+        "Visible": false,
+        "ClipsDescendants": true
        },
        "children": [
         {
@@ -425,41 +426,10 @@
          }
         },
         {
-         "name": "UIPadding",
-         "className": "UIPadding",
+         "name": "Band",
+         "className": "Frame",
          "properties": {
-          "Name": "UIPadding",
-          "PaddingLeft": {
-           "UDim": [
-            0,
-            10
-           ]
-          },
-          "PaddingRight": {
-           "UDim": [
-            0,
-            10
-           ]
-          },
-          "PaddingTop": {
-           "UDim": [
-            0,
-            10
-           ]
-          },
-          "PaddingBottom": {
-           "UDim": [
-            0,
-            10
-           ]
-          }
-         }
-        },
-        {
-         "name": "Name",
-         "className": "TextLabel",
-         "properties": {
-          "Name": "Name",
+          "Name": "Band",
           "Size": {
            "UDim2": [
             [
@@ -468,7 +438,7 @@
             ],
             [
              0,
-             22
+             4
             ]
            ]
           },
@@ -481,6 +451,321 @@
             [
              0,
              0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundColor3": {
+           "Color3": [
+            0.35,
+            0.75,
+            1.0
+           ]
+          },
+          "BackgroundTransparency": 0,
+          "BorderSizePixel": 0,
+          "Visible": true
+         }
+        },
+        {
+         "name": "PortraitBox",
+         "className": "Frame",
+         "properties": {
+          "Name": "PortraitBox",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             120
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0,
+             4
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundColor3": {
+           "Color3": [
+            0.08,
+            0.08,
+            0.1
+           ]
+          },
+          "BackgroundTransparency": 0,
+          "BorderSizePixel": 0,
+          "Visible": true
+         },
+         "children": [
+          {
+           "name": "Portrait",
+           "className": "ImageLabel",
+           "properties": {
+            "Name": "Portrait",
+            "Size": {
+             "UDim2": [
+              [
+               1,
+               0
+              ],
+              [
+               1,
+               0
+              ]
+             ]
+            },
+            "Position": {
+             "UDim2": [
+              [
+               0,
+               0
+              ],
+              [
+               0,
+               0
+              ]
+             ]
+            },
+            "BackgroundTransparency": 1,
+            "Image": "",
+            "ScaleType": "Crop",
+            "BorderSizePixel": 0
+           }
+          },
+          {
+           "name": "Initial",
+           "className": "TextLabel",
+           "properties": {
+            "Name": "Initial",
+            "Size": {
+             "UDim2": [
+              [
+               1,
+               0
+              ],
+              [
+               1,
+               0
+              ]
+             ]
+            },
+            "Position": {
+             "UDim2": [
+              [
+               0,
+               0
+              ],
+              [
+               0,
+               0
+              ]
+             ]
+            },
+            "AnchorPoint": {
+             "Vector2": [
+              0,
+              0
+             ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "",
+            "Font": "GothamBold",
+            "TextSize": 56,
+            "TextColor3": {
+             "Color3": [
+              0.35,
+              0.75,
+              1.0
+             ]
+            },
+            "TextXAlignment": "Center",
+            "TextYAlignment": "Center",
+            "BorderSizePixel": 0,
+            "RichText": false,
+            "TextTransparency": 0.15
+           }
+          },
+          {
+           "name": "Glow",
+           "className": "UIGradient",
+           "properties": {
+            "Name": "Glow",
+            "Rotation": 90,
+            "Transparency": {
+             "NumberSequence": {
+              "keypoints": [
+               {
+                "time": 0,
+                "value": 0.6,
+                "envelope": 0
+               },
+               {
+                "time": 1,
+                "value": 0,
+                "envelope": 0
+               }
+              ]
+             }
+            }
+           }
+          }
+         ]
+        },
+        {
+         "name": "Badge",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Badge",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             0,
+             18
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             -8
+            ],
+            [
+             0,
+             10
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            1,
+            0
+           ]
+          },
+          "BackgroundTransparency": 0.15,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 10,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Center",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false,
+          "AutomaticSize": "X",
+          "BackgroundColor3": {
+           "Color3": [
+            0.1,
+            0.1,
+            0.12
+           ]
+          },
+          "ZIndex": 2
+         },
+         "children": [
+          {
+           "name": "UICorner",
+           "className": "UICorner",
+           "properties": {
+            "Name": "UICorner",
+            "CornerRadius": {
+             "UDim": [
+              0,
+              4
+             ]
+            }
+           }
+          },
+          {
+           "name": "UIPadding",
+           "className": "UIPadding",
+           "properties": {
+            "Name": "UIPadding",
+            "PaddingLeft": {
+             "UDim": [
+              0,
+              6
+             ]
+            },
+            "PaddingRight": {
+             "UDim": [
+              0,
+              6
+             ]
+            },
+            "PaddingTop": {
+             "UDim": [
+              0,
+              0
+             ]
+            },
+            "PaddingBottom": {
+             "UDim": [
+              0,
+              0
+             ]
+            }
+           }
+          }
+         ]
+        },
+        {
+         "name": "Name",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Name",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             -20
+            ],
+            [
+             0,
+             22
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             10
+            ],
+            [
+             0,
+             130
             ]
            ]
           },
@@ -508,19 +793,19 @@
          }
         },
         {
-         "name": "Abilities",
+         "name": "Tagline",
          "className": "TextLabel",
          "properties": {
-          "Name": "Abilities",
+          "Name": "Tagline",
           "Size": {
            "UDim2": [
             [
              1,
-             0
+             -20
             ],
             [
              0,
-             120
+             14
             ]
            ]
           },
@@ -528,11 +813,11 @@
            "UDim2": [
             [
              0,
-             0
+             10
             ],
             [
              0,
-             30
+             150
             ]
            ]
           },
@@ -545,7 +830,59 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamMedium",
-          "TextSize": 12,
+          "TextSize": 11,
+          "TextColor3": {
+           "Color3": [
+            0.62,
+            0.62,
+            0.68
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Abilities",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Abilities",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             -20
+            ],
+            [
+             0,
+             78
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             10
+            ],
+            [
+             0,
+             170
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamMedium",
+          "TextSize": 11,
           "TextColor3": {
            "Color3": [
             0.62,
@@ -557,7 +894,8 @@
           "TextYAlignment": "Top",
           "BorderSizePixel": 0,
           "RichText": false,
-          "TextWrapped": true
+          "TextWrapped": true,
+          "LineHeight": 1.2
          }
         },
         {
@@ -569,48 +907,70 @@
            "UDim2": [
             [
              1,
-             0
+             -20
             ],
             [
              0,
-             22
+             28
             ]
            ]
           },
           "Position": {
            "UDim2": [
             [
-             0,
+             0.5,
              0
             ],
             [
              1,
-             0
+             -10
             ]
            ]
           },
           "AnchorPoint": {
            "Vector2": [
-            0,
+            0.5,
             1
            ]
           },
-          "BackgroundTransparency": 1,
+          "BackgroundTransparency": 0.85,
           "Text": "",
           "Font": "GothamBold",
-          "TextSize": 13,
+          "TextSize": 12,
           "TextColor3": {
            "Color3": [
-            0.35,
-            0.75,
-            1.0
+            0.96,
+            0.96,
+            0.97
            ]
           },
-          "TextXAlignment": "Left",
+          "TextXAlignment": "Center",
           "TextYAlignment": "Center",
           "BorderSizePixel": 0,
-          "RichText": false
-         }
+          "RichText": false,
+          "BackgroundColor3": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          }
+         },
+         "children": [
+          {
+           "name": "UICorner",
+           "className": "UICorner",
+           "properties": {
+            "Name": "UICorner",
+            "CornerRadius": {
+             "UDim": [
+              0,
+              5
+             ]
+            }
+           }
+          }
+         ]
         }
        ]
       }

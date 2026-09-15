@@ -2,7 +2,7 @@
 --[[
 	CombatController (cliente)
 	Só captura input e mostra feedback. NUNCA decide dano.
-	  - Botão esquerdo do mouse: RequestAttack("M1")
+	  - Botão esquerdo do mouse: RequestAttack("M1"); segurar = combo de 4 automático
 	  - Segurar F: RequestBlock(true) / soltar: RequestBlock(false)
 
 	Feedback (tudo por nome em ReplicatedStorage.Assets, ver Assets.luau):
@@ -14,6 +14,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -43,6 +44,38 @@ CombatController.TouchAttackEnabled = true
 --- Soco (M1). Usado pelo input e pelos botões de toque.
 function CombatController.Attack()
 	requestAttack:FireServer("M1")
+end
+
+-- Segurar o botão = os 4 golpes saem sozinhos, no ritmo do Cooldown; depois do 4º o servidor
+-- impõe ComboEndCooldown (sem combo infinito). O servidor continua validando cada pedido.
+local attackHeld = false
+local autoAttackConn: RBXScriptConnection? = nil
+local nextAutoAttackAt = 0
+
+local function stopAutoAttack()
+	attackHeld = false
+	if autoAttackConn then
+		autoAttackConn:Disconnect()
+		autoAttackConn = nil
+	end
+end
+
+local function startAutoAttack()
+	if attackHeld then
+		return
+	end
+	attackHeld = true
+	CombatController.Attack()
+	nextAutoAttackAt = os.clock() + CombatConfig.Attacks.M1.Cooldown
+	autoAttackConn = RunService.Heartbeat:Connect(function()
+		if not attackHeld then
+			return
+		end
+		if os.clock() >= nextAutoAttackAt then
+			nextAutoAttackAt = os.clock() + CombatConfig.Attacks.M1.Cooldown
+			CombatController.Attack() -- em cooldown/ComboEnd o servidor só ignora
+		end
+	end)
 end
 
 --- Segurar/soltar block. Idempotente.
@@ -211,16 +244,18 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 		return
 	end
 	if input.UserInputType == ATTACK_KEY or input.KeyCode == ATTACK_GAMEPAD then
-		CombatController.Attack()
+		startAutoAttack()
 	elseif input.UserInputType == ATTACK_TOUCH and CombatController.TouchAttackEnabled then
-		CombatController.Attack()
+		startAutoAttack()
 	elseif input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
 		CombatController.SetBlock(true)
 	end
 end
 
 local function onInputEnded(input: InputObject, _gameProcessed: boolean)
-	if input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
+	if input.UserInputType == ATTACK_KEY or input.KeyCode == ATTACK_GAMEPAD or input.UserInputType == ATTACK_TOUCH then
+		stopAutoAttack()
+	elseif input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
 		CombatController.SetBlock(false)
 	end
 end
@@ -247,6 +282,7 @@ function CombatController.Start()
 
 	localPlayer.CharacterAdded:Connect(function()
 		blockHeld = false
+		stopAutoAttack()
 	end)
 
 	Log.debug("[CombatController] pronto. Mouse1/toque/R1 = soco, segurar F/L1 = block")

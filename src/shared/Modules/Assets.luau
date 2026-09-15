@@ -147,6 +147,11 @@ Assets.VFXPack = {
 	["Boss/Charge"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
 	["Boss/Charge_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
 	["Boss/Roar"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 3 },
+	["Boss/Roar_Hit"] = "Packs/OfficialJJS/Misc/S/HeavyHit",
+	["Boss/Shockwave"] = "Packs/OfficialJJS/Locust/Slam",
+	["Boss/Shockwave_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	["Boss/Leap"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
+	["Boss/Leap_Hit"] = { Path = "Packs/ShadowBattlegroundsfull/MeteoricCombination/FinalImpact2", Lifetime = 3 },
 } :: { [string]: PackChoice }
 
 local function findPath(path: string): Instance?

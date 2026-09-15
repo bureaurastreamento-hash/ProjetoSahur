@@ -304,6 +304,20 @@
           "attributes": {
             "R15Id": ""
           }
+        },
+        {
+          "name": "Shockwave",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
+        },
+        {
+          "name": "Leap",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          }
         }
       ]
     },

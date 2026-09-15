@@ -3,8 +3,7 @@
 	TopbarController (cliente)
 	Ícones do topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon):
 	  Loja (B)        -> ShopGui.Panel (conteúdo no ShopController)
-	  Personagens (V) -> DROPDOWN abaixo do ícone com um sub-ícone por personagem (usar/comprar);
-	                     a tela CharacterSelect ficou como reserva (não é mais aberta)
+	  Personagens (V) -> CharacterSelect.Panel (cartões; conteúdo no HUDController)
 	  Perfil (P)      -> ProfileGui.Panel (stats/moedas/nível/missões vindos de NotifyProfile)
 	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
 	  Controles       -> HelpGui.Panel
@@ -22,6 +21,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
+local HUDController = require(script.Parent:WaitForChild("HUDController"))
 
 local TopbarController = {}
 
@@ -41,11 +41,7 @@ local missionsList: Frame
 local missionTemplate: TextLabel
 local charactersIcon: any
 local shopIcon: any
-local characterIcons: { [string]: any } = {}
-local profileCache: any = nil
 local notifiedAffordable = false
-local requestSelectCharacter: RemoteEvent
-local requestUnlockCharacter: RemoteEvent
 
 local STAT_LABELS = {
 	{ "wins", "Vitórias" },
@@ -103,79 +99,6 @@ local function renderProgression(profile: any)
 	end
 end
 
---- Espelha DataService.HasCharacter (o servidor é quem decide; isto é só para o rótulo).
-local function ownsCharacter(id: string): boolean
-	local def = CharacterDefs.Get(id)
-	if not def then
-		return false
-	end
-	if profileCache ~= nil and table.find(profileCache.unlockedCharacters or {}, id) ~= nil then
-		return true
-	end
-	local access = CharacterDefs.AccessOf(def)
-	local dev = localPlayer:GetAttribute("IsDeveloper") == true
-	if access == "early" then
-		return dev
-	elseif access == "vip" then
-		return dev or localPlayer:GetAttribute("Pass_vip") == true or localPlayer:GetAttribute("Pass_all_characters") == true
-	end
-	return def.UnlockCost <= 0
-end
-
---- Rótulo de cada sub-ícone: "● Brawler" (selecionado), "Swift", "Mystic · 250 moedas",
---- "Guardian · VIP", "Sahur · em breve".
-local function refreshCharacterIcons()
-	local currentId = localPlayer:GetAttribute("CharacterId")
-	for id, icon in characterIcons do
-		local def = CharacterDefs.Get(id)
-		local name = if def then def.DisplayName else id
-		local access = if def then CharacterDefs.AccessOf(def) else "coins"
-		if id == currentId then
-			icon:setLabel("● " .. name)
-		elseif ownsCharacter(id) then
-			icon:setLabel(name)
-		elseif access == "vip" then
-			icon:setLabel(name .. " · VIP")
-		elseif access == "early" then
-			icon:setLabel(name .. " · em breve")
-		else
-			icon:setLabel(("%s · %d moedas"):format(name, if def then def.UnlockCost else 0))
-		end
-	end
-end
-
-local function buildCharacterDropdown()
-	local children = {}
-	for i, id in CharacterDefs.Order do
-		local icon = Icon.new()
-			:setName("Char_" .. id)
-			:setLabel(id)
-			:setWidth(190)
-			:setOrder(i)
-			:oneClick()
-		icon.selected:Connect(function()
-			local def = CharacterDefs.Get(id)
-			local access = if def then CharacterDefs.AccessOf(def) else "coins"
-			if ownsCharacter(id) then
-				requestSelectCharacter:FireServer(id)
-			elseif access == "vip" and shopIcon then
-				shopIcon:select() -- VIP se compra na loja
-			else
-				requestUnlockCharacter:FireServer(id) -- moedas (ou "early": o servidor responde e a HUD avisa)
-			end
-		end)
-		characterIcons[id] = icon
-		table.insert(children, icon)
-	end
-	charactersIcon:setDropdown(children)
-	-- joinFeature (Utility) desliga o autoDeselect de quem tem dropdown; religa para o
-	-- "Personagens" fechar quando outro menu abre (e vice-versa)
-	task.defer(function()
-		charactersIcon:autoDeselect(true)
-	end)
-	refreshCharacterIcons()
-end
-
 --- Diagnóstico: aponta cópias alheias do TopbarPlus/"Example" que vieram com o place.
 local function reportForeignTopbar()
 	local ours = ReplicatedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("Packages")
@@ -190,8 +113,6 @@ local function reportForeignTopbar()
 end
 
 local function renderProfile(profile: any, sessionOnly: boolean)
-	profileCache = profile
-	refreshCharacterIcons()
 	profileCoins.Text = ("%d moedas"):format(profile.coins or 0)
 	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
@@ -238,8 +159,6 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 end
 
 function TopbarController.Init()
-	requestSelectCharacter = Remotes.GetEvent(Remotes.Events.RequestSelectCharacter)
-	requestUnlockCharacter = Remotes.GetEvent(Remotes.Events.RequestUnlockCharacter)
 	local profileGui = get(playerGui, "ProfileGui")
 	profilePanel = get(profileGui, "Panel") :: Frame
 	profileCoins = get(profilePanel, "Coins") :: TextLabel
@@ -259,6 +178,7 @@ function TopbarController.Start()
 	local helpPanel = get(get(playerGui, "HelpGui"), "Panel") :: Frame
 	local duelPanel = get(get(playerGui, "DuelGui"), "Panel") :: Frame
 	local shopPanel = get(get(playerGui, "ShopGui"), "Panel") :: Frame
+	local selectPanel = get(get(playerGui, "CharacterSelect"), "Panel") :: Frame
 
 	-- Nossa lista substitui a PlayerList padrão (Tab)
 	pcall(function()
@@ -278,12 +198,11 @@ function TopbarController.Start()
 		:setCaption("Trocar personagem")
 		:setCaptionHint(Enum.KeyCode.V)
 		:bindToggleKey(Enum.KeyCode.V)
+		:bindToggleItem(selectPanel)
 		:setOrder(1)
-	buildCharacterDropdown()
-	localPlayer:GetAttributeChangedSignal("CharacterId"):Connect(refreshCharacterIcons)
-	for _, attr in { "IsDeveloper", "Pass_vip", "Pass_all_characters" } do
-		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshCharacterIcons)
-	end
+	HUDController.OpenShop.Event:Connect(function()
+		shopIcon:select() -- cartão VIP clicado
+	end)
 
 	Icon.new()
 		:setLabel("Perfil")

@@ -274,6 +274,21 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - "Example": é `Workspace.TopbarPlus` (pasta inteira, com READ_ME) — o dono apaga.
 - Boss: dono acha "incompletinho"; aguardando lista do que falta (visual do rig, mais golpes, barra).
 
+### Rodada 2 de polimento (2026-09-15, FALTA TESTAR)
+- Dash (`CharacterDefs.DashTuning`): frente/trás ×1,4, lateral ×1,0, correção 8 rad/s; parede/jogador
+  só zera o empurrão naquele frame — a duração continua contando (sem dash grátis); ao terminar,
+  velocidade cai para WalkSpeed (sem momento residual → AntiExploit parou de rubber-bandar).
+  `AntiExploit.Grace` nunca encurta uma graça maior.
+- Segurar Mouse1 = combo de 4 automático (cliente repete no ritmo do Cooldown; servidor impõe
+  ComboEndCooldown).
+- Seleção de personagem voltou a ser painel (cartões estilizados: faixa de cor, retrato/inicial,
+  selo GRÁTIS/MOEDAS/VIP/ACESSO ANTECIPADO, tagline, habilidades, botão USAR/COMPRAR/ABRIR LOJA).
+  `CharacterDefs.<Id>.Image` = rbxassetid do retrato (o dono cria). Dropdown removido.
+- Boss: 6 golpes (Swipe, Slam, **Shockwave** anel 18, **Leap** pulo em área, **Roar** atordoa 1,2 s
+  na fase 2 e na virada, Charge fase 2), escolha ponderada (`Weight`), alvo por agressão
+  (`BossConfig.AI`: quem mais bateu, perto, sem bloquear; reavalia a cada 5 s), fase 2 com
+  cooldown ×0,7, dano ×1,2 e combo Swipe. Animações Boss.Slam/Charge/Shockwave/Leap vazias (equipe).
+
 ### BUGS / PENDÊNCIAS ABERTAS (ordem de prioridade)
 1. **Animações não aparecem no jogador** (boss/bonecos OK). Causa confirmada em 2026-09-15 11:00: o
    jogador nasce **R15** mesmo com Game Settings em R6 e sem StarterCharacter. Solução aplicada

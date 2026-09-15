@@ -40,6 +40,8 @@ type Fight = {
 	cooldowns: { [string]: number }, -- os.clock() em que o golpe libera
 	lastSeenPlayer: number,
 	finished: boolean,
+	target: Player?,
+	targetChosenAt: number,
 }
 
 local state = "Ready" -- Ready | Fighting | Cooldown | Missing
@@ -186,18 +188,54 @@ local function telegraph(position: Vector3, radius: number, seconds: number)
 end
 
 local function hitAround(f: Fight, center: Vector3, attack: BossConfig.Attack)
+	local damage = attack.Damage * (if f.phase >= 2 then BossConfig.AI.Phase2DamageScale else 1)
 	for _, victim in Hitbox.AroundPoint(f.model, center, attack.Radius, 12) do
-		if Players:GetPlayerFromCharacter(victim) then
-			CombatService.ResolveNpcHit(f.model, victim, attack.Damage, attack.Knockback)
+		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		if victimPlayer then
+			local dealt = CombatService.ResolveNpcHit(f.model, victim, damage, attack.Knockback)
+			if dealt > 0 and typeof(attack.StunSeconds) == "number" then
+				CombatService.Stun(victimPlayer, attack.StunSeconds, "stunned")
+			end
 		end
+	end
+end
+
+--- Move o boss até `goal` em `seconds` com um arco (pulo). Servidor é dono do rig.
+local function leapTo(f: Fight, goal: Vector3, seconds: number)
+	local from = f.root.Position
+	local t0 = os.clock()
+	local height = 14
+	while not f.finished and f.model.Parent do
+		local a = math.clamp((os.clock() - t0) / seconds, 0, 1)
+		local pos = from:Lerp(goal, a) + Vector3.new(0, math.sin(a * math.pi) * height, 0)
+		local flat = Vector3.new(goal.X - from.X, 0, goal.Z - from.Z)
+		f.root.CFrame = if flat.Magnitude > 0.1 then CFrame.lookAt(pos, pos + flat.Unit) else CFrame.new(pos)
+		if a >= 1 then
+			break
+		end
+		task.wait()
 	end
 end
 
 local function doAttack(f: Fight, name: string, target: BasePart)
 	local attack = BossConfig.Attacks[name]
-	f.cooldowns[name] = os.clock() + attack.Cooldown
+	f.cooldowns[name] = os.clock() + attack.Cooldown * (if f.phase >= 2 then BossConfig.AI.Phase2CooldownScale else 1)
 	f.humanoid:MoveTo(f.root.Position) -- para durante o golpe
 	broadcast("attack", { model = f.model, name = name, phase = "windup", windup = attack.Windup })
+	if name == "Leap" then
+		local goal = target.Position
+		telegraph(goal, attack.Radius, attack.Windup + 0.6)
+		task.wait(attack.Windup)
+		if f.finished then
+			return
+		end
+		leapTo(f, Vector3.new(goal.X, f.root.Position.Y, goal.Z), 0.55)
+		if not f.finished then
+			broadcast("attack", { model = f.model, name = name, phase = "hit", position = f.root.Position, radius = attack.Radius })
+			hitAround(f, f.root.Position, attack)
+		end
+		return
+	end
 	if name == "Charge" then
 		telegraph(target.Position, attack.Radius, attack.Windup + 0.6)
 		task.wait(attack.Windup)
@@ -218,30 +256,70 @@ local function doAttack(f: Fight, name: string, target: BasePart)
 		end
 		return
 	end
-	local center = if name == "Slam" then f.root.Position else f.root.Position + f.root.CFrame.LookVector * (attack.Radius * 0.6)
+	local centered = name == "Slam" or name == "Shockwave" or name == "Roar"
+	local center = if centered then f.root.Position else f.root.Position + f.root.CFrame.LookVector * (attack.Radius * 0.6)
 	telegraph(center, attack.Radius, attack.Windup + 0.15)
 	task.wait(attack.Windup)
 	if f.finished then
 		return
 	end
-	local hitCenter = if name == "Slam" then f.root.Position else f.root.Position + f.root.CFrame.LookVector * (attack.Radius * 0.6)
+	local hitCenter = if centered then f.root.Position else f.root.Position + f.root.CFrame.LookVector * (attack.Radius * 0.6)
 	broadcast("attack", { model = f.model, name = name, phase = "hit", position = hitCenter, radius = attack.Radius })
 	hitAround(f, hitCenter, attack)
 end
 
+--- Sorteia entre os golpes prontos e no alcance, ponderado por Weight (fase 2 libera Charge/Roar).
 local function chooseAttack(f: Fight, dist: number): string?
 	local now = os.clock()
-	local order: { string } = if f.phase >= 2 then { "Charge", "Slam", "Swipe" } else { "Slam", "Swipe" }
-	for _, name in ipairs(order) do
-		local attack = BossConfig.Attacks[name]
-		if (f.cooldowns[name] or 0) <= now and dist <= attack.Range then
-			if name == "Charge" and dist < 12 then
-				continue -- investida só de longe
-			end
-			return name
+	local candidates: { { name: string, weight: number } } = {}
+	local total = 0
+	for name, attack in BossConfig.Attacks :: { [string]: BossConfig.Attack } do
+		if attack.Phase and f.phase < attack.Phase then
+			continue
+		end
+		if (f.cooldowns[name] or 0) > now or dist > attack.Range then
+			continue
+		end
+		if attack.MinRange and dist < attack.MinRange then
+			continue
+		end
+		local weight = attack.Weight or 1
+		table.insert(candidates, { name = name, weight = weight })
+		total += weight
+	end
+	if total <= 0 then
+		return nil
+	end
+	local roll = math.random() * total
+	for _, c in candidates do
+		roll -= c.weight
+		if roll <= 0 then
+			return c.name
 		end
 	end
-	return nil
+	return candidates[#candidates].name
+end
+
+--- Prioridade: quem mais bateu no boss, perto e sem bloquear. Reavalia a cada RetargetSeconds
+--- ou quando o alvo some/morre/sai da arena.
+local function pickTarget(f: Fight, near: { { player: Player, root: BasePart, dist: number } }, center: Vector3): { player: Player, root: BasePart, dist: number }?
+	local best, bestScore = nil, -math.huge
+	for _, entry in near do
+		if (entry.root.Position - center).Magnitude > BossConfig.ArenaRadius then
+			continue
+		end
+		local score = (f.damageBy[entry.player] or 0) * BossConfig.AI.AggroDamageWeight - entry.dist * 0.05
+		if CombatService.IsBlocking(entry.player) then
+			score -= BossConfig.AI.AggroBlockPenalty
+		end
+		if entry.player == f.target then
+			score += 0.5 -- um pouco de inércia para não ficar trocando
+		end
+		if score > bestScore then
+			best, bestScore = entry, score
+		end
+	end
+	return best
 end
 
 -- ---------------------------------------------------------------------------
@@ -313,12 +391,34 @@ local function aiLoop(f: Fight)
 	local lastState = 0
 	while not f.finished and f.humanoid.Health > 0 and f.model.Parent do
 		local near = playersNear(f.root.Position, BossConfig.ArenaRadius * 1.3)
-		local target = near[1]
-		if target and (target.root.Position - center).Magnitude <= BossConfig.ArenaRadius then
+		-- alvo atual continua válido? senão (ou passou RetargetSeconds) escolhe de novo
+		local target = nil
+		for _, entry in near do
+			if entry.player == f.target and (entry.root.Position - center).Magnitude <= BossConfig.ArenaRadius then
+				target = entry
+			end
+		end
+		if not target or os.clock() - f.targetChosenAt > BossConfig.AI.RetargetSeconds then
+			local picked = pickTarget(f, near, center)
+			if picked then
+				target = picked
+				f.target = picked.player
+				f.targetChosenAt = os.clock()
+			end
+		end
+		if target then
 			f.lastSeenPlayer = os.clock()
 			local attackName = chooseAttack(f, target.dist)
 			if attackName then
 				doAttack(f, attackName, target.root)
+				-- fase 2: emenda um Swipe se o alvo ficou colado (combo)
+				if not f.finished and f.phase >= 2 and math.random() < BossConfig.AI.ComboChance then
+					local again = playersNear(f.root.Position, BossConfig.Attacks.Swipe.Range)
+					if #again > 0 then
+						f.cooldowns.Swipe = 0
+						doAttack(f, "Swipe", again[1].root)
+					end
+				end
 			else
 				f.humanoid:MoveTo(target.root.Position)
 			end
@@ -338,6 +438,9 @@ local function aiLoop(f: Fight)
 			f.phase = 2
 			f.humanoid.WalkSpeed = BossConfig.PhaseTwoSpeed
 			broadcast("phase", { phase = 2, model = f.model })
+			-- virada de fase: rugido na hora (atordoa quem estiver colado)
+			f.cooldowns.Roar = 0
+			doAttack(f, "Roar", f.root)
 		end
 		if os.clock() - lastState > 0.5 then
 			lastState = os.clock()
@@ -385,6 +488,8 @@ local function summon(player: Player)
 		cooldowns = {},
 		lastSeenPlayer = os.clock(),
 		finished = false,
+		target = nil,
+		targetChosenAt = 0,
 	}
 	fight = f
 	humanoid.Died:Once(function()

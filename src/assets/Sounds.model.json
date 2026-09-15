@@ -460,6 +460,56 @@
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
+        },
+        {
+          "name": "Roar_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7093763783",
+            "Volume": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "Shockwave",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9116684884",
+            "Volume": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "Shockwave_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7093763783",
+            "Volume": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "Leap",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9114362943",
+            "Volume": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "Leap_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9113504593",
+            "Volume": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
         }
       ]
     },

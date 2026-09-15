@@ -31,6 +31,9 @@ local AbilityController = require(script.Parent:WaitForChild("AbilityController"
 
 local HUDController = {}
 
+--- Disparado quando um cartão VIP é clicado (TopbarController abre a Loja).
+HUDController.OpenShop = Instance.new("BindableEvent")
+
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
@@ -78,6 +81,27 @@ local profile: any = nil
 local CARD_SELECTED = Color3.fromRGB(90, 190, 255)
 local CARD_ACTION = Color3.fromRGB(240, 240, 245)
 local CARD_LOCKED = Color3.fromRGB(255, 204, 77)
+local CARD_EARLY = Color3.fromRGB(180, 120, 255)
+local CARD_MUTED = Color3.fromRGB(158, 158, 173)
+
+--- Espelha DataService.HasCharacter (servidor decide; aqui é só para o cartão).
+local function ownsCharacter(id: string): boolean
+	local def = CharacterDefs.Get(id)
+	if not def then
+		return false
+	end
+	if profile ~= nil and table.find(profile.unlockedCharacters or {}, id) ~= nil then
+		return true
+	end
+	local access = CharacterDefs.AccessOf(def)
+	local dev = localPlayer:GetAttribute("IsDeveloper") == true
+	if access == "early" then
+		return dev
+	elseif access == "vip" then
+		return dev or localPlayer:GetAttribute("Pass_vip") == true or localPlayer:GetAttribute("Pass_all_characters") == true
+	end
+	return def.UnlockCost <= 0
+end
 
 local currentState = if MatchConfig.FreeRoam then "FreeRoam" else "Waiting"
 local stateData: { [string]: any } = {}
@@ -248,19 +272,48 @@ local function refreshMatchUI()
 	for id, b in characterButtons do
 		local def = CharacterDefs.Get(id)
 		local access = if def then CharacterDefs.AccessOf(def) else "coins"
-		local owned = def ~= nil and ((access == "coins" and def.UnlockCost <= 0) or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
+		local owned = ownsCharacter(id)
 		local status = b:FindFirstChild("Status") :: TextLabel
+		local badge = b:FindFirstChild("Badge") :: TextLabel
 		local stroke = b:FindFirstChildOfClass("UIStroke")
-		if owned then
-			status.Text = if id == currentId then "SELECIONADO" else "USAR"
-			status.TextColor3 = if id == currentId then CARD_SELECTED else CARD_ACTION
-		else
-			status.Text = if access == "vip" then "VIP" elseif access == "early" then "EM BREVE" else ("%d MOEDAS"):format(if def then def.UnlockCost else 0)
+		local color = if def and def.Color then def.Color else CARD_SELECTED
+		if id == currentId then
+			status.Text = "SELECIONADO"
+			status.TextColor3 = color
+			status.BackgroundTransparency = 0.75
+		elseif owned then
+			status.Text = "USAR"
+			status.TextColor3 = CARD_ACTION
+			status.BackgroundTransparency = 0.85
+		elseif access == "vip" then
+			status.Text = "ABRIR LOJA"
 			status.TextColor3 = CARD_LOCKED
+			status.BackgroundTransparency = 0.85
+		elseif access == "early" then
+			status.Text = "BLOQUEADO"
+			status.TextColor3 = CARD_MUTED
+			status.BackgroundTransparency = 0.92
+		else
+			status.Text = ("COMPRAR · %d"):format(if def then def.UnlockCost else 0)
+			status.TextColor3 = CARD_LOCKED
+			status.BackgroundTransparency = 0.85
+		end
+		if access == "vip" then
+			badge.Text = "VIP"
+			badge.TextColor3 = CARD_LOCKED
+		elseif access == "early" then
+			badge.Text = "ACESSO ANTECIPADO"
+			badge.TextColor3 = CARD_EARLY
+		elseif def and def.UnlockCost > 0 then
+			badge.Text = if owned then "SEU" else ("%d MOEDAS"):format(def.UnlockCost)
+			badge.TextColor3 = if owned then CARD_MUTED else CARD_LOCKED
+		else
+			badge.Text = "GRÁTIS"
+			badge.TextColor3 = CARD_MUTED
 		end
 		if stroke then
-			stroke.Color = if id == currentId then CARD_SELECTED else Color3.new(1, 1, 1)
-			stroke.Transparency = if id == currentId then 0.2 else 0.86
+			stroke.Color = if id == currentId then color else Color3.new(1, 1, 1)
+			stroke.Transparency = if id == currentId then 0.1 else 0.86
 		end
 	end
 	local coins = localPlayer:GetAttribute("Coins")
@@ -444,7 +497,20 @@ function HUDController.Start()
 		local b = selectTemplate:Clone()
 		b.Visible = true
 		b.LayoutOrder = i
+		local color = if def and def.Color then def.Color else CARD_SELECTED
 		;(b:FindFirstChild("Name") :: TextLabel).Text = if def then def.DisplayName else id
+		;(b:FindFirstChild("Tagline") :: TextLabel).Text = if def and def.Tagline then def.Tagline else ""
+		;(b:FindFirstChild("Band") :: Frame).BackgroundColor3 = color
+		local portraitBox = b:FindFirstChild("PortraitBox") :: Frame
+		local portrait = portraitBox:FindFirstChild("Portrait") :: ImageLabel
+		local initial = portraitBox:FindFirstChild("Initial") :: TextLabel
+		if def and def.Image and def.Image ~= "" then
+			portrait.Image = def.Image
+			initial.Visible = false
+		else
+			initial.Text = (if def then def.DisplayName else id):sub(1, 1)
+			initial.TextColor3 = color
+		end
 		local lines = {}
 		if def then
 			for slot, ability in def.Abilities do
@@ -454,11 +520,13 @@ function HUDController.Start()
 		;(b:FindFirstChild("Abilities") :: TextLabel).Text = table.concat(lines, "\n")
 		b.Parent = selectList
 		b.Activated:Connect(function()
-			local owned = def ~= nil and (def.UnlockCost <= 0 or (profile ~= nil and table.find(profile.unlockedCharacters, id) ~= nil))
-			if owned then
+			local access = if def then CharacterDefs.AccessOf(def) else "coins"
+			if ownsCharacter(id) then
 				requestSelectCharacter:FireServer(id)
+			elseif access == "vip" then
+				HUDController.OpenShop:Fire()
 			else
-				requestUnlockCharacter:FireServer(id)
+				requestUnlockCharacter:FireServer(id) -- moedas; "early" o servidor nega e o banner avisa
 			end
 		end)
 		characterButtons[id] = b
@@ -562,7 +630,7 @@ function HUDController.Start()
 		refreshSlots()
 		refreshMatchUI()
 	end)
-	for _, attr in { "InMatch", "InQueue" } do
+	for _, attr in { "InMatch", "InQueue", "IsDeveloper", "Pass_vip", "Pass_all_characters" } do
 		localPlayer:GetAttributeChangedSignal(attr):Connect(refreshMatchUI)
 	end
 

@@ -192,17 +192,36 @@ write("HUD.model.json", hud)
 # =============================================================================
 # Seleção de personagem (cartões)
 # =============================================================================
-CARD_W, CARD_H = 150, 230
-card = button("Template", "", ud(0, CARD_W, 0, CARD_H), ud(0, 0, 0, 0), bg=CARD, t=0.1, extra={"Visible": False},
-              children=[
-    padding(10),
-    label("Name", "", ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16),
-    label("Abilities", "", ud(1, 0, 0, 120), ud(0, 0, 0, 30), ts=12, color=MUTED, yalign="Top",
-          extra={"TextWrapped": True}),
-    label("Status", "", ud(1, 0, 0, 22), ud(0, 0, 1, 0), anchor=(0, 1), font=FONT_B, ts=13, color=ACCENT),
+CARD_W, CARD_H = 168, 300
+PURPLE = [0.70, 0.45, 1.0]
+card = button("Template", "", ud(0, CARD_W, 0, CARD_H), ud(0, 0, 0, 0), bg=CARD, t=0.05, extra={"Visible": False,
+              "ClipsDescendants": True}, children=[
+    # faixa de cor do personagem no topo + retrato (imagem ou inicial)
+    frame("Band", ud(1, 0, 0, 4), ud(0, 0, 0, 0), bg=ACCENT, t=0),
+    frame("PortraitBox", ud(1, 0, 0, 120), ud(0, 0, 0, 4), bg=[0.08, 0.08, 0.10], t=0, children=[
+        node("Portrait", "ImageLabel", {"Size": ud(1, 0, 1, 0), "Position": ud(0, 0, 0, 0), "BackgroundTransparency": 1,
+                                        "Image": "", "ScaleType": "Crop", "BorderSizePixel": 0}),
+        label("Initial", "", ud(1, 0, 1, 0), ud(0, 0, 0, 0), font=FONT_B, ts=56, color=ACCENT, xalign="Center",
+              extra={"TextTransparency": 0.15}),
+        node("Glow", "UIGradient", {"Rotation": 90, "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.6, "envelope": 0},
+                                                                          {"time": 1, "value": 0, "envelope": 0}]}}}),
+    ]),
+    # selo: GRÁTIS / 250 MOEDAS / VIP / EM BREVE
+    label("Badge", "", ud(0, 0, 0, 18), ud(1, -8, 0, 10), anchor=(1, 0), font=FONT_B, ts=10, color=TEXT,
+          xalign="Center", extra={"AutomaticSize": "X", "BackgroundTransparency": 0.15,
+                                  "BackgroundColor3": col([0.1, 0.1, 0.12]), "ZIndex": 2},
+          children=[corner(4), padding(6, 0)]),
+    label("Name", "", ud(1, -20, 0, 22), ud(0, 10, 0, 130), font=FONT_B, ts=16),
+    label("Tagline", "", ud(1, -20, 0, 14), ud(0, 10, 0, 150), ts=11, color=MUTED),
+    label("Abilities", "", ud(1, -20, 0, 78), ud(0, 10, 0, 170), ts=11, color=MUTED, yalign="Top",
+          extra={"TextWrapped": True, "LineHeight": 1.2}),
+    # ação embaixo (USAR / SELECIONADO / COMPRAR / VIP / EM BREVE)
+    label("Status", "", ud(1, -20, 0, 28), ud(0.5, 0, 1, -10), anchor=(0.5, 1), font=FONT_B, ts=12, color=TEXT,
+          xalign="Center", extra={"BackgroundTransparency": 0.85, "BackgroundColor3": col([1, 1, 1])},
+          children=[corner(5)]),
 ])
 select = screen("CharacterSelect", [
-    panel("Panel", 4 * (CARD_W + 10) + 32 + 10, CARD_H + 110, "Personagens", [
+    panel("Panel", 5 * (CARD_W + 10) + 32 - 10, CARD_H + 100, "Personagens", [
         label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         label("Hint", "", ud(1, 0, 0, 18), ud(0, 0, 0, 26), ts=12, color=MUTED),

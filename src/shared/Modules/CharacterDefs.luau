@@ -43,6 +43,9 @@ export type CharacterDef = {
 	DisplayName: string,
 	UnlockCost: number, -- moedas; 0 = todos começam com ele (só vale com Access = "coins"/nil)
 	Access: string?, -- nil/"coins" = moedas | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs)
+	Tagline: string?, -- subtítulo no cartão da seleção
+	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
+	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
 	Abilities: { AbilityDef }, -- índice = slot (1 = Q, 2 = E, 3 = R, 4 = T). Slot 1 é sempre a mobilidade (dash; Swift teleporta)
 }
 
@@ -56,6 +59,15 @@ CharacterDefs.Energy = {
 
 CharacterDefs.DefaultCharacter = "Brawler"
 
+--- Afinação global do dash (Effect.Type = "Dash"). Duration da habilidade × escala conforme a direção.
+--- O cliente move; o servidor amostra a hitbox por Duration × ForwardScale (o maior).
+CharacterDefs.DashTuning = {
+	ForwardScale = 1.4, -- frente/trás
+	SideScale = 1.0, -- lados
+	SteerRate = 8, -- rad/s de correção pelo WASD durante o dash
+	MinDistanceHold = true, -- bateu em parede/jogador: a duração continua contando (sem "dash grátis")
+}
+
 --- Trocar de personagem faz respawn; só é permitido depois deste tempo sem levar dano.
 CharacterDefs.SwapOutOfCombatSeconds = 10
 
@@ -64,6 +76,9 @@ CharacterDefs.Characters = {
 		Id = "Brawler",
 		DisplayName = "Brawler",
 		UnlockCost = 0,
+		Tagline = "Força bruta e pressão",
+		Color = Color3.fromRGB(255, 150, 60),
+		Image = "",
 		Abilities = {
 			{
 				Id = "ShoulderBash",
@@ -96,6 +111,9 @@ CharacterDefs.Characters = {
 		Id = "Swift",
 		DisplayName = "Swift",
 		UnlockCost = 100,
+		Tagline = "Velocidade e teleporte",
+		Color = Color3.fromRGB(110, 230, 255),
+		Image = "",
 		Abilities = {
 			{
 				Id = "Blink",
@@ -128,6 +146,9 @@ CharacterDefs.Characters = {
 		Id = "Mystic",
 		DisplayName = "Mystic",
 		UnlockCost = 250,
+		Tagline = "Distância, cura e meteoro",
+		Color = Color3.fromRGB(170, 110, 255),
+		Image = "",
 		Abilities = {
 			{
 				Id = "ArcaneStep",
@@ -169,6 +190,9 @@ CharacterDefs.Characters = {
 		DisplayName = "Guardian",
 		UnlockCost = 0,
 		Access = "vip", -- exclusivo do passe VIP (ou "Todos os personagens")
+		Tagline = "Tanque: escudo e terremoto",
+		Color = Color3.fromRGB(255, 205, 80),
+		Image = "",
 		Abilities = {
 			{
 				Id = "ShieldBash",
@@ -203,6 +227,9 @@ CharacterDefs.Characters = {
 		DisplayName = "Sahur",
 		UnlockCost = 0,
 		Access = "early",
+		Tagline = "O ritmo que esmaga",
+		Color = Color3.fromRGB(120, 255, 160),
+		Image = "",
 		Abilities = {
 			{
 				Id = "DrumStep",

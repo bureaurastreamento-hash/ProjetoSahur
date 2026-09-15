@@ -193,7 +193,8 @@ end
 local DASH_SAMPLE_INTERVAL = 0.05
 effects.Dash = function(player, character, ability, direction)
 	local e = ability.Effect
-	AntiExploitService.Grace(player, e.Duration + 0.5)
+	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
+	AntiExploitService.Grace(player, maxDuration + 1.0)
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", {
 		Speed = e.Speed,
 		Duration = e.Duration,
@@ -201,7 +202,7 @@ effects.Dash = function(player, character, ability, direction)
 	})
 	task.spawn(function()
 		local hitAlready: { [Model]: boolean } = {}
-		local endsAt = os.clock() + e.Duration + DASH_SAMPLE_INTERVAL
+		local endsAt = os.clock() + maxDuration + DASH_SAMPLE_INTERVAL
 		while os.clock() < endsAt do
 			if not stillValid(player, character) or CombatService.IsStunned(player) then
 				return

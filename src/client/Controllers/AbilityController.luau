@@ -4,8 +4,8 @@
 	  - Q / E / R / T (ou Gamepad X / Y / B / R2) -> RequestAbility(1 / 2 / 3 / 4, direção)
 	Não decide nada: cooldown mostrado é o que o servidor informou.
 	Direção: a do WASD/analógico no momento (ou a frente do personagem se parado). Serve para
-	dash e teleporte. O dash trava a direção inicial e aceita só uma correção pequena pelo WASD
-	(DASH_STEER_RATE); lateral é mais curto que frente/trás (DASH_SIDE_SCALE).
+	dash e teleporte. Afinação em CharacterDefs.DashTuning (escala frente/lado, correção pelo WASD,
+	duração conta mesmo travado numa parede).
 	Movimento de Dash é aplicado aqui (cliente é dono da física do próprio
 	personagem); o DANO do dash é decidido pelo servidor.
 
@@ -29,6 +29,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
+local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 
 local AbilityController = {}
 
@@ -55,10 +56,10 @@ local TRAIL_COLORS: { [string]: Color3 } = {
 
 local requestAbility: RemoteEvent
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
+
+AbilityController.CooldownChanged = Instance.new("BindableEvent")
 local dashConn: RBXScriptConnection? = nil
 local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
-local DASH_STEER_RATE = 5.0 -- rad/s de correção máxima durante o dash (dá para curvar, não para inverter)
-local DASH_SIDE_SCALE = 0.65 -- dash lateral dura (e anda) 65% do dash para frente/trás
 local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -2, 0) } -- cabeça, tronco, pés
 
 --- Direção horizontal desejada: WASD/analógico, senão a frente do personagem.
@@ -87,12 +88,13 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 	if not root then
 		return
 	end
-	-- Lateral = mais curto; frente/trás = distância cheia
+	local tuning = CharacterDefs.DashTuning
+	-- Lateral vs frente/trás: escala da duração (distância) conforme a direção inicial
 	local look = root.CFrame.LookVector
 	local flatLook = Vector3.new(look.X, 0, look.Z)
-	if flatLook.Magnitude > 0.01 and math.abs(initial:Dot(flatLook.Unit)) < 0.5 then
-		duration *= DASH_SIDE_SCALE
-	end
+	local sideways = flatLook.Magnitude > 0.01 and math.abs(initial:Dot(flatLook.Unit)) < 0.5
+	duration *= if sideways then tuning.SideScale else tuning.ForwardScale
+
 	if dashConn then
 		dashConn:Disconnect()
 		dashConn = nil
@@ -114,17 +116,20 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 	rayParams.FilterType = Enum.RaycastFilterType.Exclude
 	rayParams.FilterDescendantsInstances = { character }
 	rayParams.RespectCanCollide = true
-	local function finish(blocked: boolean?)
+	local function finish()
 		if dashConn then
 			dashConn:Disconnect()
 			dashConn = nil
 		end
 		lv:Destroy()
 		attachment:Destroy()
-		if blocked and root.Parent then
-			-- mata o momento horizontal: sem isso a física "devolve" o boneco para o lado contrário
+		if root.Parent then
+			-- sem momento residual (era isso que o AntiExploit via como "moveu demais" e o
+			-- que devolvia o boneco para o lado contrário na parede)
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			local walk = if humanoid then humanoid.WalkSpeed else 16
 			local v = root.AssemblyLinearVelocity
-			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
+			root.AssemblyLinearVelocity = Vector3.new(direction.X * walk, math.min(v.Y, 0), direction.Z * walk)
 		end
 	end
 	dashConn = RunService.Heartbeat:Connect(function(dt)
@@ -132,18 +137,19 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 			finish()
 			return
 		end
-		-- Correção limitada: gira no máximo DASH_STEER_RATE rad/s em direção ao WASD atual
+		-- Correção limitada pelo WASD (SteerRate rad/s): dá para curvar e, se bateu numa parede,
+		-- virar e seguir para outro lado — a duração continua contando de qualquer jeito.
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		local move = if humanoid then humanoid.MoveDirection else Vector3.zero
 		local flat = Vector3.new(move.X, 0, move.Z)
 		if flat.Magnitude > 0.1 then
 			local want = flat.Unit
 			local angle = math.atan2(direction:Cross(want).Y, direction:Dot(want))
-			local step = math.clamp(angle, -DASH_STEER_RATE * dt, DASH_STEER_RATE * dt)
+			local step = math.clamp(angle, -tuning.SteerRate * dt, tuning.SteerRate * dt)
 			direction = (CFrame.Angles(0, step, 0) * direction).Unit
 		end
-		-- Parede/personagem à frente: encerra o empurrão (a animação segue), em vez de ficar
-		-- forçando contra o obstáculo (isso é o que trava e derruba o boneco).
+		-- Parede/personagem à frente: zera o empurrão só neste frame (nada de forçar contra o
+		-- obstáculo, que travava e derrubava). O tempo do dash não para: sem "dash grátis".
 		local ahead = speed * dt + DASH_STOP_DISTANCE
 		local blocked = false
 		for _, offset in DASH_RAY_OFFSETS do
@@ -153,14 +159,14 @@ local function steerableDash(character: Model, speed: number, duration: number, 
 			end
 		end
 		if blocked then
-			finish(true)
-			return
+			lv.PlaneVelocity = Vector2.zero
+			local v = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
+		else
+			lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
 		end
-		lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
 	end)
 end
-
-AbilityController.CooldownChanged = Instance.new("BindableEvent")
 
 -- ---------------------------------------------------------------------------
 -- Handlers do servidor
