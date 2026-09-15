@@ -216,6 +216,12 @@ Pendências imediatas, em ordem:
 5. Conferir rig R6 em Game Settings (HealthService avisa no boot se for R15).
 
 ## Em andamento
+- 2026-09-15 — **Duelo 1v1 opt-in** (item 5): `DuelService` + `DuelController` + `DuelGui` + `DuelConfig`.
+  Ícone "Duelo" (J) lista jogadores → desafiar → alvo aceita (Y) / recusa (N) → cópia de
+  `ServerStorage.Maps.Arena_Gerada` em `Workspace.Duels` (céu, 4000/1500/4000, até 8 slots) →
+  contagem 3 s → morte/queda/tempo (120 s = empate) → `RecordMatchResult` (+50/+10 moedas) → volta.
+  HealthService: sem fogo amigo quando `TeamId` igual (pronto para 2v2). FALTA TESTAR com 2 clientes;
+  2v2 depois (só o fluxo de convite muda, StartDuel já aceita NvN).
 - 2026-09-15 — **Otimização**: o Rojo injetava ~195k instâncias (packs VFX inteiros em ReplicatedStorage
   + KeyframeSequences/mapas em ServerStorage.Import). Packs completos foram para `packs/` (fora do Rojo);
   `tools/podar_vfx.luau` gera `src/assets/VFX/Packs` só com os efeitos usados (268 instâncias).
@@ -255,7 +261,7 @@ Pendências imediatas, em ordem:
 4. ~~4º personagem~~ (Guardian feito); balancear preços/dano com dados de teste.
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
    desafio, arena separada (`ServerStorage.Maps.Arena_Gerada` ou `ArenaMap` do pack em
-   `ServerStorage.Import`), `FreeRoam` continua para os demais. ← PRÓXIMO
+   `ServerStorage.Import`), `FreeRoam` continua para os demais. ← 1v1 FEITO (testar); 2v2 pendente
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.

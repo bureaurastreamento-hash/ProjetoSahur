@@ -115,6 +115,13 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
 		return 0 -- modo deus (AdminService)
 	end
+	if attacker and victimPlayer and attacker ~= victimPlayer then
+		-- mesmo time (Teams/duelo 2v2): sem fogo amigo
+		local teamA, teamB = attacker:GetAttribute("TeamId"), victimPlayer:GetAttribute("TeamId")
+		if teamA ~= nil and teamA == teamB then
+			return 0
+		end
+	end
 
 	local before = humanoid.Health
 	humanoid.Health = math.max(0, before - amount)

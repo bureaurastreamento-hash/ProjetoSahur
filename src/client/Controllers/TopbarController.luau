@@ -6,6 +6,7 @@
 	  Perfil (P)      -> ProfileGui.Panel (stats/moedas vindos de NotifyProfile)
 	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
 	  Controles       -> HelpGui.Panel
+	  Duelo (J)       -> DuelGui.Panel (lógica no DuelController)
 	Só reflete estado do servidor; não decide nada.
 ]]
 
@@ -108,6 +109,7 @@ function TopbarController.Start()
 	local selectPanel = get(get(playerGui, "CharacterSelect"), "Panel") :: Frame
 	local scoreboard = get(get(playerGui, "HUD"), "Scoreboard") :: Frame
 	local helpPanel = get(get(playerGui, "HelpGui"), "Panel") :: Frame
+	local duelPanel = get(get(playerGui, "DuelGui"), "Panel") :: Frame
 
 	-- Nossa lista substitui a PlayerList padrão (Tab)
 	pcall(function()
@@ -140,10 +142,18 @@ function TopbarController.Start()
 		:setOrder(3)
 
 	Icon.new()
+		:setLabel("Duelo")
+		:setCaption("Desafiar alguém para 1v1")
+		:setCaptionHint(Enum.KeyCode.J)
+		:bindToggleKey(Enum.KeyCode.J)
+		:bindToggleItem(duelPanel)
+		:setOrder(4)
+
+	Icon.new()
 		:setLabel("Controles")
 		:setCaption("Como jogar")
 		:bindToggleItem(helpPanel)
-		:setOrder(4)
+		:setOrder(5)
 
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(profile: any, sessionOnly: boolean)
 		if typeof(profile) == "table" then

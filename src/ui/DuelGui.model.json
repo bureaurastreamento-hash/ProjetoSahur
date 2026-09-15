@@ -1,0 +1,763 @@
+{
+ "className": "ScreenGui",
+ "properties": {
+  "ResetOnSpawn": false,
+  "IgnoreGuiInset": true,
+  "DisplayOrder": 3
+ },
+ "children": [
+  {
+   "name": "Panel",
+   "className": "Frame",
+   "properties": {
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       360
+      ],
+      [
+       0,
+       380
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       0,
+       20
+      ],
+      [
+       0.5,
+       0
+      ]
+     ]
+    },
+    "AnchorPoint": {
+     "Vector2": [
+      0,
+      0.5
+     ]
+    },
+    "BackgroundColor3": {
+     "Color3": [
+      0.0784313725490196,
+      0.0784313725490196,
+      0.10980392156862745
+     ]
+    },
+    "BackgroundTransparency": 0.15,
+    "BorderSizePixel": 0,
+    "Visible": false
+   },
+   "children": [
+    {
+     "name": "UICorner",
+     "className": "UICorner",
+     "properties": {
+      "CornerRadius": {
+       "UDim": [
+        0,
+        8
+       ]
+      }
+     }
+    },
+    {
+     "name": "Title",
+     "className": "TextLabel",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         0,
+         8
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "Duelo 1v1",
+      "TextSize": 20,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "TextWrapped": true,
+      "TextXAlignment": "Left"
+     }
+    },
+    {
+     "name": "Hint",
+     "className": "TextLabel",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         34
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         0,
+         38
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "Clique em um jogador para desafiar. Vitória = +50 moedas.",
+      "TextSize": 13,
+      "Font": "Gotham",
+      "TextColor3": {
+       "Color3": [
+        0.7450980392156863,
+        0.7450980392156863,
+        0.7843137254901961
+       ]
+      },
+      "TextWrapped": true,
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Top"
+     }
+    },
+    {
+     "name": "List",
+     "className": "ScrollingFrame",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         1,
+         -140
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         0,
+         76
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "BorderSizePixel": 0,
+      "ScrollBarThickness": 4,
+      "CanvasSize": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "AutomaticCanvasSize": "Y"
+     },
+     "children": [
+      {
+       "name": "UIListLayout",
+       "className": "UIListLayout",
+       "properties": {
+        "Padding": {
+         "UDim": [
+          0,
+          4
+         ]
+        },
+        "SortOrder": "Name"
+       }
+      },
+      {
+       "name": "Template",
+       "className": "TextButton",
+       "properties": {
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -6
+          ],
+          [
+           0,
+           34
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.23529411764705882,
+          0.23529411764705882,
+          0.29411764705882354
+         ]
+        },
+        "BorderSizePixel": 0,
+        "Text": "  Jogador",
+        "TextSize": 15,
+        "Font": "Gotham",
+        "TextColor3": {
+         "Color3": [
+          1.0,
+          1.0,
+          1.0
+         ]
+        },
+        "TextXAlignment": "Left",
+        "Visible": false,
+        "AutoButtonColor": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "Action",
+         "className": "TextLabel",
+         "properties": {
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             80
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             -90
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "DESAFIAR",
+          "TextSize": 12,
+          "Font": "GothamBold",
+          "TextColor3": {
+           "Color3": [
+            0.47058823529411764,
+            0.8627450980392157,
+            0.5882352941176471
+           ]
+          },
+          "TextWrapped": true,
+          "TextXAlignment": "Right"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Status",
+     "className": "TextLabel",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         20
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -58
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "",
+      "TextSize": 14,
+      "Font": "Gotham",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        0.8627450980392157,
+        0.47058823529411764
+       ]
+      },
+      "TextWrapped": true,
+      "TextXAlignment": "Left"
+     }
+    },
+    {
+     "name": "Leave",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -36
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.6666666666666666,
+        0.23529411764705882,
+        0.23529411764705882
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Desistir do duelo",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "Cancel",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -36
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.23529411764705882,
+        0.23529411764705882,
+        0.29411764705882354
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Cancelar desafio",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Invite",
+   "className": "Frame",
+   "properties": {
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       340
+      ],
+      [
+       0,
+       96
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       0.5,
+       0
+      ],
+      [
+       0,
+       70
+      ]
+     ]
+    },
+    "AnchorPoint": {
+     "Vector2": [
+      0.5,
+      0
+     ]
+    },
+    "BackgroundColor3": {
+     "Color3": [
+      0.0784313725490196,
+      0.0784313725490196,
+      0.10980392156862745
+     ]
+    },
+    "BackgroundTransparency": 0.1,
+    "BorderSizePixel": 0,
+    "Visible": false
+   },
+   "children": [
+    {
+     "name": "UICorner",
+     "className": "UICorner",
+     "properties": {
+      "CornerRadius": {
+       "UDim": [
+        0,
+        8
+       ]
+      }
+     }
+    },
+    {
+     "name": "Text",
+     "className": "TextLabel",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         40
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         0,
+         8
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "Fulano te desafiou para um duelo!",
+      "TextSize": 15,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "TextWrapped": true
+     }
+    },
+    {
+     "name": "Accept",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -40
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.23529411764705882,
+        0.6274509803921569,
+        0.35294117647058826
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Aceitar (Y)",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "Decline",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         5
+        ],
+        [
+         1,
+         -40
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.6666666666666666,
+        0.23529411764705882,
+        0.23529411764705882
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Recusar (N)",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "DuelStatus",
+   "className": "TextLabel",
+   "properties": {
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       500
+      ],
+      [
+       0,
+       40
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       0.5,
+       0
+      ],
+      [
+       0,
+       110
+      ]
+     ]
+    },
+    "BackgroundTransparency": 1,
+    "Text": "",
+    "TextSize": 26,
+    "Font": "GothamBold",
+    "TextColor3": {
+     "Color3": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "TextWrapped": true,
+    "TextStrokeTransparency": 0.5,
+    "Visible": false,
+    "AnchorPoint": {
+     "Vector2": [
+      0.5,
+      0
+     ]
+    }
+   }
+  }
+ ]
+}
