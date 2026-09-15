@@ -9,70 +9,70 @@
      "name": "M1_1",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": "rbxassetid://131052178297326"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "M1_2",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": "rbxassetid://131052178297326"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "M1_3",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": "rbxassetid://131052178297326"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "M1_4",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967478"
+      "AnimationId": "rbxassetid://99102876663865"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522638767"
+      "R15Id": ""
      }
     },
     {
      "name": "Block",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://182393478"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507768375"
+      "R15Id": ""
      }
     },
     {
      "name": "Parry",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://182393478"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507768375"
+      "R15Id": ""
      }
     },
     {
      "name": "Hit",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://180436148"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507767968"
+      "R15Id": ""
      }
     },
     {
@@ -104,6 +104,16 @@
      "attributes": {
       "R15Id": ""
      }
+    },
+    {
+     "name": "DashBack",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://74875282344858"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
     }
    ]
   },
@@ -125,20 +135,20 @@
      "name": "GroundSlam",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": "rbxassetid://112099038975315"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "Rampage",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129423030"
+      "AnimationId": "rbxassetid://120293502970268"
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770677"
+      "R15Id": ""
      }
     }
    ]
@@ -151,30 +161,30 @@
      "name": "Blink",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://128853357"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770453"
+      "R15Id": ""
      }
     },
     {
      "name": "SweepKick",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "Tempest",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://182491248"
+      "AnimationId": "rbxassetid://125017727896276"
      },
      "attributes": {
-      "R15Id": "rbxassetid://507771019"
+      "R15Id": ""
      }
     }
    ]
@@ -187,30 +197,30 @@
      "name": "ArcaneBolt",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://128853357"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770453"
+      "R15Id": ""
      }
     },
     {
      "name": "Mend",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129423030"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770677"
+      "R15Id": ""
      }
     },
     {
      "name": "Meteor",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://128777973"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770239"
+      "R15Id": ""
      }
     }
    ]
@@ -233,20 +243,20 @@
      "name": "Fortify",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://182393478"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507768375"
+      "R15Id": ""
      }
     },
     {
      "name": "Quake",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     }
    ]
@@ -259,40 +269,40 @@
      "name": "Swipe",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967390"
+      "AnimationId": "rbxassetid://112099038975315"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522635514"
+      "R15Id": ""
      }
     },
     {
      "name": "Slam",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129423030"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770677"
+      "R15Id": ""
      }
     },
     {
      "name": "Charge",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967478"
+      "AnimationId": ""
      },
      "attributes": {
-      "R15Id": "rbxassetid://522638767"
+      "R15Id": ""
      }
     },
     {
      "name": "Roar",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129423030"
+      "AnimationId": "rbxassetid://139399523673215"
      },
      "attributes": {
-      "R15Id": "rbxassetid://507770677"
+      "R15Id": ""
      }
     }
    ]

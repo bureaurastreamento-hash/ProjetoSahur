@@ -82,8 +82,7 @@ function AnimationCheckService.Start()
 		end
 		local count = 0
 		for _, d in folder:GetDescendants() do
-			if d:IsA("Animation") and d.AnimationId ~= "" and not d.AnimationId:find("rbxassetid://12") and not d.AnimationId:find("rbxassetid://18") then
-				-- pula os placeholders públicos da Roblox (ids 12x/18x milhões); checa só os da equipe
+			if d:IsA("Animation") and d.AnimationId ~= "" then
 				count += 1
 				check(d)
 			end

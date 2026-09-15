@@ -247,8 +247,17 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    `AnimationCheckService` (só Studio): baixa cada KeyframeSequence dos ids da equipe e imprime
    `[AnimCheck] ... OK R6` / `rig R15 — não vai mexer` / `NÃO CARREGOU` (grupo sem acesso).
    O jogo é de GRUPO: animações precisam ser publicadas com o grupo como criador.
-   Existem 2 places/universos de grupo: 85844807133499 (original) e 126518739287432 (cópia do
-   autosave de 2026-09-14); o Rojo é aditivo e serve para o que estiver aberto no Studio.
+   Existem 2 places/universos de grupo: 85844807133499 (antigo) e 126518739287432 (OFICIAL, escolhido
+   pelo dono em 2026-09-15); o Rojo é aditivo e serve para o que estiver aberto no Studio.
+9. **Ids da equipe (2026-09-15, publicados no grupo)** encaixados e TODAS as placeholders da Roblox
+   removidas (AnimationId vazio = sem animação): Melee1 → M1_1..3; Blue (agarra e taca) → M1_4;
+   Charge Punch → Brawler/GroundSlam e Boss/Swipe; Desafiando → Boss/Roar; Vergil practice →
+   Swift/Tempest; Beatdown → Brawler/Rampage; Dash frontal → ShoulderBash/ShieldBash; Idle/Walk/Run.
+   `Shared/DashBack` (dash para trás) guardado sem uso. Sem animação ainda: Block/Parry/Hit, Swift
+   Blink/SweepKick, Mystic (3), Guardian Fortify/Quake, Boss Slam/Charge.
+   Ferramenta: `lune run tools/juntar_animacoes.luau` → `packs/Import/AnimPreview.rbxm` (todas as
+   KeyframeSequences + preview clicável num place em branco).
+   Place oficial: **126518739287432** (rig trocado para R6 pelo dono em 2026-09-15).
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
