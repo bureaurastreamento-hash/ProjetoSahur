@@ -158,117 +158,163 @@ local function findModelTemplate(): Model?
 	return nil
 end
 
---- Monta um rig por cima de um modelo 3D sem Humanoid: HRP invisível (colide), Humanoid, partes do
---- modelo achatadas como filhas diretas (hitbox conta só filhos diretos), soldadas ao HRP, sem colisão.
+--- Monta/arruma o rig do modelo 3D. Aceita qualquer combinação: Model aninhado, com ou sem Humanoid,
+--- com ou sem HumanoidRootPart, Motor6D feitos no RigEdit (dentro das partes). Regras:
+---   • todas as partes viram filhas DIRETAS do boss (a Hitbox só conta filhos diretos);
+---   • Motor6D são preservados (é o que anima); partes SEM junta (micro-detalhes) são soldadas
+---     (WeldConstraint) à parte com junta mais próxima, então seguem a animação do membro;
+---   • se não houver HumanoidRootPart, cria um HRP invisível na raiz da árvore de juntas com um
+---     Motor6D "RootJoint"; só o HRP colide; Humanoid R15 com HipHeight calculado;
+---   • escala para BossConfig.ModelHeight (ScaleTo escala as juntas junto).
 local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
-	-- Modelo JÁ rigado pela equipe (Humanoid + HumanoidRootPart + Motor6D): usa como está, só escala.
-	local existingHum = template:FindFirstChildOfClass("Humanoid")
-	local existingRoot = template:FindFirstChild("HumanoidRootPart")
-	if existingHum and existingRoot and existingRoot:IsA("BasePart") then
-		local rigged = template:Clone()
-		for _, d in rigged:GetDescendants() do
-			if d:IsA("Script") or d:IsA("LocalScript") then
-				d:Destroy()
-			elseif d:IsA("BasePart") then
-				d.Anchored = false
-				if d.Name ~= "HumanoidRootPart" then
-					d.CanCollide = false -- só o HRP colide: nada de "caixa" empurrando jogador
-				end
-			end
-		end
-		local _, size = rigged:GetBoundingBox()
-		if size.Y > 0.1 then
-			pcall(function()
-				rigged:ScaleTo(rigged:GetScale() * BossConfig.ModelHeight / size.Y)
-			end)
-		end
-		rigged.PrimaryPart = existingRoot :: BasePart
-		return rigged, rigged:FindFirstChildOfClass("Humanoid"), rigged:FindFirstChild("HumanoidRootPart") :: BasePart?
-	end
-
-	local mesh = template:Clone()
-	for _, d in mesh:GetDescendants() do
-		if d:IsA("Script") or d:IsA("LocalScript") or d:IsA("Humanoid") or d:IsA("BodyMover") or d:IsA("Constraint") or d:IsA("JointInstance") then
+	local model = template:Clone()
+	model.Name = BossConfig.Name
+	for _, d in model:GetDescendants() do
+		if d:IsA("Script") or d:IsA("LocalScript") or d:IsA("BodyMover") then
 			d:Destroy()
 		end
 	end
+	-- 1) achata: partes como filhas diretas (Motor6D/Weld dentro delas vêm junto; Part0/Part1 seguem válidos)
 	local parts: { BasePart } = {}
-	for _, d in mesh:GetDescendants() do
+	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			table.insert(parts, d)
 		end
 	end
 	if #parts == 0 then
-		mesh:Destroy()
+		model:Destroy()
 		return nil, nil, nil
 	end
-	-- escala para a altura desejada
-	local _, size = mesh:GetBoundingBox()
-	if size.Y > 0.1 then
-		pcall(function()
-			mesh:ScaleTo(mesh:GetScale() * BossConfig.ModelHeight / size.Y)
-		end)
+	for _, part in parts do
+		part.Parent = model
 	end
-	local cf, bbox = mesh:GetBoundingBox()
-
-	local model = Instance.new("Model")
-	model.Name = BossConfig.Name
-	local root = Instance.new("Part")
-	root.Name = "HumanoidRootPart"
-	-- HRP estreito (só para andar/colidir com o chão); a hitbox de dano é o mesh (CanQuery)
-	root.Size = Vector3.new(math.clamp(bbox.X * 0.3, 3, 8), math.max(4, bbox.Y * 0.6), math.clamp(bbox.Z * 0.3, 3, 8))
-	root.Transparency = 1
-	root.CanCollide = true
-	root.CanQuery = true
-	root.CastShadow = false
-	root.CFrame = CFrame.new(cf.Position) * CFrame.Angles(0, math.rad(BossConfig.FaceOffset), 0)
-	root.Parent = model
-	model.PrimaryPart = root
-	-- partes do modelo: filhas diretas, soldadas, sem colisão/massa (o HRP é quem anda)
+	for _, d in model:GetChildren() do
+		if d:IsA("Model") or d:IsA("Folder") then
+			if #d:GetDescendants() == 0 then
+				d:Destroy()
+			end
+		end
+	end
+	-- 2) juntas existentes: quem está ligado por Motor6D
+	local jointed: { [BasePart]: boolean } = {}
+	local isChild: { [BasePart]: boolean } = {}
+	local motors: { Motor6D } = {}
+	for _, d in model:GetDescendants() do
+		if d:IsA("Motor6D") and d.Part0 and d.Part1 then
+			table.insert(motors, d)
+			jointed[d.Part0] = true
+			jointed[d.Part1] = true
+			isChild[d.Part1] = true
+		end
+	end
+	-- 3) raiz: HumanoidRootPart existente, senão a parte que é Part0 mas nunca Part1, senão a maior
+	local existingRoot = model:FindFirstChild("HumanoidRootPart")
+	local treeRoot: BasePart? = nil
+	for part in jointed do
+		if not isChild[part] and part.Name ~= "HumanoidRootPart" then
+			treeRoot = part
+			break
+		end
+	end
+	if not treeRoot then
+		local biggest = 0
+		for _, part in parts do
+			local v = part.Size.X * part.Size.Y * part.Size.Z
+			if v > biggest and part.Name ~= "HumanoidRootPart" then
+				biggest, treeRoot = v, part
+			end
+		end
+	end
+	local bcf, bbox = model:GetBoundingBox()
+	local root: BasePart
+	if existingRoot and existingRoot:IsA("BasePart") then
+		root = existingRoot
+	else
+		local newRoot = Instance.new("Part")
+		newRoot.Name = "HumanoidRootPart"
+		newRoot.Transparency = 1
+		newRoot.CastShadow = false
+		newRoot.Size = Vector3.new(math.clamp(bbox.X * 0.3, 2, 8), math.clamp(bbox.Y * 0.5, 2, 30), math.clamp(bbox.Z * 0.3, 2, 8))
+		newRoot.CFrame = CFrame.new(bcf.Position) * CFrame.Angles(0, math.rad(BossConfig.FaceOffset), 0)
+		newRoot.Parent = model
+		root = newRoot
+		if treeRoot then
+			local rj = Instance.new("Motor6D")
+			rj.Name = "RootJoint"
+			rj.Part0 = root
+			rj.Part1 = treeRoot
+			rj.C0 = root.CFrame:ToObjectSpace(treeRoot.CFrame)
+			rj.C1 = CFrame.identity
+			rj.Parent = root
+			jointed[treeRoot] = true
+		end
+	end
+	jointed[root] = true
+	-- 4) partes soltas (micro-detalhes): solda na parte com junta mais próxima
+	local anchorsList: { BasePart } = {}
+	for part in jointed do
+		table.insert(anchorsList, part)
+	end
+	local welded = 0
+	for _, part in parts do
+		if not jointed[part] and part ~= root then
+			local best: BasePart? = nil
+			local bestDist = math.huge
+			for _, cand in anchorsList do
+				local dist = (cand.Position - part.Position).Magnitude
+				if dist < bestDist then
+					best, bestDist = cand, dist
+				end
+			end
+			local weld = Instance.new("WeldConstraint")
+			weld.Part0 = best or root
+			weld.Part1 = part
+			weld.Parent = part
+			welded += 1
+		end
+	end
+	-- 5) física: só o HRP colide; nada ancorado; resto sem massa
 	for _, part in parts do
 		part.Anchored = false
 		part.CanCollide = false
-		part.Massless = true
 		part.CanQuery = true
-		local weld = Instance.new("WeldConstraint")
-		weld.Part0 = root
-		weld.Part1 = part
-		weld.Parent = part
-		part.Parent = model
+		part.Massless = true
 	end
-	mesh:Destroy()
-	-- Head/Torso invisíveis: o Humanoid (nome/vida flutuante, estado) espera esses nomes
-	local head = Instance.new("Part")
-	head.Name = "Head"
-	head.Size = Vector3.new(2, 2, 2)
-	head.Transparency = 1
-	head.CanCollide = false
-	head.Massless = true
-	head.CanQuery = false
-	head.CFrame = root.CFrame * CFrame.new(0, bbox.Y * 0.45, 0)
-	local headWeld = Instance.new("WeldConstraint")
-	headWeld.Part0 = root
-	headWeld.Part1 = head
-	headWeld.Parent = head
-	head.Parent = model
-	local torso = Instance.new("Part")
-	torso.Name = "Torso"
-	torso.Size = Vector3.new(2, 2, 1)
-	torso.Transparency = 1
-	torso.CanCollide = false
-	torso.Massless = true
-	torso.CanQuery = false
-	torso.CFrame = root.CFrame
-	local torsoWeld = Instance.new("WeldConstraint")
-	torsoWeld.Part0 = root
-	torsoWeld.Part1 = torso
-	torsoWeld.Parent = torso
-	torso.Parent = model
-	local humanoid = Instance.new("Humanoid")
-	-- R15: usa HipHeight de verdade (R6 ignora e calcula pelas pernas — era o que fazia "voar")
+	root.Anchored = false
+	root.CanCollide = true
+	root.CanQuery = true
+	root.Massless = false
+	model.PrimaryPart = root
+	-- 6) Head para nome/vida (se o modelo não tiver)
+	if not model:FindFirstChild("Head") then
+		local head = Instance.new("Part")
+		head.Name = "Head"
+		head.Size = Vector3.new(1, 1, 1)
+		head.Transparency = 1
+		head.CanCollide = false
+		head.CanQuery = false
+		head.Massless = true
+		head.CFrame = CFrame.new(bcf.Position + Vector3.new(0, bbox.Y * 0.45, 0))
+		local hw = Instance.new("WeldConstraint")
+		hw.Part0 = root
+		hw.Part1 = head
+		hw.Parent = head
+		head.Parent = model
+	end
+	-- 7) Humanoid (R15 respeita HipHeight; R6 calcularia pelas pernas e "voa")
+	local humanoid = model:FindFirstChildOfClass("Humanoid") or Instance.new("Humanoid")
 	humanoid.RigType = Enum.HumanoidRigType.R15
-	humanoid.HipHeight = (bbox.Y - root.Size.Y) / 2 -- HRP fica centrado no modelo; pés no chão
 	humanoid.Parent = model
+	-- 8) escala (juntas e soldas acompanham) e HipHeight = do pé do HRP até o pé do modelo
+	if bbox.Y > 0.1 then
+		pcall(function()
+			model:ScaleTo(model:GetScale() * BossConfig.ModelHeight / bbox.Y)
+		end)
+	end
+	local cf2, size2 = model:GetBoundingBox()
+	local bottom = cf2.Position.Y - size2.Y / 2
+	humanoid.HipHeight = math.max(0, (root.Position.Y - root.Size.Y / 2) - bottom)
+	Log.debug(("[BossService] rig do boss: %d partes, %d Motor6D, %d soldadas, altura %.1f, HipHeight %.1f"):format(#parts, #motors, welded, size2.Y, humanoid.HipHeight))
 	return model, humanoid, root
 end
 

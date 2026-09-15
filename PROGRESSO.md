@@ -211,6 +211,11 @@ Memória entre sessões. Atualizar depois de cada mudança.
   `Workspace` (qualquer profundidade; é movido para ServerStorage ao iniciar) → `InsertService:LoadAsset
   (138493793469412)` (só funciona se o asset for do grupo/dono ou público). Fallback: rig R6 antigo.
 - Dono: renomear o Model inserido para **BossModel** (de preferência em ServerStorage) e salvar o place.
+- 2ª versão (`rigFromModel` robusto): aceita Model aninhado (`BossModel.Model.tripo_part_*`), Motor6D
+  do RigEdit dentro das partes, com/sem Humanoid/HRP. Achata as partes (hitbox), preserva Motor6D,
+  **solda micro-detalhes sem junta na parte com junta mais próxima**, cria HRP + `RootJoint` na raiz
+  da árvore de juntas, Humanoid R15 com HipHeight = pé do HRP → pé do modelo. `tools/inspecionar_boss.luau`
+  (colar na Command Bar) imprime a estrutura para eu conferir.
 
 ### Fase 5 (NÃO testada)
 - **Uppercut/downslam só como 4º golpe** do combo (no lugar do finisher com empurrão; cliente e
