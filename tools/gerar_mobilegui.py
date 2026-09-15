@@ -35,9 +35,8 @@ root = {"name": "Root", "className": "Frame", "properties": {
     button("Slot1", "Q", 60, udim2(1, -232, 1, -46), [0.25, 0.25, 0.32]),
     button("Slot2", "E", 60, udim2(1, -168, 1, -116), [0.25, 0.25, 0.32]),
     button("Slot3", "R", 66, udim2(1, -80, 1, -136), [0.6, 0.45, 0.15]),
-    # movimento no canto inferior esquerdo (acima do joystick): dash e correr (toggle)
-    button("Dash", "DASH", 64, udim2(0, 150, 1, -140), [0.35, 0.6, 0.85], 15),
-    button("Sprint", "CORRER", 64, udim2(0, 224, 1, -140), [0.3, 0.3, 0.38], 13),
+    # correr (toggle) no canto inferior esquerdo, acima do joystick
+    button("Sprint", "CORRER", 64, udim2(0, 150, 1, -140), [0.3, 0.3, 0.38], 13),
 ]}
 
 gui = {"className": "ScreenGui", "properties": {"ResetOnSpawn": False, "DisplayOrder": 2, "IgnoreGuiInset": True},

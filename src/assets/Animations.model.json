@@ -104,16 +104,6 @@
      "attributes": {
       "R15Id": ""
      }
-    },
-    {
-     "name": "Dash",
-     "className": "Animation",
-     "properties": {
-      "AnimationId": "rbxassetid://135221133424050"
-     },
-     "attributes": {
-      "R15Id": ""
-     }
     }
    ]
   },
@@ -125,10 +115,10 @@
      "name": "ShoulderBash",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967478"
+      "AnimationId": "rbxassetid://135221133424050"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522638767"
+      "R15Id": ""
      }
     },
     {
@@ -233,10 +223,10 @@
      "name": "ShieldBash",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://129967478"
+      "AnimationId": "rbxassetid://135221133424050"
      },
      "attributes": {
-      "R15Id": "rbxassetid://522638767"
+      "R15Id": ""
      }
     },
     {

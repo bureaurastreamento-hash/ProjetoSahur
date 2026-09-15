@@ -49,12 +49,8 @@ end
 function MobileController.Start()
 	local attack = get(root, "Attack") :: TextButton
 	local block = get(root, "Block") :: TextButton
-	local dash = get(root, "Dash") :: TextButton
 	local sprint = get(root, "Sprint") :: TextButton
 
-	dash.MouseButton1Down:Connect(function()
-		MovementController.Dash()
-	end)
 	local sprintOn = false
 	sprint.MouseButton1Click:Connect(function()
 		sprintOn = not sprintOn

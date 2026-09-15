@@ -230,15 +230,17 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    Roblox), VFX `Assets.VFXPack["Boss/..."]` (reaproveita efeitos já podados), sons `Sounds.Boss.*`
    (ids vazios) e shake perto do impacto. Boss e bonecos agora têm `Animator` (antes nenhuma
    animação tocava neles).
-7. **Movimento** (`MovementService`/`MovementController`, `CombatConfig.Sprint/Dash`): **correr**
-   segurando Shift (WalkSpeed 24, não enquanto bloqueia; block ao soltar volta para a corrida) e
-   **dash** com Ctrl esquerdo (65 studs/s por 0,22 s, recarga 2,5 s, na direção do movimento; servidor
-   autoriza e manda `NotifyDash`, rastro em todos). Mobile: botões DASH e CORRER (toggle) acima do
-   joystick. Ajuda (Controles) atualizada.
-8. **Animações da equipe ligadas**: `Animations.Shared.{Idle,Walk,Run,Dash}` com os ids recebidos em
-   2026-09-15 (Parado/Andando/Correndo/Dash frontal). O `MovementController` troca os ids do script
-   `Animate` padrão (idle/walk/run) ao spawnar; correndo usa Run. Dash toca `Shared/Dash`.
-   Se a animação não tocar: conferir que os ids foram publicados na conta dona do jogo (ou no grupo).
+7. **Movimento** (`MovementService`/`MovementController`, `CombatConfig.Sprint`): **correr** segurando
+   Shift (WalkSpeed 24, não enquanto bloqueia; ao soltar o block volta para a corrida). Mobile: botão
+   CORRER (toggle). **Shift lock foi para o Ctrl** (rebind do `BoundKeys` do MouseLockController do
+   PlayerModule). Dash genérico foi REMOVIDO a pedido do dono: dash/teleporte é o Q de cada personagem.
+8. **Animações da equipe ligadas** (ids de 2026-09-15): `Animations.Shared.{Idle,Walk,Run}` e o
+   "Dash frontal" em `Brawler/ShoulderBash` e `Guardian/ShieldBash`. O `MovementController` toca
+   Idle/Walk/Run por conta própria (prioridade Movement, por cima do `Animate` padrão, que fica só
+   com pulo/queda) — 1ª versão trocava os ids do Animate e o dono relatou que não tocava. Se ainda
+   não tocar, o Output avisa "carregou com duração 0" = id não é da conta/grupo dono do jogo ou foi
+   animado em outro rig (jogo é R6). O place tem um script estranho `Workspace."Animation Maker"`
+   (não é nosso, dá erro ao sair) — apagar.
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
