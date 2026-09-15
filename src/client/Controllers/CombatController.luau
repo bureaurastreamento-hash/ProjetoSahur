@@ -61,6 +61,8 @@ local COLOR_BLOCK = Color3.fromRGB(80, 160, 255)
 local COLOR_PARRY = Color3.fromRGB(255, 255, 255)
 local COLOR_NUMBER_HIT = Color3.fromRGB(255, 230, 90)
 local COLOR_NUMBER_BLOCK = Color3.fromRGB(140, 190, 255)
+local COLOR_GUARDBREAK = Color3.fromRGB(255, 140, 40)
+local COLOR_FINISHER = Color3.fromRGB(255, 40, 40)
 
 -- ---------------------------------------------------------------------------
 -- Handlers do servidor
@@ -68,6 +70,7 @@ local COLOR_NUMBER_BLOCK = Color3.fromRGB(140, 190, 255)
 
 local HITSTOP_LIGHT = 0.05
 local HITSTOP_HEAVY = 0.09
+local HITSTOP_FINISHER = 0.14
 
 local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex: number)
 	if not attackerChar then
@@ -102,6 +105,35 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		FX.Flash(victimChar, COLOR_BLOCK, 0.15)
 		FX.SpawnVFX(victimChar, SHARED, "Block", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Block")
+	elseif kind == "guardbreak" then
+		-- Guarda quebrou: golpe entra cheio, vítima atordoada (VFX de tontura segue a cabeça)
+		FX.DamageNumber(victimChar, "GUARDA QUEBRADA", COLOR_GUARDBREAK)
+		FX.Flash(victimChar, COLOR_GUARDBREAK, 0.3)
+		FX.Hitstop(victimChar, HITSTOP_HEAVY)
+		if attackerChar then
+			FX.Hitstop(attackerChar, HITSTOP_HEAVY)
+		end
+		FX.SpawnVFX(victimChar, SHARED, "GuardBreak", true)
+		FX.SpawnVFX(victimChar, SHARED, "Stun", true)
+		FX.PlaySoundAt(victimChar, SHARED, "GuardBreak")
+		FX.PlayAnimation(victimChar, SHARED, "Hit")
+		if isMe then
+			FX.Shake(0.6, 0.25)
+		end
+	elseif kind == "finisher" then
+		-- 4º golpe em alvo quase morto: peso máximo
+		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_FINISHER)
+		FX.Flash(victimChar, COLOR_FINISHER, 0.25)
+		FX.Hitstop(victimChar, HITSTOP_FINISHER)
+		if attackerChar then
+			FX.Hitstop(attackerChar, HITSTOP_FINISHER)
+		end
+		FX.SpawnVFX(victimChar, SHARED, "FinisherHit", true)
+		FX.PlaySoundAt(victimChar, SHARED, "Finisher_Hit")
+		FX.PlayAnimation(victimChar, SHARED, "Hit")
+		if isMe or attackerChar == localPlayer.Character then
+			FX.Shake(0.8, 0.3)
+		end
 	else
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_HIT)
 		if isMe then
@@ -143,8 +175,14 @@ end
 
 local function onNotifyCooldown(reason: string, seconds: number)
 	Log.debug(("[CombatController] cooldown: %s por %.2fs"):format(reason, seconds))
-	if reason == "parried" and blockHeld then
+	if (reason == "parried" or reason == "guardbreak") and blockHeld then
 		blockHeld = false -- servidor cancelou o block; fica em sincronia
+	end
+	if reason == "parried" then
+		local character = localPlayer.Character
+		if character then
+			FX.SpawnVFX(character, SHARED, "Stun", true) -- tontura em quem foi parryado
+		end
 	end
 end
 
@@ -160,6 +198,7 @@ local function onNotifyKill(_killer: Player?, victim: Player)
 	local character = victim.Character
 	if character then
 		FX.PlaySoundAt(character, SHARED, "Death")
+		FX.SpawnVFX(character, SHARED, "Ragdoll", true) -- rastro de vento no corpo caindo
 	end
 end
 

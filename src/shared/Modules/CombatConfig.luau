@@ -42,6 +42,31 @@ CombatConfig.Block = {
 	ParryWindow = 0.2, -- segundos após iniciar o block em que um golpe recebido vira parry
 	ParryStun = 1.0, -- tempo que o atacante fica sem poder agir após ser parryado
 	Cooldown = 0.4, -- tempo mínimo entre soltar e voltar a bloquear (evita spam de parry)
+	-- Guarda: cada golpe bloqueado gasta o dano BRUTO dele; zerou = guard break
+	GuardMax = 60,
+	GuardRegenPerSecond = 20, -- volta sozinha quando não está bloqueando há RegenDelay
+	GuardRegenDelay = 1.0,
+	GuardBreakStun = 1.6, -- atordoado, sem block, dano cheio no golpe que quebrou
+}
+
+-- Levar golpe: interrompe o combo da vítima e freia por um instante (hitstun).
+-- Só socos/habilidades "hit" (não bloqueados). Não se acumula além de Duration.
+CombatConfig.HitStun = {
+	Duration = 0.35,
+	WalkSpeed = 6,
+}
+
+-- Finisher (4º golpe) em alvo com vida <= LowHealth (fração) ou que morre no golpe:
+-- empurrão forte + efeito/câmera pesados no cliente (kind = "finisher").
+CombatConfig.Finisher = {
+	LowHealth = 0.3,
+	Knockback = { Speed = 75, Duration = 0.35 },
+}
+
+-- Morte: personagem vira ragdoll (juntas soltas) até o respawn; empurrado na direção do golpe.
+CombatConfig.Ragdoll = {
+	Enabled = true,
+	PushSpeed = 40,
 }
 
 -- Movimento (MovementService/MovementController). Dash é habilidade de personagem (Q).

@@ -246,6 +246,20 @@ Memória entre sessões. Atualizar depois de cada mudança.
   FallingDown/Ragdoll desligados no cliente. Hitbox só conta partes diretas do personagem (acessório
   gigante não aumenta hitbox). FALTA TESTAR.
 
+### Fase 1 — sensação de combate (2026-09-15, FALTA TESTAR)
+- `CombatConfig.HitStun` (0,35 s, WalkSpeed 6): levar soco/habilidade interrompe combo e freia.
+- Guarda (`Block.GuardMax` 60, regen 20/s após 1 s): cada golpe bloqueado gasta o dano bruto; zerou =
+  **guard break** (`kind = "guardbreak"`: dano cheio, block cai, stun 1,6 s, VFX Dizzy + HeavyHit).
+- **Finisher**: 4º golpe em alvo com ≤30% de vida (`Finisher.LowHealth`) → `kind = "finisher"`,
+  knockback 75, hitstop 0,14 s, shake forte, VFX Todo/HeavyHit.
+- **Ragdoll na morte** (`HealthService.ragdoll`): Motor6D → BallSocket, PlatformStand, empurrado
+  para longe do último atacante via NotifyKnockback; VFX RagdollWind.
+- `restoreWalkSpeed` centraliza block > hitstun > corrida > normal (DevSpeed manda).
+- Sons: `Sounds.model.json` preenchido com 41 sons dos packs escolhidos por nome (ver PackSounds).
+  Trocar = editar o SoundId lá. Novos: GuardBreak, Finisher_Hit, Mystic/ArcaneStep(_Hit).
+- VFX novos em `Assets.VFXPack`: Shared/FinisherHit, GuardBreak, Stun (Dizzy, segue), Ragdoll (segue),
+  Mystic/ArcaneStep(_Hit). `tools/podar_vfx.luau` rodado (288 instâncias).
+
 ### BUGS / PENDÊNCIAS ABERTAS (ordem de prioridade)
 1. **Animações não aparecem no jogador** (boss/bonecos OK). Causa confirmada em 2026-09-15 11:00: o
    jogador nasce **R15** mesmo com Game Settings em R6 e sem StarterCharacter. Solução aplicada

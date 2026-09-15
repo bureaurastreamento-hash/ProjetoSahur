@@ -29,6 +29,7 @@ local warnedRig = false -- segundos que o último atacante recebe crédito do ki
 
 local notifyHealth: RemoteEvent
 local notifyKill: RemoteEvent
+local notifyKnockback: RemoteEvent
 
 --- Disparado no servidor quando um jogador morre: (victim: Player, killer: Player?)
 HealthService.Died = Instance.new("BindableEvent")
@@ -66,6 +67,43 @@ function HealthService.IsAlive(character: Model?): boolean
 	return humanoid ~= nil and humanoid.Health > 0
 end
 
+--- Morte com peso: solta as juntas (Motor6D -> BallSocket) e empurra o corpo para longe do último
+--- atacante. O empurrão vai pelo NotifyKnockback (o cliente é dono da física do próprio boneco).
+local function ragdoll(player: Player, character: Model, humanoid: Humanoid, attacker: Player?)
+	humanoid.PlatformStand = true
+	humanoid.AutoRotate = false
+	for _, d in character:GetDescendants() do
+		if d:IsA("Motor6D") and d.Part0 and d.Part1 then
+			local a0 = Instance.new("Attachment")
+			a0.CFrame = d.C0
+			a0.Parent = d.Part0
+			local a1 = Instance.new("Attachment")
+			a1.CFrame = d.C1
+			a1.Parent = d.Part1
+			local socket = Instance.new("BallSocketConstraint")
+			socket.Attachment0 = a0
+			socket.Attachment1 = a1
+			socket.LimitsEnabled = true
+			socket.TwistLimitsEnabled = true
+			socket.UpperAngle = 60
+			socket.TwistLowerAngle = -45
+			socket.TwistUpperAngle = 45
+			socket.Parent = d.Part0
+			d:Destroy()
+		elseif d:IsA("BasePart") then
+			d.CanCollide = d.Name ~= "HumanoidRootPart"
+		end
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local attackerRoot = attacker and attacker.Character and attacker.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if root then
+		local away = if attackerRoot then root.Position - attackerRoot.Position else -root.CFrame.LookVector
+		away = Vector3.new(away.X, 0, away.Z)
+		local direction = if away.Magnitude > 0.1 then away.Unit else -root.CFrame.LookVector
+		notifyKnockback:FireClient(player, direction, CombatConfig.Ragdoll.PushSpeed, 0.25)
+	end
+end
+
 local function setupCharacter(player: Player, character: Model)
 	local humanoid = character:WaitForChild("Humanoid", 5) :: Humanoid?
 	if not humanoid then
@@ -98,6 +136,9 @@ local function setupCharacter(player: Player, character: Model)
 		local lastTime = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
 		if typeof(lastId) == "number" and typeof(lastTime) == "number" and (os.clock() - lastTime) <= KILL_CREDIT_WINDOW then
 			killer = Players:GetPlayerByUserId(lastId)
+		end
+		if CombatConfig.Ragdoll.Enabled then
+			ragdoll(player, character, humanoid, if typeof(lastId) == "number" then Players:GetPlayerByUserId(lastId) else nil)
 		end
 		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
 		notifyKill:FireAllClients(killer, player)
@@ -183,6 +224,7 @@ end
 
 function HealthService.Init()
 	notifyHealth = Remotes.GetEvent(Remotes.Events.NotifyHealth)
+	notifyKnockback = Remotes.GetEvent(Remotes.Events.NotifyKnockback)
 	notifyKill = Remotes.GetEvent(Remotes.Events.NotifyKill)
 	Players.RespawnTime = CombatConfig.RespawnTime
 end

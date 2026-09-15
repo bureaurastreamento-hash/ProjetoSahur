@@ -32,6 +32,9 @@ type PlayerState = {
 	stunnedUntil: number,
 	combo: number, -- índice do PRÓXIMO golpe (1..ComboLength)
 	lastAttackAt: number,
+	guard: number, -- guarda restante (CombatConfig.Block.GuardMax)
+	guardHitAt: number, -- último golpe bloqueado (regen começa GuardRegenDelay depois)
+	hitStunUntil: number,
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -62,7 +65,38 @@ local function newState(): PlayerState
 		stunnedUntil = 0,
 		combo = 1,
 		lastAttackAt = -math.huge,
+		guard = CombatConfig.Block.GuardMax,
+		guardHitAt = -math.huge,
+		hitStunUntil = 0,
 	}
+end
+
+--- WalkSpeed "certa" para o estado atual (block > hitstun > corrida > normal). DevSpeed manda.
+local function restoreWalkSpeed(player: Player)
+	local state = states[player]
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not state or not humanoid or player:GetAttribute("DevSpeed") ~= nil then
+		return
+	end
+	if state.blocking then
+		humanoid.WalkSpeed = CombatConfig.Block.WalkSpeed
+	elseif os.clock() < state.hitStunUntil then
+		humanoid.WalkSpeed = CombatConfig.HitStun.WalkSpeed
+	else
+		humanoid.WalkSpeed = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
+	end
+end
+
+--- Guarda atual com a regeneração aplicada preguiçosamente.
+local function currentGuard(state: PlayerState): number
+	local cfg = CombatConfig.Block
+	local since = os.clock() - state.guardHitAt - cfg.GuardRegenDelay
+	if since > 0 then
+		state.guard = math.min(cfg.GuardMax, state.guard + since * cfg.GuardRegenPerSecond)
+		state.guardHitAt = os.clock() - cfg.GuardRegenDelay -- evita somar o mesmo intervalo de novo
+	end
+	return state.guard
 end
 
 local function getState(player: Player): PlayerState
@@ -104,10 +138,7 @@ local function setBlocking(player: Player, active: boolean)
 	else
 		state.blocking = false
 		state.blockReleased = now
-		if humanoid then
-			-- correndo (MovementService) volta para a velocidade de corrida
-			humanoid.WalkSpeed = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
-		end
+		restoreWalkSpeed(player)
 	end
 
 	if character then
@@ -132,6 +163,28 @@ function CombatService.Stun(player: Player, seconds: number, reason: string)
 		setBlocking(player, false)
 	end
 	notifyCooldown:FireClient(player, reason, seconds)
+end
+
+--- Hitstun: interrompe o combo/ações da vítima por HitStun.Duration e freia o andar.
+function CombatService.HitStun(player: Player)
+	local state = getState(player)
+	local cfg = CombatConfig.HitStun
+	local now = os.clock()
+	local until_ = now + cfg.Duration
+	if until_ <= state.hitStunUntil then
+		return -- já está em hitstun maior
+	end
+	state.hitStunUntil = until_
+	state.stunnedUntil = math.max(state.stunnedUntil, until_)
+	state.nextAttackAt = math.max(state.nextAttackAt, until_)
+	state.combo = 1
+	restoreWalkSpeed(player)
+	task.delay(cfg.Duration + 0.01, function()
+		if states[player] == state and os.clock() >= state.hitStunUntil then
+			restoreWalkSpeed(player)
+		end
+	end)
+	notifyCooldown:FireClient(player, "hit", cfg.Duration)
 end
 
 function CombatService.IsBlocking(player: Player): boolean
@@ -181,15 +234,27 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	end
 	local finalDamage = damage
 
-	if victimState and victimState.blocking then
+	if victimState and victimState.blocking and victimPlayer then
 		local blockAge = os.clock() - victimState.blockStart
 		if allowParry ~= false and blockAge <= CombatConfig.Block.ParryWindow then
 			kind = "parry"
 			finalDamage = 0
 			CombatService.Stun(attacker, CombatConfig.Block.ParryStun, "parried")
 		else
-			kind = "blocked"
-			finalDamage = damage * CombatConfig.Block.DamageMultiplier
+			local guard = currentGuard(victimState) - damage
+			victimState.guardHitAt = os.clock()
+			if guard <= 0 then
+				-- Guard break: o golpe entra cheio, block cai e a vítima fica atordoada
+				kind = "guardbreak"
+				finalDamage = damage
+				victimState.guard = CombatConfig.Block.GuardMax
+				victimState.wantBlock = false
+				CombatService.Stun(victimPlayer, CombatConfig.Block.GuardBreakStun, "guardbreak")
+			else
+				kind = "blocked"
+				victimState.guard = guard
+				finalDamage = damage * CombatConfig.Block.DamageMultiplier
+			end
 		end
 	end
 
@@ -201,10 +266,24 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 		end
 	end
 
+	-- Finisher: 4º golpe (tem knockback) em alvo com pouca vida ou que morreu no golpe
+	local kb = knockback
+	if kind == "hit" and knockback and dealt > 0 then
+		local humanoid = victim:FindFirstChildOfClass("Humanoid")
+		local ratio = if humanoid and humanoid.MaxHealth > 0 then humanoid.Health / humanoid.MaxHealth else 1
+		if ratio <= CombatConfig.Finisher.LowHealth then
+			kind = "finisher"
+			kb = CombatConfig.Finisher.Knockback
+		end
+	end
+	if kind == "hit" and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
+		CombatService.HitStun(victimPlayer)
+	end
+
 	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
-	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
-		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration)
+	if kb and (kind == "hit" or kind == "finisher") and HealthService.IsAlive(victim) then
+		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration)
 	end
 end
 
@@ -223,6 +302,9 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	local dealt = if damage > 0 then HealthService.ApplyDamage(victim, damage, nil) else 0
 	if dealt > 0 and victimPlayer and AbilityService then
 		AbilityService.OnHitTaken(victimPlayer)
+	end
+	if kind == "hit" and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
+		CombatService.HitStun(victimPlayer)
 	end
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
 	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
