@@ -54,6 +54,26 @@
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
+        },
+        {
+          "name": "Finisher_Whoosh",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "UltReady",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
         }
       ]
     },
@@ -195,6 +215,62 @@
         },
         {
           "name": "Tempest_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mystic",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "ArcaneBolt",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "ArcaneBolt_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Mend",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Meteor",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Meteor_Hit",
           "className": "Sound",
           "properties": {
             "SoundId": "",

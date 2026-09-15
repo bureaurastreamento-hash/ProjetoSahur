@@ -1,0 +1,463 @@
+{
+ "className": "ScreenGui",
+ "properties": {
+  "ResetOnSpawn": false,
+  "DisplayOrder": 2,
+  "IgnoreGuiInset": true
+ },
+ "children": [
+  {
+   "name": "Root",
+   "className": "Frame",
+   "properties": {
+    "Name": "Root",
+    "Size": {
+     "UDim2": [
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "BackgroundTransparency": 1,
+    "Visible": false
+   },
+   "children": [
+    {
+     "name": "Attack",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Attack",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         96
+        ],
+        [
+         0,
+         96
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         1,
+         -24
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.85,
+        0.3,
+        0.25
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "SOCO",
+      "TextSize": 20,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Block",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Block",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         72
+        ],
+        [
+         0,
+         72
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -136
+        ],
+        [
+         1,
+         -24
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.3,
+        0.55,
+        0.9
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "BLOCK",
+      "TextSize": 15,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Slot1",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Slot1",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         60
+        ],
+        [
+         0,
+         60
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -232
+        ],
+        [
+         1,
+         -46
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.25,
+        0.32
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "Q",
+      "TextSize": 18,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Slot2",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Slot2",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         60
+        ],
+        [
+         0,
+         60
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -168
+        ],
+        [
+         1,
+         -116
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.25,
+        0.32
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "E",
+      "TextSize": 18,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Slot3",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Slot3",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         66
+        ],
+        [
+         0,
+         66
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -80
+        ],
+        [
+         1,
+         -136
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.6,
+        0.45,
+        0.15
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "R",
+      "TextSize": 18,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

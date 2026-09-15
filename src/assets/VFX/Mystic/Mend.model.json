@@ -1,0 +1,346 @@
+{
+ "className": "Model",
+ "children": [
+  {
+   "name": "Bubble",
+   "className": "Part",
+   "properties": {
+    "Name": "Bubble",
+    "Anchored": true,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false,
+    "Material": "Neon",
+    "Color": [
+     0.45,
+     1.0,
+     0.55
+    ],
+    "Transparency": 0.6,
+    "Size": [
+     5,
+     5,
+     5
+    ],
+    "Position": [
+     0,
+     0,
+     0
+    ],
+    "Shape": "Ball"
+   },
+   "attributes": {
+    "TweenScale": 1.4,
+    "TweenTime": 0.8
+   },
+   "children": []
+  },
+  {
+   "name": "Ring",
+   "className": "Part",
+   "properties": {
+    "Name": "Ring",
+    "Anchored": true,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false,
+    "Material": "Neon",
+    "Color": [
+     0.45,
+     1.0,
+     0.55
+    ],
+    "Transparency": 0.15,
+    "Size": [
+     0.2,
+     3.0,
+     3.0
+    ],
+    "Position": [
+     0,
+     -2.6,
+     0
+    ],
+    "Shape": "Cylinder",
+    "Orientation": [
+     0,
+     0,
+     90
+    ]
+   },
+   "attributes": {
+    "TweenScale": 3,
+    "TweenTime": 0.7
+   },
+   "children": []
+  },
+  {
+   "name": "Rise",
+   "className": "Part",
+   "properties": {
+    "Name": "Rise",
+    "Anchored": true,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false,
+    "Transparency": 1,
+    "Size": [
+     1,
+     1,
+     1
+    ],
+    "Position": [
+     0,
+     -2,
+     0
+    ]
+   },
+   "children": [
+    {
+     "name": "Motes",
+     "className": "ParticleEmitter",
+     "properties": {
+      "Rate": 0,
+      "Texture": "rbxasset://textures/particles/sparkles_main.dds",
+      "Color": {
+       "ColorSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "color": [
+           1,
+           1,
+           1
+          ]
+         },
+         {
+          "time": 0.5,
+          "color": [
+           0.45,
+           1.0,
+           0.55
+          ]
+         },
+         {
+          "time": 1,
+          "color": [
+           0.3,
+           0.8,
+           0.4
+          ]
+         }
+        ]
+       }
+      },
+      "Size": {
+       "NumberSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "value": 0.5,
+          "envelope": 0
+         },
+         {
+          "time": 1,
+          "value": 0,
+          "envelope": 0
+         }
+        ]
+       }
+      },
+      "Lifetime": {
+       "NumberRange": [
+        0.9,
+        1.4
+       ]
+      },
+      "Speed": {
+       "NumberRange": [
+        4,
+        8
+       ]
+      },
+      "SpreadAngle": {
+       "Vector2": [
+        70,
+        70
+       ]
+      },
+      "LightEmission": 1,
+      "Brightness": 1.5,
+      "Acceleration": [
+       0,
+       10,
+       0
+      ],
+      "Drag": 1,
+      "Rotation": {
+       "NumberRange": [
+        -180,
+        180
+       ]
+      },
+      "RotSpeed": {
+       "NumberRange": [
+        0,
+        0
+       ]
+      },
+      "Transparency": {
+       "NumberSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "value": 0.2,
+          "envelope": 0
+         },
+         {
+          "time": 1,
+          "value": 1,
+          "envelope": 0
+         }
+        ]
+       }
+      },
+      "ZOffset": 0
+     },
+     "attributes": {
+      "EmitCount": 24
+     }
+    },
+    {
+     "name": "Crosses",
+     "className": "ParticleEmitter",
+     "properties": {
+      "Rate": 0,
+      "Texture": "rbxasset://textures/particles/sparkles_main.dds",
+      "Color": {
+       "ColorSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "color": [
+           0.45,
+           1.0,
+           0.55
+          ]
+         },
+         {
+          "time": 1,
+          "color": [
+           1,
+           1,
+           1
+          ]
+         }
+        ]
+       }
+      },
+      "Size": {
+       "NumberSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "value": 1.2,
+          "envelope": 0
+         },
+         {
+          "time": 1,
+          "value": 0.4,
+          "envelope": 0
+         }
+        ]
+       }
+      },
+      "Lifetime": {
+       "NumberRange": [
+        0.8,
+        1.2
+       ]
+      },
+      "Speed": {
+       "NumberRange": [
+        3,
+        6
+       ]
+      },
+      "SpreadAngle": {
+       "Vector2": [
+        60,
+        60
+       ]
+      },
+      "LightEmission": 1,
+      "Brightness": 1.5,
+      "Acceleration": [
+       0,
+       6,
+       0
+      ],
+      "Drag": 0,
+      "Rotation": {
+       "NumberRange": [
+        45,
+        45
+       ]
+      },
+      "RotSpeed": {
+       "NumberRange": [
+        0,
+        0
+       ]
+      },
+      "Transparency": {
+       "NumberSequence": {
+        "keypoints": [
+         {
+          "time": 0,
+          "value": 0.1,
+          "envelope": 0
+         },
+         {
+          "time": 0.7,
+          "value": 0.4,
+          "envelope": 0
+         },
+         {
+          "time": 1,
+          "value": 1,
+          "envelope": 0
+         }
+        ]
+       }
+      },
+      "ZOffset": 0
+     },
+     "attributes": {
+      "EmitCount": 8
+     }
+    }
+   ]
+  },
+  {
+   "name": "Light",
+   "className": "PointLight",
+   "properties": {
+    "Color": [
+     0.45,
+     1.0,
+     0.55
+    ],
+    "Brightness": 2,
+    "Range": 14,
+    "Shadows": false
+   },
+   "attributes": {
+    "FadeTime": 0.8
+   }
+  }
+ ],
+ "attributes": {
+  "OriginRelative": true
+ }
+}

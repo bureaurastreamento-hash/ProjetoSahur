@@ -461,6 +461,11 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
 		local msgs = { coins = "Moedas insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado" }
+		local remaining = reason:match("^in_combat:(%d+)")
+		if remaining then
+			showBanner(("Em combate: fique %ss sem levar dano para trocar"):format(remaining), 2.5)
+			return
+		end
 		showBanner(("%s: %s"):format(characterId, msgs[reason] or reason), 3)
 	end)
 	localPlayer:GetAttributeChangedSignal("Coins"):Connect(refreshMatchUI)
@@ -473,9 +478,33 @@ function HUDController.Start()
 	end)
 
 	-- Atributos replicados do servidor
+	local ENERGY_COLOR = energyFill.BackgroundColor3
+	local ULT_COLOR = Color3.fromRGB(255, 200, 70)
+	local ultPulse: Tween? = nil
+	local wasFull = false
 	local function refreshEnergy()
 		local e = localPlayer:GetAttribute("Energy")
-		setBar(energyFill, energyText, if typeof(e) == "number" then e else 0, CharacterDefs.Energy.Max)
+		local energy = if typeof(e) == "number" then e else 0
+		setBar(energyFill, energyText, energy, CharacterDefs.Energy.Max)
+		-- Ult pronta: barra dourada pulsando + flash no slot 3 + som (uma vez por carga)
+		local full = energy >= CharacterDefs.Energy.Max
+		if full and not wasFull then
+			energyFill.BackgroundColor3 = ULT_COLOR
+			local pulse = TweenService:Create(energyFill, TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.45 })
+			pulse:Play()
+			ultPulse = pulse
+			flashSlot(3, ULT_COLOR)
+			FX.PlaySoundUI("Shared", "UltReady")
+			showBanner("ULT PRONTA — R", 1.5)
+		elseif not full and wasFull then
+			if ultPulse then
+				ultPulse:Cancel()
+				ultPulse = nil
+			end
+			energyFill.BackgroundTransparency = 0
+			energyFill.BackgroundColor3 = ENERGY_COLOR
+		end
+		wasFull = full
 	end
 	localPlayer:GetAttributeChangedSignal("Energy"):Connect(refreshEnergy)
 	localPlayer:GetAttributeChangedSignal("CharacterId"):Connect(function()

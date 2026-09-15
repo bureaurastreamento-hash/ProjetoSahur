@@ -106,25 +106,79 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - 2026-09-14 — Hitbox só atinge personagens de jogadores ou Models com tag `Combatant`
   (rigs decorativos do Workspace não levam mais dano).
 
+- 2026-09-14 — **Mapa novo (plano, detalhado)**: `tools/gerar_arena.py` gera
+  `src/workspace/Arena.model.json` (662 parts, só materiais nativos com paleta própria; nada
+  de free model). Praça circular central (3 anéis + medalhão neon, meio-fio, 8 postes com luz,
+  bancos, floreiras), 4 caminhos pavimentados e 4 trilhas de terra; zonas: **Ruínas** (N,
+  colunas quebradas/caídas, muretas, dais), **Mercado** (S, 6 barracas, poço, caixotes, barris,
+  cerca), **Lago** (L, lâmina d'água sem colisão, ilha, passarela, pedras, juncos) e **Bosque**
+  (O, ~20 árvores, troncos, cogumelos com luz, pedra rúnica). Muro de pedra baixo com torres
+  nos cantos + barreira invisível de 60 studs. Pastas por zona no Explorer; 12 spawns.
+  Editar o mapa = editar o script e rodar de novo.
+- 2026-09-14 — `EnvironmentService`: iluminação em runtime (fim de tarde, Atmosphere, Bloom,
+  ColorCorrection, SunRays), aditivo (só cria efeitos `Sahur*` se não existirem).
+  `Lighting.Technology` precisa ser trocado no Studio manualmente.
+- 2026-09-14 — **3º personagem: Mystic** (250 moedas). Q `ArcaneBolt` (novo efeito
+  `Projectile`: esfera neon simulada no servidor em `Workspace.Projectiles`, raycast por passo,
+  acerta o 1º alvo, knockback leve), E `Mend` (novo efeito `Heal`, +30 HP, número verde
+  flutuante), R `Meteor` (`AreaDamage` com `Offset`: cai 16 studs à frente 1.2 s depois, raio
+  14, 45 de dano, knockback forte; o ponto trava no cast). `Hitbox.AroundPoint`,
+  `FX.SpawnVFX(..., at)` posiciona VFX num ponto (NotifyAbility manda `Position`).
+  Aliases do Particle Pack, Animations/Sounds `Mystic` (ids vazios), `VFX/Mystic`.
+  Painel de seleção alargado para 640 px.
+
+- 2026-09-14 — **VFX próprios** (`tools/gerar_vfx.py` → `src/assets/VFX/<Char>/<Ability>.model.json`,
+  16 efeitos, só texturas embutidas do engine + Parts Neon): rajadas, anéis de choque que
+  crescem e somem, luzes que apagam, aura de fogo que segue o Brawler na Fúria, anel de aviso
+  do Meteoro. `FX.SpawnVFX` entende atributos `OriginRelative`/`Lifetime`/`Follow` (Model),
+  `TweenScale`/`TweenTime` (Part), `EmitCount`/`EmitDuration` (emissor), `FadeTime` (luz).
+  VFX feito pela arte com o mesmo nome no Studio continua tendo prioridade.
+  AssetsPacks: continua só o Particle Pack (os `.rbxl` Rova são dumps de outros jogos, não usar).
+- 2026-09-14 — **Menu de desenvolvedor**: `src/server/AdminConfig.luau` (lista de NICKS
+  permitidos: guilacartinhasgames, humanoider_20; dono do jogo também passa; sem senha),
+  `AdminService` (atributo `IsDeveloper` só para eles → ícone "Dev"/F8 só aparece para eles;
+  `FetchAdminLogin()` abre a sessão, `RequestAdminCommand`, `NotifyAdminResult`; comandos SetCoins/
+  AddCoins/GrantCharacter/RevokeCharacter/SetCharacter/Heal/Kill/God/Teleport/Bring/Kick/
+  ResetData/SetEnergy/ListPlayers, tudo logado com `warn` no servidor), `DevGui`
+  (`tools/gerar_devgui.py`) + `DevController` (ícone "Dev" no topbar / F8, só para IsDeveloper).
+  `DataService.SetCoins/GrantCharacter/RevokeCharacter/ResetProfile`; atributo `Invulnerable`
+  no Player bloqueia dano em `HealthService.ApplyDamage`.
+- 2026-09-14 — **Game feel 2**: hitstop (`FX.Hitstop`, 50/90 ms em quem bate e quem apanha),
+  rastro no dash/blink (`FX.Trail`, cor por personagem), finisher com som `Finisher_Whoosh`
+  (cai no Punch_Whoosh) + VFX `Shared/Finisher`, ult pronta = barra dourada pulsando + flash no
+  slot 3 + som `UltReady` + banner.
+
+- 2026-09-15 — Trocar de personagem = **respawn** com o novo (`player:LoadCharacter()`); negado
+  se levou dano nos últimos `CharacterDefs.SwapOutOfCombatSeconds` (10 s), banner mostra a
+  contagem. `HealthService.SecondsSinceDamaged`.
+- 2026-09-15 — Animações placeholder com ids públicos da própria Roblox (as do Animate R6):
+  socos = toolslash/toollunge, block/parry = toolnone, hit = fall, habilidades = lunge/slash/
+  cheer/point/wave/dance. Trocar pelas da equipe quando publicarem (mesmos nomes).
+- 2026-09-15 — **Mobile**: `MobileGui` (`tools/gerar_mobilegui.py`: SOCO, BLOCK segurar, Q/E/R)
+  + `MobileController` (só aparece com toque e sem teclado; desliga "toque no mundo = soco").
+  `CombatController.Attack/SetBlock`, `AbilityController.Use`.
+
 ## Em andamento
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.
 - Receber ids das animações/sons da equipe e preencher `src/assets/Animations.model.json`
   e `Sounds.model.json`; VFX por nome no Studio (lista em CHECKLIST_PUBLICACAO.md §1).
-- Avaliar o mapa `Sahur.Arena` no Team Test e ajustar layout/escala.
+- Avaliar o mapa novo (`Sahur.Arena`) no Team Test: escala das zonas, se o lago/bosque atrapalham
+  o combate, performance (662 parts + ~20 PointLights).
+- Testar Mystic: projétil contra parede/jogador, cura, meteoro (o alvo consegue sair?).
+- Testar os VFX gerados (escala/duração de cada um) e o menu Dev (login, alvo, comandos).
+- Se o ícone Dev não aparecer: conferir que `StarterGui.DevGui` existe no Explorer (Rojo
+  conectado e sincronizado) e que o nick está em `AdminConfig.Developers`.
 - Testar o topbar (V/P/Tab), a tela de perfil e os VFX do Particle Pack nas habilidades.
 - Asset "Textures" (id 18221073047) foi inserido no Studio pelo usuário em local desconhecido;
   decidir se vira VFX nomeado em `Assets.VFX.<Personagem>`.
 
 ## Próximos passos (ordem sugerida)
-1. **Game feel, parte 2**: hitstop curto, trilha de dash, som de "whoosh" no finisher,
-   feedback de energia cheia (ult pronta).
-2. **Mapa**: detalhar `Sahur.Arena` (props, iluminação, zonas), ou substituir pelo mapa
-   da equipe mantendo `Spawns`.
-3. **Mobile**: botões na tela para block e Q/E/R (hoje toque = soco); testar no
-   Device Emulator.
-4. **Mais personagens** (escalar `CharacterDefs`): 3º e 4º estilos com novos tipos de efeito
-   (projétil, contra-ataque, cura), preços de desbloqueio balanceados.
+1. ~~Game feel, parte 2~~ (feito).
+2. **Mapa**: quando a equipe de arte trouxer meshes, trocar props do `gerar_arena.py` por
+   modelos deles (manter nomes/zonas e a pasta `Spawns`).
+3. ~~Mobile~~ (feito; falta testar no Device Emulator e ajustar tamanho/posição).
+4. **4º personagem** (contra-ataque/parry ofensivo, escudo) e balanceamento de preços.
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
    desafio, arena separada (`ServerStorage.Maps`), `FreeRoam` continua para os demais.
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/

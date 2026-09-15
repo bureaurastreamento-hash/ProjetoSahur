@@ -47,6 +47,7 @@ RemoteEvents.Events = ({
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
+	RequestAdminCommand = "RequestAdminCommand", -- (command: string, args: table) — só após FetchAdminLogin ok
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: string, comboIndex: number)
@@ -62,11 +63,13 @@ RemoteEvents.Events = ({
 	NotifyAbilityDenied = "NotifyAbilityDenied", -- dono: (slot: number, reason: string)
 	NotifyProfile = "NotifyProfile", -- dono: (profile: DataConfig.Profile, sessionOnly: boolean)
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
+	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)
 RemoteEvents.Functions = ({
 	FetchServerTime = "FetchServerTime", -- () -> number
+	FetchAdminLogin = "FetchAdminLogin", -- () -> boolean (abre sessão dev; só para Players em AdminConfig)
 }) :: { [string]: string }
 
 -- ---------------------------------------------------------------------------

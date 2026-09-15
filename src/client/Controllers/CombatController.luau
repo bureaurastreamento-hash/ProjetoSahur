@@ -19,6 +19,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 
 local CombatController = {}
 
@@ -36,6 +37,25 @@ local SHARED = "Shared"
 
 local blockHeld = false
 
+--- Toque no mundo = soco (MobileController desliga quando há botões na tela)
+CombatController.TouchAttackEnabled = true
+
+--- Soco (M1). Usado pelo input e pelos botões de toque.
+function CombatController.Attack()
+	requestAttack:FireServer("M1")
+end
+
+--- Segurar/soltar block. Idempotente.
+function CombatController.SetBlock(active: boolean)
+	if active and not blockHeld then
+		blockHeld = true
+		requestBlock:FireServer(true)
+	elseif not active and blockHeld then
+		blockHeld = false
+		requestBlock:FireServer(false)
+	end
+end
+
 local COLOR_HIT = Color3.fromRGB(255, 60, 60)
 local COLOR_BLOCK = Color3.fromRGB(80, 160, 255)
 local COLOR_PARRY = Color3.fromRGB(255, 255, 255)
@@ -46,12 +66,24 @@ local COLOR_NUMBER_BLOCK = Color3.fromRGB(140, 190, 255)
 -- Handlers do servidor
 -- ---------------------------------------------------------------------------
 
+local HITSTOP_LIGHT = 0.05
+local HITSTOP_HEAVY = 0.09
+
 local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex: number)
 	if not attackerChar then
 		return
 	end
 	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
-	FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+	local attackDef = CombatConfig.Attacks[attackId]
+	if attackDef and comboIndex >= attackDef.ComboLength then
+		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
+		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then
+			FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+		end
+		FX.SpawnVFX(attackerChar, SHARED, "Finisher", true)
+	else
+		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+	end
 end
 
 local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: number, kind: string)
@@ -74,6 +106,12 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_HIT)
 		if isMe then
 			FX.Shake(0.35, 0.15)
+		end
+		-- Hitstop: congela um instante quem bateu e quem apanhou (peso no golpe)
+		local stop = if amount >= CombatConfig.Attacks.M1.FinisherDamage then HITSTOP_HEAVY else HITSTOP_LIGHT
+		FX.Hitstop(victimChar, stop)
+		if attackerChar then
+			FX.Hitstop(attackerChar, stop)
 		end
 		FX.Flash(victimChar, COLOR_HIT, 0.15)
 		FX.SpawnVFX(victimChar, SHARED, "Hit", true)
@@ -133,18 +171,18 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	if gameProcessed then
 		return
 	end
-	if input.UserInputType == ATTACK_KEY or input.UserInputType == ATTACK_TOUCH or input.KeyCode == ATTACK_GAMEPAD then
-		requestAttack:FireServer("M1")
-	elseif (input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD) and not blockHeld then
-		blockHeld = true
-		requestBlock:FireServer(true)
+	if input.UserInputType == ATTACK_KEY or input.KeyCode == ATTACK_GAMEPAD then
+		CombatController.Attack()
+	elseif input.UserInputType == ATTACK_TOUCH and CombatController.TouchAttackEnabled then
+		CombatController.Attack()
+	elseif input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
+		CombatController.SetBlock(true)
 	end
 end
 
 local function onInputEnded(input: InputObject, _gameProcessed: boolean)
-	if (input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD) and blockHeld then
-		blockHeld = false
-		requestBlock:FireServer(false)
+	if input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
+		CombatController.SetBlock(false)
 	end
 end
 

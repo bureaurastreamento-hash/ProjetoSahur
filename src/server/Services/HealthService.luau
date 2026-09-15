@@ -30,6 +30,16 @@ local notifyKill: RemoteEvent
 --- Disparado no servidor quando um jogador morre: (victim: Player, killer: Player?)
 HealthService.Died = Instance.new("BindableEvent")
 
+--- Segundos desde a última vez que o jogador levou dano (math.huge se nunca / sem personagem).
+function HealthService.SecondsSinceDamaged(player: Player): number
+	local character = player.Character
+	local lastHit = character and character:GetAttribute(ATTR_LAST_ATTACK_TIME)
+	if typeof(lastHit) ~= "number" then
+		return math.huge
+	end
+	return os.clock() - lastHit
+end
+
 --- Jogadores com atributo CanFight == false não dão nem recebem dano (ex.: lobby).
 function HealthService.CanFight(player: Player?): boolean
 	return player == nil or player:GetAttribute("CanFight") ~= false
@@ -92,8 +102,12 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	if not humanoid or humanoid.Health <= 0 or amount <= 0 then
 		return 0
 	end
-	if not HealthService.CanFight(attacker) or not HealthService.CanFight(Players:GetPlayerFromCharacter(victim)) then
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	if not HealthService.CanFight(attacker) or not HealthService.CanFight(victimPlayer) then
 		return 0
+	end
+	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
+		return 0 -- modo deus (AdminService)
 	end
 
 	local before = humanoid.Health
@@ -105,7 +119,6 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 		victim:SetAttribute(ATTR_LAST_ATTACK_TIME, os.clock())
 	end
 
-	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	if victimPlayer then
 		notifyHealth:FireClient(victimPlayer, humanoid.Health, humanoid.MaxHealth)
 	end

@@ -64,4 +64,9 @@ function Hitbox.Around(attacker: Model, radius: number, maxTargets: number): { M
 	return collect(Workspace:GetPartBoundsInRadius(root.Position, radius, params(attacker)), attacker, maxTargets)
 end
 
+--- Esfera centrada em um ponto qualquer (projéteis, área à distância). `exclude` nunca é atingido.
+function Hitbox.AroundPoint(exclude: Model, position: Vector3, radius: number, maxTargets: number): { Model }
+	return collect(Workspace:GetPartBoundsInRadius(position, radius, params(exclude)), exclude, maxTargets)
+end
+
 return Hitbox

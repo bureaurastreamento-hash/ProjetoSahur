@@ -15,9 +15,12 @@
 	Tipos de efeito (implementados em AbilityService):
 	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> movimento no cliente, hitbox no servidor ao fim
 	  Teleport    { Distance }                                       -> servidor move o HRP para frente (com raycast contra parede)
-	  AreaDamage  { Radius, Damage, Delay, StunSeconds? }            -> dano em esfera após Delay
+	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
+	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
 	  MultiHitArea{ Radius, Damage, Hits, Interval }                 -> vários ticks de AreaDamage
 	  DamageBuff  { Multiplier, Duration }                           -> multiplica dano dos socos/habilidades
+	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
+	  Heal        { Amount }                                         -> cura o próprio lançador
 ]]
 
 export type Effect = {
@@ -50,6 +53,9 @@ CharacterDefs.Energy = {
 }
 
 CharacterDefs.DefaultCharacter = "Brawler"
+
+--- Trocar de personagem faz respawn; só é permitido depois deste tempo sem levar dano.
+CharacterDefs.SwapOutOfCombatSeconds = 10
 
 CharacterDefs.Characters = {
 	Brawler = {
@@ -115,10 +121,42 @@ CharacterDefs.Characters = {
 			},
 		},
 	} :: CharacterDef,
+
+	Mystic = {
+		Id = "Mystic",
+		DisplayName = "Mystic",
+		UnlockCost = 250,
+		Abilities = {
+			{
+				Id = "ArcaneBolt",
+				DisplayName = "Projétil Arcano",
+				Cooldown = 4,
+				EnergyCost = 0,
+				CastTime = 0.3,
+				Effect = { Type = "Projectile", Speed = 90, Range = 70, Radius = 3, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } },
+			},
+			{
+				Id = "Mend",
+				DisplayName = "Restaurar",
+				Cooldown = 16,
+				EnergyCost = 35,
+				CastTime = 0.6,
+				Effect = { Type = "Heal", Amount = 30 },
+			},
+			{
+				Id = "Meteor",
+				DisplayName = "Meteoro",
+				Cooldown = 30,
+				EnergyCost = 100,
+				CastTime = 0.8,
+				Effect = { Type = "AreaDamage", Radius = 14, Damage = 45, Delay = 1.2, Offset = 16, Knockback = { Speed = 55, Duration = 0.3 } },
+			},
+		},
+	} :: CharacterDef,
 }
 
---- Lista ordenada de ids (para ciclar na seleção de debug)
-CharacterDefs.Order = { "Brawler", "Swift" }
+--- Lista ordenada de ids (ordem na seleção de personagem)
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic" }
 
 function CharacterDefs.Get(characterId: string): CharacterDef?
 	return CharacterDefs.Characters[characterId]

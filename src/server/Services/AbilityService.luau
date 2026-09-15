@@ -24,6 +24,7 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
+local AdminService = require(script.Parent:WaitForChild("AdminService"))
 
 local AbilityService = {}
 
@@ -99,8 +100,28 @@ end
 -- Efeitos
 -- ---------------------------------------------------------------------------
 
-local function areaHit(player: Player, character: Model, effect: CharacterDefs.Effect, damage: number)
-	for _, victim in Hitbox.Around(character, effect.Radius, MAX_AREA_TARGETS) do
+--- Ponto central de um efeito de área: o lançador, ou `Offset` studs à frente dele.
+local function areaCenter(character: Model, effect: CharacterDefs.Effect): Vector3?
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return nil
+	end
+	local offset = effect.Offset
+	if typeof(offset) == "number" and offset > 0 then
+		local look = root.CFrame.LookVector
+		return root.Position + Vector3.new(look.X, 0, look.Z).Unit * offset
+	end
+	return root.Position
+end
+
+local function areaHit(player: Player, character: Model, effect: CharacterDefs.Effect, damage: number, center: Vector3?)
+	local victims: { Model }
+	if center then
+		victims = Hitbox.AroundPoint(character, center, effect.Radius, MAX_AREA_TARGETS)
+	else
+		victims = Hitbox.Around(character, effect.Radius, MAX_AREA_TARGETS)
+	end
+	for _, victim in victims do
 		CombatService.ResolveHit(player, character, victim, damage, false, effect.Knockback)
 		local stunSeconds = effect.StunSeconds
 		if typeof(stunSeconds) == "number" then
@@ -161,18 +182,20 @@ effects.Teleport = function(player, character, ability)
 	local hit = Workspace:Raycast(root.Position, direction, params)
 	local distance = if hit then math.max(0, hit.Distance - 2) else e.Distance
 	root.CFrame = root.CFrame + root.CFrame.LookVector * distance
-	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start")
+	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Teleported = true })
 end
 
 effects.AreaDamage = function(player, character, ability)
 	local e = ability.Effect
-	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start")
+	-- Com Offset o ponto é travado no momento do cast (o alvo vê onde vai cair e pode sair)
+	local center = if typeof(e.Offset) == "number" then areaCenter(character, e) else nil
+	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Position = center })
 	task.delay(e.Delay, function()
 		if not stillValid(player, character) or CombatService.IsStunned(player) then
 			return
 		end
-		areaHit(player, character, e, e.Damage)
-		notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit")
+		areaHit(player, character, e, e.Damage, center)
+		notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit", { Position = center })
 	end)
 end
 
@@ -189,6 +212,101 @@ effects.MultiHitArea = function(player, character, ability)
 			notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit", { Index = i })
 		end
 		notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "end")
+	end)
+end
+
+effects.Heal = function(player, character, ability)
+	local e = ability.Effect
+	local healed = HealthService.Heal(character, e.Amount)
+	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Healed = healed })
+end
+
+-- Projétil simulado no servidor: esfera anchored avança por Heartbeat e acerta o
+-- primeiro personagem (ou parede) no caminho. A parte é o visual mínimo; o VFX
+-- de impacto vai pelo NotifyAbility "hit" com a posição.
+local PROJECTILE_FOLDER_NAME = "Projectiles"
+local function projectileFolder(): Folder
+	local existing = Workspace:FindFirstChild(PROJECTILE_FOLDER_NAME)
+	if existing and existing:IsA("Folder") then
+		return existing
+	end
+	local folder = Instance.new("Folder")
+	folder.Name = PROJECTILE_FOLDER_NAME
+	folder.Parent = Workspace
+	return folder
+end
+
+effects.Projectile = function(player, character, ability)
+	local e = ability.Effect
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local characterId = getState(player).characterId
+	local direction = root.CFrame.LookVector
+	local origin = root.Position + direction * 3 + Vector3.new(0, 0.5, 0)
+
+	local bolt = Instance.new("Part")
+	bolt.Name = ability.Id
+	bolt.Shape = Enum.PartType.Ball
+	bolt.Size = Vector3.new(1.6, 1.6, 1.6)
+	bolt.Material = Enum.Material.Neon
+	bolt.Color = Color3.fromRGB(120, 200, 255)
+	bolt.Anchored = true
+	bolt.CanCollide = false
+	bolt.CanQuery = false
+	bolt.CanTouch = false
+	bolt.CastShadow = false
+	bolt.CFrame = CFrame.new(origin, origin + direction)
+	local glow = Instance.new("PointLight")
+	glow.Color = bolt.Color
+	glow.Range = 10
+	glow.Brightness = 1.5
+	glow.Parent = bolt
+	local folder = projectileFolder()
+	bolt.Parent = folder
+
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start")
+
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	rayParams.FilterDescendantsInstances = { character, folder }
+
+	task.spawn(function()
+		local travelled = 0
+		local position = origin
+		local function finish(hitPosition: Vector3, victim: Model?)
+			bolt:Destroy()
+			if victim and stillValid(player, character) then
+				CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback)
+			end
+			notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Position = hitPosition })
+		end
+		while travelled < e.Range do
+			local dt = task.wait()
+			if not player.Parent or not bolt.Parent then
+				bolt:Destroy()
+				return
+			end
+			local step = math.min(e.Speed * dt, e.Range - travelled)
+			-- Raycast do passo evita atravessar paredes finas em frames longos
+			local ray = Workspace:Raycast(position, direction * (step + e.Radius), rayParams)
+			local nextPosition = position + direction * step
+			if ray then
+				local victims = Hitbox.AroundPoint(character, ray.Position, e.Radius, 1)
+				finish(ray.Position, victims[1])
+				return
+			end
+			local victims = Hitbox.AroundPoint(character, nextPosition, e.Radius, 1)
+			if #victims > 0 then
+				finish(nextPosition, victims[1])
+				return
+			end
+			position = nextPosition
+			travelled += step
+			bolt.CFrame = CFrame.new(position, position + direction)
+		end
+		finish(position, nil)
 	end)
 end
 
@@ -282,11 +400,20 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 		Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied):FireClient(player, characterId, "locked")
 		return
 	end
+	-- Trocar = respawn com o personagem novo; em combate (levou dano há pouco) espera
+	local since = HealthService.SecondsSinceDamaged(player)
+	if since < CharacterDefs.SwapOutOfCombatSeconds then
+		local remaining = math.ceil(CharacterDefs.SwapOutOfCombatSeconds - since)
+		Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied):FireClient(player, characterId, ("in_combat:%d"):format(remaining))
+		return
+	end
 	state.characterId = characterId
 	state.cooldownReadyAt = {}
 	state.damageMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
-	Log.debug(("[AbilityService] %s agora é %s"):format(player.Name, characterId))
+	Log.debug(("[AbilityService] %s agora é %s (respawn)"):format(player.Name, characterId))
+	AntiExploitService.Grace(player, 3)
+	player:LoadCharacter()
 end
 
 -- ---------------------------------------------------------------------------
@@ -299,7 +426,21 @@ function AbilityService.Init()
 	notifyAbilityDenied = Remotes.GetEvent(Remotes.Events.NotifyAbilityDenied)
 end
 
+--- [Admin] Troca o personagem sem checar desbloqueio/round.
+local function forceCharacter(player: Player, characterId: string)
+	if not CharacterDefs.Get(characterId) then
+		return
+	end
+	local state = getState(player)
+	state.characterId = characterId
+	state.cooldownReadyAt = {}
+	state.damageMultiplierUntil = 0
+	player:SetAttribute("CharacterId", characterId)
+end
+
 function AbilityService.Start()
+	AdminService.ForceCharacter = forceCharacter
+	AdminService.SetEnergy = setEnergy
 	Remotes.GetEvent(Remotes.Events.RequestAbility).OnServerEvent:Connect(onRequestAbility)
 	Remotes.GetEvent(Remotes.Events.RequestSelectCharacter).OnServerEvent:Connect(onRequestSelectCharacter)
 

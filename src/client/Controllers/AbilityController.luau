@@ -38,6 +38,13 @@ local SLOT_KEYS: { [Enum.KeyCode]: number } = {
 	[Enum.KeyCode.ButtonB] = 3,
 }
 
+local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
+local TRAIL_COLORS: { [string]: Color3 } = {
+	Brawler = Color3.fromRGB(255, 150, 60),
+	Swift = Color3.fromRGB(110, 230, 255),
+	Mystic = Color3.fromRGB(170, 110, 255),
+}
+
 local requestAbility: RemoteEvent
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 
@@ -51,18 +58,28 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 	if not character then
 		return
 	end
+	local at: Vector3? = if typeof(data) == "table" and typeof(data.Position) == "Vector3" then data.Position else nil
 	if phase == "start" then
 		FX.PlayAnimation(character, characterId, abilityId)
-		FX.SpawnVFX(character, characterId, abilityId)
+		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)
-		if character == localPlayer.Character and typeof(data) == "table" and data.Speed and data.Duration then
-			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
-			if root then
-				FX.Push(character, root.CFrame.LookVector * data.Speed, data.Duration)
+		if typeof(data) == "table" and typeof(data.Healed) == "number" and data.Healed > 0 then
+			FX.DamageNumber(character, "+" .. math.floor(data.Healed), Color3.fromRGB(120, 255, 140))
+		end
+		if typeof(data) == "table" and data.Speed and data.Duration then
+			-- Dash: rastro em todo mundo, movimento só no dono da física
+			FX.Trail(character, TRAIL_COLORS[characterId] or TRAIL_DEFAULT, data.Duration + 0.1)
+			if character == localPlayer.Character then
+				local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+				if root then
+					FX.Push(character, root.CFrame.LookVector * data.Speed, data.Duration)
+				end
 			end
+		elseif typeof(data) == "table" and data.Teleported then
+			FX.Trail(character, TRAIL_COLORS[characterId] or TRAIL_DEFAULT, 0.15, 3)
 		end
 	elseif phase == "hit" then
-		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true)
+		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true, at)
 		FX.PlaySoundAt(character, characterId, abilityId .. "_Hit")
 	end
 end
@@ -86,8 +103,13 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	end
 	local slot = SLOT_KEYS[input.KeyCode]
 	if slot then
-		requestAbility:FireServer(slot)
+		AbilityController.Use(slot)
 	end
+end
+
+--- Pede a habilidade do slot ao servidor (teclado, gamepad ou botão de toque).
+function AbilityController.Use(slot: number)
+	requestAbility:FireServer(slot)
 end
 
 function AbilityController.GetCooldowns()

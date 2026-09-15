@@ -205,6 +205,53 @@ function DataService.AddCoins(player: Player, amount: number)
 	touch(player)
 end
 
+--- [Admin] Define moedas direto.
+function DataService.SetCoins(player: Player, amount: number)
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return
+	end
+	profile.coins = math.max(0, math.floor(amount))
+	touch(player)
+end
+
+--- [Admin] Concede personagem sem cobrar. Retorna false se já tinha/inexistente.
+function DataService.GrantCharacter(player: Player, characterId: string): boolean
+	local profile = DataService.GetProfile(player)
+	if not profile or not CharacterDefs.Get(characterId) or table.find(profile.unlockedCharacters, characterId) then
+		return false
+	end
+	table.insert(profile.unlockedCharacters, characterId)
+	touch(player)
+	return true
+end
+
+--- [Admin] Remove personagem (não remove os gratuitos).
+function DataService.RevokeCharacter(player: Player, characterId: string): boolean
+	local profile = DataService.GetProfile(player)
+	local def = CharacterDefs.Get(characterId)
+	if not profile or not def or def.UnlockCost <= 0 then
+		return false
+	end
+	local index = table.find(profile.unlockedCharacters, characterId)
+	if not index then
+		return false
+	end
+	table.remove(profile.unlockedCharacters, index)
+	touch(player)
+	return true
+end
+
+--- [Admin] Volta o perfil ao padrão (salva no próximo autosave/saída).
+function DataService.ResetProfile(player: Player)
+	local session = sessions[player]
+	if not session then
+		return
+	end
+	session.profile = DataConfig.DefaultProfile()
+	touch(player)
+end
+
 function DataService.HasCharacter(player: Player, characterId: string): boolean
 	local def = CharacterDefs.Get(characterId)
 	if not def then

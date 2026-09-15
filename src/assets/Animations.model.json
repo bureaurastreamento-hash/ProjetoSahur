@@ -9,49 +9,49 @@
           "name": "M1_1",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967390"
           }
         },
         {
           "name": "M1_2",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967390"
           }
         },
         {
           "name": "M1_3",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967390"
           }
         },
         {
           "name": "M1_4",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967478"
           }
         },
         {
           "name": "Block",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://182393478"
           }
         },
         {
           "name": "Parry",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://182393478"
           }
         },
         {
           "name": "Hit",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://180436148"
           }
         }
       ]
@@ -64,21 +64,21 @@
           "name": "ShoulderBash",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967478"
           }
         },
         {
           "name": "GroundSlam",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967390"
           }
         },
         {
           "name": "Rampage",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129423030"
           }
         }
       ]
@@ -91,21 +91,48 @@
           "name": "Blink",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://128853357"
           }
         },
         {
           "name": "SweepKick",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://129967390"
           }
         },
         {
           "name": "Tempest",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://182491248"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mystic",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "ArcaneBolt",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://128853357"
+          }
+        },
+        {
+          "name": "Mend",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://129423030"
+          }
+        },
+        {
+          "name": "Meteor",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": "rbxassetid://128777973"
           }
         }
       ]
