@@ -200,10 +200,10 @@
      ]
     },
     {
-     "name": "Slot1",
+     "name": "Dash",
      "className": "TextButton",
      "properties": {
-      "Name": "Slot1",
+      "Name": "Dash",
       "Size": {
        "UDim2": [
         [
@@ -236,14 +236,14 @@
       },
       "BackgroundColor3": {
        "Color3": [
-        0.25,
-        0.25,
-        0.32
+        0.2,
+        0.5,
+        0.45
        ]
       },
       "BackgroundTransparency": 0.35,
-      "Text": "Q",
-      "TextSize": 18,
+      "Text": "DASH",
+      "TextSize": 14,
       "Font": "GothamBold",
       "TextColor3": {
        "Color3": [
@@ -286,10 +286,10 @@
      ]
     },
     {
-     "name": "Slot2",
+     "name": "Slot1",
      "className": "TextButton",
      "properties": {
-      "Name": "Slot2",
+      "Name": "Slot1",
       "Size": {
        "UDim2": [
         [
@@ -372,10 +372,10 @@
      ]
     },
     {
-     "name": "Slot3",
+     "name": "Slot2",
      "className": "TextButton",
      "properties": {
-      "Name": "Slot3",
+      "Name": "Slot2",
       "Size": {
        "UDim2": [
         [
@@ -458,10 +458,10 @@
      ]
     },
     {
-     "name": "Slot4",
+     "name": "Slot3",
      "className": "TextButton",
      "properties": {
-      "Name": "Slot4",
+      "Name": "Slot3",
       "Size": {
        "UDim2": [
         [

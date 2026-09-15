@@ -106,6 +106,16 @@
           }
         },
         {
+          "name": "Dash",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
           "name": "DashBack",
           "className": "Animation",
           "properties": {
@@ -325,13 +335,6 @@
       "name": "Sahur",
       "className": "Folder",
       "children": [
-        {
-          "name": "DrumStep",
-          "className": "Animation",
-          "properties": {
-            "AnimationId": ""
-          }
-        },
         {
           "name": "Bombo",
           "className": "Animation",

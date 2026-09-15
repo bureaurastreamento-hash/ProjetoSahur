@@ -1,7 +1,7 @@
 --!strict
 --[[
 	MobileController (cliente)
-	Botões de toque (StarterGui.MobileGui): SOCO, BLOCK (segurar), Q/E/R.
+	Botões de toque (StarterGui.MobileGui): SOCO, BLOCK (segurar), DASH (Q), E/R/T, CORRER.
 	Só aparece quando há toque e não há teclado (celular/tablet). Não decide nada:
 	chama CombatController / AbilityController, que mandam os Requests ao servidor.
 	Testar no Studio: Test > Device (emulador) com um aparelho de toque.
@@ -74,7 +74,11 @@ function MobileController.Start()
 	block.MouseLeave:Connect(function()
 		CombatController.SetBlock(false)
 	end)
-	for slot = 1, 4 do
+	local dash = get(root, "Dash") :: TextButton
+	dash.MouseButton1Down:Connect(function()
+		MovementController.Dash()
+	end)
+	for slot = 1, 3 do
 		local b = get(root, "Slot" .. slot) :: TextButton
 		b.MouseButton1Down:Connect(function()
 			AbilityController.Use(slot)

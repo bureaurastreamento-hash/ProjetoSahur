@@ -28,6 +28,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
+local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
 local HUDController = {}
 
@@ -37,7 +38,7 @@ HUDController.OpenShop = Instance.new("BindableEvent")
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local SLOT_KEYS = { "Q", "E", "R", "T" }
+local SLOT_KEYS = { "E", "R", "T" } -- slots de habilidade; Q = dash universal (frame "Dash")
 local KILLFEED_MAX = 5
 local KILLFEED_LIFETIME = 6
 
@@ -61,6 +62,7 @@ local energyFill: Frame
 local energyText: TextLabel
 local characterNameLabel: TextLabel
 local slots: { Frame } = {}
+local dashSlot: Frame
 local killFeed: Frame
 local killTemplate: TextLabel
 local scoreboard: Frame
@@ -159,25 +161,36 @@ local function refreshSlots()
 	end
 end
 
+local function setCooldownOverlay(slot: Frame, remaining: number, total: number)
+	local overlay = slot:FindFirstChild("Cooldown") :: Frame
+	local text = slot:FindFirstChild("CooldownText") :: TextLabel
+	if remaining > 0 then
+		overlay.Size = UDim2.fromScale(1, math.clamp(remaining / math.max(total, remaining), 0, 1))
+		text.Text = ("%.1f"):format(remaining)
+	else
+		overlay.Size = UDim2.fromScale(1, 0)
+		text.Text = ""
+	end
+end
+
 local function updateCooldowns()
 	local now = Workspace:GetServerTimeNow()
 	local cooldowns = AbilityController.GetCooldowns()
 	local characterId = localPlayer:GetAttribute("CharacterId")
 	for i, slot in slots do
-		local overlay = slot:FindFirstChild("Cooldown") :: Frame
-		local text = slot:FindFirstChild("CooldownText") :: TextLabel
 		local cd = cooldowns[i]
 		local remaining = if cd then cd.readyAt - now else 0
-		if remaining > 0 then
-			local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i) else nil
-			local total = if ability then ability.Cooldown else remaining
-			overlay.Size = UDim2.fromScale(1, math.clamp(remaining / total, 0, 1))
-			text.Text = ("%.1f"):format(remaining)
-		else
-			overlay.Size = UDim2.fromScale(1, 0)
-			text.Text = ""
-		end
+		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i) else nil
+		setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
 	end
+	-- Dash universal (Q): caído mostra o cooldown do ragdoll cancel
+	local dashCds = MovementController.GetDashCooldowns()
+	local ragdolled = localPlayer:GetAttribute("Ragdolled") == true
+	local cd = if ragdolled then dashCds.cancel else dashCds.dash
+	local remaining = if cd then cd.readyAt - now else 0
+	setCooldownOverlay(dashSlot, remaining, if cd then cd.total else remaining)
+	local nameLabel = dashSlot:FindFirstChild("Name") :: TextLabel
+	nameLabel.Text = if ragdolled then "Levantar" else "Dash"
 end
 
 --- Slot da ultimate do personagem atual (a que custa toda a energia); 3 se não achar.
@@ -463,6 +476,7 @@ function HUDController.Init()
 	characterNameLabel = get(vitals, "CharacterName") :: TextLabel
 
 	local abilities = get(hud, "Abilities")
+	dashSlot = get(abilities, "Dash") :: Frame
 	for i = 1, #SLOT_KEYS do
 		slots[i] = get(abilities, "Slot" .. i) :: Frame
 	end
@@ -592,6 +606,20 @@ function HUDController.Start()
 	end)
 	AbilityController.CooldownChanged.Event:Connect(function(slot: number)
 		flashSlot(slot, Color3.fromRGB(60, 120, 200))
+		updateCooldowns()
+	end)
+	MovementController.DashCooldownChanged.Event:Connect(function()
+		local original = dashSlot.BackgroundColor3
+		dashSlot.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+		task.delay(0.15, function()
+			dashSlot.BackgroundColor3 = original
+		end)
+		updateCooldowns()
+	end)
+	localPlayer:GetAttributeChangedSignal("Ragdolled"):Connect(function()
+		if localPlayer:GetAttribute("Ragdolled") == true then
+			showBanner("CAÍDO — Q para levantar", 1.2)
+		end
 		updateCooldowns()
 	end)
 

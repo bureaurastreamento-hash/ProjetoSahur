@@ -17,6 +17,7 @@ local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
+local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 
 -- AbilityService depende deste módulo; é carregado tardiamente em Start() para evitar ciclo.
 local AbilityService: any = nil
@@ -30,6 +31,7 @@ type PlayerState = {
 	blockReleased: number,
 	nextAttackAt: number, -- os.clock() a partir do qual pode atacar
 	stunnedUntil: number,
+	hardStunUntil: number, -- parry/guard break/habilidade: nem o dash (Q) sai
 	combo: number, -- índice do PRÓXIMO golpe (1..ComboLength)
 	lastAttackAt: number,
 	guard: number, -- guarda restante (CombatConfig.Block.GuardMax)
@@ -63,6 +65,7 @@ local function newState(): PlayerState
 		blockReleased = -math.huge,
 		nextAttackAt = 0,
 		stunnedUntil = 0,
+		hardStunUntil = 0,
 		combo = 1,
 		lastAttackAt = -math.huge,
 		guard = CombatConfig.Block.GuardMax,
@@ -158,11 +161,21 @@ function CombatService.Stun(player: Player, seconds: number, reason: string)
 	local state = getState(player)
 	local until_ = os.clock() + seconds
 	state.stunnedUntil = math.max(state.stunnedUntil, until_)
+	state.hardStunUntil = math.max(state.hardStunUntil, until_)
 	state.nextAttackAt = math.max(state.nextAttackAt, until_)
 	if state.blocking then
 		setBlocking(player, false)
 	end
 	notifyCooldown:FireClient(player, reason, seconds)
+end
+
+--- Solta o block (e a intenção) — usado ao cair em ragdoll.
+function CombatService.CancelBlock(player: Player)
+	local state = getState(player)
+	state.wantBlock = false
+	if state.blocking then
+		setBlocking(player, false)
+	end
 end
 
 --- Hitstun: interrompe o combo/ações da vítima por HitStun.Duration e freia o andar.
@@ -195,14 +208,21 @@ function CombatService.IsStunned(player: Player): boolean
 	return os.clock() < getState(player).stunnedUntil
 end
 
+--- Stun "duro" (parry, guard break, habilidade). Hitstun de soco NÃO conta: o dash sai dele.
+function CombatService.IsHardStunned(player: Player): boolean
+	return os.clock() < getState(player).hardStunUntil
+end
+
 -- ---------------------------------------------------------------------------
 -- Ataque
 -- ---------------------------------------------------------------------------
 
 --- Resolve um acerto contra `victim` considerando block/parry e buffs.
 --- Usado pelos socos e pelas habilidades (AbilityService).
---- Empurra a vítima na direção do atacante (aplicado no cliente dono da física; sem efeito de gameplay além do deslocamento).
-function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number)
+--- Empurra a vítima para longe do atacante (aplicado no cliente dono da física). Com
+--- `ragdollSeconds` a vítima também cai em ragdoll de combate (RagdollService) e perde o block.
+export type Knockback = { Speed: number, Duration: number, Ragdoll: number? }
+function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number, ragdollSeconds: number?)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -212,13 +232,18 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	local flat = vRoot.Position - aRoot.Position
 	flat = Vector3.new(flat.X, 0, flat.Z)
 	local direction = if flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
+	if ragdollSeconds and ragdollSeconds > 0 then
+		CombatService.CancelBlock(victimPlayer)
+		RagdollService.Ragdoll(victimPlayer, ragdollSeconds)
+		duration = math.max(duration, 0.3) -- corpo solto voa um pouco mais
+	end
 	if AntiExploitService then
-		AntiExploitService.Grace(victimPlayer, duration + 0.5)
+		AntiExploitService.Grace(victimPlayer, duration + (ragdollSeconds or 0) + 0.5)
 	end
 	notifyKnockback:FireClient(victimPlayer, direction, speed, duration)
 end
 
-function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?, knockback: { Speed: number, Duration: number }?)
+function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?, knockback: Knockback?)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local victimState = victimPlayer and states[victimPlayer]
 	local kind = "hit"
@@ -283,12 +308,12 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
 	if kb and (kind == "hit" or kind == "finisher") and HealthService.IsAlive(victim) then
-		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration)
+		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, kb.Ragdoll)
 	end
 end
 
 --- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
-function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: { Speed: number, Duration: number }?): number
+function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: Knockback?): number
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local victimState = victimPlayer and states[victimPlayer]
 	local kind = "hit"
@@ -308,7 +333,7 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	end
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
 	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
-		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration)
+		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration, knockback.Ragdoll)
 	end
 	return dealt
 end
@@ -335,8 +360,8 @@ local function onRequestAttack(player: Player, attackId: any)
 	end
 
 	local now = os.clock()
-	if now < state.stunnedUntil or now < state.nextAttackAt then
-		return -- em cooldown/stun: ignorado silenciosamente
+	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) then
+		return -- em cooldown/stun/ragdoll: ignorado silenciosamente
 	end
 
 	-- Atacar cancela o block (e a intenção; o jogador precisa apertar F de novo)
@@ -383,6 +408,9 @@ local function onRequestBlock(player: Player, active: any)
 	end
 	if not HealthService.IsAlive(player.Character) or not HealthService.CanFight(player) then
 		return
+	end
+	if active and RagdollService.IsRagdolled(player) then
+		return -- caído: sem block (o botão precisa ser apertado de novo ao levantar)
 	end
 	state.wantBlock = active
 	setBlocking(player, active)

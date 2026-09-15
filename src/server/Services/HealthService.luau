@@ -14,6 +14,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+local RagdollRig = require(Modules:WaitForChild("RagdollRig"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 
 local respawnLimiter = RateLimiter.new(1, 1)
@@ -23,6 +24,7 @@ local HealthService = {}
 
 local ATTR_LAST_ATTACKER = "LastAttackerUserId"
 local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
+local ATTR_IFRAMES = "IFramesUntil" -- os.clock; RagdollService concede (ragdoll cancel/levantar)
 local KILL_CREDIT_WINDOW = 8
 local VOID_Y = -80 -- abaixo disso = caiu do mapa
 local warnedRig = false -- segundos que o último atacante recebe crédito do kill
@@ -67,33 +69,10 @@ function HealthService.IsAlive(character: Model?): boolean
 	return humanoid ~= nil and humanoid.Health > 0
 end
 
---- Morte com peso: solta as juntas (Motor6D -> BallSocket) e empurra o corpo para longe do último
---- atacante. O empurrão vai pelo NotifyKnockback (o cliente é dono da física do próprio boneco).
-local function ragdoll(player: Player, character: Model, humanoid: Humanoid, attacker: Player?)
-	humanoid.PlatformStand = true
-	humanoid.AutoRotate = false
-	for _, d in character:GetDescendants() do
-		if d:IsA("Motor6D") and d.Part0 and d.Part1 then
-			local a0 = Instance.new("Attachment")
-			a0.CFrame = d.C0
-			a0.Parent = d.Part0
-			local a1 = Instance.new("Attachment")
-			a1.CFrame = d.C1
-			a1.Parent = d.Part1
-			local socket = Instance.new("BallSocketConstraint")
-			socket.Attachment0 = a0
-			socket.Attachment1 = a1
-			socket.LimitsEnabled = true
-			socket.TwistLimitsEnabled = true
-			socket.UpperAngle = 60
-			socket.TwistLowerAngle = -45
-			socket.TwistUpperAngle = 45
-			socket.Parent = d.Part0
-			d:Destroy()
-		elseif d:IsA("BasePart") then
-			d.CanCollide = d.Name ~= "HumanoidRootPart"
-		end
-	end
+--- Morte com peso: solta as juntas (RagdollRig, permanente até o respawn) e empurra o corpo para
+--- longe do último atacante. O empurrão vai pelo NotifyKnockback (o cliente é dono da física).
+local function ragdoll(player: Player, character: Model, attacker: Player?)
+	RagdollRig.Apply(character) -- no-op se já estava em ragdoll de combate
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local attackerRoot = attacker and attacker.Character and attacker.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if root then
@@ -138,7 +117,7 @@ local function setupCharacter(player: Player, character: Model)
 			killer = Players:GetPlayerByUserId(lastId)
 		end
 		if CombatConfig.Ragdoll.Enabled then
-			ragdoll(player, character, humanoid, if typeof(lastId) == "number" then Players:GetPlayerByUserId(lastId) else nil)
+			ragdoll(player, character, if typeof(lastId) == "number" then Players:GetPlayerByUserId(lastId) else nil)
 		end
 		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
 		notifyKill:FireAllClients(killer, player)
@@ -165,6 +144,10 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	end
 	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
 		return 0 -- modo deus (AdminService)
+	end
+	local iframes = victim:GetAttribute(ATTR_IFRAMES)
+	if typeof(iframes) == "number" and os.clock() < iframes then
+		return 0 -- i-frames (ragdoll cancel / acabou de levantar)
 	end
 	if attacker and victimPlayer and attacker ~= victimPlayer then
 		-- mesmo time (Teams/duelo 2v2): sem fogo amigo

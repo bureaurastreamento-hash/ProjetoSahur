@@ -11,7 +11,13 @@
 	    com pulo/queda). Assim funciona mesmo se o place trocar/remover o Animate.
 	    Diagnóstico: se a track carrega com Length 0, avisa no Output (id não é da conta dona
 	    do jogo ou foi feita para outro rig).
-	API: MovementController.SetSprint(active) (mobile).
+	  - DASH UNIVERSAL no Q (gamepad X): RequestDash(direção do WASD). O servidor valida cooldown
+	    (CombatConfig.Dash) e manda NotifyDash; o movimento (LinearVelocity dirigível) é feito aqui
+	    no dono da física. Q caído = ragdoll cancel (o servidor decide). Sem dano.
+	  - Ragdoll (NotifyRagdoll): para as animações de movimento; ao levantar força GettingUp.
+	API: MovementController.SetSprint(active) (mobile) · MovementController.Dash() (mobile)
+	     MovementController.SteerableDash(character, speed, duration, dir) (AbilityController: investidas)
+	     MovementController.MoveDirection(character) · GetDashCooldowns() · DashCooldownChanged
 ]]
 
 local Players = game:GetService("Players")
@@ -24,12 +30,16 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local Assets = require(Modules:WaitForChild("Assets"))
+local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 
 local MovementController = {}
 
 local localPlayer = Players.LocalPlayer
 local SHIFTLOCK_KEY = Enum.KeyCode.LeftShift
+local DASH_KEY = Enum.KeyCode.Q
+local DASH_GAMEPAD = Enum.KeyCode.ButtonX
 local FORWARD_DOT = 0.6 -- MoveDirection·frente da câmera acima disso = "indo para a frente"
 local SPRINT_MIN_INTERVAL = 0.15 -- segundos entre pedidos ao servidor (RateLimiter lá é 10/s)
 local SHARED = "Shared"
@@ -107,7 +117,7 @@ local function update()
 	if not a then
 		return
 	end
-	if not a.grounded then
+	if not a.grounded or localPlayer:GetAttribute("Ragdolled") == true then
 		stopAll() -- pulo/queda: deixa o Animate padrão mostrar
 		return
 	end
@@ -184,6 +194,211 @@ local function setup(character: Model)
 	end)
 end
 
+
+-- ---------------------------------------------------------------------------
+-- Dash (movimento no cliente; o servidor só autoriza e avisa os outros)
+-- ---------------------------------------------------------------------------
+
+local requestDash: RemoteEvent
+local dashConn: RBXScriptConnection? = nil
+local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
+local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -2, 0) } -- cabeça, tronco, pés
+local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
+
+-- kind ("dash" | "cancel") -> { readyAt (GetServerTimeNow), total }
+local dashCooldowns: { [string]: { readyAt: number, total: number } } = {}
+MovementController.DashCooldownChanged = Instance.new("BindableEvent")
+
+function MovementController.GetDashCooldowns()
+	return dashCooldowns
+end
+
+--- Direção horizontal desejada: WASD/analógico, senão a frente do personagem.
+function MovementController.MoveDirection(character: Model): Vector3
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local move = if humanoid then humanoid.MoveDirection else Vector3.zero
+	local flat = Vector3.new(move.X, 0, move.Z)
+	if flat.Magnitude > 0.1 then
+		return flat.Unit
+	end
+	if root then
+		local look = root.CFrame.LookVector
+		flat = Vector3.new(look.X, 0, look.Z)
+		if flat.Magnitude > 0.01 then
+			return flat.Unit
+		end
+	end
+	return Vector3.new(0, 0, -1)
+end
+
+--- Dash dirigível: LinearVelocity cujo vetor segue o WASD enquanto durar (mantém a última direção
+--- se soltar as teclas). Sem componente vertical: o Humanoid continua cuidando da gravidade/pulo.
+--- Usado pelo dash universal (Q) e pelas investidas de personagem (AbilityController).
+function MovementController.SteerableDash(character: Model, speed: number, duration: number, initial: Vector3)
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local tuning = CharacterDefs.DashTuning
+	-- Lateral vs frente/trás: escala da duração (distância) conforme a direção inicial
+	local look = root.CFrame.LookVector
+	local flatLook = Vector3.new(look.X, 0, look.Z)
+	local sideways = flatLook.Magnitude > 0.01 and math.abs(initial:Dot(flatLook.Unit)) < 0.5
+	duration *= if sideways then tuning.SideScale else tuning.ForwardScale
+
+	if dashConn then
+		dashConn:Disconnect()
+		dashConn = nil
+	end
+	local attachment = Instance.new("Attachment")
+	attachment.Parent = root
+	local lv = Instance.new("LinearVelocity")
+	lv.Attachment0 = attachment
+	lv.RelativeTo = Enum.ActuatorRelativeTo.World
+	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Plane
+	lv.PrimaryTangentAxis = Vector3.xAxis
+	lv.SecondaryTangentAxis = Vector3.zAxis
+	lv.MaxForce = math.huge
+	lv.PlaneVelocity = Vector2.new(initial.X, initial.Z) * speed
+	lv.Parent = root
+	local direction = initial
+	local endsAt = os.clock() + duration
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	rayParams.FilterDescendantsInstances = { character }
+	rayParams.RespectCanCollide = true
+	local function finish()
+		if dashConn then
+			dashConn:Disconnect()
+			dashConn = nil
+		end
+		lv:Destroy()
+		attachment:Destroy()
+		if root.Parent then
+			-- sem momento residual (era isso que o AntiExploit via como "moveu demais" e o
+			-- que devolvia o boneco para o lado contrário na parede)
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			local walk = if humanoid then humanoid.WalkSpeed else 16
+			local v = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = Vector3.new(direction.X * walk, math.min(v.Y, 0), direction.Z * walk)
+		end
+	end
+	dashConn = RunService.Heartbeat:Connect(function(dt)
+		if os.clock() >= endsAt or lv.Parent == nil or root.Parent == nil or localPlayer:GetAttribute("Ragdolled") == true then
+			finish()
+			return
+		end
+		-- Correção limitada pelo WASD (SteerRate rad/s): dá para curvar e, se bateu numa parede,
+		-- virar e seguir para outro lado — a duração continua contando de qualquer jeito.
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		local move = if humanoid then humanoid.MoveDirection else Vector3.zero
+		local flat = Vector3.new(move.X, 0, move.Z)
+		if flat.Magnitude > 0.1 then
+			local want = flat.Unit
+			local angle = math.atan2(direction:Cross(want).Y, direction:Dot(want))
+			local step = math.clamp(angle, -tuning.SteerRate * dt, tuning.SteerRate * dt)
+			direction = (CFrame.Angles(0, step, 0) * direction).Unit
+		end
+		-- Parede/personagem à frente: zera o empurrão só neste frame (nada de forçar contra o
+		-- obstáculo, que travava e derrubava). O tempo do dash não para: sem "dash grátis".
+		local ahead = speed * dt + DASH_STOP_DISTANCE
+		local blocked = false
+		for _, offset in DASH_RAY_OFFSETS do
+			if Workspace:Raycast(root.Position + offset, direction * ahead, rayParams) then
+				blocked = true
+				break
+			end
+		end
+		if blocked then
+			lv.PlaneVelocity = Vector2.zero
+			local v = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
+		else
+			lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
+		end
+	end)
+end
+
+--- Pede o dash universal (Q / botão de toque). Caído = ragdoll cancel.
+function MovementController.Dash()
+	local character = localPlayer.Character
+	if not character then
+		return
+	end
+	requestDash:FireServer(MovementController.MoveDirection(character))
+end
+
+local function characterColor(character: Model): Color3
+	local player = Players:GetPlayerFromCharacter(character)
+	local id = player and player:GetAttribute("CharacterId")
+	local def = if typeof(id) == "string" then CharacterDefs.Get(id) else nil
+	return if def and def.Color then def.Color else TRAIL_DEFAULT
+end
+
+local function onNotifyDash(character: Model?, data: any)
+	if not character or typeof(data) ~= "table" or typeof(data.Direction) ~= "Vector3" then
+		return
+	end
+	local direction: Vector3 = data.Direction
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local look = if root then root.CFrame.LookVector else Vector3.zero
+	local backwards = Vector3.new(look.X, 0, look.Z):Dot(direction) < -0.5
+	FX.Trail(character, characterColor(character), data.Duration + 0.15)
+	if data.Cancel then
+		FX.Flash(character, Color3.fromRGB(255, 255, 255), 0.3)
+		FX.SpawnVFX(character, SHARED, "RagdollCancel", true)
+		FX.PlaySoundAt(character, SHARED, "RagdollCancel")
+	else
+		FX.SpawnVFX(character, SHARED, "Dash", true)
+		FX.PlaySoundAt(character, SHARED, "Dash")
+	end
+	-- DashBack existe (equipe); Dash (frente/lado) entra quando a equipe mandar o id
+	if not (backwards and FX.PlayAnimation(character, SHARED, "DashBack")) then
+		FX.PlayAnimation(character, SHARED, "Dash")
+	end
+	if character == localPlayer.Character then
+		MovementController.SteerableDash(character, data.Speed, data.Duration, direction)
+	end
+end
+
+local function onNotifyDashCooldown(kind: string, readyAt: number, total: number)
+	dashCooldowns[kind] = { readyAt = readyAt, total = total }
+	MovementController.DashCooldownChanged:Fire(kind, readyAt, total)
+end
+
+local function onNotifyRagdoll(character: Model?, active: boolean, seconds: number?)
+	if not character then
+		return
+	end
+	if active then
+		FX.SpawnVFX(character, SHARED, "Ragdoll", true)
+	end
+	if character ~= localPlayer.Character then
+		return
+	end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if active then
+		stopAll()
+		if dashConn then
+			dashConn:Disconnect()
+			dashConn = nil
+		end
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+		end
+	else
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+		end
+		local a = anims
+		if a then
+			a.current = nil
+			update()
+		end
+	end
+end
+
 -- ---------------------------------------------------------------------------
 -- Shift lock próprio no Shift (o nativo está desligado: StarterPlayer.EnableMouseLockOption=false)
 -- ---------------------------------------------------------------------------
@@ -212,7 +427,7 @@ local function applyShiftLock(active: boolean)
 		local char = localPlayer.Character
 		local hum = char and char:FindFirstChildOfClass("Humanoid")
 		local root = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
-		if not hum or not root or hum.Health <= 0 then
+		if not hum or not root or hum.Health <= 0 or localPlayer:GetAttribute("Ragdolled") == true then
 			return
 		end
 		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
@@ -291,11 +506,20 @@ local function onInputBegan(input: InputObject, processed: boolean)
 	end
 	if input.KeyCode == SHIFTLOCK_KEY then
 		toggleShiftLock()
+	elseif input.KeyCode == DASH_KEY or input.KeyCode == DASH_GAMEPAD then
+		MovementController.Dash()
 	end
 end
 
-function MovementController.Start()
+function MovementController.Init()
 	requestSprint = Remotes.GetEvent(Remotes.Events.RequestSprint)
+	requestDash = Remotes.GetEvent(Remotes.Events.RequestDash)
+end
+
+function MovementController.Start()
+	Remotes.GetEvent(Remotes.Events.NotifyDash).OnClientEvent:Connect(onNotifyDash)
+	Remotes.GetEvent(Remotes.Events.NotifyDashCooldown).OnClientEvent:Connect(onNotifyDashCooldown)
+	Remotes.GetEvent(Remotes.Events.NotifyRagdoll).OnClientEvent:Connect(onNotifyRagdoll)
 	UserInputService.InputBegan:Connect(onInputBegan)
 	RunService.Heartbeat:Connect(updateSprint)
 	localPlayer:GetAttributeChangedSignal("Sprinting"):Connect(function()
@@ -307,6 +531,8 @@ function MovementController.Start()
 	end)
 	localPlayer.CharacterAdded:Connect(function(character)
 		sprintSent = false
+		table.clear(dashCooldowns)
+		MovementController.DashCooldownChanged:Fire("dash", 0, 0)
 		setup(character)
 		if shiftLock then
 			applyShiftLock(true) -- reaplica no personagem novo
@@ -315,7 +541,7 @@ function MovementController.Start()
 	if localPlayer.Character then
 		task.spawn(setup, localPlayer.Character)
 	end
-	Log.debug(("[MovementController] pronto (corre sozinho para a frente a %d, Shift = shift lock)"):format(CombatConfig.Sprint.Speed))
+	Log.debug(("[MovementController] pronto (corre sozinho para a frente a %d, Shift = shift lock, Q = dash)"):format(CombatConfig.Sprint.Speed))
 end
 
 return MovementController

@@ -104,6 +104,26 @@
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
+        },
+        {
+          "name": "Dash",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9118159096",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "RagdollCancel",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://3755636152",
+            "Volume": 0.5,
+            "RollOffMaxDistance": 80,
+            "RollOffMinDistance": 10
+          }
         }
       ]
     },
@@ -308,26 +328,6 @@
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
-        },
-        {
-          "name": "ArcaneStep",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "rbxassetid://9118159096",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "ArcaneStep_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "rbxassetid://7515452875",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
         }
       ]
     },
@@ -517,26 +517,6 @@
       "name": "Sahur",
       "className": "Folder",
       "children": [
-        {
-          "name": "DrumStep",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "rbxassetid://3755636152",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
-        {
-          "name": "DrumStep_Hit",
-          "className": "Sound",
-          "properties": {
-            "SoundId": "rbxassetid://8595974357",
-            "Volume": 0.5,
-            "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
-          }
-        },
         {
           "name": "Bombo",
           "className": "Sound",

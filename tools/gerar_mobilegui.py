@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Gera src/ui/MobileGui.model.json: botões de toque (soco, block, Q/E/R/T).
+Gera src/ui/MobileGui.model.json: botões de toque (soco, block, dash Q, E/R/T).
 Uso: python3 tools/gerar_mobilegui.py
 MobileController só mostra em dispositivos com toque e sem teclado.
 """
@@ -29,13 +29,13 @@ def button(name, text, size, pos, color, text_size=18):
 root = {"name": "Root", "className": "Frame", "properties": {
     "Name": "Root", "Size": udim2(1, 0, 1, 0), "BackgroundTransparency": 1, "Visible": False,
 }, "children": [
-    # soco grande no canto inferior direito; block à esquerda dele; Q/E/R em arco acima
+    # soco grande no canto inferior direito; block à esquerda dele; dash + E/R/T em arco acima
     button("Attack", "SOCO", 96, udim2(1, -24, 1, -24), [0.85, 0.3, 0.25], 20),
     button("Block", "BLOCK", 72, udim2(1, -136, 1, -24), [0.3, 0.55, 0.9], 15),
-    button("Slot1", "Q", 56, udim2(1, -236, 1, -30), [0.25, 0.25, 0.32]),
-    button("Slot2", "E", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
-    button("Slot3", "R", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
-    button("Slot4", "T", 62, udim2(1, -60, 1, -160), [0.6, 0.45, 0.15]),
+    button("Dash", "DASH", 56, udim2(1, -236, 1, -30), [0.2, 0.5, 0.45], 14),
+    button("Slot1", "E", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
+    button("Slot2", "R", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
+    button("Slot3", "T", 62, udim2(1, -60, 1, -160), [0.6, 0.45, 0.15]),
     # correr (toggle) no canto inferior esquerdo, acima do joystick
     button("Sprint", "CORRER", 64, udim2(0, 150, 1, -140), [0.3, 0.3, 0.38], 13),
 ]}

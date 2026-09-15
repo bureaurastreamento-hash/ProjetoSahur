@@ -7,17 +7,21 @@
 
 	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — Q/E/R são só cooldown
 	(EnergyCost = 0). A barra "Energy" virou a CARGA DA ULT (0..Max): enche dando/recebendo dano
-	durante a luta; a ultimate (slot 4, T) custa Max. HUD mostra como "ULT".
+	durante a luta; a ultimate (slot 3, T) custa Max. HUD mostra como "ULT".
 
 	Assets esperados (por nome, ver Assets.luau):
 	  Animations.<CharacterId>.<AbilityId>
 	  VFX.<CharacterId>.<AbilityId>
 
+	Slots: 1 = E, 2 = R, 3 = T (ultimate, EnergyCost = Max). O dash universal fica no Q e é de
+	TODOS os personagens (CombatConfig.Dash, MovementService) — não é habilidade daqui.
+
 	Tipos de efeito (implementados em AbilityService):
-	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> movimento no cliente, hitbox no servidor ao fim
+	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> investida COM dano (movimento no cliente, hitbox no servidor)
 	  Teleport    { Distance }                                       -> servidor move o HRP para frente (com raycast contra parede)
 	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
 	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
+	                                                                    Knockback = { Speed, Duration, Ragdoll? } (Ragdoll = segundos caído)
 	  MultiHitArea{ Radius, Damage, Hits, Interval }                 -> vários ticks de AreaDamage
 	  DamageBuff  { Multiplier, Duration }                           -> multiplica dano dos socos/habilidades
 	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
@@ -47,7 +51,7 @@ export type CharacterDef = {
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
-	Abilities: { AbilityDef }, -- índice = slot (1 = Q, 2 = E, 3 = R, 4 = T). Slot 1 é sempre a mobilidade (dash; Swift teleporta)
+	Abilities: { AbilityDef }, -- índice = slot (1 = E, 2 = R, 3 = T = ultimate)
 }
 
 local CharacterDefs = {}
@@ -60,8 +64,8 @@ CharacterDefs.Energy = {
 
 CharacterDefs.DefaultCharacter = "Brawler"
 
---- Afinação global do dash (Effect.Type = "Dash"). Duration da habilidade × escala conforme a direção.
---- O cliente move; o servidor amostra a hitbox por Duration × ForwardScale (o maior).
+--- Afinação global de dash (dash universal do Q e Effect.Type = "Dash"). Duration × escala conforme a
+--- direção. O cliente move; o servidor amostra a hitbox por Duration × ForwardScale (o maior).
 CharacterDefs.DashTuning = {
 	ForwardScale = 1.4, -- frente/trás
 	SideScale = 1.0, -- lados
@@ -95,7 +99,7 @@ CharacterDefs.Characters = {
 				Cooldown = 10,
 				EnergyCost = 0,
 				CastTime = 0.6,
-				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25 } },
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } },
 			},
 			{
 				Id = "Rampage",
@@ -152,14 +156,6 @@ CharacterDefs.Characters = {
 		Image = "",
 		Abilities = {
 			{
-				Id = "ArcaneStep",
-				DisplayName = "Passo Arcano",
-				Cooldown = 6,
-				EnergyCost = 0,
-				CastTime = 0.2,
-				Effect = { Type = "Dash", Speed = 65, Duration = 0.22, Damage = 8, Range = 6, Width = 6, Height = 6 },
-			},
-			{
 				Id = "ArcaneBolt",
 				DisplayName = "Projétil Arcano",
 				Cooldown = 4,
@@ -181,7 +177,7 @@ CharacterDefs.Characters = {
 				Cooldown = 30,
 				EnergyCost = 100,
 				CastTime = 0.8,
-				Effect = { Type = "AreaDamage", Radius = 14, Damage = 45, Delay = 1.2, Offset = 16, Knockback = { Speed = 55, Duration = 0.3 } },
+				Effect = { Type = "AreaDamage", Radius = 14, Damage = 45, Delay = 1.2, Offset = 16, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } },
 			},
 		},
 	} :: CharacterDef,
@@ -233,20 +229,12 @@ CharacterDefs.Characters = {
 		Image = "",
 		Abilities = {
 			{
-				Id = "DrumStep",
-				DisplayName = "Passo do Tambor",
-				Cooldown = 6,
-				EnergyCost = 0,
-				CastTime = 0.2,
-				Effect = { Type = "Dash", Speed = 68, Duration = 0.24, Damage = 10, Range = 6, Width = 6, Height = 6, StunSeconds = 0.4 },
-			},
-			{
 				Id = "Bombo",
 				DisplayName = "Bombo",
 				Cooldown = 9,
 				EnergyCost = 0,
 				CastTime = 0.5,
-				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25 } },
+				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } },
 			},
 			{
 				Id = "Toque",

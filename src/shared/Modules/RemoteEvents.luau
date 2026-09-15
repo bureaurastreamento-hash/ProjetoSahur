@@ -44,6 +44,7 @@ RemoteEvents.Events = ({
 	RequestBlock = "RequestBlock", -- (active: boolean)
 	RequestRespawn = "RequestRespawn", -- ()
 	RequestSprint = "RequestSprint", -- (active: boolean)
+	RequestDash = "RequestDash", -- (direction: Vector3?) — dash universal (Q); ragdollado = ragdoll cancel
 	RequestAbility = "RequestAbility", -- (slot: number)
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
@@ -61,6 +62,9 @@ RemoteEvents.Events = ({
 	NotifyCooldown = "NotifyCooldown", -- atacante: (reason: string, seconds: number)
 	NotifyBlock = "NotifyBlock", -- all: (character: Model, active: boolean)
 	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number)
+	NotifyDash = "NotifyDash", -- all: (character: Model, data: { Direction: Vector3, Speed: number, Duration: number, Cancel: boolean? })
+	NotifyDashCooldown = "NotifyDashCooldown", -- dono: (kind: "dash"|"cancel", readyAtServerTime: number, total: number)
+	NotifyRagdoll = "NotifyRagdoll", -- all: (character: Model, active: boolean, seconds: number?)
 	NotifyMatchState = "NotifyMatchState", -- all: (state: "Waiting"|"Selecting"|"InProgress"|"Ending", data: table)
 	NotifyAbility = "NotifyAbility", -- all: (character: Model, characterId: string, abilityId: string, phase: string, data: table?)
 	NotifyAbilityCooldown = "NotifyAbilityCooldown", -- dono: (slot: number, abilityId: string, readyAtServerTime: number)

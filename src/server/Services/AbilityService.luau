@@ -1,8 +1,9 @@
 --!strict
 --[[
 	AbilityService (servidor)
-	Autoridade sobre personagem escolhido, energia, cooldowns e efeito de cada
-	habilidade. O cliente só envia RequestAbility(slot) e RequestSelectCharacter(id).
+	Autoridade sobre personagem escolhido, carga da ult, cooldowns e efeito de cada
+	habilidade (slots 1..3 = E/R/T). O dash universal (Q) é do MovementService.
+	O cliente só envia RequestAbility(slot, direção) e RequestSelectCharacter(id).
 
 	Replicação de estado (para HUD): atributos no Player
 	  "CharacterId" (string), "Energy" (number)
@@ -23,6 +24,7 @@ local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
+local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local AdminService = require(script.Parent:WaitForChild("AdminService"))
@@ -417,6 +419,9 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	end
 	if CombatService.IsStunned(player) then
 		return deny(player, slot, "stunned")
+	end
+	if RagdollService.IsRagdolled(player) then
+		return deny(player, slot, "ragdoll")
 	end
 	local noCooldown = player:GetAttribute(ATTR_NO_COOLDOWN) == true
 	if now < state.busyUntil and not noCooldown then

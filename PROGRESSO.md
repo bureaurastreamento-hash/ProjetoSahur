@@ -200,20 +200,51 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, fim de tarde)
+## Retomar aqui (última sessão: 2026-09-15, noite)
 
 ### Onde paramos
-- Tudo commitado e enviado. Estado testado pelo dono: rig R6 ✓, HUD/topbar ✓, dash ✓, combo ✓, loja
-  "em breve" ✓, personagens (cartões) ✓, boss com IA nova (testado por cima).
-- **Última mudança (não testada)**: sem energia nas habilidades — Q/E/R só cooldown (`EnergyCost = 0`),
-  barra virou "ULT %" (carga enche dando/recebendo golpe), T custa carga cheia.
-- **Pesquisa feita**: `PESQUISA_BATTLEGROUNDS.md` (TSB / JJS / HB: M1, block, parry/crítico, dash,
-  ragdoll cancel, awakening, modos, boss). Tem "Sahur hoje / Fazer" por seção e a ordem sugerida (§10).
-- **Próximo passo**: começar pelo §10 item 1 (dash universal no Q + ragdoll de combate + ragdoll
-  cancel), depois M1 em %, block frontal + crítico, Awakening por G.
+- **Feito nesta sessão (NÃO testado no Studio)** — PESQUISA_BATTLEGROUNDS §10 item 1:
+  - **Dash universal no Q** (todo personagem; gamepad X; botão DASH no mobile). `CombatConfig.Dash`:
+    sem dano, segue o WASD, lateral/trás 2 s, frontal 4,5 s (um timer só). Sai durante hitstun de soco;
+    não sai em stun duro (parry/guard break/habilidade: `CombatService.IsHardStunned`).
+    Fluxo: `RequestDash(dir)` → `MovementService` valida → `NotifyDash` (todos) → `MovementController`
+    move o dono (LinearVelocity dirigível, código que era do AbilityController) + rastro/anim/som
+    (`Shared.Dash` / `Shared.DashBack` — DashBack tem id da equipe; Dash está vazio).
+    Cooldown: `NotifyDashCooldown(kind, readyAt, total)` → slot "Dash" (Q) no HUD.
+  - **Habilidades viraram 3 slots E/R/T** (gamepad Y/B/R2). Saíram os dashes de personagem que só
+    andavam: `Mystic.ArcaneStep`, `Sahur.DrumStep`. Ficaram os que dão dano (Brawler ShoulderBash E,
+    Guardian ShieldBash E) e o Blink do Swift (E). Ult continua sendo o slot com EnergyCost 100 (T).
+  - **Ragdoll de combate** (`RagdollService` + `RagdollRig` compartilhado, reversível: Motor6D
+    desligados + BallSocket, HRP sem colisão, PlatformStand). Quem derruba: `Knockback.Ragdoll` (s):
+    4º M1 1,6 s · finisher 2,2 s · GroundSlam/Bombo 1,5 s · Meteoro 2 s · boss Slam 1,5 / Charge 1,8 /
+    Shockwave 2 s. Caído: sem M1/block/habilidade; leva follow-ups; perde o block.
+    Morte usa o mesmo `RagdollRig.Apply` (permanente). Atributo `Ragdolled` no Player + `NotifyRagdoll`.
+  - **Ragdoll cancel**: Q caído → levanta na hora + 0,5 s de i-frames (`IFramesUntil` no personagem,
+    `HealthService.ApplyDamage` respeita) + sai em dash; cooldown 20 s (`CombatConfig.CombatRagdoll`).
+    Levantar sozinho dá 0,2 s de i-frames. HUD: slot Q vira "Levantar" com o cooldown do cancel;
+    banner "CAÍDO — Q para levantar".
+  - UI regerada (`tools/gerar_ui.py`, `tools/gerar_mobilegui.py`): HUD com frame `Abilities.Dash` +
+    Slot1..3; Controles atualizados; MobileGui com botão DASH. `podar_vfx` rodado (Shared/Dash e
+    Shared/RagdollCancel reaproveitam efeitos já podados). Sons `Shared.Dash`/`RagdollCancel` reaproveitam
+    os ids que eram do ArcaneStep/DrumStep.
+- **Anterior, também não testado**: sem energia nas habilidades (só cooldown), barra "ULT %".
+
+### Roteiro de teste (Studio, 2 clientes ou boneco de treino)
+1. Q parado/andando: dash na direção do WASD, rastro, slot Q com cooldown (2 s lado, 4,5 s frente).
+2. Levar soco e apertar Q no meio do hitstun: deve sair. Ser parryado/guard break e apertar Q: não sai.
+3. Combo de 4 no boneco/jogador: no 4º o alvo cai (ragdoll ~1,6 s) e levanta sozinho sem travar
+   (se ficar deitado/tremendo, avisar: é o `ChangeState(GettingUp)` do cliente).
+4. Caído, apertar Q: levanta na hora, pisca branco, sai em dash; slot Q mostra 20 s de "Levantar".
+5. Morrer caído e morrer em pé: ragdoll de morte e respawn normais.
+6. E/R/T = habilidades (cartão de personagem mostra E/R/T); GroundSlam/Meteoro derrubam.
+7. Boss: Slam/Charge/Shockwave derrubam; Q levanta.
+
+### Próximo passo
+- §10 item 2: M1 em % (dano por fração de vida), hitstun 0,7, puxão no M1, endlag no block,
+  downslam (pulo + M1) / uppercut (espaço + M1). Depois §3 block frontal + crítico do parry, §5 Awakening G.
 - Pendências do dono: apagar `Workspace.TopbarPlus` (Example); ids dos produtos/passes no
-  `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animações Boss.Slam/Charge/Shockwave/Leap e
-  Sahur.*; passada de sons/VFX olhando junto (alguns não combinam com a ação).
+  `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animação `Shared.Dash` (frente/lado) e
+  Boss.Slam/Charge/Shockwave/Leap e Sahur.*; passada de sons/VFX olhando junto.
 
 ## Histórico (2026-09-15, manhã/tarde — balanço antes de limpar o contexto)
 

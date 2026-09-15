@@ -9,8 +9,9 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
 - Mouse1 = M1 (segurar = combo automático) · F = block · Q = dash (direção do WASD; Q ragdollado =
   ragdoll cancel) · Espaço+M1 = uppercut · pular + M1 = **downslam** · G = ultimate/awakening ·
   B = emote · 1-4 = habilidades (TSB/JJS) · Shift = corrida/shift lock.
-- **Sahur hoje**: Mouse1 (segurar = combo) ✓, F ✓, Q/E/R/T habilidades (Q = dash do personagem), Shift
-  shift lock, corrida automática, sem uppercut/downslam, sem G, sem emote.
+- **Sahur hoje** (2026-09-15 noite): Mouse1 (segurar = combo) ✓, F ✓, **Q = dash universal ✓ (Q caído =
+  ragdoll cancel ✓)**, E/R/T habilidades, Shift shift lock, corrida automática, sem uppercut/downslam,
+  sem G, sem emote.
 - **Fazer**: downslam (pulo + M1) e uppercut (espaço durante M1) como variações do 4º golpe; **G para
   ativar a ult** (em vez de ela ser o slot 4 — ver §5); B = emotes (equipe faz animações).
 
@@ -52,9 +53,11 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
   hora com 0,5 s de i-frames; **cooldown de 15 s (JJS) / 30 s (TSB)**. Sem ele, combos longos entram
   inteiros. Bait: fazer o adversário gastar o cancel e então usar o combo de verdade.
 - Ragdoll: estado derrubado por ~1,5-2 s; permite follow-ups; downslam não repete no mesmo ragdoll.
-- **Sahur hoje**: dash é habilidade Q de cada personagem (6 s cooldown), dirigível, duração obrigatória;
-  ragdoll só na morte; sem ragdoll cancel.
-- **Fazer**: separar **dash universal** (Q, WASD, cooldown lateral 2 s / frontal 4-5 s, sem dano) das
+- **Sahur hoje** (FEITO 2026-09-15 noite, falta testar): dash universal no Q (CombatConfig.Dash: lateral/trás
+  2 s, frontal 4,5 s, sem dano, sai durante hitstun, não em stun duro); ragdoll de combate (4º M1 1,6 s,
+  finisher 2,2 s, GroundSlam/Bombo/Meteoro, Slam/Shockwave/Charge do boss) com ragdoll cancel (Q, 20 s,
+  0,5 s de i-frames; levantar sozinho dá 0,2 s).
+- **Era**: separar **dash universal** (Q, WASD, cooldown lateral 2 s / frontal 4-5 s, sem dano) das
   habilidades (E/R/T + G); ragdoll de combate (4º M1, downslam, alguns skills) com ragdoll cancel
   (Q, 15-30 s cd, 0,5 s i-frames); dash usável durante hitstun.
 

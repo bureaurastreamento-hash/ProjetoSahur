@@ -115,13 +115,13 @@ def write(fname, data):
 # HUD
 # =============================================================================
 SLOT = 64
-SLOT_KEYS = ["Q", "E", "R", "T"]
+SLOT_KEYS = ["E", "R", "T"]  # habilidades; o Q é o dash universal (frame "Dash", igual mas fixo)
 
 
-def slot(i):
-    key = SLOT_KEYS[i - 1]
-    ult = i == 4
-    return frame(f"Slot{i}", ud(0, SLOT, 0, SLOT), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": i,
+def slot(i, name=None, key=None, ult=None):
+    key = key or SLOT_KEYS[i - 1]
+    ult = (i == 3) if ult is None else ult
+    return frame(name or f"Slot{i}", ud(0, SLOT, 0, SLOT), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": i,
                  "ClipsDescendants": True}, children=[
         corner(6), stroke(0.8 if not ult else 0.5, 1, LINE if not ult else GOLD),
         label("Key", key, ud(0, 24, 0, 20), ud(0, 6, 0, 4), font=FONT_B, ts=16, color=TEXT if not ult else GOLD),
@@ -170,7 +170,7 @@ hud = screen("HUD", [
     # Habilidades
     frame("Abilities", ud(0, SLOT * 4 + 8 * 3, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
         listlayout("Horizontal", 8, "Center", "Center"),
-        slot(1), slot(2), slot(3), slot(4),
+        slot(0, name="Dash", key="Q", ult=False), slot(1), slot(2), slot(3),
     ]),
     # Placar (Tab)
     frame("Scoreboard", ud(0, 240, 0, 260), ud(1, -16, 0.5, 0), anchor=(1, 0.5), visible=False, children=[
@@ -281,14 +281,16 @@ HELP = "\n".join([
     "BLOQUEAR — segurar F (−70% de dano) · PARRY — apertar F até 0,2 s antes do golpe",
     "CORRER — automático ao andar para a frente (W)",
     "SHIFT LOCK — Shift",
-    "HABILIDADES — Q (dash / teleporte, segue o WASD) · E · R por cooldown · T = ULTIMATE (precisa da carga cheia)",
+    "DASH — Q (segue o WASD; lados/trás 2 s, frente 4,5 s; sai até durante o hitstun)",
+    "CAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)",
+    "HABILIDADES — E · R por cooldown · T = ULTIMATE (precisa da carga cheia)",
     "CARGA DA ULT — enche ao dar (+6) e receber (+4) golpes · VIDA — regenera após 6 s sem dano",
     "PERSONAGENS — V · LOJA — B · PERFIL — P · PLACAR — Tab · DUELO — J (Y aceita / N recusa)",
     "BOSS — segure E no altar; anel vermelho = saia da área",
-    "Gamepad: R1 soco · L1 block · X / Y / B / R2 habilidades",
+    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades",
 ])
 helpgui = screen("HelpGui", [
-    panel("Panel", 620, 300, "Controles", [
+    panel("Panel", 620, 330, "Controles", [
         label("Body", HELP, ud(1, 0, 1, -30), ud(0, 0, 0, 30), ts=13, yalign="Top",
               extra={"TextWrapped": True, "LineHeight": 1.35}),
     ]),

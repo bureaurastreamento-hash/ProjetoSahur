@@ -32,8 +32,30 @@ CombatConfig.Attacks = {
 		Width = 5,
 		Height = 6,
 		MaxTargets = 3,
-		FinisherKnockback = { Speed = 45, Duration = 0.2 }, -- empurrão no último golpe do combo
+		FinisherKnockback = { Speed = 45, Duration = 0.2, Ragdoll = 1.6 }, -- empurrão + ragdoll no último golpe do combo
 	},
+}
+
+-- Dash UNIVERSAL (Q, todo personagem; MovementService/MovementController). Sem dano.
+-- Direção = WASD (frente do boneco se parado). Frente = fechar distância (cooldown maior);
+-- lados/trás = esquiva (cooldown curto). Pode usar durante hitstun (é a saída defensiva), não
+-- durante stun "duro" (parry/guard break). Q enquanto ragdollado = ragdoll cancel (abaixo).
+CombatConfig.Dash = {
+	Speed = 70,
+	Duration = 0.22, -- base; CharacterDefs.DashTuning escala frente/lado
+	ForwardCooldown = 4.5,
+	SideCooldown = 2.0, -- lados e trás
+	ForwardDot = 0.5, -- direção·frente do boneco acima disso = dash frontal
+}
+
+-- Ragdoll de combate: cai por `seconds` (juntas soltas, sem agir), permite follow-ups.
+-- Fontes: 4º M1 (FinisherKnockback.Ragdoll), finisher, habilidades com Knockback.Ragdoll.
+-- Ragdoll cancel: Q ragdollado -> levanta na hora, i-frames curtos, cooldown longo.
+CombatConfig.CombatRagdoll = {
+	MaxSeconds = 3, -- teto por segurança
+	CancelCooldown = 20,
+	CancelIFrames = 0.5,
+	GetUpIFrames = 0.2, -- ao levantar sozinho (evita o "loop" de ragdoll no chão)
 }
 
 CombatConfig.Block = {
@@ -57,10 +79,10 @@ CombatConfig.HitStun = {
 }
 
 -- Finisher (4º golpe) em alvo com vida <= LowHealth (fração) ou que morre no golpe:
--- empurrão forte + efeito/câmera pesados no cliente (kind = "finisher").
+-- empurrão forte + ragdoll + efeito/câmera pesados no cliente (kind = "finisher").
 CombatConfig.Finisher = {
 	LowHealth = 0.3,
-	Knockback = { Speed = 75, Duration = 0.35 },
+	Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 },
 }
 
 -- Morte: personagem vira ragdoll (juntas soltas) até o respawn; empurrado na direção do golpe.
@@ -69,12 +91,12 @@ CombatConfig.Ragdoll = {
 	PushSpeed = 40,
 }
 
--- Movimento (MovementService/MovementController). Dash é habilidade de personagem (Q).
+-- Movimento (MovementService/MovementController). Dash universal em CombatConfig.Dash.
 CombatConfig.Sprint = {
 	Speed = 24, -- WalkSpeed correndo (Shift segurado); AntiExploit tolera WalkSpeed * 1.6
 }
 
 -- Animações são buscadas por NOME em ReplicatedStorage.Assets.Animations.Shared
--- (ver Assets.luau): M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit, Idle, Walk, Run
+-- (ver Assets.luau): M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit, Idle, Walk, Run, Dash, DashBack
 
 return CombatConfig

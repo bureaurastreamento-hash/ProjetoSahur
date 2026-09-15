@@ -11,7 +11,7 @@
 
 	ReplicatedStorage.Assets
 	├── Animations
-	│   ├── Shared         (Animation) M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit
+	│   ├── Shared         (Animation) M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit, Idle, Walk, Run, Dash, DashBack
 	│   └── <CharacterId>  (Animation) <AbilityId>   ex: Brawler/ShoulderBash
 	├── VFX
 	│   ├── Shared         Hit, Block, Parry, Placeholder
@@ -111,6 +111,8 @@ Assets.VFXPack = {
 	["Shared/GuardBreak"] = "Packs/OfficialJJS/Misc/S/HeavyHit",
 	["Shared/Stun"] = { Path = "Packs/OfficialJJS/Damage/Dizzy", Follow = true, Lifetime = 1.2 },
 	["Shared/Ragdoll"] = { Path = "Packs/OfficialJJS/Damage/RagdollWind", Follow = true, Lifetime = 1.5 },
+	["Shared/Dash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash", -- dash universal (Q)
+	["Shared/RagdollCancel"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact", -- Q caído: levantou
 	["Brawler/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
 	["Brawler/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
 	["Brawler/GroundSlam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
@@ -121,8 +123,6 @@ Assets.VFXPack = {
 	["Swift/SweepKick_Hit"] = "Packs/ShadowBattlegroundsfull/Garou/punchhit",
 	["Swift/Tempest"] = { Path = "Packs/ShadowBattlegroundsfull/Garou/Spin", Lifetime = 2.5 },
 	["Swift/Tempest_Hit"] = "Packs/OfficialJJS/Misc/M/Hit",
-	["Mystic/ArcaneStep"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact",
-	["Mystic/ArcaneStep_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
 	["Mystic/ArcaneBolt"] = "Packs/OfficialJJS/Misc/S/Orb",
 	["Mystic/ArcaneBolt_Hit"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact",
 	["Mystic/Mend"] = "Packs/OfficialJJS/Yuta/SecondWind",
@@ -133,8 +133,6 @@ Assets.VFXPack = {
 	["Guardian/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
 	["Guardian/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
 	["Guardian/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
-	["Sahur/DrumStep"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
-	["Sahur/DrumStep_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
 	["Sahur/Bombo"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
 	["Sahur/Bombo_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
 	["Sahur/Toque"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 6 },
