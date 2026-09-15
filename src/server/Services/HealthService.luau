@@ -74,7 +74,14 @@ local function setupCharacter(player: Player, character: Model)
 
 	if humanoid.RigType ~= Enum.HumanoidRigType.R6 and not warnedRig then
 		warnedRig = true
-		warn("[HealthService] rig do jogo é R15; o projeto foi feito para R6 (Game Settings > Avatar > R6). Animações caem no id R15 alternativo.")
+		local StarterPlayer = game:GetService("StarterPlayer")
+		local starterChar = StarterPlayer:FindFirstChild("StarterCharacter")
+		local starterHum = StarterPlayer:FindFirstChild("StarterHumanoid")
+		local causa = if starterChar
+			then "existe um StarterPlayer.StarterCharacter (rig R15 do pack) que IGNORA o Game Settings — apague-o"
+			elseif starterHum then "existe um StarterPlayer.StarterHumanoid com RigType R15 — apague-o"
+			else "confira Game Settings > Avatar > Avatar Type = R6 e salve/publique"
+		warn(("[HealthService] rig do jogador é %s; o projeto foi feito para R6. As animações da equipe (R6) NÃO vão tocar. Causa provável: %s."):format(humanoid.RigType.Name, causa))
 	end
 	humanoid.MaxHealth = CombatConfig.MaxHealth
 	humanoid.Health = CombatConfig.MaxHealth
