@@ -99,7 +99,8 @@ end
 --- Template de VFX em Assets.VFX.<folder>.<name>. Fallbacks: alias do Particle Pack, depois VFX.Shared.Placeholder.
 -- Escolha explícita de VFX dos packs por habilidade (tem prioridade sobre o VFX gerado/nomeado).
 -- Valor = caminho dentro de Assets.VFX, ou { Path, Follow?, Lifetime? } (aura que segue / dura mais).
--- Para trocar: use o Preview de VFX no menu Dev, copie o caminho e edite aqui.
+-- Para trocar: use o Preview de VFX no menu Dev, copie o caminho, edite aqui e rode
+-- `lune run tools/podar_vfx.luau` (só o que está listado aqui é replicado; packs completos em packs/VFX).
 export type PackChoice = string | { Path: string, Follow: boolean?, Lifetime: number? }
 Assets.VFXPack = {
 	["Shared/Hit"] = "Packs/OfficialJJS/Misc/C/M1/Hit1",

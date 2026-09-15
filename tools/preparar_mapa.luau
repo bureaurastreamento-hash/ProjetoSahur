@@ -1,6 +1,6 @@
 --[[
 	preparar_mapa.luau — monta src/workspace/Arena.rbxm a partir de um mapa importado.
-	Uso: ~/.rokit/bin/lune run tools/preparar_mapa.luau src/import/ShadowBattlegroundsfull/MainMap.rbxm
+	Uso: ~/.rokit/bin/lune run tools/preparar_mapa.luau packs/Import/ShadowBattlegroundsfull/MainMap.rbxm
 
 	- remove placares/GUIs/sons do pack (Donation Leaderboard, LeaderBoards, Spawns vazio)
 	- recentra o mapa: centro do piso (Tiles) vai para (0, 0, 0), topo do piso em y = 0
@@ -14,7 +14,7 @@ local process = require("@lune/process")
 local Vector3 = roblox.Vector3
 local CFrame = roblox.CFrame
 
-local src = process.args[1] or "src/import/ShadowBattlegroundsfull/MainMap.rbxm"
+local src = process.args[1] or "packs/Import/ShadowBattlegroundsfull/MainMap.rbxm"
 local model = roblox.deserializeModel(fs.readFile(src))[1]
 model.Name = "Arena"
 

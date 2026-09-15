@@ -58,10 +58,12 @@ ainda não existe, mesmo que pareça óbvio.
   extrair com `~/.rokit/bin/lune run tools/extrair_pack.luau <kfs|sons|listar|vfx|import> arquivo`.
   Decisão do dono (2026-09-15): os packs `[Rova Assets]*.rbxl` são licenciados e PODEM ser usados.
   Limites técnicos: Animation/Sound de lá são só ponteiros de outra conta (animação não toca;
-  som só se for público) — animações vêm dos KeyframeSequences em `ServerStorage.Import.Animacoes`
-  que o dono republica (Save to Roblox) e cola o id em `src/assets/Animations.model.json`;
+  som só se for público) — animações vêm dos KeyframeSequences em `packs/Import/Animacoes` (fora do
+  Rojo; o dono usa Insert from File no Studio, Save to Roblox e cola o id em `src/assets/Animations.model.json`);
   sons passam pelo comando dev "Testar sons dos packs" antes de entrar em `Sounds.model.json`.
-  VFX/meshes extraídos ficam em `Assets.VFX.Packs.<Pack>` e são ligados por alias com caminho.
+  VFX/meshes extraídos ficam completos em `packs/VFX/<Pack>` (fora do Rojo, ~95k instâncias);
+  `tools/podar_vfx.luau` gera em `Assets.VFX.Packs.<Pack>` SÓ os caminhos citados em `Assets.luau`.
+  Nunca colocar packs inteiros dentro de `src/` (foi isso que derrubou o FPS em 2026-09-15).
 - VFX: nome exato em `Assets.VFX.<Personagem>` > alias do Particle Pack (`Assets.VFXAliases`)
   > `Shared.Placeholder`.
 - UI de topo usa TopbarPlus (`src/shared/Packages/Icon`, v3.4.0). Telas ficam em `src/ui/*.model.json`

@@ -208,14 +208,20 @@ Pendências imediatas, em ordem:
    `Sounds.model.json` com os que tocam. (Os erros "Failed to load sound ... not authorized" ao abrir
    o place eram Sounds dentro dos VFX extraídos; removidos com `tools/limpar_sons_packs.luau` e o
    extrator já descarta Sound.)
-2. Publicar os KeyframeSequences de `ServerStorage.Import.Animacoes` (Save to Roblox) e me passar
-   os ids → `Animations.model.json`. Prioridade: `Melee1`, `Charge Punch`, `run`, `teleport`,
+2. Publicar os KeyframeSequences de `packs/Import/Animacoes/<Pack>/*.rbxm` (Studio: clique direito em
+   ServerStorage > Insert from File > Save to Roblox) e me passar os ids → `Animations.model.json`. Prioridade: `Melee1`, `Charge Punch`, `run`, `teleport`,
    `finisher`, `beatdown`.
 3. Passar pelo **Preview de VFX (F7)** e apontar trocas → `Assets.VFXPack`.
 4. Medir FPS no MainMap; se pesado, cortar `Corners`/`Trees` em `tools/preparar_mapa.luau`.
 5. Conferir rig R6 em Game Settings (HealthService avisa no boot se for R15).
 
 ## Em andamento
+- 2026-09-15 — **Otimização**: o Rojo injetava ~195k instâncias (packs VFX inteiros em ReplicatedStorage
+  + KeyframeSequences/mapas em ServerStorage.Import). Packs completos foram para `packs/` (fora do Rojo);
+  `tools/podar_vfx.luau` gera `src/assets/VFX/Packs` só com os efeitos usados (268 instâncias).
+  `ServerStorage.Import` saiu do project.json — o dono precisa apagar a pasta órfã no Studio uma vez.
+  SoundProbe: 1477/1477 OK (mas PreloadAsync deu OK até para os 13 "not authorized"; não é confiável
+  para sons privados — validar tocando de fato).
 - Ver FPS com o MainMap (2470 parts). Se ainda pesar: reduzir `Corners` (525 parts) / `Trees`.
 - Passar pelo Preview de VFX e me dizer trocas ("Meteoro = Sukuna/X").
 - Sons dos packs: rodar "Testar sons dos packs" no Studio e me mandar o Output (ou eu leio o log);

@@ -1,13 +1,14 @@
 --[[
 	extrair_pack.luau (roda com Lune: ~/.rokit/bin/lune run tools/extrair_pack.luau <modo> <arquivo.rbxl>)
 	Extrai dos packs em AssetsPacks/:
-	  kfs     -> KeyframeSequences para src/import/Animacoes/<Pack>/<Nome>.rbxm
-	             (ServerStorage.Import via Rojo; no Studio: clique direito > Save to Roblox
+	  kfs     -> KeyframeSequences para packs/Import/Animacoes/<Pack>/<Nome>.rbxm
+	             (fora do Rojo; no Studio: Insert from File > clique direito > Save to Roblox
 	              para virar uma Animation SUA, aí o id vai em src/assets/Animations.model.json)
 	  sons    -> lista todos os SoundIds únicos em scratch/sons_<Pack>.json
 	  listar  -> imprime a árvore dos Folders de VFX (para escolher o que extrair)
-	  vfx <caminho> [...]    -> extrai para src/assets/VFX/Packs/<Pack>/<Nome>.rbxm (replicado, para FX)
-	  import <caminho> [...] -> extrai para src/import/<Pack>/<Nome>.rbxm (ServerStorage.Import, só olhar)
+	  vfx <caminho> [...]    -> extrai para packs/VFX/<Pack>/<Nome>.rbxm (pack completo, fora do Rojo;
+	                            tools/podar_vfx.luau gera em src/assets/VFX/Packs só o que Assets.luau usa)
+	  import <caminho> [...] -> extrai para packs/Import/<Pack>/<Nome>.rbxm (fora do Rojo; Insert from File)
 	  ("<pasta>/*" = cada Folder/Model filho vira um arquivo)
 ]]
 local fs = require("@lune/fs")
@@ -58,8 +59,10 @@ local function findByPath(path: string)
 end
 
 if mode == "kfs" then
-	local dir = "src/import/Animacoes/" .. packName
-	ensureDir("src/import/Animacoes")
+	local dir = "packs/Import/Animacoes/" .. packName
+	ensureDir("packs")
+	ensureDir("packs/Import")
+	ensureDir("packs/Import/Animacoes")
 	ensureDir(dir)
 	local seen = {}
 	local n = 0
@@ -137,8 +140,9 @@ elseif mode == "listar" then
 		end
 	end
 elseif mode == "vfx" or mode == "import" then
-	local dir = if mode == "vfx" then "src/assets/VFX/Packs/" .. packName else "src/import/" .. packName
-	ensureDir(if mode == "vfx" then "src/assets/VFX/Packs" else "src/import")
+	local dir = if mode == "vfx" then "packs/VFX/" .. packName else "packs/Import/" .. packName
+	ensureDir("packs")
+	ensureDir(if mode == "vfx" then "packs/VFX" else "packs/Import")
 	ensureDir(dir)
 	local targets = {}
 	for i = 3, #process.args do

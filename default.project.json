@@ -46,11 +46,7 @@
         "$path": "src/maps",
         "$ignoreUnknownInstances": true
       },
-      "$ignoreUnknownInstances": true,
-      "Import": {
-        "$path": "src/import",
-        "$ignoreUnknownInstances": true
-      }
+      "$ignoreUnknownInstances": true
     },
     "$ignoreUnknownInstances": true,
     "StarterGui": {
