@@ -161,6 +161,31 @@ end
 --- Monta um rig por cima de um modelo 3D sem Humanoid: HRP invisível (colide), Humanoid, partes do
 --- modelo achatadas como filhas diretas (hitbox conta só filhos diretos), soldadas ao HRP, sem colisão.
 local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
+	-- Modelo JÁ rigado pela equipe (Humanoid + HumanoidRootPart + Motor6D): usa como está, só escala.
+	local existingHum = template:FindFirstChildOfClass("Humanoid")
+	local existingRoot = template:FindFirstChild("HumanoidRootPart")
+	if existingHum and existingRoot and existingRoot:IsA("BasePart") then
+		local rigged = template:Clone()
+		for _, d in rigged:GetDescendants() do
+			if d:IsA("Script") or d:IsA("LocalScript") then
+				d:Destroy()
+			elseif d:IsA("BasePart") then
+				d.Anchored = false
+				if d.Name ~= "HumanoidRootPart" then
+					d.CanCollide = false -- só o HRP colide: nada de "caixa" empurrando jogador
+				end
+			end
+		end
+		local _, size = rigged:GetBoundingBox()
+		if size.Y > 0.1 then
+			pcall(function()
+				rigged:ScaleTo(rigged:GetScale() * BossConfig.ModelHeight / size.Y)
+			end)
+		end
+		rigged.PrimaryPart = existingRoot :: BasePart
+		return rigged, rigged:FindFirstChildOfClass("Humanoid"), rigged:FindFirstChild("HumanoidRootPart") :: BasePart?
+	end
+
 	local mesh = template:Clone()
 	for _, d in mesh:GetDescendants() do
 		if d:IsA("Script") or d:IsA("LocalScript") or d:IsA("Humanoid") or d:IsA("BodyMover") or d:IsA("Constraint") or d:IsA("JointInstance") then
@@ -190,7 +215,8 @@ local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
 	model.Name = BossConfig.Name
 	local root = Instance.new("Part")
 	root.Name = "HumanoidRootPart"
-	root.Size = Vector3.new(math.max(4, bbox.X * 0.45), math.max(4, bbox.Y * 0.6), math.max(4, bbox.Z * 0.45))
+	-- HRP estreito (só para andar/colidir com o chão); a hitbox de dano é o mesh (CanQuery)
+	root.Size = Vector3.new(math.clamp(bbox.X * 0.3, 3, 8), math.max(4, bbox.Y * 0.6), math.clamp(bbox.Z * 0.3, 3, 8))
 	root.Transparency = 1
 	root.CanCollide = true
 	root.CanQuery = true
@@ -239,7 +265,8 @@ local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
 	torsoWeld.Parent = torso
 	torso.Parent = model
 	local humanoid = Instance.new("Humanoid")
-	humanoid.RigType = Enum.HumanoidRigType.R6
+	-- R15: usa HipHeight de verdade (R6 ignora e calcula pelas pernas — era o que fazia "voar")
+	humanoid.RigType = Enum.HumanoidRigType.R15
 	humanoid.HipHeight = (bbox.Y - root.Size.Y) / 2 -- HRP fica centrado no modelo; pés no chão
 	humanoid.Parent = model
 	return model, humanoid, root
