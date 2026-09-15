@@ -200,7 +200,40 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite — fase 5)
+## Retomar aqui (última sessão: 2026-09-15, noite — fim; tudo commitado e enviado)
+
+### Estado do boss com modelo 3D (última coisa feita)
+- `ServerStorage.BossModel` (asset 138493793469412, 71 MeshParts em 6 grupos Tronco/Cabeça/BracoDir/
+  BracoEsq/PernaDir/PernaEsq). O dono rodou na Command Bar
+  `require(game.ReplicatedStorage.Shared.Modules.BossRig:Clone()).Studio(true)` → **27 Motor6D**
+  (Neck, Right/Left Shoulder, Right/Left Hip, RootJoint + 21 internas), 44 detalhes soldados, welds
+  manuais (que cruzavam membros) removidos. Ele precisava dar **Save to Roblox** — conferir na próxima
+  sessão se o rig persistiu (rodar a linha de novo: deve dar "27 Motor6D, 0 soldadas").
+- Runtime: `BossService.rigFromModel` clona e chama `BossRig.Assemble` (achatado, 16 studs).
+- **Pendente testar**: `BossConfig.FaceOffset = 90` (andava de lado; se ainda de lado usar -90, de
+  costas 180). Cache do `require` na Command Bar: usar `:Clone()` para pegar o código novo.
+- Animações do boss: a equipe faz no Animation Editor em cima do `BossModel`, publica no grupo e cola
+  em `Animations.model.json` → `Boss` (Swipe, Slam, Shockwave, Leap, Charge, Roar). Idle/Walk do boss
+  ainda não são tocados (ligar quando existirem).
+
+### Bugs relatados e corrigidos hoje (retestar)
+- Dash "voando infinito" (LinearVelocity antigo nunca destruído) → corrigido; levar golpe/knockback
+  cancela o dash; barreira baixa não lança para cima (raio no joelho + teto vertical 6).
+- Boneco atacante caía no void → corrigido (PivotTo pelo pivô).
+- Uppercut no 1º soco → só no 4º (troca com o empurrão); downslam como continuação.
+- Anti-exploit disparando com knockback do boss → tolerância maior + avisos/kick.
+
+### Bugs que o dono anotou no 3º teste e AINDA NÃO mandou ("depois a gente volta nisso")
+- Pedir a lista + Output na próxima sessão antes de seguir.
+
+### Próxima sessão — ordem
+1. Conferir rig do boss salvo + FaceOffset; encaixar animações que a equipe mandar (Boss e Emotes,
+   Dash/Downslam/Uppercut/Parry/Hit do Shared).
+2. Bugs do 3º teste (pedir).
+3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
+4. Depois: placar global de rating, mais agarrões (perguntar quais), Idle/Walk do boss, e o plano de
+   **guerra de clã/dominação** (ver "Planos futuros").
+
 
 ### Boss com modelo 3D — 3ª versão (`src/shared/Modules/BossRig.luau`)
 - Output do dono mostrou: 71 MeshParts em 6 grupos (Tronco, Cabeça, BracoDir, BracoEsq, PernaDir,
