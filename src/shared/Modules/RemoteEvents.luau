@@ -48,7 +48,7 @@ RemoteEvents.Events = ({
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
 	RequestAdminCommand = "RequestAdminCommand", -- (command: string, args: table) — só após FetchAdminLogin ok
-	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave", targetUserId: number?)
+	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: string, comboIndex: number)
@@ -67,7 +67,7 @@ RemoteEvents.Events = ({
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"defeated"|"despawned"|"denied", data: table)
-	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state", data: table)
+	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

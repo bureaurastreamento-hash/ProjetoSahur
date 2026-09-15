@@ -5,15 +5,20 @@
 	cada duelo é uma cópia de ServerStorage.Maps[DuelConfig.MapName] colocada longe/alto
 	do mapa (slot próprio), com os participantes teleportados para lá.
 
-	Convites: RequestDuel("challenge", userId) -> alvo recebe NotifyDuel("invite") ->
+	Convites 1v1: RequestDuel("challenge", userId) -> alvo recebe NotifyDuel("invite") ->
 	RequestDuel("accept"/"decline"). Quem desafiou pode "cancel". Em duelo, "leave" = desiste.
+
+	Salas 2v2: "create_room" cria uma sala (dono = primeiro membro); "join_room" (hostUserId)
+	entra; "switch_team" troca de time se houver vaga; "leave_room" sai (sala vazia some).
+	Com DuelConfig.TeamSize * 2 membros o duelo começa sozinho. A lista de salas vai para
+	todo mundo em NotifyDuel("rooms") a cada mudança (e "list_rooms" pede a lista).
 
 	Fim: só um time vivo, tempo esgotado (empate) ou queda da arena. Recompensa via
 	DataService.RecordMatchResult (kills/mortes já são contadas pelo MatchService no mapa
 	livre, então aqui passamos kills = 0 para não contar duas vezes).
 
 	Contrato via atributos do Player (MatchConfig): InMatch, TeamId, CanFight; mais DuelId.
-	A estrutura de times já aceita NvN; hoje o fluxo de convite só monta 1v1.
+	A estrutura de times aceita NvN (StartDuel recebe { {time1}, {time2} }).
 ]]
 
 local Players = game:GetService("Players")
@@ -58,6 +63,17 @@ type Invite = {
 	expiresAt: number,
 }
 
+type RoomMember = {
+	player: Player,
+	teamId: number,
+}
+
+type Room = {
+	host: Player,
+	members: { RoomMember },
+	starting: boolean,
+}
+
 local DUELS_FOLDER = "Duels"
 local requestLimiter = RateLimiter.new(4, 2)
 
@@ -69,6 +85,8 @@ local duels: { [number]: Duel } = {}
 local duelByPlayer: { [Player]: Duel } = {}
 local slotsInUse: { [number]: boolean } = {}
 local nextDuelId = 0
+local rooms: { [Player]: Room } = {} -- por host
+local roomByPlayer: { [Player]: Room } = {}
 
 -- ---------------------------------------------------------------------------
 -- Utilidades
@@ -92,7 +110,7 @@ local function notifyAll(duel: Duel, event: string, data: { [string]: any })
 end
 
 local function isBusy(player: Player): boolean
-	return player:GetAttribute("InMatch") == true or duelByPlayer[player] ~= nil
+	return player:GetAttribute("InMatch") == true or duelByPlayer[player] ~= nil or roomByPlayer[player] ~= nil
 end
 
 local function allocateSlot(): number?
@@ -219,6 +237,148 @@ local function challenge(from: Player, targetUserId: any)
 	task.delay(DuelConfig.InviteTimeout, function()
 		closeInvite(invite, "expired")
 	end)
+end
+
+-- ---------------------------------------------------------------------------
+-- Salas 2v2
+-- ---------------------------------------------------------------------------
+
+local function roomsData(): { [string]: any }
+	local out = {}
+	for host, room in rooms do
+		local members = {}
+		for _, m in room.members do
+			table.insert(members, { name = m.player.Name, userId = m.player.UserId, teamId = m.teamId })
+		end
+		table.insert(out, { hostName = host.Name, hostUserId = host.UserId, members = members, size = DuelConfig.TeamSize * 2 })
+	end
+	table.sort(out, function(a, b)
+		return a.hostName < b.hostName
+	end)
+	return { rooms = out }
+end
+
+local function broadcastRooms()
+	notifyDuel:FireAllClients("rooms", roomsData())
+end
+
+local function teamCount(room: Room, teamId: number): number
+	local n = 0
+	for _, m in room.members do
+		if m.teamId == teamId then
+			n += 1
+		end
+	end
+	return n
+end
+
+local function removeFromRoom(player: Player, reason: string)
+	local room = roomByPlayer[player]
+	if not room then
+		return
+	end
+	roomByPlayer[player] = nil
+	for i, m in room.members do
+		if m.player == player then
+			table.remove(room.members, i)
+			break
+		end
+	end
+	notify(player, "room_left", { reason = reason })
+	if #room.members == 0 then
+		rooms[room.host] = nil
+	elseif room.host == player then
+		rooms[room.host] = nil
+		room.host = room.members[1].player
+		rooms[room.host] = room
+	end
+	broadcastRooms()
+end
+
+local function addToRoom(room: Room, player: Player)
+	-- entra no time com menos gente (empate = time 1)
+	local teamId = if teamCount(room, 2) < teamCount(room, 1) then 2 else 1
+	table.insert(room.members, { player = player, teamId = teamId })
+	roomByPlayer[player] = room
+	notify(player, "room_joined", { hostUserId = room.host.UserId })
+	broadcastRooms()
+end
+
+local function tryStartRoom(room: Room)
+	local size = DuelConfig.TeamSize
+	if room.starting or #room.members < size * 2 or teamCount(room, 1) ~= size or teamCount(room, 2) ~= size then
+		return
+	end
+	room.starting = true
+	local teams: { { Player } } = { {}, {} }
+	for _, m in room.members do
+		table.insert(teams[m.teamId], m.player)
+	end
+	-- desfaz a sala antes de iniciar (isBusy passa a ser o duelo)
+	rooms[room.host] = nil
+	for _, m in room.members do
+		roomByPlayer[m.player] = nil
+	end
+	broadcastRooms()
+	local ok, err = DuelService.StartDuel(teams)
+	if not ok then
+		for _, m in room.members do
+			notify(m.player, "denied", { reason = err })
+		end
+	end
+end
+
+local function createRoom(player: Player)
+	if isBusy(player) or invitesByFrom[player] or invitesByTarget[player] then
+		notify(player, "denied", { reason = "Você já está em um duelo ou desafio." })
+		return
+	end
+	local room: Room = { host = player, members = {}, starting = false }
+	rooms[player] = room
+	addToRoom(room, player)
+	Log.debug(("[DuelService] %s criou uma sala 2v2"):format(player.Name))
+end
+
+local function joinRoom(player: Player, hostUserId: any)
+	if typeof(hostUserId) ~= "number" then
+		return
+	end
+	local host = Players:GetPlayerByUserId(hostUserId)
+	local room = host and rooms[host]
+	if not room then
+		notify(player, "denied", { reason = "Essa sala não existe mais." })
+		return
+	end
+	if isBusy(player) or invitesByFrom[player] or invitesByTarget[player] then
+		notify(player, "denied", { reason = "Você já está em um duelo ou desafio." })
+		return
+	end
+	if #room.members >= DuelConfig.TeamSize * 2 then
+		notify(player, "denied", { reason = "A sala está cheia." })
+		return
+	end
+	addToRoom(room, player)
+	tryStartRoom(room)
+end
+
+local function switchTeam(player: Player)
+	local room = roomByPlayer[player]
+	if not room or room.starting then
+		return
+	end
+	for _, m in room.members do
+		if m.player == player then
+			local other = if m.teamId == 1 then 2 else 1
+			if teamCount(room, other) >= DuelConfig.TeamSize then
+				notify(player, "denied", { reason = "O outro time está cheio." })
+				return
+			end
+			m.teamId = other
+			break
+		end
+	end
+	broadcastRooms()
+	tryStartRoom(room)
 end
 
 -- ---------------------------------------------------------------------------
@@ -444,6 +604,16 @@ local function onRequest(player: Player, action: any, targetUserId: any)
 		if invite then
 			closeInvite(invite, "cancelled")
 		end
+	elseif action == "create_room" then
+		createRoom(player)
+	elseif action == "join_room" then
+		joinRoom(player, targetUserId)
+	elseif action == "switch_team" then
+		switchTeam(player)
+	elseif action == "leave_room" then
+		removeFromRoom(player, "left")
+	elseif action == "list_rooms" then
+		notify(player, "rooms", roomsData())
 	elseif action == "leave" then
 		local duel = duelByPlayer[player]
 		local participant = duel and duel.byPlayer[player]
@@ -471,6 +641,7 @@ local function onPlayerRemoving(player: Player)
 	if invite then
 		closeInvite(invite, "unavailable")
 	end
+	removeFromRoom(player, "unavailable")
 	local duel = duelByPlayer[player]
 	local participant = duel and duel.byPlayer[player]
 	if duel and participant then

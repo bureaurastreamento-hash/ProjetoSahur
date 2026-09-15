@@ -18,7 +18,7 @@
       ],
       [
        0,
-       380
+       420
       ]
      ]
     },
@@ -53,18 +53,6 @@
    },
    "children": [
     {
-     "name": "UICorner",
-     "className": "UICorner",
-     "properties": {
-      "CornerRadius": {
-       "UDim": [
-        0,
-        8
-       ]
-      }
-     }
-    },
-    {
      "name": "Title",
      "className": "TextLabel",
      "properties": {
@@ -93,7 +81,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "Duelo 1v1",
+      "Text": "Duelo",
       "TextSize": 20,
       "Font": "GothamBold",
       "TextColor3": {
@@ -105,6 +93,18 @@
       },
       "TextWrapped": true,
       "TextXAlignment": "Left"
+     }
+    },
+    {
+     "name": "UICorner",
+     "className": "UICorner",
+     "properties": {
+      "CornerRadius": {
+       "UDim": [
+        0,
+        8
+       ]
+      }
      }
     },
     {
@@ -131,7 +131,7 @@
         ],
         [
          0,
-         38
+         72
         ]
        ]
       },
@@ -163,7 +163,7 @@
         ],
         [
          1,
-         -140
+         -208
         ]
        ]
       },
@@ -175,7 +175,7 @@
         ],
         [
          0,
-         76
+         108
         ]
        ]
       },
@@ -332,7 +332,7 @@
         ],
         [
          1,
-         -58
+         -92
         ]
        ]
       },
@@ -452,6 +452,326 @@
       },
       "BorderSizePixel": 0,
       "Text": "Cancelar desafio",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "Tab1v1",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         0,
+         40
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.27,
+        0.55,
+        0.85
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "1v1",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "Tab2v2",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         5
+        ],
+        [
+         0,
+         40
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.18,
+        0.18,
+        0.24
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "2v2",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "CreateRoom",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -20
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -68
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.6,
+        0.4
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Criar sala 2v2",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "SwitchTeam",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         10
+        ],
+        [
+         1,
+         -68
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.27,
+        0.45,
+        0.75
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Trocar de time",
+      "TextSize": 14,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        1.0,
+        1.0
+       ]
+      },
+      "AutoButtonColor": true,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "name": "LeaveRoom",
+     "className": "TextButton",
+     "properties": {
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -15
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         5
+        ],
+        [
+         1,
+         -68
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.6,
+        0.35,
+        0.25
+       ]
+      },
+      "BorderSizePixel": 0,
+      "Text": "Sair da sala",
       "TextSize": 14,
       "Font": "GothamBold",
       "TextColor3": {

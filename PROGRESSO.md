@@ -212,6 +212,10 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    anel vermelho antes de cada golpe, recompensa por dano (bolo 300 + mín 20 + 50 top). Dá para
    testar SOZINHO. Cooldown do altar 45 s. Sem animação própria ainda (usa o NotifyAttack "Melee").
 3. Bonecos de treino agora 100% anchored e com os pés no chão por raycast (estavam afundando).
+4. **2v2 por salas** (mesmo `DuelService`/`DuelController`/`DuelGui`): aba "2v2" no painel Duelo →
+   "Criar sala 2v2" → outros entram pela lista (auto-balanceia times, "Trocar de time" se houver
+   vaga) → com 4 jogadores começa sozinho (times 1/2 = `TeamId`, sem fogo amigo). Precisa de
+   4 clientes (Test > Clients and Servers > 4 Players). `DuelConfig.TeamSize` = 2.
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
@@ -219,7 +223,8 @@ Pendências do dono:
 - Bonecos R15 "de teste" no mapa são do place (os nossos são criados em runtime em R6).
 - Sons: escolher referências (soco/block/etc.) para eu preencher `Sounds.model.json` com ids OK.
 - Animações: `packs/Import/Animacoes` → Insert from File → Save to Roblox → ids.
-Próximo passo de código: 2v2 (fluxo de convite em grupo) e animações do boss quando houver ids.
+Próximo passo de código: animações do boss quando houver ids; depois do teste do 1v1/2v2/boss,
+balancear `BossConfig`/`DuelConfig` e seguir para Progressão (item 6).
 
 ## Em andamento
 - 2026-09-15 — **Altar do boss** (item 8): ver "Retomar aqui". Testar: E no altar, anel vermelho,
@@ -229,8 +234,10 @@ Próximo passo de código: 2v2 (fluxo de convite em grupo) e animações do boss
   Ícone "Duelo" (J) lista jogadores → desafiar → alvo aceita (Y) / recusa (N) → cópia de
   `ServerStorage.Maps.Arena_Gerada` em `Workspace.Duels` (céu, 4000/1500/4000, até 8 slots) →
   contagem 3 s → morte/queda/tempo (120 s = empate) → `RecordMatchResult` (+50/+10 moedas) → volta.
-  HealthService: sem fogo amigo quando `TeamId` igual (pronto para 2v2). FALTA TESTAR com 2 clientes;
-  2v2 depois (só o fluxo de convite muda, StartDuel já aceita NvN).
+  HealthService: sem fogo amigo quando `TeamId` igual. FALTA TESTAR com 2 clientes.
+- 2026-09-15 — **2v2 por salas** (item 5b): `create_room`/`join_room`/`switch_team`/`leave_room`/
+  `list_rooms` no `RequestDuel`; `NotifyDuel("rooms")` para todos a cada mudança. Sala some quando
+  esvazia; dono sai → passa para o próximo. FALTA TESTAR com 4 clientes.
 - 2026-09-15 — **Otimização**: o Rojo injetava ~195k instâncias (packs VFX inteiros em ReplicatedStorage
   + KeyframeSequences/mapas em ServerStorage.Import). Packs completos foram para `packs/` (fora do Rojo);
   `tools/podar_vfx.luau` gera `src/assets/VFX/Packs` só com os efeitos usados (268 instâncias).
@@ -270,7 +277,7 @@ Próximo passo de código: 2v2 (fluxo de convite em grupo) e animações do boss
 4. ~~4º personagem~~ (Guardian feito); balancear preços/dano com dados de teste.
 5. **Modos Duel (1v1) e Teams (2v2)** como opt-in dentro do mapa livre: portal/painel de
    desafio, arena separada (`ServerStorage.Maps.Arena_Gerada` ou `ArenaMap` do pack em
-   `ServerStorage.Import`), `FreeRoam` continua para os demais. ← 1v1 FEITO (testar); 2v2 pendente
+   `ServerStorage.Import`), `FreeRoam` continua para os demais. ← 1v1 e 2v2 FEITOS (testar)
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.
