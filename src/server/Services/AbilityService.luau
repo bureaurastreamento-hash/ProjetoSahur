@@ -99,6 +99,11 @@ function AbilityService.OnHitDealt(attacker: Player, victim: Player?)
 	end
 end
 
+--- Energia por golpe recebido de um NPC (boss); o atacante não é Player.
+function AbilityService.OnHitTaken(victim: Player)
+	setEnergy(victim, getState(victim).energy + CharacterDefs.Energy.GainOnHitTaken)
+end
+
 function AbilityService.GetDamageMultiplier(player: Player): number
 	local state = states[player]
 	if not state or os.clock() > state.damageMultiplierUntil then

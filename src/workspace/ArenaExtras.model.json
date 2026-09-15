@@ -181,6 +181,297 @@
        90
       ]
      }
+    },
+    {
+     "name": "BossAltarBase",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarBase",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.5,
+       95
+      ],
+      "Size": [
+       14,
+       1,
+       14
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossAltarStep",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarStep",
+      "Anchored": true,
+      "Position": [
+       0,
+       1.5,
+       95
+      ],
+      "Size": [
+       10,
+       1,
+       10
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossAltar",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltar",
+      "Anchored": true,
+      "Position": [
+       0,
+       3.5,
+       95
+      ],
+      "Size": [
+       4,
+       3,
+       4
+      ],
+      "Color": [
+       0.1,
+       0.1,
+       0.13
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BossAltarRune",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarRune",
+      "Anchored": true,
+      "Position": [
+       0,
+       5.1,
+       95
+      ],
+      "Size": [
+       2.5,
+       0.2,
+       2.5
+      ],
+      "Color": [
+       0.85,
+       0.25,
+       0.25
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "BossAltarPillar0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarPillar0",
+      "Anchored": true,
+      "Position": [
+       4.243,
+       3.5,
+       99.243
+      ],
+      "Size": [
+       7,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarPillar1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarPillar1",
+      "Anchored": true,
+      "Position": [
+       -4.243,
+       3.5,
+       99.243
+      ],
+      "Size": [
+       7,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarPillar2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarPillar2",
+      "Anchored": true,
+      "Position": [
+       -4.243,
+       3.5,
+       90.757
+      ],
+      "Size": [
+       7,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarPillar3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarPillar3",
+      "Anchored": true,
+      "Position": [
+       4.243,
+       3.5,
+       90.757
+      ],
+      "Size": [
+       7,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.6,
+       0.58,
+       0.54
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossSpawn",
+     "className": "Part",
+     "properties": {
+      "Name": "BossSpawn",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.5,
+       125
+      ],
+      "Size": [
+       6,
+       1,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "BossArena",
+     "className": "Part",
+     "properties": {
+      "Name": "BossArena",
+      "Anchored": true,
+      "Position": [
+       0,
+       1,
+       125
+      ],
+      "Size": [
+       1,
+       1,
+       1
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false
+     }
     }
    ]
   },

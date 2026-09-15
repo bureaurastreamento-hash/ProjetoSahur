@@ -472,6 +472,17 @@ part("LeaderboardFrame", (12, 10, 0.6), (-30, 5.5, -69.6), STONE_LIGHT)
 for i, a in enumerate((30, 150, 270)):
     ar = math.radians(a)
     cylinder(f"DummyPad{i}", 3, 0.3, (math.cos(ar) * 18, 0.15, math.sin(ar) * 18), BASALT, CastShadow=False)
+# altar do boss (BossService): pedestal ao sul da praça; BossAltar recebe o ProximityPrompt,
+# BossSpawn é onde o boss nasce, BossArena marca o centro/raio da luta.
+part("BossAltarBase", (14, 1, 14), (0, 0.5, 95), BASALT)
+part("BossAltarStep", (10, 1, 10), (0, 1.5, 95), STONE_LIGHT)
+part("BossAltar", (4, 3, 4), (0, 3.5, 95), ("Slate", (0.10, 0.10, 0.13)))
+part("BossAltarRune", (2.5, 0.2, 2.5), (0, 5.1, 95), ("Neon", (0.85, 0.25, 0.25)), CastShadow=False)
+for i in range(4):
+    a = math.radians(45 + i * 90)
+    cylinder(f"BossAltarPillar{i}", 0.8, 7, (math.cos(a) * 6, 3.5, 95 + math.sin(a) * 6), STONE_LIGHT)
+part("BossSpawn", (6, 1, 6), (0, 0.5, 125), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+part("BossArena", (1, 1, 1), (0, 1, 125), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
 extra_spawns = []
 for i in range(12):
     a = i / 12 * math.tau

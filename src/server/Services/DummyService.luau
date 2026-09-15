@@ -66,7 +66,8 @@ local function buildRig(index: number): Model?
 	end
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
-			d.Anchored = d.Name == "HumanoidRootPart" -- fica no lugar; membros seguem pelos Motor6D
+			d.Anchored = true -- estático de verdade: nada de física afundando/deitando o boneco
+			d.CanCollide = d.Name ~= "HumanoidRootPart"
 		elseif d:IsA("Script") or d:IsA("LocalScript") then
 			d:Destroy() -- Animate/Health padrão não interessam
 		end
@@ -84,7 +85,15 @@ local function spawnAt(pad: BasePart, index: number)
 	if not model then
 		return
 	end
-	model:PivotTo(pad.CFrame * CFrame.new(0, 3.2, 0) * CFrame.Angles(0, math.rad(180), 0))
+	-- apoia os pés no chão real abaixo do pad (o mapa da equipe pode não estar em y=0)
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = { folder, pad }
+	local hit = Workspace:Raycast(pad.Position + Vector3.new(0, 5, 0), Vector3.new(0, -30, 0), params)
+	local floorY = if hit then hit.Position.Y else pad.Position.Y + pad.Size.Y / 2
+	local rootY = floorY + 3 + 0.05 -- R6: pernas 2 + metade do HRP 1
+	local cf = CFrame.new(pad.Position.X, math.max(rootY, pad.Position.Y + pad.Size.Y / 2 + 3), pad.Position.Z) * CFrame.Angles(0, math.rad(180), 0)
+	model:PivotTo(cf)
 	model.Parent = folder
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
 	if humanoid then
@@ -114,11 +123,19 @@ local function spawnAt(pad: BasePart, index: number)
 	end
 end
 
+local function ensureFolder(): Folder
+	if not folder then
+		local f = Workspace:FindFirstChild(FOLDER_NAME) :: Folder? or Instance.new("Folder")
+		f.Name = FOLDER_NAME
+		f.Parent = Workspace
+		folder = f
+	end
+	return folder
+end
+
 --- [Admin] Remove todos e recria (se Enabled).
 function DummyService.Respawn(): number
-	if folder then
-		folder:ClearAllChildren()
-	end
+	ensureFolder():ClearAllChildren()
 	if not DummyService.Enabled then
 		return 0
 	end
@@ -139,9 +156,7 @@ function DummyService.Start()
 	if not DummyService.Enabled then
 		return
 	end
-	folder = Workspace:FindFirstChild(FOLDER_NAME) :: Folder? or Instance.new("Folder")
-	folder.Name = FOLDER_NAME
-	folder.Parent = Workspace
+	ensureFolder()
 	local pads = findPads()
 	for i, pad in pads do
 		spawnAt(pad, i)

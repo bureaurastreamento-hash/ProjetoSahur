@@ -66,6 +66,7 @@ RemoteEvents.Events = ({
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
+	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"defeated"|"despawned"|"denied", data: table)
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"end"|"denied"|"state", data: table)
 }) :: { [string]: string }
 

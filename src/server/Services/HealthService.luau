@@ -31,6 +31,8 @@ local notifyKill: RemoteEvent
 
 --- Disparado no servidor quando um jogador morre: (victim: Player, killer: Player?)
 HealthService.Died = Instance.new("BindableEvent")
+--- Disparado a cada dano aplicado (victim: Model, amount: number, attacker: Player?). BossService usa para crédito.
+HealthService.Damaged = Instance.new("BindableEvent")
 
 --- Segundos desde a última vez que o jogador levou dano (math.huge se nunca / sem personagem).
 function HealthService.SecondsSinceDamaged(player: Player): number
@@ -134,6 +136,9 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 
 	if victimPlayer then
 		notifyHealth:FireClient(victimPlayer, humanoid.Health, humanoid.MaxHealth)
+	end
+	if dealt > 0 then
+		HealthService.Damaged:Fire(victim, dealt, attacker)
 	end
 
 	return dealt

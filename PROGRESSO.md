@@ -200,22 +200,31 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15)
-Estado: tudo commitado localmente até `fa49e7a` (push bloqueado na sessão do Claude; o dono roda
-`git push`). Fluxo de teste: Team Test no Studio, dono = `guilacartinhasgames` (dev; menu Dev F8).
-Pendências imediatas, em ordem:
-1. Rodar **Testar sons dos packs** no menu Dev e me avisar → leio `[SoundProbe]` no log e preencho
-   `Sounds.model.json` com os que tocam. (Os erros "Failed to load sound ... not authorized" ao abrir
-   o place eram Sounds dentro dos VFX extraídos; removidos com `tools/limpar_sons_packs.luau` e o
-   extrator já descarta Sound.)
-2. Publicar os KeyframeSequences de `packs/Import/Animacoes/<Pack>/*.rbxm` (Studio: clique direito em
-   ServerStorage > Insert from File > Save to Roblox) e me passar os ids → `Animations.model.json`. Prioridade: `Melee1`, `Charge Punch`, `run`, `teleport`,
-   `finisher`, `beatdown`.
-3. Passar pelo **Preview de VFX (F7)** e apontar trocas → `Assets.VFXPack`.
-4. Medir FPS no MainMap; se pesado, cortar `Corners`/`Trees` em `tools/preparar_mapa.luau`.
-5. Conferir rig R6 em Game Settings (HealthService avisa no boot se for R15).
+## Retomar aqui (última sessão: 2026-09-15, noite)
+Estado: tudo commitado localmente (o dono roda `git push`). Rig R6 confirmado no Studio. FPS normal
+depois de tirar os packs do Rojo (`ServerStorage.Import` já apagado pelo dono).
+Feito nesta sessão, AINDA NÃO TESTADO no Studio:
+1. **Duelo 1v1** (`DuelService`/`DuelController`/`DuelGui`, ícone Duelo = J). Precisa de 2 clientes
+   (Test > Clients and Servers > 2 Players). Roteiro em "Em andamento".
+2. **Altar do boss** (`BossService`/`BossController`/`BossGui`/`BossConfig`): altar em
+   `Workspace.Sahur.ArenaExtras` (BossAltar em (0, 3.5, 95), boss nasce em BossSpawn (0, 0.5, 125)).
+   Segurar E no altar → boss R6 escalado 1.9x, 1500 HP, Swipe/Slam (+ Charge na fase 2 abaixo de 50%),
+   anel vermelho antes de cada golpe, recompensa por dano (bolo 300 + mín 20 + 50 top). Dá para
+   testar SOZINHO. Cooldown do altar 45 s. Sem animação própria ainda (usa o NotifyAttack "Melee").
+3. Bonecos de treino agora 100% anchored e com os pés no chão por raycast (estavam afundando).
+Pendências do dono:
+- Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
+  é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
+  ReplicatedStorage, provavelmente veio junto com o mapa do pack) — apagar no Studio e salvar.
+- Bonecos R15 "de teste" no mapa são do place (os nossos são criados em runtime em R6).
+- Sons: escolher referências (soco/block/etc.) para eu preencher `Sounds.model.json` com ids OK.
+- Animações: `packs/Import/Animacoes` → Insert from File → Save to Roblox → ids.
+Próximo passo de código: 2v2 (fluxo de convite em grupo) e animações do boss quando houver ids.
 
 ## Em andamento
+- 2026-09-15 — **Altar do boss** (item 8): ver "Retomar aqui". Testar: E no altar, anel vermelho,
+  dano com block (70% a menos), fase 2, morte → banner com moedas, altar recarrega 45 s, boss some se
+  ninguém ficar na arena por 30 s. Ajustes finos em `BossConfig.luau`.
 - 2026-09-15 — **Duelo 1v1 opt-in** (item 5): `DuelService` + `DuelController` + `DuelGui` + `DuelConfig`.
   Ícone "Duelo" (J) lista jogadores → desafiar → alvo aceita (Y) / recusa (N) → cópia de
   `ServerStorage.Maps.Arena_Gerada` em `Workspace.Duels` (céu, 4000/1500/4000, até 8 slots) →
@@ -265,7 +274,7 @@ Pendências imediatas, em ordem:
 6. **Progressão**: tela de perfil (stats, moedas, personagens), loja simples, gamepass/
    Robux só depois de validar a economia.
 7. ~~Lobby vivo~~ (dummies + placar feitos); falta: leaderboard também na tela de perfil.
-8. **Altar para invocar o boss**: altar no mapa (usar meshes de `ServerStorage.Import` ou
+8. ~~Altar para invocar o boss~~ (feito 2026-09-15; falta testar/balancear e animações). Era: altar no mapa (usar meshes de `ServerStorage.Import` ou
    `Arena_Gerada`), interação (ProximityPrompt) que junta jogadores/moedas e invoca um boss NPC
    (rig R6 como os dummies, tag `Combatant`, `Hitbox` já aceita NPC) com IA simples (persegue,
    golpes de área, fases por vida), recompensa em moedas para quem participou; placar próprio.

@@ -203,6 +203,29 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	end
 end
 
+--- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
+function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: { Speed: number, Duration: number }?): number
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	local victimState = victimPlayer and states[victimPlayer]
+	local kind = "hit"
+	if victimPlayer and AbilityService then
+		damage *= AbilityService.GetIncomingMultiplier(victimPlayer)
+	end
+	if victimState and victimState.blocking then
+		kind = "blocked"
+		damage *= CombatConfig.Block.DamageMultiplier
+	end
+	local dealt = if damage > 0 then HealthService.ApplyDamage(victim, damage, nil) else 0
+	if dealt > 0 and victimPlayer and AbilityService then
+		AbilityService.OnHitTaken(victimPlayer)
+	end
+	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
+	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
+		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration)
+	end
+	return dealt
+end
+
 local function onRequestAttack(player: Player, attackId: any)
 	if not attackLimiter:Allow(player) then
 		return
