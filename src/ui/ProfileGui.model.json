@@ -3,7 +3,7 @@
   "properties": {
     "ResetOnSpawn": false,
     "IgnoreGuiInset": true,
-    "DisplayOrder": 2
+    "DisplayOrder": 3
   },
   "children": [
     {
@@ -14,23 +14,23 @@
           "UDim2": [
             [
               0,
-              520
+              300
             ],
             [
               0,
-              64
+              320
             ]
           ]
         },
         "Position": {
           "UDim2": [
             [
-              0.5,
-              0
+              0,
+              20
             ],
             [
-              0,
-              70
+              0.5,
+              0
             ]
           ]
         },
@@ -41,12 +41,12 @@
             0.10980392156862745
           ]
         },
-        "BackgroundTransparency": 0.25,
+        "BackgroundTransparency": 0.15,
         "BorderSizePixel": 0,
         "AnchorPoint": {
           "Vector2": [
-            0.5,
-            0
+            0,
+            0.5
           ]
         },
         "Visible": false
@@ -71,12 +71,12 @@
             "Size": {
               "UDim2": [
                 [
-                  0,
-                  110
+                  1,
+                  -20
                 ],
                 [
-                  1,
-                  0
+                  0,
+                  30
                 ]
               ]
             },
@@ -88,23 +88,24 @@
                 ],
                 [
                   0,
-                  0
+                  8
                 ]
               ]
             },
             "BackgroundTransparency": 1,
-            "Text": "Personagem",
-            "TextSize": 14,
+            "Text": "Perfil",
+            "TextSize": 20,
             "Font": "GothamBold",
             "TextColor3": {
               "Color3": [
-                0.7843137254901961,
-                0.7843137254901961,
-                0.7843137254901961
+                1.0,
+                1.0,
+                1.0
               ]
             },
             "TextXAlignment": "Left",
-            "TextStrokeTransparency": 0.6
+            "TextWrapped": true,
+            "TextYAlignment": "Top"
           }
         },
         {
@@ -114,30 +115,30 @@
             "Size": {
               "UDim2": [
                 [
-                  0,
-                  110
+                  1,
+                  -20
                 ],
                 [
                   0,
-                  18
+                  22
                 ]
               ]
             },
             "Position": {
               "UDim2": [
                 [
-                  1,
-                  -10
+                  0,
+                  10
                 ],
                 [
-                  1,
-                  -4
+                  0,
+                  40
                 ]
               ]
             },
             "BackgroundTransparency": 1,
             "Text": "",
-            "TextSize": 12,
+            "TextSize": 15,
             "Font": "GothamBold",
             "TextColor3": {
               "Color3": [
@@ -146,78 +147,68 @@
                 0.35294117647058826
               ]
             },
-            "TextXAlignment": "Right",
-            "TextStrokeTransparency": 0.6,
-            "AnchorPoint": {
-              "Vector2": [
-                1,
-                1
-              ]
-            }
+            "TextXAlignment": "Left",
+            "TextWrapped": true,
+            "TextYAlignment": "Top"
           }
         },
         {
-          "name": "Hint",
+          "name": "Warning",
           "className": "TextLabel",
           "properties": {
             "Size": {
               "UDim2": [
                 [
-                  0,
-                  200
+                  1,
+                  -20
                 ],
                 [
                   0,
-                  16
+                  34
                 ]
               ]
             },
             "Position": {
               "UDim2": [
                 [
-                  1,
-                  -10
+                  0,
+                  10
                 ],
                 [
                   0,
-                  4
+                  62
                 ]
               ]
             },
             "BackgroundTransparency": 1,
             "Text": "",
-            "TextSize": 11,
-            "Font": "GothamBold",
+            "TextSize": 12,
+            "Font": "Gotham",
             "TextColor3": {
               "Color3": [
-                0.6274509803921569,
-                0.6274509803921569,
-                0.6274509803921569
+                1.0,
+                0.5490196078431373,
+                0.47058823529411764
               ]
             },
-            "TextXAlignment": "Right",
-            "TextStrokeTransparency": 0.6,
-            "AnchorPoint": {
-              "Vector2": [
-                1,
-                0
-              ]
-            }
+            "TextXAlignment": "Left",
+            "TextWrapped": true,
+            "TextYAlignment": "Top"
           }
         },
         {
-          "name": "List",
+          "name": "Stats",
           "className": "Frame",
           "properties": {
             "Size": {
               "UDim2": [
                 [
                   1,
-                  -130
+                  -20
                 ],
                 [
-                  1,
-                  -16
+                  0,
+                  150
                 ]
               ]
             },
@@ -225,11 +216,11 @@
               "UDim2": [
                 [
                   0,
-                  120
+                  10
                 ],
                 [
                   0,
-                  8
+                  100
                 ]
               ]
             },
@@ -252,27 +243,24 @@
                 "Padding": {
                   "UDim": [
                     0,
-                    8
+                    2
                   ]
-                },
-                "HorizontalAlignment": "Left",
-                "VerticalAlignment": "Center",
-                "FillDirection": "Horizontal"
+                }
               }
             },
             {
               "name": "Template",
-              "className": "TextButton",
+              "className": "TextLabel",
               "properties": {
                 "Size": {
                   "UDim2": [
                     [
-                      0,
-                      120
-                    ],
-                    [
                       1,
                       0
+                    ],
+                    [
+                      0,
+                      22
                     ]
                   ]
                 },
@@ -288,9 +276,10 @@
                     ]
                   ]
                 },
-                "Text": "Personagem",
+                "BackgroundTransparency": 1,
+                "Text": "Vit\u00f3rias: 0",
                 "TextSize": 14,
-                "Font": "GothamBold",
+                "Font": "Gotham",
                 "TextColor3": {
                   "Color3": [
                     1.0,
@@ -298,103 +287,57 @@
                     1.0
                   ]
                 },
-                "BackgroundColor3": {
-                  "Color3": [
-                    0.19607843137254902,
-                    0.19607843137254902,
-                    0.23529411764705882
-                  ]
-                },
-                "BorderSizePixel": 0,
-                "AutoButtonColor": true,
+                "TextXAlignment": "Left",
+                "TextWrapped": true,
+                "TextYAlignment": "Top",
                 "Visible": false
-              },
-              "children": [
-                {
-                  "name": "UICorner",
-                  "className": "UICorner",
-                  "properties": {
-                    "CornerRadius": {
-                      "UDim": [
-                        0,
-                        6
-                      ]
-                    }
-                  }
-                }
-              ]
+              }
             }
           ]
         },
         {
-          "name": "QueueButton",
-          "className": "TextButton",
+          "name": "Characters",
+          "className": "TextLabel",
           "properties": {
             "Size": {
               "UDim2": [
                 [
-                  0,
-                  110
+                  1,
+                  -20
                 ],
                 [
                   0,
-                  26
+                  50
                 ]
               ]
             },
             "Position": {
               "UDim2": [
                 [
-                  1,
-                  -10
+                  0,
+                  10
                 ],
                 [
-                  0.5,
-                  0
+                  1,
+                  -60
                 ]
               ]
             },
-            "Text": "Entrar na fila",
-            "TextSize": 14,
-            "Font": "GothamBold",
+            "BackgroundTransparency": 1,
+            "Text": "",
+            "TextSize": 13,
+            "Font": "Gotham",
             "TextColor3": {
               "Color3": [
-                1.0,
-                1.0,
-                1.0
+                0.7843137254901961,
+                0.7843137254901961,
+                0.7843137254901961
               ]
             },
-            "BackgroundColor3": {
-              "Color3": [
-                0.1568627450980392,
-                0.5490196078431373,
-                0.3137254901960784
-              ]
-            },
-            "BorderSizePixel": 0,
-            "AutoButtonColor": true,
-            "AnchorPoint": {
-              "Vector2": [
-                1,
-                0.5
-              ]
-            },
-            "Visible": false
-          },
-          "children": [
-            {
-              "name": "UICorner",
-              "className": "UICorner",
-              "properties": {
-                "CornerRadius": {
-                  "UDim": [
-                    0,
-                    6
-                  ]
-                }
-              }
-            }
-          ]
+            "TextXAlignment": "Left",
+            "TextWrapped": true,
+            "TextYAlignment": "Top"
+          }
         }
       ]
     }

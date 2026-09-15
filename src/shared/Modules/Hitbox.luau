@@ -5,13 +5,20 @@
 	Usado pelo servidor para detecção autoritativa. R6.
 ]]
 
+local CollectionService = game:GetService("CollectionService")
+local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+
+local COMBATANT_TAG = "Combatant" -- NPCs/dummies precisam desta tag para levar dano
 
 local Hitbox = {}
 
 local function isAlive(model: Model): boolean
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
-	return humanoid ~= nil and humanoid.Health > 0
+	if humanoid == nil or humanoid.Health <= 0 then
+		return false
+	end
+	return Players:GetPlayerFromCharacter(model) ~= nil or CollectionService:HasTag(model, COMBATANT_TAG)
 end
 
 local function collect(parts: { BasePart }, exclude: Model, maxTargets: number): { Model }

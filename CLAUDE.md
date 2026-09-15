@@ -53,6 +53,15 @@ ainda não existe, mesmo que pareça óbvio.
 - O place no Studio é o publicado (placeId 85844807133499, ~5.5k instâncias, mapa da equipe).
   O `default.project.json` DEVE continuar 100% aditivo (`$ignoreUnknownInstances` em tudo).
 
+## Assets externos e UI
+- `AssetsPacks/` (ignorado no git) tem packs; ler com `python3 tools/rbx_tree.py arquivo`.
+  Só o que for legítimo e usado vai para `src/assets/`. NUNCA integrar dumps de outros jogos
+  (os `[Rova Assets]*.rbxl`): direitos + animações/áudio de terceiros não tocam no Roblox.
+- VFX: nome exato em `Assets.VFX.<Personagem>` > alias do Particle Pack (`Assets.VFXAliases`)
+  > `Shared.Placeholder`.
+- UI de topo usa TopbarPlus (`src/shared/Packages/Icon`, v3.4.0). Telas ficam em `src/ui/*.model.json`
+  (StarterGui) e são ligadas por nome nos controllers.
+
 ## Fluxo de trabalho
 - Trabalhe em mudanças pequenas e testáveis, um sistema de cada vez.
 - Depois de cada mudança, explique em português, de forma direta, o que mudou e

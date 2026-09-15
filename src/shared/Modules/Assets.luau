@@ -59,11 +59,44 @@ function Assets.GetAnimation(folder: string, name: string): Animation?
 	return nil
 end
 
---- Template de VFX em Assets.VFX.<folder>.<name>. Se não existir, usa VFX.Shared.Placeholder.
+-- Enquanto a arte não entrega o VFX com o nome exato, usamos efeitos do
+-- Particle Pack (Assets.VFX.Packs.ParticlePack.<nome>). Um VFX com o nome exato
+-- na pasta do personagem sempre tem prioridade sobre o alias.
+local PACK = { "Packs", "ParticlePack", "[Shiro Dev Patreon] - Particle Set" }
+Assets.VFXAliases = {
+	["Brawler/ShoulderBash"] = "Wind",
+	["Brawler/ShoulderBash_Hit"] = "Slashes",
+	["Brawler/GroundSlam"] = "Smoke V.2",
+	["Brawler/GroundSlam_Hit"] = "Stripes",
+	["Brawler/Rampage"] = "Fire V.2",
+	["Swift/Blink"] = "Flare",
+	["Swift/SweepKick"] = "Wind",
+	["Swift/SweepKick_Hit"] = "Slashes",
+	["Swift/Tempest"] = "Stripes",
+	["Swift/Tempest_Hit"] = "Slashes",
+}
+
+local function findPackVFX(name: string): Instance?
+	local current: Instance? = find("VFX", PACK[1], PACK[2])
+	if current then
+		current = current:FindFirstChild(PACK[3]) or current
+		return current:FindFirstChild(name)
+	end
+	return nil
+end
+
+--- Template de VFX em Assets.VFX.<folder>.<name>. Fallbacks: alias do Particle Pack, depois VFX.Shared.Placeholder.
 function Assets.GetVFX(folder: string, name: string): Instance?
 	local inst = find("VFX", folder, name)
 	if inst then
 		return inst
+	end
+	local alias = Assets.VFXAliases[folder .. "/" .. name]
+	if alias then
+		local packInst = findPackVFX(alias)
+		if packInst then
+			return packInst
+		end
 	end
 	warnOnce(("VFX.%s.%s (usando Placeholder)"):format(folder, name))
 	return find("VFX", "Shared", "Placeholder")
@@ -79,9 +112,13 @@ function Assets.GetSound(folder: string, name: string): Sound?
 	return nil
 end
 
---- Existe VFX específico (sem fallback)?
+--- Existe VFX específico ou alias (sem cair no Placeholder)?
 function Assets.HasVFX(folder: string, name: string): boolean
-	return find("VFX", folder, name) ~= nil
+	if find("VFX", folder, name) ~= nil then
+		return true
+	end
+	local alias = Assets.VFXAliases[folder .. "/" .. name]
+	return alias ~= nil and findPackVFX(alias) ~= nil
 end
 
 return Assets

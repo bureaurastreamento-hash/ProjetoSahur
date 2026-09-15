@@ -191,7 +191,9 @@ local function refreshScoreboard()
 		end
 	end
 	local visible = typeof(scores) == "table" and #scores > 0 and (currentState == "InProgress" or currentState == "Ending" or currentState == "FreeRoam")
-	scoreboard.Visible = visible
+	if not MatchConfig.FreeRoam then
+		scoreboard.Visible = visible -- no mapa livre quem controla é o ícone "Placar" do topbar
+	end
 	if not visible then
 		return
 	end

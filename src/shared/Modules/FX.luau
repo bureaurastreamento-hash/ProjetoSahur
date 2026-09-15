@@ -170,11 +170,22 @@ function FX.SpawnVFX(character: Model, folder: string, name: string, exact: bool
 	for _, d in clone:GetDescendants() do
 		if d:IsA("ParticleEmitter") then
 			table.insert(emitters, d)
+		elseif d:IsA("BillboardGui") or d:IsA("Script") or d:IsA("LocalScript") then
+			d:Destroy() -- lixo de packs ("DELETE ME", scripts de demo)
+		elseif d:IsA("BasePart") then
+			d.Anchored = true
+			d.CanCollide = false
+			d.CanQuery = false
+			d.CanTouch = false
+			d.CastShadow = false
 		end
 	end
 	for _, emitter in emitters do
+		-- Packs costumam vir com emissão contínua (Rate > 0): convertemos em uma rajada única
 		local count = emitter:GetAttribute("EmitCount")
-		emitter:Emit(math.min(FX.MaxEmitPerEmitter, if typeof(count) == "number" then count else 20))
+		local burst = if typeof(count) == "number" then count else math.clamp(math.floor(emitter.Rate * 0.5), 8, FX.MaxEmitPerEmitter)
+		emitter.Enabled = false
+		emitter:Emit(math.min(FX.MaxEmitPerEmitter, burst))
 	end
 	activeVFX += 1
 	task.delay(FX.VFXLifetime, function()

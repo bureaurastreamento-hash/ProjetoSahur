@@ -1,0 +1,159 @@
+{
+  "className": "ScreenGui",
+  "properties": {
+    "ResetOnSpawn": false,
+    "IgnoreGuiInset": true,
+    "DisplayOrder": 3
+  },
+  "children": [
+    {
+      "name": "Panel",
+      "className": "Frame",
+      "properties": {
+        "Size": {
+          "UDim2": [
+            [
+              0,
+              420
+            ],
+            [
+              0,
+              300
+            ]
+          ]
+        },
+        "Position": {
+          "UDim2": [
+            [
+              0,
+              20
+            ],
+            [
+              0.5,
+              0
+            ]
+          ]
+        },
+        "BackgroundColor3": {
+          "Color3": [
+            0.0784313725490196,
+            0.0784313725490196,
+            0.10980392156862745
+          ]
+        },
+        "BackgroundTransparency": 0.15,
+        "BorderSizePixel": 0,
+        "AnchorPoint": {
+          "Vector2": [
+            0,
+            0.5
+          ]
+        },
+        "Visible": false
+      },
+      "children": [
+        {
+          "name": "UICorner",
+          "className": "UICorner",
+          "properties": {
+            "CornerRadius": {
+              "UDim": [
+                0,
+                8
+              ]
+            }
+          }
+        },
+        {
+          "name": "Title",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -20
+                ],
+                [
+                  0,
+                  30
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  8
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "Controles",
+            "TextSize": 20,
+            "Font": "GothamBold",
+            "TextColor3": {
+              "Color3": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "TextXAlignment": "Left",
+            "TextWrapped": true,
+            "TextYAlignment": "Top"
+          }
+        },
+        {
+          "name": "Body",
+          "className": "TextLabel",
+          "properties": {
+            "Size": {
+              "UDim2": [
+                [
+                  1,
+                  -20
+                ],
+                [
+                  1,
+                  -50
+                ]
+              ]
+            },
+            "Position": {
+              "UDim2": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  42
+                ]
+              ]
+            },
+            "BackgroundTransparency": 1,
+            "Text": "SOCO \u2014 Bot\u00e3o esquerdo do mouse (combo de 4; o 4\u00ba empurra)\nBLOQUEAR \u2014 Segurar F (reduz o dano em 70%)\nPARRY \u2014 Apertar F at\u00e9 0,2 s antes de levar o golpe (atordoa o oponente)\nHABILIDADES \u2014 Q / E / R (R \u00e9 a ultimate, precisa de 100 de energia)\nENERGIA \u2014 ganha ao dar (+6) e receber (+4) golpes\nVIDA \u2014 regenera 3/s ap\u00f3s 6 s sem tomar dano\nPERSONAGEM \u2014 V ou o \u00edcone no topo; troque a qualquer momento\nPLACAR \u2014 Tab \u2022 PERFIL \u2014 P\nGamepad: R1 soco, L1 block, X/Y/B habilidades",
+            "TextSize": 14,
+            "Font": "Gotham",
+            "TextColor3": {
+              "Color3": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "TextXAlignment": "Left",
+            "TextWrapped": true,
+            "TextYAlignment": "Top",
+            "LineHeight": 1.25
+          }
+        }
+      ]
+    }
+  ]
+}

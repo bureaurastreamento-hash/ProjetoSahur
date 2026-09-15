@@ -94,12 +94,27 @@ Memória entre sessões. Atualizar depois de cada mudança.
   números de dano flutuantes, tremor leve de câmera ao apanhar, indicador de combo, banner
   "Você eliminou X". `FX.Push/Shake/DamageNumber`.
 
+- 2026-09-14 — Assets externos: `tools/rbx_tree.py` (lê .rbxm/.rbxl binários). `AssetsPacks/`
+  avaliado: os dois `.rbxl` "[Rova Assets]" são dumps de outros jogos (não usar: direitos +
+  anims/áudio de terceiros não tocam); `Particle Pack.rbxm` (Shiro Dev) sincronizado em
+  `Assets.VFX.Packs.ParticlePack` e mapeado por alias (`Assets.VFXAliases`) para as
+  habilidades. `FX.SpawnVFX` sanitiza packs (remove BillboardGui/scripts, rajada única).
+- 2026-09-14 — TopbarPlus v3.4.0 vendorizado em `src/shared/Packages/Icon` (GitHub oficial).
+  `TopbarController`: ícones Personagens (V), Perfil (P), Placar (Tab, substitui PlayerList),
+  Controles. Novas telas `ProfileGui` (stats/K-D/moedas/personagens) e `HelpGui`. Painel de
+  personagens agora abre pelo topbar; placar escondido por padrão.
+- 2026-09-14 — Hitbox só atinge personagens de jogadores ou Models com tag `Combatant`
+  (rigs decorativos do Workspace não levam mais dano).
+
 ## Em andamento
 - Validar no Team Test: block/parry, Swift (Blink/SweepKick/Tempest), speed hack simulado
   (AntiExploit), `DataConfig.SimulateFailure = true`.
 - Receber ids das animações/sons da equipe e preencher `src/assets/Animations.model.json`
   e `Sounds.model.json`; VFX por nome no Studio (lista em CHECKLIST_PUBLICACAO.md §1).
 - Avaliar o mapa `Sahur.Arena` no Team Test e ajustar layout/escala.
+- Testar o topbar (V/P/Tab), a tela de perfil e os VFX do Particle Pack nas habilidades.
+- Asset "Textures" (id 18221073047) foi inserido no Studio pelo usuário em local desconhecido;
+  decidir se vira VFX nomeado em `Assets.VFX.<Personagem>`.
 
 ## Próximos passos (ordem sugerida)
 1. **Game feel, parte 2**: hitstop curto, trilha de dash, som de "whoosh" no finisher,
