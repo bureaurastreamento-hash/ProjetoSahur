@@ -78,12 +78,12 @@ RemoteEvents.Events = ({
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
-	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
+	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"warning"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
 	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done"|"mastery_up", data: table)
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)
 	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
-	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
+	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"rating"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

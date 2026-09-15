@@ -154,6 +154,9 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
+	if typeof(raw.rating) == "number" and raw.rating >= 0 then
+		profile.rating = math.floor(raw.rating)
+	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile

@@ -25,6 +25,10 @@ DuelConfig.TeamSize = 2 -- jogadores por time nas salas de equipe (2 = 2v2)
 -- Onde as cópias da arena ficam: longe e alto para nunca encostar no mapa da equipe.
 DuelConfig.ArenaOrigin = Vector3.new(4000, 1500, 4000)
 DuelConfig.ArenaSpacing = 800 -- studs entre arenas (Arena_Gerada tem 320x320)
-DuelConfig.FallDepth = 60 -- abaixo do chão da arena = eliminado (caiu)
+DuelConfig.FallDepth = 60
+
+-- Ranking (Elo) de duelos 1v1: profile.rating (começa em 1000); K = variação máxima por duelo.
+DuelConfig.RatingStart = 1000
+DuelConfig.RatingK = 24 -- abaixo do chão da arena = eliminado (caiu)
 
 return DuelConfig

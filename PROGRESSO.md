@@ -200,9 +200,27 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite — fase 4)
+## Retomar aqui (última sessão: 2026-09-15, noite — fase 5)
 
-### Fase 4 (NÃO testada) — "próximos passos" da lista
+### Fase 5 (NÃO testada)
+- **Uppercut/downslam só como 4º golpe** do combo (no lugar do finisher com empurrão; cliente e
+  servidor conferem `combo == 4`); depois do uppercut, o downslam sai como continuação por 1,6 s
+  (`Uppercut.FollowUpWindow`). Pedido do dono: "todo soco especial deve ser no último soco".
+- **Boss por horário** (`BossConfig.AutoSpawnMinutes = 12`): aviso 30 s antes (banner "chega ao
+  Santuário") e invoca sozinho se o altar estiver pronto e houver alguém.
+- **Rating (Elo) de duelo 1v1** (`profile.rating`, começa 1000, K = 24): status no fim do duelo
+  ("Rating: 1012 (+12)") e no Perfil.
+- **Títulos** (tag antes do nome, `NameTag`): Veterano (nível 10), Elite (25), Lenda (40), Mestre
+  (maestria 10 em algum personagem); VIP tem prioridade. Recalcula ao subir nível/maestria/entrar.
+
+### Roteiro de teste da fase 5
+1. Socar 1–3 vezes pulando: sempre M1; no 4º pulando/subindo: uppercut; no ar depois, socar caindo:
+   downslam. Pular e socar no 1º golpe NÃO faz uppercut.
+2. Esperar ~12 min: banner do boss + spawn sozinho (ou baixar `AutoSpawnMinutes` para testar).
+3. Duelo 1v1: no fim aparece "Rating: … (+/−)"; Perfil mostra rating.
+4. Dev: AddXP até nível 10 → nome vira "[Veterano] Nick" ao respawnar (DisplayName) e na barra.
+
+
 - **Wall splat** (`CombatConfig.WallSplat`): golpe que derruba (4º M1, finisher, agarrão, habilidade com
   Ragdoll) com parede a até 12 studs na direção do empurrão → +6 de dano, ragdoll +0,8 s, kind
   `wallsplat` (número "PAREDE", tremor forte, VFX `Shared/WallSplat`).

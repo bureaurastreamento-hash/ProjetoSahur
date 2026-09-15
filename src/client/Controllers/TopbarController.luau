@@ -114,7 +114,7 @@ local function reportForeignTopbar()
 end
 
 local function renderProfile(profile: any, sessionOnly: boolean)
-	profileCoins.Text = ("%d pontos"):format(profile.coins or 0)
+	profileCoins.Text = ("%d pontos · rating %d"):format(profile.coins or 0, profile.rating or 1000)
 	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
 	for _, child in statsList:GetChildren() do

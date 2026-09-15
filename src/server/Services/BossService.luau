@@ -503,11 +503,11 @@ local function aiLoop(f: Fight)
 	end
 end
 
-local function summon(player: Player)
+local function summon(player: Player, byName: string?)
 	if state ~= "Ready" or fight then
 		return
 	end
-	if BossConfig.SummonCost > 0 then
+	if BossConfig.SummonCost > 0 and not byName then
 		local profile = DataService.GetProfile(player)
 		if not profile or profile.coins < BossConfig.SummonCost then
 			notifyBoss:FireClient(player, "denied", { event = "denied", reason = ("Precisa de %d moedas para invocar."):format(BossConfig.SummonCost) })
@@ -550,8 +550,8 @@ local function summon(player: Player)
 	humanoid.Died:Once(function()
 		endFight(f, true)
 	end)
-	Log.debug(("[BossService] %s invocou o boss"):format(player.Name))
-	broadcast("summoned", { by = player.Name, name = BossConfig.Name, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
+	Log.debug(("[BossService] %s invocou o boss"):format(byName or player.Name))
+	broadcast("summoned", { by = byName or player.Name, name = BossConfig.Name, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
 	setStatus(BossConfig.Name .. ": 100%")
 	task.spawn(aiLoop, f)
 end
@@ -586,6 +586,28 @@ end
 -- ---------------------------------------------------------------------------
 -- Ciclo de vida
 -- ---------------------------------------------------------------------------
+
+--- Spawn automático por tempo (além do altar): aviso, depois invoca com o 1º jogador como "dono".
+local function autoSpawnLoop()
+	local minutes = BossConfig.AutoSpawnMinutes
+	if minutes <= 0 then
+		return
+	end
+	while true do
+		task.wait(minutes * 60 - BossConfig.AutoSpawnWarning)
+		if state == "Ready" and not fight and #Players:GetPlayers() > 0 then
+			broadcast("warning", { seconds = BossConfig.AutoSpawnWarning, name = BossConfig.Name })
+			setStatus(("%s chega em %ds!"):format(BossConfig.Name, BossConfig.AutoSpawnWarning))
+			task.wait(BossConfig.AutoSpawnWarning)
+			local any = Players:GetPlayers()[1]
+			if state == "Ready" and not fight and any then
+				summon(any, "o Santuário")
+			end
+		else
+			task.wait(BossConfig.AutoSpawnWarning)
+		end
+	end
+end
 
 function BossService.Init()
 	notifyBoss = Remotes.GetEvent(Remotes.Events.NotifyBoss)
@@ -651,7 +673,8 @@ function BossService.Start()
 		end
 	end)
 
-	Log.debug(("[BossService] altar pronto em %s"):format(a:GetFullName()))
+	task.spawn(autoSpawnLoop)
+	Log.debug(("[BossService] altar pronto em %s (auto a cada %d min)"):format(a:GetFullName(), BossConfig.AutoSpawnMinutes))
 end
 
 return BossService

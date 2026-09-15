@@ -68,6 +68,9 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 		profile.xp = math.min(profile.xp, ProgressionConfig.XPForLevel(profile.level) - 1)
 	end
 	player:SetAttribute("Level", profile.level)
+	if leveled then
+		ProgressionService.RefreshTitle(player)
+	end
 	if not leveled then
 		notify(player, "xp", { amount = amount, reason = reason })
 	end
@@ -141,6 +144,33 @@ end
 -- Ganchos chamados por outros services
 -- ---------------------------------------------------------------------------
 
+--- Título (NameTag) por nível/maestria; VIP (ShopService) tem prioridade. Recalcula quando muda.
+function ProgressionService.RefreshTitle(player: Player)
+	if player:GetAttribute("Pass_vip") == true then
+		return -- ShopService pôs "VIP"
+	end
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return
+	end
+	local title = ""
+	for _, t in ProgressionConfig.Titles do
+		if profile.level >= t.Level then
+			title = t.Title
+			break
+		end
+	end
+	for _, xp in profile.mastery do
+		if ProgressionConfig.MasteryLevel(xp) >= ProgressionConfig.Mastery.MaxLevel then
+			title = ProgressionConfig.MasterTitle
+			break
+		end
+	end
+	if player:GetAttribute("NameTag") ~= title then
+		player:SetAttribute("NameTag", title)
+	end
+end
+
 --- Maestria do personagem ATUAL do jogador (atributo CharacterId). Avisa ao subir de nível.
 function ProgressionService.AddMastery(player: Player, amount: number, reason: string)
 	local profile = DataService.GetProfile(player)
@@ -154,6 +184,7 @@ function ProgressionService.AddMastery(player: Player, amount: number, reason: s
 	DataService.MarkDirty(player)
 	local lb, la = ProgressionConfig.MasteryLevel(before), ProgressionConfig.MasteryLevel(after)
 	if la > lb then
+		ProgressionService.RefreshTitle(player)
 		notify(player, "mastery_up", { characterId = characterId, level = la })
 		Log.debug(("[ProgressionService] %s: maestria %s nível %d (%s)"):format(player.Name, characterId, la, reason))
 	end
@@ -207,6 +238,7 @@ function ProgressionService.Init()
 	-- Conectado no Init para pegar perfis que carregam durante o Start dos outros services.
 	DataService.ProfileLoaded.Event:Connect(function(player: Player, profile: DataConfig.Profile, sessionOnly: boolean)
 		player:SetAttribute("Level", profile.level)
+		ProgressionService.RefreshTitle(player)
 		local changed = ensureMissions(player, profile)
 		if changed then
 			DataService.MarkDirty(player)

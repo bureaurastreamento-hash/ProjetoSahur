@@ -12,6 +12,8 @@ local BossConfig = {}
 BossConfig.Name = "Sahur Colossal"
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
 BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
+BossConfig.AutoSpawnMinutes = 12 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado)
+BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
 BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6
 BossConfig.ArenaRadius = 55 -- studs a partir de BossArena; fora disso o boss ignora/volta

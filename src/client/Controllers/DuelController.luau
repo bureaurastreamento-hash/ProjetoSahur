@@ -261,6 +261,9 @@ local function onNotifyDuel(event: string, data: any)
 		duelStatus.Visible = true
 		setStatus(("Em duelo (round %d, melhor de %d)."):format(round, (tonumber(data.roundsToWin) or 2) * 2 - 1))
 		FX.PlaySoundUI("Match", "RoundStart")
+	elseif event == "rating" then
+		local delta = tonumber(data.delta) or 0
+		setStatus(("Rating: %d (%s%d)"):format(tonumber(data.rating) or 0, if delta >= 0 then "+" else "", delta))
 	elseif event == "round_end" then
 		-- Placar da série entre rounds; o "end" vem logo depois quando a série fecha
 		timerEndsAt = nil

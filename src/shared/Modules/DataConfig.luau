@@ -41,6 +41,7 @@ export type Profile = {
 	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
 	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
 	mastery: { [string]: number }, -- characterId -> XP de maestria (ProgressionConfig.Mastery)
+	rating: number, -- Elo de duelo 1v1 (DuelConfig.RatingStart)
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -56,6 +57,7 @@ function DataConfig.DefaultProfile(): Profile
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},
+		rating = 1000,
 	}
 end
 

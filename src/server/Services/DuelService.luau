@@ -456,11 +456,34 @@ local function finishDuel(duel: Duel)
 		p.player:SetAttribute("CanFight", false)
 	end
 	local names = winnerNames(duel, duel.winnerTeam)
+	-- Elo (só 1v1 com vencedor): winner +K(1-E), loser -K·E
+	local ratingDelta: { [Player]: number } = {}
+	if #duel.participants == 2 and duel.winnerTeam and duel.winnerTeam >= 0 then
+		local a, b = duel.participants[1], duel.participants[2]
+		local pa, pb = DataService.GetProfile(a.player), DataService.GetProfile(b.player)
+		if pa and pb then
+			local ra, rb = pa.rating or DuelConfig.RatingStart, pb.rating or DuelConfig.RatingStart
+			local ea = 1 / (1 + 10 ^ ((rb - ra) / 400))
+			local sa = if a.teamId == duel.winnerTeam then 1 else 0
+			local da = math.floor(DuelConfig.RatingK * (sa - ea) + 0.5)
+			pa.rating = math.max(0, ra + da)
+			pb.rating = math.max(0, rb - da)
+			ratingDelta[a.player] = da
+			ratingDelta[b.player] = -da
+			DataService.MarkDirty(a.player)
+			DataService.MarkDirty(b.player)
+		end
+	end
 	for _, p in duel.participants do
 		if p.player.Parent == Players then
 			local won = duel.winnerTeam ~= nil and duel.winnerTeam >= 0 and p.teamId == duel.winnerTeam
 			DataService.RecordMatchResult(p.player, won, 0, false)
 			ProgressionService.OnDuelResult(p.player, won)
+			local delta = ratingDelta[p.player]
+			if delta then
+				local profile = DataService.GetProfile(p.player)
+				notify(p.player, "rating", { delta = delta, rating = if profile then profile.rating else 0 })
+			end
 		end
 	end
 	Log.debug(("[DuelService] duelo %d: %s (%d x %d)"):format(duel.id, if #names > 0 then "venceu " .. table.concat(names, ", ") else "empate", duel.wins[1] or 0, duel.wins[2] or 0))

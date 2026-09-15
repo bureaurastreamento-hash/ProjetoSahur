@@ -73,6 +73,9 @@ local function onNotifyBoss(event: string, data: any)
 			FX.SpawnVFX(model, "Boss", "Roar")
 			FX.PlaySoundAt(model, "Boss", "Roar")
 		end
+	elseif event == "warning" then
+		showBanner(("%s chega ao Santuário em %ds!"):format(tostring(data.name), tonumber(data.seconds) or 0), 4)
+		FX.PlaySoundUI("Match", "RoundStart")
 	elseif event == "enrage" then
 		-- combo estendido no boss: contorno vermelho + aviso; some quando acaba
 		local model = if typeof(data.model) == "Instance" and data.model:IsA("Model") then data.model :: Model else nil

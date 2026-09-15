@@ -52,6 +52,14 @@ function ProgressionConfig.MasteryLevel(xp: number): number
 	return math.min(ProgressionConfig.Mastery.MaxLevel, math.floor(xp / ProgressionConfig.Mastery.PerLevel) + 1)
 end
 
+-- Títulos (tag antes do nome; VIP tem prioridade): por nível ou maestria máxima em algum personagem.
+ProgressionConfig.Titles = {
+	{ Level = 40, Title = "Lenda" },
+	{ Level = 25, Title = "Elite" },
+	{ Level = 10, Title = "Veterano" },
+}
+ProgressionConfig.MasterTitle = "Mestre" -- maestria no máximo em algum personagem: "Mestre"
+
 ProgressionConfig.MissionsPerDay = 3
 local MissionPool: { MissionDef } = {
 	{ id = "kills10", kind = "kills", goal = 10, coins = 80, xp = 100, text = "Elimine %d jogadores" },
