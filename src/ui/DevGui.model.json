@@ -3690,6 +3690,73 @@
      ]
     },
     {
+     "name": "InspectBoss",
+     "className": "TextButton",
+     "properties": {
+      "Name": "InspectBoss",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         618
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Inspecionar BossModel",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
      "name": "Time",
      "className": "TextBox",
      "properties": {

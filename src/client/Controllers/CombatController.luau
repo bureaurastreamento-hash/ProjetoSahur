@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
 local CombatController = {}
 
@@ -297,6 +298,9 @@ end
 
 local function onNotifyCooldown(reason: string, seconds: number)
 	Log.debug(("[CombatController] cooldown: %s por %.2fs"):format(reason, seconds))
+	if reason == "hit" or reason == "grabbed" or reason == "parried" or reason == "guardbreak" or reason == "stunned" then
+		MovementController.CancelDash() -- levou golpe no meio do dash: o impulso para na hora
+	end
 	if (reason == "parried" or reason == "guardbreak") and blockHeld then
 		blockHeld = false -- servidor cancelou o block; fica em sincronia
 	end
@@ -322,6 +326,7 @@ local function onNotifyKnockback(direction: Vector3, speed: number, duration: nu
 	local character = localPlayer.Character
 	if character and typeof(direction) == "Vector3" then
 		local vertical = if typeof(up) == "number" then up else speed * 0.25
+		MovementController.CancelDash()
 		FX.Push(character, direction * speed + Vector3.new(0, vertical, 0), duration)
 		FX.Shake(0.5, 0.2)
 	end

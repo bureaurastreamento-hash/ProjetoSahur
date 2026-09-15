@@ -205,6 +205,10 @@ local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
 			jointed[d.Part0] = true
 			jointed[d.Part1] = true
 			isChild[d.Part1] = true
+		elseif (d:IsA("Weld") or d:IsA("WeldConstraint")) and d.Part0 and d.Part1 then
+			-- solda manual da equipe: a parte já está presa em algo, não soldar de novo
+			jointed[d.Part1] = true
+			isChild[d.Part1] = true
 		end
 	end
 	-- 3) raiz: HumanoidRootPart existente, senão a parte que é Part0 mas nunca Part1, senão a maior
@@ -314,8 +318,46 @@ local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
 	local cf2, size2 = model:GetBoundingBox()
 	local bottom = cf2.Position.Y - size2.Y / 2
 	humanoid.HipHeight = math.max(0, (root.Position.Y - root.Size.Y / 2) - bottom)
-	Log.debug(("[BossService] rig do boss: %d partes, %d Motor6D, %d soldadas, altura %.1f, HipHeight %.1f"):format(#parts, #motors, welded, size2.Y, humanoid.HipHeight))
+	print(("[BossService] rig do boss: %d partes, %d Motor6D, %d soldadas automaticamente, altura %.1f, HipHeight %.1f, raiz %s"):format(#parts, #motors, welded, size2.Y, humanoid.HipHeight, treeRoot and treeRoot.Name or "?"))
 	return model, humanoid, root
+end
+
+--- [Admin] Imprime no Output a estrutura do BossModel (template) e do rig montado.
+function BossService.Inspect(): string
+	local template = findModelTemplate()
+	if not template then
+		return "BossModel não encontrado (ServerStorage/ReplicatedStorage.Assets/Workspace) e asset não carregou"
+	end
+	print(("[Boss] template %s em %s"):format(template.Name, template:GetFullName()))
+	local hum = template:FindFirstChildOfClass("Humanoid")
+	print("[Boss] Humanoid:", hum and hum.RigType.Name or "NENHUM", "| HRP:", template:FindFirstChild("HumanoidRootPart", true) and "sim" or "NÃO")
+	local cf, size = template:GetBoundingBox()
+	print(("[Boss] bounding box %.1f x %.1f x %.1f em %s"):format(size.X, size.Y, size.Z, tostring(cf.Position)))
+	local jointed: { [Instance]: boolean } = {}
+	local parts, motors, welds = 0, 0, 0
+	for _, d in template:GetDescendants() do
+		if d:IsA("Motor6D") then
+			motors += 1
+			print(("  Motor6D %s: %s -> %s (em %s)"):format(d.Name, d.Part0 and d.Part0.Name or "?", d.Part1 and d.Part1.Name or "?", d.Parent and d.Parent.Name or "?"))
+			if d.Part0 then jointed[d.Part0] = true end
+			if d.Part1 then jointed[d.Part1] = true end
+		elseif d:IsA("Weld") or d:IsA("WeldConstraint") then
+			welds += 1
+			if d.Part1 then jointed[d.Part1] = true end
+		end
+	end
+	for _, d in template:GetDescendants() do
+		if d:IsA("BasePart") then
+			parts += 1
+			local flag = if jointed[d] then "" else "  (SEM junta: será soldada na mais próxima)"
+			print(("  %s [%s] %.1fx%.1fx%.1f anch=%s pai=%s%s"):format(d.Name, d.ClassName, d.Size.X, d.Size.Y, d.Size.Z, tostring(d.Anchored), d.Parent and d.Parent.Name or "?", flag))
+		end
+	end
+	local model = rigFromModel(template)
+	if model then
+		model:Destroy()
+	end
+	return ("%d partes, %d Motor6D, %d welds (detalhe no Output)"):format(parts, motors, welds)
 end
 
 local function buildBoss(): (Model?, Humanoid?, BasePart?)

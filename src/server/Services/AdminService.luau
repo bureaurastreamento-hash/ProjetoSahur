@@ -545,6 +545,10 @@ global.SummonBoss = function(admin)
 	return ok, if ok then "boss invocado" else ("não invocou: %s"):format(tostring(msg))
 end
 
+global.InspectBoss = function()
+	return true, BossService.Inspect()
+end
+
 global.DespawnBoss = function()
 	local ok = BossService.Despawn()
 	return true, if ok then "boss removido" else "não havia boss"

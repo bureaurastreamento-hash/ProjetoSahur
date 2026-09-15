@@ -49,7 +49,7 @@ local SIMPLE_COMMANDS = {
 	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteMissions",
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
-	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss",
+	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
 }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 

@@ -205,7 +205,8 @@ local requestDash: RemoteEvent
 local shiftLock = false -- (shift lock; seção abaixo) o dash restaura AutoRotate só se não estiver ligado
 local dashConn: RBXScriptConnection? = nil
 local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
-local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -2, 0) } -- cabeça, tronco, pés
+local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0) } -- cabeça, tronco (pés não: meio-fio/degrau o Humanoid sobe)
+local dashCleanup: (() -> ())? = nil -- encerra o dash em andamento (destrói o LinearVelocity)
 local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
 
 -- kind ("dash" | "cancel") -> { readyAt (GetServerTimeNow), total }
@@ -257,9 +258,8 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 		root.CFrame = CFrame.lookAt(root.Position, root.Position + keepFacing)
 	end
 
-	if dashConn then
-		dashConn:Disconnect()
-		dashConn = nil
+	if dashCleanup then
+		dashCleanup() -- dash anterior: destrói o LinearVelocity dele (antes ficava para sempre = "voando")
 	end
 	local attachment = Instance.new("Attachment")
 	attachment.Parent = root
@@ -283,6 +283,7 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 			dashConn:Disconnect()
 			dashConn = nil
 		end
+		dashCleanup = nil
 		lv:Destroy()
 		attachment:Destroy()
 		if keepFacing and humanoid and not shiftLock then
@@ -297,6 +298,7 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 			root.AssemblyLinearVelocity = Vector3.new(direction.X * walk, math.min(v.Y, 0), direction.Z * walk)
 		end
 	end
+	dashCleanup = finish
 	dashConn = RunService.Heartbeat:Connect(function(dt)
 		if os.clock() >= endsAt or lv.Parent == nil or root.Parent == nil or localPlayer:GetAttribute("Ragdolled") == true then
 			finish()
@@ -348,6 +350,13 @@ local function cameraLook(character: Model): Vector3
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local rl = if root then root.CFrame.LookVector else Vector3.new(0, 0, -1)
 	return Vector3.new(rl.X, 0, rl.Z).Unit
+end
+
+--- Encerra o dash em andamento (levou golpe, foi agarrado, caiu). Sem efeito se não há dash.
+function MovementController.CancelDash()
+	if dashCleanup then
+		dashCleanup()
+	end
 end
 
 --- Pede o dash universal (Q / botão de toque). Caído = ragdoll cancel.
@@ -411,10 +420,7 @@ local function onNotifyRagdoll(character: Model?, active: boolean, seconds: numb
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	if active then
 		stopAll()
-		if dashConn then
-			dashConn:Disconnect()
-			dashConn = nil
-		end
+		MovementController.CancelDash()
 		if humanoid then
 			humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 		end

@@ -420,9 +420,17 @@ function FX.Push(character: Model, velocity: Vector3, duration: number)
 	if not root then
 		return
 	end
+	-- um empurrão por vez: o anterior (e seu Attachment) sai antes de somar outro
+	for _, child in root:GetChildren() do
+		if child.Name == "FXPush" then
+			child:Destroy()
+		end
+	end
 	local attachment = Instance.new("Attachment")
+	attachment.Name = "FXPush"
 	attachment.Parent = root
 	local lv = Instance.new("LinearVelocity")
+	lv.Name = "FXPush"
 	lv.Attachment0 = attachment
 	lv.RelativeTo = Enum.ActuatorRelativeTo.World
 	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
@@ -430,8 +438,12 @@ function FX.Push(character: Model, velocity: Vector3, duration: number)
 	lv.VectorVelocity = velocity
 	lv.Parent = root
 	task.delay(duration, function()
-		lv:Destroy()
-		attachment:Destroy()
+		if lv.Parent then
+			lv:Destroy()
+		end
+		if attachment.Parent then
+			attachment:Destroy()
+		end
 	end)
 end
 
