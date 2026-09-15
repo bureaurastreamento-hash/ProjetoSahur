@@ -230,6 +230,15 @@ Feito nesta sessão, AINDA NÃO TESTADO no Studio:
    Roblox), VFX `Assets.VFXPack["Boss/..."]` (reaproveita efeitos já podados), sons `Sounds.Boss.*`
    (ids vazios) e shake perto do impacto. Boss e bonecos agora têm `Animator` (antes nenhuma
    animação tocava neles).
+7. **Movimento** (`MovementService`/`MovementController`, `CombatConfig.Sprint/Dash`): **correr**
+   segurando Shift (WalkSpeed 24, não enquanto bloqueia; block ao soltar volta para a corrida) e
+   **dash** com Ctrl esquerdo (65 studs/s por 0,22 s, recarga 2,5 s, na direção do movimento; servidor
+   autoriza e manda `NotifyDash`, rastro em todos). Mobile: botões DASH e CORRER (toggle) acima do
+   joystick. Ajuda (Controles) atualizada.
+8. **Animações da equipe ligadas**: `Animations.Shared.{Idle,Walk,Run,Dash}` com os ids recebidos em
+   2026-09-15 (Parado/Andando/Correndo/Dash frontal). O `MovementController` troca os ids do script
+   `Animate` padrão (idle/walk/run) ao spawnar; correndo usa Run. Dash toca `Shared/Dash`.
+   Se a animação não tocar: conferir que os ids foram publicados na conta dona do jogo (ou no grupo).
 Pendências do dono:
 - Apagar o "menu Example" que aparece no topo: não está no nosso código (grep em `src/` não acha);
   é algo dentro do place (procurar "Example" no Explorer: StarterGui / StarterPlayerScripts /
@@ -241,6 +250,8 @@ Próximo passo de código: testar tudo acima; depois loja/cosméticos (títulos 
 lançamento (item 9). Ids reais de animação/som do boss quando a arte publicar.
 
 ## Em andamento
+- 2026-09-15 — **Movimento** (correr/dash) + animações de movimento da equipe. FALTA TESTAR: Shift
+  corre (anim Run), Ctrl dá dash (anim Dash + rastro), dash negado bloqueando/atordoado, recarga.
 - 2026-09-15 — **Progressão** (item 6): ver "Retomar aqui" (XP/nível, diária, missões). FALTA TESTAR.
   Balancear valores em `ProgressionConfig.luau`. Ideia seguinte: títulos/cores de nome por nível.
 - 2026-09-15 — Boss com evento `attack` (anim/VFX/som por nome) + Animator nos NPCs. FALTA TESTAR.

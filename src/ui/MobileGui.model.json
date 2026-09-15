@@ -456,6 +456,178 @@
        }
       }
      ]
+    },
+    {
+     "name": "Dash",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Dash",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         64
+        ],
+        [
+         0,
+         64
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         150
+        ],
+        [
+         1,
+         -140
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.35,
+        0.6,
+        0.85
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "DASH",
+      "TextSize": 15,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Sprint",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Sprint",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         64
+        ],
+        [
+         0,
+         64
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         224
+        ],
+        [
+         1,
+         -140
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.3,
+        0.3,
+        0.38
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "CORRER",
+      "TextSize": 13,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
     }
    ]
   }

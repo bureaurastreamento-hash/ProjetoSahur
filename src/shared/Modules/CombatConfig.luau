@@ -44,7 +44,17 @@ CombatConfig.Block = {
 	Cooldown = 0.4, -- tempo mínimo entre soltar e voltar a bloquear (evita spam de parry)
 }
 
+-- Movimento (MovementService/MovementController)
+CombatConfig.Sprint = {
+	Speed = 24, -- WalkSpeed correndo (Shift segurado); AntiExploit tolera WalkSpeed * 1.6
+}
+CombatConfig.Dash = {
+	Speed = 65,
+	Duration = 0.22,
+	Cooldown = 2.5, -- s entre dashes
+}
+
 -- Animações são buscadas por NOME em ReplicatedStorage.Assets.Animations.Shared
--- (ver Assets.luau): M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit
+-- (ver Assets.luau): M1_1, M1_2, M1_3, M1_4, Block, Parry, Hit, Idle, Walk, Run, Dash
 
 return CombatConfig

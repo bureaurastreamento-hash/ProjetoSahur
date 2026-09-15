@@ -74,6 +74,46 @@
      "attributes": {
       "R15Id": "rbxassetid://507767968"
      }
+    },
+    {
+     "name": "Idle",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://115646583689048"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "Walk",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://72750715106225"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "Run",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://72974351110053"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "Dash",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://135221133424050"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
     }
    ]
   },

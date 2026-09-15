@@ -105,7 +105,8 @@ local function setBlocking(player: Player, active: boolean)
 		state.blocking = false
 		state.blockReleased = now
 		if humanoid then
-			humanoid.WalkSpeed = CombatConfig.WalkSpeed
+			-- correndo (MovementService) volta para a velocidade de corrida
+			humanoid.WalkSpeed = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
 		end
 	end
 
@@ -131,6 +132,10 @@ function CombatService.Stun(player: Player, seconds: number, reason: string)
 		setBlocking(player, false)
 	end
 	notifyCooldown:FireClient(player, reason, seconds)
+end
+
+function CombatService.IsBlocking(player: Player): boolean
+	return getState(player).blocking
 end
 
 function CombatService.IsStunned(player: Player): boolean

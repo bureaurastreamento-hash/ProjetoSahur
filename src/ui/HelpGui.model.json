@@ -137,7 +137,7 @@
               ]
             },
             "BackgroundTransparency": 1,
-            "Text": "SOCO \u2014 Bot\u00e3o esquerdo do mouse (combo de 4; o 4\u00ba empurra)\nBLOQUEAR \u2014 Segurar F (reduz o dano em 70%)\nPARRY \u2014 Apertar F at\u00e9 0,2 s antes de levar o golpe (atordoa o oponente)\nHABILIDADES \u2014 Q / E / R (R \u00e9 a ultimate, precisa de 100 de energia)\nENERGIA \u2014 ganha ao dar (+6) e receber (+4) golpes\nVIDA \u2014 regenera 3/s ap\u00f3s 6 s sem tomar dano\nPERSONAGEM \u2014 V ou o \u00edcone no topo; troque a qualquer momento\nPLACAR \u2014 Tab \u2022 PERFIL \u2014 P \u2022 DUELO 1v1 \u2014 J (Y aceita / N recusa)\nBOSS \u2014 segure E no altar ao sul da pra\u00e7a; anel vermelho = saia da \u00e1rea\nGamepad: R1 soco, L1 block, X/Y/B habilidades",
+            "Text": "SOCO \u2014 Bot\u00e3o esquerdo do mouse (combo de 4; o 4\u00ba empurra)\nBLOQUEAR \u2014 Segurar F (reduz o dano em 70%)\nCORRER \u2014 Segurar Shift \u2022 DASH \u2014 Ctrl (2,5 s de recarga)\nPARRY \u2014 Apertar F at\u00e9 0,2 s antes de levar o golpe (atordoa o oponente)\nHABILIDADES \u2014 Q / E / R (R \u00e9 a ultimate, precisa de 100 de energia)\nENERGIA \u2014 ganha ao dar (+6) e receber (+4) golpes\nVIDA \u2014 regenera 3/s ap\u00f3s 6 s sem tomar dano\nPERSONAGEM \u2014 V ou o \u00edcone no topo; troque a qualquer momento\nPLACAR \u2014 Tab \u2022 PERFIL \u2014 P \u2022 DUELO 1v1 \u2014 J (Y aceita / N recusa)\nBOSS \u2014 segure E no altar ao sul da pra\u00e7a; anel vermelho = saia da \u00e1rea\nGamepad: R1 soco, L1 block, X/Y/B habilidades",
             "TextSize": 14,
             "Font": "Gotham",
             "TextColor3": {

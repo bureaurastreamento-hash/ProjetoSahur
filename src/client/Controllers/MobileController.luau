@@ -15,6 +15,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Log = require(Modules:WaitForChild("Log"))
 local CombatController = require(script.Parent:WaitForChild("CombatController"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
+local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
 local MobileController = {}
 
@@ -48,6 +49,22 @@ end
 function MobileController.Start()
 	local attack = get(root, "Attack") :: TextButton
 	local block = get(root, "Block") :: TextButton
+	local dash = get(root, "Dash") :: TextButton
+	local sprint = get(root, "Sprint") :: TextButton
+
+	dash.MouseButton1Down:Connect(function()
+		MovementController.Dash()
+	end)
+	local sprintOn = false
+	sprint.MouseButton1Click:Connect(function()
+		sprintOn = not sprintOn
+		MovementController.SetSprint(sprintOn)
+		sprint.BackgroundColor3 = if sprintOn then Color3.fromRGB(70, 160, 100) else Color3.fromRGB(77, 77, 97)
+	end)
+	localPlayer.CharacterAdded:Connect(function()
+		sprintOn = false
+		sprint.BackgroundColor3 = Color3.fromRGB(77, 77, 97)
+	end)
 
 	attack.MouseButton1Down:Connect(function()
 		CombatController.Attack()
