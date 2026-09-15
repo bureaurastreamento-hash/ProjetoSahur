@@ -5,6 +5,8 @@
 	Todos os números de balanceamento ficam aqui. Servidor autoritativo (BossService).
 ]]
 
+local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
+
 local BossConfig = {}
 
 BossConfig.Name = "Sahur Colossal"
@@ -30,7 +32,7 @@ export type Attack = {
 	MinRange: number?, -- só usa se o alvo estiver a pelo menos isso (Charge/Leap)
 	Radius: number, -- área do dano (esfera no boss ou ponto)
 	Cooldown: number,
-	Knockback: { Speed: number, Duration: number, Ragdoll: number? }?, -- Ragdoll = segundos caído (ragdoll de combate)
+	Knockback: CombatConfig.Knockback?, -- Ragdoll = segundos caído (ragdoll de combate)
 	StunSeconds: number?, -- Roar: atordoa quem for atingido
 	Phase: number?, -- só a partir desta fase (nil = sempre)
 	Weight: number?, -- peso na escolha aleatória entre os golpes prontos (nil = 1)

@@ -25,6 +25,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
@@ -177,11 +178,26 @@ local function updateCooldowns()
 	local now = Workspace:GetServerTimeNow()
 	local cooldowns = AbilityController.GetCooldowns()
 	local characterId = localPlayer:GetAttribute("CharacterId")
+	local awakenedUntil = localPlayer:GetAttribute("AwakenedUntil")
+	local awakened = typeof(awakenedUntil) == "number" and awakenedUntil > now
 	for i, slot in slots do
 		local cd = cooldowns[i]
 		local remaining = if cd then cd.readyAt - now else 0
 		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i) else nil
-		setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
+		if ability and ability.EnergyCost >= CharacterDefs.Energy.Max and not awakened then
+			-- Ultimate trancada fora do Awakening: overlay cheio com a tecla que destranca
+			local overlay = slot:FindFirstChild("Cooldown") :: Frame
+			local text = slot:FindFirstChild("CooldownText") :: TextLabel
+			overlay.Size = UDim2.fromScale(1, 1)
+			text.Text = "G"
+		else
+			setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
+		end
+	end
+	-- Awakening: a barra da ult vira contagem regressiva dourada
+	if awakened then
+		energyFill.Size = UDim2.fromScale(math.clamp((awakenedUntil - now) / CombatConfig.Awakening.Duration, 0, 1), 1)
+		energyText.Text = ("DESPERTO %ds"):format(math.ceil(awakenedUntil - now))
 	end
 	-- Dash universal (Q): caído mostra o cooldown do ragdoll cancel
 	local dashCds = MovementController.GetDashCooldowns()
@@ -629,6 +645,10 @@ function HUDController.Start()
 	local ultPulse: Tween? = nil
 	local wasFull = false
 	local function refreshEnergy()
+		local untilT = localPlayer:GetAttribute("AwakenedUntil")
+		if typeof(untilT) == "number" and untilT > Workspace:GetServerTimeNow() then
+			return -- no Awakening a barra é a contagem regressiva (updateCooldowns)
+		end
 		local e = localPlayer:GetAttribute("Energy")
 		local energy = if typeof(e) == "number" then e else 0
 		setBar(energyFill, energyText, energy, CharacterDefs.Energy.Max)
@@ -643,7 +663,7 @@ function HUDController.Start()
 			local ultSlot = ultSlotIndex()
 			flashSlot(ultSlot, ULT_COLOR)
 			FX.PlaySoundUI("Shared", "UltReady")
-			showBanner(("ULT PRONTA — %s"):format(SLOT_KEYS[ultSlot] or "?"), 1.5)
+			showBanner("ULT PRONTA — G para despertar", 1.5)
 		elseif not full and wasFull then
 			if ultPulse then
 				ultPulse:Cancel()
@@ -655,6 +675,17 @@ function HUDController.Start()
 		wasFull = full
 	end
 	localPlayer:GetAttributeChangedSignal("Energy"):Connect(refreshEnergy)
+	localPlayer:GetAttributeChangedSignal("AwakenedUntil"):Connect(function()
+		local untilT = localPlayer:GetAttribute("AwakenedUntil")
+		if typeof(untilT) == "number" and untilT > Workspace:GetServerTimeNow() then
+			energyFill.BackgroundColor3 = ULT_COLOR
+			showBanner(("DESPERTAR! %ds — T liberado"):format(CombatConfig.Awakening.Duration), 2)
+		else
+			energyFill.BackgroundColor3 = ENERGY_COLOR
+			refreshEnergy()
+		end
+		updateCooldowns()
+	end)
 	localPlayer:GetAttributeChangedSignal("CharacterId"):Connect(function()
 		refreshSlots()
 		refreshMatchUI()

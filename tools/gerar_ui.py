@@ -277,20 +277,23 @@ write("ProfileGui.model.json", profile)
 # Controles
 # =============================================================================
 HELP = "\n".join([
-    "SOCO — botão esquerdo do mouse (combo de 4; o 4º empurra)",
-    "BLOQUEAR — segurar F (−70% de dano) · PARRY — apertar F até 0,2 s antes do golpe",
+    "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático",
+    "UPPERCUT — pular e socar subindo (levanta o alvo com você) · DOWNSLAM — socar caindo (ignora block, esmaga)",
+    "BLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe",
+    "PARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)",
     "CORRER — automático ao andar para a frente (W)",
     "SHIFT LOCK — Shift",
     "DASH — Q (segue o WASD; lados/trás 2 s, frente 4,5 s; sai até durante o hitstun)",
     "CAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)",
-    "HABILIDADES — E · R por cooldown · T = ULTIMATE (precisa da carga cheia)",
-    "CARGA DA ULT — enche ao dar (+6) e receber (+4) golpes · VIDA — regenera após 6 s sem dano",
+    "HABILIDADES — E · R por cooldown · G = DESPERTAR com a carga cheia (20 s: +30% dano, +10% vel.)",
+    "T = ULTIMATE — só durante o Despertar · CARGA — dar golpe +6, receber +4, parry +10",
+    "VIDA — regenera após 6 s sem dano",
     "PERSONAGENS — V · LOJA — B · PERFIL — P · PLACAR — Tab · DUELO — J (Y aceita / N recusa)",
     "BOSS — segure E no altar; anel vermelho = saia da área",
-    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades",
+    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 despertar",
 ])
 helpgui = screen("HelpGui", [
-    panel("Panel", 620, 330, "Controles", [
+    panel("Panel", 640, 380, "Controles", [
         label("Body", HELP, ud(1, 0, 1, -30), ud(0, 0, 0, 30), ts=13, yalign="Top",
               extra={"TextWrapped": True, "LineHeight": 1.35}),
     ]),

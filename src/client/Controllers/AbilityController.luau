@@ -2,6 +2,7 @@
 --[[
 	AbilityController (cliente)
 	  - E / R / T (ou Gamepad Y / B / R2) -> RequestAbility(1 / 2 / 3, direção)
+	  - G (ou Gamepad L2) -> RequestAwaken (Awakening com a carga cheia; libera o T por 20 s)
 	  (Q é o dash universal: MovementController.)
 	Não decide nada: cooldown mostrado é o que o servidor informou.
 	Direção: a do WASD/analógico no momento (ou a frente do personagem se parado). Serve para
@@ -48,7 +49,12 @@ local function trailColor(characterId: string): Color3
 	return if def and def.Color then def.Color else TRAIL_DEFAULT
 end
 
+local AWAKEN_KEY = Enum.KeyCode.G
+local AWAKEN_GAMEPAD = Enum.KeyCode.ButtonL2
+local AWAKEN_COLOR = Color3.fromRGB(255, 200, 70)
+
 local requestAbility: RemoteEvent
+local requestAwaken: RemoteEvent
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 
 AbilityController.CooldownChanged = Instance.new("BindableEvent")
@@ -62,6 +68,24 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		return
 	end
 	local at: Vector3? = if typeof(data) == "table" and typeof(data.Position) == "Vector3" then data.Position else nil
+	if abilityId == "Awakening" then
+		-- Modo: aura que segue o personagem (VFX.<Char>.Awakening ou Shared.Awakening) + contorno dourado
+		if phase == "start" then
+			FX.PlayAnimation(character, characterId, "Awakening")
+			FX.SpawnVFX(character, characterId, "Awakening", false)
+			if not FX.PlaySoundAt(character, characterId, "Awakening") then
+				FX.PlaySoundAt(character, "Shared", "Awakening")
+			end
+			FX.SetOutline(character, AWAKEN_COLOR)
+			FX.Flash(character, AWAKEN_COLOR, 0.4)
+			if character == localPlayer.Character then
+				FX.Shake(0.7, 0.4)
+			end
+		else
+			FX.SetOutline(character, nil)
+		end
+		return
+	end
 	if phase == "start" then
 		FX.PlayAnimation(character, characterId, abilityId)
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
@@ -105,7 +129,14 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	local slot = SLOT_KEYS[input.KeyCode]
 	if slot then
 		AbilityController.Use(slot)
+	elseif input.KeyCode == AWAKEN_KEY or input.KeyCode == AWAKEN_GAMEPAD then
+		AbilityController.Awaken()
 	end
+end
+
+--- Pede o Awakening (G / botão de toque). O servidor confere a carga.
+function AbilityController.Awaken()
+	requestAwaken:FireServer()
 end
 
 --- Pede a habilidade do slot ao servidor (teclado, gamepad ou botão de toque).
@@ -125,6 +156,7 @@ end
 
 function AbilityController.Init()
 	requestAbility = Remotes.GetEvent(Remotes.Events.RequestAbility)
+	requestAwaken = Remotes.GetEvent(Remotes.Events.RequestAwaken)
 end
 
 function AbilityController.Start()
@@ -150,7 +182,7 @@ function AbilityController.Start()
 		table.clear(cooldowns)
 	end)
 
-	Log.debug("[AbilityController] pronto. E/R/T = habilidades (direção pelo WASD)")
+	Log.debug("[AbilityController] pronto. E/R/T = habilidades (direção pelo WASD), G = Awakening")
 end
 
 return AbilityController

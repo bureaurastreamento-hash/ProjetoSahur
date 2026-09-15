@@ -36,6 +36,7 @@ root = {"name": "Root", "className": "Frame", "properties": {
     button("Slot1", "E", 56, udim2(1, -206, 1, -104), [0.25, 0.25, 0.32]),
     button("Slot2", "R", 56, udim2(1, -140, 1, -150), [0.25, 0.25, 0.32]),
     button("Slot3", "T", 62, udim2(1, -60, 1, -160), [0.6, 0.45, 0.15]),
+    button("Awaken", "G", 48, udim2(1, -128, 1, -236), [0.75, 0.6, 0.2], 16),
     # correr (toggle) no canto inferior esquerdo, acima do joystick
     button("Sprint", "CORRER", 64, udim2(0, 150, 1, -140), [0.3, 0.3, 0.38], 13),
 ]}

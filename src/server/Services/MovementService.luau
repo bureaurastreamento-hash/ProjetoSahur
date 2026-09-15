@@ -126,10 +126,8 @@ local function setSprint(player: Player, active: boolean)
 	if player:GetAttribute("DevSpeed") ~= nil then
 		return -- só anima; a velocidade é do menu dev
 	end
-	if CombatService.IsBlocking(player) then
-		return -- block manda na velocidade; ao soltar, CombatService lê o atributo
-	end
-	humanoid.WalkSpeed = if active then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
+	-- CombatService decide a velocidade final (block > hitstun > corrida) × buff do Awakening
+	CombatService.RestoreWalkSpeed(player)
 end
 
 local function onRequestSprint(player: Player, active: any)

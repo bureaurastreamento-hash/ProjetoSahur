@@ -112,12 +112,16 @@ Assets.VFXPack = {
 	["Shared/Stun"] = { Path = "Packs/OfficialJJS/Damage/Dizzy", Follow = true, Lifetime = 1.2 },
 	["Shared/Ragdoll"] = { Path = "Packs/OfficialJJS/Damage/RagdollWind", Follow = true, Lifetime = 1.5 },
 	["Shared/Dash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash", -- dash universal (Q)
+	["Shared/Crit"] = "Packs/OfficialJJS/Todo/HeavyHit", -- crítico do parry
+	["Shared/BlackFlash"] = { Path = "Packs/OfficialJJS/Hakari/RoughImpact", Lifetime = 1.5 }, -- 2º crítico seguido
+	["Shared/Awakening"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 20 }, -- aura do modo (G)
 	["Shared/RagdollCancel"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact", -- Q caído: levantou
 	["Brawler/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
 	["Brawler/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
 	["Brawler/GroundSlam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
 	["Brawler/GroundSlam_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
-	["Brawler/Rampage"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 8 },
+	["Brawler/Rampage"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Brawler/Rampage_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
 	["Swift/Blink"] = "Packs/OfficialJJS/Gojo/Teleport",
 	["Swift/SweepKick"] = "Packs/ShadowBattlegroundsfull/ShadowFist/Skick1",
 	["Swift/SweepKick_Hit"] = "Packs/ShadowBattlegroundsfull/Garou/punchhit",

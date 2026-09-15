@@ -19,10 +19,10 @@ local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 
+local CombatService = {}
+
 -- AbilityService depende deste módulo; é carregado tardiamente em Start() para evitar ciclo.
 local AbilityService: any = nil
-
-local CombatService = {}
 
 type PlayerState = {
 	wantBlock: boolean, -- jogador está segurando o botão de block
@@ -37,6 +37,9 @@ type PlayerState = {
 	guard: number, -- guarda restante (CombatConfig.Block.GuardMax)
 	guardHitAt: number, -- último golpe bloqueado (regen começa GuardRegenDelay depois)
 	hitStunUntil: number,
+	critUntil: number, -- parryou: próximo M1 até aqui é crítico
+	critArmedUntil: number, -- 1º crítico saiu: parry+crítico até aqui = Black Flash
+	lastRagdollHitAt: number, -- (vítima) último downslam que derrubou (RagdollOnce)
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -71,10 +74,14 @@ local function newState(): PlayerState
 		guard = CombatConfig.Block.GuardMax,
 		guardHitAt = -math.huge,
 		hitStunUntil = 0,
+		critUntil = 0,
+		critArmedUntil = 0,
+		lastRagdollHitAt = -math.huge,
 	}
 end
 
---- WalkSpeed "certa" para o estado atual (block > hitstun > corrida > normal). DevSpeed manda.
+--- WalkSpeed "certa" para o estado atual (block > hitstun > corrida > normal) × buff de velocidade
+--- (Awakening). DevSpeed manda. Público: MovementService (corrida) e AbilityService (awakening) chamam.
 local function restoreWalkSpeed(player: Player)
 	local state = states[player]
 	local character = player.Character
@@ -82,14 +89,17 @@ local function restoreWalkSpeed(player: Player)
 	if not state or not humanoid or player:GetAttribute("DevSpeed") ~= nil then
 		return
 	end
+	local mult = if AbilityService then AbilityService.GetSpeedMultiplier(player) else 1
 	if state.blocking then
 		humanoid.WalkSpeed = CombatConfig.Block.WalkSpeed
 	elseif os.clock() < state.hitStunUntil then
 		humanoid.WalkSpeed = CombatConfig.HitStun.WalkSpeed
 	else
-		humanoid.WalkSpeed = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
+		local base = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
+		humanoid.WalkSpeed = base * mult
 	end
 end
+CombatService.RestoreWalkSpeed = restoreWalkSpeed
 
 --- Guarda atual com a regeneração aplicada preguiçosamente.
 local function currentGuard(state: PlayerState): number
@@ -127,7 +137,7 @@ local function setBlocking(player: Player, active: boolean)
 
 	local now = os.clock()
 	if active then
-		local readyAt = math.max(state.blockReleased + CombatConfig.Block.Cooldown, state.stunnedUntil)
+		local readyAt = math.max(state.blockReleased + CombatConfig.Block.Cooldown, state.stunnedUntil, state.lastAttackAt + CombatConfig.Block.LockoutAfterAttack)
 		if now < readyAt then
 			-- Ainda em cooldown/stun: ativa sozinho quando liberar, se o botão continuar pressionado
 			task.delay(readyAt - now + 0.01, tryActivateBlock, player)
@@ -221,8 +231,8 @@ end
 --- Usado pelos socos e pelas habilidades (AbilityService).
 --- Empurra a vítima para longe do atacante (aplicado no cliente dono da física). Com
 --- `ragdollSeconds` a vítima também cai em ragdoll de combate (RagdollService) e perde o block.
-export type Knockback = { Speed: number, Duration: number, Ragdoll: number? }
-function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number, ragdollSeconds: number?)
+export type Knockback = CombatConfig.Knockback
+function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number, ragdollSeconds: number?, up: number?)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -240,13 +250,41 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	if AntiExploitService then
 		AntiExploitService.Grace(victimPlayer, duration + (ragdollSeconds or 0) + 0.5)
 	end
-	notifyKnockback:FireClient(victimPlayer, direction, speed, duration)
+	notifyKnockback:FireClient(victimPlayer, direction, speed, duration, up)
 end
 
-function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?, knockback: Knockback?)
+--- Block só cobre a frente: golpe vindo de trás (dot < FrontDot) entra como se não bloqueasse.
+local function blockCovers(victim: Model, attackerChar: Model): boolean
+	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not vRoot or not aRoot then
+		return true
+	end
+	local toAttacker = aRoot.Position - vRoot.Position
+	toAttacker = Vector3.new(toAttacker.X, 0, toAttacker.Z)
+	if toAttacker.Magnitude < 0.1 then
+		return true
+	end
+	local look = vRoot.CFrame.LookVector
+	return Vector3.new(look.X, 0, look.Z).Unit:Dot(toAttacker.Unit) >= CombatConfig.Block.FrontDot
+end
+
+export type HitOptions = {
+	IsM1: boolean?, -- soco: consome o crítico do parry
+	BreaksBlock: boolean?, -- ignora o block (quem bloqueia toma guard break)
+	RagdollOnce: boolean?, -- não derruba de novo quem já está caído (downslam)
+}
+
+--- Resolve um acerto contra `victim` considerando block (só frontal)/parry/crítico e buffs.
+--- Retorna o `kind` ("hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash").
+--- Usado pelos socos e pelas habilidades (AbilityService).
+function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim: Model, damage: number, allowParry: boolean?, knockback: Knockback?, options: HitOptions?): string
+	local opts: HitOptions = options or {}
+	local attackerState = getState(attacker)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local victimState = victimPlayer and states[victimPlayer]
 	local kind = "hit"
+	local now = os.clock()
 	if AbilityService then
 		damage *= AbilityService.GetDamageMultiplier(attacker)
 		if victimPlayer then
@@ -257,21 +295,49 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	if typeof(devMult) == "number" then
 		damage *= devMult -- menu de desenvolvedor
 	end
+
+	-- Crítico do parry (só M1): ×3, ou Black Flash ×6 se for o 2º crítico seguido
+	local critKind: string? = nil
+	if opts.IsM1 and now < attackerState.critUntil then
+		local cfg = CombatConfig.Critical
+		if now < attackerState.critArmedUntil then
+			critKind = "blackflash"
+			damage *= cfg.BlackFlashMultiplier
+			attackerState.critArmedUntil = 0
+		else
+			critKind = "crit"
+			damage *= cfg.Multiplier
+			attackerState.critArmedUntil = now + cfg.ChainWindow
+		end
+		attackerState.critUntil = 0
+	elseif opts.IsM1 then
+		attackerState.critArmedUntil = 0 -- soco normal no meio quebra a corrente do Black Flash
+	end
 	local finalDamage = damage
 
-	if victimState and victimState.blocking and victimPlayer then
-		local blockAge = os.clock() - victimState.blockStart
-		if allowParry ~= false and blockAge <= CombatConfig.Block.ParryWindow then
+	if victimState and victimState.blocking and victimPlayer and blockCovers(victim, attackerChar) then
+		local blockAge = now - victimState.blockStart
+		if opts.BreaksBlock then
+			-- Block breaker (downslam, habilidades marcadas): quem bloqueia toma guard break
+			kind = "guardbreak"
+			victimState.guard = CombatConfig.Block.GuardMax
+			victimState.wantBlock = false
+			CombatService.Stun(victimPlayer, CombatConfig.Block.GuardBreakStun, "guardbreak")
+		elseif allowParry ~= false and blockAge <= CombatConfig.Block.ParryWindow then
 			kind = "parry"
 			finalDamage = 0
 			CombatService.Stun(attacker, CombatConfig.Block.ParryStun, "parried")
+			victimState.critUntil = now + CombatConfig.Critical.Window
+			if AbilityService then
+				AbilityService.OnParry(victimPlayer)
+			end
+			notifyCooldown:FireClient(victimPlayer, "crit_ready", CombatConfig.Critical.Window)
 		else
 			local guard = currentGuard(victimState) - damage
-			victimState.guardHitAt = os.clock()
+			victimState.guardHitAt = now
 			if guard <= 0 then
 				-- Guard break: o golpe entra cheio, block cai e a vítima fica atordoada
 				kind = "guardbreak"
-				finalDamage = damage
 				victimState.guard = CombatConfig.Block.GuardMax
 				victimState.wantBlock = false
 				CombatService.Stun(victimPlayer, CombatConfig.Block.GuardBreakStun, "guardbreak")
@@ -290,6 +356,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			AbilityService.OnHitDealt(attacker, victimPlayer)
 		end
 	end
+	if kind == "hit" and critKind and dealt > 0 then
+		kind = critKind
+	end
 
 	-- Finisher: 4º golpe (tem knockback) em alvo com pouca vida ou que morreu no golpe
 	local kb = knockback
@@ -301,15 +370,21 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			kb = CombatConfig.Finisher.Knockback
 		end
 	end
-	if kind == "hit" and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
+	local landed = kind == "hit" or kind == "finisher" or kind == "crit" or kind == "blackflash"
+	if landed and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
 		CombatService.HitStun(victimPlayer)
 	end
 
 	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
-	if kb and (kind == "hit" or kind == "finisher") and HealthService.IsAlive(victim) then
-		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, kb.Ragdoll)
+	if kb and (landed or kind == "guardbreak") and HealthService.IsAlive(victim) then
+		local ragdoll = kb.Ragdoll
+		if ragdoll and opts.RagdollOnce and victimPlayer and RagdollService.IsRagdolled(victimPlayer) then
+			ragdoll = nil -- downslam em quem já está no chão: só o dano
+		end
+		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, ragdoll, kb.Up)
 	end
+	return kind
 end
 
 --- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
@@ -320,7 +395,7 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	if victimPlayer and AbilityService then
 		damage *= AbilityService.GetIncomingMultiplier(victimPlayer)
 	end
-	if victimState and victimState.blocking then
+	if victimState and victimState.blocking and blockCovers(victim, attackerChar) then
 		kind = "blocked"
 		damage *= CombatConfig.Block.DamageMultiplier
 	end
@@ -333,9 +408,21 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	end
 	notifyDamage:FireAllClients(attackerChar, victim, dealt, kind)
 	if knockback and kind == "hit" and HealthService.IsAlive(victim) then
-		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration, knockback.Ragdoll)
+		CombatService.Knockback(attackerChar, victim, knockback.Speed, knockback.Duration, knockback.Ragdoll, knockback.Up)
 	end
 	return dealt
+end
+
+--- "ground" | "rising" | "falling" (mesma regra do cliente: CombatConfig.AirRisingSpeed)
+local function airState(character: Model, humanoid: Humanoid): string
+	local st = humanoid:GetState()
+	local airborne = st == Enum.HumanoidStateType.Freefall or st == Enum.HumanoidStateType.Jumping or humanoid.FloorMaterial == Enum.Material.Air
+	if not airborne then
+		return "ground"
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local vy = if root then root.AssemblyLinearVelocity.Y else 0
+	return (if vy > CombatConfig.AirRisingSpeed then "rising" else "falling") :: string
 end
 
 local function onRequestAttack(player: Player, attackId: any)
@@ -355,13 +442,20 @@ local function onRequestAttack(player: Player, attackId: any)
 	end
 
 	local character = player.Character
-	if not character or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not character or not humanoid or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
 		return
 	end
 
 	local now = os.clock()
 	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) then
 		return -- em cooldown/stun/ragdoll: ignorado silenciosamente
+	end
+	-- Downslam só caindo; uppercut só subindo (o cliente escolhe, o servidor confere)
+	local air = airState(character, humanoid)
+	local falling, rising = air == "falling", air == "rising"
+	if (attackCfg.RequiresFalling and not falling) or (attackCfg.RequiresRising and not rising) then
+		return
 	end
 
 	-- Atacar cancela o block (e a intenção; o jogador precisa apertar F de novo)
@@ -370,17 +464,31 @@ local function onRequestAttack(player: Player, attackId: any)
 		setBlocking(player, false)
 	end
 
-	-- Combo
-	if now - state.lastAttackAt > attackCfg.ComboResetTime then
+	-- Combo (só o M1 tem); downslam/uppercut zeram o combo e têm espera própria
+	local comboIndex = 1
+	local isM1 = attackId == "M1"
+	local damage: number
+	local knockback: Knockback? = nil
+	local isFinisher = false
+	if isM1 then
+		if now - state.lastAttackAt > attackCfg.ComboResetTime then
+			state.combo = 1
+		end
+		comboIndex = state.combo
+		isFinisher = comboIndex >= attackCfg.ComboLength
+		damage = attackCfg.ComboDamage[comboIndex] or attackCfg.ComboDamage[#attackCfg.ComboDamage]
+		state.nextAttackAt = now + (if isFinisher then attackCfg.ComboEndCooldown else attackCfg.Cooldown)
+		state.combo = if isFinisher then 1 else comboIndex + 1
+		if isFinisher then
+			knockback = attackCfg.FinisherKnockback
+		end
+	else
+		damage = attackCfg.Damage
+		knockback = attackCfg.Knockback
 		state.combo = 1
+		state.nextAttackAt = now + attackCfg.Cooldown
 	end
-	local comboIndex = state.combo
-	local isFinisher = comboIndex >= attackCfg.ComboLength
-	local damage = if isFinisher then attackCfg.FinisherDamage else attackCfg.Damage
-
 	state.lastAttackAt = now
-	state.nextAttackAt = now + (if isFinisher then attackCfg.ComboEndCooldown else attackCfg.Cooldown)
-	state.combo = if isFinisher then 1 else comboIndex + 1
 
 	notifyAttack:FireAllClients(character, attackId, comboIndex)
 
@@ -392,8 +500,21 @@ local function onRequestAttack(player: Player, attackId: any)
 		if os.clock() < state.stunnedUntil then
 			return -- foi parryado/stunado durante o wind-up
 		end
+		local blocked = false
 		for _, victim in Hitbox.InFront(character, attackCfg.Range, attackCfg.Width, attackCfg.Height, attackCfg.MaxTargets) do
-			CombatService.ResolveHit(player, character, victim, damage, nil, if isFinisher then attackCfg.FinisherKnockback else nil)
+			local kind = CombatService.ResolveHit(player, character, victim, damage, nil, knockback, {
+				IsM1 = isM1,
+				BreaksBlock = attackCfg.BreaksBlock == true,
+				RagdollOnce = attackCfg.RagdollOnce == true,
+			})
+			if kind == "blocked" then
+				blocked = true
+			end
+		end
+		-- Bater no block custa: endlag dobrado até o próximo golpe
+		if blocked and isM1 then
+			local extra = (attackCfg.BlockedEndlagMultiplier - 1) * attackCfg.Cooldown
+			state.nextAttackAt = math.max(state.nextAttackAt, os.clock()) + extra
 		end
 	end)
 end

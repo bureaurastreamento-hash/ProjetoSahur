@@ -227,6 +227,21 @@ Memória entre sessões. Atualizar depois de cada mudança.
     Slot1..3; Controles atualizados; MobileGui com botão DASH. `podar_vfx` rodado (Shared/Dash e
     Shared/RagdollCancel reaproveitam efeitos já podados). Sons `Shared.Dash`/`RagdollCancel` reaproveitam
     os ids que eram do ArcaneStep/DrumStep.
+- **Também nesta sessão (NÃO testado)** — §10 itens 2, 3 e 4:
+  - **M1 em %** (`CombatConfig.Attacks.M1.ComboDamage = {3,3,4,5}`), cooldown 0,3, downtime 1,2 s após o
+    4º; **hitstun 0,7 s** (só sai por Q ou parry); **puxão** de 1 stud no acerto (cliente); M1 no block
+    = endlag ×2. **Uppercut** = socar subindo logo após pular (alvo e atacante sobem); **Downslam** =
+    socar caindo (ignora block → guard break, ragdoll 1,2 s, não repete em quem já está caído).
+    Servidor confere subindo/caindo pela velocidade Y do HRP (`AirRisingSpeed`).
+  - **Block só frontal** (`Block.FrontDot`; golpe por trás entra cheio), −90%, guarda 30, lockout 0,2 s
+    depois de socar. **Parry** agora atordoa só 0,4 s e arma o **CRÍTICO** (próximo M1 ×3 em 4 s;
+    contorno vermelho); crítico + novo parry+crítico em 4 s = **BLACK FLASH** ×6. `HitOptions` no
+    `ResolveHit` (IsM1/BreaksBlock/RagdollOnce); ele agora retorna o `kind`.
+  - **Awakening (G)**: carga cheia → `RequestAwaken` → 20 s com +30% dano, +10% velocidade, 0,6 s de
+    i-frames, aura (`Shared/Awakening`, contorno dourado), barra vira contagem "DESPERTO"; **T (ultimate)
+    só funciona no modo** (slot mostra "G" trancado) e não gasta carga. Parry dá +10 de carga.
+    Brawler `Rampage` virou golpe em área (30 de dano, ragdoll) porque o buff já é do modo.
+    `CombatService.RestoreWalkSpeed` é público (MovementService/AbilityService usam).
 - **Anterior, também não testado**: sem energia nas habilidades (só cooldown), barra "ULT %".
 
 ### Roteiro de teste (Studio, 2 clientes ou boneco de treino)
@@ -238,13 +253,21 @@ Memória entre sessões. Atualizar depois de cada mudança.
 5. Morrer caído e morrer em pé: ragdoll de morte e respawn normais.
 6. E/R/T = habilidades (cartão de personagem mostra E/R/T); GroundSlam/Meteoro derrubam.
 7. Boss: Slam/Charge/Shockwave derrubam; Q levanta.
+8. Combo no boneco: números 3/3/4/5; atacante desliza 1 stud a cada acerto; após o 4º, 1,2 s sem socar.
+9. Pular e socar subindo: uppercut (os dois sobem); socar caindo: downslam (alvo cai; contra block
+   = "GUARDA QUEBRADA"). Se o uppercut nunca sair, me diga (janela de "subindo" pode estar curta).
+10. Block de costas para o atacante: dano cheio. Parry (F no último instante): contorno vermelho em
+    você → próximo soco "CRÍTICO"; repetir parry+crítico em 4 s → "BLACK FLASH".
+11. Carga cheia → G: banner "DESPERTAR", aura, barra dourada contando 20 s, T destrava; antes disso T
+    mostra "G" e não sai.
 
 ### Próximo passo
-- §10 item 2: M1 em % (dano por fração de vida), hitstun 0,7, puxão no M1, endlag no block,
-  downslam (pulo + M1) / uppercut (espaço + M1). Depois §3 block frontal + crítico do parry, §5 Awakening G.
+- §10 item 5: kill streak (banner/moedas), duelo melhor de 3, enrage do boss (§8). Depois wall splat e
+  versões "despertas" das habilidades (só o buff por enquanto). Balancear com testes.
 - Pendências do dono: apagar `Workspace.TopbarPlus` (Example); ids dos produtos/passes no
-  `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animação `Shared.Dash` (frente/lado) e
-  Boss.Slam/Charge/Shockwave/Leap e Sahur.*; passada de sons/VFX olhando junto.
+  `ShopConfig`; retratos em `CharacterDefs.<Id>.Image`; animações `Shared.Dash`, `Shared.Downslam`,
+  `Shared.Uppercut`, `<Char>.Awakening` (opcional), Boss.Slam/Charge/Shockwave/Leap e Sahur.*;
+  sons `Shared.Crit/BlackFlash/Awakening` (caem no Finisher_Hit/nada); passada de sons/VFX olhando junto.
 
 ## Histórico (2026-09-15, manhã/tarde — balanço antes de limpar o contexto)
 

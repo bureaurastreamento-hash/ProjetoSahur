@@ -3,12 +3,15 @@
 	CombatController (cliente)
 	Só captura input e mostra feedback. NUNCA decide dano.
 	  - Botão esquerdo do mouse: RequestAttack("M1"); segurar = combo de 4 automático
+	    · no ar SUBINDO (logo após pular) = "Uppercut" (levanta o alvo e você) · no ar CAINDO =
+	    "Downslam" (ignora block, esmaga). O servidor confere subindo/caindo; aqui só se escolhe o pedido.
 	  - Segurar F: RequestBlock(true) / soltar: RequestBlock(false)
+	  - Acerto de M1 puxa o atacante ~1 stud para a vítima (cliente dono da física).
 
 	Feedback (tudo por nome em ReplicatedStorage.Assets, ver Assets.luau):
-	  Animations.Shared: M1_1..M1_4, Block (loop), Parry, Hit
-	  VFX.Shared:        Hit, Block, Parry
-	  Sounds.Shared:     Punch_Whoosh, Punch_Hit, Block, Parry, Death
+	  Animations.Shared: M1_1..M1_4, Downslam, Uppercut, Block (loop), Parry, Hit
+	  VFX.Shared:        Hit, Block, Parry, Crit, BlackFlash
+	  Sounds.Shared:     Punch_Whoosh, Punch_Hit, Block, Parry, Death, Crit, BlackFlash
 ]]
 
 local Players = game:GetService("Players")
@@ -41,9 +44,21 @@ local blockHeld = false
 --- Toque no mundo = soco (MobileController desliga quando há botões na tela)
 CombatController.TouchAttackEnabled = true
 
---- Soco (M1). Usado pelo input e pelos botões de toque.
+--- Soco (M1). Usado pelo input e pelos botões de toque. No ar subindo vira Uppercut, caindo vira
+--- Downslam (o servidor valida os dois com a mesma regra).
 function CombatController.Attack()
-	requestAttack:FireServer("M1")
+	local character = localPlayer.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local attackId = "M1"
+	if humanoid and root then
+		local st = humanoid:GetState()
+		local airborne = st == Enum.HumanoidStateType.Freefall or st == Enum.HumanoidStateType.Jumping
+		if airborne then
+			attackId = if root.AssemblyLinearVelocity.Y > CombatConfig.AirRisingSpeed then "Uppercut" else "Downslam"
+		end
+	end
+	requestAttack:FireServer(attackId)
 end
 
 -- Segurar o botão = os 4 golpes saem sozinhos, no ritmo do Cooldown; depois do 4º o servidor
@@ -96,6 +111,8 @@ local COLOR_NUMBER_HIT = Color3.fromRGB(255, 230, 90)
 local COLOR_NUMBER_BLOCK = Color3.fromRGB(140, 190, 255)
 local COLOR_GUARDBREAK = Color3.fromRGB(255, 140, 40)
 local COLOR_FINISHER = Color3.fromRGB(255, 40, 40)
+local COLOR_CRIT = Color3.fromRGB(255, 30, 30)
+local COLOR_BLACKFLASH = Color3.fromRGB(20, 0, 30)
 
 -- ---------------------------------------------------------------------------
 -- Handlers do servidor
@@ -109,8 +126,18 @@ local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex
 	if not attackerChar then
 		return
 	end
-	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
 	local attackDef = CombatConfig.Attacks[attackId]
+	if attackId ~= "M1" then
+		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
+		FX.PlayAnimation(attackerChar, SHARED, attackId)
+		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+		local up = attackDef and attackDef.AttackerUp
+		if typeof(up) == "number" and attackerChar == localPlayer.Character then
+			FX.Push(attackerChar, Vector3.new(0, up, 0), 0.2)
+		end
+		return
+	end
+	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
 	if attackDef and comboIndex >= attackDef.ComboLength then
 		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
 		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then
@@ -153,6 +180,23 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		if isMe then
 			FX.Shake(0.6, 0.25)
 		end
+	elseif kind == "crit" or kind == "blackflash" then
+		-- Recompensa do parry: crítico ×3 (vermelho) / Black Flash ×6 (escuro, tela treme)
+		local black = kind == "blackflash"
+		FX.DamageNumber(victimChar, ("%s %d"):format(if black then "BLACK FLASH" else "CRÍTICO", math.floor(amount + 0.5)), if black then COLOR_FINISHER else COLOR_CRIT)
+		FX.Flash(victimChar, if black then COLOR_BLACKFLASH else COLOR_CRIT, 0.35)
+		FX.Hitstop(victimChar, HITSTOP_FINISHER)
+		if attackerChar then
+			FX.Hitstop(attackerChar, HITSTOP_FINISHER)
+		end
+		FX.SpawnVFX(victimChar, SHARED, if black then "BlackFlash" else "Crit", true)
+		if not FX.PlaySoundAt(victimChar, SHARED, if black then "BlackFlash" else "Crit") then
+			FX.PlaySoundAt(victimChar, SHARED, "Finisher_Hit")
+		end
+		FX.PlayAnimation(victimChar, SHARED, "Hit")
+		if isMe or attackerChar == localPlayer.Character then
+			FX.Shake(if black then 1.2 else 0.8, 0.35)
+		end
 	elseif kind == "finisher" then
 		-- 4º golpe em alvo quase morto: peso máximo
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_FINISHER)
@@ -173,7 +217,8 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 			FX.Shake(0.35, 0.15)
 		end
 		-- Hitstop: congela um instante quem bateu e quem apanhou (peso no golpe)
-		local stop = if amount >= CombatConfig.Attacks.M1.FinisherDamage then HITSTOP_HEAVY else HITSTOP_LIGHT
+		local heavy = amount >= CombatConfig.Attacks.M1.ComboDamage[CombatConfig.Attacks.M1.ComboLength]
+		local stop = if heavy then HITSTOP_HEAVY else HITSTOP_LIGHT
 		FX.Hitstop(victimChar, stop)
 		if attackerChar then
 			FX.Hitstop(attackerChar, stop)
@@ -182,6 +227,19 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		FX.SpawnVFX(victimChar, SHARED, "Hit", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Punch_Hit")
 		FX.PlayAnimation(victimChar, SHARED, "Hit")
+	end
+	-- Puxão: quem acertou (soco não bloqueado) desliza ~PullStuds para a vítima
+	if attackerChar and attackerChar == localPlayer.Character and (kind == "hit" or kind == "crit" or kind == "blackflash") then
+		local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
+		local vRoot = victimChar:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if aRoot and vRoot then
+			local to = vRoot.Position - aRoot.Position
+			to = Vector3.new(to.X, 0, to.Z)
+			if to.Magnitude > 3 then
+				local pull = CombatConfig.Attacks.M1.PullStuds
+				FX.Push(attackerChar, to.Unit * (pull / 0.08), 0.08)
+			end
+		end
 	end
 	if victimChar == localPlayer.Character or attackerChar == localPlayer.Character then
 		Log.debug(("[CombatController] %s -> %s: %s (%.1f)"):format(
@@ -216,13 +274,24 @@ local function onNotifyCooldown(reason: string, seconds: number)
 		if character then
 			FX.SpawnVFX(character, SHARED, "Stun", true) -- tontura em quem foi parryado
 		end
+	elseif reason == "crit_ready" then
+		local character = localPlayer.Character
+		if character then
+			FX.SetOutline(character, COLOR_CRIT) -- parryou: próximo soco é crítico
+			task.delay(seconds, function()
+				if localPlayer.Character == character and not blockHeld then
+					FX.SetOutline(character, nil)
+				end
+			end)
+		end
 	end
 end
 
-local function onNotifyKnockback(direction: Vector3, speed: number, duration: number)
+local function onNotifyKnockback(direction: Vector3, speed: number, duration: number, up: number?)
 	local character = localPlayer.Character
 	if character and typeof(direction) == "Vector3" then
-		FX.Push(character, direction * speed + Vector3.new(0, speed * 0.25, 0), duration)
+		local vertical = if typeof(up) == "number" then up else speed * 0.25
+		FX.Push(character, direction * speed + Vector3.new(0, vertical, 0), duration)
 		FX.Shake(0.5, 0.2)
 	end
 end

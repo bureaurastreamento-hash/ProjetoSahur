@@ -45,7 +45,8 @@ RemoteEvents.Events = ({
 	RequestRespawn = "RequestRespawn", -- ()
 	RequestSprint = "RequestSprint", -- (active: boolean)
 	RequestDash = "RequestDash", -- (direction: Vector3?) — dash universal (Q); ragdollado = ragdoll cancel
-	RequestAbility = "RequestAbility", -- (slot: number)
+	RequestAbility = "RequestAbility", -- (slot: number, direction: Vector3?)
+	RequestAwaken = "RequestAwaken", -- () — G: ativa o Awakening se a carga da ult estiver cheia
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)
@@ -55,13 +56,13 @@ RemoteEvents.Events = ({
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 
 	-- Notify: servidor -> cliente
-	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: string, comboIndex: number)
-	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry")
+	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: "M1"|"Downslam"|"Uppercut", comboIndex: number)
+	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash")
 	NotifyHealth = "NotifyHealth", -- vítima: (current: number, max: number)
 	NotifyKill = "NotifyKill", -- all: (killer: Player?, victim: Player)
-	NotifyCooldown = "NotifyCooldown", -- atacante: (reason: string, seconds: number)
+	NotifyCooldown = "NotifyCooldown", -- dono: (reason: "parried"|"guardbreak"|"hit"|"stunned"|"crit_ready", seconds: number)
 	NotifyBlock = "NotifyBlock", -- all: (character: Model, active: boolean)
-	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number)
+	NotifyKnockback = "NotifyKnockback", -- vítima: (direction: Vector3, speed: number, duration: number, up: number?)
 	NotifyDash = "NotifyDash", -- all: (character: Model, data: { Direction: Vector3, Speed: number, Duration: number, Cancel: boolean? })
 	NotifyDashCooldown = "NotifyDashCooldown", -- dono: (kind: "dash"|"cancel", readyAtServerTime: number, total: number)
 	NotifyRagdoll = "NotifyRagdoll", -- all: (character: Model, active: boolean, seconds: number?)

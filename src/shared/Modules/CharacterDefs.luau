@@ -5,9 +5,10 @@
 	Lido pelo servidor (autoridade: cooldown, energia, efeito) e pelo cliente
 	(só teclas, nomes e feedback).
 
-	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — Q/E/R são só cooldown
-	(EnergyCost = 0). A barra "Energy" virou a CARGA DA ULT (0..Max): enche dando/recebendo dano
-	durante a luta; a ultimate (slot 3, T) custa Max. HUD mostra como "ULT".
+	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — E/R são só cooldown
+	(EnergyCost = 0). A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano e
+	parryando; cheia, G ativa o AWAKENING (CombatConfig.Awakening: modo de 20 s com +dano/+velocidade)
+	e só nele a ultimate (slot 3, T, marcada com EnergyCost = Max) pode ser usada. HUD mostra "ULT".
 
 	Assets esperados (por nome, ver Assets.luau):
 	  Animations.<CharacterId>.<AbilityId>
@@ -106,8 +107,9 @@ CharacterDefs.Characters = {
 				DisplayName = "Fúria",
 				Cooldown = 30,
 				EnergyCost = 100,
-				CastTime = 0.5,
-				Effect = { Type = "DamageBuff", Multiplier = 2, Duration = 8 },
+				CastTime = 0.6,
+				-- ultimate = golpe (o buff de dano já é do Awakening): pancada devastadora em área
+				Effect = { Type = "AreaDamage", Radius = 10, Damage = 30, Delay = 0.5, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 2 } },
 			},
 		},
 	} :: CharacterDef,

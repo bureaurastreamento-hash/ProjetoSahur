@@ -25,9 +25,10 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
   block**, prende no chão; não pode duas vezes na mesma janela de ragdoll. "True downslam" = do stun do
   3º M1, sem chance de ragdoll cancel.
 - Wall combo (TSB): 4º M1 perto de parede + dash para frente = 12% de dano com cinemática.
-- **Sahur hoje**: 4 golpes 8/8/8/15 de 100 HP (= 39%, muito alto), ComboEnd 0,9 s, hitstun 0,35 s,
-  finisher com knockback, sem puxão, sem downslam/uppercut, sem endlag maior no block.
-- **Fazer**: dano do combo para ~3/3/4/5 (15% total) com M1 mais rápido (0,3 s); hitstun 0,6-0,75 s;
+- **Sahur hoje** (FEITO 2026-09-15 noite, falta testar): 3/3/4/5, M1 0,3 s, downtime 1,2 s, hitstun 0,7,
+  puxão 1 stud, 4º = ragdoll 1,2 s, endlag ×2 no block, uppercut (socar subindo) e downslam (socar
+  caindo, ignora block, não repete no mesmo ragdoll). Falta: wall splat.
+- **Era**: dano do combo para ~3/3/4/5 (15% total) com M1 mais rápido (0,3 s); hitstun 0,6-0,75 s;
   puxão de 1 stud no acerto; 4º golpe → **ragdoll** curto (1,2 s) em vez de só knockback; endlag ×2 quando
   o M1 é bloqueado; downslam (ignora block) e uppercut; wall splat.
 
@@ -38,9 +39,10 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
   vermelho; dois críticos em ~4 s sem outro golpe no meio = **Black Flash (6×)**. Em JJS, Black Flash é
   2,5× e só alguns personagens têm.
 - Block breakers: certos golpes (downslam, alguns skills) **atordoam quem bloqueia**.
-- **Sahur hoje**: block 70% de redução em qualquer ângulo, parry 0,2 s que atordoa o atacante 1 s,
-  guarda de 60 que quebra (guard break 1,6 s de stun). Não há crítico nem black flash.
-- **Fazer**: block só frontal (dot ≥ 0 com a direção do atacante); redução para ~90% e guarda menor;
+- **Sahur hoje** (FEITO 2026-09-15 noite, falta testar): block frontal (dot ≥ 0), −90%, guarda 30, lockout
+  0,2 s após M1, parry = stun 0,4 s + crítico ×3 no próximo M1 (4 s), Black Flash ×6, `BreaksBlock`
+  (downslam) → guard break.
+- **Era**: block só frontal (dot ≥ 0 com a direção do atacante); redução para ~90% e guarda menor;
   lockout de 0,2 s após M1; parry vira **crítico no próximo M1 (3×)** em vez de stun (opcional manter
   stun curto); Black Flash 6× como recompensa de 2 parries seguidos; golpes "block breaker" por flag na
   habilidade (`BreaksBlock = true`).
@@ -69,7 +71,10 @@ ordem de grandeza e afinar no teste. Cada seção termina com "**Sahur hoje**" (
   (Ultimate Mode muda HUD e moveset).
 - **Sahur hoje** (após 2026-09-15): sem energia para habilidades; barra "ULT" enche +6/+4 por golpe
   dado/recebido; slot T custa a barra cheia (é um golpe único).
-- **Fazer** (decisão do dono: "ult carrega durante a batalha"): virar **modo** — G com barra cheia ativa
+- **FEITO 2026-09-15 noite (falta testar)**: G com a barra cheia = Awakening 20 s (+30% dano, +10% vel.,
+  aura, i-frames 0,6 s); T (ultimate) só no modo, sem custo; parry +10 de carga. Sem versões fortes das
+  habilidades ainda.
+- **Era** (decisão do dono: "ult carrega durante a batalha"): virar **modo** — G com barra cheia ativa
   o Awakening por 20 s (aura VFX, +30% dano, +10% velocidade, Q/E/R/T trocam por versões fortes onde
   existir; onde não existir, só o buff). Parry dá +10 de carga. Barra some fora de combate devagar
   (opcional).

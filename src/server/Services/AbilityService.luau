@@ -5,8 +5,12 @@
 	habilidade (slots 1..3 = E/R/T). O dash universal (Q) é do MovementService.
 	O cliente só envia RequestAbility(slot, direção) e RequestSelectCharacter(id).
 
+	Awakening (G, CombatConfig.Awakening): com a carga cheia, RequestAwaken zera a carga e liga o modo por
+	Duration s (+dano, +velocidade, aura por NotifyAbility "Awakening"); só nele o slot T (ultimate,
+	EnergyCost = Max) pode ser usado, sem custo.
+
 	Replicação de estado (para HUD): atributos no Player
-	  "CharacterId" (string), "Energy" (number)
+	  "CharacterId" (string), "Energy" (number), "AwakenedUntil" (number, GetServerTimeNow; 0 = fora)
 	Cooldowns vão por NotifyAbilityCooldown(slot, abilityId, readyAtServerTime),
 	usando workspace:GetServerTimeNow() para o cliente contar sozinho.
 ]]
@@ -19,6 +23,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
@@ -40,6 +45,7 @@ type PlayerState = {
 	damageMultiplierUntil: number,
 	incomingMultiplier: number,
 	incomingMultiplierUntil: number,
+	awakenedUntil: number, -- os.clock()
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -51,6 +57,8 @@ local notifyAbilityDenied: RemoteEvent
 local MAX_AREA_TARGETS = 8
 local abilityLimiter = RateLimiter.new(8, 1)
 local selectLimiter = RateLimiter.new(2, 1)
+local awakenLimiter = RateLimiter.new(3, 1)
+local ATTR_AWAKENED_UNTIL = "AwakenedUntil"
 
 -- ---------------------------------------------------------------------------
 -- Estado
@@ -66,6 +74,7 @@ local function newState(characterId: string?): PlayerState
 		damageMultiplierUntil = 0,
 		incomingMultiplier = 1,
 		incomingMultiplierUntil = 0,
+		awakenedUntil = 0,
 	}
 end
 
@@ -107,12 +116,31 @@ function AbilityService.OnHitTaken(victim: Player)
 	setEnergy(victim, getState(victim).energy + CharacterDefs.Energy.GainOnHitTaken)
 end
 
+--- Carga extra por parry.
+function AbilityService.OnParry(player: Player)
+	setEnergy(player, getState(player).energy + CombatConfig.Awakening.ChargeOnParry)
+end
+
+function AbilityService.IsAwakened(player: Player): boolean
+	local state = states[player]
+	return state ~= nil and os.clock() < state.awakenedUntil
+end
+
 function AbilityService.GetDamageMultiplier(player: Player): number
 	local state = states[player]
-	if not state or os.clock() > state.damageMultiplierUntil then
+	if not state then
 		return 1
 	end
-	return state.damageMultiplier
+	local mult = if os.clock() > state.damageMultiplierUntil then 1 else state.damageMultiplier
+	if os.clock() < state.awakenedUntil then
+		mult *= CombatConfig.Awakening.DamageMultiplier
+	end
+	return mult
+end
+
+--- Multiplicador de WalkSpeed (Awakening). CombatService.RestoreWalkSpeed aplica.
+function AbilityService.GetSpeedMultiplier(player: Player): number
+	return if AbilityService.IsAwakened(player) then CombatConfig.Awakening.SpeedMultiplier else 1
 end
 
 --- Multiplicador de dano RECEBIDO (escudo). 1 = normal.
@@ -431,8 +459,9 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if now < readyAt and not noCooldown then
 		return deny(player, slot, "cooldown")
 	end
-	if state.energy < ability.EnergyCost and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
-		return deny(player, slot, "energy")
+	local isUltimate = ability.EnergyCost >= CharacterDefs.Energy.Max
+	if isUltimate and not AbilityService.IsAwakened(player) and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
+		return deny(player, slot, "awaken") -- ultimate só durante o Awakening (G)
 	end
 	local handler = effects[ability.Effect.Type]
 	if not handler then
@@ -440,20 +469,55 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 		return deny(player, slot, "no_handler")
 	end
 
-	-- Tudo validado: cobra antes de executar
-	setEnergy(player, state.energy - ability.EnergyCost)
+	-- Tudo validado: cobra o cooldown antes de executar (a ultimate não gasta carga: o Awakening já gastou)
 	if not noCooldown then
 		state.cooldownReadyAt[ability.Id] = now + ability.Cooldown
 		state.busyUntil = now + ability.CastTime
 		notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
 	end
 
-	Log.debug(("[AbilityService] %s usou %s.%s (energia restante %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
+	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
 	local ok, err = pcall(handler :: any, player, character, ability, sanitizeDirection(character, rawDirection))
 	if not ok then
 		warn(("[AbilityService] erro em %s: %s"):format(ability.Id, tostring(err)))
 	end
+end
+
+local function onRequestAwaken(player: Player)
+	if not awakenLimiter:Allow(player) then
+		return
+	end
+	local state = getState(player)
+	local character = player.Character
+	if not character or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
+		return
+	end
+	if CombatService.IsHardStunned(player) or RagdollService.IsRagdolled(player) then
+		return
+	end
+	if AbilityService.IsAwakened(player) then
+		return
+	end
+	if state.energy < CharacterDefs.Energy.Max and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
+		return deny(player, 0, "energy")
+	end
+	local cfg = CombatConfig.Awakening
+	local now = os.clock()
+	setEnergy(player, 0)
+	state.awakenedUntil = now + cfg.Duration
+	player:SetAttribute(ATTR_AWAKENED_UNTIL, Workspace:GetServerTimeNow() + cfg.Duration)
+	RagdollService.GrantIFrames(character, cfg.IFrames)
+	CombatService.RestoreWalkSpeed(player)
+	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration })
+	Log.debug(("[AbilityService] %s DESPERTOU por %ds"):format(player.Name, cfg.Duration))
+	task.delay(cfg.Duration, function()
+		if states[player] == state and player.Character == character and os.clock() >= state.awakenedUntil then
+			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
+			CombatService.RestoreWalkSpeed(player)
+			notifyAbility:FireAllClients(character, state.characterId, "Awakening", "end")
+		end
+	end)
 end
 
 local function onRequestSelectCharacter(player: Player, characterId: any)
@@ -531,6 +595,7 @@ function AbilityService.Start()
 	AdminService.SetEnergy = setEnergy
 	AdminService.ResetCooldowns = resetCooldowns
 	Remotes.GetEvent(Remotes.Events.RequestAbility).OnServerEvent:Connect(onRequestAbility)
+	Remotes.GetEvent(Remotes.Events.RequestAwaken).OnServerEvent:Connect(onRequestAwaken)
 	Remotes.GetEvent(Remotes.Events.RequestSelectCharacter).OnServerEvent:Connect(onRequestSelectCharacter)
 
 	local function onPlayer(player: Player)
@@ -543,6 +608,7 @@ function AbilityService.Start()
 			local prev = getState(player)
 			states[player] = newState(prev.characterId)
 			player:SetAttribute("Energy", 0)
+			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
 		end)
 	end
 	Players.PlayerAdded:Connect(onPlayer)
