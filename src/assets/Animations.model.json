@@ -109,7 +109,7 @@
           "name": "Idle",
           "className": "Animation",
           "properties": {
-            "AnimationId": "rbxassetid://115646583689048"
+            "AnimationId": "rbxassetid://119477589200226"
           },
           "attributes": {
             "R15Id": ""
@@ -175,7 +175,7 @@
           "name": "GroundSlam",
           "className": "Animation",
           "properties": {
-            "AnimationId": "rbxassetid://112099038975315"
+            "AnimationId": "rbxassetid://112109080090418"
           },
           "attributes": {
             "R15Id": ""
