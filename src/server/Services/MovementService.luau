@@ -13,6 +13,7 @@
 ]]
 
 local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
@@ -39,6 +40,7 @@ local dashStates: { [Player]: DashState } = {}
 
 local notifyDash: RemoteEvent
 local notifyDashCooldown: RemoteEvent
+local notifyAbility: RemoteEvent -- DashOverride (Blink) avisa como habilidade para o FX de teleporte
 
 local function dashState(player: Player): DashState
 	local s = dashStates[player]
@@ -63,6 +65,63 @@ local function sanitizeDirection(root: BasePart, raw: any): Vector3
 		end
 	end
 	return facing(root)
+end
+
+--- Teleporte de verdade (decisão do dono 2026-09-16): anda `distance` studs em `direction` ATRAVESSANDO o
+--- que estiver na frente (sem raycast travando na parede) e encaixa no chão do destino, mantendo a
+--- altura que o boneco tinha em relação ao chão de onde saiu. Sem chão no destino, mantém o Y.
+function MovementService.Teleport(player: Player, character: Model, direction: Vector3, distance: number): boolean
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return false
+	end
+	local flat = Vector3.new(direction.X, 0, direction.Z)
+	if flat.Magnitude < 0.01 then
+		flat = root.CFrame.LookVector
+	end
+	flat = flat.Unit
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = { character }
+	params.RespectCanCollide = true
+	local here = Workspace:Raycast(root.Position, Vector3.new(0, -12, 0), params)
+	local heightAboveGround = if here then root.Position.Y - here.Position.Y else 3
+	local target = root.Position + flat * distance
+	local ground = Workspace:Raycast(target + Vector3.new(0, 15, 0), Vector3.new(0, -45, 0), params)
+	if ground then
+		target = Vector3.new(target.X, ground.Position.Y + heightAboveGround, target.Z)
+	end
+	AntiExploitService.Grace(player, 1)
+	root.AssemblyLinearVelocity = Vector3.zero
+	root.CFrame = CFrame.new(target) * (root.CFrame - root.CFrame.Position)
+	return true
+end
+
+--- Q de um personagem com DashOverride (Swift = Piscar): teleporta em vez de dar dash; um cooldown só
+--- (mostrado nos dois "kinds" do HUD). Usa a mesma trava DashingUntil por CastTime.
+local function doDashOverride(player: Player, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean)
+	local now = os.clock()
+	if now < state.forwardReadyAt and not noCooldown then
+		return
+	end
+	local effect = ability.Effect
+	if not (effect and effect.Type == "Teleport") then
+		warn(("[MovementService] DashOverride %s: só Effect Teleport é suportado"):format(tostring(ability.Id)))
+		return
+	end
+	if not MovementService.Teleport(player, character, direction, effect.Distance) then
+		return
+	end
+	if not noCooldown then
+		local serverNow = Workspace:GetServerTimeNow()
+		state.forwardReadyAt = now + ability.Cooldown
+		state.sideReadyAt = state.forwardReadyAt
+		notifyDashCooldown:FireClient(player, "forward", serverNow + ability.Cooldown, ability.Cooldown)
+		notifyDashCooldown:FireClient(player, "side", serverNow + ability.Cooldown, ability.Cooldown)
+	end
+	player:SetAttribute(ATTR_DASHING_UNTIL, now + (ability.CastTime or 0))
+	local characterId = player:GetAttribute("CharacterId")
+	notifyAbility:FireAllClients(character, if typeof(characterId) == "string" then characterId else "", ability.Id, "start", { Teleported = true })
 end
 
 local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
@@ -107,6 +166,13 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 
 	-- Preso no combo/stun: não sai (a brecha é quando o atacante para de bater)
 	if CombatService.IsStunned(player) then
+		return
+	end
+	-- Personagem sem dash (Swift): o Q vira a habilidade DashOverride
+	local characterId = player:GetAttribute("CharacterId")
+	local override = if typeof(characterId) == "string" then CharacterDefs.GetDashOverride(characterId) else nil
+	if override then
+		doDashOverride(player, character, override, direction, state, noCooldown)
 		return
 	end
 	local readyAt = if sideways then state.sideReadyAt else state.forwardReadyAt
@@ -162,6 +228,7 @@ end
 function MovementService.Init()
 	notifyDash = Remotes.GetEvent(Remotes.Events.NotifyDash)
 	notifyDashCooldown = Remotes.GetEvent(Remotes.Events.NotifyDashCooldown)
+	notifyAbility = Remotes.GetEvent(Remotes.Events.NotifyAbility)
 end
 
 function MovementService.Start()

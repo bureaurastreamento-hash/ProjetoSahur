@@ -228,7 +228,10 @@ local function updateCooldowns()
 	local remaining = if cd then cd.readyAt - now else 0
 	setCooldownOverlay(dashSlot, remaining, if cd then cd.total else remaining)
 	local nameLabel = dashSlot:FindFirstChild("Name") :: TextLabel
-	nameLabel.Text = if ragdolled then "Levantar" else "Dash ↑↓"
+	-- personagem sem dash (Swift): o Q é o DashOverride (Piscar); um cooldown só, o slot lateral some
+	local override = if typeof(characterId) == "string" then CharacterDefs.GetDashOverride(characterId) else nil
+	nameLabel.Text = if ragdolled then "Levantar" elseif override then override.DisplayName else "Dash ↑↓"
+	dashSideSlot.Visible = override == nil
 	local side = dashCds.side
 	local sideRemaining = if side then side.readyAt - now else 0
 	setCooldownOverlay(dashSideSlot, sideRemaining, if side then side.total else sideRemaining)

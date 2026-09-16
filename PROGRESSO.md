@@ -224,6 +224,21 @@ Memória entre sessões. Atualizar depois de cada mudança.
   a equipe precisa animar o Roar em cima do BossModel.
 - `Shared/Block` e `Shared/Idle` com duração 0 continuam (esperado no place antigo; reconferir no do grupo).
 
+### Feito 2026-09-16 (tarde) — itens 2, 3 e 4 das decisões
+- **Fade de áudio** (`FX.playClone`): Volume 0→alvo em `FX.SoundFadeIn` (0,15 s) e alvo→0 nos últimos
+  `FX.SoundFadeOut` (0,3 s), via TweenService; sons curtos (< 0,45 s) e em loop não fazem fade-out.
+- **Swift: Q = Piscar** (`CharacterDefs.Swift.DashOverride`): Blink saiu do slot 1 (Rasteira virou 1, Tempestade 2);
+  `MovementService` vê `GetDashOverride(CharacterId)` no RequestDash → teleporta; cooldown único de 5 s
+  mostrado no slot do Q (HUD esconde o slot lateral e escreve "Piscar"). FX via NotifyAbility "Blink"/Teleported.
+- **Teleport real** (`MovementService.Teleport`): atravessa obstáculos, encaixa no chão do destino
+  (mantém a altura sobre o chão); usado pelo Q do Swift e por `effects.Teleport` (Overlord/Warp).
+  Testado via MCP: 18 studs exatos, atravessou o BossPillar0, Y ajustado ao chão.
+- FALTA TESTAR (Studio fechou/crashou às 13:50 UTC ao encerrar um play test do MCP): fade de áudio
+  (ouvir grito/Death sem corte seco), Swift com Q = Piscar no HUD e em jogo, Warp do Overlord.
+  Observação: num teste o personagem estava em y = -33 (abaixo do chão) 8 s após nascer — conferir spawn.
+- Cuidado com o MCP: `run_script_in_play_mode` encadeado (um atrás do outro) derrubou o Studio; esperar
+  a sessão anterior terminar de verdade (get_studio_mode = stop) antes de iniciar outra.
+
 ### DECISÕES DE DESIGN do dono (2026-09-16, madrugada) — aplicar na próxima sessão
 1. **ULT = cutscene/transformação, não um ataque.** G ativa uma animação/cutscene que TRANSFORMA o
    personagem (despertado) e, transformado, ele mostra ATAQUES DIFERENTES (kit alternativo, não só buff).

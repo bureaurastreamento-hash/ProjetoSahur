@@ -544,24 +544,58 @@ end
 -- Som
 -- ---------------------------------------------------------------------------
 
+-- Fade para o som não entrar/cortar seco (decisão do dono 2026-09-16): 0 → Volume em FadeIn,
+-- Volume → 0 nos últimos FadeOut segundos. Sons mais curtos que FadeIn+FadeOut tocam sem fade.
+FX.SoundFadeIn = 0.15
+FX.SoundFadeOut = 0.3
+
+local function fadeOut(sound: Sound)
+	if not sound.Parent or not sound.IsPlaying then
+		return
+	end
+	TweenService:Create(sound, TweenInfo.new(FX.SoundFadeOut, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Volume = 0 }):Play()
+end
+
 local function playClone(template: Sound, parent: Instance)
 	if activeSounds >= FX.MaxActiveSounds then
 		return
 	end
 	local sound = template:Clone()
+	local target = template.Volume
 	sound.Parent = parent
 	activeSounds += 1
-	sound.Ended:Once(function()
+	local done = false
+	local function finish()
+		if done then
+			return
+		end
+		done = true
 		activeSounds -= 1
 		sound:Destroy()
-	end)
+	end
+	sound.Ended:Once(finish)
+	sound.Stopped:Once(finish)
+	sound.Volume = 0
 	sound:Play()
-	-- segurança se Ended nunca disparar (id inválido)
-	task.delay(10, function()
-		if sound.Parent then
-			activeSounds -= 1
-			sound:Destroy()
+	TweenService:Create(sound, TweenInfo.new(FX.SoundFadeIn, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Volume = target }):Play()
+	task.spawn(function()
+		-- TimeLength só existe depois de carregar; espera no máximo 3 s
+		if not sound.IsLoaded then
+			local t0 = os.clock()
+			repeat
+				task.wait(0.05)
+			until sound.IsLoaded or done or os.clock() - t0 > 3
 		end
+		if done then
+			return
+		end
+		local length = sound.TimeLength / math.max(sound.PlaybackSpeed, 0.01)
+		if length > FX.SoundFadeIn + FX.SoundFadeOut and not sound.Looped then
+			local wait = length - sound.TimePosition / math.max(sound.PlaybackSpeed, 0.01) - FX.SoundFadeOut
+			task.delay(math.max(wait, 0), fadeOut, sound)
+		end
+		-- segurança se Ended nunca disparar (id inválido / som em loop)
+		task.delay(math.max(10, length + 1), finish)
 	end)
 end
 

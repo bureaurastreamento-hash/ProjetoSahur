@@ -34,6 +34,7 @@ local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local AdminService = require(script.Parent:WaitForChild("AdminService"))
+local MovementService = require(script.Parent:WaitForChild("MovementService"))
 
 local AbilityService = {}
 
@@ -374,17 +375,10 @@ end
 
 effects.Teleport = function(player, character, ability, direction)
 	local e = ability.Effect
-	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
-	if not root then
+	-- teleporte real (atravessa obstáculos, encaixa no chão) — mesmo do Q do Swift
+	if not MovementService.Teleport(player, character, direction, e.Distance) then
 		return
 	end
-	AntiExploitService.Grace(player, 1)
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = { character }
-	local hit = Workspace:Raycast(root.Position, direction * e.Distance, params)
-	local distance = if hit then math.max(0, hit.Distance - 2) else e.Distance
-	root.CFrame = root.CFrame + direction * distance
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Teleported = true })
 end
 

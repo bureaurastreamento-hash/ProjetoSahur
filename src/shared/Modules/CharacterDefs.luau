@@ -26,7 +26,8 @@
 	                                                                    | "Chokeslam" (Lift studs erguido; esmaga + área SlamRadius/SlamDamage/SlamKnockback?)
 	                                                                    | "Spin" (gira Spin voltas/s; SpinRadius/SpinDamage/SpinInterval/SpinKnockback? em
 	                                                                      quem chega perto; solta na tangente)
-	  Teleport    { Distance }                                       -> servidor move o HRP para frente (com raycast contra parede)
+	  Teleport    { Distance }                                       -> servidor move o HRP Distance studs para frente ATRAVESSANDO o que
+	                                                                    estiver no caminho e encaixando no chão (MovementService.Teleport)
 	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
 	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
 	                                                                    Knockback = { Speed, Duration, Ragdoll? } (Ragdoll = segundos caído)
@@ -61,6 +62,7 @@ export type CharacterDef = {
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
 	Abilities: { AbilityDef }, -- índice = tecla (1..4); a última com EnergyCost = Max é a ultimate (G)
+	DashOverride: AbilityDef?, -- substitui o dash universal (Q) por esta habilidade (Swift: Piscar); só Effect Teleport hoje
 }
 
 local CharacterDefs = {}
@@ -131,15 +133,16 @@ CharacterDefs.Characters = {
 		Tagline = "Velocidade e teleporte",
 		Color = Color3.fromRGB(110, 230, 255),
 		Image = "",
+		-- Swift não tem dash: o Q é o Piscar (teleport curto, decisão do dono 2026-09-16)
+		DashOverride = {
+			Id = "Blink",
+			DisplayName = "Piscar",
+			Cooldown = 5,
+			EnergyCost = 0,
+			CastTime = 0.15,
+			Effect = { Type = "Teleport", Distance = 18 },
+		},
 		Abilities = {
-			{
-				Id = "Blink",
-				DisplayName = "Piscar",
-				Cooldown = 5,
-				EnergyCost = 0,
-				CastTime = 0.15,
-				Effect = { Type = "Teleport", Distance = 18 },
-			},
 			{
 				Id = "SweepKick",
 				DisplayName = "Rasteira",
@@ -328,6 +331,12 @@ end
 
 function CharacterDefs.Get(characterId: string): CharacterDef?
 	return CharacterDefs.Characters[characterId]
+end
+
+--- Habilidade que substitui o dash universal (Q) deste personagem, se houver.
+function CharacterDefs.GetDashOverride(characterId: string): AbilityDef?
+	local def = CharacterDefs.Get(characterId)
+	return def and def.DashOverride
 end
 
 function CharacterDefs.GetAbility(characterId: string, slot: number): AbilityDef?
