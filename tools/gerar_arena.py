@@ -504,6 +504,10 @@ def fire(node, color=(1.0, 0.45, 0.15), size=1.2, rate=18):
 
 SANCT_Z = 195
 SANCT_R = 44
+# Onde o dono POSICIONOU o santuário no Studio (2026-09-16, lido via MCP): o conjunto é gerado em volta
+# de (0, 0, SANCT_Z) e depois movido/girado em bloco para cá. Mudar aqui, nunca no Studio + aqui.
+SANCT_WORLD = (97.75, 0.6, 231.625)  # centro final (x, deslocamento y, z)
+SANCT_YAW = 180  # giro em graus no eixo Y
 DARK_STONE = ("Slate", (0.13, 0.13, 0.16))
 RUNE_RED = ("Neon", (0.85, 0.20, 0.20))
 # caminho de lajes da praça até o santuário
@@ -564,6 +568,20 @@ for i in range(12):
                        "Size": [8, 1, 8], "Neutral": True, "Duration": 0, "Transparency": 1,
                        "CanCollide": False, "CastShadow": False},
     })
+# aplica o deslocamento/giro do santuário em todas as partes Boss* (altar, spawn, arena, pilares...)
+_yaw = math.radians(SANCT_YAW)
+for node in parts:
+    if not node["name"].startswith("Boss"):
+        continue
+    pr = node["properties"]
+    x, y, z = pr["Position"]
+    dx, dz = x, z - SANCT_Z
+    rx = dx * math.cos(_yaw) + dz * math.sin(_yaw)
+    rz = -dx * math.sin(_yaw) + dz * math.cos(_yaw)
+    pr["Position"] = [round(SANCT_WORLD[0] + rx, 3), round(y + SANCT_WORLD[1], 3), round(SANCT_WORLD[2] + rz, 3)]
+    ox, oy, oz = pr.get("Orientation", [0, 0, 0])
+    pr["Orientation"] = [ox, (oy + SANCT_YAW + 180) % 360 - 180, oz]
+
 extras = {"className": "Model", "children": [folder("Props", list(parts)), folder("Spawns", extra_spawns)]}
 OUT_EXTRAS.write_text(json.dumps(extras, indent=1))
 print(f"{OUT_EXTRAS}: {len(parts)} partes + {len(extra_spawns)} spawns")

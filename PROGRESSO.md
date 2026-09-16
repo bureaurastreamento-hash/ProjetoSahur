@@ -263,13 +263,10 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Guardian Esmagar contra boneco: "hit 3.9 ×2, finisher 18.2" — o chokeslam funcionou (dano+área).
   Overlord Giro: "hit 39, finisher 39" — ok. Falta a sincronia visual (item 5).
 
-### PENDÊNCIA que trava regenerar o mapa
-- O dono **moveu o altar do boss no Studio** e não quer que volte. `BossAltar/BossSpawn/BossArena` vêm do
-  `ArenaExtras.model.json` (gerador `tools/gerar_arena.py`): na próxima conexão do Rojo eles voltam para
-  a posição do arquivo. **Pedir a Position (e Orientation) nova** dos três, gravar no gerador, regenerar
-  (isso também cria o `ClanBoard`). Enquanto isso NÃO rodar `gerar_arena.py`.
-- Boss no place certo: conferir se `[FX] animação Boss/Idle ... duração 0` aparece; se aparecer, a equipe
-  publicou fora do grupo.
+### Altar do boss — RESOLVIDO (2026-09-16, tarde)
+- Posição do santuário lida via MCP e gravada em `tools/gerar_arena.py` (`SANCT_WORLD = (97.75, 0.6, 231.625)`,
+  `SANCT_YAW = 180`); todas as partes `Boss*` são transformadas em bloco. ArenaExtras regenerado, `ClanBoard` criado.
+  Para mover de novo: mudar `SANCT_WORLD`/`SANCT_YAW` e rodar o gerador (não mover no Studio).
 
 ### Ordem sugerida da próxima sessão
 1. Pedir posição do altar → gerador → regenerar ArenaExtras (ClanBoard junto).
