@@ -15,6 +15,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Assets = require(script.Parent:WaitForChild("Assets"))
+local Log = require(script.Parent:WaitForChild("Log"))
 
 local FX = {}
 
@@ -115,6 +116,8 @@ local tracks: { [Model]: { [string]: AnimationTrack } } = {}
 
 local r15Animations: { [Animation]: Animation } = {}
 
+local lengthWarned: { [string]: boolean } = {}
+
 local function trackFor(character: Model, folder: string, name: string): AnimationTrack?
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
@@ -165,6 +168,19 @@ function FX.PlayAnimation(character: Model, folder: string, name: string, looped
 	track.Looped = looped == true
 	track.Priority = priority or Enum.AnimationPriority.Action
 	track:Play(0.1)
+	-- Length 0 depois de carregar = o asset não veio (id errado ou publicado fora do criador do place:
+	-- jogo de grupo só carrega animação do grupo). Avisa uma vez por animação, só em Studio.
+	local key = folder .. "/" .. name
+	if not lengthWarned[key] then
+		lengthWarned[key] = true
+		task.delay(2, function()
+			if track.Length == 0 then
+				local anim = track.Animation
+				Log.debug(("[FX] animação %s (%s) carregou com duração 0: id errado ou sem permissão (jogo de grupo? place certo?)"):format(
+					key, anim and anim.AnimationId or "?"))
+			end
+		end)
+	end
 	return track
 end
 
