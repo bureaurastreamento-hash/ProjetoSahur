@@ -617,6 +617,138 @@ global.EndBossForm = function()
 	return true, "forma de boss encerrada"
 end
 
+-- ---------------------------------------------------------------------------
+-- Administração (item 7 dos planos): mensagens, ban, kick
+-- ---------------------------------------------------------------------------
+local MessagingService = game:GetService("MessagingService")
+local DataStoreService = game:GetService("DataStoreService")
+local ANNOUNCE_TOPIC = "SahurAnnounce"
+local BAN_STORE = "Bans_v1"
+
+local function textArg(args: { [string]: any }): string?
+	local t = args.text
+	if typeof(t) ~= "string" then
+		return nil
+	end
+	t = t:gsub("^%s+", ""):gsub("%s+$", "")
+	if #t == 0 then
+		return nil
+	end
+	return t:sub(1, 200)
+end
+
+local function announceHere(text: string, scope: string, from: string)
+	Remotes.GetEvent(Remotes.Events.NotifyAnnouncement):FireAllClients(text, scope, from)
+end
+
+global.AnnounceServer = function(admin, args)
+	local text = textArg(args)
+	if not text then
+		return false, "escreva a mensagem na caixa"
+	end
+	announceHere(text, "server", admin.Name)
+	return true, "mensagem enviada a este servidor"
+end
+
+global.AnnounceGlobal = function(admin, args)
+	local text = textArg(args)
+	if not text then
+		return false, "escreva a mensagem na caixa"
+	end
+	local ok, err = pcall(function()
+		MessagingService:PublishAsync(ANNOUNCE_TOPIC, { text = text, from = admin.Name })
+	end)
+	if not ok then
+		announceHere(text, "server", admin.Name)
+		return true, "MessagingService falhou (" .. tostring(err) .. "); enviada só a este servidor"
+	end
+	return true, "mensagem GLOBAL publicada (todos os servidores)"
+end
+
+perTarget.Announce = function(admin, target, args)
+	local text = textArg(args)
+	if not text then
+		return false, "escreva a mensagem na caixa"
+	end
+	Remotes.GetEvent(Remotes.Events.NotifyAnnouncement):FireClient(target, text, "you", admin.Name)
+	return true, ("mensagem enviada a %s"):format(target.Name)
+end
+
+local function banStore(): DataStore?
+	local ok, store = pcall(function()
+		return DataStoreService:GetDataStore(BAN_STORE)
+	end)
+	return if ok then store else nil
+end
+
+--- Ban (DataStore) + kick. `args.text` = motivo (opcional), `args.amount` = dias (0/nil = permanente).
+perTarget.Ban = function(admin, target, args)
+	if target == admin then
+		return false, "não dá pra se banir"
+	end
+	if isDeveloper(target) then
+		return false, "não dá pra banir outro dev"
+	end
+	local reason = textArg(args) or "Banido por um desenvolvedor"
+	local days = number(args.amount)
+	local until_ = if days and days > 0 then os.time() + days * 86400 else 0
+	local store = banStore()
+	if not store then
+		return false, "DataStore indisponível (Studio: ligue 'Enable Studio Access to API Services')"
+	end
+	local ok, err = pcall(function()
+		store:SetAsync(tostring(target.UserId), { reason = reason, until_ = until_, by = admin.Name, name = target.Name, at = os.time() })
+	end)
+	if not ok then
+		return false, "não gravou o ban: " .. tostring(err)
+	end
+	target:Kick(("Você foi banido: %s%s"):format(reason, if until_ > 0 then (" (até %s)"):format(os.date("%d/%m/%Y", until_)) else ""))
+	return true, ("%s banido (%s)"):format(target.Name, if until_ > 0 then tostring(days) .. " dia(s)" else "permanente")
+end
+
+--- Desbanir pelo nome (args.text = nome do jogador).
+global.Unban = function(_, args)
+	local name = textArg(args)
+	if not name then
+		return false, "escreva o NOME do jogador na caixa"
+	end
+	local okId, userId = pcall(function()
+		return Players:GetUserIdFromNameAsync(name)
+	end)
+	if not okId then
+		return false, "jogador não encontrado: " .. name
+	end
+	local store = banStore()
+	if not store then
+		return false, "DataStore indisponível"
+	end
+	local ok, err = pcall(function()
+		store:RemoveAsync(tostring(userId))
+	end)
+	return ok, if ok then name .. " desbanido" else "erro: " .. tostring(err)
+end
+
+--- Na entrada: banido = kick (falha do DataStore deixa entrar, mas avisa no Output).
+local function checkBan(player: Player)
+	local store = banStore()
+	if not store then
+		return
+	end
+	local ok, entry = pcall(function()
+		return store:GetAsync(tostring(player.UserId))
+	end)
+	if not ok then
+		warn(("[AdminService] não consegui ler o ban de %s: %s"):format(player.Name, tostring(entry)))
+		return
+	end
+	if typeof(entry) == "table" then
+		local until_ = tonumber(entry.until_) or 0
+		if until_ == 0 or os.time() < until_ then
+			player:Kick(("Você está banido: %s%s"):format(tostring(entry.reason), if until_ > 0 then (" (até %s)"):format(os.date("%d/%m/%Y", until_)) else ""))
+		end
+	end
+end
+
 global.RespawnArrow = function()
 	if not RitualService then
 		return false, "RitualService não carregou"
@@ -730,6 +862,18 @@ function AdminService.Start()
 	if okF then
 		BossFormService = f
 	end
+	-- anúncios globais (outros servidores) e ban na entrada
+	pcall(function()
+		MessagingService:SubscribeAsync(ANNOUNCE_TOPIC, function(message)
+			local data = message.Data
+			if typeof(data) == "table" and typeof(data.text) == "string" then
+				announceHere(data.text, "global", tostring(data.from))
+			end
+		end)
+	end)
+	Players.PlayerAdded:Connect(function(player)
+		task.spawn(checkBan, player)
+	end)
 	Remotes.GetFunction(Remotes.Functions.FetchAdminLogin).OnServerInvoke = onLogin
 	Remotes.GetEvent(Remotes.Events.RequestAdminCommand).OnServerEvent:Connect(onCommand)
 

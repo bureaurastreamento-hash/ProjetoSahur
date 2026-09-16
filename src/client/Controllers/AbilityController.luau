@@ -31,6 +31,7 @@ local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
+local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 
 local AbilityController = {}
 
@@ -108,6 +109,9 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		return
 	end
 	if phase == "start" then
+		if character:GetAttribute("BossRig") ~= nil then
+			RigAnimController.Pulse(character, 2)
+		end
 		FX.PlayAnimation(character, characterId, abilityId)
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)

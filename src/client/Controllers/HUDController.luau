@@ -556,6 +556,12 @@ function HUDController.Init()
 end
 
 function HUDController.Start()
+	-- anúncios da administração (global/servidor/só pra mim)
+	Remotes.GetEvent(Remotes.Events.NotifyAnnouncement).OnClientEvent:Connect(function(text: string, scope: string, from: string)
+		local prefix = if scope == "global" then "[GLOBAL] " elseif scope == "you" then "[Mensagem] " else ""
+		showBanner(prefix .. tostring(text), 7)
+		FX.PlaySoundUI("Match", "RoundStart")
+	end)
 	-- Botões de personagem
 	for i, id in CharacterDefs.Order do
 		local def = CharacterDefs.Get(id)

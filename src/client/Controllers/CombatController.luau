@@ -28,6 +28,7 @@ local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local SettingsController = require(script.Parent:WaitForChild("SettingsController"))
+local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
 local CombatController = {}
@@ -57,6 +58,9 @@ local pendingAttacks = 0 -- socos previstos cuja confirmação (NotifyAttack) ai
 --- Animação + som do golpe (previsto no atacante local, NotifyAttack nos outros).
 local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: number)
 	local attackDef = CombatConfig.Attacks[attackId]
+	if attackerChar:GetAttribute("BossRig") ~= nil then
+		RigAnimController.Pulse(attackerChar, if attackId == "M1" and comboIndex < 4 then 1 else 1.6) -- rig por peças: "mordida"
+	end
 	if attackId ~= "M1" then
 		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
 		FX.PlayAnimation(attackerChar, SHARED, attackId)

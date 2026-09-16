@@ -52,12 +52,14 @@ local SIMPLE_COMMANDS = {
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
 	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm",
 }
+-- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
+local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban" }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local panel: Frame
+local panel: ScrollingFrame
 local targetsList: ScrollingFrame
 local targetTemplate: TextButton
 local charactersList: Frame
@@ -350,7 +352,7 @@ function DevController.Init()
 	requestCommand = Remotes.GetEvent(Remotes.Events.RequestAdminCommand)
 	local gui = playerGui:WaitForChild("DevGui", 15)
 	assert(gui, "[DevController] StarterGui.DevGui não chegou (Rojo conectado?)")
-	panel = get(gui, "Panel") :: Frame
+	panel = get(gui, "Panel") :: ScrollingFrame
 	targetsList = get(panel, "Targets") :: ScrollingFrame
 	targetTemplate = get(targetsList, "Template") :: TextButton
 	charactersList = get(panel, "Characters") :: Frame
@@ -399,6 +401,13 @@ function DevController.Start()
 	for _, command in SIMPLE_COMMANDS do
 		(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
 			send(command)
+		end)
+	end
+	local messageBox = get(panel, "Message") :: TextBox
+	local banDaysBox = get(panel, "BanDays") :: TextBox
+	for _, command in TEXT_COMMANDS do
+		(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
+			send(command, { text = messageBox.Text, amount = tonumber(banDaysBox.Text) })
 		end)
 	end
 	buildCharacters()

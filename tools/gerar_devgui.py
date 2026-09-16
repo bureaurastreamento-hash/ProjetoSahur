@@ -21,7 +21,7 @@ GREY = [0.75, 0.75, 0.78]
 RED = [0.75, 0.25, 0.25]
 GREEN = [0.25, 0.55, 0.35]
 
-W, H = 620, 900
+W, H = 620, 1000
 PAD = 12
 COL_W = (W - PAD * 2 - 8 * 3) // 4  # 4 colunas
 
@@ -137,6 +137,17 @@ for i, (cmd, text, color) in enumerate(actions):
     children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y), color))
 y += 36
 
+children.append(section("AdminSection", "ADMINISTRAÇÃO  (mensagem na caixa; Ban/Enviar usam o alvo)", y)); y += 18
+children.append(textbox("Message", "mensagem / motivo do ban / nome para desbanir", udim2(0, COL_W * 3 + 16, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(textbox("BanDays", "dias (0 = perm.)", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y)))
+y += 32
+admin = [("AnnounceGlobal", "Mensagem GLOBAL", GREEN), ("AnnounceServer", "Mensagem no servidor", BG2), ("Announce", "Enviar ao alvo", BG2), ("Ban", "BANIR alvo", RED)]
+for i, (cmd, text, color) in enumerate(admin):
+    children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y), color))
+y += 32
+children.append(button("Unban", "Desbanir (nome na caixa)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y)))
+y += 36
+
 children.append(section("TestSection", "COMBATE / TESTES  (alvo)", y)); y += 18
 tests = [("Fly", "Voar", BG2), ("Awaken", "ULT + despertar", GREEN), ("Ragdoll", "Ragdoll 2 s", BG2), ("ClearAntiExploit", "Zerar anti-exploit", BG2)]
 for i, (cmd, text, color) in enumerate(tests):
@@ -178,15 +189,17 @@ y += 36
 # ---- Log --------------------------------------------------------------------------
 children.append(section("LogSection", "RESULTADO", y)); y += 18
 children.append(node("Log", "TextLabel", {
-    "Size": udim2(1, -PAD * 2, 1, -y - PAD), "Position": udim2(0, PAD, 0, y), "BackgroundColor3": {"Color3": BG2},
+    "Size": udim2(1, -PAD * 2 - 8, 0, H - y - PAD), "Position": udim2(0, PAD, 0, y), "BackgroundColor3": {"Color3": BG2},
     "BackgroundTransparency": 0.5, "Text": "", "TextSize": 11, "Font": "Code", "TextColor3": {"Color3": GREY},
     "TextXAlignment": "Left", "TextYAlignment": "Top", "TextWrapped": True, "BorderSizePixel": 0,
 }, [corner(), node("UIPadding", "UIPadding", {"PaddingLeft": {"UDim": [0, 6]}, "PaddingTop": {"UDim": [0, 4]}})]))
 
-panel = node("Panel", "Frame", {
-    "Size": udim2(0, W, 0, H), "Position": udim2(0.5, 0, 0.5, 0), "AnchorPoint": {"Vector2": [0.5, 0.5]},
+# ScrollingFrame: em telas baixas (laptop) o painel rola em vez de sair da tela
+panel = node("Panel", "ScrollingFrame", {
+    "Size": udim2(0, W, 0.92, 0), "Position": udim2(0.5, 0, 0.5, 0), "AnchorPoint": {"Vector2": [0.5, 0.5]},
     "BackgroundColor3": {"Color3": BG}, "BackgroundTransparency": 0.08, "Visible": False, "Active": True,
-    "BorderSizePixel": 0,
+    "BorderSizePixel": 0, "CanvasSize": udim2(0, 0, 0, H), "ScrollBarThickness": 6, "ScrollingDirection": "Y",
+    "AutomaticCanvasSize": "None",
 }, children)
 
 gui = {"className": "ScreenGui", "properties": {"ResetOnSpawn": False, "DisplayOrder": 10, "IgnoreGuiInset": False},

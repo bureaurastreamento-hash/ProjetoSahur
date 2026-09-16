@@ -81,6 +81,7 @@ RemoteEvents.Events = ({
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
 	NotifyLeaderboard = "NotifyLeaderboard", -- all: ({ kills = rows, rating = rows }, rows: { {name: string, value: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
+	NotifyAnnouncement = "NotifyAnnouncement", -- all/um: (text: string, scope: "global"|"server"|"you", from: string)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"warning"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
 	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done"|"mastery_up", data: table)
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)

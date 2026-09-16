@@ -263,6 +263,19 @@ Memória entre sessões. Atualizar depois de cada mudança.
    holders somem no fim. FALTA: o dono olhar cada um no F7 e apontar o que ajustar (tamanho/cor/mesh errada —
    escolhi as meshes pelo nome/tamanho, sem ver); sons por golpe; animações do rig do boss.
    Depois disso `Workspace.Efeitos`/`Auras` podem sair do place (tudo que precisava virou ID no código).
+4c. **Polimento (2026-09-16 noite, depois dos VFX)**:
+   - **Agarrão soldado no servidor** (item 5 dos planos): `AbilityService.attachVictim` = `Weld` HRP→HRP com C0
+     (offset/lift; Spin gira o C0 a 30 Hz), física da vítima passa ao cliente do atacante, `PlatformStand`;
+     solta ANTES do golpe final. Cliente da vítima só toca `Shared/Grabbed` (loop, entrada vazia em
+     `Animations.model.json`). Testado com boneco: weld 3 studs, solta, dano entra.
+   - `RigAnimController` (novo, saiu do BossController): animação procedural do rig + `Pulse(model, força)` =
+     mordida do cone no M1/habilidades (CombatController/AbilityController chamam). Zoom da câmera 18–70 na
+     forma de boss (`BossController`).
+   - **Menu DEV → Administração** (item 7): caixa de mensagem + dias; **Mensagem GLOBAL** (MessagingService
+     `SahurAnnounce`, cai para o servidor se falhar), **no servidor**, **ao alvo**; **BANIR alvo** (DataStore
+     `Bans_v1`, kick, checado no PlayerAdded; dias = 0 permanente), **Desbanir** (nome na caixa). Banner na HUD
+     (`NotifyAnnouncement`). Painel virou ScrollingFrame (92% da tela, rola). `AbilityService.Use` p/ testes.
+   - Aviso: `Boss.Swipe/Idle/Roar` (animações do BossModel antigo) não valem mais — o boss é o rig por peças.
 5. **Arena_Antiga = mapa da guerra de clã**: `tools/montar_arena_antiga.luau` (rodei via MCP) recoloriu os muros
    do dono, gerou interior (piso, plataforma central B com rampas, plataformas A/C, cobertura espelhada,
    colunas quebradas, tochas, bandeiras azul/vermelha), `CapturePoints` A/B/C e `Spawns` (Spawn1 oeste /
