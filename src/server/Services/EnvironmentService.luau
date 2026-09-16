@@ -73,6 +73,100 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 	},
 }
 
+-- ---------------------------------------------------------------------------
+-- Ciclo dia/noite (servidor manda). O boss só pode ser invocado à NOITE (BossService/RitualService).
+-- O dev controla: AdminService.SetTime/SetDay/SetNight congelam a hora; TimeAuto volta ao ciclo.
+-- Workspace.IsNight (atributo) replica para os clientes.
+-- ---------------------------------------------------------------------------
+EnvironmentService.DayNight = {
+	Enabled = true,
+	DayMinutes = 10, -- duração real do dia (NightEnd → NightStart)
+	NightMinutes = 5, -- duração real da noite (NightStart → NightEnd)
+	NightStart = 18.5, -- ClockTime em que começa a noite
+	NightEnd = 5.5, -- ClockTime em que amanhece
+	StartClock = 15.6, -- hora ao ligar o servidor (fim de tarde: primeira noite chega em ~2,5 min)
+	-- iluminação extra da noite (interpolada nos ~1,5 h de transição em volta de NightStart/NightEnd)
+	Night = {
+		Brightness = 0.9,
+		Ambient = Color3.fromRGB(28, 30, 44),
+		OutdoorAmbient = Color3.fromRGB(44, 48, 72),
+		ExposureCompensation = -0.15,
+	},
+}
+
+local clock = EnvironmentService.DayNight.StartClock
+local clockOverride: number? = nil -- dev congelou a hora
+local isNight = false
+
+local function nightAmount(hour: number): number
+	-- 0 = dia pleno, 1 = noite plena; transição de 1,5 h em volta dos limites
+	local dn = EnvironmentService.DayNight
+	local function ramp(x: number): number
+		return math.clamp(x, 0, 1)
+	end
+	local fade = 1.5
+	if hour >= dn.NightStart or hour < dn.NightEnd then
+		local sinceStart = (hour - dn.NightStart) % 24
+		local untilEnd = (dn.NightEnd - hour) % 24
+		return math.min(ramp(sinceStart / fade + 0.5), ramp(untilEnd / fade + 0.5), 1)
+	end
+	local toStart = dn.NightStart - hour
+	local sinceEnd = hour - dn.NightEnd
+	return math.max(ramp(0.5 - toStart / fade), ramp(0.5 - sinceEnd / fade), 0)
+end
+
+local function applyClock(hour: number)
+	local dn = EnvironmentService.DayNight
+	clock = hour % 24
+	Lighting.ClockTime = clock
+	local a = nightAmount(clock)
+	local day = CONFIG.Lighting
+	Lighting.Brightness = day.Brightness + (dn.Night.Brightness - day.Brightness) * a
+	Lighting.Ambient = day.Ambient:Lerp(dn.Night.Ambient, a)
+	Lighting.OutdoorAmbient = day.OutdoorAmbient:Lerp(dn.Night.OutdoorAmbient, a)
+	Lighting.ExposureCompensation = day.ExposureCompensation + (dn.Night.ExposureCompensation - day.ExposureCompensation) * a
+	local night = clock >= dn.NightStart or clock < dn.NightEnd
+	if night ~= isNight then
+		isNight = night
+		Workspace:SetAttribute("IsNight", night)
+		Log.debug(("[EnvironmentService] %s (ClockTime %.1f)"):format(if night then "anoiteceu" else "amanheceu", clock))
+	end
+end
+
+function EnvironmentService.IsNight(): boolean
+	return isNight
+end
+
+function EnvironmentService.GetClock(): number
+	return clock
+end
+
+--- Dev: congela a hora (nil = volta ao ciclo automático).
+function EnvironmentService.SetClockOverride(hour: number?)
+	clockOverride = hour
+	if hour then
+		applyClock(hour)
+	end
+	Workspace:SetAttribute("ClockOverride", hour)
+end
+
+local function dayNightLoop()
+	local dn = EnvironmentService.DayNight
+	applyClock(dn.StartClock)
+	Workspace:SetAttribute("IsNight", isNight)
+	local step = 1
+	while true do
+		task.wait(step)
+		if clockOverride or not dn.Enabled then
+			continue
+		end
+		local nightHours = (dn.NightEnd - dn.NightStart) % 24
+		local dayHours = 24 - nightHours
+		local hoursPerSecond = if isNight then nightHours / (dn.NightMinutes * 60) else dayHours / (dn.DayMinutes * 60)
+		applyClock(clock + hoursPerSecond * step)
+	end
+end
+
 local function applyProperties(target: Instance, props: { [string]: any })
 	for key, value in props do
 		local ok, err = pcall(function()
@@ -105,6 +199,7 @@ function EnvironmentService.Start()
 	end
 	Log.debug("[EnvironmentService] iluminação aplicada (Technology precisa ser Future/ShadowMap no Studio)")
 	EnvironmentService.OptimizeShadows()
+	task.spawn(dayNightLoop)
 end
 
 -- Sombras só em parts que fazem diferença visual: decoração miúda (< ShadowMinSize studs no maior eixo),

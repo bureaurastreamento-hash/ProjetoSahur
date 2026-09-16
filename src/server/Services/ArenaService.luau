@@ -28,7 +28,8 @@ local current: Model? = nil
 local function refreshRotation()
 	rotation = {}
 	for _, child in mapsFolder:GetChildren() do
-		if child:IsA("Model") then
+		-- WarOnly = só guerra de clã (WarService), fora da rotação de rounds
+		if child:IsA("Model") and child:GetAttribute("WarOnly") ~= true then
 			table.insert(rotation, child)
 		end
 	end

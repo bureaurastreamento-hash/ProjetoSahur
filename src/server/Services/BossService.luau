@@ -27,6 +27,7 @@ local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local BossRig = require(Modules:WaitForChild("BossRig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
+local RitualService = require(script.Parent:WaitForChild("RitualService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
@@ -78,6 +79,18 @@ local function setStatus(text: string)
 	if statusLabel then
 		statusLabel.Text = text
 	end
+end
+
+--- Altar em "Ready": letreiro + prompt conforme o ritual (caveiras) e a noite.
+local function refreshReady()
+	if state ~= "Ready" then
+		return
+	end
+	local can = RitualService.CanSummon()
+	if prompt then
+		prompt.Enabled = can
+	end
+	setStatus(RitualService.StatusText())
 end
 
 local function findExtras()
@@ -500,12 +513,10 @@ local function endFight(f: Fight, defeated: boolean)
 		end
 		if state == "Cooldown" then
 			state = "Ready"
-			setStatus("Altar pronto: segure E para invocar")
-			if prompt then
-				prompt.Enabled = true
-			end
+			refreshReady()
 		end
 	end)
+	RitualService.Restart(BossConfig.Cooldown) -- caveiras voltam ao mapa junto com o altar
 end
 
 local function aiLoop(f: Fight)
@@ -608,6 +619,11 @@ local function summon(player: Player, byName: string?)
 	if state ~= "Ready" or fight then
 		return
 	end
+	if not byName and not RitualService.CanSummon() then
+		notifyBoss:FireClient(player, "denied", { event = "denied", reason = RitualService.StatusText() })
+		refreshReady()
+		return
+	end
 	if BossConfig.SummonCost > 0 and not byName then
 		local profile = DataService.GetProfile(player)
 		if not profile or profile.coins < BossConfig.SummonCost then
@@ -624,6 +640,7 @@ local function summon(player: Player, byName: string?)
 	if prompt then
 		prompt.Enabled = false
 	end
+	RitualService.Consume()
 	local spawnCf = if spawnPart then spawnPart.CFrame else CFrame.new(arenaCenter())
 	local lift = humanoid.HipHeight + root.Size.Y / 2 + 1
 	model:PivotTo(CFrame.new(spawnCf.Position + Vector3.new(0, lift, 0)))
@@ -677,7 +694,7 @@ function BossService.Summon(player: Player): (boolean, string)
 	if state ~= "Ready" then
 		return false, "boss já está ativo"
 	end
-	summon(player)
+	summon(player, player.Name .. " (admin)")
 	return true, "boss invocado"
 end
 
@@ -756,7 +773,8 @@ function BossService.Start()
 	label.TextScaled = false
 	label.Parent = gui
 	statusLabel = label
-	setStatus("Altar pronto: segure E para invocar")
+	refreshReady()
+	RitualService.Changed.Event:Connect(refreshReady)
 
 	HealthService.Damaged.Event:Connect(function(victim: Model, amount: number, attacker: Player?)
 		local f = fight

@@ -21,7 +21,7 @@ GREY = [0.75, 0.75, 0.78]
 RED = [0.75, 0.25, 0.25]
 GREEN = [0.25, 0.55, 0.35]
 
-W, H = 620, 772
+W, H = 620, 860
 PAD = 12
 COL_W = (W - PAD * 2 - 8 * 3) // 4  # 4 colunas
 
@@ -158,11 +158,17 @@ children.append(button("DespawnBoss", "Remover boss", udim2(0, COL_W, 0, 28), ud
 children.append(button("InspectBoss", "Inspecionar BossModel", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y)))
 y += 32
 children.append(textbox("Time", "hora 0-24", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
-children.append(button("SetTime", "Definir hora", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y)))
+children.append(button("SetTime", "Congelar hora", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y)))
 children.append(button("ListPlayers", "Listar online", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y)))
 children.append(button("GetState", "Atualizar estado", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y)))
 y += 32
-children.append(button("TestSounds", "Testar sons dos packs", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(button("SetDay", "DIA", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(button("SetNight", "NOITE", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y), BG2))
+children.append(button("TimeAuto", "Ciclo automático", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y)))
+children.append(button("CompleteRitual", "Completar ritual", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y), GREEN))
+y += 32
+children.append(button("RespawnSkulls", "Sortear caveiras", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
+children.append(button("TestSounds", "Testar sons dos packs", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y)))
 children.append(button("PreviewVfx", "Preview VFX (F7)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y), GREEN))
 y += 36
 

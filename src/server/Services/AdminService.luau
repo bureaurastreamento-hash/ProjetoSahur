@@ -44,6 +44,8 @@ local DummyService = require(script.Parent:WaitForChild("DummyService"))
 local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local BossService = require(script.Parent:WaitForChild("BossService"))
+local RitualService = require(script.Parent:WaitForChild("RitualService"))
+local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
@@ -559,13 +561,41 @@ global.RefreshLeaderboard = function()
 	return true, "placar publicado e atualizado"
 end
 
+-- Tempo: o dev manda. SetTime/SetDay/SetNight CONGELAM a hora (o ciclo automático para); TimeAuto solta.
 global.SetTime = function(_, args)
 	local hour = number(args.amount)
 	if not hour then
 		return false, "hora inválida (0–24)"
 	end
-	Lighting.ClockTime = hour % 24
-	return true, ("ClockTime = %.1f"):format(Lighting.ClockTime)
+	EnvironmentService.SetClockOverride(hour % 24)
+	return true, ("hora congelada em %.1f (%s)"):format(Lighting.ClockTime, if EnvironmentService.IsNight() then "noite" else "dia")
+end
+
+global.SetDay = function()
+	EnvironmentService.SetClockOverride(13)
+	return true, "DIA (hora congelada em 13:00)"
+end
+
+global.SetNight = function()
+	EnvironmentService.SetClockOverride(22)
+	return true, "NOITE (hora congelada em 22:00) — altar aceita invocação se o ritual estiver completo"
+end
+
+global.TimeAuto = function()
+	EnvironmentService.SetClockOverride(nil)
+	local dn = EnvironmentService.DayNight
+	return true, ("ciclo automático (dia %d min / noite %d min)"):format(dn.DayMinutes, dn.NightMinutes)
+end
+
+global.CompleteRitual = function()
+	RitualService.ForceComplete()
+	local c, r = RitualService.GetProgress()
+	return true, ("ritual completo (%d/%d caveiras); %s"):format(c, r, if RitualService.CanSummon() then "altar PRONTO" else "falta a noite (SetNight)")
+end
+
+global.RespawnSkulls = function()
+	RitualService.Restart(0)
+	return true, "caveiras sorteadas de novo (progresso zerado)"
 end
 
 global.TestSounds = function()

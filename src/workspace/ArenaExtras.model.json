@@ -4354,6 +4354,1685 @@
      ]
     },
     {
+     "name": "BossAltarSkullSocket0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSkullSocket0",
+      "Anchored": true,
+      "Position": [
+       94.497,
+       3.55,
+       258.372
+      ],
+      "Size": [
+       0.5,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.1,
+       0.1,
+       0.13
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSocketRune0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSocketRune0",
+      "Anchored": true,
+      "Position": [
+       94.497,
+       3.84,
+       258.372
+      ],
+      "Size": [
+       1.2,
+       0.08,
+       1.2
+      ],
+      "Color": [
+       0.35,
+       0.08,
+       0.08
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -135,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSkullSocket1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSkullSocket1",
+      "Anchored": true,
+      "Position": [
+       101.003,
+       3.55,
+       258.372
+      ],
+      "Size": [
+       0.5,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.1,
+       0.1,
+       0.13
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSocketRune1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSocketRune1",
+      "Anchored": true,
+      "Position": [
+       101.003,
+       3.84,
+       258.372
+      ],
+      "Size": [
+       1.2,
+       0.08,
+       1.2
+      ],
+      "Color": [
+       0.35,
+       0.08,
+       0.08
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -135,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSkullSocket2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSkullSocket2",
+      "Anchored": true,
+      "Position": [
+       101.003,
+       3.55,
+       264.878
+      ],
+      "Size": [
+       0.5,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.1,
+       0.1,
+       0.13
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSocketRune2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSocketRune2",
+      "Anchored": true,
+      "Position": [
+       101.003,
+       3.84,
+       264.878
+      ],
+      "Size": [
+       1.2,
+       0.08,
+       1.2
+      ],
+      "Color": [
+       0.35,
+       0.08,
+       0.08
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -135,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSkullSocket3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSkullSocket3",
+      "Anchored": true,
+      "Position": [
+       94.497,
+       3.55,
+       264.878
+      ],
+      "Size": [
+       0.5,
+       1.8,
+       1.8
+      ],
+      "Color": [
+       0.1,
+       0.1,
+       0.13
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossAltarSocketRune3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarSocketRune3",
+      "Anchored": true,
+      "Position": [
+       94.497,
+       3.84,
+       264.878
+      ],
+      "Size": [
+       1.2,
+       0.08,
+       1.2
+      ],
+      "Color": [
+       0.35,
+       0.08,
+       0.08
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -135,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile0_0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile0_0",
+      "Anchored": true,
+      "Position": [
+       103.63,
+       2.569,
+       267.249
+      ],
+      "Size": [
+       1.075,
+       1.075,
+       1.075
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile0_1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile0_1",
+      "Anchored": true,
+      "Position": [
+       103.436,
+       2.642,
+       267.678
+      ],
+      "Size": [
+       1.369,
+       1.369,
+       1.369
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile0_2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile0_2",
+      "Anchored": true,
+      "Position": [
+       104.953,
+       2.638,
+       267.056
+      ],
+      "Size": [
+       1.352,
+       1.352,
+       1.352
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile0_3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile0_3",
+      "Anchored": true,
+      "Position": [
+       104.527,
+       3.076,
+       268.097
+      ],
+      "Size": [
+       1.103,
+       1.103,
+       1.103
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBoneLong0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBoneLong0",
+      "Anchored": true,
+      "Position": [
+       103.504,
+       2.5,
+       267.905
+      ],
+      "Size": [
+       0.35,
+       0.35,
+       2.6
+      ],
+      "Color": [
+       0.86,
+       0.82,
+       0.7
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -80.83386765253556,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile1_0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile1_0",
+      "Anchored": true,
+      "Position": [
+       92.137,
+       2.643,
+       267.486
+      ],
+      "Size": [
+       1.37,
+       1.37,
+       1.37
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile1_1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile1_1",
+      "Anchored": true,
+      "Position": [
+       91.335,
+       2.601,
+       266.514
+      ],
+      "Size": [
+       1.204,
+       1.204,
+       1.204
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile1_2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile1_2",
+      "Anchored": true,
+      "Position": [
+       92.066,
+       2.627,
+       267.244
+      ],
+      "Size": [
+       1.307,
+       1.307,
+       1.307
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile1_3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile1_3",
+      "Anchored": true,
+      "Position": [
+       92.343,
+       3.063,
+       265.968
+      ],
+      "Size": [
+       1.05,
+       1.05,
+       1.05
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBoneLong1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBoneLong1",
+      "Anchored": true,
+      "Position": [
+       90.897,
+       2.5,
+       266.48
+      ],
+      "Size": [
+       0.35,
+       0.35,
+       2.6
+      ],
+      "Color": [
+       0.86,
+       0.82,
+       0.7
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -178.8571075534182,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile2_0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile2_0",
+      "Anchored": true,
+      "Position": [
+       103.211,
+       2.631,
+       255.901
+      ],
+      "Size": [
+       1.322,
+       1.322,
+       1.322
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile2_1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile2_1",
+      "Anchored": true,
+      "Position": [
+       103.855,
+       2.618,
+       256.428
+      ],
+      "Size": [
+       1.271,
+       1.271,
+       1.271
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile2_2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile2_2",
+      "Anchored": true,
+      "Position": [
+       104.339,
+       2.538,
+       256.84
+      ],
+      "Size": [
+       0.953,
+       0.953,
+       0.953
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile2_3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile2_3",
+      "Anchored": true,
+      "Position": [
+       103.201,
+       3.067,
+       255.396
+      ],
+      "Size": [
+       1.068,
+       1.068,
+       1.068
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBoneLong2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBoneLong2",
+      "Anchored": true,
+      "Position": [
+       103.197,
+       2.5,
+       255.486
+      ],
+      "Size": [
+       0.35,
+       0.35,
+       2.6
+      ],
+      "Color": [
+       0.86,
+       0.82,
+       0.7
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -132.1222128387103,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile3_0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile3_0",
+      "Anchored": true,
+      "Position": [
+       91.791,
+       2.594,
+       254.99
+      ],
+      "Size": [
+       1.177,
+       1.177,
+       1.177
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile3_1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile3_1",
+      "Anchored": true,
+      "Position": [
+       92.166,
+       2.59,
+       255.313
+      ],
+      "Size": [
+       1.162,
+       1.162,
+       1.162
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile3_2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile3_2",
+      "Anchored": true,
+      "Position": [
+       92.273,
+       2.646,
+       254.789
+      ],
+      "Size": [
+       1.383,
+       1.383,
+       1.383
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBonePile3_3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBonePile3_3",
+      "Anchored": true,
+      "Position": [
+       92.177,
+       3.027,
+       256.206
+      ],
+      "Size": [
+       0.908,
+       0.908,
+       0.908
+      ],
+      "Color": [
+       0.7,
+       0.64,
+       0.52
+      ],
+      "Material": "Sand",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Shape": "Ball",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossBoneLong3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossBoneLong3",
+      "Anchored": true,
+      "Position": [
+       91.26,
+       2.5,
+       254.913
+      ],
+      "Size": [
+       0.35,
+       0.35,
+       2.6
+      ],
+      "Color": [
+       0.86,
+       0.82,
+       0.7
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -45.6927570351026,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack0",
+      "Anchored": true,
+      "Position": [
+       87.484,
+       1.32,
+       257.477
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       6.144
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -112.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack1",
+      "Anchored": true,
+      "Position": [
+       93.045,
+       1.32,
+       250.542
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       8.081
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -157.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack2",
+      "Anchored": true,
+      "Position": [
+       101.899,
+       1.32,
+       251.356
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       6.15
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       158.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack3",
+      "Anchored": true,
+      "Position": [
+       107.801,
+       1.32,
+       257.359
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       5.837
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       113.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack4",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack4",
+      "Anchored": true,
+      "Position": [
+       108.958,
+       1.32,
+       266.153
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       8.176
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       68.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack5",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack5",
+      "Anchored": true,
+      "Position": [
+       102.284,
+       1.32,
+       272.306
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       7.207
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       23.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack6",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack6",
+      "Anchored": true,
+      "Position": [
+       93.362,
+       1.32,
+       272.485
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       7.425
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -22.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossCrack7",
+     "className": "Part",
+     "properties": {
+      "Name": "BossCrack7",
+      "Anchored": true,
+      "Position": [
+       87.013,
+       1.32,
+       266.183
+      ],
+      "Size": [
+       0.35,
+       0.12,
+       7.328
+      ],
+      "Color": [
+       0.3,
+       0.06,
+       0.06
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -67.0,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossArchPostW",
+     "className": "Part",
+     "properties": {
+      "Name": "BossArchPostW",
+      "Anchored": true,
+      "Position": [
+       106.75,
+       8.8,
+       270.625
+      ],
+      "Size": [
+       14,
+       2.4,
+       2.4
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossArchPostE",
+     "className": "Part",
+     "properties": {
+      "Name": "BossArchPostE",
+      "Anchored": true,
+      "Position": [
+       88.75,
+       8.8,
+       270.625
+      ],
+      "Size": [
+       14,
+       2.4,
+       2.4
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       -180,
+       90
+      ]
+     }
+    },
+    {
+     "name": "BossArchTop",
+     "className": "Part",
+     "properties": {
+      "Name": "BossArchTop",
+      "Anchored": true,
+      "Position": [
+       97.75,
+       16.2,
+       270.625
+      ],
+      "Size": [
+       21,
+       2.2,
+       2.6
+      ],
+      "Color": [
+       0.13,
+       0.13,
+       0.16
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossArchKey",
+     "className": "Part",
+     "properties": {
+      "Name": "BossArchKey",
+      "Anchored": true,
+      "Position": [
+       97.75,
+       17.0,
+       270.625
+      ],
+      "Size": [
+       3,
+       3.2,
+       2.9
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     }
+    },
+    {
+     "name": "BossChain0",
+     "className": "Part",
+     "properties": {
+      "Name": "BossChain0",
+      "Anchored": true,
+      "Position": [
+       103.25,
+       12.8,
+       270.625
+      ],
+      "Size": [
+       0.3,
+       6.437,
+       0.3
+      ],
+      "Color": [
+       0.25,
+       0.24,
+       0.24
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       -0.36608465264971457
+      ]
+     }
+    },
+    {
+     "name": "BossChain1",
+     "className": "Part",
+     "properties": {
+      "Name": "BossChain1",
+      "Anchored": true,
+      "Position": [
+       99.75,
+       12.8,
+       270.625
+      ],
+      "Size": [
+       0.3,
+       6.019,
+       0.3
+      ],
+      "Color": [
+       0.25,
+       0.24,
+       0.24
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       2.371418506477628
+      ]
+     }
+    },
+    {
+     "name": "BossChain2",
+     "className": "Part",
+     "properties": {
+      "Name": "BossChain2",
+      "Anchored": true,
+      "Position": [
+       95.75,
+       12.8,
+       270.625
+      ],
+      "Size": [
+       0.3,
+       6.073,
+       0.3
+      ],
+      "Color": [
+       0.25,
+       0.24,
+       0.24
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       -0.7534318903955928
+      ]
+     }
+    },
+    {
+     "name": "BossChain3",
+     "className": "Part",
+     "properties": {
+      "Name": "BossChain3",
+      "Anchored": true,
+      "Position": [
+       92.25,
+       12.8,
+       270.625
+      ],
+      "Size": [
+       0.3,
+       5.674,
+       0.3
+      ],
+      "Color": [
+       0.25,
+       0.24,
+       0.24
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       0.8440857128583215
+      ]
+     }
+    },
+    {
+     "name": "BossAltarMist",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarMist",
+      "Anchored": true,
+      "Position": [
+       97.75,
+       2.5,
+       261.625
+      ],
+      "Size": [
+       18,
+       0.2,
+       18
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     },
+     "children": [
+      {
+       "name": "Mist",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             0.55,
+             0.2,
+             0.2
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.2,
+             0.05,
+             0.08
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 4,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 7,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 1,
+            "envelope": 0
+           },
+           {
+            "time": 0.3,
+            "value": 0.85,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 4,
+        "Lifetime": {
+         "NumberRange": [
+          4,
+          6
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          0.4,
+          1.0
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          80,
+          80
+         ]
+        },
+        "Rotation": {
+         "NumberRange": [
+          0,
+          360
+         ]
+        },
+        "RotSpeed": {
+         "NumberRange": [
+          -8,
+          8
+         ]
+        },
+        "LightEmission": 0.15
+       }
+      }
+     ]
+    },
+    {
+     "name": "BossAltarEmbers",
+     "className": "Part",
+     "properties": {
+      "Name": "BossAltarEmbers",
+      "Anchored": true,
+      "Position": [
+       97.75,
+       6.8,
+       261.625
+      ],
+      "Size": [
+       6,
+       0.2,
+       6
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "CastShadow": false,
+      "Orientation": [
+       0,
+       -180,
+       0
+      ]
+     },
+     "children": [
+      {
+       "name": "Embers",
+       "className": "ParticleEmitter",
+       "properties": {
+        "Color": {
+         "ColorSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "color": [
+             1.0,
+             0.35,
+             0.2
+            ]
+           },
+           {
+            "time": 1,
+            "color": [
+             0.5,
+             0.05,
+             0.0
+            ]
+           }
+          ]
+         }
+        },
+        "Size": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.18,
+            "envelope": 0.05
+           },
+           {
+            "time": 1,
+            "value": 0,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Transparency": {
+         "NumberSequence": {
+          "keypoints": [
+           {
+            "time": 0,
+            "value": 0.1,
+            "envelope": 0
+           },
+           {
+            "time": 1,
+            "value": 1,
+            "envelope": 0
+           }
+          ]
+         }
+        },
+        "Rate": 10,
+        "Lifetime": {
+         "NumberRange": [
+          1.5,
+          3
+         ]
+        },
+        "Speed": {
+         "NumberRange": [
+          1,
+          2.5
+         ]
+        },
+        "SpreadAngle": {
+         "Vector2": [
+          60,
+          60
+         ]
+        },
+        "Acceleration": {
+         "Vector3": [
+          0,
+          1.5,
+          0
+         ]
+        },
+        "LightEmission": 1,
+        "Drag": 1
+       }
+      }
+     ]
+    },
+    {
      "name": "BossSpawn",
      "className": "Part",
      "properties": {
@@ -4420,6 +6099,1278 @@
        0
       ]
      }
+    },
+    {
+     "name": "SkullPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad0",
+      "Anchored": true,
+      "Position": [
+       -160,
+       0.25,
+       -160
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot0",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot0",
+      "Anchored": true,
+      "Position": [
+       -160,
+       0.8,
+       -160
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost0",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost0",
+      "Anchored": true,
+      "Position": [
+       -157.8,
+       3.5,
+       -157.8
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm0",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm0",
+      "Anchored": true,
+      "Position": [
+       -158.8,
+       6.9,
+       -157.8
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern0",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern0",
+      "Anchored": true,
+      "Position": [
+       -159.7,
+       6.3,
+       -157.8
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad1",
+      "Anchored": true,
+      "Position": [
+       160,
+       0.25,
+       -160
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot1",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot1",
+      "Anchored": true,
+      "Position": [
+       160,
+       0.8,
+       -160
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost1",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost1",
+      "Anchored": true,
+      "Position": [
+       162.2,
+       3.5,
+       -157.8
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm1",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm1",
+      "Anchored": true,
+      "Position": [
+       161.2,
+       6.9,
+       -157.8
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern1",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern1",
+      "Anchored": true,
+      "Position": [
+       160.3,
+       6.3,
+       -157.8
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad2",
+      "Anchored": true,
+      "Position": [
+       -205,
+       0.25,
+       10
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot2",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot2",
+      "Anchored": true,
+      "Position": [
+       -205,
+       0.8,
+       10
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost2",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost2",
+      "Anchored": true,
+      "Position": [
+       -202.8,
+       3.5,
+       12.2
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm2",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm2",
+      "Anchored": true,
+      "Position": [
+       -203.8,
+       6.9,
+       12.2
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern2",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern2",
+      "Anchored": true,
+      "Position": [
+       -204.7,
+       6.3,
+       12.2
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad3",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad3",
+      "Anchored": true,
+      "Position": [
+       205,
+       0.25,
+       25
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot3",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot3",
+      "Anchored": true,
+      "Position": [
+       205,
+       0.8,
+       25
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost3",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost3",
+      "Anchored": true,
+      "Position": [
+       207.2,
+       3.5,
+       27.2
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm3",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm3",
+      "Anchored": true,
+      "Position": [
+       206.2,
+       6.9,
+       27.2
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern3",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern3",
+      "Anchored": true,
+      "Position": [
+       205.3,
+       6.3,
+       27.2
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad4",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad4",
+      "Anchored": true,
+      "Position": [
+       -168,
+       0.25,
+       188
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot4",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot4",
+      "Anchored": true,
+      "Position": [
+       -168,
+       0.8,
+       188
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost4",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost4",
+      "Anchored": true,
+      "Position": [
+       -165.8,
+       3.5,
+       190.2
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm4",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm4",
+      "Anchored": true,
+      "Position": [
+       -166.8,
+       6.9,
+       190.2
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern4",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern4",
+      "Anchored": true,
+      "Position": [
+       -167.7,
+       6.3,
+       190.2
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad5",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad5",
+      "Anchored": true,
+      "Position": [
+       5,
+       0.25,
+       -215
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot5",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot5",
+      "Anchored": true,
+      "Position": [
+       5,
+       0.8,
+       -215
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost5",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost5",
+      "Anchored": true,
+      "Position": [
+       7.2,
+       3.5,
+       -212.8
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm5",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm5",
+      "Anchored": true,
+      "Position": [
+       6.2,
+       6.9,
+       -212.8
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern5",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern5",
+      "Anchored": true,
+      "Position": [
+       5.3,
+       6.3,
+       -212.8
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad6",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad6",
+      "Anchored": true,
+      "Position": [
+       190,
+       0.25,
+       150
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot6",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot6",
+      "Anchored": true,
+      "Position": [
+       190,
+       0.8,
+       150
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost6",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost6",
+      "Anchored": true,
+      "Position": [
+       192.2,
+       3.5,
+       152.2
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm6",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm6",
+      "Anchored": true,
+      "Position": [
+       191.2,
+       6.9,
+       152.2
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern6",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern6",
+      "Anchored": true,
+      "Position": [
+       190.3,
+       6.3,
+       152.2
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
+    },
+    {
+     "name": "SkullPad7",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPad7",
+      "Anchored": true,
+      "Position": [
+       -45,
+       0.25,
+       120
+      ],
+      "Size": [
+       0.5,
+       5.2,
+       5.2
+      ],
+      "Color": [
+       0.3,
+       0.3,
+       0.32
+      ],
+      "Material": "Basalt",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullSpot7",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullSpot7",
+      "Anchored": true,
+      "Position": [
+       -45,
+       0.8,
+       120
+      ],
+      "Size": [
+       1.6,
+       0.6,
+       1.6
+      ],
+      "Color": [
+       0.14,
+       0.14,
+       0.17
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullPost7",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPost7",
+      "Anchored": true,
+      "Position": [
+       -42.8,
+       3.5,
+       122.2
+      ],
+      "Size": [
+       7,
+       0.5,
+       0.5
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "SkullPostArm7",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullPostArm7",
+      "Anchored": true,
+      "Position": [
+       -43.8,
+       6.9,
+       122.2
+      ],
+      "Size": [
+       2.2,
+       0.25,
+       0.25
+      ],
+      "Color": [
+       0.2,
+       0.19,
+       0.18
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SkullLantern7",
+     "className": "Part",
+     "properties": {
+      "Name": "SkullLantern7",
+      "Anchored": true,
+      "Position": [
+       -44.7,
+       6.3,
+       122.2
+      ],
+      "Size": [
+       0.9,
+       1.1,
+       0.9
+      ],
+      "Color": [
+       1.0,
+       0.78,
+       0.45
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     },
+     "children": [
+      {
+       "name": "Light",
+       "className": "PointLight",
+       "properties": {
+        "Color": [
+         1.0,
+         0.75,
+         0.45
+        ],
+        "Brightness": 2.2,
+        "Range": 26,
+        "Shadows": false
+       }
+      }
+     ]
     }
    ]
   },

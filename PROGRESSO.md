@@ -225,7 +225,35 @@ Memória entre sessões. Atualizar depois de cada mudança.
      soco SIMPLES de um terceiro dá dano mas NÃO interrompe (sem hitstun). 4º golpe, uppercut/downslam e
      habilidades (têm empurrão) interrompem normal. Vítima em hitstun continua sem dash (já era assim).
    Testar com 2 clientes (Test > Clients and Servers, 3 players) ou bonecos.
-4. Depois (ainda não feito): item 4 (VFX golpe a golpe com o testador F7), item 5 (flipbooks parados — conferir
+4. **Ciclo dia/noite + ritual das caveiras + altar ambientado** (pedido do dono, 2026-09-16 noite):
+   - `EnvironmentService.DayNight`: dia 10 min / noite 5 min (noite = ClockTime 18,5→5,5), começa 15,6
+     (primeira noite em ~2,5 min). `Workspace.IsNight` (atributo). Painel DEV: **DIA / NOITE / Ciclo automático /
+     Congelar hora** (SetTime congela). Iluminação da noite = `DayNight.Night` (Brightness/Ambient/Exposure).
+   - `RitualService` (novo): 4 caveiras (`BossConfig.Ritual.SkullsRequired`) sorteadas entre 8 `SkullSpot*` do
+     mapa (pedestal + poste com lanterna acesa, `SKULL_SPOTS` em `gerar_arena.py`). Encostar coleta (servidor
+     confere raio); cada caveira acende uma tocha do altar e aparece num `BossAltarSkullSocket{i}`; ritual
+     completo + noite = runa/rachaduras acendem e o prompt E aparece. Ao invocar, gasta; caveiras voltam
+     junto com o cooldown do altar. Caveira = modelo `Skull` em ServerStorage/Assets se a equipe fizer;
+     senão caveira por código (flutua/gira no cliente, tag `RitualSkull`). `AutoSpawnMinutes = 0`.
+     DEV: **Completar ritual**, **Sortear caveiras**. Banner "X achou uma caveira (n/4)".
+   - Altar ambientado (gerador): 4 encaixes de caveira com runa, pilhas de ossos, rachaduras vermelhas, arco
+     de pedra com correntes atrás, névoa baixa vermelha, brasas. Regenerado (`ArenaExtras`: 181 partes).
+   - TESTAR: andar até uma lanterna e pegar a caveira; ver tocha acender; DEV → NOITE; E no altar.
+5. **Arena_Antiga = mapa da guerra de clã**: `tools/montar_arena_antiga.luau` (rodei via MCP) recoloriu os muros
+   do dono, gerou interior (piso, plataforma central B com rampas, plataformas A/C, cobertura espelhada,
+   colunas quebradas, tochas, bandeiras azul/vermelha), `CapturePoints` A/B/C e `Spawns` (Spawn1 oeste /
+   Spawn2 leste), moveu para `ServerStorage.Maps.Arena_Antiga` (atributo `WarOnly` = fora da rotação de
+   rounds). `WarConfig.Maps = {Arena_Antiga, Arena_Gerada}` → `WarService.pickMap` sorteia. O place precisa ser
+   SALVO (Team Create) para persistir. Para refazer o interior: rodar o script de novo (apaga só o gerado).
+   TESTAR: guerra de clã com 2 clãs (ver roteiro da guerra) e conferir se caiu na Arena_Antiga.
+6. **Pendências do que o dono puxou para o Workspace** (ver resposta de 2026-09-16 noite): `Workspace.Efeitos.VFX
+   PACK` = 2.897 parts / 785 texturas únicas renderizando (mesmo pack que derrubou o FPS antes) — tirar do
+   Workspace (ServerStorage) ou apagar (já temos em `packs/ParaImportar`). `EFEITOS 2` (191 meshes de
+   choque/tornado/esferas) e `poder` são bons para VFX de habilidade → escolher e eu levo para
+   `Assets.VFX`. `Auras` (7 auras de partículas) → candidatas a `Assets.VFX.<Personagem>.Awakening`.
+   Árvores/pedras (Arvore1-3, Pedra1-3) → posso espalhar cópias por código (PropService) se o dono quiser.
+   `cav` (8 parts Slate em 255,11,88) parece uma caverna/gruta — o dono confirma o uso.
+7. Depois (ainda não feito): item 4 (VFX golpe a golpe com o testador F7), item 5 (flipbooks parados — conferir
    `podar_vfx.luau`/`FX.SpawnVFXTemplate` preservam `Flipbook*`), item 7 dos planos (Menu DEV → Administração:
    mensagem global via MessagingService, ban DataStore + kick, kick), item 5 dos planos (agarrão soldado no
    servidor + anim Shared/Grabbed), menus minimalistas, `AwakenedEffect` faltando em vários personagens,

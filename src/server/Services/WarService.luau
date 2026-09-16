@@ -384,10 +384,30 @@ local function runWar(war: War)
 	finishWar(war)
 end
 
+--- Sorteia um mapa de WarConfig.Maps que exista em ServerStorage.Maps (reserva: WarConfig.MapName).
+local function pickMap(): Model?
+	local folder = ServerStorage:FindFirstChild("Maps")
+	if not folder then
+		return nil
+	end
+	local options: { Model } = {}
+	for _, name in WarConfig.Maps do
+		local m = folder:FindFirstChild(name)
+		if m and m:IsA("Model") then
+			table.insert(options, m)
+		end
+	end
+	if #options == 0 then
+		local m = folder:FindFirstChild(WarConfig.MapName)
+		return if m and m:IsA("Model") then m else nil
+	end
+	return options[math.random(1, #options)]
+end
+
 local function startWar(a: QueueEntry, b: QueueEntry): (boolean, string)
-	local template = ServerStorage:FindFirstChild("Maps") and ServerStorage.Maps:FindFirstChild(WarConfig.MapName)
-	if not template or not template:IsA("Model") then
-		return false, ("mapa %s não existe em ServerStorage.Maps"):format(WarConfig.MapName)
+	local template = pickMap()
+	if not template then
+		return false, ("nenhum mapa de guerra em ServerStorage.Maps (%s)"):format(table.concat(WarConfig.Maps, ", "))
 	end
 	local slot = allocateSlot()
 	if not slot then
@@ -604,7 +624,7 @@ function WarService.Start()
 			onCharacterAdded(player)
 		end)
 	end
-	Log.debug(("[WarService] pronto (mapa %s, %d pontos por segundo)"):format(WarConfig.MapName, WarConfig.PointsPerSecond))
+	Log.debug(("[WarService] pronto (mapas %s, %d pontos por segundo)"):format(table.concat(WarConfig.Maps, "/"), WarConfig.PointsPerSecond))
 end
 
 return WarService

@@ -194,6 +194,43 @@ local function onNotifyBoss(event: string, data: any)
 		showBanner("O boss foi embora...", 3)
 	elseif event == "denied" then
 		showBanner(tostring(data.reason), 3)
+	elseif event == "ritual" then
+		local c, r = tonumber(data.collected) or 0, tonumber(data.required) or 0
+		if data.complete then
+			showBanner(if data.night then "Ritual completo — o altar está PRONTO!" else "Ritual completo — o altar desperta à NOITE", 4)
+			FX.PlaySoundUI("Match", "RoundStart")
+		else
+			showBanner(("%s achou uma caveira (%d/%d)"):format(tostring(data.by), c, r), 3)
+		end
+	end
+end
+
+-- Caveiras do ritual (tag RitualSkull, RitualService): flutuam e giram no cliente
+local CollectionService = game:GetService("CollectionService")
+local SKULL_TAG = "RitualSkull"
+local skullBase: { [Model]: CFrame } = {}
+
+local function trackSkull(inst: Instance)
+	if inst:IsA("Model") and inst.PrimaryPart then
+		skullBase[inst] = inst.PrimaryPart.CFrame
+	end
+end
+
+local function untrackSkull(inst: Instance)
+	if inst:IsA("Model") then
+		skullBase[inst] = nil
+	end
+end
+
+local function animateSkulls()
+	local t = os.clock()
+	for model, base in skullBase do
+		local primary = model.PrimaryPart
+		if not primary or not model.Parent then
+			skullBase[model] = nil
+			continue
+		end
+		primary.CFrame = base * CFrame.new(0, math.sin(t * 2 + base.X) * 0.35, 0) * CFrame.Angles(0, t * 1.2, 0)
 	end
 end
 
@@ -205,6 +242,12 @@ function BossController.Start()
 	subLabel = get(bar, "Sub") :: TextLabel
 	banner = get(gui, "BossBanner") :: TextLabel
 	Remotes.GetEvent(Remotes.Events.NotifyBoss).OnClientEvent:Connect(onNotifyBoss)
+	for _, inst in CollectionService:GetTagged(SKULL_TAG) do
+		trackSkull(inst)
+	end
+	CollectionService:GetInstanceAddedSignal(SKULL_TAG):Connect(trackSkull)
+	CollectionService:GetInstanceRemovedSignal(SKULL_TAG):Connect(untrackSkull)
+	RunService.Heartbeat:Connect(animateSkulls)
 	Log.debug("[BossController] pronto")
 end
 

@@ -12,7 +12,7 @@ local BossConfig = {}
 BossConfig.Name = "Sahur Colossal"
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
 BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
-BossConfig.AutoSpawnMinutes = 12 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado)
+BossConfig.AutoSpawnMinutes = 0 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado; agora é ritual)
 BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
 BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6 (só no fallback sem modelo 3D)
@@ -28,6 +28,19 @@ BossConfig.AbandonSeconds = 30 -- sem jogador vivo na arena por esse tempo = bos
 BossConfig.WalkSpeed = 14
 BossConfig.PhaseTwoAt = 0.5 -- fração de vida que liga a fase 2 (mais rápido, investida)
 BossConfig.PhaseTwoSpeed = 20
+
+-- Ritual (dono, 2026-09-16): o altar só invoca À NOITE (EnvironmentService.DayNight) e depois que os
+-- jogadores coletarem SkullsRequired caveiras espalhadas pelos SkullSpot* do mapa (RitualService).
+-- Cada caveira coletada acende uma tocha do altar e aparece num BossAltarSkullSocket. Progresso é do
+-- servidor (todo mundo junto). Depois da luta, as caveiras reaparecem em outros pontos.
+BossConfig.Ritual = {
+	Enabled = true,
+	NightOnly = true,
+	SkullsRequired = 4,
+	CollectRadius = 7, -- studs do personagem até a caveira para contar
+	RespawnDelay = 20, -- s depois do fim da luta/cooldown até as caveiras voltarem
+	SkullModelName = "Skull", -- Model/BasePart com esse nome em ServerStorage ou ReplicatedStorage.Assets (senão: caveira por código)
+}
 
 -- Recompensa: bolo dividido pela fração de dano causado + mínimo para quem participou
 BossConfig.RewardPool = 300

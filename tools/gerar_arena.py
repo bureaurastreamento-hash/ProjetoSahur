@@ -556,6 +556,57 @@ for i in range(4):
     torch = cylinder(f"BossAltarTorch{i}", 0.5, 0.5, (px, 8.4, pz), ("Metal", (0.2, 0.18, 0.16)))
     fire(torch, size=0.8, rate=12)
     light(torch, (1.0, 0.45, 0.2), 1.5, 16)
+# --- ambientação do altar (ritual das caveiras: RitualService acende as tochas e põe uma caveira em cada
+# BossAltarSkullSocket{i} conforme os jogadores coletam; a runa acende quando o ritual completa à noite)
+BONE = ("SmoothPlastic", (0.86, 0.82, 0.70))
+BONE_OLD = ("Sand", (0.70, 0.64, 0.52))
+for i in range(4):
+    a = math.radians(45 + i * 90)
+    sx, sz = math.cos(a) * 4.6, ALTAR_Z + math.sin(a) * 4.6
+    cylinder(f"BossAltarSkullSocket{i}", 0.9, 0.5, (sx, 2.95, sz), ("Slate", (0.10, 0.10, 0.13)))
+    part(f"BossAltarSocketRune{i}", (1.2, 0.08, 1.2), (sx, 3.24, sz), ("Neon", (0.35, 0.08, 0.08)), rot=(0, 45, 0), CastShadow=False)
+# pilhas de ossos/caveiras velhas nos cantos da base
+for i, (ox, oz) in enumerate(((-6.2, -5.5), (6.4, -5.2), (-6.0, 5.8), (6.1, 6.0))):
+    for j in range(4):
+        r = 0.55 + rng.uniform(-0.1, 0.15)
+        ball(f"BossBonePile{i}_{j}", r, (ox + jitter(1.1), 1.7 + (0.5 if j == 3 else 0) + r * 0.5, ALTAR_Z + oz + jitter(1.1)), BONE_OLD, CastShadow=False)
+    part(f"BossBoneLong{i}", (0.35, 0.35, 2.6), (ox + jitter(0.8), 1.9, ALTAR_Z + oz + jitter(0.8)), BONE, rot=(0, rng.uniform(0, 180), 0), CastShadow=False)
+# rachaduras no chão que "vazam" luz vermelha a partir do altar (acendem com o ritual)
+for i in range(8):
+    a = math.radians(i * 45 + 22)
+    ln = rng.uniform(5, 8.5)
+    cx, cz = math.cos(a) * (8 + ln / 2), ALTAR_Z + math.sin(a) * (8 + ln / 2)
+    part(f"BossCrack{i}", (0.35, 0.12, ln), (cx, 0.72, cz), ("Neon", (0.30, 0.06, 0.06)), rot=(0, -math.degrees(a) + 90, 0), CastShadow=False)
+# arco de pedra atrás do altar (moldura do santuário) com correntes penduradas
+for sx in (-1, 1):
+    cylinder(f"BossArchPost{'W' if sx < 0 else 'E'}", 1.2, 14, (sx * 9, 8.2, ALTAR_Z - 9), DARK_STONE)
+part("BossArchTop", (21, 2.2, 2.6), (0, 15.6, ALTAR_Z - 9), DARK_STONE)
+part("BossArchKey", (3, 3.2, 2.9), (0, 16.4, ALTAR_Z - 9), BASALT)
+for i, cx in enumerate((-5.5, -2, 2, 5.5)):
+    part(f"BossChain{i}", (0.3, rng.uniform(3.5, 6.5), 0.3), (cx, 12.2, ALTAR_Z - 9), ("Metal", (0.25, 0.24, 0.24)), rot=(0, 0, jitter(6)), CastShadow=False)
+# névoa baixa e brasas em volta do altar
+_mist = part("BossAltarMist", (18, 0.2, 18), (0, 1.9, ALTAR_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+_mist.setdefault("children", []).append({
+    "name": "Mist", "className": "ParticleEmitter",
+    "properties": {
+        "Color": {"ColorSequence": {"keypoints": [{"time": 0, "color": [0.55, 0.2, 0.2]}, {"time": 1, "color": [0.2, 0.05, 0.08]}]}},
+        "Size": {"NumberSequence": {"keypoints": [{"time": 0, "value": 4, "envelope": 0}, {"time": 1, "value": 7, "envelope": 0}]}},
+        "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 1, "envelope": 0}, {"time": 0.3, "value": 0.85, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}},
+        "Rate": 4, "Lifetime": {"NumberRange": [4, 6]}, "Speed": {"NumberRange": [0.4, 1.0]}, "SpreadAngle": {"Vector2": [80, 80]},
+        "Rotation": {"NumberRange": [0, 360]}, "RotSpeed": {"NumberRange": [-8, 8]}, "LightEmission": 0.15,
+    },
+})
+_embers = part("BossAltarEmbers", (6, 0.2, 6), (0, 6.2, ALTAR_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+_embers.setdefault("children", []).append({
+    "name": "Embers", "className": "ParticleEmitter",
+    "properties": {
+        "Color": {"ColorSequence": {"keypoints": [{"time": 0, "color": [1.0, 0.35, 0.2]}, {"time": 1, "color": [0.5, 0.05, 0.0]}]}},
+        "Size": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.18, "envelope": 0.05}, {"time": 1, "value": 0, "envelope": 0}]}},
+        "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.1, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}},
+        "Rate": 10, "Lifetime": {"NumberRange": [1.5, 3]}, "Speed": {"NumberRange": [1, 2.5]}, "SpreadAngle": {"Vector2": [60, 60]},
+        "Acceleration": {"Vector3": [0, 1.5, 0]}, "LightEmission": 1, "Drag": 1,
+    },
+})
 part("BossSpawn", (6, 1, 6), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
 part("BossArena", (1, 1, 1), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
 extra_spawns = []
@@ -568,6 +619,21 @@ for i in range(12):
                        "Size": [8, 1, 8], "Neutral": True, "Duration": 0, "Transparency": 1,
                        "CanCollide": False, "CastShadow": False},
     })
+# ---------------------------------------------------------------------------
+# PONTOS DE CAVEIRA (ritual do boss): lugares fáceis e ACESOS pelo mapa. RitualService sorteia
+# BossConfig.Ritual.SkullsRequired entre os SkullSpot* e põe uma caveira em cima de cada um.
+# Cada ponto = pedestal baixo + poste com lanterna (luz quente) para ser visto de longe, também à noite.
+# Coordenadas no mapa importado (chão y≈0, área andável ±240). NÃO passam pelo giro do santuário.
+# ---------------------------------------------------------------------------
+SKULL_SPOTS = [(-160, -160), (160, -160), (-205, 10), (205, 25), (-168, 188), (5, -215), (190, 150), (-45, 120)]
+for i, (sx, sz) in enumerate(SKULL_SPOTS):
+    cylinder(f"SkullPad{i}", 2.6, 0.5, (sx, 0.25, sz), BASALT)
+    part(f"SkullSpot{i}", (1.6, 0.6, 1.6), (sx, 0.8, sz), ("Slate", (0.14, 0.14, 0.17)))
+    cylinder(f"SkullPost{i}", 0.25, 7, (sx + 2.2, 3.5, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
+    part(f"SkullPostArm{i}", (2.2, 0.25, 0.25), (sx + 1.2, 6.9, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
+    lantern = part(f"SkullLantern{i}", (0.9, 1.1, 0.9), (sx + 0.3, 6.3, sz + 2.2), ("Neon", (1.0, 0.78, 0.45)), CastShadow=False)
+    light(lantern, (1.0, 0.75, 0.45), 2.2, 26)
+
 # aplica o deslocamento/giro do santuário em todas as partes Boss* (altar, spawn, arena, pilares...)
 _yaw = math.radians(SANCT_YAW)
 for node in parts:

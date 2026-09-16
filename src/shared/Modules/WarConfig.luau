@@ -9,7 +9,10 @@
 
 local WarConfig = {}
 
-WarConfig.MapName = "Arena_Gerada" -- ServerStorage.Maps (com Spawns e CapturePoints)
+-- Mapas da guerra em ServerStorage.Maps (com Spawns e CapturePoints). Sorteia entre os que existirem;
+-- Arena_Antiga = muros do projeto antigo do dono + interior gerado (tools/montar_arena_antiga.luau, roda no Studio).
+WarConfig.Maps = { "Arena_Antiga", "Arena_Gerada" }
+WarConfig.MapName = "Arena_Gerada" -- reserva se nenhum da lista existir
 WarConfig.MinPerSide = 1 -- membros online mínimos para entrar na fila (subir para 2-3 depois dos testes)
 WarConfig.MaxPerSide = 6
 WarConfig.Countdown = 5
