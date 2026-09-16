@@ -200,7 +200,73 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-16, noite)
+## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado)
+
+### Onde estamos (resumo em 30 segundos)
+- Jogo em mapa livre, 24 services / 15 controllers bootam limpos (Output 2026-09-16 00:10). Studio agora em
+  **Team Create** ("Configuring as team test server") no place do grupo.
+- Feito em 2026-09-16 e AINDA NÃO TESTADO pelo dono (ordem de teste sugerida abaixo): Idle/Walk do boss,
+  placar de rating, agarrões Throw/Chokeslam/Spin, clãs, controles mobile/console + acessibilidade,
+  guerra de clã (dominação), placar de clãs, 20 sons do dono, `packs/ParaImportar`.
+- Animações do amigo coladas: M1_1..4, Shared/Idle (119477589200226), Brawler/GroundSlam (112109080090418),
+  Boss/Idle (107074192710996), Boss/Swipe (71637199637001).
+
+### DECISÕES DE DESIGN do dono (2026-09-16, madrugada) — aplicar na próxima sessão
+1. **ULT = cutscene/transformação, não um ataque.** G ativa uma animação/cutscene que TRANSFORMA o
+   personagem (despertado) e, transformado, ele mostra ATAQUES DIFERENTES (kit alternativo, não só buff).
+   Hoje `RequestAwaken` dispara a última habilidade + buff; precisa virar: cutscene (câmera + animação
+   `<Char>/Awakening`) → estado despertado com habilidades `AwakenedEffect`/kit próprio.
+   Sons da ult (`Awakening`, `Awakening_Burst`) tocam **quando ATIVA a ult (G)**, não quando a carga
+   libera (`UltReady` fica só para "carga cheia", mais discreto ou nenhum).
+2. **Áudio com fade-in/fade-out** (principalmente os gritos): `FX.playClone` deve fazer Volume 0→alvo
+   em ~0,1–0,2 s e alvo→0 nos últimos ~0,3 s (TweenService) para não ficar seco.
+3. **Swift NÃO tem dash**: trocar o dash universal (Q) do Swift pelo **Piscar** (teleport) — é uma troca:
+   Q = Blink para o Swift, e o slot 1 dele ganha outra habilidade (ou some). `MovementController.Dash`
+   /`MovementService` precisam checar `CharacterId == "Swift"` → teleport.
+4. **Teleport de verdade** (Swift/Blink e Overlord/Warp): distância predefinida, atravessa o que estiver
+   na frente (sem raycast travando na parede), como um "dash melhor". Hoje `effects.Teleport` faz raycast
+   e para antes do obstáculo.
+5. **Agarrões**: "não estão segurando de verdade com sincronia" — a vítima não fica colada no atacante
+   de forma consistente (posição só no cliente da vítima; outros veem atraso). Fazer: servidor solda a
+   vítima (WeldConstraint/Motor6D HRP→HRP com offset, `PlatformStand`) durante o Carry e desfaz no fim;
+   animações de quem bate (`<Id>_Carry`) E de quem apanha (`Shared/Grabbed`, novo).
+6. **Menus**: sobreposições, erros visuais e falta de espaço; deixar mais minimalista/moderno (ver
+   `tools/gerar_ui.py`; conferir Perfil 560×460, Controles 640×560, Clã 420×440, Cosméticos, Loja,
+   Personagens — no Device Emulator também).
+7. **Menu DEV → submenu Administração**: mensagem global (todos os servidores, MessagingService),
+   mensagem só do servidor, mensagem para um jogador; ban (DataStore de banidos + kick no PlayerAdded),
+   kick, e o resto de admin (mute? teleport para jogador, dar/tirar pontos já existe).
+8. **Depois disso**: escolher VFX, sons e criar animações para CADA ação, cutscene e ataque (lista
+   completa dos buracos = linhas "[Assets] não encontrado" do Output: Awakening de todos os personagens
+   (anim/VFX/som), Shared Dash/Uppercut/Downslam/Hit/Parry, Swift Blink/SweepKick, Mystic ArcaneBolt/
+   Mend/Meteor, Guardian Quake/Fortify/ShieldBash_Carry, Sahur Bombo/Toque/Ritmo, Overlord tudo,
+   Emotes, Boss Slam/Charge/Shockwave/Leap/Walk, Sons Brawler Rampage_Hit, Overlord *).
+
+### Bugs/observações do Output de 2026-09-16 00:10–00:19
+- `Shared/Block` (113541104537435) e `Shared/Idle` (119477589200226, do amigo) carregaram com **duração 0**
+  → não são do grupo (ou R15). O Block é id antigo; o Idle do amigo precisa ser republicado com o grupo
+  como criador (ou o amigo exportou em R15). Os M1 do amigo não deram aviso → ok.
+- `[LeaderboardService] Part ClanBoard não encontrada` — esperado até regenerar o ArenaExtras (abaixo).
+- Guardian Esmagar contra boneco: "hit 3.9 ×2, finisher 18.2" — o chokeslam funcionou (dano+área).
+  Overlord Giro: "hit 39, finisher 39" — ok. Falta a sincronia visual (item 5).
+
+### PENDÊNCIA que trava regenerar o mapa
+- O dono **moveu o altar do boss no Studio** e não quer que volte. `BossAltar/BossSpawn/BossArena` vêm do
+  `ArenaExtras.model.json` (gerador `tools/gerar_arena.py`): na próxima conexão do Rojo eles voltam para
+  a posição do arquivo. **Pedir a Position (e Orientation) nova** dos três, gravar no gerador, regenerar
+  (isso também cria o `ClanBoard`). Enquanto isso NÃO rodar `gerar_arena.py`.
+- Boss no place certo: conferir se `[FX] animação Boss/Idle ... duração 0` aparece; se aparecer, a equipe
+  publicou fora do grupo.
+
+### Ordem sugerida da próxima sessão
+1. Pedir posição do altar → gerador → regenerar ArenaExtras (ClanBoard junto).
+2. Itens 2, 3, 4 das decisões (fade de áudio, Swift = Blink no Q, teleport real) — pequenos.
+3. Item 5 (agarrão soldado no servidor + animação da vítima).
+4. Item 1 (ULT como cutscene/transformação com kit próprio) — maior; combinar com o dono o kit despertado
+   de cada personagem antes de codar.
+5. Item 7 (admin) e item 6 (menus).
+6. Item 8 (assets por ação) — depende da equipe/packs (`packs/ParaImportar/LEIA-ME.md`).
+7. Testar o que ficou de 2026-09-16 (roteiros nas seções abaixo).
 
 ### Boss — rig CONFIRMADO (2026-09-16)
 - `Studio()` no place salvo deu **27 Motor6D, 0 soldadas**, raiz `tripo_part_46`, juntas Neck/Right
