@@ -234,6 +234,23 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Sobrou no place: `Workspace.humanoider_20` (456, rig de animação da equipe?), `ServerStorage.BossModel - save`
   (backup), `RBX_ANIMSAVES` (Moon/Animation Editor), `BestWalkAnimR6`, `C00lkidd M4`, `Barriers` (vazios). Não mexi.
 
+### PENDÊNCIA URGENTE — plugins (2026-09-16, 14:45)
+O dono clicou "atualizar tudo" e 39 plugins entraram na conta; a Roblox reinstala todos a cada abertura
+(52 plugins carregados, LuaHeap 605 MB, Studio em 3 GB e 2 crashes `HangDetected` em Play). Movi as pastas
+locais para backup mas voltaram. **Só resolve em Plugins > Manage Plugins > Uninstall**, um a um:
+- REMOVER (entraram hoje 11:32): obby creator, Part Terrain Maker, NPC Creator, Infinite Scripter, Grass Fixer,
+  FPS Viewport, Lighting Pro, Gui to Lua Converter, Lighting Shading Plugin, Developer Scripts Pack,
+  Maor's Gui Animation, Tycoon Creator, FPS Visualizer, Simulator Generator, Future's Lighting,
+  RBXMonkey Blender Animations, Tycoon Generator, Grass Brush, Legacy Animation Editor, Rain Plugin,
+  Part to Terrain, ParticleEmitter:Emit(n) V2, Grass Decoration, Wall Creator, uiDesign Lite,
+  Codes Otaku Cutscene, GUI Creator, Load Catalog Items, Surface Viewer, Edge Smoother,
+  Complete Kit for Horror Games, Quick GUI Tools, Stravant Quick Stairs, Infinite Terrain, Prefab Placer,
+  DBZ All Forms (624 erros por Play!), Grass Remover, Moon Animator Export Cutscene, Ro-Defender (se voltar).
+- MANTER (já estavam antes): Rojo, Moon Animator 2, MCPStudioPlugin (locais), Building Tools F3X, Archimedes,
+  Rig Editor, RigEdit Lite, Load Character Lite, VFX Suite, ParticleEmitter Scaler, Reclass, Auto Anchor,
+  Add Easy Texture, Multi Tool. Candidatos a remover também (IA, pesados): Revix AI, GUI Copilot.
+Depois: fechar e reabrir o Studio e eu meço de novo (meta: < 1,5 GB, LuaHeap < 150 MB).
+
 ### Feito 2026-09-16 (tarde) — itens 2, 3 e 4 das decisões
 - **Fade de áudio** (`FX.playClone`): Volume 0→alvo em `FX.SoundFadeIn` (0,15 s) e alvo→0 nos últimos
   `FX.SoundFadeOut` (0,3 s), via TweenService; sons curtos (< 0,45 s) e em loop não fazem fade-out.
@@ -243,9 +260,9 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - **Teleport real** (`MovementService.Teleport`): atravessa obstáculos, encaixa no chão do destino
   (mantém a altura sobre o chão); usado pelo Q do Swift e por `effects.Teleport` (Overlord/Warp).
   Testado via MCP: 18 studs exatos, atravessou o BossPillar0, Y ajustado ao chão.
-- FALTA TESTAR (Studio fechou/crashou às 13:50 UTC ao encerrar um play test do MCP): fade de áudio
-  (ouvir grito/Death sem corte seco), Swift com Q = Piscar no HUD e em jogo, Warp do Overlord.
-  Observação: num teste o personagem estava em y = -33 (abaixo do chão) 8 s após nascer — conferir spawn.
+- Fade-in testado via MCP (0 → 0,48 em 0,1 s). FALTA: fade-out (ouvir), Swift Q = Piscar em jogo, Warp do Overlord.
+  `Shared/Death` carregou com duração 0 (id não carrega). Spawn: servidor viu o boneco parado em (110, 4.55, 0)
+  com estado FallingDown por 6 s no play automático — perguntar ao dono se nasce em pé.
 - Cuidado com o MCP: `run_script_in_play_mode` encadeado (um atrás do outro) derrubou o Studio; esperar
   a sessão anterior terminar de verdade (get_studio_mode = stop) antes de iniciar outra.
 
