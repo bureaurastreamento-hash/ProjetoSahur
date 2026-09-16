@@ -24,6 +24,7 @@ local ClanConfig = require(Modules:WaitForChild("ClanConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
+local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
 
 type Clan = ClanConfig.Clan
 
@@ -480,6 +481,7 @@ function ClanService.AddWin(tag: string): boolean
 	end)
 	if ok then
 		pushClan(tag, result :: Clan)
+		LeaderboardService.PublishClan(tag, (result :: Clan).wins or 0)
 	end
 	return ok
 end

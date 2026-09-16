@@ -233,8 +233,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
   entrar os dois vão para a arena no céu, contagem 5 s, barra no topo; ficar no anel A por 5 s pinta de
   azul/vermelho e o placar sobe 1/s; morrer renasce no lado do time; ao acabar (300 ou 5 min ou um lado
   vazio) banner de vitória, pontos e cofre (Clã > cofre) sobem, volta ao mapa.
-- Faltam (próximos): placar por clã (OrderedDataStore por `wins`), MessagingService para clãs em servidores
-  diferentes, mapa próprio de dominação quando a arte trouxer, fila cross-server.
+- **Placar por clã** (2026-09-16): 3º board no `LeaderboardService` (`clans`, OrderedDataStore
+  `Leaderboard_ClanWins_v1`, chave = tag, `ClanService.AddWin` → `PublishClan`), painel `ClanBoard` em
+  (0, 5.5, −76) no gerador — **ArenaExtras NÃO foi regenerado** porque o dono moveu o altar no Studio
+  (pedir a Position nova do BossAltar/BossSpawn/BossArena, gravar em `gerar_arena.py`, aí regenerar;
+  até lá o placar de clãs só publica e avisa "Part ClanBoard não encontrada").
+- Sons do dono (20 ids) ligados 2026-09-16 (`Sounds.model.json`): Awakening(+2), UltReady(1–3),
+  Awakening_Burst(1–3, toca na ultimate), Awakening_End(1–3, fim do despertar), GroundSlam/Bombo/Slam_Hit(+2),
+  Quake/Shockwave/WallSplat(+2), Rampage(+2), Toque, Boss Roar/Charge. `Assets.GetSound` sorteia `Nome`,
+  `Nome2`, `Nome3`...
+- Faltam: MessagingService para clãs em servidores diferentes, mapa próprio de dominação, fila cross-server.
 
 ### Animações do boss não tocaram (2026-09-16) — causa provável
 - O log do Studio mostra a sessão de Play no place **85844807133499 (o antigo)**, não no oficial de grupo

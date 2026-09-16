@@ -4,9 +4,10 @@
 	Placares globais (OrderedDataStore), um por "board":
 	  - kills:  total de kills (profile.stats.kills), painel Workspace.Sahur...LeaderboardBoard
 	  - rating: Elo de duelo 1v1 (profile.rating), painel Workspace.Sahur...RatingBoard
+	  - clans:  guerras vencidas por clã (ClanService.AddWin -> PublishClan), painel ClanBoard
 	Publica o valor do jogador ao sair e a cada PUBLISH_INTERVAL; a cada REFRESH_INTERVAL busca o
 	top N de cada board, desenha no SurfaceGui do painel (criado por tools/gerar_arena.py, ArenaExtras)
-	e manda NotifyLeaderboard({ kills = rows, rating = rows }) para o Perfil. Sem a Part, só publica.
+	e manda NotifyLeaderboard({ kills = rows, rating = rows, clans = rows }) para o Perfil. Sem a Part, só publica.
 ]]
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -33,8 +34,9 @@ type Board = {
 	storeName: string,
 	boardName: string, -- Part no mapa
 	title: string,
-	-- valor a publicar (nil = não entra no ranking)
-	valueOf: (profile: any) -> number?,
+	-- valor a publicar (nil = não entra no ranking); nil no board = não é por jogador (clãs)
+	valueOf: ((profile: any) -> number?)?,
+	labelOf: ((key: string) -> string)?, -- chave do store -> texto (padrão: nome do userId)
 	store: OrderedDataStore?,
 	storeFailed: boolean,
 	rows: { TextLabel },
@@ -42,13 +44,14 @@ type Board = {
 	lastRows: { Row },
 }
 
-local function board(key: string, storeName: string, boardName: string, title: string, valueOf: (any) -> number?): Board
+local function board(key: string, storeName: string, boardName: string, title: string, valueOf: ((any) -> number?)?, labelOf: ((string) -> string)?): Board
 	return {
 		key = key,
 		storeName = storeName,
 		boardName = boardName,
 		title = title,
 		valueOf = valueOf,
+		labelOf = labelOf,
 		store = nil,
 		storeFailed = false,
 		rows = {},
@@ -66,6 +69,10 @@ local boards: { Board } = {
 	board("rating", "Leaderboard_Rating_v1", "RatingBoard", "⚔️ TOP RATING 1v1", function(profile)
 		local rating = profile.rating
 		return if typeof(rating) == "number" and rating ~= DuelConfig.RatingStart then rating else nil
+	end),
+	-- clãs por guerras vencidas: ClanService publica via LeaderboardService.PublishClan(tag, wins)
+	board("clans", "Leaderboard_ClanWins_v1", "ClanBoard", "🏰 TOP CLÃS (guerras)", nil, function(tag)
+		return "[" .. tag .. "]"
 	end),
 }
 
@@ -113,7 +120,7 @@ local function publish(player: Player)
 	end
 	for _, b in boards do
 		local s = getStore(b)
-		local value = b.valueOf(profile)
+		local value = if b.valueOf then b.valueOf(profile) else nil
 		if s and value and b.lastPublished[player] ~= value then
 			local ok, err = pcall(s.SetAsync, s, tostring(player.UserId), value)
 			if ok then
@@ -205,8 +212,7 @@ local function refreshBoard(b: Board)
 		local entry = entries[i]
 		local row = b.rows[i]
 		if entry then
-			local userId = tonumber(entry.key) or 0
-			local name = nameFor(userId)
+			local name = if b.labelOf then b.labelOf(tostring(entry.key)) else nameFor(tonumber(entry.key) or 0)
 			table.insert(b.lastRows, { name = name, value = entry.value })
 			if row then
 				row.Text = ("%2d.  %s  —  %d"):format(i, name, entry.value)
@@ -222,6 +228,21 @@ local function refresh()
 		refreshBoard(b)
 	end
 	notifyLeaderboard:FireAllClients(payload())
+end
+
+--- Clã: publica as guerras vencidas (chave = tag). Chamado pelo ClanService.
+function LeaderboardService.PublishClan(tag: string, wins: number)
+	for _, b in boards do
+		if b.key == "clans" then
+			local s = getStore(b)
+			if s and wins > 0 then
+				local ok, err = pcall(s.SetAsync, s, tag, math.floor(wins))
+				if not ok then
+					warn(("[LeaderboardService] SetAsync clans/%s: %s"):format(tag, tostring(err)))
+				end
+			end
+		end
+	end
 end
 
 --- [Admin] Publica todo mundo e redesenha.
