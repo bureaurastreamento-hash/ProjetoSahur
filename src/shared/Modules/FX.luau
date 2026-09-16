@@ -9,6 +9,7 @@
 	Todos os assets são localizados por nome via Assets.luau; ausência = ignora.
 ]]
 
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
@@ -16,6 +17,8 @@ local Workspace = game:GetService("Workspace")
 
 local Assets = require(script.Parent:WaitForChild("Assets"))
 local Log = require(script.Parent:WaitForChild("Log"))
+local VFXLibrary = require(script.Parent:WaitForChild("VFXLibrary"))
+local CharacterDefs = require(script.Parent:WaitForChild("CharacterDefs"))
 
 local FX = {}
 
@@ -210,10 +213,344 @@ end
 ---   ParticleEmitter: EmitCount (rajada única), EmitDuration (fica ligado N s)
 ---   PointLight:      FadeTime (apaga em N s)
 function FX.SpawnVFX(character: Model, folder: string, name: string, exact: boolean?, at: Vector3?)
+	-- 1) composição por código (VFXLibrary): tem prioridade sobre packs/alias
+	local composed = VFXLibrary.Get(folder, name)
+	if composed then
+		FX.PlayComposed(character, composed, at)
+		return
+	end
 	local template = if exact then (if Assets.HasVFX(folder, name) then Assets.GetVFX(folder, name) else nil) else Assets.GetVFX(folder, name)
 	if template then
 		FX.SpawnVFXTemplate(character, template, at)
 	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Composições (VFXLibrary): meshes por SpecialMesh + rajadas de partículas + luz, tudo por código.
+-- ---------------------------------------------------------------------------
+
+local EASING: { [string]: Enum.EasingStyle } = {
+	Quad = Enum.EasingStyle.Quad,
+	Quart = Enum.EasingStyle.Quart,
+	Sine = Enum.EasingStyle.Sine,
+	Back = Enum.EasingStyle.Back,
+	Linear = Enum.EasingStyle.Linear,
+	Exponential = Enum.EasingStyle.Exponential,
+}
+
+--- Cor do personagem (CharacterDefs.Color) para "$primary"/"$secondary".
+local function characterColor(character: Model): Color3
+	local id = character:GetAttribute("CharacterId")
+	if typeof(id) ~= "string" then
+		local player = Players:GetPlayerFromCharacter(character)
+		id = player and player:GetAttribute("CharacterId")
+	end
+	local def = if typeof(id) == "string" then CharacterDefs.Get(id) else nil
+	return (def and def.Color) or Color3.fromRGB(255, 255, 255)
+end
+
+local function resolveColor(value: any, primary: Color3): Color3
+	if typeof(value) == "Color3" then
+		return value
+	end
+	if value == "$secondary" then
+		local h, sat, v = primary:ToHSV()
+		return Color3.fromHSV(h, sat * 0.5, math.min(1, v * 1.15))
+	end
+	return primary
+end
+
+local function numberSeq(value: any, fallbackA: number, fallbackB: number): NumberSequence
+	if typeof(value) == "number" then
+		return NumberSequence.new(value)
+	elseif typeof(value) == "table" then
+		if typeof(value[1]) == "table" then
+			local kps = {}
+			for _, kp in value do
+				table.insert(kps, NumberSequenceKeypoint.new(kp[1], kp[2], kp[3] or 0))
+			end
+			return NumberSequence.new(kps)
+		end
+		return NumberSequence.new(value[1], value[2])
+	end
+	return NumberSequence.new(fallbackA, fallbackB)
+end
+
+local function numberRange(value: any, fallbackA: number, fallbackB: number?): NumberRange
+	if typeof(value) == "number" then
+		return NumberRange.new(value)
+	elseif typeof(value) == "table" then
+		return NumberRange.new(math.min(value[1], value[2]), math.max(value[1], value[2]))
+	end
+	return NumberRange.new(fallbackA, fallbackB or fallbackA)
+end
+
+local function makeHolder(cf: CFrame, size: Vector3?): Part
+	local holder = Instance.new("Part")
+	holder.Name = "VFX"
+	holder.Size = size or Vector3.one
+	holder.Transparency = 1
+	holder.Anchored = true
+	holder.CanCollide = false
+	holder.CanQuery = false
+	holder.CanTouch = false
+	holder.CastShadow = false
+	holder.CFrame = cf
+	return holder
+end
+
+local groundParams = RaycastParams.new()
+groundParams.FilterType = Enum.RaycastFilterType.Exclude
+groundParams.RespectCanCollide = true
+
+--- Encosta o CFrame no chão (raycast até 14 studs para baixo), mantendo o giro.
+local function snapToGround(cf: CFrame, exclude: { Instance }): CFrame
+	groundParams.FilterDescendantsInstances = exclude
+	local hit = Workspace:Raycast(cf.Position + Vector3.new(0, 2, 0), Vector3.new(0, -16, 0), groundParams)
+	if hit then
+		return CFrame.new(hit.Position + Vector3.new(0, 0.12, 0)) * (cf - cf.Position)
+	end
+	return cf
+end
+
+local function directionFor(name: any): Enum.NormalId
+	if name == "up" then
+		return Enum.NormalId.Top
+	elseif name == "down" then
+		return Enum.NormalId.Bottom
+	elseif name == "back" then
+		return Enum.NormalId.Back
+	elseif name == "forward" then
+		return Enum.NormalId.Front
+	end
+	return Enum.NormalId.Top
+end
+
+local ORIENT: { [string]: Enum.ParticleOrientation } = {
+	FacingCamera = Enum.ParticleOrientation.FacingCamera,
+	FacingCameraWorldUp = Enum.ParticleOrientation.FacingCameraWorldUp,
+	VelocityParallel = Enum.ParticleOrientation.VelocityParallel,
+	VelocityPerpendicular = Enum.ParticleOrientation.VelocityPerpendicular,
+}
+
+--- Toca uma composição da VFXLibrary em `character` (ou no ponto `at`). Cores "$primary" = cor do personagem.
+function FX.PlayComposed(character: Model, effect: VFXLibrary.Effect, at: Vector3?)
+	if activeVFX >= FX.MaxActiveVFX then
+		return
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root and not at then
+		return
+	end
+	local primary = characterColor(character)
+	-- origem: posição + só o giro horizontal (efeito não tomba com o ragdoll)
+	local origin: CFrame
+	if at then
+		local look = if root then Vector3.new(root.CFrame.LookVector.X, 0, root.CFrame.LookVector.Z) else Vector3.new(0, 0, -1)
+		origin = CFrame.lookAt(at, at + (if look.Magnitude > 0.01 then look.Unit else Vector3.new(0, 0, -1)))
+	else
+		local r = root :: BasePart
+		local look = Vector3.new(r.CFrame.LookVector.X, 0, r.CFrame.LookVector.Z)
+		origin = CFrame.lookAt(r.Position, r.Position + (if look.Magnitude > 0.01 then look.Unit else Vector3.new(0, 0, -1)))
+	end
+	local lifetime = effect.lifetime or FX.VFXLifetime
+	local trash: { Instance } = {}
+	local spinning: { { part: Part, spin: Vector3 } } = {}
+	local exclude: { Instance } = { character }
+	local camera = Workspace.CurrentCamera
+
+	local function place(layer: any, size: Vector3?): (Part, CFrame)
+		local cf = origin
+		local off = layer.offset
+		if typeof(off) == "CFrame" then
+			cf = cf * off
+		elseif typeof(off) == "Vector3" then
+			cf = cf * CFrame.new(off)
+		end
+		if layer.ground then
+			cf = snapToGround(cf, exclude)
+		end
+		if layer.camera and camera then
+			cf = CFrame.lookAt(cf.Position, camera.CFrame.Position)
+		end
+		local holder = makeHolder(cf, size)
+		holder.Parent = Workspace
+		table.insert(trash, holder)
+		return holder, cf
+	end
+
+	local function runLayer(layer: any)
+		local kind = layer.kind
+		if kind == "mesh" then
+			local def = VFXLibrary.Meshes[layer.mesh]
+			if not def then
+				return
+			end
+			local holder = place(layer)
+			holder.Transparency = layer.tr0 or 0.15
+			holder.Color = resolveColor(layer.color, primary)
+			holder.Material = layer.material or Enum.Material.Neon
+			if layer.follow and root then
+				holder.Anchored = false
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = root
+				weld.Part1 = holder
+				weld.Parent = holder
+				holder.Massless = true
+			end
+			local sm = Instance.new("SpecialMesh")
+			sm.MeshType = Enum.MeshType.FileMesh
+			sm.MeshId = "rbxassetid://" .. def.id
+			local native = math.max(def.size.X, def.size.Y, def.size.Z, 0.01)
+			sm.Scale = Vector3.one * (layer.size0 / native)
+			sm.Parent = holder
+			local info = TweenInfo.new(layer.t or 0.3, EASING[layer.ease or "Quart"] or Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+			TweenService:Create(sm, info, { Scale = Vector3.one * (layer.size1 / native) }):Play()
+			TweenService:Create(holder, info, { Transparency = layer.tr1 or 1 }):Play()
+			if typeof(layer.spin) == "Vector3" then
+				table.insert(spinning, { part = holder, spin = layer.spin })
+			end
+			task.delay((layer.t or 0.3) + 0.05, function()
+				if (layer.tr1 or 1) >= 1 then
+					holder:Destroy()
+				end
+			end)
+		elseif kind == "emit" then
+			local texId = VFXLibrary.Textures[layer.texture]
+			if not texId then
+				return
+			end
+			local emitter = Instance.new("ParticleEmitter")
+			emitter.Name = "VFX_" .. tostring(layer.texture)
+			emitter.Texture = "rbxassetid://" .. texId
+			if typeof(layer.colorSeq) == "table" then
+				local kps = {}
+				for _, kp in layer.colorSeq do
+					table.insert(kps, ColorSequenceKeypoint.new(kp[1], resolveColor(kp[2], primary)))
+				end
+				emitter.Color = ColorSequence.new(kps)
+			else
+				emitter.Color = ColorSequence.new(resolveColor(layer.color, primary))
+			end
+			emitter.Size = numberSeq(layer.sizeSeq or layer.size, 1, 1)
+			emitter.Transparency = numberSeq(layer.trSeq, 0, 1)
+			if not layer.trSeq then
+				emitter.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.6, 0.25), NumberSequenceKeypoint.new(1, 1) })
+			end
+			emitter.Lifetime = numberRange(layer.life, 0.4, 0.7)
+			emitter.Speed = numberRange(layer.speed, 8, 16)
+			local spread = layer.spread
+			emitter.SpreadAngle = if typeof(spread) == "table" then Vector2.new(spread[1], spread[2]) else Vector2.new(180, 180)
+			emitter.Rotation = numberRange(layer.rot, -180, 180)
+			emitter.RotSpeed = numberRange(layer.rotSpeed, 0, 0)
+			emitter.LightEmission = layer.light or 1
+			emitter.LightInfluence = if layer.light and layer.light < 0.5 then 1 else 0
+			emitter.Acceleration = layer.accel or Vector3.zero
+			emitter.Drag = layer.drag or 0
+			emitter.Orientation = ORIENT[layer.orient or "FacingCamera"] or Enum.ParticleOrientation.FacingCamera
+			emitter.ZOffset = layer.zOffset or 0
+			emitter.Brightness = layer.brightness or 1.5
+			emitter.LockedToPart = layer.lockedToPart == true
+			emitter.Shape = if layer.shape == "Sphere" then Enum.ParticleEmitterShape.Sphere
+				elseif layer.shape == "Disc" then Enum.ParticleEmitterShape.Disc
+				elseif layer.shape == "Cylinder" then Enum.ParticleEmitterShape.Cylinder
+				else Enum.ParticleEmitterShape.Box
+			emitter.ShapeStyle = if layer.shapeStyle == "Surface" then Enum.ParticleEmitterShapeStyle.Surface else Enum.ParticleEmitterShapeStyle.Volume
+			emitter.ShapeInOut = if layer.shapeInOut == "Inward" then Enum.ParticleEmitterShapeInOut.Inward
+				elseif layer.shapeInOut == "InAndOut" then Enum.ParticleEmitterShapeInOut.InAndOut
+				else Enum.ParticleEmitterShapeInOut.Outward
+			emitter.EmissionDirection = directionFor(layer.direction)
+			if typeof(layer.flipbook) == "table" then
+				local fb = layer.flipbook
+				emitter.FlipbookLayout = (Enum.ParticleFlipbookLayout :: any)[fb.layout] or Enum.ParticleFlipbookLayout.None
+				emitter.FlipbookMode = (Enum.ParticleFlipbookMode :: any)[fb.mode] or Enum.ParticleFlipbookMode.OneShot
+				emitter.FlipbookFramerate = NumberRange.new(fb.fps or 16, fb.fps2 or fb.fps or 16)
+				emitter.FlipbookStartRandom = fb.random == true
+			end
+			emitter.Enabled = false
+			emitter.Rate = layer.rate or 0
+			if layer.follow and root then
+				local att = Instance.new("Attachment")
+				att.Name = "VFXAttachment"
+				local off = layer.offset
+				att.CFrame = if typeof(off) == "Vector3" then CFrame.new(off) elseif typeof(off) == "CFrame" then off else CFrame.new()
+				att.Parent = root
+				emitter.Parent = att
+				table.insert(trash, att)
+			else
+				local holder = place(layer, layer.shapeSize)
+				emitter.Parent = holder
+			end
+			local count = layer.count or 0
+			if typeof(layer.duration) == "number" then
+				emitter.Rate = math.min(layer.rate or 20, 60)
+				emitter.Enabled = true
+				task.delay(layer.duration, function()
+					emitter.Enabled = false
+				end)
+			end
+			if count > 0 then
+				emitter:Emit(math.min(count, FX.MaxEmitPerEmitter * 2))
+			end
+		elseif kind == "light" then
+			local lightObj = Instance.new("PointLight")
+			lightObj.Color = resolveColor(layer.color, primary)
+			lightObj.Range = layer.range or 12
+			lightObj.Shadows = false
+			local target = layer.brightness or 3
+			if layer.fadeIn then
+				lightObj.Brightness = 0
+				TweenService:Create(lightObj, TweenInfo.new(layer.t or 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.In), { Brightness = target }):Play()
+			else
+				lightObj.Brightness = target
+				TweenService:Create(lightObj, TweenInfo.new(layer.t or 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Brightness = 0 }):Play()
+			end
+			if root and not layer.offset then
+				lightObj.Parent = root
+				table.insert(trash, lightObj)
+			else
+				local holder = place(layer)
+				lightObj.Parent = holder
+			end
+		elseif kind == "pack" then
+			local template = Assets.GetVFXPath(layer.path)
+			if template then
+				FX.SpawnVFXTemplate(character, template, at)
+			end
+		elseif kind == "sound" then
+			FX.PlaySoundAt(character, layer.folder or "Shared", layer.name)
+		end
+	end
+
+	for _, layer in effect.layers do
+		local delay = layer.delay
+		if typeof(delay) == "number" and delay > 0 then
+			task.delay(delay, runLayer, layer)
+		else
+			runLayer(layer)
+		end
+	end
+
+	local spinConn: RBXScriptConnection? = nil
+	if #spinning > 0 then
+		spinConn = RunService.Heartbeat:Connect(function(dt)
+			for _, s in spinning do
+				if s.part.Parent then
+					s.part.CFrame = s.part.CFrame * CFrame.Angles(math.rad(s.spin.X * dt), math.rad(s.spin.Y * dt), math.rad(s.spin.Z * dt))
+				end
+			end
+		end)
+	end
+	activeVFX += 1
+	task.delay(lifetime, function()
+		activeVFX -= 1
+		if spinConn then
+			spinConn:Disconnect()
+		end
+		for _, inst in trash do
+			inst:Destroy()
+		end
+	end)
 end
 
 --- Instancia um template qualquer (usado pelo preview de VFX do menu Dev).

@@ -214,7 +214,7 @@ local function onNotifyBoss(event: string, data: any)
 		FX.Shake(0.5, 1.0)
 		if typeof(data.character) == "Instance" and data.character:IsA("Model") then
 			FX.SetAura(data.character :: Model, Color3.fromRGB(196, 66, 108), "Transform")
-			FX.SpawnVFX(data.character :: Model, "Shared", "Awakening_Charge", true)
+			FX.SpawnVFX(data.character :: Model, "Shared", "Transform", true)
 			task.delay(tonumber(data.seconds) or 2.5, function()
 				FX.SetAura(data.character :: Model, nil, "Transform")
 			end)

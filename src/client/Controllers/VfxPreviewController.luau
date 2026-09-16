@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
+local VFXLibrary = require(Modules:WaitForChild("VFXLibrary"))
 local FX = require(Modules:WaitForChild("FX"))
 local Log = require(Modules:WaitForChild("Log"))
 
@@ -31,7 +32,7 @@ local template: TextButton
 local search: TextBox
 local countLabel: TextLabel
 
-type Entry = { path: string, inst: Instance, weight: number }
+type Entry = { path: string, inst: Instance?, weight: number, composed: string? }
 local entries: { Entry } = {}
 local rows: { TextButton } = {}
 
@@ -81,6 +82,11 @@ local function scan()
 		end
 	end
 	walk(packs, "Packs", 1)
+	-- composições por código (VFXLibrary): aparecem primeiro, como "Lib/Pasta/Nome"
+	for _, key in VFXLibrary.Keys() do
+		local eff = VFXLibrary.Effects[key]
+		table.insert(entries, { path = "Lib/" .. key, inst = nil, weight = #eff.layers, composed = key })
+	end
 	table.sort(entries, function(a, b)
 		return a.path < b.path
 	end)
@@ -94,7 +100,14 @@ local function play(entry: Entry)
 	end
 	local shift = UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)
 	local at = if shift then root.Position + root.CFrame.LookVector * 12 else nil
-	FX.SpawnVFXTemplate(character, entry.inst, at)
+	if entry.composed then
+		local folder, name = entry.composed:match("^([^/]+)/(.+)$")
+		if folder and name then
+			FX.SpawnVFX(character, folder, name, true, at)
+		end
+	elseif entry.inst then
+		FX.SpawnVFXTemplate(character, entry.inst, at)
+	end
 	VfxPreviewController.LastPath = entry.path
 	warn(("[VfxPreview] %s  (%d emissores/beams/meshes)"):format(entry.path, entry.weight))
 end
@@ -116,7 +129,7 @@ local function refresh()
 		end
 		local row = template:Clone()
 		row.Name = tostring(i)
-		row.Text = ("%s  [%d]"):format(entry.path:gsub("^Packs/", ""), entry.weight)
+		row.Text = ("%s  [%d]"):format((entry.path:gsub("^Packs/", "")), entry.weight)
 		row.LayoutOrder = shown
 		row.Visible = true
 		row.MouseButton1Click:Connect(function()

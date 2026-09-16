@@ -61,6 +61,7 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
 		FX.PlayAnimation(attackerChar, SHARED, attackId)
 		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+		FX.SpawnVFX(attackerChar, SHARED, attackId, true) -- Shared/Uppercut, Shared/Downslam (VFXLibrary)
 		local up = attackDef and attackDef.AttackerUp
 		if typeof(up) == "number" and attackerChar == localPlayer.Character then
 			FX.Push(attackerChar, Vector3.new(0, up, 0), 0.2)
@@ -68,6 +69,7 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		return
 	end
 	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
+	FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
 	if attackDef and comboIndex >= attackDef.ComboLength then
 		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
 		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then

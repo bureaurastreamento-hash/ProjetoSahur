@@ -250,6 +250,19 @@ Memória entre sessões. Atualizar depois de cada mudança.
    - Testado via MCP: pegar flecha → noite → transformar → 1500 HP → morrer → recompensa → respawn R6.
    - FALTA (próximos): ataques do rig com pose (cone "morde" no M1), VFX/sons próprios, câmera da forma (zoom
      maior), balancear kit, som/animação de transformação melhor, `ArrowSpot` visíveis de longe (feixe de luz?).
+4b. **VFX compostos por código (`VFXLibrary.luau` + `FX.PlayComposed`)** — 2026-09-16 noite. Li via MCP o pack
+   novo do dono (`Workspace.Efeitos` "EFEITOS 2" = 142 meshes únicas de choque/vento/impacto/raio; `Auras` =
+   126 emissores com texturas/sequências) e guardei os IDs em `VFXLibrary.Meshes` (60) e `.Textures` (43). Os
+   efeitos são montados na hora: SpecialMesh (escala tweenada, giro, encosta no chão, olha a câmera) + rajadas
+   de partícula + luz + camada `pack` que reaproveita os VFX dos packs antigos. 76 composições: socos
+   (`Shared/Swing_1..4`, `Uppercut`, `Downslam`), acertos (`Hit`, `Crit`, `BlackFlash`, `FinisherHit`,
+   `WallSplat`, `Block`, `Parry`, `GuardBreak`, `Stun`, `Ragdoll`, `RagdollCancel`, `Dash`), despertar
+   (`Awakening_Charge/_Burst/Awakening`, `Transform`), e TODAS as habilidades (Brawler/Swift/Mystic/Guardian/
+   Sahur/Overlord/NotoriousBIG + Boss). `$primary` = cor do personagem. `FX.SpawnVFX` tenta a composição antes
+   dos packs. **Preview F7** lista tudo como `Lib/Pasta/Nome` (Shift = à frente). Testado: 76/76 tocam sem erro,
+   holders somem no fim. FALTA: o dono olhar cada um no F7 e apontar o que ajustar (tamanho/cor/mesh errada —
+   escolhi as meshes pelo nome/tamanho, sem ver); sons por golpe; animações do rig do boss.
+   Depois disso `Workspace.Efeitos`/`Auras` podem sair do place (tudo que precisava virou ID no código).
 5. **Arena_Antiga = mapa da guerra de clã**: `tools/montar_arena_antiga.luau` (rodei via MCP) recoloriu os muros
    do dono, gerou interior (piso, plataforma central B com rampas, plataformas A/C, cobertura espelhada,
    colunas quebradas, tochas, bandeiras azul/vermelha), `CapturePoints` A/B/C e `Spawns` (Spawn1 oeste /

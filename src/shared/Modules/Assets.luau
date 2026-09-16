@@ -195,6 +195,12 @@ local function findPath(path: string): Instance?
 	return find("VFX", table.unpack(path:split("/")))
 end
 
+--- Template de VFX por caminho dentro de Assets.VFX ("Packs/OfficialJJS/Todo/HeavyHit"). Usado pelas
+--- composições (VFXLibrary camada "pack").
+function Assets.GetVFXPath(path: string): Instance?
+	return findPath(path)
+end
+
 local function packChoice(folder: string, name: string): Instance?
 	local choice = Assets.VFXPack[folder .. "/" .. name]
 	if not choice then
