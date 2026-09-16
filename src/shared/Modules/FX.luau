@@ -558,9 +558,10 @@ local function fadeOut(sound: Sound)
 	TweenService:Create(sound, TweenInfo.new(FX.SoundFadeOut, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Volume = 0 }):Play()
 end
 
-local function playClone(template: Sound, parent: Instance)
+--- Toca um clone do som; devolve uma função que o interrompe (com fade) ou nil se o teto foi atingido.
+local function playClone(template: Sound, parent: Instance): (() -> ())?
 	if activeSounds >= FX.MaxActiveSounds then
-		return
+		return nil
 	end
 	local sound = template:Clone()
 	local target = template.Volume
@@ -597,8 +598,16 @@ local function playClone(template: Sound, parent: Instance)
 			task.delay(math.max(wait, 0), fadeOut, sound)
 		end
 		-- segurança se Ended nunca disparar (id inválido / som em loop)
-		task.delay(math.max(10, length + 1), finish)
+		if not sound.Looped then
+			task.delay(math.max(10, length + 1), finish)
+		end
 	end)
+	return function()
+		if not done then
+			fadeOut(sound)
+			task.delay(FX.SoundFadeOut + 0.05, finish)
+		end
+	end
 end
 
 --- Som 3D em Assets.Sounds.<folder>.<name>, tocado no personagem.
@@ -611,6 +620,17 @@ function FX.PlaySoundAt(character: Model, folder: string, name: string): boolean
 		return true
 	end
 	return false
+end
+
+--- Igual a PlaySoundAt, mas devolve a função que PARA o som (com fade). Para sons em loop/longos
+--- que precisam acabar num momento exato (ex.: carga da cutscene do despertar).
+function FX.PlaySoundAtStoppable(character: Model, folder: string, name: string): (() -> ())?
+	local template = Assets.GetSound(Assets.ResolveFolder("Sounds", folder, name, character), name)
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if template and root then
+		return playClone(template, root)
+	end
+	return nil
 end
 
 --- Som de UI (não posicional).

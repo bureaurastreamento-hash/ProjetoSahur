@@ -244,6 +244,7 @@ end
 --- Socos e ataques continuam sorteando `Nome2`, `Nome3`...
 Assets.FixedSounds = {
 	Awakening = true,
+	Awakening_Charge = true,
 	Awakening_Burst = true,
 	Awakening_End = true,
 	UltReady = true,

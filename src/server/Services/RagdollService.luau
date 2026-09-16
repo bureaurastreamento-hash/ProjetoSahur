@@ -45,6 +45,11 @@ function RagdollService.GrantIFrames(character: Model, seconds: number)
 	character:SetAttribute(ATTR_IFRAMES, until_)
 end
 
+--- Encerra i-frames concedidos antes (ex.: agarrão que não pegou ninguém).
+function RagdollService.ClearIFrames(character: Model)
+	character:SetAttribute(ATTR_IFRAMES, 0)
+end
+
 --- Levanta o jogador agora (se estiver ragdollado). Retorna true se levantou.
 function RagdollService.Recover(player: Player, iframes: number?): boolean
 	local s = states[player]

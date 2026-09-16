@@ -280,6 +280,9 @@ effects.Grab = function(player, character, ability, direction)
 	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
 	AntiExploitService.Grace(player, maxDuration + e.Carry + 1.0)
 	CombatService.SetSuperArmor(player, maxDuration + e.Carry + 0.2)
+	-- Prioridade (dono, 2026-09-16): executando um agarrão não se leva golpe, do início ao release.
+	-- Se a investida não pegar ninguém, a invencibilidade acaba junto com ela.
+	RagdollService.GrantIFrames(character, maxDuration + 0.1)
 	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", {
 		Speed = e.Speed,
 		Duration = e.Duration,
@@ -295,16 +298,25 @@ effects.Grab = function(player, character, ability, direction)
 			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local vel = if root then Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z) else Vector3.zero
 			local dir = if vel.Magnitude > 5 then vel.Unit else direction
-			caught = Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 1)[1]
+			for _, candidate in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 2) do
+				-- não agarra quem está invencível (cutscene, i-frames, preso em outro agarrão)
+				if not HealthService.IsInvulnerable(candidate, player) then
+					caught = candidate
+					break
+				end
+			end
 			if not caught then
 				task.wait(DASH_SAMPLE_INTERVAL)
 			end
 		end
 		if not caught then
+			RagdollService.ClearIFrames(character)
 			return
 		end
 		local victim = caught :: Model
 		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		RagdollService.GrantIFrames(character, e.Carry + 0.3)
+		HealthService.LockTo(victim, player, e.Carry + 0.5) -- terceiro não tira a vítima do agarrão
 		if victimPlayer then
 			CombatService.CancelBlock(victimPlayer)
 			CombatService.Stun(victimPlayer, e.Carry + 0.3, "grabbed")
@@ -336,7 +348,9 @@ effects.Grab = function(player, character, ability, direction)
 			end)
 		end
 		task.wait(e.Carry)
+		RagdollService.ClearIFrames(character)
 		if not stillValid(player, character) or not HealthService.IsAlive(victim) then
+			HealthService.LockTo(victim, nil)
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
 			return
 		end
@@ -366,6 +380,7 @@ effects.Grab = function(player, character, ability, direction)
 		else
 			CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
 		end
+		HealthService.LockTo(victim, nil)
 		if victimPlayer and typeof(e.StunSeconds) == "number" then
 			CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 		end
@@ -638,6 +653,24 @@ local function onRequestAwaken(player: Player)
 	CombatService.Stun(player, cut.Duration, "awakening")
 	CombatService.RestoreWalkSpeed(player)
 	AntiExploitService.Grace(player, cut.Duration + 1)
+	-- Preso no lugar (vale no ar: ativou pulando fica flutuando até o fim da cutscene). Âncora no servidor
+	-- replica e trava a física do cliente; a câmera da cutscene segue o root de qualquer jeito.
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local function release()
+		if root and root.Anchored then
+			root.Anchored = false
+		end
+	end
+	if root then
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+		root.Anchored = true
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			humanoid.Died:Once(release)
+		end
+		character.AncestryChanged:Once(release)
+	end
 	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
 	Log.debug(("[AbilityService] %s DESPERTOU (cutscene %.1fs + %ds)"):format(player.Name, cut.Duration, cfg.Duration))
 	-- Estouro: quem estiver perto leva dano + empurrão (o único "ataque" da transformação)
@@ -650,6 +683,7 @@ local function onRequestAwaken(player: Player)
 		end
 	end)
 	task.delay(cut.Duration, function()
+		release()
 		if states[player] == state and player.Character == character then
 			player:SetAttribute("CutsceneUntil", 0)
 			CombatService.RestoreWalkSpeed(player) -- agora com o SpeedMultiplier do modo

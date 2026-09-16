@@ -131,28 +131,26 @@ local POSE_STANCE: Pose = {
 }
 
 -- ---------------------------------------------------------------------------
--- Câmera (só para quem despertou)
+-- Câmera (só para quem despertou). Os "planos" são RELATIVOS ao HRP e recalculados a cada frame
+-- (RenderStepped), então se o personagem estiver no ar/caindo a câmera vai junto — nunca perde o quadro.
 -- ---------------------------------------------------------------------------
 
+local RunService = game:GetService("RunService")
+
+type Shot = { offset: Vector3, look: Vector3, fov: number }
+
 local cameraBusy = false
-local cameraTweens: { Tween } = {}
+local cameraConn: RBXScriptConnection? = nil
+local shotFrom: Shot? = nil
+local shotTo: Shot? = nil
+local shotStart = 0
+local shotDuration = 0
+local shotStyle = Enum.EasingStyle.Quad
+local shotDirection = Enum.EasingDirection.InOut
+local shotRoot: BasePart? = nil
 
 function CutsceneController.IsPlaying(): boolean
 	return cameraBusy
-end
-
-local function cancelCameraTweens()
-	for _, t in cameraTweens do
-		t:Cancel()
-	end
-	table.clear(cameraTweens)
-end
-
-local function tweenCamera(camera: Camera, cf: CFrame, fov: number, seconds: number, style: Enum.EasingStyle?, direction: Enum.EasingDirection?)
-	local info = TweenInfo.new(seconds, style or Enum.EasingStyle.Quad, direction or Enum.EasingDirection.InOut)
-	local t = TweenService:Create(camera, info, { CFrame = cf, FieldOfView = fov })
-	t:Play()
-	table.insert(cameraTweens, t)
 end
 
 --- CFrame de câmera relativo ao HRP (frente = -Z) olhando para um ponto relativo.
@@ -160,6 +158,67 @@ local function camAt(root: BasePart, offset: Vector3, lookOffset: Vector3): CFra
 	local pos = root.CFrame:PointToWorldSpace(offset)
 	local look = root.CFrame:PointToWorldSpace(lookOffset)
 	return CFrame.lookAt(pos, look)
+end
+
+local function currentShot(): Shot?
+	if not shotTo then
+		return nil
+	end
+	if not shotFrom or shotDuration <= 0 then
+		return shotTo
+	end
+	local alpha = math.clamp((os.clock() - shotStart) / shotDuration, 0, 1)
+	alpha = TweenService:GetValue(alpha, shotStyle, shotDirection)
+	return {
+		offset = shotFrom.offset:Lerp(shotTo.offset, alpha),
+		look = shotFrom.look:Lerp(shotTo.look, alpha),
+		fov = shotFrom.fov + (shotTo.fov - shotFrom.fov) * alpha,
+	}
+end
+
+local function renderCamera()
+	local camera = Workspace.CurrentCamera
+	local root = shotRoot
+	local shot = currentShot()
+	if not camera or not root or not shot then
+		return
+	end
+	camera.CFrame = camAt(root, shot.offset, shot.look)
+	camera.FieldOfView = shot.fov
+end
+
+--- Corta (seconds = 0) ou vai suavemente até o plano `to` a partir de onde a câmera está agora.
+local function cameraShot(to: Shot, seconds: number, style: Enum.EasingStyle?, direction: Enum.EasingDirection?)
+	shotFrom = if seconds > 0 then currentShot() else nil
+	shotTo = to
+	shotStart = os.clock()
+	shotDuration = seconds
+	shotStyle = style or Enum.EasingStyle.Quad
+	shotDirection = direction or Enum.EasingDirection.InOut
+	renderCamera()
+end
+
+local function takeCamera(root: BasePart, first: Shot)
+	shotRoot = root
+	shotFrom = nil
+	shotTo = nil
+	if cameraConn then
+		cameraConn:Disconnect()
+	end
+	cameraConn = RunService.RenderStepped:Connect(renderCamera)
+	cameraBusy = true
+	cameraShot(first, 0)
+end
+
+local function releaseCamera()
+	if cameraConn then
+		cameraConn:Disconnect()
+		cameraConn = nil
+	end
+	shotRoot = nil
+	shotFrom = nil
+	shotTo = nil
+	cameraBusy = false
 end
 
 -- ---------------------------------------------------------------------------
@@ -188,6 +247,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	local camera = Workspace.CurrentCamera
 	local alive = true
 	local steps: { thread } = {}
+	local stopCharge: (() -> ())? = nil
 
 	local function at(t: number, fn: () -> ())
 		table.insert(steps, task.delay(t, function()
@@ -217,14 +277,17 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 			end)
 		end
 		FX.SetAura(character, nil, "AwakenCharge")
+		if stopCharge then
+			stopCharge()
+			stopCharge = nil
+		end
 		if isMe then
 			humanoid.AutoRotate = savedAutoRotate
 			humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
 			if camera and cameraBusy then
-				cancelCameraTweens()
+				releaseCamera()
 				camera.CameraType = savedCameraType
 				camera.FieldOfView = savedFov
-				cameraBusy = false
 			end
 		end
 	end
@@ -247,18 +310,19 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		humanoid.AutoRotate = false
 		humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
 		if camera then
-			cameraBusy = true
-			cancelCameraTweens()
 			camera.CameraType = Enum.CameraType.Scriptable
-			camera.CFrame = camAt(root, Vector3.new(3.5, 0.5, 7), Vector3.new(0, 1.5, 0))
-			camera.FieldOfView = 70
-			-- órbita lenta até a frente, aproximando
-			tweenCamera(camera, camAt(root, Vector3.new(-4.5, 1.8, -6), Vector3.new(0, 0.8, 0)), 58, burstAt, Enum.EasingStyle.Sine)
+			-- plano aberto de lado/trás; órbita lenta até a frente durante a carga (segue o root a cada frame)
+			takeCamera(root, { offset = Vector3.new(4, 0.5, 8), look = Vector3.new(0, 1.5, 0), fov = 70 })
+			cameraShot({ offset = Vector3.new(-4.5, 1.8, -6.5), look = Vector3.new(0, 0.8, 0), fov = 60 }, burstAt * 0.68, Enum.EasingStyle.Sine)
 		end
 	end
+	-- Sons: início em t=0, carga (loop, se a equipe colar o id em Sounds.Shared.Awakening_Charge) até o
+	-- estouro, estouro em BurstAt, fim quando o modo acaba (AbilityController).
 	if not FX.PlaySoundAt(character, characterId, "Awakening") then
 		FX.PlaySoundAt(character, SHARED, "Awakening")
 	end
+	stopCharge = FX.PlaySoundAtStoppable(character, characterId, "Awakening_Charge")
+		or FX.PlaySoundAtStoppable(character, SHARED, "Awakening_Charge")
 	FX.SetOutline(character, color)
 	FX.SetAura(character, color, "AwakenCharge")
 	FX.SpawnVFX(character, SHARED, "Awakening_Charge", true)
@@ -266,21 +330,23 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		applyPose(rig, POSE_CHARGE_1, 0.35)
 	end
 
-	-- carga crescendo
-	at(burstAt * 0.42, function()
+	-- carga crescendo (tempos proporcionais ao BurstAt: com 5 s → 1,6 s / 3,4 s)
+	at(burstAt * 0.32, function()
 		if rig then
-			applyPose(rig, POSE_CHARGE_2, 0.6, Enum.EasingStyle.Sine)
+			applyPose(rig, POSE_CHARGE_2, burstAt * 0.2, Enum.EasingStyle.Sine)
 		end
 		if isMe then
-			FX.Shake(0.25, burstAt * 0.5)
+			FX.Shake(0.2, burstAt * 0.4)
 		end
 	end)
-	at(burstAt * 0.78, function()
+	at(burstAt * 0.68, function()
 		if rig then
-			applyPose(rig, POSE_CHARGE_3, burstAt * 0.22, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
+			applyPose(rig, POSE_CHARGE_3, burstAt * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
 		end
 		if isMe then
-			FX.Shake(0.6, burstAt * 0.25)
+			FX.Shake(0.7, burstAt * 0.32)
+			-- close no rosto, acelerando até o estouro
+			cameraShot({ offset = Vector3.new(-1.2, 1.2, -3.6), look = Vector3.new(0, 1.2, 0), fov = 50 }, burstAt * 0.32, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 		end
 	end)
 
@@ -288,6 +354,10 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	at(burstAt, function()
 		if rig then
 			applyPose(rig, POSE_BURST, 0.12, Enum.EasingStyle.Back)
+		end
+		if stopCharge then
+			stopCharge()
+			stopCharge = nil
 		end
 		FX.SetAura(character, nil, "AwakenCharge")
 		FX.Flash(character, Color3.new(1, 1, 1), 0.35)
@@ -300,10 +370,9 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		if isMe then
 			FX.Shake(1.2, 0.5)
 			if camera then
-				cancelCameraTweens()
-				camera.CFrame = camAt(root, Vector3.new(0, 2.5, -9), Vector3.new(0, 1, 0))
-				camera.FieldOfView = 78
-				tweenCamera(camera, camAt(root, Vector3.new(1.5, 3, -13), Vector3.new(0, 1, 0)), 64, 0.7, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+				-- corte para a frente, baixo, e recua com o impacto
+				cameraShot({ offset = Vector3.new(0, 2.5, -9), look = Vector3.new(0, 1, 0), fov = 78 }, 0)
+				cameraShot({ offset = Vector3.new(1.5, 3, -13), look = Vector3.new(0, 1, 0), fov = 64 }, 0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 			end
 		end
 	end)
@@ -314,11 +383,16 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 			applyPose(rig, POSE_STANCE, 0.45)
 		end
 	end)
-	at(math.max(total - 0.35, burstAt + 0.6), function()
+	at(burstAt + 1.0, function()
+		if isMe and camera then
+			-- órbita lenta em volta da pose despertada
+			cameraShot({ offset = Vector3.new(-3.5, 2.5, -11), look = Vector3.new(0, 1.2, 0), fov = 62 }, math.max(total - burstAt - 1.5, 0.3), Enum.EasingStyle.Sine)
+		end
+	end)
+	at(math.max(total - 0.45, burstAt + 0.6), function()
 		if isMe and camera then
 			-- volta suave para trás do personagem (a câmera padrão assume no fim)
-			cancelCameraTweens()
-			tweenCamera(camera, camAt(root, Vector3.new(0, 4, 11), Vector3.new(0, 1.5, 0)), savedFov, 0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+			cameraShot({ offset = Vector3.new(0, 4, 11), look = Vector3.new(0, 1.5, 0), fov = savedFov }, 0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		end
 	end)
 	at(total, finish)

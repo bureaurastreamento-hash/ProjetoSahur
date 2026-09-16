@@ -25,6 +25,9 @@ local HealthService = {}
 local ATTR_LAST_ATTACKER = "LastAttackerUserId"
 local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
 local ATTR_IFRAMES = "IFramesUntil" -- os.clock; RagdollService concede (ragdoll cancel/levantar)
+-- Preso num agarrão: só quem agarrou acerta a vítima até LockedUntil (terceiro não interrompe o agarrão)
+local ATTR_LOCKED_TO = "LockedToUserId"
+local ATTR_LOCKED_UNTIL = "LockedUntil"
 local KILL_CREDIT_WINDOW = 8
 local VOID_Y = -80 -- abaixo disso = caiu do mapa
 local warnedRig = false -- segundos que o último atacante recebe crédito do kill
@@ -132,6 +135,39 @@ end
 -- API pública (usada por outros services)
 -- ---------------------------------------------------------------------------
 
+--- Prioridade: quem NÃO pode levar golpe de `attacker` agora. Vale i-frames (ragdoll cancel, levantar,
+--- cutscene do despertar, agarrão em curso), modo deus e a trava do agarrão (só o agarrador acerta a
+--- vítima presa). Habilidades que "pegam" alguém (agarrão) devem checar antes de agarrar.
+function HealthService.IsInvulnerable(victim: Model, attacker: Player?): boolean
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
+		return true -- modo deus (AdminService)
+	end
+	local iframes = victim:GetAttribute(ATTR_IFRAMES)
+	if typeof(iframes) == "number" and os.clock() < iframes then
+		return true -- i-frames (ragdoll cancel / levantar / cutscene / agarrando)
+	end
+	local lockedUntil = victim:GetAttribute(ATTR_LOCKED_UNTIL)
+	if typeof(lockedUntil) == "number" and os.clock() < lockedUntil then
+		local owner = victim:GetAttribute(ATTR_LOCKED_TO)
+		if not attacker or attacker.UserId ~= owner then
+			return true -- preso num agarrão: só o agarrador acerta
+		end
+	end
+	return false
+end
+
+--- Trava a vítima a um atacante por `seconds` (agarrão): só ele consegue acertá-la. `attacker` nil = solta.
+function HealthService.LockTo(victim: Model, attacker: Player?, seconds: number?)
+	if attacker and seconds and seconds > 0 then
+		victim:SetAttribute(ATTR_LOCKED_TO, attacker.UserId)
+		victim:SetAttribute(ATTR_LOCKED_UNTIL, os.clock() + seconds)
+	else
+		victim:SetAttribute(ATTR_LOCKED_TO, nil)
+		victim:SetAttribute(ATTR_LOCKED_UNTIL, 0)
+	end
+end
+
 --- Aplica dano. Retorna o dano efetivamente aplicado (0 se alvo inválido/morto).
 function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Player?): number
 	local humanoid = getHumanoid(victim)
@@ -142,12 +178,8 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	if not HealthService.CanFight(attacker) or not HealthService.CanFight(victimPlayer) then
 		return 0
 	end
-	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
-		return 0 -- modo deus (AdminService)
-	end
-	local iframes = victim:GetAttribute(ATTR_IFRAMES)
-	if typeof(iframes) == "number" and os.clock() < iframes then
-		return 0 -- i-frames (ragdoll cancel / acabou de levantar)
+	if HealthService.IsInvulnerable(victim, attacker) then
+		return 0
 	end
 	if attacker and victimPlayer and attacker ~= victimPlayer then
 		-- mesmo time (Teams/duelo 2v2): sem fogo amigo

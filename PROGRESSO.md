@@ -200,33 +200,36 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-16, ~16:30 — tudo commitado e no GitHub, `b107863`)
+## Retomar aqui (última sessão: 2026-09-16, noite)
 
-### COMEÇAR POR AQUI na próxima sessão — observações do dono (2026-09-16, fim da tarde), SEM mexer ainda
-1. **Cutscene da ult curta demais**: 3,2 s é pouco; os áudios (início/carga/estouro) ficam amontoados e sem
-   construção. Alongar (`CombatConfig.Awakening.Cutscene.Duration/BurstAt` — pensar em ~6–8 s: início →
-   carga longa crescendo → estouro → pose), e ajustar as poses/câmera do `CutsceneController` para o novo tempo.
-   Sons: início no t=0, carga (se houver id) durante, estouro no BurstAt, fim ao acabar o modo.
-2. **Ult ativada NO AR**: a câmera ficou onde o personagem estava e ele caiu fora do quadro. Fazer: ou a câmera
-   segue o HRP a cada frame (RenderStepped recalculando `camAt` relativo ao root), ou o servidor prende o
-   personagem no ar (AssemblyLinearVelocity 0 + âncora/BodyPosition durante a cutscene) — preferir prender +
-   câmera seguindo (as duas coisas).
-3. **Prioridade/invencibilidade** (não testado, mas garantir): NÃO pode levar golpe (a) durante a ativação da
-   ult/cutscene, (b) enquanto executa um agarrão (Grab: do início ao release), (c) enquanto está no meio do
-   combo de M1 batendo em alguém (o combo tem que "dar jus": quem está sendo comboado não sai, e um terceiro
-   não interrompe o atacante com um soco qualquer). Conferir `RagdollService.GrantIFrames`, `HealthService`/
-   `CombatService.ResolveHit` e o hitstun; definir regra clara: cutscenes e animações complexas têm prioridade.
-4. **VFX mal colocados/sem sentido nos ataques** (padrões demais): revisar `Assets.VFXAliases` golpe a golpe
-   usando o testador de VFX do painel DEV (F7) e os assets que o dono separou para isso. Trocar por efeitos que
-   combinem com cada ataque.
-5. **Sprite-sheets parados**: alguns VFX dos packs são flipbooks (ParticleEmitter com `FlipbookLayout`/
-   `FlipbookMode`, texturas em grade) e estão aparecendo fixos — conferir se `podar_vfx.luau` preservou as
-   propriedades Flipbook*/`FlipbookFramerate`/`FlipbookStartRandom` e se `FX.SpawnVFXTemplate` não zera nada;
-   testar no preview.
-6. Depois: item 7 dos planos (Menu DEV → Administração: mensagem global via MessagingService, do servidor, para
-   um jogador, ban DataStore + kick, kick), item 5 (agarrão soldado no servidor + anim Shared/Grabbed), item 6
-   (menus minimalistas), `AwakenedEffect` faltando em vários personagens, e a lista de animações/VFX/sons por
-   ação (o `[Assets] não encontrado` do Output).
+### COMEÇAR POR AQUI — o dono precisa TESTAR no Studio (feito nesta sessão, boot OK 24 services / 0 erros)
+1. **Cutscene da ult = 7 s** (`CombatConfig.Awakening.Cutscene`: Duration 7.0, BurstAt 5.0). Linha do tempo
+   (`CutsceneController`): t0 som `Awakening` + som de carga em loop `Sounds.Shared.Awakening_Charge` (entrada
+   criada VAZIA no `Sounds.model.json` — colar id) → poses 1/2/3 em 0/1,6/3,4 s, câmera orbita e fecha no rosto
+   → 5,0 s estouro (corte de câmera, flash, `Awakening_Burst`) → pose de guarda, órbita lenta → 6,55 s câmera
+   volta → 7,0 s controle de volta. `FX.PlaySoundAtStoppable` devolve função que para o som (fade).
+   Testar: G no chão e NO AR; ver se os 3 sons ficam separados; ajustar tempos se quiser.
+2. **Ult no ar**: servidor ANCORA o HumanoidRootPart (velocidade zerada) durante a cutscene e solta no fim/morte
+   (`AbilityService.onRequestAwaken`); câmera agora é recalculada a cada frame relativa ao root
+   (`RenderStepped`), nunca perde o personagem. Testar: pular + G → personagem flutua parado, câmera junto, cai
+   quando acaba.
+3. **Prioridade/invencibilidade** (`HealthService.IsInvulnerable` centraliza: modo deus, `IFramesUntil`, trava do
+   agarrão):
+   - Cutscene: já tinha i-frames; agora golpe em alvo invencível vira kind `"immune"` (sem dano, sem hitstun,
+     sem empurrão; cliente só dá um brilho cinza). NPC/boss idem (`ResolveNpcHit`). Agarrão não pega quem
+     está invencível.
+   - Agarrão (Grab: Throw/Chokeslam/Spin): quem agarra tem i-frames da investida até o release (se não pegar
+     ninguém, `RagdollService.ClearIFrames`); a vítima presa fica `LockedToUserId` = só o agarrador acerta
+     (terceiro não tira ela do agarrão).
+   - Combo de M1: ao acertar um M1 (1º–3º), o atacante ganha `comboArmorUntil` (~0,65 s, até o próximo golpe):
+     soco SIMPLES de um terceiro dá dano mas NÃO interrompe (sem hitstun). 4º golpe, uppercut/downslam e
+     habilidades (têm empurrão) interrompem normal. Vítima em hitstun continua sem dash (já era assim).
+   Testar com 2 clientes (Test > Clients and Servers, 3 players) ou bonecos.
+4. Depois (ainda não feito): item 4 (VFX golpe a golpe com o testador F7), item 5 (flipbooks parados — conferir
+   `podar_vfx.luau`/`FX.SpawnVFXTemplate` preservam `Flipbook*`), item 7 dos planos (Menu DEV → Administração:
+   mensagem global via MessagingService, ban DataStore + kick, kick), item 5 dos planos (agarrão soldado no
+   servidor + anim Shared/Grabbed), menus minimalistas, `AwakenedEffect` faltando em vários personagens,
+   lista de animações/VFX/sons por ação (o `[Assets] não encontrado` do Output).
 
 ### O que foi feito em 2026-09-16 (tarde) — resumo
 - MCP do Roblox Studio ligado (ver notas em CLAUDE.md e memória): leio o place, dou Play e leio o Output sozinho.

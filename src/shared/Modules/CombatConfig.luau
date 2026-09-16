@@ -157,9 +157,11 @@ CombatConfig.Awakening = {
 	-- Cutscene de transformação (decisão do dono 2026-09-16): G = o personagem para, carrega, ESTOURA e
 	-- volta despertado. O jogador fica invencível e sem agir durante Duration; no BurstAt quem estiver a
 	-- BurstRadius leva BurstDamage + empurrão. O buff/kit despertado só começa DEPOIS da cutscene.
+	-- Tempos (dono, 2026-09-16): ~7 s para os sons terem construção: início → carga longa crescendo →
+	-- estouro → pose. O servidor prende o personagem no lugar (âncora, vale no ar) durante Duration.
 	Cutscene = {
-		Duration = 3.2,
-		BurstAt = 2.2,
+		Duration = 7.0,
+		BurstAt = 5.0,
 		BurstRadius = 12,
 		BurstDamage = 5,
 		BurstKnockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.0 } :: Knockback,

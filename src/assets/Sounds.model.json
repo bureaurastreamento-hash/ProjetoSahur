@@ -154,6 +154,15 @@
           }
         },
         {
+          "name": "Awakening_Charge",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "",
+            "Looped": true,
+            "Volume": 0.6
+          }
+        },
+        {
           "name": "Awakening_Burst",
           "className": "Sound",
           "properties": {

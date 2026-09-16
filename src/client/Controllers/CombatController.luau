@@ -243,7 +243,11 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		return
 	end
 	local isMe = victimChar == localPlayer.Character
-	if kind == "parry" then
+	if kind == "immune" then
+		-- alvo invencível (cutscene/agarrão/i-frames): só um brilho discreto, sem número nem reação
+		FX.Flash(victimChar, Color3.fromRGB(200, 200, 200), 0.1)
+		return
+	elseif kind == "parry" then
 		FX.DamageNumber(victimChar, "PARRY", COLOR_PARRY)
 		FX.Flash(victimChar, COLOR_PARRY, 0.25)
 		FX.SpawnVFX(victimChar, SHARED, "Parry", true)

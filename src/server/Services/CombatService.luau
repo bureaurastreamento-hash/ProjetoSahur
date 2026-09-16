@@ -43,6 +43,8 @@ type PlayerState = {
 	critArmedUntil: number, -- 1º crítico saiu: parry+crítico até aqui = Black Flash
 	lastRagdollHitAt: number, -- (vítima) último downslam que derrubou (RagdollOnce)
 	superArmorUntil: number, -- agarrão/ult: não toma hitstun nem cai (dano entra normal)
+	comboArmorUntil: number, -- acabou de acertar um M1: soco simples de TERCEIRO não interrompe o combo
+	comboTargetUserId: number, -- em quem o combo está entrando (o alvo em hitstun não bate mesmo)
 	followUpUntil: number, -- depois do uppercut: janela para o downslam no ar (sem precisar de combo)
 }
 
@@ -82,6 +84,8 @@ local function newState(): PlayerState
 		critArmedUntil = 0,
 		lastRagdollHitAt = -math.huge,
 		superArmorUntil = 0,
+		comboArmorUntil = 0,
+		comboTargetUserId = 0,
 		followUpUntil = 0,
 	}
 end
@@ -389,6 +393,11 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 		if dealt > 0 and AbilityService then
 			AbilityService.OnHitDealt(attacker, victimPlayer)
 		end
+		if dealt == 0 and HealthService.IsInvulnerable(victim, attacker) and HealthService.IsAlive(victim) then
+			-- Invencível (cutscene, i-frames, agarrando/preso em agarrão): nem dano, nem hitstun, nem empurrão.
+			notifyDamage:FireAllClients(attackerChar, victim, 0, "immune")
+			return "immune"
+		end
 	end
 	if kind == "hit" and critKind and dealt > 0 then
 		kind = critKind
@@ -406,7 +415,20 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	end
 	local landed = kind == "hit" or kind == "finisher" or kind == "crit" or kind == "blackflash"
 	if landed and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
-		CombatService.HitStun(victimPlayer)
+		-- Prioridade do combo (dono, 2026-09-16): quem está no meio do combo de M1 (acertou há pouco e
+		-- ainda tem golpe vindo) não é interrompido pelo soco simples de um terceiro — o dano entra,
+		-- o hitstun não. Golpes com empurrão (4º, uppercut, habilidades) interrompem normalmente.
+		local plainM1 = opts.IsM1 and knockback == nil
+		local comboArmor = plainM1 and victimState ~= nil and now < victimState.comboArmorUntil
+			and victimState.comboTargetUserId ~= attacker.UserId
+		if not comboArmor then
+			CombatService.HitStun(victimPlayer)
+		end
+	end
+	if landed and dealt > 0 and opts.IsM1 and knockback == nil and victimPlayer then
+		local m1 = CombatConfig.Attacks.M1
+		attackerState.comboArmorUntil = now + m1.Cooldown + m1.HitDelay + 0.2 -- até o próximo golpe sair
+		attackerState.comboTargetUserId = victimPlayer.UserId
 	end
 
 	Log.debug(("[CombatService] %s -> %s: %s, dano %.1f"):format(attacker.Name, victim.Name, kind, dealt))
@@ -482,6 +504,10 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 		damage *= CombatConfig.Block.DamageMultiplier
 	end
 	local dealt = if damage > 0 then HealthService.ApplyDamage(victim, damage, nil) else 0
+	if dealt == 0 and damage > 0 and HealthService.IsInvulnerable(victim, nil) then
+		notifyDamage:FireAllClients(attackerChar, victim, 0, "immune")
+		return 0 -- cutscene/i-frames/agarrão: o NPC também não empurra
+	end
 	if dealt > 0 and victimPlayer and AbilityService then
 		AbilityService.OnHitTaken(victimPlayer)
 	end
