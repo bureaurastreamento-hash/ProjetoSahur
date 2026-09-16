@@ -234,7 +234,7 @@ Memória entre sessões. Atualizar depois de cada mudança.
      rosa (19 blobs), olhos amarelos de grade, boca com dentes, 4 barris listrados, cauda. Atributos no Model:
      `BossRig`, `HitboxScale` (Hitbox.luau multiplica alcance/raio), `RigScale`. Animação PROCEDURAL no cliente
      (`BossController.animateRigs`: respira, cone balança, barris pisam ao andar, cauda ondula).
-     Preview parado deixado em `Workspace.PreviewNotoriousBIG` (apagar quando quiser).
+     (Preview que ficou no Workspace foi removido; pra ver o modelo: DEV → Virar Notorious BIG.)
    - `RitualService` (reescrito): UMA flecha dourada aparece num dos 8 `ArrowSpot*` (pedestal + lanterna).
      Encostar pega (fica nas costas, `Player.HasArrow`, banner pra todo mundo = alvo). Morreu = a flecha cai
      onde caiu. À NOITE o portador segura E no altar (`RitualPrompt`) → `BossFormService.Transform`. Tochas
