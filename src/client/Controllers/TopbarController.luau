@@ -36,6 +36,7 @@ local profileCoins: TextLabel
 local profileWarning: TextLabel
 local profileCharacters: TextLabel
 local profileTop: TextLabel
+local profileTopRating: TextLabel
 local profileLevel: TextLabel
 local xpFill: Frame
 local missionsList: Frame
@@ -166,6 +167,7 @@ function TopbarController.Init()
 	profileWarning = get(profilePanel, "Warning") :: TextLabel
 	profileCharacters = get(profilePanel, "Characters") :: TextLabel
 	profileTop = get(profilePanel, "Top") :: TextLabel
+	profileTopRating = get(profilePanel, "TopRating") :: TextLabel
 	statsList = get(profilePanel, "Stats") :: Frame
 	statsTemplate = get(statsList, "Template") :: TextLabel
 	profileLevel = get(profilePanel, "Level") :: TextLabel
@@ -249,15 +251,25 @@ function TopbarController.Start()
 		end
 	end)
 
-	Remotes.GetEvent(Remotes.Events.NotifyLeaderboard).OnClientEvent:Connect(function(rows: any)
-		if typeof(rows) ~= "table" then
+	-- placares globais: { kills = rows, rating = rows }; o Perfil mostra os 5 primeiros de cada
+	local function renderTop(label: TextLabel, rows: any)
+		local lines = {}
+		if typeof(rows) == "table" then
+			for i, row in ipairs(rows) do
+				if i > 5 then
+					break
+				end
+				table.insert(lines, ("%d. %-14s %d"):format(i, tostring(row.name), tonumber(row.value) or 0))
+			end
+		end
+		label.Text = if #lines > 0 then table.concat(lines, "\n") else "ninguém ainda"
+	end
+	Remotes.GetEvent(Remotes.Events.NotifyLeaderboard).OnClientEvent:Connect(function(data: any)
+		if typeof(data) ~= "table" then
 			return
 		end
-		local lines = {}
-		for i, row in ipairs(rows) do
-			table.insert(lines, ("%2d. %-16s %d"):format(i, tostring(row.name), tonumber(row.kills) or 0))
-		end
-		profileTop.Text = if #lines > 0 then table.concat(lines, "\n") else "ninguém ainda"
+		renderTop(profileTop, data.kills)
+		renderTop(profileTopRating, data.rating)
 	end)
 
 	Remotes.GetEvent(Remotes.Events.RequestProfile):FireServer() -- o 1º NotifyProfile pode ter saído antes do boot

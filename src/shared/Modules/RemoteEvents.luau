@@ -76,7 +76,7 @@ RemoteEvents.Events = ({
 	NotifyAbilityDenied = "NotifyAbilityDenied", -- dono: (slot: number, reason: string)
 	NotifyProfile = "NotifyProfile", -- dono: (profile: DataConfig.Profile, sessionOnly: boolean)
 	NotifyUnlockDenied = "NotifyUnlockDenied", -- dono: (characterId: string, reason: string)
-	NotifyLeaderboard = "NotifyLeaderboard", -- all: (rows: { {name: string, kills: number} })
+	NotifyLeaderboard = "NotifyLeaderboard", -- all: ({ kills = rows, rating = rows }, rows: { {name: string, value: number} })
 	NotifyAdminResult = "NotifyAdminResult", -- dev: (ok: boolean, message: string, data: table?)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"warning"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
 	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done"|"mastery_up", data: table)

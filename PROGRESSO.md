@@ -211,6 +211,17 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### Placar global de rating 1v1 (2026-09-16, NÃO testado)
+- `LeaderboardService` generalizado em 2 boards: `kills` (OrderedDataStore `Leaderboard_Kills_v1`, Part
+  `LeaderboardBoard`) e `rating` (`Leaderboard_Rating_v1`, Part `RatingBoard`, publicado só depois do 1º
+  duelo, i.e. rating ≠ 1000). `RatingBoard/Base/Frame` novos no `ArenaExtras` em x=+30 (espelho do de
+  kills em x=−30, z=−70) — se ficar em cima de algo do mapa, mudar a posição em `tools/gerar_arena.py`
+  (não no Studio: o Rojo sobrescreve).
+- `NotifyLeaderboard` agora manda `{ kills = rows, rating = rows }` (rows `{name, value}`); Perfil (P)
+  mostra top 5 de cada (labels `Top` e `TopRating`; painel 560×460).
+- Teste: dois clientes, duelo 1v1 até o fim → dev "RefreshLeaderboard" → painel de rating e Perfil
+  mostram o vencedor (precisa de "Enable Studio Access to API Services").
+
 ### Estado do boss com modelo 3D (sessão anterior)
 - `ServerStorage.BossModel` (asset 138493793469412, 71 MeshParts em 6 grupos Tronco/Cabeça/BracoDir/
   BracoEsq/PernaDir/PernaEsq). O dono rodou na Command Bar
@@ -240,8 +251,8 @@ Memória entre sessões. Atualizar depois de cada mudança.
    (Boss incl. Idle/Walk, Emotes, Dash/Downslam/Uppercut/Parry/Hit do Shared).
 2. Bugs do 3º teste (pedir).
 3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
-4. Depois: placar global de rating, mais agarrões (perguntar quais), Idle/Walk do boss, e o plano de
-   **guerra de clã/dominação** (ver "Planos futuros").
+4. Depois: ~~placar global de rating~~ (feito, testar), mais agarrões (perguntar quais), ~~Idle/Walk do
+   boss~~ (código pronto, faltam ids), e o plano de **guerra de clã/dominação** (ver "Planos futuros").
 
 
 ### Boss com modelo 3D — 3ª versão (`src/shared/Modules/BossRig.luau`)

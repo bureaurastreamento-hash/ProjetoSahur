@@ -21,7 +21,7 @@
       ],
       [
        0,
-       400
+       460
       ]
      ]
     },
@@ -628,7 +628,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "TOP GLOBAL (KILLS)",
+      "Text": "TOP GLOBAL — KILLS",
       "Font": "GothamBold",
       "TextSize": 11,
       "TextColor3": {
@@ -657,7 +657,7 @@
         ],
         [
          0,
-         100
+         74
         ]
        ]
       },
@@ -670,6 +670,110 @@
         [
          0,
          270
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "",
+      "Font": "Code",
+      "TextSize": 12,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Top",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "TopRatingTitle",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "TopRatingTitle",
+      "Size": {
+       "UDim2": [
+        [
+         0.48,
+         0
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         346
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "TOP GLOBAL — RATING 1v1",
+      "Font": "GothamBold",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "TopRating",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "TopRating",
+      "Size": {
+       "UDim2": [
+        [
+         0.48,
+         0
+        ],
+        [
+         0,
+         74
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         364
         ]
        ]
       },

@@ -248,7 +248,7 @@ mission_row = label("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), font=FONT_B
     ]),
 ])
 profile = screen("ProfileGui", [
-    panel("Panel", 560, 400, "Perfil", [
+    panel("Panel", 560, 460, "Perfil", [
         label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         label("Warning", "", ud(1, 0, 0, 16), ud(0, 0, 0, 24), ts=11, color=HEALTH),
@@ -263,9 +263,12 @@ profile = screen("ProfileGui", [
         ]),
         label("Characters", "", ud(0.48, 0, 0, 34), ud(0, 0, 0, 214), ts=12, color=MUTED, yalign="Top",
               extra={"TextWrapped": True}),
-        label("TopTitle", "TOP GLOBAL (KILLS)", ud(0.48, 0, 0, 16), ud(0, 0, 0, 252), font=FONT_B, ts=11,
+        label("TopTitle", "TOP GLOBAL — KILLS", ud(0.48, 0, 0, 16), ud(0, 0, 0, 252), font=FONT_B, ts=11,
               color=MUTED),
-        label("Top", "", ud(0.48, 0, 0, 100), ud(0, 0, 0, 270), font="Code", ts=12, yalign="Top"),
+        label("Top", "", ud(0.48, 0, 0, 74), ud(0, 0, 0, 270), font="Code", ts=12, yalign="Top"),
+        label("TopRatingTitle", "TOP GLOBAL — RATING 1v1", ud(0.48, 0, 0, 16), ud(0, 0, 0, 346), font=FONT_B,
+              ts=11, color=MUTED),
+        label("TopRating", "", ud(0.48, 0, 0, 74), ud(0, 0, 0, 364), font="Code", ts=12, yalign="Top"),
         # coluna direita: missões
         label("MissionsTitle", "MISSÕES DE HOJE", ud(0.48, 0, 0, 16), ud(1, 0, 0, 44), anchor=(1, 0), font=FONT_B,
               ts=11, color=MUTED),
