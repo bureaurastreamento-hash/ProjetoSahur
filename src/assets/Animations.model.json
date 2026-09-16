@@ -309,7 +309,7 @@
           "name": "Swipe",
           "className": "Animation",
           "properties": {
-            "AnimationId": "rbxassetid://112099038975315"
+            "AnimationId": "rbxassetid://71637199637001"
           },
           "attributes": {
             "R15Id": ""
@@ -363,7 +363,7 @@
           "name": "Idle",
           "className": "Animation",
           "properties": {
-            "AnimationId": ""
+            "AnimationId": "rbxassetid://107074192710996"
           },
           "attributes": {
             "R15Id": ""
