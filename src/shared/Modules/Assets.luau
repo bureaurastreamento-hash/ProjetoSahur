@@ -118,6 +118,8 @@ Assets.VFXPack = {
 	["Shared/WallSplat"] = "Packs/OfficialJJS/Hakari/RoughSlam", -- caiu contra a parede
 	["Shared/BlackFlash"] = { Path = "Packs/OfficialJJS/Hakari/RoughImpact", Lifetime = 1.5 }, -- 2º crítico seguido
 	["Shared/Awakening"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 20 }, -- aura do modo (G)
+	["Shared/Awakening_Charge"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 2.4 }, -- carga da cutscene
+	["Shared/Awakening_Burst"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2 }, -- estouro da cutscene (onda no chão)
 	["Shared/RagdollCancel"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact", -- Q caído: levantou
 	["Brawler/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
 	["Brawler/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",

@@ -572,8 +572,8 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if now < readyAt and not noCooldown then
 		return deny(player, slot, "cooldown")
 	end
-	if ability.EnergyCost >= CharacterDefs.Energy.Max then
-		return deny(player, slot, "use_g") -- a ultimate sai pelo G (RequestAwaken), não pelo slot
+	if ability.EnergyCost >= CharacterDefs.Energy.Max and not AbilityService.IsAwakened(player) then
+		return deny(player, slot, "use_g") -- ultimate: só no modo despertado (G = cutscene de transformação)
 	end
 	local handler = effects[ability.Effect.Type]
 	if not handler then
@@ -625,35 +625,37 @@ local function onRequestAwaken(player: Player)
 		return deny(player, 0, "energy")
 	end
 	local cfg = CombatConfig.Awakening
+	local cut = cfg.Cutscene
 	local now = os.clock()
+	local serverNow = Workspace:GetServerTimeNow()
 	setEnergy(player, 0)
-	state.awakenedUntil = now + cfg.Duration
-	player:SetAttribute(ATTR_AWAKENED_UNTIL, Workspace:GetServerTimeNow() + cfg.Duration)
-	RagdollService.GrantIFrames(character, cfg.IFrames)
+	-- Cutscene: parado (CutsceneUntil → WalkSpeed 0), sem agir (Stun), invencível; o modo só começa depois
+	state.awakenedUntil = now + cut.Duration + cfg.Duration
+	state.busyUntil = now + cut.Duration
+	player:SetAttribute("CutsceneUntil", serverNow + cut.Duration)
+	player:SetAttribute(ATTR_AWAKENED_UNTIL, serverNow + cut.Duration + cfg.Duration)
+	RagdollService.GrantIFrames(character, cut.Duration + cfg.IFrames)
+	CombatService.Stun(player, cut.Duration, "awakening")
 	CombatService.RestoreWalkSpeed(player)
-	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration })
-	Log.debug(("[AbilityService] %s DESPERTOU por %ds"):format(player.Name, cfg.Duration))
-	-- A ultimate do personagem (Abilities com EnergyCost = Max) sai junto com o despertar
-	local def = CharacterDefs.Get(state.characterId)
-	local ult: CharacterDefs.AbilityDef? = nil
-	if def then
-		for _, ability in def.Abilities do
-			if ability.EnergyCost >= CharacterDefs.Energy.Max then
-				ult = ability
-			end
+	AntiExploitService.Grace(player, cut.Duration + 1)
+	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
+	Log.debug(("[AbilityService] %s DESPERTOU (cutscene %.1fs + %ds)"):format(player.Name, cut.Duration, cfg.Duration))
+	-- Estouro: quem estiver perto leva dano + empurrão (o único "ataque" da transformação)
+	task.delay(cut.BurstAt, function()
+		if states[player] ~= state or player.Character ~= character or not HealthService.IsAlive(character) then
+			return
 		end
-	end
-	if ult then
-		local handler = effects[ult.Effect.Type]
-		if handler then
-			state.busyUntil = now + ult.CastTime
-			local ok, err = pcall(handler :: any, player, character, ult, facing(character))
-			if not ok then
-				warn(("[AbilityService] erro na ultimate %s: %s"):format(ult.Id, tostring(err)))
-			end
+		for _, victim in Hitbox.Around(character, cut.BurstRadius, 8) do
+			CombatService.ResolveHit(player, character, victim, cut.BurstDamage, false, cut.BurstKnockback, { BreaksBlock = true })
 		end
-	end
-	task.delay(cfg.Duration, function()
+	end)
+	task.delay(cut.Duration, function()
+		if states[player] == state and player.Character == character then
+			player:SetAttribute("CutsceneUntil", 0)
+			CombatService.RestoreWalkSpeed(player) -- agora com o SpeedMultiplier do modo
+		end
+	end)
+	task.delay(cut.Duration + cfg.Duration, function()
 		if states[player] == state and player.Character == character and os.clock() >= state.awakenedUntil then
 			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
 			CombatService.RestoreWalkSpeed(player)

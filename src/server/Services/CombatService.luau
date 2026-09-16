@@ -96,7 +96,10 @@ local function restoreWalkSpeed(player: Player)
 		return
 	end
 	local mult = if AbilityService then AbilityService.GetSpeedMultiplier(player) else 1
-	if state.blocking then
+	local cutsceneUntil = player:GetAttribute("CutsceneUntil")
+	if typeof(cutsceneUntil) == "number" and Workspace:GetServerTimeNow() < cutsceneUntil then
+		humanoid.WalkSpeed = 0 -- cutscene (despertar): parado
+	elseif state.blocking then
 		humanoid.WalkSpeed = CombatConfig.Block.WalkSpeed
 	elseif os.clock() < state.hitStunUntil then
 		humanoid.WalkSpeed = CombatConfig.HitStun.WalkSpeed

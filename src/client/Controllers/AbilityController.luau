@@ -30,6 +30,7 @@ local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
+local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 
 local AbilityController = {}
 
@@ -41,7 +42,6 @@ local function trailColor(characterId: string): Color3
 	return if def and def.Color then def.Color else TRAIL_DEFAULT
 end
 
-local AWAKEN_COLOR = Color3.fromRGB(255, 200, 70)
 
 local requestAbility: RemoteEvent
 local requestAwaken: RemoteEvent
@@ -103,16 +103,9 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 	if abilityId == "Awakening" then
 		-- Modo: aura que segue o personagem (VFX.<Char>.Awakening ou Shared.Awakening) + contorno dourado
 		if phase == "start" then
-			FX.PlayAnimation(character, characterId, "Awakening")
-			FX.SpawnVFX(character, characterId, "Awakening", false)
-			if not FX.PlaySoundAt(character, characterId, "Awakening") then
-				FX.PlaySoundAt(character, "Shared", "Awakening")
-			end
-			FX.SetOutline(character, AWAKEN_COLOR)
-			FX.Flash(character, AWAKEN_COLOR, 0.4)
-			if character == localPlayer.Character then
-				FX.Shake(0.7, 0.4)
-			end
+			-- Cutscene de transformação (câmera + poses + VFX + sons); a aura/contorno do modo ficam depois
+			CutsceneController.PlayAwakening(character, characterId, data)
+			FX.PlayAnimation(character, characterId, "Awakening") -- se a equipe publicar uma, toca por cima
 		else
 			FX.SetOutline(character, nil)
 			FX.PlaySoundAt(character, "Shared", "Awakening_End")

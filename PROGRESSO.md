@@ -234,6 +234,17 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Sobrou no place: `Workspace.humanoider_20` (456, rig de animação da equipe?), `ServerStorage.BossModel - save`
   (backup), `RBX_ANIMSAVES` (Moon/Animation Editor), `BestWalkAnimR6`, `C00lkidd M4`, `Barriers` (vazios). Não mexi.
 
+### 2026-09-16 (16:00) — Cutscene do DESPERTAR (decisão 1) — FALTA O DONO VER
+- Servidor (`AbilityService.onRequestAwaken`): G = cutscene de `CombatConfig.Awakening.Cutscene.Duration` (3,2 s):
+  Stun("awakening") + atributo `CutsceneUntil` (WalkSpeed 0 no `restoreWalkSpeed`) + i-frames; no `BurstAt`
+  (2,2 s) quem estiver a 12 studs leva 5 de dano + empurrão (`Hitbox.Around`); o modo (buff/kit) começa DEPOIS.
+  A ult NÃO dispara mais sozinha: o slot com EnergyCost = Max fica liberado só no modo despertado.
+- Cliente: novo `CutsceneController` (câmera Scriptable com órbita → estouro → volta; poses procedurais nas
+  Motor6D R6 via C0 (carga 1/2/3 → estouro → guarda); sons Awakening (início) e Awakening_Burst; VFX
+  `Shared/Awakening_Charge` (aura) e `Shared/Awakening_Burst` (onda Locust/Slam) novos em `Assets.VFXAliases`;
+  contorno; shake). Outros jogadores veem corpo/efeitos, sem câmera. Morte/troca no meio desfaz tudo.
+- Ajustar depois de ver: tempos em `CombatConfig.Awakening.Cutscene`, poses/câmera no `CutsceneController`.
+
 ### 2026-09-16 (15:30) — auditoria completa + hit detection novo
 - Place limpo via MCP (autorizado): scripts alheios em SSS ("Blood after Player Dies", AssistantTestScript do MCP),
   Workspace "C00lkidd M4"/BestWalkAnimR6/Barriers, RS.GuiAnimatorPlugin, Lighting SunRays/DoF, "BossModel - save".
