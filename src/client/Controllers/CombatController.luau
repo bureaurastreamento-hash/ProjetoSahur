@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local SettingsController = require(script.Parent:WaitForChild("SettingsController"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
@@ -44,10 +45,39 @@ local blockHeld = false
 --- Toque no mundo = soco (MobileController desliga quando há botões na tela)
 CombatController.TouchAttackEnabled = true
 
--- Combo próprio (espelho do servidor via NotifyAttack): o especial só sai quando o próximo é o 4º
+-- Combo próprio (previsto no clique, confirmado pelo servidor via NotifyAttack): o especial só sai quando
+-- o próximo é o 4º. myNextAttackAt/myStunnedUntil evitam animar/pedir golpe que o servidor vai recusar.
 local myNextCombo = 1
 local myLastAttackAt = -math.huge
 local myFollowUpUntil = 0 -- depois do uppercut: downslam livre
+local myNextAttackAt = 0
+local myStunnedUntil = 0
+local pendingAttacks = 0 -- socos previstos cuja confirmação (NotifyAttack) ainda não chegou
+
+--- Animação + som do golpe (previsto no atacante local, NotifyAttack nos outros).
+local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: number)
+	local attackDef = CombatConfig.Attacks[attackId]
+	if attackId ~= "M1" then
+		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
+		FX.PlayAnimation(attackerChar, SHARED, attackId)
+		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+		local up = attackDef and attackDef.AttackerUp
+		if typeof(up) == "number" and attackerChar == localPlayer.Character then
+			FX.Push(attackerChar, Vector3.new(0, up, 0), 0.2)
+		end
+		return
+	end
+	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
+	if attackDef and comboIndex >= attackDef.ComboLength then
+		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
+		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then
+			FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+		end
+		FX.SpawnVFX(attackerChar, SHARED, "Finisher", true)
+	else
+		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
+	end
+end
 
 --- Soco (M1). Usado pelo input e pelos botões de toque. No 4º golpe, no ar subindo vira Uppercut,
 --- caindo vira Downslam (o servidor valida com a mesma regra).
@@ -71,7 +101,38 @@ function CombatController.Attack()
 			end
 		end
 	end
-	requestAttack:FireServer(attackId)
+	local now = os.clock()
+	if not character or not root or now < myNextAttackAt or now < myStunnedUntil or localPlayer:GetAttribute("Ragdolled") == true then
+		return
+	end
+	local attackCfg = CombatConfig.Attacks[attackId]
+	-- Previsão: anima na hora do clique (sem esperar o servidor) e mantém o combo local
+	local comboIndex = 1
+	if attackId == "M1" then
+		if now - myLastAttackAt > m1.ComboResetTime then
+			myNextCombo = 1
+		end
+		comboIndex = myNextCombo
+		local finisher = comboIndex >= m1.ComboLength
+		myNextAttackAt = now + (if finisher then m1.ComboEndCooldown else m1.Cooldown)
+		myNextCombo = if finisher then 1 else comboIndex + 1
+	else
+		myNextAttackAt = now + attackCfg.Cooldown
+		myNextCombo = 1
+		myFollowUpUntil = if attackId == "Uppercut" then now + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
+	end
+	myLastAttackAt = now
+	pendingAttacks += 1
+	playAttackFx(character, attackId, comboIndex)
+	-- Wind-up aqui, com as posições exatas deste cliente; o servidor valida a lista numa caixa tolerante
+	task.delay(attackCfg.HitDelay, function()
+		if localPlayer.Character ~= character or os.clock() < myStunnedUntil then
+			pendingAttacks = math.max(0, pendingAttacks - 1)
+			return -- levou parry/stun durante o wind-up: o golpe não sai
+		end
+		local victims = Hitbox.InFront(character, attackCfg.Range, attackCfg.Width, attackCfg.Height, attackCfg.MaxTargets)
+		requestAttack:FireServer(attackId, victims)
+	end)
 end
 
 -- Segurar o botão = os 4 golpes saem sozinhos, no ritmo do Cooldown; depois do 4º o servidor
@@ -164,32 +225,17 @@ local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex
 	if not attackerChar then
 		return
 	end
-	local attackDef = CombatConfig.Attacks[attackId]
 	if attackerChar == localPlayer.Character then
-		myLastAttackAt = os.clock()
+		-- confirmação do servidor: sincroniza o combo (o servidor manda); a animação já saiu no clique
 		myNextCombo = if attackId == "M1" and comboIndex < CombatConfig.Attacks.M1.ComboLength then comboIndex + 1 else 1
 		myFollowUpUntil = if attackId == "Uppercut" then os.clock() + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
-	end
-	if attackId ~= "M1" then
-		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
-		FX.PlayAnimation(attackerChar, SHARED, attackId)
-		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
-		local up = attackDef and attackDef.AttackerUp
-		if typeof(up) == "number" and attackerChar == localPlayer.Character then
-			FX.Push(attackerChar, Vector3.new(0, up, 0), 0.2)
+		if pendingAttacks > 0 then
+			pendingAttacks -= 1
+			return
 		end
-		return
+		-- sem previsão pendente (ex.: golpe disparado por outro caminho): anima agora
 	end
-	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
-	if attackDef and comboIndex >= attackDef.ComboLength then
-		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
-		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then
-			FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
-		end
-		FX.SpawnVFX(attackerChar, SHARED, "Finisher", true)
-	else
-		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
-	end
+	playAttackFx(attackerChar, attackId, comboIndex)
 end
 
 local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: number, kind: string)
@@ -321,6 +367,11 @@ end
 
 local function onNotifyCooldown(reason: string, seconds: number)
 	Log.debug(("[CombatController] cooldown: %s por %.2fs"):format(reason, seconds))
+	-- espelho do stun do servidor: não prevê soco enquanto durar (e o wind-up pendente é cancelado)
+	if reason ~= "crit_ready" then
+		myStunnedUntil = math.max(myStunnedUntil, os.clock() + seconds)
+		myNextAttackAt = math.max(myNextAttackAt, os.clock() + seconds)
+	end
 	if reason == "hit" or reason == "grabbed" or reason == "parried" or reason == "guardbreak" or reason == "stunned" then
 		MovementController.CancelDash() -- levou golpe no meio do dash: o impulso para na hora
 	end

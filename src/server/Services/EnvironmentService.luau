@@ -12,6 +12,7 @@
 ]]
 
 local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService("Workspace")
 
 local Log = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("Log"))
 
@@ -103,6 +104,31 @@ function EnvironmentService.Start()
 		inst.Parent = Lighting
 	end
 	Log.debug("[EnvironmentService] iluminação aplicada (Technology precisa ser Future/ShadowMap no Studio)")
+	EnvironmentService.OptimizeShadows()
+end
+
+-- Sombras só em parts que fazem diferença visual: decoração miúda (< ShadowMinSize studs no maior eixo),
+-- parts invisíveis e não colidíveis (hitboxes, marcadores) não projetam sombra. Roda uma vez no boot sobre
+-- Workspace.Sahur (mapa) — ganho de GPU no cliente, sem mexer nos assets no disco.
+EnvironmentService.ShadowMinSize = 2.5
+function EnvironmentService.OptimizeShadows()
+	local root = Workspace:FindFirstChild("Sahur")
+	if not root then
+		return
+	end
+	local changed, total = 0, 0
+	for _, d in root:GetDescendants() do
+		if d:IsA("BasePart") and d.CastShadow then
+			total += 1
+			local size = d.Size
+			local biggest = math.max(size.X, size.Y, size.Z)
+			if biggest < EnvironmentService.ShadowMinSize or (d.Transparency >= 1 and not d.CanCollide) then
+				d.CastShadow = false
+				changed += 1
+			end
+		end
+	end
+	Log.debug(("[EnvironmentService] sombras: %d de %d parts do mapa deixaram de projetar"):format(changed, total))
 end
 
 return EnvironmentService

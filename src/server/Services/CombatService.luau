@@ -2,7 +2,8 @@
 --[[
 	CombatService (servidor)
 	Autoridade sobre golpes, cooldowns, combo, block e parry.
-	O cliente só envia RequestAttack(attackId) / RequestBlock(active).
+	O cliente envia RequestAttack(attackId, vítimas vistas por ele) / RequestBlock(active). A hitbox
+	do servidor é só tolerância (CombatConfig.HitValidation): descarta quem não está à frente/perto.
 	A hitbox é calculada AQUI, a partir da posição do atacante no servidor;
 	nada que o cliente envie sobre "quem acertei" é aceito.
 ]]
@@ -503,7 +504,33 @@ local function airState(character: Model, humanoid: Humanoid): string
 	return (if vy > CombatConfig.AirRisingSpeed then "rising" else "falling") :: string
 end
 
-local function onRequestAttack(player: Player, attackId: any)
+--- Vítimas aceitas: as que o cliente do atacante viu (claimed) E que estão na caixa tolerante do servidor.
+--- Sem lista do cliente (client antigo/mobile sem hitbox local) cai na hitbox estrita do servidor.
+local function resolveVictims(character: Model, attackCfg: any, claimed: any): { Model }
+	if typeof(claimed) ~= "table" then
+		return Hitbox.InFront(character, attackCfg.Range, attackCfg.Width, attackCfg.Height, attackCfg.MaxTargets)
+	end
+	local v = CombatConfig.HitValidation
+	local allowed: { [Model]: boolean } = {}
+	for _, m in Hitbox.InFront(character, attackCfg.Range * v.RangeScale, attackCfg.Width * v.WidthScale, attackCfg.Height * v.HeightScale, attackCfg.MaxTargets + v.ExtraTargets) do
+		allowed[m] = true
+	end
+	local victims: { Model } = {}
+	local seen: { [Model]: boolean } = {}
+	for i = 1, math.min(#claimed, attackCfg.MaxTargets + v.ExtraTargets) do
+		local m = claimed[i]
+		if typeof(m) == "Instance" and m:IsA("Model") and allowed[m] and not seen[m] then
+			seen[m] = true
+			table.insert(victims, m)
+			if #victims >= attackCfg.MaxTargets then
+				break
+			end
+		end
+	end
+	return victims
+end
+
+local function onRequestAttack(player: Player, attackId: any, claimed: any)
 	if not attackLimiter:Allow(player) then
 		return
 	end
@@ -582,18 +609,15 @@ local function onRequestAttack(player: Player, attackId: any)
 	end
 	state.lastAttackAt = now
 
+	-- O cliente já esperou o wind-up (HitDelay) antes de pedir, animando na hora do clique: o cooldown
+	-- conta a partir do clique, e a hitbox é resolvida agora (vítimas vistas pelo cliente × caixa tolerante).
+	state.nextAttackAt = math.max(now, state.nextAttackAt - attackCfg.HitDelay)
+
 	notifyAttack:FireAllClients(character, attackId, comboIndex)
 
-	-- Wind-up: hitbox é checada depois do delay, com a posição de então
-	task.delay(attackCfg.HitDelay, function()
-		if player.Parent ~= Players or player.Character ~= character or not HealthService.IsAlive(character) then
-			return
-		end
-		if os.clock() < state.stunnedUntil then
-			return -- foi parryado/stunado durante o wind-up
-		end
+	do
 		local blocked = false
-		for _, victim in Hitbox.InFront(character, attackCfg.Range, attackCfg.Width, attackCfg.Height, attackCfg.MaxTargets) do
+		for _, victim in resolveVictims(character, attackCfg, claimed) do
 			local kind = CombatService.ResolveHit(player, character, victim, damage, nil, knockback, {
 				IsM1 = isM1,
 				BreaksBlock = attackCfg.BreaksBlock == true,
@@ -608,7 +632,7 @@ local function onRequestAttack(player: Player, attackId: any)
 			local extra = (attackCfg.BlockedEndlagMultiplier - 1) * attackCfg.Cooldown
 			state.nextAttackAt = math.max(state.nextAttackAt, os.clock()) + extra
 		end
-	end)
+	end
 end
 
 local function onRequestBlock(player: Player, active: any)

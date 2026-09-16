@@ -24,6 +24,16 @@ CombatConfig.Regen = {
 -- Ar: velocidade vertical do HRP > AirRisingSpeed = subindo (uppercut); no ar e não subindo = caindo (downslam).
 -- Dano em % da vida (100 HP): combo de 4 = 15% (ref. TSB); o resto vem das habilidades.
 CombatConfig.AirRisingSpeed = 5
+-- Detecção de golpe: o CLIENTE do atacante checa a hitbox (posições exatas, sem atraso de rede) e manda
+-- as vítimas; o servidor só ACEITA quem estiver dentro de uma caixa maior (tolerância de lag) à frente
+-- dele. Quem estiver fora da caixa tolerante é descartado (anti-cheat), cooldown/dano continuam do servidor.
+CombatConfig.HitValidation = {
+	RangeScale = 1.7, -- caixa do servidor = Range × isto (ping de 100–200 ms move ~3–5 studs)
+	WidthScale = 1.7,
+	HeightScale = 1.4,
+	ExtraTargets = 1, -- o servidor aceita até MaxTargets + isto candidatos na caixa tolerante
+}
+
 CombatConfig.Attacks = {
 	M1 = {
 		ComboDamage = { 3, 3, 4, 5 }, -- dano de cada golpe do combo (índice = golpe)

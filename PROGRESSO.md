@@ -234,7 +234,23 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Sobrou no place: `Workspace.humanoider_20` (456, rig de animação da equipe?), `ServerStorage.BossModel - save`
   (backup), `RBX_ANIMSAVES` (Moon/Animation Editor), `BestWalkAnimR6`, `C00lkidd M4`, `Barriers` (vazios). Não mexi.
 
-### PENDÊNCIA URGENTE — plugins (2026-09-16, 14:45)
+### 2026-09-16 (15:30) — auditoria completa + hit detection novo
+- Place limpo via MCP (autorizado): scripts alheios em SSS ("Blood after Player Dies", AssistantTestScript do MCP),
+  Workspace "C00lkidd M4"/BestWalkAnimR6/Barriers, RS.GuiAnimatorPlugin, Lighting SunRays/DoF, "BossModel - save".
+  Ficam: `Workspace.humanoider_20` (rig do amigo animando) e `ServerStorage.RBX_ANIMSAVES`. 9.714 instâncias.
+- `StreamingEnabled = false` (mapa de 320 studs; evita pop-in e referências quebradas).
+- Plugins: dono desinstalou os 39; Studio reaberto de vez → 2,4 GB (era 3,7). LuaHeap ainda ~550 MB
+  (Moon Animator 2 = 11 MB de plugin, Rojo, MCP, Revix AI, GUI Copilot) — Revix/GUI Copilot são candidatos.
+- `EnvironmentService`: reaproveita Bloom/Atmosphere do place (não duplica), zera fog, `OptimizeShadows()`
+  (parts < 2,5 studs e invisíveis não projetam sombra; só 16 de 478 no mapa atual — ganho pequeno).
+- **Hit detection estilo TSB** (feeling do soco): `CombatController.Attack` anima NA HORA do clique (previsão
+  com combo/cooldown/stun locais, `pendingAttacks` evita animar 2×) e depois do `HitDelay` roda
+  `Hitbox.InFront` NO CLIENTE e manda `RequestAttack(attackId, vítimas)`. `CombatService.resolveVictims`
+  aceita só quem está na caixa tolerante (`CombatConfig.HitValidation`: Range×1.7, Width×1.7, Height×1.4)
+  e resolve o dano na hora (cooldown descontado do HitDelay). Sem lista (cliente antigo) = hitbox estrita.
+  Boot testado via MCP: 0 erros. FALTA o dono sentir em jogo (soco sai no clique? pega em quem anda?).
+
+### PENDÊNCIA — plugins (2026-09-16, 14:45) — RESOLVIDA pelo dono (desinstalou tudo)
 O dono clicou "atualizar tudo" e 39 plugins entraram na conta; a Roblox reinstala todos a cada abertura
 (52 plugins carregados, LuaHeap 605 MB, Studio em 3 GB e 2 crashes `HangDetected` em Play). Movi as pastas
 locais para backup mas voltaram. **Só resolve em Plugins > Manage Plugins > Uninstall**, um a um:
