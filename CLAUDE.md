@@ -74,15 +74,16 @@ ainda não existe, mesmo que pareça óbvio.
   extrair com `~/.rokit/bin/lune run tools/extrair_pack.luau <kfs|sons|listar|vfx|import> arquivo`.
   Decisão do dono (2026-09-15): os packs `[Rova Assets]*.rbxl` são licenciados e PODEM ser usados.
   Limites técnicos: Animation/Sound de lá são só ponteiros de outra conta (animação não toca;
-  som só se for público) — animações vêm dos KeyframeSequences em `packs/Import/Animacoes` (fora do
+  som só se for público) — animações vêm dos KeyframeSequences em `packs/ParaImportar/Animacoes` (fora do
   Rojo; o dono usa Insert from File no Studio, Save to Roblox e cola o id em `src/assets/Animations.model.json`);
   sons passam pelo comando dev "Testar sons dos packs" antes de entrar em `Sounds.model.json`.
-  VFX/meshes extraídos ficam completos em `packs/VFX/<Pack>` (fora do Rojo, ~95k instâncias);
+  VFX/meshes extraídos ficam completos em `packs/ParaImportar/VFX/<Prefixo>_<Nome>.rbxm` (fora do Rojo, ~95k instâncias);
   `tools/podar_vfx.luau` gera em `Assets.VFX.Packs.<Pack>` SÓ os caminhos citados em `Assets.luau`.
   Nunca colocar packs inteiros dentro de `src/` (foi isso que derrubou o FPS em 2026-09-15).
 - Animações: ids da equipe em `src/assets/Animations.model.json` (sem placeholders da Roblox; id vazio =
   não toca). Para escolher animações dos packs: `lune run tools/juntar_animacoes.luau` gera
-  `packs/Import/AnimPreview.rbxm` (preview clicável num place em branco → Save to Roblox no grupo).
+  `packs/ParaImportar/Animacoes/AnimPreview_todas.rbxm` (preview clicável num place em branco → Save to Roblox no grupo).
+  **Tudo que precisa ir para o grupo (animações, áudios, VFX, modelos) está em `packs/ParaImportar/` — ver `LEIA-ME.md` lá.**
   Idle/Walk/Run são tocadas pelo `MovementController` (não pelo Animate padrão).
 - VFX: nome exato em `Assets.VFX.<Personagem>` > alias do Particle Pack (`Assets.VFXAliases`)
   > `Shared.Placeholder`.

@@ -1,14 +1,14 @@
 --[[
 	extrair_pack.luau (roda com Lune: ~/.rokit/bin/lune run tools/extrair_pack.luau <modo> <arquivo.rbxl>)
 	Extrai dos packs em AssetsPacks/:
-	  kfs     -> KeyframeSequences para packs/Import/Animacoes/<Pack>/<Nome>.rbxm
+	  kfs     -> KeyframeSequences para packs/ParaImportar/Animacoes/<Prefixo>_<Nome>.rbxm
 	             (fora do Rojo; no Studio: Insert from File > clique direito > Save to Roblox
 	              para virar uma Animation SUA, aí o id vai em src/assets/Animations.model.json)
 	  sons    -> lista todos os SoundIds únicos em scratch/sons_<Pack>.json
 	  listar  -> imprime a árvore dos Folders de VFX (para escolher o que extrair)
-	  vfx <caminho> [...]    -> extrai para packs/VFX/<Pack>/<Nome>.rbxm (pack completo, fora do Rojo;
+	  vfx <caminho> [...]    -> extrai para packs/ParaImportar/VFX/<Prefixo>_<Nome>.rbxm (pack completo, fora do Rojo;
 	                            tools/podar_vfx.luau gera em src/assets/VFX/Packs só o que Assets.luau usa)
-	  import <caminho> [...] -> extrai para packs/Import/<Pack>/<Nome>.rbxm (fora do Rojo; Insert from File)
+	  import <caminho> [...] -> extrai para packs/ParaImportar/Modelos/<Prefixo>_<Nome>.rbxm (fora do Rojo; Insert from File)
 	  ("<pasta>/*" = cada Folder/Model filho vira um arquivo)
 ]]
 local fs = require("@lune/fs")
@@ -22,6 +22,9 @@ assert(mode and file, "uso: lune run tools/extrair_pack.luau <kfs|sons|listar|vf
 
 local packName = file:match("%] ([^/]+)%.rbx[lm]$") or file:match("([^/]+)%.rbx[lm]$") or "Pack"
 packName = packName:gsub("%s+", ""):gsub("[^%w]", "")
+-- prefixo curto no nome do arquivo (tudo vai para packs/ParaImportar/<Tipo>/<Prefixo>_<Nome>.rbxm)
+local PREFIXO = { OfficialJJS = "JJS", ShadowBattlegroundsfull = "SBG" }
+local prefixo = PREFIXO[packName] or packName:sub(1, 4):upper()
 
 local game = roblox.deserializePlace(fs.readFile(file))
 
@@ -59,10 +62,9 @@ local function findByPath(path: string)
 end
 
 if mode == "kfs" then
-	local dir = "packs/Import/Animacoes/" .. packName
+	local dir = "packs/ParaImportar/Animacoes"
 	ensureDir("packs")
-	ensureDir("packs/Import")
-	ensureDir("packs/Import/Animacoes")
+	ensureDir("packs/ParaImportar")
 	ensureDir(dir)
 	local seen = {}
 	local n = 0
@@ -78,7 +80,7 @@ if mode == "kfs" then
 			seen[name] = true
 			local clone = inst:Clone()
 			clone.Name = name
-			fs.writeFile(("%s/%s.rbxm"):format(dir, name), roblox.serializeModel({ clone }))
+			fs.writeFile(("%s/%s_%s.rbxm"):format(dir, prefixo, name), roblox.serializeModel({ clone }))
 			n += 1
 			print(("  %s  <- %s (%d keyframes)"):format(name, fullName(inst), #inst:GetChildren()))
 		end
@@ -140,9 +142,9 @@ elseif mode == "listar" then
 		end
 	end
 elseif mode == "vfx" or mode == "import" then
-	local dir = if mode == "vfx" then "packs/VFX/" .. packName else "packs/Import/" .. packName
+	local dir = if mode == "vfx" then "packs/ParaImportar/VFX" else "packs/ParaImportar/Modelos"
 	ensureDir("packs")
-	ensureDir(if mode == "vfx" then "packs/VFX" else "packs/Import")
+	ensureDir("packs/ParaImportar")
 	ensureDir(dir)
 	local targets = {}
 	for i = 3, #process.args do
@@ -186,7 +188,7 @@ elseif mode == "vfx" or mode == "import" then
 		end
 		seen[name] = true
 		clone.Name = name
-		fs.writeFile(("%s/%s.rbxm"):format(dir, name), roblox.serializeModel({ clone }))
+		fs.writeFile(("%s/%s_%s.rbxm"):format(dir, prefixo, name), roblox.serializeModel({ clone }))
 		print(("  %s/%s.rbxm  <- %s (%d instâncias)"):format(dir, name, path, #clone:GetDescendants()))
 	end
 else

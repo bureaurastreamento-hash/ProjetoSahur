@@ -211,6 +211,12 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### packs/ParaImportar (2026-09-16)
+- Tudo dos packs que precisa ir para o grupo foi movido para UMA pasta: `packs/ParaImportar/{Animacoes,Audios,VFX,Modelos}`,
+  arquivos com prefixo do pack (`JJS_`, `SBG_`), + `LEIA-ME.md` com o passo a passo por tipo e a sugestão de uso.
+  Tools atualizadas (`juntar_animacoes`, `podar_vfx`, `extrair_pack`, `limpar_sons_packs`). Áudios do dono (20 mp3,
+  extensões completadas) estão em `Audios/` aguardando upload no grupo → ids.
+
 ### Guerra de clã — DOMINAÇÃO (2026-09-16, NÃO testado)
 - `WarConfig`: 2 clãs, cópia da `Arena_Gerada` em (-4000,1500,4000) (região própria, 2 simultâneas),
   pontos A/B/C (pasta `CapturePoints` nova em `gerar_arena.py`: cilindros neon em x=-100/0/100),

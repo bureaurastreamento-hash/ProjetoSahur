@@ -1,6 +1,6 @@
 --[[
 	limpar_sons_packs.luau (roda com Lune: ~/.rokit/bin/lune run tools/limpar_sons_packs.luau)
-	Remove instâncias Sound dos .rbxm já extraídos em packs/VFX, packs/Import e src/assets/VFX/Packs.
+	Remove instâncias Sound dos .rbxm já extraídos em packs/ParaImportar e src/assets/VFX/Packs.
 	Motivo: os SoundIds dos packs são de outra conta e geram "User is not authorized to access Asset"
 	ao abrir o place. Som do jogo vem só de Assets.Sounds (Sounds.model.json).
 ]]
@@ -38,7 +38,7 @@ local function walk(dir: string)
 	end
 end
 
-for _, dir in { "packs/VFX", "packs/Import", "src/assets/VFX/Packs" } do
+for _, dir in { "packs/ParaImportar", "src/assets/VFX/Packs" } do
 	if fs.isDir(dir) then
 		walk(dir)
 	end

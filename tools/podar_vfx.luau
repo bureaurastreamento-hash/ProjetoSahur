@@ -2,16 +2,17 @@
 	podar_vfx.luau (roda com Lune: ~/.rokit/bin/lune run tools/podar_vfx.luau)
 	Lê todos os caminhos "Packs/<Pack>/<Arquivo>/..." em src/shared/Modules/Assets.luau e gera em
 	src/assets/VFX/Packs/<Pack>/<Arquivo>.rbxm SÓ as subárvores usadas, a partir dos packs completos
-	em packs/VFX/<Pack>/<Arquivo>.rbxm. Rodar sempre que mudar Assets.VFXPack.
+	em packs/ParaImportar/VFX/<Prefixo>_<Arquivo>.rbxm (OfficialJJS = JJS_, ShadowBattlegroundsfull = SBG_). Rodar sempre que mudar Assets.VFXPack.
 	Motivo: os packs completos têm ~95k instâncias (ParticleEmitters, KeyframeSequences de cutscene);
 	replicar isso em ReplicatedStorage derruba FPS/memória. Para navegar o pack inteiro no Preview
 	de VFX (F7): Studio > ReplicatedStorage.Assets.VFX.Packs > clique direito > Insert from File >
-	packs/VFX/<Pack>/<Arquivo>.rbxm (e apague depois; o Rojo ignora o que não conhece).
+	packs/ParaImportar/VFX/<Prefixo>_<Arquivo>.rbxm (e apague depois; o Rojo ignora o que não conhece).
 ]]
 local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
 
-local ORIGEM = "packs/VFX"
+local ORIGEM = "packs/ParaImportar/VFX"
+local PREFIXO = { OfficialJJS = "JJS", ShadowBattlegroundsfull = "SBG" }
 local DESTINO = "src/assets/VFX/Packs"
 
 local src = fs.readFile("src/shared/Modules/Assets.luau")
@@ -52,7 +53,7 @@ table.sort(chaves)
 for _, chave in chaves do
 	local caminhos = porArquivo[chave]
 	local pack, arquivo = chave:match("^([^/]+)/(.+)$")
-	local origem = ("%s/%s/%s.rbxm"):format(ORIGEM, pack, arquivo)
+	local origem = ("%s/%s_%s.rbxm"):format(ORIGEM, PREFIXO[pack] or pack, arquivo)
 	if not fs.isFile(origem) then
 		warn("pack não encontrado: " .. origem .. " (extraia com tools/extrair_pack.luau vfx)")
 		continue
