@@ -22,6 +22,30 @@ local Log = require(Modules:WaitForChild("Log"))
 
 local CharacterService = {}
 
+--- Nome mostrado sobre a cabeça: "[CLÃ] [Título] Nick" (atributos ClanTag do ClanService e NameTag do
+--- ProgressionService/ShopService).
+function CharacterService.DisplayNameFor(player: Player): string
+	local name = player.DisplayName
+	local title = player:GetAttribute("NameTag")
+	if typeof(title) == "string" and title ~= "" then
+		name = ("[%s] %s"):format(title, name)
+	end
+	local clan = player:GetAttribute("ClanTag")
+	if typeof(clan) == "string" and clan ~= "" then
+		name = ("[%s] %s"):format(clan, name)
+	end
+	return name
+end
+
+--- Reaplica o DisplayName no personagem atual (quando ClanTag/NameTag mudam sem respawn).
+function CharacterService.RefreshDisplayName(player: Player)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.DisplayName = CharacterService.DisplayNameFor(player)
+	end
+end
+
 local descriptionCache: { [Player]: HumanoidDescription } = {}
 local loading: { [Player]: boolean } = {}
 
@@ -83,8 +107,7 @@ local function buildCharacter(player: Player): (Model?, Humanoid?, BasePart?)
 	end
 	m.Name = player.Name
 	m.PrimaryPart = root
-	local tag = player:GetAttribute("NameTag") -- "VIP" (ShopService)
-	humanoid.DisplayName = if typeof(tag) == "string" and tag ~= "" then ("[%s] %s"):format(tag, player.DisplayName) else player.DisplayName
+	humanoid.DisplayName = CharacterService.DisplayNameFor(player)
 	if not humanoid:FindFirstChildOfClass("Animator") then
 		Instance.new("Animator").Parent = humanoid
 	end

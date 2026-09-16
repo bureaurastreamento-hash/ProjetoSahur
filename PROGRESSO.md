@@ -211,6 +211,30 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### Clãs — fundação da guerra de clã (2026-09-16, NÃO testado)
+- `ClanConfig` (500 pts para fundar, 20 membros, tag 2–4 alfanumérica = id único, depósito mín. 10,
+  convite expira em 30 s, cargos member/officer/leader).
+- `ClanService`: DataStore `Clans_v1` (chave `clan_<TAG>`, toda mutação por UpdateAsync → funciona com
+  vários servidores). Ações `RequestClan`: create(nome, tag) · invite(userId, só online no mesmo servidor,
+  líder/oficial) · accept/decline · leave (líder não sai) · kick/promote/demote (líder promove
+  membro→oficial→líder, passando a liderança) · deposit(pontos → cofre) · disband (líder) · refresh.
+  `NotifyClan`: state { clan, role } · invite · denied · info. `profile.clanTag` é só cache: ao entrar,
+  o registro é lido e, se o jogador não está mais nele, limpa. API: `GetTag/GetClan/AddToVault`.
+- Nome sobre a cabeça: `CharacterService.DisplayNameFor` = "[TAG] [Título] Nick" (atributo `ClanTag`),
+  `RefreshDisplayName` aplica sem respawn.
+- UI: `ClanGui` (gerar_ui.py; `textbox`/`scroll` novos no gerador), ícone "Clã" (**C**) no topbar,
+  `ClanController` (sem clã: fundar/convite Y-N; com clã: abas Membros/Convidar, selecionar membro →
+  promover/rebaixar/expulsar, depositar, sair, dissolver com 2 cliques).
+- Limitação conhecida: expulsão/dissolução só chega a quem está no MESMO servidor na hora; os outros
+  veem ao relogar (MessagingService fica para depois, junto com a guerra).
+- Teste (API Services ligado; dev: dar 500+ pontos): C → nome+TAG → FUNDAR → nome vira "[TAG] Nick",
+  painel mostra cofre/membros. 2º cliente: aba Convidar → clique → no outro aparece convite (Y aceita)
+  → entra como Membro. Líder seleciona o membro → PROMOVER (Oficial) → PROMOVER de novo (vira líder,
+  você vira oficial). DEPOSITAR 50 → cofre sobe, pontos descem. SAIR / DISSOLVER (2 cliques).
+  Relogar: clã continua. Tag duplicada, nome curto, sem pontos → mensagens vermelhas.
+- Próximo (guerra): mapa de dominação, portal/fila por clã, zonas de captura, rodada com tempo, vencedor,
+  recompensa no cofre (`AddToVault`) e placar por clã. Reaproveita MatchService (Teams, FreeRoam=false).
+
 ### Agarrões variantes (2026-09-16, NÃO testado) — decisão do dono: Throw, Chokeslam, Spin nos 3 que já tinham
 - `Effect.Finish` no Grab (`AbilityService.effects.Grab`): `Slam` (antigo) | `Throw` | `Chokeslam` | `Spin`.
   Ids das habilidades NÃO mudaram (animações/VFX continuam por nome: `<Id>`, `<Id>_Carry`, `<Id>_Hit`).
@@ -270,7 +294,7 @@ Memória entre sessões. Atualizar depois de cada mudança.
 2. Bugs do 3º teste (pedir).
 3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
 4. Depois: ~~placar global de rating~~ (feito, testar), ~~mais agarrões~~ (Throw/Chokeslam/Spin feitos, testar), ~~Idle/Walk do
-   boss~~ (código pronto, faltam ids), e o plano de **guerra de clã/dominação** (ver "Planos futuros").
+   boss~~ (código pronto, faltam ids), e a **guerra de clã/dominação**: fundação (clãs) feita 2026-09-16, falta o modo em si (ver "Planos futuros").
 
 
 ### Boss com modelo 3D — 3ª versão (`src/shared/Modules/BossRig.luau`)

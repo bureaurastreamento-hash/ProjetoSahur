@@ -92,6 +92,22 @@ def button(name, text, size, pos, anchor=(0, 0), bg=CARD, t=0.0, font=FONT_B, ts
     return node(name, "TextButton", props, ch)
 
 
+def textbox(name, placeholder, size, pos, anchor=(0, 0), ts=14, extra=None):
+    props = {"Size": size, "Position": pos, "AnchorPoint": {"Vector2": list(anchor)}, "BackgroundColor3": col(CARD),
+             "BackgroundTransparency": 0.0, "Text": "", "PlaceholderText": placeholder, "PlaceholderColor3": col(MUTED),
+             "Font": FONT, "TextSize": ts, "TextColor3": col(TEXT), "ClearTextOnFocus": False, "BorderSizePixel": 0,
+             "TextXAlignment": "Left"}
+    props.update(extra or {})
+    return node(name, "TextBox", props, [corner(), stroke(), padding(8, 0)])
+
+
+def scroll(name, size, pos, children=None, extra=None):
+    props = {"Size": size, "Position": pos, "BackgroundTransparency": 1, "BorderSizePixel": 0, "ScrollBarThickness": 4,
+             "CanvasSize": {"UDim2": [[0, 0], [0, 0]]}, "AutomaticCanvasSize": "Y", "ScrollingDirection": "Y"}
+    props.update(extra or {})
+    return node(name, "ScrollingFrame", props, children)
+
+
 def screen(name, children, order=1, enabled=True, ignore_inset=True):
     return {"className": "ScreenGui", "properties": {"ResetOnSpawn": False, "IgnoreGuiInset": ignore_inset,
                                                       "ZIndexBehavior": "Sibling", "DisplayOrder": order,
@@ -279,6 +295,51 @@ profile = screen("ProfileGui", [
 ], order=3)
 write("ProfileGui.model.json", profile)
 
+
+# =============================================================================
+# Clã (C) — ClanController
+# =============================================================================
+member_row = button("Template", "", ud(1, -6, 0, 30), ud(0, 0, 0, 0), ts=13, extra={"Visible": False, "TextXAlignment": "Left"},
+                    children=[padding(10, 0),
+                              label("Role", "", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), ts=11, color=MUTED, xalign="Right")])
+clan = screen("ClanGui", [
+    panel("Panel", 420, 440, "Clã", [
+        # --- sem clã: fundar ---
+        frame("Create", ud(1, 0, 1, -30), ud(0, 0, 0, 30), t=1, children=[
+            label("Hint", "Funde um clã ou aceite um convite de um líder/oficial.", ud(1, 0, 0, 34), ud(0, 0, 0, 0),
+                  ts=12, color=MUTED, yalign="Top", extra={"TextWrapped": True}),
+            textbox("Name", "Nome do clã (3–20)", ud(1, 0, 0, 32), ud(0, 0, 0, 44)),
+            textbox("Tag", "TAG (2–4 letras/números)", ud(0.5, -5, 0, 32), ud(0, 0, 0, 84)),
+            button("Submit", "FUNDAR — 500 pts", ud(0.5, -5, 0, 32), ud(1, 0, 0, 84), anchor=(1, 0), bg=GOLD_BG, ts=13),
+            label("Invite", "", ud(1, 0, 0, 40), ud(0, 0, 0, 140), font=FONT_B, ts=13, color=GOLD, yalign="Top",
+                  extra={"TextWrapped": True}),
+            button("Accept", "ACEITAR (Y)", ud(0.5, -5, 0, 30), ud(0, 0, 0, 186), bg=[0.16, 0.38, 0.24], ts=13,
+                   extra={"Visible": False}),
+            button("Decline", "RECUSAR (N)", ud(0.5, -5, 0, 30), ud(1, 0, 0, 186), anchor=(1, 0), ts=13,
+                   extra={"Visible": False}),
+        ]),
+        # --- com clã ---
+        frame("Info", ud(1, 0, 1, -30), ud(0, 0, 0, 30), t=1, visible=False, children=[
+            label("Header", "", ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=GOLD),
+            label("Sub", "", ud(1, 0, 0, 18), ud(0, 0, 0, 24), ts=12, color=MUTED),
+            button("TabMembers", "MEMBROS", ud(0.5, -5, 0, 26), ud(0, 0, 0, 50), ts=12),
+            button("TabInvite", "CONVIDAR", ud(0.5, -5, 0, 26), ud(1, 0, 0, 50), anchor=(1, 0), ts=12),
+            scroll("List", ud(1, 0, 1, -196), ud(0, 0, 0, 84), children=[listlayout("Vertical", 4), member_row]),
+            label("Selected", "", ud(1, 0, 0, 16), ud(0, 0, 1, -106), anchor=(0, 1), ts=11, color=MUTED),
+            button("Promote", "PROMOVER", ud(0.33, -6, 0, 28), ud(0, 0, 1, -72), anchor=(0, 1), ts=12),
+            button("Demote", "REBAIXAR", ud(0.33, -6, 0, 28), ud(0.5, 0, 1, -72), anchor=(0.5, 1), ts=12),
+            button("Kick", "EXPULSAR", ud(0.33, -6, 0, 28), ud(1, 0, 1, -72), anchor=(1, 1), bg=[0.4, 0.14, 0.14], ts=12),
+            textbox("Amount", "pontos", ud(0.3, -6, 0, 28), ud(0, 0, 1, -36), anchor=(0, 1), ts=13),
+            button("Deposit", "DEPOSITAR", ud(0.3, -6, 0, 28), ud(0.35, 0, 1, -36), anchor=(0, 1), bg=GOLD_BG, ts=12),
+            button("Leave", "SAIR", ud(0.3, -6, 0, 28), ud(1, 0, 1, -36), anchor=(1, 1), ts=12),
+            button("Disband", "DISSOLVER", ud(0.3, -6, 0, 28), ud(1, 0, 1, -36), anchor=(1, 1), bg=[0.4, 0.14, 0.14], ts=12,
+                   extra={"Visible": False}),
+        ]),
+        label("Status", "", ud(1, 0, 0, 16), ud(0, 0, 1, 0), anchor=(0, 1), ts=11, color=MUTED),
+    ]),
+], order=3)
+write("ClanGui.model.json", clan)
+
 # =============================================================================
 # Controles
 # =============================================================================
@@ -295,7 +356,7 @@ HELP = "\n".join([
     "G = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)",
     "CARGA — dar golpe +6, receber +4, parry +10",
     "VIDA — regenera após 6 s sem dano",
-    "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J",
+    "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C",
     "BOSS — segure E no altar; anel vermelho = saia da área",
     "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 ultimate",
 ])

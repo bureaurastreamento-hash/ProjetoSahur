@@ -157,6 +157,9 @@ local function migrate(raw: any): DataConfig.Profile
 	if typeof(raw.rating) == "number" and raw.rating >= 0 then
 		profile.rating = math.floor(raw.rating)
 	end
+	if typeof(raw.clanTag) == "string" and raw.clanTag ~= "" then
+		profile.clanTag = raw.clanTag
+	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile

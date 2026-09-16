@@ -55,6 +55,7 @@ RemoteEvents.Events = ({
 	RequestShop = "RequestShop", -- (kind: "product"|"pass", key: string) — abre o prompt de compra da Roblox
 	RequestCosmetic = "RequestCosmetic", -- (action: "roll"|"equip"|"unequip"|"pick_robux", id: string?)
 	RequestEmote = "RequestEmote", -- (emoteId: string) — roda de emotes (B)
+	RequestClan = "RequestClan", -- (action: "create"|"invite"|"accept"|"decline"|"leave"|"kick"|"promote"|"demote"|"deposit"|"disband"|"refresh", a: any?, b: any?) — create(name, tag), invite/kick/promote/demote(userId), deposit(amount)
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 
 	-- Notify: servidor -> cliente
@@ -83,6 +84,7 @@ RemoteEvents.Events = ({
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)
 	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
+	NotifyClan = "NotifyClan", -- dono: (event: "state"|"invite"|"denied"|"info", data: table) — state = { clan: ClanConfig.Clan? , role: string? }
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"rating"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
 }) :: { [string]: string }
 
