@@ -1,8 +1,7 @@
 --!strict
 --[[
 	AbilityController (cliente)
-	  - 1 / 2 / 3 / 4 (ou Gamepad Y / B / R2 / L2... só Y/B/R2 por enquanto) -> RequestAbility(slot, direção)
-	  - G (ou Gamepad L2) -> RequestAwaken: ULTIMATE + Awakening (carga cheia)
+	  - Slot1..4 / Awaken (teclas em Controls.luau: 1-4 / G; gamepad LB/LT/RT/RB / D-pad cima) -> RequestAbility / RequestAwaken
 	  (Q é o dash universal: MovementController.)
 	Não decide nada: cooldown mostrado é o que o servidor informou.
 	Direção: a do WASD/analógico no momento (ou a frente do personagem se parado). Serve para
@@ -26,6 +25,7 @@ local RunService = game:GetService("RunService")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Controls = require(Modules:WaitForChild("Controls"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
@@ -35,24 +35,12 @@ local AbilityController = {}
 
 local localPlayer = Players.LocalPlayer
 
-local SLOT_KEYS: { [Enum.KeyCode]: number } = {
-	[Enum.KeyCode.One] = 1,
-	[Enum.KeyCode.Two] = 2,
-	[Enum.KeyCode.Three] = 3,
-	[Enum.KeyCode.Four] = 4,
-	[Enum.KeyCode.ButtonY] = 1,
-	[Enum.KeyCode.ButtonB] = 2,
-	[Enum.KeyCode.ButtonR2] = 3,
-}
-
 local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
 local function trailColor(characterId: string): Color3
 	local def = CharacterDefs.Get(characterId)
 	return if def and def.Color then def.Color else TRAIL_DEFAULT
 end
 
-local AWAKEN_KEY = Enum.KeyCode.G
-local AWAKEN_GAMEPAD = Enum.KeyCode.ButtonL2
 local AWAKEN_COLOR = Color3.fromRGB(255, 200, 70)
 
 local requestAbility: RemoteEvent
@@ -188,10 +176,11 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	if gameProcessed then
 		return
 	end
-	local slot = SLOT_KEYS[input.KeyCode]
+	local action = Controls.ActionOf(input)
+	local slot = if action then tonumber(action:match("^Slot(%d)$")) else nil
 	if slot then
 		AbilityController.Use(slot)
-	elseif input.KeyCode == AWAKEN_KEY or input.KeyCode == AWAKEN_GAMEPAD then
+	elseif action == "Awaken" then
 		AbilityController.Awaken()
 	end
 end

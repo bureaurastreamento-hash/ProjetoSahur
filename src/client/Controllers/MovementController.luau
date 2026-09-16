@@ -30,6 +30,7 @@ local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Controls = require(Modules:WaitForChild("Controls"))
 local Log = require(Modules:WaitForChild("Log"))
 local Assets = require(Modules:WaitForChild("Assets"))
 local FX = require(Modules:WaitForChild("FX"))
@@ -39,9 +40,6 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = {}
 
 local localPlayer = Players.LocalPlayer
-local SHIFTLOCK_KEY = Enum.KeyCode.LeftShift
-local DASH_KEY = Enum.KeyCode.Q
-local DASH_GAMEPAD = Enum.KeyCode.ButtonX
 local FORWARD_DOT = 0.6 -- MoveDirection·frente da câmera acima disso = "indo para a frente"
 local SPRINT_MIN_INTERVAL = 0.15 -- segundos entre pedidos ao servidor (RateLimiter lá é 10/s)
 local SHARED = "Shared"
@@ -484,10 +482,16 @@ local function applyShiftLock(active: boolean)
 end
 
 local function toggleShiftLock()
-	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-		return
-	end
 	applyShiftLock(not shiftLock)
+end
+
+--- Botão LOCK do toque / R3 do controle.
+function MovementController.SetShiftLock(active: boolean)
+	applyShiftLock(active)
+end
+
+function MovementController.IsShiftLocked(): boolean
+	return shiftLock
 end
 
 -- ---------------------------------------------------------------------------
@@ -546,9 +550,10 @@ local function onInputBegan(input: InputObject, processed: boolean)
 	if processed then
 		return
 	end
-	if input.KeyCode == SHIFTLOCK_KEY then
+	local action = Controls.ActionOf(input)
+	if action == "ShiftLock" then
 		toggleShiftLock()
-	elseif input.KeyCode == DASH_KEY or input.KeyCode == DASH_GAMEPAD then
+	elseif action == "Dash" then
 		MovementController.Dash()
 	end
 end

@@ -21,7 +21,7 @@
       ],
       [
        0,
-       380
+       560
       ]
      ]
     },
@@ -180,8 +180,8 @@
          0
         ],
         [
-         1,
-         -30
+         0,
+         330
         ]
        ]
       },
@@ -204,7 +204,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático\n4º GOLPE: no chão empurra · pular e socar subindo = UPPERCUT (levanta o alvo com você) · socar caindo = DOWNSLAM (ignora block, esmaga)\nBLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe\nPARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nDASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)\nCAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)\nHABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)\nG = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)\nCARGA — dar golpe +6, receber +4, parry +10\nVIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C\nBOSS — segure E no altar; anel vermelho = saia da área\nGamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 ultimate",
+      "Text": "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático\n4º GOLPE: no chão empurra · pular e socar subindo = UPPERCUT (levanta o alvo com você) · socar caindo = DOWNSLAM (ignora block, esmaga)\nBLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe\nPARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nDASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)\nCAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)\nHABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)\nG = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)\nCARGA — dar golpe +6, receber +4, parry +10\nVIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C\nBOSS — segure E no altar; anel vermelho = saia da área\nCONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo\nCELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
       "Font": "GothamMedium",
       "TextSize": 13,
       "TextColor3": {
@@ -221,6 +221,298 @@
       "TextWrapped": true,
       "LineHeight": 1.35
      }
+    },
+    {
+     "name": "SettingsTitle",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "SettingsTitle",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         366
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "CONFIGURAÇÕES (clique para mudar; salva no perfil)",
+      "Font": "GothamBold",
+      "TextSize": 11,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "Settings",
+     "className": "Frame",
+     "properties": {
+      "Name": "Settings",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         -388
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         388
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.0,
+        0.0,
+        0.0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UIListLayout",
+       "className": "UIListLayout",
+       "properties": {
+        "Name": "UIListLayout",
+        "FillDirection": "Vertical",
+        "Padding": {
+         "UDim": [
+          0,
+          4
+         ]
+        },
+        "HorizontalAlignment": "Left",
+        "VerticalAlignment": "Top",
+        "SortOrder": "LayoutOrder"
+       }
+      },
+      {
+       "name": "Template",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Template",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           0,
+           26
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.08,
+          0.08,
+          0.09
+         ]
+        },
+        "BackgroundTransparency": 0.2,
+        "Text": "",
+        "Font": "GothamBold",
+        "TextSize": 12,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": false,
+        "TextXAlignment": "Left"
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        },
+        {
+         "name": "UIPadding",
+         "className": "UIPadding",
+         "properties": {
+          "Name": "UIPadding",
+          "PaddingLeft": {
+           "UDim": [
+            0,
+            10
+           ]
+          },
+          "PaddingRight": {
+           "UDim": [
+            0,
+            10
+           ]
+          },
+          "PaddingTop": {
+           "UDim": [
+            0,
+            0
+           ]
+          },
+          "PaddingBottom": {
+           "UDim": [
+            0,
+            0
+           ]
+          }
+         }
+        },
+        {
+         "name": "Value",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Value",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             90
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            1,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 12,
+          "TextColor3": {
+           "Color3": [
+            0.35,
+            0.75,
+            1.0
+           ]
+          },
+          "TextXAlignment": "Right",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        }
+       ]
+      }
+     ]
     }
    ]
   }

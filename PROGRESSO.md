@@ -211,6 +211,37 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### Animações do boss não tocaram (2026-09-16) — causa provável
+- O log do Studio mostra a sessão de Play no place **85844807133499 (o antigo)**, não no oficial de grupo
+  126518739287432. Animações publicadas no grupo carregam com duração 0 fora do place do grupo (sem erro
+  no Output). Boss.Idle/Swipe foram encontradas e carregadas — só não mexeram nada.
+- `FX.PlayAnimation` agora avisa em Studio: "[FX] animação X carregou com duração 0: id errado ou sem
+  permissão". Se aparecer no place certo, o problema é o id/criador da animação; se não aparecer e ainda
+  não mexer, é o rig (poses do KeyframeSequence vs nomes das partes).
+
+### Controles mobile/console + acessibilidade (2026-09-16, NÃO testado)
+- `Controls.luau` = fonte única dos controles por dispositivo (`ActionOf(input)`, `Label(action, device)`).
+  Combat/Movement/Ability/Cosmetics/Topbar não comparam KeyCodes soltos mais.
+- Gamepad (layout do Jujutsu Shenanigans): B soco (segurar = combo) · X block · Y dash/levantar ·
+  LB/LT/RT/RB = golpes 1–4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad →
+  navega os ícones do topo (TopbarPlus `highlightKey`) · A pulo (nativo).
+- HUD: rótulo dos slots/dash/ult muda conforme o último input (1-4/Q/G ↔ LB/LT/RT/RB/Y/D↑; toque = vazio).
+- Mobile (`tools/gerar_mobilegui.py`, `MobileController`): SOCO segurar = combo, BLOCK, DASH, 1-4 em arco,
+  ULT, **EMOTE** (roda), **LOCK** (shift lock; `MovementController.SetShiftLock` agora funciona no toque),
+  CORRER. Botões têm atributos BaseX/BaseY/Side para espelhar.
+- Acessibilidade (`Controls.Settings`, salvas em `profile.settings` via `RequestSetting` → `SettingsService`;
+  cliente `SettingsController`, lista no painel Controles): segurar soco = combo (on/off), block alternar
+  em vez de segurar, tremor de tela (`FX.ShakeEnabled`), vibração no controle (`FX.Haptic`, HapticService),
+  tamanho/opacidade/canhoto dos botões de toque.
+- Limitação: a roda de emotes ainda não é navegável pelo controle (só abre/fecha com D-pad ↓; escolher
+  precisa de GuiService.SelectedObject — depois).
+- Teste: (1) teclado: nada mudou (M1/F/Q/1-4/G/B/Shift/Tab). (2) Controle no Studio (ou emulador de
+  gamepad): B/X/Y/bumpers/gatilhos/D-pad conforme acima; HUD mostra LB/LT/RT/RB; D-pad → seleciona os
+  ícones do topo; Back abre o placar. (3) Device Emulator (celular): 11 botões, segurar SOCO faz o combo,
+  LOCK gira o boneco com a câmera, EMOTE abre a roda; Controles > configurações: Grande/opacidade/canhoto
+  mudam na hora e persistem ao relogar. (4) "Bloquear: alternar" ligado: F/X/BLOCK uma vez liga, outra
+  desliga.
+
 ### Clãs — fundação da guerra de clã (2026-09-16, NÃO testado)
 - `ClanConfig` (500 pts para fundar, 20 membros, tag 2–4 alfanumérica = id único, depósito mín. 10,
   convite expira em 30 s, cargos member/officer/leader).

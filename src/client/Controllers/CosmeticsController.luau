@@ -18,6 +18,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local Controls = require(Modules:WaitForChild("Controls"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
@@ -28,7 +29,6 @@ local CosmeticsController = {}
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local EMOTE_KEY = Enum.KeyCode.B
 local EMOTES = "Emotes"
 local AURA_NAME = "Cosmetic"
 local SCENE_AURA = "Scene"
@@ -313,6 +313,11 @@ function CosmeticsController.Init()
 end
 
 --- Painel (TopbarController liga no ícone "Cosméticos").
+--- Botão EMOTE do toque.
+function CosmeticsController.ToggleWheel()
+	setWheel(not wheel.Visible)
+end
+
 function CosmeticsController.GetPanel(): Frame
 	return panel
 end
@@ -340,7 +345,7 @@ function CosmeticsController.Start()
 		if processed then
 			return
 		end
-		if input.KeyCode == EMOTE_KEY or input.KeyCode == Enum.KeyCode.DPadUp then
+		if Controls.ActionOf(input) == "Emotes" then
 			setWheel(not wheel.Visible)
 		end
 	end)

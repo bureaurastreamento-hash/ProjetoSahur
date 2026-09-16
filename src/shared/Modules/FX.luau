@@ -468,7 +468,17 @@ local shakeMagnitude = 0
 local shakeConnected = false
 
 --- Tremor leve de câmera (magnitude em studs, ~0.3 é sutil).
+--- Desligáveis pelo jogador (SettingsController): tremor de tela e vibração (gamepad).
+FX.ShakeEnabled = true
+FX.Haptic = nil :: ((strength: number, seconds: number) -> ())?
+
 function FX.Shake(magnitude: number, duration: number)
+	if FX.Haptic then
+		FX.Haptic(math.clamp(magnitude, 0, 1), math.min(duration, 0.3))
+	end
+	if not FX.ShakeEnabled then
+		return
+	end
 	shakeMagnitude = math.max(shakeMagnitude, magnitude)
 	shakeUntil = math.max(shakeUntil, os.clock() + duration)
 	if shakeConnected then

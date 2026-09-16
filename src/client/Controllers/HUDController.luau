@@ -16,6 +16,7 @@
 ]]
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -25,6 +26,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local Controls = require(Modules:WaitForChild("Controls"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
@@ -508,6 +510,24 @@ function HUDController.Init()
 	for i = 1, #SLOT_KEYS do
 		slots[i] = get(abilities, "Slot" .. i) :: Frame
 	end
+	-- rótulo de tecla/botão conforme o último dispositivo usado (teclado, gamepad; toque esconde)
+	local function refreshKeyLabels()
+		local device: Controls.Device = Controls.DeviceOf(UserInputService:GetLastInputType())
+		local function setKey(frame: Frame, action: string)
+			local label = frame:FindFirstChild("Key") :: TextLabel?
+			if label then
+				label.Text = if device == "touch" then "" else Controls.Label(action, device)
+			end
+		end
+		for i, frame in slots do
+			setKey(frame, "Slot" .. i)
+		end
+		setKey(dashSlot, "Dash")
+		setKey(dashSideSlot, "Dash")
+		setKey(ultSlot, "Awaken")
+	end
+	refreshKeyLabels()
+	UserInputService.LastInputTypeChanged:Connect(refreshKeyLabels)
 
 	killFeed = get(hud, "KillFeed") :: Frame
 	killTemplate = get(killFeed, "Template") :: TextLabel

@@ -358,12 +358,18 @@ HELP = "\n".join([
     "VIDA — regenera após 6 s sem dano",
     "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C",
     "BOSS — segure E no altar; anel vermelho = saia da área",
-    "Gamepad: R1 soco · L1 block · X dash · Y / B / R2 habilidades · L2 ultimate",
+    "CONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo",
+    "CELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
 ])
+setting_row = button("Template", "", ud(1, 0, 0, 26), ud(0, 0, 0, 0), bg=CARD, t=0.2, ts=12, extra={"Visible": False, "TextXAlignment": "Left"},
+                     children=[padding(10, 0),
+                               label("Value", "", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=12, color=ACCENT, xalign="Right")])
 helpgui = screen("HelpGui", [
-    panel("Panel", 640, 380, "Controles", [
-        label("Body", HELP, ud(1, 0, 1, -30), ud(0, 0, 0, 30), ts=13, yalign="Top",
+    panel("Panel", 640, 560, "Controles", [
+        label("Body", HELP, ud(1, 0, 0, 330), ud(0, 0, 0, 30), ts=13, yalign="Top",
               extra={"TextWrapped": True, "LineHeight": 1.35}),
+        label("SettingsTitle", "CONFIGURAÇÕES (clique para mudar; salva no perfil)", ud(1, 0, 0, 16), ud(0, 0, 0, 366), font=FONT_B, ts=11, color=MUTED),
+        frame("Settings", ud(1, 0, 1, -388), ud(0, 0, 0, 388), t=1, children=[listlayout("Vertical", 4), setting_row]),
     ]),
 ], order=3)
 write("HelpGui.model.json", helpgui)

@@ -22,6 +22,10 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
+local Controls = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("Controls"))
+-- Gamepad: D-pad direita navega os ícones do topo (D-pad cima é o despertar)
+local IconAny: any = Icon
+IconAny.highlightKey = Controls.Gamepad.Menus
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 local CosmeticsController = require(script.Parent:WaitForChild("CosmeticsController"))
 
@@ -230,6 +234,7 @@ function TopbarController.Start()
 		:setCaption("Kills da sessão")
 		:setCaptionHint(Enum.KeyCode.Tab)
 		:bindToggleKey(Enum.KeyCode.Tab)
+		:bindToggleKey(Controls.Gamepad.Scoreboard)
 		:bindToggleItem(scoreboard)
 		:setOrder(3)
 

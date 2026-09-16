@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local DataConfig = require(Modules:WaitForChild("DataConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local Controls = require(Modules:WaitForChild("Controls"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
 local unlockLimiter = RateLimiter.new(2, 1)
@@ -159,6 +160,13 @@ local function migrate(raw: any): DataConfig.Profile
 	end
 	if typeof(raw.clanTag) == "string" and raw.clanTag ~= "" then
 		profile.clanTag = raw.clanTag
+	end
+	if typeof(raw.settings) == "table" then
+		for k, v in raw.settings do
+			if Controls.ValidateSetting(k, v) ~= nil then
+				profile.settings[k] = v
+			end
+		end
 	end
 	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
 	profile.schemaVersion = DataConfig.SchemaVersion

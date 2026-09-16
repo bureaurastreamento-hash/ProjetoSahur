@@ -55,6 +55,7 @@ RemoteEvents.Events = ({
 	RequestShop = "RequestShop", -- (kind: "product"|"pass", key: string) — abre o prompt de compra da Roblox
 	RequestCosmetic = "RequestCosmetic", -- (action: "roll"|"equip"|"unequip"|"pick_robux", id: string?)
 	RequestEmote = "RequestEmote", -- (emoteId: string) — roda de emotes (B)
+	RequestSetting = "RequestSetting", -- (key: string, value: number|boolean) — Controls.Settings; salva em profile.settings
 	RequestClan = "RequestClan", -- (action: "create"|"invite"|"accept"|"decline"|"leave"|"kick"|"promote"|"demote"|"deposit"|"disband"|"refresh", a: any?, b: any?) — create(name, tag), invite/kick/promote/demote(userId), deposit(amount)
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 

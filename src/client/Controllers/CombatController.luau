@@ -25,6 +25,8 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local Controls = require(Modules:WaitForChild("Controls"))
+local SettingsController = require(script.Parent:WaitForChild("SettingsController"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
 local CombatController = {}
@@ -34,11 +36,7 @@ local localPlayer = Players.LocalPlayer
 local requestAttack: RemoteEvent
 local requestBlock: RemoteEvent
 
-local ATTACK_KEY = Enum.UserInputType.MouseButton1
 local ATTACK_TOUCH = Enum.UserInputType.Touch
-local BLOCK_KEY = Enum.KeyCode.F
-local BLOCK_GAMEPAD = Enum.KeyCode.ButtonL1
-local ATTACK_GAMEPAD = Enum.KeyCode.ButtonR1
 local SHARED = "Shared"
 
 local blockHeld = false
@@ -106,6 +104,31 @@ local function startAutoAttack()
 			CombatController.Attack() -- em cooldown/ComboEnd o servidor só ignora
 		end
 	end)
+end
+
+--- Botão de soco pressionado/solto (input, gamepad, toque). Com "AttackHold" desligado, cada
+--- pressionar = um soco.
+function CombatController.SetAttackHeld(held: boolean)
+	if held then
+		if SettingsController.Get("AttackHold") == true then
+			startAutoAttack()
+		else
+			CombatController.Attack()
+		end
+	else
+		stopAutoAttack()
+	end
+end
+
+--- Botão de block pressionado/solto. Com "BlockToggle" ligado, pressionar alterna.
+function CombatController.BlockInput(pressed: boolean)
+	if SettingsController.Get("BlockToggle") == true then
+		if pressed then
+			CombatController.SetBlock(not blockHeld)
+		end
+	else
+		CombatController.SetBlock(pressed)
+	end
 end
 
 --- Segurar/soltar block. Idempotente.
@@ -348,20 +371,22 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	if gameProcessed then
 		return
 	end
-	if input.UserInputType == ATTACK_KEY or input.KeyCode == ATTACK_GAMEPAD then
-		startAutoAttack()
+	local action = Controls.ActionOf(input)
+	if action == "Attack" then
+		CombatController.SetAttackHeld(true)
 	elseif input.UserInputType == ATTACK_TOUCH and CombatController.TouchAttackEnabled then
-		startAutoAttack()
-	elseif input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
-		CombatController.SetBlock(true)
+		CombatController.SetAttackHeld(true)
+	elseif action == "Block" then
+		CombatController.BlockInput(true)
 	end
 end
 
 local function onInputEnded(input: InputObject, _gameProcessed: boolean)
-	if input.UserInputType == ATTACK_KEY or input.KeyCode == ATTACK_GAMEPAD or input.UserInputType == ATTACK_TOUCH then
-		stopAutoAttack()
-	elseif input.KeyCode == BLOCK_KEY or input.KeyCode == BLOCK_GAMEPAD then
-		CombatController.SetBlock(false)
+	local action = Controls.ActionOf(input)
+	if action == "Attack" or input.UserInputType == ATTACK_TOUCH then
+		CombatController.SetAttackHeld(false)
+	elseif action == "Block" then
+		CombatController.BlockInput(false)
 	end
 end
 

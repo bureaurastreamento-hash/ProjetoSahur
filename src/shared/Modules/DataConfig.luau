@@ -43,6 +43,7 @@ export type Profile = {
 	mastery: { [string]: number }, -- characterId -> XP de maestria (ProgressionConfig.Mastery)
 	rating: number, -- Elo de duelo 1v1 (DuelConfig.RatingStart)
 	clanTag: string?, -- clã atual (ClanService; a verdade é o registro do clã, isto é cache)
+	settings: { [string]: any }, -- acessibilidade/controles (Controls.Settings; SettingsService valida)
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -59,6 +60,7 @@ function DataConfig.DefaultProfile(): Profile
 		emotes = {},
 		mastery = {},
 		rating = 1000,
+		settings = {},
 	}
 end
 
