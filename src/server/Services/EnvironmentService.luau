@@ -92,7 +92,12 @@ function EnvironmentService.Start()
 		if Lighting:FindFirstChild(def.Name) then
 			continue
 		end
-		local inst = Instance.new(def.ClassName)
+		-- já existe um efeito da mesma classe (Bloom/Atmosphere do place)? reaproveita em vez de duplicar
+		-- (dois BloomEffect somam; duas Atmospheres brigam)
+		local inst = Lighting:FindFirstChildOfClass(def.ClassName)
+		if not inst then
+			inst = Instance.new(def.ClassName)
+		end
 		inst.Name = def.Name
 		applyProperties(inst, def.Properties)
 		inst.Parent = Lighting
