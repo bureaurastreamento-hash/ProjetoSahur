@@ -211,6 +211,19 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Animações do amigo coladas: M1_1..4, Shared/Idle (119477589200226), Brawler/GroundSlam (112109080090418),
   Boss/Idle (107074192710996), Boss/Swipe (71637199637001).
 
+### 2026-09-16 (tarde) — MCP do Roblox Studio ligado
+- Agora eu (Claude) dou Play, leio o Output e inspeciono o place sozinho (`run_code` = edição,
+  `run_script_in_play_mode` = servidor do Play com os logs em JSON). Ciclo: editar → `tools/analisar.sh`
+  → Play via MCP → ler boot. Testado: 24 services / 15 controllers, 0 erros.
+- ATENÇÃO: o Studio estava aberto no place ANTIGO (85844807133499). Nele o altar está na posição
+  padrão do gerador (altar 0,4.3,165 / spawn 0,1.5,195) — o altar movido só existe no place do grupo.
+  Abrir o 126518739287432 para eu ler a posição nova direto do Studio (sem precisar copiar à mão).
+- Descoberto via MCP: `Boss.Idle`/`Boss.Swipe` animam as partes `tripo_part_*` do BossModel (72 partes,
+  rig custom do `BossRig`) → estão CERTAS; o AnimCheck avisava "rig misturada" errado. Corrigido:
+  pasta `Boss` espera o rig do BossModel. `Boss.Roar` (139399523673215) é R6 → NÃO mexe o boss;
+  a equipe precisa animar o Roar em cima do BossModel.
+- `Shared/Block` e `Shared/Idle` com duração 0 continuam (esperado no place antigo; reconferir no do grupo).
+
 ### DECISÕES DE DESIGN do dono (2026-09-16, madrugada) — aplicar na próxima sessão
 1. **ULT = cutscene/transformação, não um ataque.** G ativa uma animação/cutscene que TRANSFORMA o
    personagem (despertado) e, transformado, ele mostra ATAQUES DIFERENTES (kit alternativo, não só buff).
