@@ -20363,6 +20363,117 @@
      }
     }
    ]
+  },
+  {
+   "name": "CapturePoints",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "A",
+     "className": "Part",
+     "properties": {
+      "Name": "A",
+      "Anchored": true,
+      "Position": [
+       -100,
+       0.8,
+       0
+      ],
+      "Size": [
+       0.3,
+       24,
+       24
+      ],
+      "Color": [
+       0.7,
+       0.7,
+       0.75
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanCollide": false,
+      "CastShadow": false,
+      "Transparency": 0.35,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "B",
+     "className": "Part",
+     "properties": {
+      "Name": "B",
+      "Anchored": true,
+      "Position": [
+       0,
+       0.8,
+       0
+      ],
+      "Size": [
+       0.3,
+       24,
+       24
+      ],
+      "Color": [
+       0.7,
+       0.7,
+       0.75
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanCollide": false,
+      "CastShadow": false,
+      "Transparency": 0.35,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    },
+    {
+     "name": "C",
+     "className": "Part",
+     "properties": {
+      "Name": "C",
+      "Anchored": true,
+      "Position": [
+       100,
+       0.8,
+       0
+      ],
+      "Size": [
+       0.3,
+       24,
+       24
+      ],
+      "Color": [
+       0.7,
+       0.7,
+       0.75
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanCollide": false,
+      "CastShadow": false,
+      "Transparency": 0.35,
+      "Shape": "Cylinder",
+      "Orientation": [
+       0,
+       0,
+       90
+      ]
+     }
+    }
+   ]
   }
  ]
 }

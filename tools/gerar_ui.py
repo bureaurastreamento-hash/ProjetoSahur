@@ -320,7 +320,8 @@ clan = screen("ClanGui", [
         ]),
         # --- com clã ---
         frame("Info", ud(1, 0, 1, -30), ud(0, 0, 0, 30), t=1, visible=False, children=[
-            label("Header", "", ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=GOLD),
+            label("Header", "", ud(1, -120, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=GOLD),
+            button("War", "GUERRA", ud(0, 110, 0, 24), ud(1, 0, 0, 0), anchor=(1, 0), bg=[0.4, 0.14, 0.14], ts=12),
             label("Sub", "", ud(1, 0, 0, 18), ud(0, 0, 0, 24), ts=12, color=MUTED),
             button("TabMembers", "MEMBROS", ud(0.5, -5, 0, 26), ud(0, 0, 0, 50), ts=12),
             button("TabInvite", "CONVIDAR", ud(0.5, -5, 0, 26), ud(1, 0, 0, 50), anchor=(1, 0), ts=12),
@@ -340,6 +341,31 @@ clan = screen("ClanGui", [
 ], order=3)
 write("ClanGui.model.json", clan)
 
+
+# =============================================================================
+# Guerra de clã (WarController): placar no topo durante a dominação
+# =============================================================================
+def zone_chip(name, x):
+    return frame(name, ud(0, 34, 0, 26), ud(0.5, x, 1, -6), anchor=(0.5, 1), bg=[0.7, 0.7, 0.75], t=0.2, children=[
+        corner(6),
+        label("Letter", name, ud(1, 0, 1, 0), ud(0, 0, 0, 0), font=FONT_B, ts=14, xalign="Center", color=[0.05, 0.05, 0.06]),
+        frame("Progress", ud(0, 0, 0, 3), ud(0, 0, 1, 0), anchor=(0, 1), bg=[1, 1, 1], t=0),
+    ])
+wargui = screen("WarGui", [
+    frame("Bar", ud(0, 440, 0, 78), ud(0.5, 0, 0, 8), anchor=(0.5, 0), visible=False, children=[
+        corner(8), stroke(),
+        label("TeamA", "", ud(0, 150, 0, 22), ud(0, 12, 0, 6), font=FONT_B, ts=14, color=[0.45, 0.6, 1.0]),
+        label("ScoreA", "0", ud(0, 60, 0, 30), ud(0.5, -40, 0, 2), anchor=(1, 0), font=FONT_B, ts=24, xalign="Right"),
+        label("Timer", "5:00", ud(0, 70, 0, 30), ud(0.5, 0, 0, 2), anchor=(0.5, 0), font=FONT_B, ts=16, xalign="Center", color=MUTED),
+        label("ScoreB", "0", ud(0, 60, 0, 30), ud(0.5, 40, 0, 2), anchor=(0, 0), font=FONT_B, ts=24),
+        label("TeamB", "", ud(0, 150, 0, 22), ud(1, -12, 0, 6), anchor=(1, 0), font=FONT_B, ts=14, color=[1.0, 0.45, 0.45], xalign="Right"),
+        zone_chip("A", -44), zone_chip("B", 0), zone_chip("C", 44),
+    ]),
+    label("Banner", "", ud(0, 520, 0, 44), ud(0.5, 0, 0, 96), anchor=(0.5, 0), font=FONT_B, ts=20, xalign="Center",
+          color=GOLD, extra={"TextStrokeTransparency": 0.5, "Visible": False}),
+], order=4)
+write("WarGui.model.json", wargui)
+
 # =============================================================================
 # Controles
 # =============================================================================
@@ -357,7 +383,7 @@ HELP = "\n".join([
     "CARGA — dar golpe +6, receber +4, parry +10",
     "VIDA — regenera após 6 s sem dano",
     "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C",
-    "BOSS — segure E no altar; anel vermelho = saia da área",
+    "BOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã (C) > GUERRA: dominação A/B/C, 2 clãs, 5 min",
     "CONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo",
     "CELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
 ])

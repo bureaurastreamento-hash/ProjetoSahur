@@ -469,6 +469,21 @@ function ClanService.AddToVault(tag: string, amount: number): boolean
 	return ok
 end
 
+--- +1 guerra vencida.
+function ClanService.AddWin(tag: string): boolean
+	local ok, result = update(tag, function(c)
+		if not c then
+			return nil
+		end
+		c.wins = (c.wins or 0) + 1
+		return c
+	end)
+	if ok then
+		pushClan(tag, result :: Clan)
+	end
+	return ok
+end
+
 -- ---------------------------------------------------------------------------
 -- Ciclo de vida
 -- ---------------------------------------------------------------------------

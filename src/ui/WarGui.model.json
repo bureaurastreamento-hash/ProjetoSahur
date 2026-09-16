@@ -1,0 +1,888 @@
+{
+ "className": "ScreenGui",
+ "properties": {
+  "ResetOnSpawn": false,
+  "IgnoreGuiInset": true,
+  "ZIndexBehavior": "Sibling",
+  "DisplayOrder": 4,
+  "Enabled": true
+ },
+ "children": [
+  {
+   "name": "Bar",
+   "className": "Frame",
+   "properties": {
+    "Name": "Bar",
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       440
+      ],
+      [
+       0,
+       78
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       0.5,
+       0
+      ],
+      [
+       0,
+       8
+      ]
+     ]
+    },
+    "AnchorPoint": {
+     "Vector2": [
+      0.5,
+      0
+     ]
+    },
+    "BackgroundColor3": {
+     "Color3": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "BackgroundTransparency": 0.5,
+    "BorderSizePixel": 0,
+    "Visible": false
+   },
+   "children": [
+    {
+     "name": "UICorner",
+     "className": "UICorner",
+     "properties": {
+      "Name": "UICorner",
+      "CornerRadius": {
+       "UDim": [
+        0,
+        8
+       ]
+      }
+     }
+    },
+    {
+     "name": "UIStroke",
+     "className": "UIStroke",
+     "properties": {
+      "Name": "UIStroke",
+      "Thickness": 1,
+      "Color": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "Transparency": 0.86,
+      "ApplyStrokeMode": "Border"
+     }
+    },
+    {
+     "name": "TeamA",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "TeamA",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         150
+        ],
+        [
+         0,
+         22
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         6
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "",
+      "Font": "GothamBold",
+      "TextSize": 14,
+      "TextColor3": {
+       "Color3": [
+        0.45,
+        0.6,
+        1.0
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "ScoreA",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "ScoreA",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         60
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         -40
+        ],
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "0",
+      "Font": "GothamBold",
+      "TextSize": 24,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "TextXAlignment": "Right",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "Timer",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "Timer",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         70
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         0
+        ],
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0.5,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "5:00",
+      "Font": "GothamBold",
+      "TextSize": 16,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "TextXAlignment": "Center",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "ScoreB",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "ScoreB",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         60
+        ],
+        [
+         0,
+         30
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         40
+        ],
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "0",
+      "Font": "GothamBold",
+      "TextSize": 24,
+      "TextColor3": {
+       "Color3": [
+        0.96,
+        0.96,
+        0.97
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "TeamB",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "TeamB",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         150
+        ],
+        [
+         0,
+         22
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -12
+        ],
+        [
+         0,
+         6
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "",
+      "Font": "GothamBold",
+      "TextSize": 14,
+      "TextColor3": {
+       "Color3": [
+        1.0,
+        0.45,
+        0.45
+       ]
+      },
+      "TextXAlignment": "Right",
+      "TextYAlignment": "Center",
+      "BorderSizePixel": 0,
+      "RichText": false
+     }
+    },
+    {
+     "name": "A",
+     "className": "Frame",
+     "properties": {
+      "Name": "A",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         34
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         -44
+        ],
+        [
+         1,
+         -6
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0.5,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.7,
+        0.7,
+        0.75
+       ]
+      },
+      "BackgroundTransparency": 0.2,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "Letter",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Letter",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "A",
+        "Font": "GothamBold",
+        "TextSize": 14,
+        "TextColor3": {
+         "Color3": [
+          0.05,
+          0.05,
+          0.06
+         ]
+        },
+        "TextXAlignment": "Center",
+        "TextYAlignment": "Center",
+        "BorderSizePixel": 0,
+        "RichText": false
+       }
+      },
+      {
+       "name": "Progress",
+       "className": "Frame",
+       "properties": {
+        "Name": "Progress",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           3
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          1
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "BackgroundTransparency": 0,
+        "BorderSizePixel": 0,
+        "Visible": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "B",
+     "className": "Frame",
+     "properties": {
+      "Name": "B",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         34
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         0
+        ],
+        [
+         1,
+         -6
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0.5,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.7,
+        0.7,
+        0.75
+       ]
+      },
+      "BackgroundTransparency": 0.2,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "Letter",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Letter",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "B",
+        "Font": "GothamBold",
+        "TextSize": 14,
+        "TextColor3": {
+         "Color3": [
+          0.05,
+          0.05,
+          0.06
+         ]
+        },
+        "TextXAlignment": "Center",
+        "TextYAlignment": "Center",
+        "BorderSizePixel": 0,
+        "RichText": false
+       }
+      },
+      {
+       "name": "Progress",
+       "className": "Frame",
+       "properties": {
+        "Name": "Progress",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           3
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          1
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "BackgroundTransparency": 0,
+        "BorderSizePixel": 0,
+        "Visible": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "C",
+     "className": "Frame",
+     "properties": {
+      "Name": "C",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         34
+        ],
+        [
+         0,
+         26
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0.5,
+         44
+        ],
+        [
+         1,
+         -6
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0.5,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.7,
+        0.7,
+        0.75
+       ]
+      },
+      "BackgroundTransparency": 0.2,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "Letter",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Letter",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "C",
+        "Font": "GothamBold",
+        "TextSize": 14,
+        "TextColor3": {
+         "Color3": [
+          0.05,
+          0.05,
+          0.06
+         ]
+        },
+        "TextXAlignment": "Center",
+        "TextYAlignment": "Center",
+        "BorderSizePixel": 0,
+        "RichText": false
+       }
+      },
+      {
+       "name": "Progress",
+       "className": "Frame",
+       "properties": {
+        "Name": "Progress",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           3
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          1
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "BackgroundTransparency": 0,
+        "BorderSizePixel": 0,
+        "Visible": true
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Banner",
+   "className": "TextLabel",
+   "properties": {
+    "Name": "Banner",
+    "Size": {
+     "UDim2": [
+      [
+       0,
+       520
+      ],
+      [
+       0,
+       44
+      ]
+     ]
+    },
+    "Position": {
+     "UDim2": [
+      [
+       0.5,
+       0
+      ],
+      [
+       0,
+       96
+      ]
+     ]
+    },
+    "AnchorPoint": {
+     "Vector2": [
+      0.5,
+      0
+     ]
+    },
+    "BackgroundTransparency": 1,
+    "Text": "",
+    "Font": "GothamBold",
+    "TextSize": 20,
+    "TextColor3": {
+     "Color3": [
+      1.0,
+      0.8,
+      0.3
+     ]
+    },
+    "TextXAlignment": "Center",
+    "TextYAlignment": "Center",
+    "BorderSizePixel": 0,
+    "RichText": false,
+    "TextStrokeTransparency": 0.5,
+    "Visible": false
+   }
+  }
+ ]
+}

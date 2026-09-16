@@ -16,6 +16,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local ClanConfig = require(Modules:WaitForChild("ClanConfig"))
+local WarController = require(script.Parent:WaitForChild("WarController"))
 
 local ClanController = {}
 
@@ -295,6 +296,15 @@ function ClanController.Start()
 	end)
 	leaveButton.MouseButton1Click:Connect(function()
 		requestClan:FireServer("leave")
+	end)
+	-- guerra de clã: líder/oficial põe o clã na fila (WarService); o botão mostra o estado
+	local warButton = get(infoFrame, "War") :: TextButton
+	warButton.MouseButton1Click:Connect(function()
+		WarController.Toggle()
+	end)
+	WarController.QueueChanged.Event:Connect(function(isQueued: boolean, _tag: string?, position: number?)
+		warButton.Text = if isQueued then ("NA FILA%s ✕"):format(if position then (" #%d"):format(position) else "") else "GUERRA"
+		warButton.BackgroundColor3 = if isQueued then Color3.fromRGB(40, 90, 60) else Color3.fromRGB(102, 36, 36)
 	end)
 	-- dissolver: 2 cliques em 3 s para não perder o clã num clique errado
 	local disbandArmedUntil = 0

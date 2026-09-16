@@ -454,9 +454,16 @@ for p in parts:
             break
     zones[zone].append(p)
 
+# Pontos de captura da guerra de clã (WarService recolore conforme o dono): A oeste, B praça, C leste
+capture_points = []
+for name, (x, z) in (("A", (-100, 0)), ("B", (0, 0)), ("C", (100, 0))):
+    capture_points.append(cylinder(f"{name}", 12, 0.3, (x, 0.8, z), ("Neon", (0.7, 0.7, 0.75)), CanCollide=False,
+                                   CastShadow=False, Transparency=0.35))
+    parts.remove(capture_points[-1])
+
 tree = {
     "className": "Model",
-    "children": [folder(z, items) for z, items in zones.items()] + [folder("Spawns", spawns)],
+    "children": [folder(z, items) for z, items in zones.items()] + [folder("Spawns", spawns), folder("CapturePoints", capture_points)],
 }
 
 OUT.write_text(json.dumps(tree, indent=1))

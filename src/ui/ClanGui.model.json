@@ -906,7 +906,7 @@
          "UDim2": [
           [
            1,
-           0
+           -120
           ],
           [
            0,
@@ -948,6 +948,95 @@
         "BorderSizePixel": 0,
         "RichText": false
        }
+      },
+      {
+       "name": "War",
+       "className": "TextButton",
+       "properties": {
+        "Name": "War",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           110
+          ],
+          [
+           0,
+           24
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          1,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.4,
+          0.14,
+          0.14
+         ]
+        },
+        "BackgroundTransparency": 0.0,
+        "Text": "GUERRA",
+        "Font": "GothamBold",
+        "TextSize": 12,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.86,
+          "ApplyStrokeMode": "Border"
+         }
+        }
+       ]
       },
       {
        "name": "Sub",

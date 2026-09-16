@@ -211,6 +211,25 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### Guerra de clã — DOMINAÇÃO (2026-09-16, NÃO testado)
+- `WarConfig`: 2 clãs, cópia da `Arena_Gerada` em (-4000,1500,4000) (região própria, 2 simultâneas),
+  pontos A/B/C (pasta `CapturePoints` nova em `gerar_arena.py`: cilindros neon em x=-100/0/100),
+  captura = 1 time sozinho por 5 s, 1 ponto/s por ponto dominado, 300 pontos ou 5 min, MinPerSide=1 (subir
+  depois dos testes), MaxPerSide=6, respawn no spawn do time (Player.RespawnLocation) com 2 s de proteção.
+  Recompensa: 80/25 pontos por jogador, 250/60 no cofre, `clan.wins` +1.
+- `WarService`: `RequestWar("queue"|"leave"|"refresh")` (líder/oficial; leva os membros online e livres do
+  MESMO servidor); com 2 clãs na fila começa. `NotifyWar`: queue/start/state(1/s)/end/denied.
+  Quem sai do servidor conta como fora; time vazio = derrota.
+- Cliente: `WarGui` (barra no topo: tags, pontos, timer, chips A/B/C coloridos com barra de captura; banner),
+  `WarController`; botão **GUERRA** no ClanGui (vira "NA FILA #n ✕" para sair).
+- Teste (2 clientes, cada um num clã diferente; Studio precisa de 2 jogadores em 2 clãs, então: cliente 1
+  funda clã X, cliente 2 funda clã Y; cada um clica GUERRA): banner "colocou o clã na fila", ao segundo
+  entrar os dois vão para a arena no céu, contagem 5 s, barra no topo; ficar no anel A por 5 s pinta de
+  azul/vermelho e o placar sobe 1/s; morrer renasce no lado do time; ao acabar (300 ou 5 min ou um lado
+  vazio) banner de vitória, pontos e cofre (Clã > cofre) sobem, volta ao mapa.
+- Faltam (próximos): placar por clã (OrderedDataStore por `wins`), MessagingService para clãs em servidores
+  diferentes, mapa próprio de dominação quando a arte trouxer, fila cross-server.
+
 ### Animações do boss não tocaram (2026-09-16) — causa provável
 - O log do Studio mostra a sessão de Play no place **85844807133499 (o antigo)**, não no oficial de grupo
   126518739287432. Animações publicadas no grupo carregam com duração 0 fora do place do grupo (sem erro
@@ -325,7 +344,7 @@ Memória entre sessões. Atualizar depois de cada mudança.
 2. Bugs do 3º teste (pedir).
 3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
 4. Depois: ~~placar global de rating~~ (feito, testar), ~~mais agarrões~~ (Throw/Chokeslam/Spin feitos, testar), ~~Idle/Walk do
-   boss~~ (código pronto, faltam ids), e a **guerra de clã/dominação**: fundação (clãs) feita 2026-09-16, falta o modo em si (ver "Planos futuros").
+   boss~~ (código pronto, faltam ids), e a **guerra de clã/dominação**: clãs + modo dominação feitos 2026-09-16 (testar); falta placar por clã e cross-server.
 
 
 ### Boss com modelo 3D — 3ª versão (`src/shared/Modules/BossRig.luau`)
