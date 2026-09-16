@@ -200,9 +200,36 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-16, noite)
+## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado, 27 services / 0 erros)
 
-### COMEÇAR POR AQUI — o dono precisa TESTAR no Studio (feito nesta sessão, boot OK 24 services / 0 erros)
+### PRÓXIMO PASSO (decidido com o dono no fim da sessão): arrumar o TRAILER — sons, animações e timing
+Ler **`TRAILER_ASSETS.md`** (inventário plano a plano do que toca no trailer, o que está VAZIO, o que é fallback e
+o que é som repetido entre golpes). Ordem combinada:
+1. **Sons**: criar as entradas que faltam em `Sounds.model.json` e fazer o código chamar os nomes certos:
+   `Shared/Awakening_Charge` (5 s de carga mudos — o pior), `Shared/Transform` + `Shared/Transform_Burst`
+   (transformação no B.I.G., hoje sem som nenhum — o `BossController` "transforming"/`BossFormService` precisam
+   tocar), `Shared/Crit` e `Shared/BlackFlash` (hoje caem no Finisher_Hit), `NotoriousBIG/Devour|Crush|FleshWave|
+   Frenzy` (+ `_Hit`), `Shared/Hit_Stun`, música/ambiente do trailer. Separar os repetidos: Quake2=WallSplat,
+   Quake_Hit=Roar_Hit=Shockwave_Hit, Tempest=Ritmo, Rampage2=Toque, Slam_Hit=GroundSlam_Hit=Bombo_Hit,
+   ShoulderBash=RagdollCancel, Leap=Finisher_Whoosh. O dono manda os ids OU eu proponho candidatos dos packs
+   (DEV → "Testar sons dos packs", `PackSounds`). Tirar `Awakening_Burst` de cima das ults onde não cabe e o
+   `RoundStart` do "summoned" da forma.
+2. **Animações** (pedir à equipe, ids em `Animations.model.json`): `Shared/Hit` (reação da vítima — VAZIO, muito
+   visível), `Shared/Parry`, `Guardian/Quake`, `Mystic/Meteor`, `Shared/Grabbed`; Tempest/Rampage (4,2 s) longas
+   para o corte — ou encurtar a cadência do trailer. Atores do trailer devem tocar Idle (hoje pose padrão).
+3. **Timing do roteiro** (`TrailerService.run()`): cadência dos socos 0,42 s vs anim 0,17 s; aviso do Meteor
+   1,5 s; Crush `_Hit` a 0,6 s; ângulos/durações conforme o dono vir o vídeo.
+4. Depois do trailer: polimento restante — menus minimalistas, `AwakenedEffect` faltando, lista final de assets
+   por ação para a equipe; feedback do dono sobre as 76 composições de VFX no F7 (`Lib/…`).
+
+### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
+- Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão
+  soldado (2 clientes) → administração (mensagem/ban) → ciclo dia/noite → Arena_Antiga na guerra de clã →
+  cutscene da ult 7 s / ult no ar / prioridade (itens 1–3 abaixo).
+- Place: `Workspace.Efeitos`/`Auras` foram APAGADOS (viraram IDs em `VFXLibrary`); `ServerStorage.Maps.Arena_Antiga`
+  precisa estar SALVO no place (Team Create). Preview do B.I.G. removido.
+
+### Feito nesta sessão — o dono precisa TESTAR no Studio
 1. **Cutscene da ult = 7 s** (`CombatConfig.Awakening.Cutscene`: Duration 7.0, BurstAt 5.0). Linha do tempo
    (`CutsceneController`): t0 som `Awakening` + som de carga em loop `Sounds.Shared.Awakening_Charge` (entrada
    criada VAZIA no `Sounds.model.json` — colar id) → poses 1/2/3 em 0/1,6/3,4 s, câmera orbita e fecha no rosto
