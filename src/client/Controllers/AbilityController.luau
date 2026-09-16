@@ -47,10 +47,15 @@ local requestAbility: RemoteEvent
 local requestAwaken: RemoteEvent
 local grabConn: RBXScriptConnection? = nil -- eu estou sendo carregado por um agarrão
 
+local grabbedTrackRef: { track: AnimationTrack? } = { track = nil }
 local function stopGrabbed()
 	if grabConn then
 		grabConn:Disconnect()
 		grabConn = nil
+	end
+	if grabbedTrackRef.track then
+		grabbedTrackRef.track:Stop(0.15)
+		grabbedTrackRef.track = nil
 	end
 	local character = localPlayer.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
@@ -59,33 +64,23 @@ local function stopGrabbed()
 	end
 end
 
---- Preso num agarrão: meu boneco (eu sou dono da física) fica colado à frente do atacante por `seconds`.
---- `lift` = studs acima (chokeslam); `spin` = voltas/s ao redor do atacante (mesma fórmula do servidor:
---- AbilityService.spinAngle, que calcula a tangente na hora de soltar).
-local function startGrabbed(attacker: Model, seconds: number, offset: number, lift: number?, spin: number?)
+--- Preso num agarrão: o servidor já me soldou no atacante (Weld HRP→HRP, física no cliente dele); aqui só
+--- a animação de "agarrado" (Shared/Grabbed, loop) e o PlatformStand local para o Humanoid não tentar andar.
+local function startGrabbed(attacker: Model, seconds: number)
 	stopGrabbed()
 	local character = localPlayer.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	local aRoot = attacker:FindFirstChild("HumanoidRootPart") :: BasePart?
-	if not root or not humanoid or not aRoot then
+	if not character or not humanoid then
 		return
 	end
 	humanoid.PlatformStand = true
-	local startedAt = os.clock()
-	local endsAt = startedAt + seconds
-	grabConn = RunService.RenderStepped:Connect(function()
-		if os.clock() >= endsAt or not aRoot.Parent or not root.Parent then
+	grabbedTrackRef.track = FX.PlayAnimation(character, "Shared", "Grabbed", true, Enum.AnimationPriority.Action)
+	grabConn = RunService.Heartbeat:Connect(function()
+		if not attacker.Parent then
 			stopGrabbed()
-			return
 		end
-		-- de frente para o atacante, colado à frente dele (erguido se lift; orbitando se spin)
-		local angle = if spin then (os.clock() - startedAt) * spin * math.pi * 2 else 0
-		local target = aRoot.CFrame * CFrame.Angles(0, angle, 0) * CFrame.new(0, lift or 0, -offset)
-		local lookAt = Vector3.new(aRoot.Position.X, target.Position.Y, aRoot.Position.Z)
-		root.CFrame = CFrame.lookAt(target.Position, lookAt)
-		root.AssemblyLinearVelocity = Vector3.zero
 	end)
+	task.delay(seconds + 0.5, stopGrabbed)
 end
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
 
@@ -144,7 +139,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
 		local victim = if typeof(data) == "table" then data.Victim else nil
 		if typeof(victim) == "Instance" and victim == localPlayer.Character then
-			startGrabbed(character, tonumber(data.Carry) or 0.8, tonumber(data.Offset) or 3, tonumber(data.Lift), tonumber(data.Spin))
+			startGrabbed(character, tonumber(data.Carry) or 0.8)
 			FX.Shake(0.4, 0.2)
 		end
 	elseif phase == "release" then

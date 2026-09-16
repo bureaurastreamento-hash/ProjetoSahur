@@ -273,6 +273,61 @@ local SPIN_DEFAULT = 1.25 -- voltas por segundo
 local function spinAngle(e: any, elapsed: number): number
 	return elapsed * (tonumber(e.Spin) or SPIN_DEFAULT) * math.pi * 2
 end
+--- Solda a vítima na frente do atacante (Weld HRP→HRP no servidor: todo mundo vê a mesma posição, sem
+--- atraso). A física da vítima passa para o cliente do atacante durante o Carry. Retorna a função que solta.
+local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Model, offset: number, lift: number?, spin: number?, e: any): () -> ()
+	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local vHum = victim:FindFirstChildOfClass("Humanoid")
+	if not vRoot then
+		return function() end
+	end
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	local weld = Instance.new("Weld")
+	weld.Name = "GrabWeld"
+	weld.Part0 = attackerRoot
+	weld.Part1 = vRoot
+	local function c0(angle: number): CFrame
+		return CFrame.Angles(0, angle, 0) * CFrame.new(0, lift or 0, -offset) * CFrame.Angles(0, math.pi, 0)
+	end
+	weld.C0 = c0(0)
+	weld.C1 = CFrame.new()
+	if vHum then
+		vHum.PlatformStand = true
+	end
+	vRoot.AssemblyLinearVelocity = Vector3.zero
+	weld.Parent = vRoot
+	pcall(function()
+		vRoot:SetNetworkOwner(attacker)
+	end)
+	local released = false
+	if spin then
+		local t0 = os.clock()
+		task.spawn(function()
+			while not released and weld.Parent do
+				weld.C0 = c0(spinAngle(e, os.clock() - t0))
+				task.wait(1 / 30)
+			end
+		end)
+	end
+	return function()
+		if released then
+			return
+		end
+		released = true
+		weld:Destroy()
+		if vHum and not (victimPlayer and victimPlayer:GetAttribute("Ragdolled") == true) then
+			vHum.PlatformStand = false
+		end
+		pcall(function()
+			if victimPlayer then
+				vRoot:SetNetworkOwner(victimPlayer)
+			else
+				vRoot:SetNetworkOwnershipAuto()
+			end
+		end)
+	end
+end
+
 effects.Grab = function(player, character, ability, direction)
 	local e = ability.Effect
 	local characterId = getState(player).characterId
@@ -330,6 +385,10 @@ effects.Grab = function(player, character, ability, direction)
 			Spin = if finish == "Spin" then (tonumber(e.Spin) or SPIN_DEFAULT) else nil,
 		})
 		local grabbedAt = os.clock()
+		local aRoot = character:FindFirstChild("HumanoidRootPart") :: BasePart
+		local release = attachVictim(player, aRoot, victim, GRAB_OFFSET,
+			if finish == "Chokeslam" then (tonumber(e.Lift) or 5) else nil,
+			if finish == "Spin" then (tonumber(e.Spin) or SPIN_DEFAULT) else nil, e)
 		if finish == "Spin" then
 			-- enquanto gira, a vítima é a "arma": quem estiver no raio toma ticks
 			local interval = tonumber(e.SpinInterval) or 0.3
@@ -348,6 +407,7 @@ effects.Grab = function(player, character, ability, direction)
 			end)
 		end
 		task.wait(e.Carry)
+		release() -- solta ANTES do golpe: a física volta para a vítima e o empurrão entra no cliente dela
 		RagdollService.ClearIFrames(character)
 		if not stillValid(player, character) or not HealthService.IsAlive(victim) then
 			HealthService.LockTo(victim, nil)
@@ -701,6 +761,11 @@ end
 --- Forma temporária (BossFormService): troca o personagem SEM respawn (o Model já foi trocado por quem
 --- chamou). `characterId` nil = volta ao personagem escolhido antes. Zera cooldowns/carga.
 local formPrevious: { [Player]: string } = {}
+--- [Admin/testes] usa a habilidade do slot como se o jogador tivesse pedido.
+function AbilityService.Use(player: Player, slot: number, direction: Vector3?)
+	onRequestAbility(player, slot, direction)
+end
+
 function AbilityService.SetForm(player: Player, characterId: string?)
 	local state = getState(player)
 	if characterId then
