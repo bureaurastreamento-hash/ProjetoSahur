@@ -358,6 +358,26 @@
           "properties": {
             "AnimationId": ""
           }
+        },
+        {
+          "name": "Idle",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
+        },
+        {
+          "name": "Walk",
+          "className": "Animation",
+          "properties": {
+            "AnimationId": ""
+          },
+          "attributes": {
+            "R15Id": ""
+          }
         }
       ]
     },

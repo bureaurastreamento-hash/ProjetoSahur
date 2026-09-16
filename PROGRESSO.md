@@ -200,9 +200,18 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-15, noite — fim; tudo commitado e enviado)
+## Retomar aqui (última sessão: 2026-09-16, noite)
 
-### Estado do boss com modelo 3D (última coisa feita)
+### Boss — rig CONFIRMADO (2026-09-16)
+- `Studio()` no place salvo deu **27 Motor6D, 0 soldadas**, raiz `tripo_part_46`, juntas Neck/Right
+  Shoulder/Left Shoulder/Right Hip/Left Hip → rig persistiu. `FaceOffset = 90` confirmado (anda de frente).
+- O dono está animando o boss no Animation Editor. Swipe já tem id (112099038975315). Faltam:
+  Slam, Charge, Roar, Shockwave, Leap, **Idle, Walk** (novos em `Animations.model.json` → `Boss`).
+- **Idle/Walk do boss agora tocam** (`BossController.attachLocomotion`): servidor manda `model` no
+  "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
+  horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
+
+### Estado do boss com modelo 3D (sessão anterior)
 - `ServerStorage.BossModel` (asset 138493793469412, 71 MeshParts em 6 grupos Tronco/Cabeça/BracoDir/
   BracoEsq/PernaDir/PernaEsq). O dono rodou na Command Bar
   `require(game.ReplicatedStorage.Shared.Modules.BossRig:Clone()).Studio(true)` → **27 Motor6D**
@@ -227,8 +236,8 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Pedir a lista + Output na próxima sessão antes de seguir.
 
 ### Próxima sessão — ordem
-1. Conferir rig do boss salvo + FaceOffset; encaixar animações que a equipe mandar (Boss e Emotes,
-   Dash/Downslam/Uppercut/Parry/Hit do Shared).
+1. ~~Conferir rig do boss salvo + FaceOffset~~ (feito 2026-09-16); encaixar animações que a equipe mandar
+   (Boss incl. Idle/Walk, Emotes, Dash/Downslam/Uppercut/Parry/Hit do Shared).
 2. Bugs do 3º teste (pedir).
 3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
 4. Depois: placar global de rating, mais agarrões (perguntar quais), Idle/Walk do boss, e o plano de

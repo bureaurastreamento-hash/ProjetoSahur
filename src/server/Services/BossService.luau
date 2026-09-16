@@ -653,7 +653,7 @@ local function summon(player: Player, byName: string?)
 		endFight(f, true)
 	end)
 	Log.debug(("[BossService] %s invocou o boss"):format(byName or player.Name))
-	broadcast("summoned", { by = byName or player.Name, name = BossConfig.Name, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
+	broadcast("summoned", { by = byName or player.Name, name = BossConfig.Name, model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
 	setStatus(BossConfig.Name .. ": 100%")
 	task.spawn(aiLoop, f)
 end
@@ -771,7 +771,7 @@ function BossService.Start()
 		task.wait(1)
 		local f = fight
 		if f then
-			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.summoner.Name, name = BossConfig.Name, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth })
+			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.summoner.Name, name = BossConfig.Name, model = f.model, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth })
 		end
 	end)
 

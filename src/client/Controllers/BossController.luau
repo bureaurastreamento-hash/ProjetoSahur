@@ -6,6 +6,7 @@
 ]]
 
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
@@ -24,6 +25,54 @@ local fill: Frame
 local subLabel: TextLabel
 local banner: TextLabel
 local bannerToken = 0
+local locomotionConn: RBXScriptConnection? -- Idle/Walk do boss ativo
+
+local MOVING_SPEED = 1.5 -- velocidade horizontal do HRP acima disso = andando
+
+--- Idle/Walk do boss (Assets.Animations.Boss.Idle/Walk; id vazio = não toca). O boss é movido pelo
+--- servidor, então o cliente decide pela velocidade do HRP em vez do input. Ataques (Action) ficam por cima.
+local function stopLocomotion()
+	if locomotionConn then
+		locomotionConn:Disconnect()
+		locomotionConn = nil
+	end
+end
+
+local function attachLocomotion(model: Model)
+	stopLocomotion()
+	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local idle = FX.PlayAnimation(model, "Boss", "Idle", true, Enum.AnimationPriority.Idle)
+	local walk = FX.PlayAnimation(model, "Boss", "Walk", true, Enum.AnimationPriority.Movement)
+	if not idle and not walk then
+		return
+	end
+	if walk then
+		walk:Stop(0)
+	end
+	local moving = false
+	locomotionConn = RunService.Heartbeat:Connect(function()
+		if not model.Parent or not root.Parent then
+			stopLocomotion()
+			return
+		end
+		local v = root.AssemblyLinearVelocity
+		local now = Vector3.new(v.X, 0, v.Z).Magnitude > MOVING_SPEED
+		if now == moving then
+			return
+		end
+		moving = now
+		if walk then
+			if moving then
+				walk:Play(0.15)
+			else
+				walk:Stop(0.15)
+			end
+		end
+	end)
+end
 
 local function get(parent: Instance, name: string): Instance
 	local child = parent:WaitForChild(name, 10)
@@ -55,6 +104,9 @@ local function onNotifyBoss(event: string, data: any)
 		nameLabel.Text = tostring(data.name or "Boss")
 		setHealth(tonumber(data.health) or 0, tonumber(data.maxHealth) or 1)
 		bar.Visible = true
+		if typeof(data.model) == "Instance" and data.model:IsA("Model") then
+			attachLocomotion(data.model :: Model)
+		end
 		showBanner(("%s invocou %s!"):format(tostring(data.by), tostring(data.name)), 4)
 		FX.PlaySoundUI("Match", "RoundStart")
 		FX.Shake(0.6, 0.6)
@@ -110,6 +162,7 @@ local function onNotifyBoss(event: string, data: any)
 			end
 		end
 	elseif event == "defeated" then
+		stopLocomotion()
 		bar.Visible = false
 		local lines = { "BOSS DERROTADO!" }
 		local mine = 0
@@ -136,6 +189,7 @@ local function onNotifyBoss(event: string, data: any)
 		showBanner(table.concat(lines, "\n"), 6)
 		FX.PlaySoundUI("Match", "Victory")
 	elseif event == "despawned" then
+		stopLocomotion()
 		bar.Visible = false
 		showBanner("O boss foi embora...", 3)
 	elseif event == "denied" then
