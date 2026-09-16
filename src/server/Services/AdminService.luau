@@ -625,6 +625,18 @@ local DataStoreService = game:GetService("DataStoreService")
 local ANNOUNCE_TOPIC = "SahurAnnounce"
 local BAN_STORE = "Bans_v1"
 
+--- Módulos que dependem (indiretamente) deste: carregados só na hora (evita ciclo de require).
+local lazyCache: { [string]: any } = {}
+local function lazyRequire(name: string): any
+	if lazyCache[name] == nil then
+		local ok, mod = pcall(function()
+			return (require :: any)(script.Parent:WaitForChild(name))
+		end)
+		lazyCache[name] = if ok then mod else false
+	end
+	return lazyCache[name] or nil
+end
+
 local function textArg(args: { [string]: any }): string?
 	local t = args.text
 	if typeof(t) ~= "string" then
@@ -747,6 +759,23 @@ local function checkBan(player: Player)
 			player:Kick(("Você está banido: %s%s"):format(tostring(entry.reason), if until_ > 0 then (" (até %s)"):format(os.date("%d/%m/%Y", until_)) else ""))
 		end
 	end
+end
+
+global.Trailer = function()
+	local TrailerService = lazyRequire("TrailerService")
+	if not TrailerService then
+		return false, "TrailerService não carregou"
+	end
+	local ok, msg = TrailerService.Run()
+	return ok, msg
+end
+
+global.TrailerStop = function()
+	local TrailerService = lazyRequire("TrailerService")
+	if TrailerService then
+		TrailerService.Stop()
+	end
+	return true, "trailer interrompido"
 end
 
 global.RespawnArrow = function()

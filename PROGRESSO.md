@@ -276,6 +276,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
      `Bans_v1`, kick, checado no PlayerAdded; dias = 0 permanente), **Desbanir** (nome na caixa). Banner na HUD
      (`NotifyAnnouncement`). Painel virou ScrollingFrame (92% da tela, rola). `AbilityService.Use` p/ testes.
    - Aviso: `Boss.Swipe/Idle/Roar` (animações do BossModel antigo) não valem mais — o boss é o rig por peças.
+4d. **TRAILER por script** (`TrailerService` + `TrailerController`, DEV → "TRAILER (~70 s)" / "Parar trailer"):
+   ambiente controlado (bonecos desligados, jogadores estacionados no céu, hora fixa), 4 atores NPC R6 na
+   praça + 1 no santuário; linha do tempo que dispara os MESMOS eventos do jogo (NotifyAttack/Damage/Ability/
+   Boss) → animações, VFX, cutscene do despertar e transformação são as reais. Roteiro: voo sobre o mapa →
+   combo com finisher → parry/crítico/Black Flash → Quake/Tempest/Meteoro/Fúria → DESPERTAR (câmera orbitando)
+   → anoitece, voo até o altar (ator com a flecha) → transformação vista de fora (câmera passa por ele) →
+   B.I.G. em ação (soco, Esmagar, Frenesi) → Arena_Antiga (cópia no céu, voo) → cartela final e fade.
+   Cliente: HUD/topbar escondidos, barras pretas, cartelas de texto, câmera Scriptable (dolly/órbita/look).
+   Testado via MCP: roda 70 s, limpa tudo (atores, cópia da arena, hora automática, bonecos, jogador).
+   Gravar com OBS. Ajustes de ritmo/ângulo: editar `run()` em TrailerService (shot = CFrames/órbita).
 5. **Arena_Antiga = mapa da guerra de clã**: `tools/montar_arena_antiga.luau` (rodei via MCP) recoloriu os muros
    do dono, gerou interior (piso, plataforma central B com rampas, plataformas A/C, cobertura espelhada,
    colunas quebradas, tochas, bandeiras azul/vermelha), `CapturePoints` A/B/C e `Spawns` (Spawn1 oeste /

@@ -50,7 +50,7 @@ local SIMPLE_COMMANDS = {
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
-	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm",
+	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerStop",
 }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
 local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban" }
