@@ -61,13 +61,17 @@ ainda não existe, mesmo que pareça óbvio.
 - Árvore que o Rojo está servindo: API msgpack em `http://localhost:34872/api/rojo` e
   `/api/read/<id>` (decoder em scratchpad/rojotree.py quando existir).
 - `ss -tnp | grep 34872` mostra se o Studio está conectado ao Rojo.
-- O place OFICIAL é o 126518739287432 (jogo de GRUPO; o 85844807133499 é o antigo, não usar).
+- O place OFICIAL é o 85844807133499 (jogo de GRUPO, creator 9835819, Team Create; confirmado pelo dono em
+  2026-09-16 — o id 126518739287432 anotado antes estava errado). Conferir `game.PlaceId` via MCP antes de mexer.
   O `default.project.json` DEVE continuar 100% aditivo (`$ignoreUnknownInstances` em tudo).
 - Jogo de grupo: animações/sons só carregam se publicados com o GRUPO como criador. Rig R6
   (Game Settings > Avatar); o `AnimationCheckService` imprime `[AnimCheck]` no Studio (rig/acesso) e o
   `HealthService` avisa se o jogador nasceu R15.
-- O place veio de um pack e tem lixo alheio (Workspace."Animation Maker", 2º TopbarPlus "Example",
-  Workspace.Textures): não é nosso, o dono apaga no Studio.
+- Lixo dos packs (Workspace.Textures, ServerStorage.Import = 120k instâncias, 3,7 GB de RAM) foi apagado
+  em 2026-09-16 via MCP. NUNCA inserir packs inteiros no place; extrair só o necessário para `packs/ParaImportar`.
+- MCP do Roblox Studio disponível (`mcp__roblox-studio__*`): `run_code` inspeciona/edita o DataModel de edição;
+  `run_script_in_play_mode` roda no servidor do Play e devolve os logs (usar `print`, o `return` se perde).
+  Não encadear duas sessões de play seguidas (derrubou o Studio). Apagar coisas do place = pedir antes.
 
 ## Assets externos e UI
 - `AssetsPacks/` (ignorado no git) tem packs; ler com `python3 tools/rbx_tree.py arquivo` e

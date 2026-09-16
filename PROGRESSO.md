@@ -224,6 +224,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
   a equipe precisa animar o Roar em cima do BossModel.
 - `Shared/Block` e `Shared/Idle` com duração 0 continuam (esperado no place antigo; reconferir no do grupo).
 
+### 2026-09-16 (tarde) — Studio pesado (3,7 GB RAM, VRAM cheia, crash ao abrir) — RESOLVIDO
+- Causa: `Workspace.Textures` (21.559 instâncias do Particle Pack: 13.568 Parts, 4.306 Decals, 518 emissores,
+  2.743 texturas únicas renderizando) e `ServerStorage.Import` (98.763 instâncias: 76.510 Poses dos
+  KeyframeSequences + packs JJS/Shadow inteiros). Apagados via MCP (Ctrl+Z desfaz). 130.540 → 10.216 instâncias.
+- A memória só cai depois de SALVAR e REABRIR (o histórico de Desfazer segura as instâncias apagadas).
+- Plugins carregados: Rojo, Moon Animator 2, MCP, Ro-Defender. O Ro-Defender é inútil ("0 vírus removidos")
+  e roda a cada Play — recomendo desinstalar. Nossos scripts somam só 929 KB.
+- Sobrou no place: `Workspace.humanoider_20` (456, rig de animação da equipe?), `ServerStorage.BossModel - save`
+  (backup), `RBX_ANIMSAVES` (Moon/Animation Editor), `BestWalkAnimR6`, `C00lkidd M4`, `Barriers` (vazios). Não mexi.
+
 ### Feito 2026-09-16 (tarde) — itens 2, 3 e 4 das decisões
 - **Fade de áudio** (`FX.playClone`): Volume 0→alvo em `FX.SoundFadeIn` (0,15 s) e alvo→0 nos últimos
   `FX.SoundFadeOut` (0,3 s), via TweenService; sons curtos (< 0,45 s) e em loop não fazem fade-out.
