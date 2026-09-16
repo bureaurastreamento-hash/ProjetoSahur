@@ -15,6 +15,16 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado do design (2026-09-16, noite) — decisões novas
+- Foco do jogo = anime **JoJo**. Bosses feitos por **PEÇAS do Roblox** (`BossRigs.luau`, estilo JJS), nunca mesh
+  externo; 1º boss = Notorious B.I.G. Ritual da **flecha**: quem acha a flecha vira o boss à noite no altar
+  (`RitualService` → `BossFormService`). Ciclo dia/noite no `EnvironmentService` (dev congela pelo painel).
+- VFX são **compostos por código** (`VFXLibrary.luau` + `FX.PlayComposed`, meshes/texturas por ID); packs
+  antigos entram como camada `pack`. Preview no F7 (`Lib/…`). Nada de VFX pesado no Workspace.
+- `Arena_Antiga` (ServerStorage.Maps, `WarOnly`) é o mapa da guerra de clã; interior gerado por
+  `tools/montar_arena_antiga.luau` (roda no Studio via MCP).
+- Trailer por script: DEV → TRAILER (`TrailerService`/`TrailerController`); inventário em `TRAILER_ASSETS.md`.
+
 ## Estado do design (2026-09-15, noite) — decisões fechadas com o dono
 - Controles: Mouse1 soco (segurar = combo de 4; subindo = uppercut, caindo = downslam), F block
   (só frontal; parry = crítico), Q dash universal (WASD relativo à câmera, cooldowns lateral ×
