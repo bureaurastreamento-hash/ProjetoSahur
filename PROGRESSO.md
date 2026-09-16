@@ -234,7 +234,17 @@ Memória entre sessões. Atualizar depois de cada mudança.
 - Sobrou no place: `Workspace.humanoider_20` (456, rig de animação da equipe?), `ServerStorage.BossModel - save`
   (backup), `RBX_ANIMSAVES` (Moon/Animation Editor), `BestWalkAnimR6`, `C00lkidd M4`, `Barriers` (vazios). Não mexi.
 
-### 2026-09-16 (16:00) — Cutscene do DESPERTAR (decisão 1) — FALTA O DONO VER
+### 2026-09-16 (16:20) — ajustes do dono após ver a cutscene
+- Sem som ao ENCHER a carga (HUD só mostra "ULT PRONTA — G"); sons da ult tocam ao ativar (cutscene).
+- `Assets.FixedSounds` (Awakening, Awakening_Burst, Awakening_End, UltReady): nunca sorteiam variação `Nome2/3`.
+  Socos/ataques continuam sorteando.
+- **Assets por personagem para TUDO**: `Assets.ResolveFolder(kind, "Shared", name, character)` — se existir
+  `Assets.Animations.<CharacterId>.<Nome>` (ou Sounds) com id, usa; senão Shared. Vale para M1_1..4, Hit,
+  Block, Parry, Dash, Idle/Walk/Run (MovementController), sons. Basta a equipe criar a pasta/nome no
+  `Animations.model.json` (ex.: Swift/Walk, Swift/M1_1). NPC/boss: atributo CharacterId no Model.
+- Pendente do dono (item 7 dos planos): Menu DEV → Administração (mensagem global/servidor/jogador, ban, kick).
+
+### 2026-09-16 (16:00) — Cutscene do DESPERTAR (decisão 1) — dono aprovou ("ficou top")
 - Servidor (`AbilityService.onRequestAwaken`): G = cutscene de `CombatConfig.Awakening.Cutscene.Duration` (3,2 s):
   Stun("awakening") + atributo `CutsceneUntil` (WalkSpeed 0 no `restoreWalkSpeed`) + i-frames; no `BurstAt`
   (2,2 s) quem estiver a 12 studs leva 5 de dano + empurrão (`Hitbox.Around`); o modo (buff/kit) começa DEPOIS.

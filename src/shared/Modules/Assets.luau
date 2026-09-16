@@ -24,6 +24,7 @@
 	    └── <CharacterId>  (Sound) <AbilityId>, <AbilityId>_Hit
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Log = require(script.Parent:WaitForChild("Log"))
@@ -52,6 +53,35 @@ local function warnOnce(path: string)
 end
 
 --- Animation em Assets.Animations.<folder>.<name>. nil se não existir ou se o AnimationId ainda estiver vazio.
+--- Id do personagem que este Model está usando (jogador: atributo CharacterId no Player; NPC/boss:
+--- atributo CharacterId no próprio Model). nil = sem personagem (boneco genérico).
+function Assets.CharacterIdOf(character: Model?): string?
+	if not character then
+		return nil
+	end
+	local player = Players:GetPlayerFromCharacter(character)
+	local id = if player then player:GetAttribute("CharacterId") else character:GetAttribute("CharacterId")
+	return if typeof(id) == "string" and id ~= "" then id else nil
+end
+
+--- Cada personagem pode ter versão própria de QUALQUER asset compartilhado (decisão do dono 2026-09-16:
+--- bater, apanhar, andar, correr, block, dash... tudo por personagem). Pedido em "Shared" → se existir
+--- Assets.<kind>.<CharacterId>.<name> com id, usa o do personagem; senão o Shared.
+function Assets.ResolveFolder(kind: string, folder: string, name: string, character: Model?): string
+	if folder ~= "Shared" then
+		return folder
+	end
+	local id = Assets.CharacterIdOf(character)
+	if not id then
+		return folder
+	end
+	local inst = find(kind, id, name)
+	if inst and ((inst:IsA("Animation") and inst.AnimationId ~= "") or (inst:IsA("Sound") and inst.SoundId ~= "")) then
+		return id
+	end
+	return folder
+end
+
 function Assets.GetAnimation(folder: string, name: string): Animation?
 	local inst = find("Animations", folder, name)
 	if inst and inst:IsA("Animation") and inst.AnimationId ~= "" then
@@ -210,13 +240,25 @@ function Assets.GetVFX(folder: string, name: string): Instance?
 end
 
 --- Sound em Assets.Sounds.<folder>.<name>. nil se não existir ou se o SoundId estiver vazio.
+--- Sons que NUNCA sorteiam variação (cutscenes/animações: sempre o mesmo som, decisão do dono).
+--- Socos e ataques continuam sorteando `Nome2`, `Nome3`...
+Assets.FixedSounds = {
+	Awakening = true,
+	Awakening_Burst = true,
+	Awakening_End = true,
+	UltReady = true,
+}
+
 --- Som por nome. Variações `Nome2`, `Nome3`, ... (com SoundId) entram no sorteio junto com `Nome`,
---- para o mesmo golpe não repetir sempre o mesmo som.
+--- para o mesmo golpe não repetir sempre o mesmo som (exceto Assets.FixedSounds).
 function Assets.GetSound(folder: string, name: string): Sound?
 	local inst = find("Sounds", folder, name)
 	if not (inst and inst:IsA("Sound") and inst.SoundId ~= "") then
 		warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
 		return nil
+	end
+	if Assets.FixedSounds[name] then
+		return inst
 	end
 	local options = { inst }
 	for i = 2, 6 do

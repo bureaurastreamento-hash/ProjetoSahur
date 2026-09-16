@@ -161,6 +161,7 @@ end
 
 --- Toca Assets.Animations.<folder>.<name>. Retorna a track (ou nil se não existir).
 function FX.PlayAnimation(character: Model, folder: string, name: string, looped: boolean?, priority: Enum.AnimationPriority?): AnimationTrack?
+	folder = Assets.ResolveFolder("Animations", folder, name, character) -- versão do personagem, se houver
 	local track = trackFor(character, folder, name)
 	if not track then
 		return nil
@@ -185,6 +186,7 @@ function FX.PlayAnimation(character: Model, folder: string, name: string, looped
 end
 
 function FX.StopAnimation(character: Model, folder: string, name: string)
+	folder = Assets.ResolveFolder("Animations", folder, name, character)
 	local byName = tracks[character]
 	local track = byName and byName[folder .. "/" .. name]
 	if track and track.IsPlaying then
@@ -602,7 +604,7 @@ end
 --- Som 3D em Assets.Sounds.<folder>.<name>, tocado no personagem.
 --- Retorna true se o som existia (tem SoundId) e foi tocado.
 function FX.PlaySoundAt(character: Model, folder: string, name: string): boolean
-	local template = Assets.GetSound(folder, name)
+	local template = Assets.GetSound(Assets.ResolveFolder("Sounds", folder, name, character), name)
 	local root = character:FindFirstChild("HumanoidRootPart")
 	if template and root then
 		playClone(template, root)

@@ -721,7 +721,7 @@ function HUDController.Start()
 			task.delay(0.3, function()
 				ultSlot.BackgroundColor3 = slots[1].BackgroundColor3
 			end)
-			FX.PlaySoundUI("Shared", "UltReady")
+			-- sem som aqui (decisão do dono): os sons da ult tocam quando ATIVA (G), na cutscene
 			showBanner("ULT PRONTA — G", 1.5)
 		elseif not full and wasFull then
 			if ultPulse then

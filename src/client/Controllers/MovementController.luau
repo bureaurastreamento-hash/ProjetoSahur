@@ -66,7 +66,8 @@ type MoveAnims = {
 local anims: MoveAnims? = nil
 
 local function loadTrack(animator: Animator, name: string): AnimationTrack?
-	local anim = Assets.GetAnimation(SHARED, name)
+	local character = animator:FindFirstAncestorOfClass("Model")
+	local anim = Assets.GetAnimation(Assets.ResolveFolder("Animations", SHARED, name, character), name)
 	if not anim then
 		return nil
 	end
