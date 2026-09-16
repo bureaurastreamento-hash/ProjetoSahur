@@ -200,7 +200,45 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
-## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado)
+## Retomar aqui (última sessão: 2026-09-16, ~16:30 — tudo commitado e no GitHub, `b107863`)
+
+### COMEÇAR POR AQUI na próxima sessão — observações do dono (2026-09-16, fim da tarde), SEM mexer ainda
+1. **Cutscene da ult curta demais**: 3,2 s é pouco; os áudios (início/carga/estouro) ficam amontoados e sem
+   construção. Alongar (`CombatConfig.Awakening.Cutscene.Duration/BurstAt` — pensar em ~6–8 s: início →
+   carga longa crescendo → estouro → pose), e ajustar as poses/câmera do `CutsceneController` para o novo tempo.
+   Sons: início no t=0, carga (se houver id) durante, estouro no BurstAt, fim ao acabar o modo.
+2. **Ult ativada NO AR**: a câmera ficou onde o personagem estava e ele caiu fora do quadro. Fazer: ou a câmera
+   segue o HRP a cada frame (RenderStepped recalculando `camAt` relativo ao root), ou o servidor prende o
+   personagem no ar (AssemblyLinearVelocity 0 + âncora/BodyPosition durante a cutscene) — preferir prender +
+   câmera seguindo (as duas coisas).
+3. **Prioridade/invencibilidade** (não testado, mas garantir): NÃO pode levar golpe (a) durante a ativação da
+   ult/cutscene, (b) enquanto executa um agarrão (Grab: do início ao release), (c) enquanto está no meio do
+   combo de M1 batendo em alguém (o combo tem que "dar jus": quem está sendo comboado não sai, e um terceiro
+   não interrompe o atacante com um soco qualquer). Conferir `RagdollService.GrantIFrames`, `HealthService`/
+   `CombatService.ResolveHit` e o hitstun; definir regra clara: cutscenes e animações complexas têm prioridade.
+4. **VFX mal colocados/sem sentido nos ataques** (padrões demais): revisar `Assets.VFXAliases` golpe a golpe
+   usando o testador de VFX do painel DEV (F7) e os assets que o dono separou para isso. Trocar por efeitos que
+   combinem com cada ataque.
+5. **Sprite-sheets parados**: alguns VFX dos packs são flipbooks (ParticleEmitter com `FlipbookLayout`/
+   `FlipbookMode`, texturas em grade) e estão aparecendo fixos — conferir se `podar_vfx.luau` preservou as
+   propriedades Flipbook*/`FlipbookFramerate`/`FlipbookStartRandom` e se `FX.SpawnVFXTemplate` não zera nada;
+   testar no preview.
+6. Depois: item 7 dos planos (Menu DEV → Administração: mensagem global via MessagingService, do servidor, para
+   um jogador, ban DataStore + kick, kick), item 5 (agarrão soldado no servidor + anim Shared/Grabbed), item 6
+   (menus minimalistas), `AwakenedEffect` faltando em vários personagens, e a lista de animações/VFX/sons por
+   ação (o `[Assets] não encontrado` do Output).
+
+### O que foi feito em 2026-09-16 (tarde) — resumo
+- MCP do Roblox Studio ligado (ver notas em CLAUDE.md e memória): leio o place, dou Play e leio o Output sozinho.
+  Regras: conferir processos/modo antes de Play; nunca encadear sessões; apagar do place só com autorização.
+- Altar/santuário do boss na posição do dono (gerador), ClanBoard criado. AnimCheck reconhece o rig do boss
+  (Boss.Roar é R6 → precisa ser animado no BossModel).
+- Fade de áudio; Swift Q = Piscar; teleport real; hit detection estilo TSB (previsão no clique + hitbox no
+  cliente validada por caixa tolerante); sombras; EnvironmentService sem duplicar Bloom/fog zerado.
+- Studio: 130k → 9,7k instâncias (packs apagados), plugins limpos, StreamingEnabled off, mapa de dia; 3,7 → 2,4 GB.
+  WebView do Studio (Toolbox/Assistant) ainda come ~3 GB: fechar esses painéis.
+- Cutscene do Despertar (aprovada, ajustes acima); sons da ult fixos e só ao ativar; assets por personagem
+  para tudo (`Assets.ResolveFolder`).
 
 ### Onde estamos (resumo em 30 segundos)
 - Jogo em mapa livre, 24 services / 15 controllers bootam limpos (Output 2026-09-16 00:10). Studio agora em
