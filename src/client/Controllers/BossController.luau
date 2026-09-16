@@ -7,6 +7,7 @@
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
@@ -194,43 +195,110 @@ local function onNotifyBoss(event: string, data: any)
 		showBanner("O boss foi embora...", 3)
 	elseif event == "denied" then
 		showBanner(tostring(data.reason), 3)
-	elseif event == "ritual" then
-		local c, r = tonumber(data.collected) or 0, tonumber(data.required) or 0
-		if data.complete then
-			showBanner(if data.night then "Ritual completo — o altar está PRONTO!" else "Ritual completo — o altar desperta à NOITE", 4)
+	elseif event == "arrow" then
+		if data.state == "spawned" then
+			showBanner("Uma FLECHA caiu no mapa — procure as lanternas", 4)
+		elseif data.state == "taken" then
+			local me = tostring(data.by) == localPlayer.Name
+			if me then
+				showBanner(if data.night then "Você tem a FLECHA — vá ao altar e segure E" else "Você tem a FLECHA — leve ao altar à NOITE", 5)
+			else
+				showBanner(("%s pegou a FLECHA — derrube antes que vire o boss!"):format(tostring(data.by)), 4)
+			end
 			FX.PlaySoundUI("Match", "RoundStart")
-		else
-			showBanner(("%s achou uma caveira (%d/%d)"):format(tostring(data.by), c, r), 3)
+		elseif data.state == "dropped" then
+			showBanner(("%s caiu — a FLECHA está no chão!"):format(tostring(data.by)), 4)
+		end
+	elseif event == "transforming" then
+		showBanner(("%s está virando %s!"):format(tostring(data.by), tostring(data.name)), tonumber(data.seconds) or 2.5)
+		FX.Shake(0.5, 1.0)
+		if typeof(data.character) == "Instance" and data.character:IsA("Model") then
+			FX.SetAura(data.character :: Model, Color3.fromRGB(196, 66, 108), "Transform")
+			FX.SpawnVFX(data.character :: Model, "Shared", "Awakening_Charge", true)
+			task.delay(tonumber(data.seconds) or 2.5, function()
+				FX.SetAura(data.character :: Model, nil, "Transform")
+			end)
 		end
 	end
 end
 
--- Caveiras do ritual (tag RitualSkull, RitualService): flutuam e giram no cliente
+-- ---------------------------------------------------------------------------
+-- Rigs por peças (BossRigs): animação PROCEDURAL nos Motor6D (atributo BossRig no Model).
+-- Cada cliente anima todos os rigs que vê: respiração do corpo, cone balançando, barris "pisando"
+-- quando anda, cauda ondulando. Só mexe em C0 (não replica; é visual).
+-- ---------------------------------------------------------------------------
 local CollectionService = game:GetService("CollectionService")
-local SKULL_TAG = "RitualSkull"
-local skullBase: { [Model]: CFrame } = {}
 
-local function trackSkull(inst: Instance)
-	if inst:IsA("Model") and inst.PrimaryPart then
-		skullBase[inst] = inst.PrimaryPart.CFrame
+type RigAnim = { model: Model, root: BasePart, motors: { [string]: Motor6D }, base: { [string]: CFrame }, phase: number }
+local rigs: { [Model]: RigAnim } = {}
+
+local function trackRig(model: Model)
+	if rigs[model] or model:GetAttribute("BossRig") == nil then
+		return
 	end
+	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local anim: RigAnim = { model = model, root = root, motors = {}, base = {}, phase = math.random() * 6 }
+	for _, d in model:GetDescendants() do
+		if d:IsA("Motor6D") then
+			anim.motors[d.Name] = d
+			anim.base[d.Name] = d.C0
+		end
+	end
+	rigs[model] = anim
 end
 
-local function untrackSkull(inst: Instance)
-	if inst:IsA("Model") then
-		skullBase[inst] = nil
-	end
-end
-
-local function animateSkulls()
+local function animateRigs()
 	local t = os.clock()
-	for model, base in skullBase do
-		local primary = model.PrimaryPart
-		if not primary or not model.Parent then
-			skullBase[model] = nil
+	for model, a in rigs do
+		if not model.Parent then
+			rigs[model] = nil
 			continue
 		end
-		primary.CFrame = base * CFrame.new(0, math.sin(t * 2 + base.X) * 0.35, 0) * CFrame.Angles(0, t * 1.2, 0)
+		local v = a.root.AssemblyLinearVelocity
+		local speed = Vector3.new(v.X, 0, v.Z).Magnitude
+		local walk = math.clamp(speed / 12, 0, 1)
+		local tt = t + a.phase
+		local breathe = math.sin(tt * 1.6) * 0.12
+		local step = tt * 7
+		local function set(name: string, cf: CFrame)
+			local m = a.motors[name]
+			local b = a.base[name]
+			if m and b then
+				m.C0 = b * cf
+			end
+		end
+		set("Root", CFrame.new(0, breathe + math.abs(math.sin(step)) * 0.35 * walk, 0) * CFrame.Angles(0, 0, math.sin(step) * 0.05 * walk))
+		set("Cone", CFrame.Angles(math.sin(tt * 1.2) * 0.04 - walk * 0.08, math.sin(tt * 0.9) * 0.05, math.sin(step) * 0.06 * walk))
+		set("LimbFL", CFrame.new(0, math.max(0, math.sin(step)) * 0.9 * walk, math.sin(step) * 0.8 * walk) * CFrame.Angles(math.sin(step) * 0.3 * walk, 0, 0))
+		set("LimbBR", CFrame.new(0, math.max(0, math.sin(step)) * 0.9 * walk, math.sin(step) * 0.8 * walk) * CFrame.Angles(math.sin(step) * 0.3 * walk, 0, 0))
+		set("LimbFR", CFrame.new(0, math.max(0, -math.sin(step)) * 0.9 * walk, -math.sin(step) * 0.8 * walk) * CFrame.Angles(-math.sin(step) * 0.3 * walk, 0, 0))
+		set("LimbBL", CFrame.new(0, math.max(0, -math.sin(step)) * 0.9 * walk, -math.sin(step) * 0.8 * walk) * CFrame.Angles(-math.sin(step) * 0.3 * walk, 0, 0))
+		set("Tail", CFrame.Angles(math.sin(tt * 2.2) * 0.12, math.sin(tt * 1.7) * 0.25 + math.sin(step) * 0.1 * walk, 0))
+	end
+end
+
+-- Flecha do ritual no chão (tag RitualArrow): flutua e gira
+local ARROW_TAG = "RitualArrow"
+local arrowBase: { [Model]: CFrame } = {}
+
+local function trackArrow(inst: Instance)
+	if inst:IsA("Model") and inst.PrimaryPart then
+		arrowBase[inst] = inst.PrimaryPart.CFrame
+	end
+end
+
+local function animateArrows()
+	local t = os.clock()
+	for model, base in arrowBase do
+		local primary = model.PrimaryPart
+		if not primary or not model.Parent then
+			arrowBase[model] = nil
+			continue
+		end
+		primary.CFrame = base * CFrame.new(0, math.sin(t * 2) * 0.35, 0) * CFrame.Angles(0, t * 1.5, 0)
 	end
 end
 
@@ -242,12 +310,25 @@ function BossController.Start()
 	subLabel = get(bar, "Sub") :: TextLabel
 	banner = get(gui, "BossBanner") :: TextLabel
 	Remotes.GetEvent(Remotes.Events.NotifyBoss).OnClientEvent:Connect(onNotifyBoss)
-	for _, inst in CollectionService:GetTagged(SKULL_TAG) do
-		trackSkull(inst)
+	for _, inst in CollectionService:GetTagged(ARROW_TAG) do
+		trackArrow(inst)
 	end
-	CollectionService:GetInstanceAddedSignal(SKULL_TAG):Connect(trackSkull)
-	CollectionService:GetInstanceRemovedSignal(SKULL_TAG):Connect(untrackSkull)
-	RunService.Heartbeat:Connect(animateSkulls)
+	CollectionService:GetInstanceAddedSignal(ARROW_TAG):Connect(trackArrow)
+	-- rigs por peças: qualquer Model com atributo BossRig que aparecer no Workspace
+	for _, d in Workspace:GetDescendants() do
+		if d:IsA("Model") and d:GetAttribute("BossRig") ~= nil then
+			trackRig(d)
+		end
+	end
+	Workspace.DescendantAdded:Connect(function(d: Instance)
+		if d:IsA("Model") and d:GetAttribute("BossRig") ~= nil then
+			task.defer(trackRig, d)
+		end
+	end)
+	RunService.Heartbeat:Connect(function()
+		animateArrows()
+		animateRigs()
+	end)
 	Log.debug("[BossController] pronto")
 end
 

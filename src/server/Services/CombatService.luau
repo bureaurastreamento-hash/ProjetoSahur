@@ -108,7 +108,10 @@ local function restoreWalkSpeed(player: Player)
 	elseif os.clock() < state.hitStunUntil then
 		humanoid.WalkSpeed = CombatConfig.HitStun.WalkSpeed
 	else
-		local base = if player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed else CombatConfig.WalkSpeed
+		local formSpeed = character and character:GetAttribute("WalkSpeed")
+		local base = if typeof(formSpeed) == "number" then formSpeed
+			elseif player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed
+			else CombatConfig.WalkSpeed
 		humanoid.WalkSpeed = base * mult
 	end
 end
@@ -326,6 +329,10 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	local devMult = attacker:GetAttribute("DevDamageMult")
 	if typeof(devMult) == "number" then
 		damage *= devMult -- menu de desenvolvedor
+	end
+	local formMult = attacker:GetAttribute("FormDamageMult")
+	if typeof(formMult) == "number" and opts.IsM1 then
+		damage *= formMult -- forma de boss (BossFormService): socos pesados
 	end
 
 	-- Crítico do parry (só M1): ×3, ou Black Flash ×6 se for o 2º crítico seguido

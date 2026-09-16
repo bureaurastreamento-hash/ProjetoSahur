@@ -698,6 +698,33 @@ local function onRequestAwaken(player: Player)
 	end)
 end
 
+--- Forma temporária (BossFormService): troca o personagem SEM respawn (o Model já foi trocado por quem
+--- chamou). `characterId` nil = volta ao personagem escolhido antes. Zera cooldowns/carga.
+local formPrevious: { [Player]: string } = {}
+function AbilityService.SetForm(player: Player, characterId: string?)
+	local state = getState(player)
+	if characterId then
+		if not formPrevious[player] then
+			formPrevious[player] = state.characterId
+		end
+		state.characterId = characterId
+	else
+		state.characterId = formPrevious[player] or state.characterId
+		formPrevious[player] = nil
+	end
+	state.cooldownReadyAt = {}
+	state.awakenedUntil = 0
+	state.damageMultiplierUntil = 0
+	state.incomingMultiplierUntil = 0
+	setEnergy(player, 0)
+	player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
+	player:SetAttribute("CharacterId", state.characterId)
+end
+
+function AbilityService.IsInForm(player: Player): boolean
+	return formPrevious[player] ~= nil
+end
+
 local function onRequestSelectCharacter(player: Player, characterId: any)
 	if not selectLimiter:Allow(player) then
 		return
@@ -709,8 +736,8 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	if state.characterId == characterId then
 		return
 	end
-	if player:GetAttribute("InMatch") == true then
-		return -- troca só fora do round
+	if player:GetAttribute("InMatch") == true or formPrevious[player] then
+		return -- troca só fora do round / fora da forma de boss
 	end
 	if not DataService.HasCharacter(player, characterId) then
 		Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied):FireClient(player, characterId, "locked")

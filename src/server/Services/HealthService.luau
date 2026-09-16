@@ -104,9 +104,12 @@ local function setupCharacter(player: Player, character: Model)
 			else "o CharacterService não montou o rig (ver warns acima) ou algum script do place recarregou o personagem"
 		warn(("[HealthService] rig do jogador é %s; o projeto foi feito para R6 (CharacterService força R6). As animações da equipe (R6) NÃO vão tocar. Causa provável: %s."):format(humanoid.RigType.Name, causa))
 	end
-	humanoid.MaxHealth = CombatConfig.MaxHealth
-	humanoid.Health = CombatConfig.MaxHealth
-	humanoid.WalkSpeed = CombatConfig.WalkSpeed
+	-- forma de boss (BossFormService) traz a própria vida/velocidade no Model
+	local maxOverride = character:GetAttribute("MaxHealth")
+	local speedOverride = character:GetAttribute("WalkSpeed")
+	humanoid.MaxHealth = if typeof(maxOverride) == "number" then maxOverride else CombatConfig.MaxHealth
+	humanoid.Health = humanoid.MaxHealth
+	humanoid.WalkSpeed = if typeof(speedOverride) == "number" then speedOverride else CombatConfig.WalkSpeed
 	humanoid.BreakJointsOnDeath = false
 
 	character:SetAttribute(ATTR_LAST_ATTACKER, nil)
@@ -128,7 +131,7 @@ local function setupCharacter(player: Player, character: Model)
 	end)
 
 	notifyHealth:FireClient(player, humanoid.Health, humanoid.MaxHealth)
-	Log.debug(("[HealthService] %s pronto: %d HP"):format(player.Name, CombatConfig.MaxHealth))
+	Log.debug(("[HealthService] %s pronto: %d HP"):format(player.Name, humanoid.MaxHealth))
 end
 
 -- ---------------------------------------------------------------------------

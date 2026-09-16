@@ -19,7 +19,7 @@
       ],
       [
        0,
-       860
+       900
       ]
      ]
     },
@@ -4233,10 +4233,10 @@
      ]
     },
     {
-     "name": "CompleteRitual",
+     "name": "GiveArrow",
      "className": "TextButton",
      "properties": {
-      "Name": "CompleteRitual",
+      "Name": "GiveArrow",
       "Size": {
        "UDim2": [
         [
@@ -4268,7 +4268,7 @@
         0.35
        ]
       },
-      "Text": "Completar ritual",
+      "Text": "Me dar a flecha",
       "TextSize": 12,
       "Font": "GothamBold",
       "TextColor3": {
@@ -4300,10 +4300,10 @@
      ]
     },
     {
-     "name": "RespawnSkulls",
+     "name": "RespawnArrow",
      "className": "TextButton",
      "properties": {
-      "Name": "RespawnSkulls",
+      "Name": "RespawnArrow",
       "Size": {
        "UDim2": [
         [
@@ -4335,7 +4335,141 @@
         0.17
        ]
       },
-      "Text": "Sortear caveiras",
+      "Text": "Sortear flecha",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "BecomeBoss",
+     "className": "TextButton",
+     "properties": {
+      "Name": "BecomeBoss",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         143
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         163
+        ],
+        [
+         0,
+         714
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.55,
+        0.35
+       ]
+      },
+      "Text": "Virar Notorious BIG",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "EndBossForm",
+     "className": "TextButton",
+     "properties": {
+      "Name": "EndBossForm",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         143
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         714
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.75,
+        0.25,
+        0.25
+       ]
+      },
+      "Text": "Encerrar forma",
       "TextSize": 12,
       "Font": "GothamBold",
       "TextColor3": {
@@ -4387,7 +4521,7 @@
        "UDim2": [
         [
          0,
-         163
+         465
         ],
         [
          0,
@@ -4454,11 +4588,11 @@
        "UDim2": [
         [
          0,
-         314
+         12
         ],
         [
          0,
-         714
+         746
         ]
        ]
       },
@@ -4525,7 +4659,7 @@
         ],
         [
          0,
-         750
+         782
         ]
        ]
       },
@@ -4558,7 +4692,7 @@
         ],
         [
          1,
-         -780
+         -812
         ]
        ]
       },
@@ -4570,7 +4704,7 @@
         ],
         [
          0,
-         768
+         800
         ]
        ]
       },

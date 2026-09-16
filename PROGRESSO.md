@@ -225,20 +225,31 @@ Memória entre sessões. Atualizar depois de cada mudança.
      soco SIMPLES de um terceiro dá dano mas NÃO interrompe (sem hitstun). 4º golpe, uppercut/downslam e
      habilidades (têm empurrão) interrompem normal. Vítima em hitstun continua sem dash (já era assim).
    Testar com 2 clientes (Test > Clients and Servers, 3 players) ou bonecos.
-4. **Ciclo dia/noite + ritual das caveiras + altar ambientado** (pedido do dono, 2026-09-16 noite):
-   - `EnvironmentService.DayNight`: dia 10 min / noite 5 min (noite = ClockTime 18,5→5,5), começa 15,6
-     (primeira noite em ~2,5 min). `Workspace.IsNight` (atributo). Painel DEV: **DIA / NOITE / Ciclo automático /
-     Congelar hora** (SetTime congela). Iluminação da noite = `DayNight.Night` (Brightness/Ambient/Exposure).
-   - `RitualService` (novo): 4 caveiras (`BossConfig.Ritual.SkullsRequired`) sorteadas entre 8 `SkullSpot*` do
-     mapa (pedestal + poste com lanterna acesa, `SKULL_SPOTS` em `gerar_arena.py`). Encostar coleta (servidor
-     confere raio); cada caveira acende uma tocha do altar e aparece num `BossAltarSkullSocket{i}`; ritual
-     completo + noite = runa/rachaduras acendem e o prompt E aparece. Ao invocar, gasta; caveiras voltam
-     junto com o cooldown do altar. Caveira = modelo `Skull` em ServerStorage/Assets se a equipe fizer;
-     senão caveira por código (flutua/gira no cliente, tag `RitualSkull`). `AutoSpawnMinutes = 0`.
-     DEV: **Completar ritual**, **Sortear caveiras**. Banner "X achou uma caveira (n/4)".
-   - Altar ambientado (gerador): 4 encaixes de caveira com runa, pilhas de ossos, rachaduras vermelhas, arco
-     de pedra com correntes atrás, névoa baixa vermelha, brasas. Regenerado (`ArenaExtras`: 181 partes).
-   - TESTAR: andar até uma lanterna e pegar a caveira; ver tocha acender; DEV → NOITE; E no altar.
+4. **Ciclo dia/noite + RITUAL DA FLECHA + Notorious B.I.G. jogável** (dono, 2026-09-16 noite — foco do jogo
+   virou JoJo; bosses por PEÇAS do Roblox, estilo JJS, sem mesh externo):
+   - `EnvironmentService.DayNight`: dia 10 min / noite 5 min (noite = 18,5→5,5), começa 15,6. `Workspace.IsNight`.
+     DEV: **DIA / NOITE / Ciclo automático / Congelar hora**. Iluminação da noite em `DayNight.Night`.
+   - `BossRigs.luau` (shared): `BossRigs.Build("NotoriousBIG")` monta o boss com Ball/Cylinder/Block (65 peças,
+     7 Motor6D: Root, Cone, LimbFL/FR/BL/BR, Tail): cone listrado azul/branco (9 cilindros), massa de carne
+     rosa (19 blobs), olhos amarelos de grade, boca com dentes, 4 barris listrados, cauda. Atributos no Model:
+     `BossRig`, `HitboxScale` (Hitbox.luau multiplica alcance/raio), `RigScale`. Animação PROCEDURAL no cliente
+     (`BossController.animateRigs`: respira, cone balança, barris pisam ao andar, cauda ondula).
+     Preview parado deixado em `Workspace.PreviewNotoriousBIG` (apagar quando quiser).
+   - `RitualService` (reescrito): UMA flecha dourada aparece num dos 8 `ArrowSpot*` (pedestal + lanterna).
+     Encostar pega (fica nas costas, `Player.HasArrow`, banner pra todo mundo = alvo). Morreu = a flecha cai
+     onde caiu. À NOITE o portador segura E no altar (`RitualPrompt`) → `BossFormService.Transform`. Tochas
+     acendem à noite; runa/rachaduras acendem quando alguém tem a flecha à noite. Flecha volta 30 s depois
+     de a forma acabar. Modelo da equipe: `StandArrow` em ServerStorage/Assets (senão flecha por código).
+   - `BossFormService` (novo): 2,5 s parado/invencível (aura + shake) → personagem vira o rig (1500 HP,
+     WalkSpeed 15, socos ×2,2, hitbox ×2,2, `CharacterId = NotoriousBIG` com kit próprio em CharacterDefs:
+     1 Devorar (investida), 2 Esmagar, 3 Onda de Carne, G Frenesi). Barra de boss pra todos. Acaba ao morrer
+     (quem bateu divide RewardPool como antes) ou em 240 s (boss ganha 150 moedas). `CharacterService.LoadModel`
+     é o caminho genérico de trocar o corpo; `HealthService` lê `MaxHealth`/`WalkSpeed` do Model;
+     `AbilityService.SetForm` troca o kit sem respawn. Boss NPC antigo ficou só para admin (SummonBoss).
+   - DEV: **Me dar a flecha / Sortear flecha / Virar Notorious BIG / Encerrar forma**.
+   - Testado via MCP: pegar flecha → noite → transformar → 1500 HP → morrer → recompensa → respawn R6.
+   - FALTA (próximos): ataques do rig com pose (cone "morde" no M1), VFX/sons próprios, câmera da forma (zoom
+     maior), balancear kit, som/animação de transformação melhor, `ArrowSpot` visíveis de longe (feixe de luz?).
 5. **Arena_Antiga = mapa da guerra de clã**: `tools/montar_arena_antiga.luau` (rodei via MCP) recoloriu os muros
    do dono, gerou interior (piso, plataforma central B com rampas, plataformas A/C, cobertura espelhada,
    colunas quebradas, tochas, bandeiras azul/vermelha), `CapturePoints` A/B/C e `Spawns` (Spawn1 oeste /

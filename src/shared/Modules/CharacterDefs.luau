@@ -319,12 +319,59 @@ CharacterDefs.Characters = {
 			},
 		},
 	} :: CharacterDef,
+	-- FORMA DE BOSS (ritual da flecha, BossFormService): não aparece na seleção (fora de Order, Access "form").
+	-- O jogador vira o Notorious B.I.G. (rig por peças, BossRigs) com muita vida; todo mundo caça ele.
+	NotoriousBIG = {
+		Id = "NotoriousBIG",
+		DisplayName = "Notorious B.I.G.",
+		UnlockCost = 0,
+		Access = "form",
+		Tagline = "Stand de carne — não morre, só cresce",
+		Color = Color3.fromRGB(196, 66, 108),
+		Image = "",
+		Abilities = {
+			{
+				Id = "Devour",
+				DisplayName = "Devorar",
+				Cooldown = 6,
+				EnergyCost = 0,
+				CastTime = 0.5,
+				-- investida pesada: quem está na frente é atropelado e cai
+				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } },
+			},
+			{
+				Id = "Crush",
+				DisplayName = "Esmagar",
+				Cooldown = 9,
+				EnergyCost = 0,
+				CastTime = 0.7,
+				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.5, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } },
+			},
+			{
+				Id = "FleshWave",
+				DisplayName = "Onda de Carne",
+				Cooldown = 14,
+				EnergyCost = 0,
+				CastTime = 0.8,
+				-- anel de choque: expulsa quem fica colado batendo
+				Effect = { Type = "AreaDamage", Radius = 22, Damage = 22, Delay = 0.7, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2 } },
+			},
+			{
+				Id = "Frenzy",
+				DisplayName = "Frenesi",
+				Cooldown = 30,
+				EnergyCost = 100,
+				CastTime = 0.6,
+				-- ultimate: mordidas em sequência em volta
+				Effect = { Type = "MultiHitArea", Radius = 14, Damage = 9, Hits = 6, Interval = 0.3 },
+			},
+		},
+	} :: CharacterDef,
 }
 
---- Lista ordenada de ids (ordem na seleção de personagem). "admin" só aparece para devs (cliente filtra).
 CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Sahur", "Overlord" }
 
---- "coins" | "vip" | "early" | "admin"
+--- "coins" | "vip" | "early" | "admin" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string
 	return def.Access or "coins"
 end

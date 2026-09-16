@@ -116,13 +116,53 @@ local function buildCharacter(player: Player): (Model?, Humanoid?, BasePart?)
 	if defaultHealth and defaultHealth:IsA("Script") then
 		defaultHealth:Destroy()
 	end
+	return m, humanoid, root
+end
+
+--- Põe `model` (com Humanoid + HumanoidRootPart) como personagem do jogador em `cf`, com os scripts de
+--- StarterCharacterScripts e respawn automático. Usado pelo Load (R6) e pela forma de boss (BossFormService).
+function CharacterService.LoadModel(player: Player, model: Model, cf: CFrame): boolean
+	if player.Parent ~= Players then
+		return false
+	end
+	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not humanoid or not root then
+		return false
+	end
+	model.Name = player.Name
+	model.PrimaryPart = root
+	humanoid.DisplayName = CharacterService.DisplayNameFor(player)
+	if not humanoid:FindFirstChildOfClass("Animator") then
+		Instance.new("Animator").Parent = humanoid
+	end
 	local starterScripts = StarterPlayer:FindFirstChild("StarterCharacterScripts")
 	if starterScripts then
-		for _, s in starterScripts:GetChildren() do
-			s:Clone().Parent = m
+		for _, sc in starterScripts:GetChildren() do
+			if not model:FindFirstChild(sc.Name) then
+				sc:Clone().Parent = model
+			end
 		end
 	end
-	return m, humanoid, root
+	local old = player.Character
+	model:PivotTo(cf)
+	if old and old ~= model then
+		old:Destroy()
+	end
+	player.Character = model -- dispara CharacterAdded
+	model.Parent = Workspace
+	pcall(function()
+		root:SetNetworkOwner(player)
+	end)
+	-- Respawn automático (o engine só faz isso com CharacterAutoLoads = true)
+	humanoid.Died:Once(function()
+		task.delay(Players.RespawnTime, function()
+			if player.Parent == Players and player.Character == model then
+				CharacterService.Load(player)
+			end
+		end)
+	end)
+	return true
 end
 
 --- Substitui player:LoadCharacter(): remove o personagem atual e monta um R6 novo no spawn.
@@ -132,29 +172,14 @@ function CharacterService.Load(player: Player)
 	end
 	loading[player] = true
 	local ok, err = pcall(function()
-		local old = player.Character
-		local model, humanoid, root = buildCharacter(player)
-		if not model or not humanoid or not root then
+		local model = buildCharacter(player)
+		if not model then
 			return nil
 		end
-		model:PivotTo(pickSpawn(player) * CFrame.new(0, 3.05, 0)) -- R6: pernas 2 + metade do HRP 1
-		if old then
-			old:Destroy()
+		-- R6: pernas 2 + metade do HRP 1
+		if not CharacterService.LoadModel(player, model, pickSpawn(player) * CFrame.new(0, 3.05, 0)) then
+			model:Destroy()
 		end
-		player.Character = model -- dispara CharacterAdded
-		model.Parent = Workspace
-		pcall(function()
-			root:SetNetworkOwner(player)
-		end)
-
-		-- Respawn automático (o engine só faz isso com CharacterAutoLoads = true)
-		humanoid.Died:Once(function()
-			task.delay(Players.RespawnTime, function()
-				if player.Parent == Players and player.Character == model then
-					CharacterService.Load(player)
-				end
-			end)
-		end)
 		return nil
 	end)
 	loading[player] = nil

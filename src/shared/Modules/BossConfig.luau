@@ -9,37 +9,43 @@ local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
 
 local BossConfig = {}
 
-BossConfig.Name = "Sahur Colossal"
+BossConfig.Name = "Notorious B.I.G."
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
 BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
 BossConfig.AutoSpawnMinutes = 0 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado; agora é ritual)
 BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
-BossConfig.Scale = 1.9 -- Model:ScaleTo no rig R6 (só no fallback sem modelo 3D)
--- Modelo 3D do boss (sem rig): BossService monta o rig por cima (HumanoidRootPart + Humanoid + partes
--- soldadas). Procura por nome em ServerStorage/ReplicatedStorage.Assets/Workspace (ModelName) e, se
--- não achar, carrega o asset (ModelAssetId, precisa ser do grupo/dono ou público). 0 = só o rig R6.
-BossConfig.ModelName = "BossModel"
-BossConfig.ModelAssetId = 138493793469412
-BossConfig.ModelHeight = 16 -- studs de altura final do modelo (escala automática)
-BossConfig.FaceOffset = 90 -- graus para girar a frente do modelo: anda de lado = 90 ou -90; de costas = 180
+-- Modelo: rig por PEÇAS do Roblox (BossRigs, sem mesh externo) — ver BossConfig.Form.RigId.
 BossConfig.ArenaRadius = 55 -- studs a partir de BossArena; fora disso o boss ignora/volta
 BossConfig.AbandonSeconds = 30 -- sem jogador vivo na arena por esse tempo = boss some (sem recompensa)
 BossConfig.WalkSpeed = 14
 BossConfig.PhaseTwoAt = 0.5 -- fração de vida que liga a fase 2 (mais rápido, investida)
 BossConfig.PhaseTwoSpeed = 20
 
--- Ritual (dono, 2026-09-16): o altar só invoca À NOITE (EnvironmentService.DayNight) e depois que os
--- jogadores coletarem SkullsRequired caveiras espalhadas pelos SkullSpot* do mapa (RitualService).
--- Cada caveira coletada acende uma tocha do altar e aparece num BossAltarSkullSocket. Progresso é do
--- servidor (todo mundo junto). Depois da luta, as caveiras reaparecem em outros pontos.
+-- Ritual da FLECHA (dono, 2026-09-16, noite): uma flecha perdida aparece num dos ArrowSpot* do mapa
+-- (lanternas acesas). Quem encosta carrega a flecha (visível nas costas); morreu = a flecha cai ali.
+-- À NOITE, o portador segura E no altar e VIRA o Notorious B.I.G. (BossConfig.Form) — controlável.
 BossConfig.Ritual = {
 	Enabled = true,
 	NightOnly = true,
-	SkullsRequired = 4,
-	CollectRadius = 7, -- studs do personagem até a caveira para contar
-	RespawnDelay = 20, -- s depois do fim da luta/cooldown até as caveiras voltarem
-	SkullModelName = "Skull", -- Model/BasePart com esse nome em ServerStorage ou ReplicatedStorage.Assets (senão: caveira por código)
+	CollectRadius = 7, -- studs do personagem até a flecha para pegar
+	RespawnDelay = 30, -- s depois de a forma acabar até a flecha voltar ao mapa
+	ArrowModelName = "StandArrow", -- Model/BasePart em ServerStorage ou ReplicatedStorage.Assets (senão: flecha por código)
+}
+
+-- Forma de boss: o jogador vira o rig (BossRigs) com o kit CharacterDefs.Characters[CharacterId].
+-- Acaba quando morre ou em Duration s. Quem bateu divide RewardPool (como o boss NPC); o boss ganha
+-- FormKillPoints por kill (via HealthService.Died → ProgressionService normal) + FormSurviveCoins se sobreviver.
+BossConfig.Form = {
+	RigId = "NotoriousBIG",
+	CharacterId = "NotoriousBIG",
+	MaxHealth = 1500,
+	WalkSpeed = 15,
+	Duration = 240,
+	HitboxScale = 2.2,
+	DamageMultiplier = 2.2, -- socos (M1) da forma
+	SurviveCoins = 150, -- se aguentar até o fim
+	TransformSeconds = 2.5, -- tempo parado/invencível no altar antes de virar (cutscene curta)
 }
 
 -- Recompensa: bolo dividido pela fração de dano causado + mínimo para quem participou

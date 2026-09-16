@@ -6101,10 +6101,10 @@
      }
     },
     {
-     "name": "SkullPad0",
+     "name": "ArrowPad0",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad0",
+      "Name": "ArrowPad0",
       "Anchored": true,
       "Position": [
        -160,
@@ -6133,10 +6133,10 @@
      }
     },
     {
-     "name": "SkullSpot0",
+     "name": "ArrowSpot0",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot0",
+      "Name": "ArrowSpot0",
       "Anchored": true,
       "Position": [
        -160,
@@ -6159,10 +6159,10 @@
      }
     },
     {
-     "name": "SkullPost0",
+     "name": "ArrowPost0",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost0",
+      "Name": "ArrowPost0",
       "Anchored": true,
       "Position": [
        -157.8,
@@ -6191,10 +6191,10 @@
      }
     },
     {
-     "name": "SkullPostArm0",
+     "name": "ArrowPostArm0",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm0",
+      "Name": "ArrowPostArm0",
       "Anchored": true,
       "Position": [
        -158.8,
@@ -6217,10 +6217,10 @@
      }
     },
     {
-     "name": "SkullLantern0",
+     "name": "ArrowLantern0",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern0",
+      "Name": "ArrowLantern0",
       "Anchored": true,
       "Position": [
        -159.7,
@@ -6260,10 +6260,10 @@
      ]
     },
     {
-     "name": "SkullPad1",
+     "name": "ArrowPad1",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad1",
+      "Name": "ArrowPad1",
       "Anchored": true,
       "Position": [
        160,
@@ -6292,10 +6292,10 @@
      }
     },
     {
-     "name": "SkullSpot1",
+     "name": "ArrowSpot1",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot1",
+      "Name": "ArrowSpot1",
       "Anchored": true,
       "Position": [
        160,
@@ -6318,10 +6318,10 @@
      }
     },
     {
-     "name": "SkullPost1",
+     "name": "ArrowPost1",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost1",
+      "Name": "ArrowPost1",
       "Anchored": true,
       "Position": [
        162.2,
@@ -6350,10 +6350,10 @@
      }
     },
     {
-     "name": "SkullPostArm1",
+     "name": "ArrowPostArm1",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm1",
+      "Name": "ArrowPostArm1",
       "Anchored": true,
       "Position": [
        161.2,
@@ -6376,10 +6376,10 @@
      }
     },
     {
-     "name": "SkullLantern1",
+     "name": "ArrowLantern1",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern1",
+      "Name": "ArrowLantern1",
       "Anchored": true,
       "Position": [
        160.3,
@@ -6419,10 +6419,10 @@
      ]
     },
     {
-     "name": "SkullPad2",
+     "name": "ArrowPad2",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad2",
+      "Name": "ArrowPad2",
       "Anchored": true,
       "Position": [
        -205,
@@ -6451,10 +6451,10 @@
      }
     },
     {
-     "name": "SkullSpot2",
+     "name": "ArrowSpot2",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot2",
+      "Name": "ArrowSpot2",
       "Anchored": true,
       "Position": [
        -205,
@@ -6477,10 +6477,10 @@
      }
     },
     {
-     "name": "SkullPost2",
+     "name": "ArrowPost2",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost2",
+      "Name": "ArrowPost2",
       "Anchored": true,
       "Position": [
        -202.8,
@@ -6509,10 +6509,10 @@
      }
     },
     {
-     "name": "SkullPostArm2",
+     "name": "ArrowPostArm2",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm2",
+      "Name": "ArrowPostArm2",
       "Anchored": true,
       "Position": [
        -203.8,
@@ -6535,10 +6535,10 @@
      }
     },
     {
-     "name": "SkullLantern2",
+     "name": "ArrowLantern2",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern2",
+      "Name": "ArrowLantern2",
       "Anchored": true,
       "Position": [
        -204.7,
@@ -6578,10 +6578,10 @@
      ]
     },
     {
-     "name": "SkullPad3",
+     "name": "ArrowPad3",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad3",
+      "Name": "ArrowPad3",
       "Anchored": true,
       "Position": [
        205,
@@ -6610,10 +6610,10 @@
      }
     },
     {
-     "name": "SkullSpot3",
+     "name": "ArrowSpot3",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot3",
+      "Name": "ArrowSpot3",
       "Anchored": true,
       "Position": [
        205,
@@ -6636,10 +6636,10 @@
      }
     },
     {
-     "name": "SkullPost3",
+     "name": "ArrowPost3",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost3",
+      "Name": "ArrowPost3",
       "Anchored": true,
       "Position": [
        207.2,
@@ -6668,10 +6668,10 @@
      }
     },
     {
-     "name": "SkullPostArm3",
+     "name": "ArrowPostArm3",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm3",
+      "Name": "ArrowPostArm3",
       "Anchored": true,
       "Position": [
        206.2,
@@ -6694,10 +6694,10 @@
      }
     },
     {
-     "name": "SkullLantern3",
+     "name": "ArrowLantern3",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern3",
+      "Name": "ArrowLantern3",
       "Anchored": true,
       "Position": [
        205.3,
@@ -6737,10 +6737,10 @@
      ]
     },
     {
-     "name": "SkullPad4",
+     "name": "ArrowPad4",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad4",
+      "Name": "ArrowPad4",
       "Anchored": true,
       "Position": [
        -168,
@@ -6769,10 +6769,10 @@
      }
     },
     {
-     "name": "SkullSpot4",
+     "name": "ArrowSpot4",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot4",
+      "Name": "ArrowSpot4",
       "Anchored": true,
       "Position": [
        -168,
@@ -6795,10 +6795,10 @@
      }
     },
     {
-     "name": "SkullPost4",
+     "name": "ArrowPost4",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost4",
+      "Name": "ArrowPost4",
       "Anchored": true,
       "Position": [
        -165.8,
@@ -6827,10 +6827,10 @@
      }
     },
     {
-     "name": "SkullPostArm4",
+     "name": "ArrowPostArm4",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm4",
+      "Name": "ArrowPostArm4",
       "Anchored": true,
       "Position": [
        -166.8,
@@ -6853,10 +6853,10 @@
      }
     },
     {
-     "name": "SkullLantern4",
+     "name": "ArrowLantern4",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern4",
+      "Name": "ArrowLantern4",
       "Anchored": true,
       "Position": [
        -167.7,
@@ -6896,10 +6896,10 @@
      ]
     },
     {
-     "name": "SkullPad5",
+     "name": "ArrowPad5",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad5",
+      "Name": "ArrowPad5",
       "Anchored": true,
       "Position": [
        5,
@@ -6928,10 +6928,10 @@
      }
     },
     {
-     "name": "SkullSpot5",
+     "name": "ArrowSpot5",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot5",
+      "Name": "ArrowSpot5",
       "Anchored": true,
       "Position": [
        5,
@@ -6954,10 +6954,10 @@
      }
     },
     {
-     "name": "SkullPost5",
+     "name": "ArrowPost5",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost5",
+      "Name": "ArrowPost5",
       "Anchored": true,
       "Position": [
        7.2,
@@ -6986,10 +6986,10 @@
      }
     },
     {
-     "name": "SkullPostArm5",
+     "name": "ArrowPostArm5",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm5",
+      "Name": "ArrowPostArm5",
       "Anchored": true,
       "Position": [
        6.2,
@@ -7012,10 +7012,10 @@
      }
     },
     {
-     "name": "SkullLantern5",
+     "name": "ArrowLantern5",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern5",
+      "Name": "ArrowLantern5",
       "Anchored": true,
       "Position": [
        5.3,
@@ -7055,10 +7055,10 @@
      ]
     },
     {
-     "name": "SkullPad6",
+     "name": "ArrowPad6",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad6",
+      "Name": "ArrowPad6",
       "Anchored": true,
       "Position": [
        190,
@@ -7087,10 +7087,10 @@
      }
     },
     {
-     "name": "SkullSpot6",
+     "name": "ArrowSpot6",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot6",
+      "Name": "ArrowSpot6",
       "Anchored": true,
       "Position": [
        190,
@@ -7113,10 +7113,10 @@
      }
     },
     {
-     "name": "SkullPost6",
+     "name": "ArrowPost6",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost6",
+      "Name": "ArrowPost6",
       "Anchored": true,
       "Position": [
        192.2,
@@ -7145,10 +7145,10 @@
      }
     },
     {
-     "name": "SkullPostArm6",
+     "name": "ArrowPostArm6",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm6",
+      "Name": "ArrowPostArm6",
       "Anchored": true,
       "Position": [
        191.2,
@@ -7171,10 +7171,10 @@
      }
     },
     {
-     "name": "SkullLantern6",
+     "name": "ArrowLantern6",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern6",
+      "Name": "ArrowLantern6",
       "Anchored": true,
       "Position": [
        190.3,
@@ -7214,10 +7214,10 @@
      ]
     },
     {
-     "name": "SkullPad7",
+     "name": "ArrowPad7",
      "className": "Part",
      "properties": {
-      "Name": "SkullPad7",
+      "Name": "ArrowPad7",
       "Anchored": true,
       "Position": [
        -45,
@@ -7246,10 +7246,10 @@
      }
     },
     {
-     "name": "SkullSpot7",
+     "name": "ArrowSpot7",
      "className": "Part",
      "properties": {
-      "Name": "SkullSpot7",
+      "Name": "ArrowSpot7",
       "Anchored": true,
       "Position": [
        -45,
@@ -7272,10 +7272,10 @@
      }
     },
     {
-     "name": "SkullPost7",
+     "name": "ArrowPost7",
      "className": "Part",
      "properties": {
-      "Name": "SkullPost7",
+      "Name": "ArrowPost7",
       "Anchored": true,
       "Position": [
        -42.8,
@@ -7304,10 +7304,10 @@
      }
     },
     {
-     "name": "SkullPostArm7",
+     "name": "ArrowPostArm7",
      "className": "Part",
      "properties": {
-      "Name": "SkullPostArm7",
+      "Name": "ArrowPostArm7",
       "Anchored": true,
       "Position": [
        -43.8,
@@ -7330,10 +7330,10 @@
      }
     },
     {
-     "name": "SkullLantern7",
+     "name": "ArrowLantern7",
      "className": "Part",
      "properties": {
-      "Name": "SkullLantern7",
+      "Name": "ArrowLantern7",
       "Anchored": true,
       "Position": [
        -44.7,

@@ -46,12 +46,21 @@ local function params(exclude: Model): OverlapParams
 	return p
 end
 
+--- Personagens grandes (rig de boss, BossRigs) têm o atributo HitboxScale no Model: multiplica alcance,
+--- largura, altura e raio de todas as consultas — vale igual no cliente (previsão) e no servidor.
+local function scaleOf(model: Model): number
+	local s = model:GetAttribute("HitboxScale")
+	return if typeof(s) == "number" and s > 0 then s else 1
+end
+
 --- Caixa à frente do HumanoidRootPart do atacante.
 function Hitbox.InFront(attacker: Model, range: number, width: number, height: number, maxTargets: number): { Model }
 	local root = attacker:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
 		return {}
 	end
+	local k = scaleOf(attacker)
+	range, width, height = range * k, width * k, height * k
 	local cf = root.CFrame * CFrame.new(0, 0, -range / 2)
 	local size = Vector3.new(width, height, range)
 	return collect(Workspace:GetPartBoundsInBox(cf, size, params(attacker)), attacker, maxTargets)
@@ -67,6 +76,8 @@ function Hitbox.InDirection(attacker: Model, direction: Vector3, range: number, 
 	if flat.Magnitude < 0.01 then
 		return Hitbox.InFront(attacker, range, width, height, maxTargets)
 	end
+	local k = scaleOf(attacker)
+	range, width, height = range * k, width * k, height * k
 	local cf = CFrame.lookAt(root.Position, root.Position + flat.Unit) * CFrame.new(0, 0, -range / 2)
 	local size = Vector3.new(width, height, range)
 	return collect(Workspace:GetPartBoundsInBox(cf, size, params(attacker)), attacker, maxTargets)
@@ -78,7 +89,7 @@ function Hitbox.Around(attacker: Model, radius: number, maxTargets: number): { M
 	if not root then
 		return {}
 	end
-	return collect(Workspace:GetPartBoundsInRadius(root.Position, radius, params(attacker)), attacker, maxTargets)
+	return collect(Workspace:GetPartBoundsInRadius(root.Position, radius * scaleOf(attacker), params(attacker)), attacker, maxTargets)
 end
 
 --- Esfera centrada em um ponto qualquer (projéteis, área à distância). `exclude` nunca é atingido.

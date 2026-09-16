@@ -9,10 +9,10 @@
 
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerStorage = game:GetService("ServerStorage")
 local KeyframeSequenceProvider = game:GetService("KeyframeSequenceProvider")
 
 local BossConfig = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("BossConfig"))
+local BossRigs = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("BossRigs"))
 
 local AnimationCheckService = {}
 
@@ -23,17 +23,20 @@ local R6_PARTS = { Torso = true, ["Left Arm"] = true, ["Right Arm"] = true, ["Le
 -- animam ESSAS partes, não Torso/Left Arm. nil = modelo não está no place (boss usa o rig R6).
 local bossParts: { [string]: boolean }? = nil
 local function loadBossParts()
-	local template = ServerStorage:FindFirstChild(BossConfig.ModelName, true)
-		or ReplicatedStorage:FindFirstChild(BossConfig.ModelName, true)
-	if not template then
+	-- Boss por peças (BossRigs, 2026-09-16): as partes/juntas vêm do rig gerado, não de um modelo externo
+	local ok, model = pcall(function()
+		return BossRigs.Build(BossConfig.Form.RigId)
+	end)
+	if not ok or not model then
 		return
 	end
 	bossParts = {}
-	for _, d in template:GetDescendants() do
+	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			(bossParts :: { [string]: boolean })[d.Name] = true
 		end
 	end
+	model:Destroy()
 end
 
 local function rigOf(ks: KeyframeSequence): string
@@ -91,7 +94,7 @@ local function check(anim: Animation)
 		print(("[AnimCheck] %s (%s): OK %s, %.2fs"):format(path, id, rig, last))
 	else
 		if expected == "Boss" then
-			warn(("[AnimCheck] %s (%s): rig %s — o boss usa o rig custom do %s (partes tripo_*), esta animação NÃO vai mexer o boss. Animar em cima do BossModel."):format(path, id, rig, BossConfig.ModelName))
+			warn(("[AnimCheck] %s (%s): rig %s — o boss é o rig por peças %s (BossRigs), esta animação NÃO vai mexer o boss. O boss é animado por código (BossController.animateRigs)."):format(path, id, rig, BossConfig.Form.RigId))
 		else
 			warn(("[AnimCheck] %s (%s): rig %s — o jogo é %s, esta animação NÃO vai mexer o personagem. Reexportar em rig %s."):format(path, id, rig, expected, expected))
 		end

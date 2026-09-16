@@ -44,8 +44,11 @@ local DummyService = require(script.Parent:WaitForChild("DummyService"))
 local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local BossService = require(script.Parent:WaitForChild("BossService"))
-local RitualService = require(script.Parent:WaitForChild("RitualService"))
 local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
+local BossConfig = require(Modules:WaitForChild("BossConfig"))
+-- RitualService/BossFormService dependem do AbilityService, que depende deste módulo: carregados no Start
+local RitualService: any = nil
+local BossFormService: any = nil
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
@@ -587,15 +590,39 @@ global.TimeAuto = function()
 	return true, ("ciclo automático (dia %d min / noite %d min)"):format(dn.DayMinutes, dn.NightMinutes)
 end
 
-global.CompleteRitual = function()
-	RitualService.ForceComplete()
-	local c, r = RitualService.GetProgress()
-	return true, ("ritual completo (%d/%d caveiras); %s"):format(c, r, if RitualService.CanSummon() then "altar PRONTO" else "falta a noite (SetNight)")
+global.GiveArrow = function(admin)
+	if not RitualService then
+		return false, "RitualService não carregou"
+	end
+	RitualService.GiveArrow(admin)
+	return true, "você está com a flecha; à noite, E no altar vira o " .. BossConfig.Name
 end
 
-global.RespawnSkulls = function()
-	RitualService.Restart(0)
-	return true, "caveiras sorteadas de novo (progresso zerado)"
+global.BecomeBoss = function(admin)
+	if not BossFormService then
+		return false, "BossFormService não carregou"
+	end
+	if RitualService then
+		RitualService.GiveArrow(nil) -- solta a flecha no mapa para os outros
+	end
+	local ok, why = BossFormService.Transform(admin)
+	return ok, if ok then ("virando %s em %.1f s"):format(BossConfig.Name, BossConfig.Form.TransformSeconds) else tostring(why)
+end
+
+global.EndBossForm = function()
+	if not BossFormService or not BossFormService.IsActive() then
+		return false, "ninguém está na forma de boss"
+	end
+	BossFormService.End("admin")
+	return true, "forma de boss encerrada"
+end
+
+global.RespawnArrow = function()
+	if not RitualService then
+		return false, "RitualService não carregou"
+	end
+	RitualService.GiveArrow(nil)
+	return true, "flecha sorteada num ponto do mapa"
 end
 
 global.TestSounds = function()
@@ -695,6 +722,14 @@ function AdminService.Init()
 end
 
 function AdminService.Start()
+	local okR, r = pcall(require, script.Parent:WaitForChild("RitualService"))
+	if okR then
+		RitualService = r
+	end
+	local okF, f = pcall(require, script.Parent:WaitForChild("BossFormService"))
+	if okF then
+		BossFormService = f
+	end
 	Remotes.GetFunction(Remotes.Functions.FetchAdminLogin).OnServerInvoke = onLogin
 	Remotes.GetEvent(Remotes.Events.RequestAdminCommand).OnServerEvent:Connect(onCommand)
 

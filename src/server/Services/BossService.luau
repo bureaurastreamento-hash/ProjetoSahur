@@ -9,14 +9,14 @@
 	(respeita block). Dano recebido é creditado por HealthService.Damaged -> recompensa
 	proporcional (BossConfig.Reward*) via DataService.AddCoins.
 
-	Estados: Ready -> Fighting -> Cooldown -> Ready. BillboardGui no altar mostra o estado.
+	Estados: Ready -> Fighting -> Cooldown -> Ready. Desde 2026-09-16 (noite) o boss NPC é só para
+	admin/teste (SummonBoss): o caminho do jogo é o ritual da flecha (RitualService → BossFormService,
+	o jogador VIRA o boss). Rig por peças (BossRigs), sem modelo externo.
 	NotifyBoss(event, data) para a HUD (BossController).
 ]]
 
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
-local InsertService = game:GetService("InsertService")
-local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
@@ -25,9 +25,8 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
-local BossRig = require(Modules:WaitForChild("BossRig"))
+local BossRigs = require(Modules:WaitForChild("BossRigs"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
-local RitualService = require(script.Parent:WaitForChild("RitualService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
@@ -54,12 +53,8 @@ type Fight = {
 
 local state = "Ready" -- Ready | Fighting | Cooldown | Missing
 local fight: Fight? = nil
-local cooldownUntil = 0
-local altar: BasePart? = nil
 local spawnPart: BasePart? = nil
 local arenaPart: BasePart? = nil
-local prompt: ProximityPrompt? = nil
-local statusLabel: TextLabel? = nil
 local notifyBoss: RemoteEvent
 
 -- ---------------------------------------------------------------------------
@@ -75,23 +70,6 @@ local function arenaCenter(): Vector3
 	return if arenaPart then arenaPart.Position elseif spawnPart then spawnPart.Position else Vector3.zero
 end
 
-local function setStatus(text: string)
-	if statusLabel then
-		statusLabel.Text = text
-	end
-end
-
---- Altar em "Ready": letreiro + prompt conforme o ritual (caveiras) e a noite.
-local function refreshReady()
-	if state ~= "Ready" then
-		return
-	end
-	local can = RitualService.CanSummon()
-	if prompt then
-		prompt.Enabled = can
-	end
-	setStatus(RitualService.StatusText())
-end
 
 local function findExtras()
 	local sahur = Workspace:FindFirstChild("Sahur")
@@ -100,9 +78,7 @@ local function findExtras()
 	end
 	for _, d in sahur:GetDescendants() do
 		if d:IsA("BasePart") then
-			if d.Name == "BossAltar" then
-				altar = d
-			elseif d.Name == "BossSpawn" then
+			if d.Name == "BossSpawn" then
 				spawnPart = d
 			elseif d.Name == "BossArena" then
 				arenaPart = d
@@ -131,146 +107,30 @@ local function playersNear(from: Vector3, radius: number): { { player: Player, r
 end
 
 -- ---------------------------------------------------------------------------
--- Rig
+-- Rig (BossRigs: peças do Roblox, sem modelo externo — decisão do dono 2026-09-16)
 -- ---------------------------------------------------------------------------
 
---- Acha o modelo 3D do boss (template): por nome nas pastas conhecidas, senão pelo asset id.
-local modelTemplate: Model? = nil
-local function findModelTemplate(): Model?
-	if modelTemplate and modelTemplate.Parent then
-		return modelTemplate
-	end
-	local name = BossConfig.ModelName
-	local assets = ReplicatedStorage:FindFirstChild("Assets")
-	for _, container in { ServerStorage, assets, Workspace } do
-		local found = container and container:FindFirstChild(name, true)
-		if found and found:IsA("Model") then
-			if found.Parent == Workspace or found:IsDescendantOf(Workspace) then
-				found.Parent = ServerStorage -- o dono largou no mapa: vira template escondido
-			end
-			modelTemplate = found
-			return found
-		end
-	end
-	if BossConfig.ModelAssetId > 0 then
-		local ok, result = pcall(function()
-			return InsertService:LoadAsset(BossConfig.ModelAssetId)
-		end)
-		if ok and result then
-			local inner = result:FindFirstChildWhichIsA("Model") or result
-			if inner:IsA("Model") then
-				inner.Name = name
-				inner.Parent = ServerStorage
-				modelTemplate = inner
-				Log.debug(("[BossService] modelo do boss carregado do asset %d"):format(BossConfig.ModelAssetId))
-				return inner
-			end
-		else
-			warn(("[BossService] não carregou o asset %d do boss: %s (coloque o Model como %s em ServerStorage)"):format(BossConfig.ModelAssetId, tostring(result), name))
-		end
-	end
-	return nil
-end
-
---- Rig do modelo 3D: BossRig.Assemble num clone (achatado para a Hitbox), escala para ModelHeight.
-local function rigFromModel(template: Model): (Model?, Humanoid?, BasePart?)
-	local model = template:Clone()
-	model.Name = BossConfig.Name
-	local ok, report = pcall(BossRig.Assemble, model, { Flatten = true, Height = BossConfig.ModelHeight, FaceOffset = BossConfig.FaceOffset })
-	if not ok then
-		warn("[BossService] rig do boss falhou: " .. tostring(report))
-		model:Destroy()
-		return nil, nil, nil
-	end
-	local r = report :: BossRig.Report
-	print(("[BossService] rig do boss: %d partes em %d grupos, %d Motor6D, %d soldadas, raiz %s, HipHeight %.1f"):format(r.parts, r.groups, r.motors, r.welded, r.root, r.hipHeight))
-	return model, model:FindFirstChildOfClass("Humanoid"), model:FindFirstChild("HumanoidRootPart") :: BasePart?
-end
-
---- [Admin] Imprime no Output a estrutura do BossModel (template) e do rig montado.
+--- [Admin] Resumo do rig por peças.
 function BossService.Inspect(): string
-	local template = findModelTemplate()
-	if not template then
-		return "BossModel não encontrado (ServerStorage/ReplicatedStorage.Assets/Workspace) e asset não carregou"
-	end
-	print(("[Boss] template %s em %s"):format(template.Name, template:GetFullName()))
-	local hum = template:FindFirstChildOfClass("Humanoid")
-	print("[Boss] Humanoid:", hum and hum.RigType.Name or "NENHUM", "| HRP:", template:FindFirstChild("HumanoidRootPart", true) and "sim" or "NÃO")
-	local cf, size = template:GetBoundingBox()
-	print(("[Boss] bounding box %.1f x %.1f x %.1f em %s"):format(size.X, size.Y, size.Z, tostring(cf.Position)))
-	local jointed: { [Instance]: boolean } = {}
-	local parts, motors, welds = 0, 0, 0
-	for _, d in template:GetDescendants() do
-		if d:IsA("Motor6D") then
-			motors += 1
-			print(("  Motor6D %s: %s -> %s (em %s)"):format(d.Name, d.Part0 and d.Part0.Name or "?", d.Part1 and d.Part1.Name or "?", d.Parent and d.Parent.Name or "?"))
-			if d.Part0 then jointed[d.Part0] = true end
-			if d.Part1 then jointed[d.Part1] = true end
-		elseif d:IsA("Weld") or d:IsA("WeldConstraint") then
-			welds += 1
-			if d.Part1 then jointed[d.Part1] = true end
-		end
-	end
-	for _, d in template:GetDescendants() do
+	local model = BossRigs.Build(BossConfig.Form.RigId)
+	local parts, motors = 0, 0
+	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			parts += 1
-			local flag = if jointed[d] then "" else "  (SEM junta: será soldada na mais próxima)"
-			print(("  %s [%s] %.1fx%.1fx%.1f anch=%s pai=%s%s"):format(d.Name, d.ClassName, d.Size.X, d.Size.Y, d.Size.Z, tostring(d.Anchored), d.Parent and d.Parent.Name or "?", flag))
+		elseif d:IsA("Motor6D") then
+			motors += 1
 		end
 	end
-	local model = rigFromModel(template)
-	if model then
-		model:Destroy()
-	end
-	return ("%d partes, %d Motor6D, %d welds (detalhe no Output)"):format(parts, motors, welds)
+	local _, size = model:GetBoundingBox()
+	model:Destroy()
+	return ("rig %s: %d peças, %d Motor6D, %.1f x %.1f x %.1f studs"):format(BossConfig.Form.RigId, parts, motors, size.X, size.Y, size.Z)
 end
 
 local function buildBoss(): (Model?, Humanoid?, BasePart?)
-	local model: Model?, humanoid: Humanoid?, root: BasePart?
-	local template = findModelTemplate()
-	if template then
-		model, humanoid, root = rigFromModel(template)
-		if not model then
-			warn("[BossService] modelo do boss sem partes; usando o rig R6")
-		end
-	end
-	if not model then
-		local ok, r6 = pcall(function()
-			return Players:CreateHumanoidModelFromDescription(Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
-		end)
-		if not ok or not r6 then
-			warn("[BossService] não consegui criar o rig: " .. tostring(r6))
-			return nil, nil, nil
-		end
-		model = r6
-		humanoid = r6:FindFirstChildOfClass("Humanoid")
-		root = r6:FindFirstChild("HumanoidRootPart") :: BasePart?
-		if not humanoid or not root then
-			r6:Destroy()
-			return nil, nil, nil
-		end
-		for _, d in r6:GetDescendants() do
-			if d:IsA("Script") or d:IsA("LocalScript") then
-				d:Destroy()
-			elseif d:IsA("BasePart") then
-				d.Color = Color3.fromRGB(70, 30, 35)
-				d.Material = Enum.Material.Slate
-			end
-		end
-		pcall(function()
-			r6:ScaleTo(BossConfig.Scale)
-		end)
-		local head = r6:FindFirstChild("Head") :: BasePart?
-		if head then
-			head.Color = Color3.fromRGB(120, 20, 25)
-		end
-	end
-	local m, h, rt = model :: Model, humanoid :: Humanoid, root :: BasePart
+	local m = BossRigs.Build(BossConfig.Form.RigId)
+	local h = m:FindFirstChildOfClass("Humanoid") :: Humanoid
+	local rt = m:FindFirstChild("HumanoidRootPart") :: BasePart
 	m.Name = BossConfig.Name
-	-- Animator criado no servidor para as animações do cliente replicarem (FX.PlayAnimation)
-	if not h:FindFirstChildOfClass("Animator") then
-		Instance.new("Animator").Parent = h
-	end
 	h.DisplayName = BossConfig.Name
 	h.MaxHealth = BossConfig.MaxHealth
 	h.Health = BossConfig.MaxHealth
@@ -505,18 +365,11 @@ local function endFight(f: Fight, defeated: boolean)
 		f.model:Destroy()
 	end)
 	state = "Cooldown"
-	cooldownUntil = os.clock() + BossConfig.Cooldown
-	task.spawn(function()
-		while state == "Cooldown" and os.clock() < cooldownUntil do
-			setStatus(("Altar recarregando: %ds"):format(math.ceil(cooldownUntil - os.clock())))
-			task.wait(1)
-		end
+	task.delay(BossConfig.Cooldown, function()
 		if state == "Cooldown" then
 			state = "Ready"
-			refreshReady()
 		end
 	end)
-	RitualService.Restart(BossConfig.Cooldown) -- caveiras voltam ao mapa junto com o altar
 end
 
 local function aiLoop(f: Fight)
@@ -609,7 +462,6 @@ local function aiLoop(f: Fight)
 		if os.clock() - lastState > 0.5 then
 			lastState = os.clock()
 			broadcast("state", { health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth, phase = f.phase })
-			setStatus(("%s: %d%%"):format(BossConfig.Name, math.floor(100 * f.humanoid.Health / f.humanoid.MaxHealth)))
 		end
 		task.wait(0.2)
 	end
@@ -617,11 +469,6 @@ end
 
 local function summon(player: Player, byName: string?)
 	if state ~= "Ready" or fight then
-		return
-	end
-	if not byName and not RitualService.CanSummon() then
-		notifyBoss:FireClient(player, "denied", { event = "denied", reason = RitualService.StatusText() })
-		refreshReady()
 		return
 	end
 	if BossConfig.SummonCost > 0 and not byName then
@@ -637,10 +484,6 @@ local function summon(player: Player, byName: string?)
 		return
 	end
 	state = "Fighting"
-	if prompt then
-		prompt.Enabled = false
-	end
-	RitualService.Consume()
 	local spawnCf = if spawnPart then spawnPart.CFrame else CFrame.new(arenaCenter())
 	local lift = humanoid.HipHeight + root.Size.Y / 2 + 1
 	model:PivotTo(CFrame.new(spawnCf.Position + Vector3.new(0, lift, 0)))
@@ -671,7 +514,6 @@ local function summon(player: Player, byName: string?)
 	end)
 	Log.debug(("[BossService] %s invocou o boss"):format(byName or player.Name))
 	broadcast("summoned", { by = byName or player.Name, name = BossConfig.Name, model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
-	setStatus(BossConfig.Name .. ": 100%")
 	task.spawn(aiLoop, f)
 end
 
@@ -682,7 +524,6 @@ function BossService.Despawn(): boolean
 		return false
 	end
 	endFight(f, false)
-	cooldownUntil = 0
 	return true
 end
 
@@ -716,7 +557,6 @@ local function autoSpawnLoop()
 		task.wait(minutes * 60 - BossConfig.AutoSpawnWarning)
 		if state == "Ready" and not fight and #Players:GetPlayers() > 0 then
 			broadcast("warning", { seconds = BossConfig.AutoSpawnWarning, name = BossConfig.Name })
-			setStatus(("%s chega em %ds!"):format(BossConfig.Name, BossConfig.AutoSpawnWarning))
 			task.wait(BossConfig.AutoSpawnWarning)
 			local any = Players:GetPlayers()[1]
 			if state == "Ready" and not fight and any then
@@ -738,43 +578,11 @@ function BossService.Start()
 		CosmeticsService = cos
 	end
 	findExtras()
-	if not altar then
+	if not spawnPart and not arenaPart then
 		state = "Missing"
-		warn("[BossService] Workspace.Sahur sem BossAltar (ArenaExtras); altar desativado")
+		warn("[BossService] Workspace.Sahur sem BossSpawn/BossArena (ArenaExtras); boss NPC desativado")
 		return
 	end
-	local a = altar :: BasePart
-
-	local p = Instance.new("ProximityPrompt")
-	p.Name = "SummonPrompt"
-	p.ActionText = "Invocar o boss"
-	p.ObjectText = BossConfig.Name
-	p.HoldDuration = 1
-	p.MaxActivationDistance = 12
-	p.RequiresLineOfSight = false
-	p.Parent = a
-	p.Triggered:Connect(summon)
-	prompt = p
-
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "BossAltarGui"
-	gui.Size = UDim2.fromOffset(260, 40)
-	gui.StudsOffset = Vector3.new(0, 4, 0)
-	gui.AlwaysOnTop = false
-	gui.MaxDistance = 90
-	gui.Parent = a
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.fromScale(1, 1)
-	label.BackgroundTransparency = 1
-	label.Font = Enum.Font.GothamBold
-	label.TextSize = 18
-	label.TextColor3 = Color3.fromRGB(255, 220, 200)
-	label.TextStrokeTransparency = 0.4
-	label.TextScaled = false
-	label.Parent = gui
-	statusLabel = label
-	refreshReady()
-	RitualService.Changed.Event:Connect(refreshReady)
 
 	HealthService.Damaged.Event:Connect(function(victim: Model, amount: number, attacker: Player?)
 		local f = fight
@@ -794,7 +602,7 @@ function BossService.Start()
 	end)
 
 	task.spawn(autoSpawnLoop)
-	Log.debug(("[BossService] altar pronto em %s (auto a cada %d min)"):format(a:GetFullName(), BossConfig.AutoSpawnMinutes))
+	Log.debug(("[BossService] boss NPC (admin) pronto: %s (auto a cada %d min)"):format(BossConfig.Form.RigId, BossConfig.AutoSpawnMinutes))
 end
 
 return BossService

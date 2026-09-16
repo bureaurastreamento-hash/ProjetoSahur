@@ -620,18 +620,18 @@ for i in range(12):
                        "CanCollide": False, "CastShadow": False},
     })
 # ---------------------------------------------------------------------------
-# PONTOS DE CAVEIRA (ritual do boss): lugares fáceis e ACESOS pelo mapa. RitualService sorteia
-# BossConfig.Ritual.SkullsRequired entre os SkullSpot* e põe uma caveira em cima de cada um.
+# PONTOS DA FLECHA (ritual do boss): lugares fáceis e ACESOS pelo mapa. RitualService sorteia UM
+# ArrowSpot* e põe a flecha perdida em cima (caiu do céu; quem pega vira o boss no altar à noite).
 # Cada ponto = pedestal baixo + poste com lanterna (luz quente) para ser visto de longe, também à noite.
 # Coordenadas no mapa importado (chão y≈0, área andável ±240). NÃO passam pelo giro do santuário.
 # ---------------------------------------------------------------------------
-SKULL_SPOTS = [(-160, -160), (160, -160), (-205, 10), (205, 25), (-168, 188), (5, -215), (190, 150), (-45, 120)]
-for i, (sx, sz) in enumerate(SKULL_SPOTS):
-    cylinder(f"SkullPad{i}", 2.6, 0.5, (sx, 0.25, sz), BASALT)
-    part(f"SkullSpot{i}", (1.6, 0.6, 1.6), (sx, 0.8, sz), ("Slate", (0.14, 0.14, 0.17)))
-    cylinder(f"SkullPost{i}", 0.25, 7, (sx + 2.2, 3.5, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
-    part(f"SkullPostArm{i}", (2.2, 0.25, 0.25), (sx + 1.2, 6.9, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
-    lantern = part(f"SkullLantern{i}", (0.9, 1.1, 0.9), (sx + 0.3, 6.3, sz + 2.2), ("Neon", (1.0, 0.78, 0.45)), CastShadow=False)
+ARROW_SPOTS = [(-160, -160), (160, -160), (-205, 10), (205, 25), (-168, 188), (5, -215), (190, 150), (-45, 120)]
+for i, (sx, sz) in enumerate(ARROW_SPOTS):
+    cylinder(f"ArrowPad{i}", 2.6, 0.5, (sx, 0.25, sz), BASALT)
+    part(f"ArrowSpot{i}", (1.6, 0.6, 1.6), (sx, 0.8, sz), ("Slate", (0.14, 0.14, 0.17)))
+    cylinder(f"ArrowPost{i}", 0.25, 7, (sx + 2.2, 3.5, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
+    part(f"ArrowPostArm{i}", (2.2, 0.25, 0.25), (sx + 1.2, 6.9, sz + 2.2), ("Metal", (0.2, 0.19, 0.18)))
+    lantern = part(f"ArrowLantern{i}", (0.9, 1.1, 0.9), (sx + 0.3, 6.3, sz + 2.2), ("Neon", (1.0, 0.78, 0.45)), CastShadow=False)
     light(lantern, (1.0, 0.75, 0.45), 2.2, 26)
 
 # aplica o deslocamento/giro do santuário em todas as partes Boss* (altar, spawn, arena, pilares...)
