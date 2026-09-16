@@ -35,6 +35,10 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 		ShadowSoftness = 0.15,
 		GlobalShadows = true,
 		ExposureCompensation = 0.1,
+		-- fog clássico desligado (a Atmosphere faz a névoa); um plugin de iluminação já deixou 10–120 preto no place
+		FogStart = 0,
+		FogEnd = 100000,
+		FogColor = Color3.fromRGB(192, 192, 192),
 	},
 	-- Instâncias filhas de Lighting (criadas só se não existirem com este nome)
 	Effects = {
