@@ -69,7 +69,7 @@
           "name": "UltReady",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://8181034930",
+            "SoundId": "rbxassetid://121816093718688",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -123,6 +123,90 @@
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Awakening",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://78882004651878"
+          }
+        },
+        {
+          "name": "Awakening2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://78781204174271"
+          }
+        },
+        {
+          "name": "UltReady2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://128227618240752"
+          }
+        },
+        {
+          "name": "UltReady3",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://134020643042377"
+          }
+        },
+        {
+          "name": "Awakening_Burst",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://83993296222949"
+          }
+        },
+        {
+          "name": "Awakening_Burst2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://94087039592916"
+          }
+        },
+        {
+          "name": "Awakening_Burst3",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://100514852109804"
+          }
+        },
+        {
+          "name": "Awakening_End",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://113054337505364"
+          }
+        },
+        {
+          "name": "Awakening_End2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://87936801185035"
+          }
+        },
+        {
+          "name": "Awakening_End3",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://104792832645652"
+          }
+        },
+        {
+          "name": "WallSplat",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://114477616922523"
+          }
+        },
+        {
+          "name": "WallSplat2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://138054935062071"
           }
         }
       ]
@@ -201,7 +285,7 @@
           "name": "GroundSlam_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7093763783",
+            "SoundId": "rbxassetid://108572756136526",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -211,10 +295,24 @@
           "name": "Rampage",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://5795505380",
+            "SoundId": "rbxassetid://108179413286388",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "GroundSlam_Hit2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://130746756274112"
+          }
+        },
+        {
+          "name": "Rampage2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://106127557057356"
           }
         }
       ]
@@ -369,7 +467,7 @@
           "name": "Quake",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://9116684884",
+            "SoundId": "rbxassetid://94833998861837",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -383,6 +481,13 @@
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Quake2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://114477616922523"
           }
         }
       ]
@@ -425,7 +530,7 @@
           "name": "Slam_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7093763783",
+            "SoundId": "rbxassetid://108572756136526",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -435,7 +540,7 @@
           "name": "Charge",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://9056932358",
+            "SoundId": "rbxassetid://95614116572317",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -455,7 +560,7 @@
           "name": "Roar",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7817336081",
+            "SoundId": "rbxassetid://106360494357341",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -475,7 +580,7 @@
           "name": "Shockwave",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://9116684884",
+            "SoundId": "rbxassetid://138054935062071",
             "Volume": 0.6,
             "RollOffMaxDistance": 120,
             "RollOffMinDistance": 15
@@ -510,6 +615,20 @@
             "RollOffMaxDistance": 120,
             "RollOffMinDistance": 15
           }
+        },
+        {
+          "name": "Slam_Hit2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://130746756274112"
+          }
+        },
+        {
+          "name": "Shockwave2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://94833998861837"
+          }
         }
       ]
     },
@@ -531,7 +650,7 @@
           "name": "Bombo_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7093763783",
+            "SoundId": "rbxassetid://108572756136526",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -541,7 +660,7 @@
           "name": "Toque",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://5795505380",
+            "SoundId": "rbxassetid://106127557057356",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -565,6 +684,13 @@
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
+          }
+        },
+        {
+          "name": "Bombo_Hit2",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://130746756274112"
           }
         }
       ]

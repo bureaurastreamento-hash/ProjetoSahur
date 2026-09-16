@@ -115,6 +115,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 			end
 		else
 			FX.SetOutline(character, nil)
+			FX.PlaySoundAt(character, "Shared", "Awakening_End")
 		end
 		return
 	end
@@ -122,6 +123,16 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.PlayAnimation(character, characterId, abilityId)
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)
+		-- ultimate (a habilidade com EnergyCost = Max): estouro da aura por cima do som próprio
+		local def = CharacterDefs.Get(characterId)
+		if def then
+			for _, ab in def.Abilities do
+				if ab.Id == abilityId and ab.EnergyCost >= CharacterDefs.Energy.Max then
+					FX.PlaySoundAt(character, "Shared", "Awakening_Burst")
+					break
+				end
+			end
+		end
 		if typeof(data) == "table" and typeof(data.Healed) == "number" and data.Healed > 0 then
 			FX.DamageNumber(character, "+" .. math.floor(data.Healed), Color3.fromRGB(120, 255, 140))
 		end

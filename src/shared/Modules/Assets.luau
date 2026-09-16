@@ -208,13 +208,24 @@ function Assets.GetVFX(folder: string, name: string): Instance?
 end
 
 --- Sound em Assets.Sounds.<folder>.<name>. nil se não existir ou se o SoundId estiver vazio.
+--- Som por nome. Variações `Nome2`, `Nome3`, ... (com SoundId) entram no sorteio junto com `Nome`,
+--- para o mesmo golpe não repetir sempre o mesmo som.
 function Assets.GetSound(folder: string, name: string): Sound?
 	local inst = find("Sounds", folder, name)
-	if inst and inst:IsA("Sound") and inst.SoundId ~= "" then
-		return inst
+	if not (inst and inst:IsA("Sound") and inst.SoundId ~= "") then
+		warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
+		return nil
 	end
-	warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
-	return nil
+	local options = { inst }
+	for i = 2, 6 do
+		local alt = find("Sounds", folder, name .. i)
+		if alt and alt:IsA("Sound") and alt.SoundId ~= "" then
+			table.insert(options, alt)
+		else
+			break
+		end
+	end
+	return options[math.random(#options)]
 end
 
 --- Existe VFX específico ou alias (sem cair no Placeholder)?
