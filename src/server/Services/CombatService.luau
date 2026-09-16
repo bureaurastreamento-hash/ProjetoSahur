@@ -250,7 +250,8 @@ end
 --- Empurra a vítima para longe do atacante (aplicado no cliente dono da física). Com
 --- `ragdollSeconds` a vítima também cai em ragdoll de combate (RagdollService) e perde o block.
 export type Knockback = CombatConfig.Knockback
-function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number, ragdollSeconds: number?, up: number?)
+--- `directionOverride` (horizontal unitária) substitui a direção atacante→vítima (ex.: soltar na tangente).
+function CombatService.Knockback(attackerChar: Model, victim: Model, speed: number, duration: number, ragdollSeconds: number?, up: number?, directionOverride: Vector3?)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -259,7 +260,7 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	end
 	local flat = vRoot.Position - aRoot.Position
 	flat = Vector3.new(flat.X, 0, flat.Z)
-	local direction = if flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
+	local direction = if directionOverride then directionOverride elseif flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
 	if CombatService.HasSuperArmor(victimPlayer) then
 		return -- agarrando alguém: nem empurrão nem queda
 	end
@@ -295,6 +296,7 @@ export type HitOptions = {
 	IsM1: boolean?, -- soco: consome o crítico do parry
 	BreaksBlock: boolean?, -- ignora o block (quem bloqueia toma guard break)
 	RagdollOnce: boolean?, -- não derruba de novo quem já está caído (downslam)
+	KnockbackDirection: Vector3?, -- horizontal unitária; substitui atacante→vítima (agarrão giratório)
 }
 
 --- Resolve um acerto contra `victim` considerando block (só frontal)/parry/crítico e buffs.
@@ -416,7 +418,7 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
 			if aRoot and vRoot then
-				local dir = vRoot.Position - aRoot.Position
+				local dir = opts.KnockbackDirection or (vRoot.Position - aRoot.Position)
 				dir = Vector3.new(dir.X, 0, dir.Z)
 				if dir.Magnitude > 0.1 then
 					local params = RaycastParams.new()
@@ -433,7 +435,7 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 				end
 			end
 		end
-		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, ragdoll, kb.Up)
+		CombatService.Knockback(attackerChar, victim, kb.Speed, kb.Duration, ragdoll, kb.Up, opts.KnockbackDirection)
 	end
 	return kind
 end

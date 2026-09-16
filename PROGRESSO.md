@@ -211,6 +211,24 @@ Memória entre sessões. Atualizar depois de cada mudança.
   "summoned"; cliente toca Idle (prioridade Idle, loop) e liga/desliga Walk (Movement) pela velocidade
   horizontal do HRP (> 1,5). Id vazio = não toca. NÃO testado ainda (sem ids).
 
+### Agarrões variantes (2026-09-16, NÃO testado) — decisão do dono: Throw, Chokeslam, Spin nos 3 que já tinham
+- `Effect.Finish` no Grab (`AbilityService.effects.Grab`): `Slam` (antigo) | `Throw` | `Chokeslam` | `Spin`.
+  Ids das habilidades NÃO mudaram (animações/VFX continuam por nome: `<Id>`, `<Id>_Carry`, `<Id>_Hit`).
+  - Brawler `ShoulderBash` = **Arremesso** (Throw): segura 0,8 s e lança para onde o atacante olha
+    (Knockback 70, Up 25, ragdoll 1,8; wall splat conta).
+  - Guardian `ShieldBash` = **Esmagar** (Chokeslam): ergue 5 studs (`Lift`) por 0,8 s, esmaga (14 +
+    ragdoll) e área de 8 studs (10 de dano + empurrão) onde a vítima cai (`Position` no "hit" → VFX
+    `ShieldBash_Hit` no ponto).
+  - Overlord `Clutch` = **Giro Devastador** (Spin): vítima orbita 1,25 volta/s por 1,6 s; a cada 0,3 s quem
+    está a 9 studs toma 6 + empurrão; solta na TANGENTE (`HitOptions.KnockbackDirection`, novo em
+    `CombatService.ResolveHit/Knockback`) com 30 + ragdoll 2,5.
+- Cliente (`AbilityController.startGrabbed`) recebe `Lift`/`Spin` no "grab" e posiciona a vítima
+  (mesma fórmula do servidor: `aRoot.CFrame * Angles(0, θ, 0) * (0, lift, -offset)`).
+- Teste: cada um contra o boneco/2º cliente. Throw: girar a câmera durante o carry muda para onde ele
+  voa; perto de parede = "PAREDE". Chokeslam: vítima sobe no ar, cai no chão à frente; 2º boneco ao
+  lado toma a área. Spin: vítima gira ao redor (visível nos dois clientes), 2º boneco perto toma ticks;
+  ao soltar ela voa na direção do giro (não para trás nem para frente do Overlord).
+
 ### Placar global de rating 1v1 (2026-09-16, NÃO testado)
 - `LeaderboardService` generalizado em 2 boards: `kills` (OrderedDataStore `Leaderboard_Kills_v1`, Part
   `LeaderboardBoard`) e `rating` (`Leaderboard_Rating_v1`, Part `RatingBoard`, publicado só depois do 1º
@@ -251,7 +269,7 @@ Memória entre sessões. Atualizar depois de cada mudança.
    (Boss incl. Idle/Walk, Emotes, Dash/Downslam/Uppercut/Parry/Hit do Shared).
 2. Bugs do 3º teste (pedir).
 3. Roteiros de teste pendentes abaixo (leva 2, leva 3, fases 4 e 5) — nada disso foi validado ainda.
-4. Depois: ~~placar global de rating~~ (feito, testar), mais agarrões (perguntar quais), ~~Idle/Walk do
+4. Depois: ~~placar global de rating~~ (feito, testar), ~~mais agarrões~~ (Throw/Chokeslam/Spin feitos, testar), ~~Idle/Walk do
    boss~~ (código pronto, faltam ids), e o plano de **guerra de clã/dominação** (ver "Planos futuros").
 
 

@@ -260,11 +260,22 @@ end
 
 -- Agarrão: investida curta (como Dash) e, ao encostar no 1º alvo, SEGURA ele por Carry s (a vítima
 -- fica em stun duro e segue o atacante no cliente dela; o atacante ganha super armor: não pode ser
--- interrompido) e solta com o golpe final (Damage + Knockback/ragdoll). Sem alvo = só a investida.
+-- interrompido). Sem alvo = só a investida. O final depende de Effect.Finish:
+--   Slam (padrão): golpe colado (Damage + Knockback)
+--   Throw:         arremessa na direção em que o atacante olha (Knockback forte, com Up; wall splat conta)
+--   Chokeslam:     segura erguido (Lift studs) e esmaga à frente; área SlamRadius/SlamDamage onde cai
+--   Spin:          a vítima gira ao redor (Spin voltas/s) batendo em quem chega perto (SpinRadius/
+--                  SpinDamage a cada SpinInterval) e é solta na tangente
 local GRAB_OFFSET = 3 -- studs à frente do atacante onde a vítima fica presa
+local SPIN_DEFAULT = 1.25 -- voltas por segundo
+-- posição relativa da vítima no giro (mesma fórmula do cliente: AbilityController.startGrabbed)
+local function spinAngle(e: any, elapsed: number): number
+	return elapsed * (tonumber(e.Spin) or SPIN_DEFAULT) * math.pi * 2
+end
 effects.Grab = function(player, character, ability, direction)
 	local e = ability.Effect
 	local characterId = getState(player).characterId
+	local finish = if typeof(e.Finish) == "string" then e.Finish else "Slam"
 	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
 	AntiExploitService.Grace(player, maxDuration + e.Carry + 1.0)
 	CombatService.SetSuperArmor(player, maxDuration + e.Carry + 0.2)
@@ -298,18 +309,66 @@ effects.Grab = function(player, character, ability, direction)
 			CombatService.Stun(victimPlayer, e.Carry + 0.3, "grabbed")
 			AntiExploitService.Grace(victimPlayer, e.Carry + 1.5)
 		end
-		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", { Victim = victim, Carry = e.Carry, Offset = GRAB_OFFSET })
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", {
+			Victim = victim,
+			Carry = e.Carry,
+			Offset = GRAB_OFFSET,
+			Lift = if finish == "Chokeslam" then (tonumber(e.Lift) or 5) else nil,
+			Spin = if finish == "Spin" then (tonumber(e.Spin) or SPIN_DEFAULT) else nil,
+		})
+		local grabbedAt = os.clock()
+		if finish == "Spin" then
+			-- enquanto gira, a vítima é a "arma": quem estiver no raio toma ticks
+			local interval = tonumber(e.SpinInterval) or 0.3
+			task.spawn(function()
+				while os.clock() - grabbedAt < e.Carry do
+					task.wait(interval)
+					if not stillValid(player, character) or not HealthService.IsAlive(victim) then
+						return
+					end
+					for _, other in Hitbox.Around(character, tonumber(e.SpinRadius) or 8, MAX_AREA_TARGETS) do
+						if other ~= victim then
+							CombatService.ResolveHit(player, character, other, tonumber(e.SpinDamage) or 6, false, e.SpinKnockback)
+						end
+					end
+				end
+			end)
+		end
 		task.wait(e.Carry)
 		if not stillValid(player, character) or not HealthService.IsAlive(victim) then
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
 			return
 		end
 		-- golpe final: a vítima está colada; ResolveHit sem parry (está presa)
-		CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
+		local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+		local hitData: { [string]: any } = { Victim = victim }
+		if finish == "Spin" then
+			-- tangente da órbita no instante em que solta (θ = ângulo acumulado; posição = frente girada)
+			local theta = spinAngle(e, os.clock() - grabbedAt)
+			local front = facing(character)
+			local right = Vector3.new(-front.Z, 0, front.X)
+			-- cliente: aRoot.CFrame * Angles(0, θ, 0) * (0, 0, -offset) → r(θ) = front·cosθ − right·sinθ
+			-- r'(θ) = −front·sinθ − right·cosθ
+			local tangent = (-front * math.sin(theta) - right * math.cos(theta)).Unit
+			CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true, KnockbackDirection = tangent })
+		elseif finish == "Chokeslam" then
+			CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
+			local at = if vRoot then vRoot.Position else nil
+			if at then
+				hitData.Position = at
+				for _, other in Hitbox.AroundPoint(character, at, tonumber(e.SlamRadius) or 8, MAX_AREA_TARGETS) do
+					if other ~= victim then
+						CombatService.ResolveHit(player, character, other, tonumber(e.SlamDamage) or 10, false, e.SlamKnockback)
+					end
+				end
+			end
+		else
+			CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
+		end
 		if victimPlayer and typeof(e.StunSeconds) == "number" then
 			CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 		end
-		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Victim = victim })
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", hitData)
 	end)
 end
 

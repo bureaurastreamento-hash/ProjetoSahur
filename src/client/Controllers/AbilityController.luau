@@ -72,7 +72,9 @@ local function stopGrabbed()
 end
 
 --- Preso num agarrão: meu boneco (eu sou dono da física) fica colado à frente do atacante por `seconds`.
-local function startGrabbed(attacker: Model, seconds: number, offset: number)
+--- `lift` = studs acima (chokeslam); `spin` = voltas/s ao redor do atacante (mesma fórmula do servidor:
+--- AbilityService.spinAngle, que calcula a tangente na hora de soltar).
+local function startGrabbed(attacker: Model, seconds: number, offset: number, lift: number?, spin: number?)
 	stopGrabbed()
 	local character = localPlayer.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -82,15 +84,18 @@ local function startGrabbed(attacker: Model, seconds: number, offset: number)
 		return
 	end
 	humanoid.PlatformStand = true
-	local endsAt = os.clock() + seconds
+	local startedAt = os.clock()
+	local endsAt = startedAt + seconds
 	grabConn = RunService.RenderStepped:Connect(function()
 		if os.clock() >= endsAt or not aRoot.Parent or not root.Parent then
 			stopGrabbed()
 			return
 		end
-		-- de frente para o atacante, colado à frente dele
-		local target = aRoot.CFrame * CFrame.new(0, 0, -offset)
-		root.CFrame = CFrame.lookAt(target.Position, aRoot.Position)
+		-- de frente para o atacante, colado à frente dele (erguido se lift; orbitando se spin)
+		local angle = if spin then (os.clock() - startedAt) * spin * math.pi * 2 else 0
+		local target = aRoot.CFrame * CFrame.Angles(0, angle, 0) * CFrame.new(0, lift or 0, -offset)
+		local lookAt = Vector3.new(aRoot.Position.X, target.Position.Y, aRoot.Position.Z)
+		root.CFrame = CFrame.lookAt(target.Position, lookAt)
 		root.AssemblyLinearVelocity = Vector3.zero
 	end)
 end
@@ -147,7 +152,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
 		local victim = if typeof(data) == "table" then data.Victim else nil
 		if typeof(victim) == "Instance" and victim == localPlayer.Character then
-			startGrabbed(character, tonumber(data.Carry) or 0.8, tonumber(data.Offset) or 3)
+			startGrabbed(character, tonumber(data.Carry) or 0.8, tonumber(data.Offset) or 3, tonumber(data.Lift), tonumber(data.Spin))
 			FX.Shake(0.4, 0.2)
 		end
 	elseif phase == "release" then
@@ -159,6 +164,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		local victim = if typeof(data) == "table" then data.Victim else nil
 		if typeof(victim) == "Instance" and victim == localPlayer.Character then
 			stopGrabbed()
+			FX.Shake(0.6, 0.3)
 		end
 		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true, at)
 		FX.PlaySoundAt(character, characterId, abilityId .. "_Hit")

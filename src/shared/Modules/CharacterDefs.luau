@@ -19,9 +19,13 @@
 
 	Tipos de efeito (implementados em AbilityService):
 	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> investida COM dano (movimento no cliente, hitbox no servidor)
-	  Grab        { Speed, Duration, Range, Width, Height, Carry, Damage, Knockback?, StunSeconds? }
+	  Grab        { Speed, Duration, Range, Width, Height, Carry, Damage, Knockback?, StunSeconds?, Finish? }
 	                                                                 -> investida; ao encostar SEGURA o alvo por Carry s (ele vai junto,
-	                                                                    sem poder agir; o atacante não é interrompido) e solta com o golpe
+	                                                                    sem poder agir; o atacante não é interrompido) e solta com o golpe.
+	                                                                    Finish: "Slam" (padrão) | "Throw" (arremessa para onde olha; Knockback.Up)
+	                                                                    | "Chokeslam" (Lift studs erguido; esmaga + área SlamRadius/SlamDamage/SlamKnockback?)
+	                                                                    | "Spin" (gira Spin voltas/s; SpinRadius/SpinDamage/SpinInterval/SpinKnockback? em
+	                                                                      quem chega perto; solta na tangente)
 	  Teleport    { Distance }                                       -> servidor move o HRP para frente (com raycast contra parede)
 	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
 	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
@@ -92,12 +96,12 @@ CharacterDefs.Characters = {
 		Abilities = {
 			{
 				Id = "ShoulderBash",
-				DisplayName = "Agarrão",
+				DisplayName = "Arremesso",
 				Cooldown = 8,
 				EnergyCost = 0,
 				CastTime = 0.4,
 				-- agarra, carrega 0,8 s e esmaga no chão
-				Effect = { Type = "Grab", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 35, Duration = 0.25, Ragdoll = 1.5 } },
+				Effect = { Type = "Grab", Finish = "Throw", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 1.8, Up = 25 } },
 			},
 			{
 				Id = "GroundSlam",
@@ -203,12 +207,12 @@ CharacterDefs.Characters = {
 		Abilities = {
 			{
 				Id = "ShieldBash",
-				DisplayName = "Golpe de Escudo",
+				DisplayName = "Esmagar",
 				Cooldown = 8,
 				EnergyCost = 0,
 				CastTime = 0.4,
-				-- prende no escudo, empurra 0,6 s e arremessa atordoado
-				Effect = { Type = "Grab", Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.6, Damage = 12, StunSeconds = 0.6, Knockback = { Speed = 45, Duration = 0.25 } },
+				-- chokeslam: ergue no escudo 0,8 s e esmaga no chão; quem está perto do impacto toma área
+				Effect = { Type = "Grab", Finish = "Chokeslam", Lift = 5, Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.8, Damage = 14, Knockback = { Speed = 10, Duration = 0.15, Ragdoll = 1.5 }, SlamRadius = 8, SlamDamage = 10, SlamKnockback = { Speed = 35, Duration = 0.2 } },
 			},
 			{
 				Id = "Fortify",
@@ -296,11 +300,11 @@ CharacterDefs.Characters = {
 			},
 			{
 				Id = "Clutch",
-				DisplayName = "Agarrão Longo",
+				DisplayName = "Giro Devastador",
 				Cooldown = 2,
 				EnergyCost = 0,
 				CastTime = 0.2,
-				Effect = { Type = "Grab", Speed = 90, Duration = 0.4, Range = 10, Width = 10, Height = 8, Carry = 1.5, Damage = 30, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2.5 } },
+				Effect = { Type = "Grab", Finish = "Spin", Spin = 1.25, Speed = 90, Duration = 0.4, Range = 10, Width = 10, Height = 8, Carry = 1.6, Damage = 30, Knockback = { Speed = 80, Duration = 0.35, Ragdoll = 2.5, Up = 15 }, SpinRadius = 9, SpinDamage = 6, SpinInterval = 0.3, SpinKnockback = { Speed = 30, Duration = 0.15 } },
 			},
 			{
 				Id = "Cataclysm",

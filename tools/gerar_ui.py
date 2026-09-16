@@ -291,7 +291,7 @@ HELP = "\n".join([
     "SHIFT LOCK — Shift",
     "DASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)",
     "CAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)",
-    "HABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões carregam o alvo",
+    "HABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)",
     "G = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)",
     "CARGA — dar golpe +6, receber +4, parry +10",
     "VIDA — regenera após 6 s sem dano",
