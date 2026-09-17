@@ -45,7 +45,6 @@ type PlayerState = {
 	superArmorUntil: number, -- agarrão/ult: não toma hitstun nem cai (dano entra normal)
 	comboArmorUntil: number, -- acabou de acertar um M1: soco simples de TERCEIRO não interrompe o combo
 	comboTargetUserId: number, -- em quem o combo está entrando (o alvo em hitstun não bate mesmo)
-	followUpUntil: number, -- depois do uppercut: janela para o downslam no ar (sem precisar de combo)
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -86,7 +85,6 @@ local function newState(): PlayerState
 		superArmorUntil = 0,
 		comboArmorUntil = 0,
 		comboTargetUserId = 0,
-		followUpUntil = 0,
 	}
 end
 
@@ -616,12 +614,12 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 	if typeof(dashingUntil) == "number" and now < dashingUntil then
 		return -- no meio do dash (MovementService)
 	end
-	-- Golpes especiais (uppercut/downslam) só como 4º GOLPE do combo, no lugar do finisher com empurrão
+	-- Uppercut só como 4º GOLPE do combo (no lugar do finisher com empurrão); o Downslam é livre no ar
+	-- caindo (dono 2026-09-17: é o par do uppercut), com o cooldown próprio segurando o ritmo.
 	local m1 = CombatConfig.Attacks.M1
-	if attackId ~= "M1" then
+	if attackId ~= "M1" and attackId ~= "Downslam" then
 		local comboAlive = now - state.lastAttackAt <= m1.ComboResetTime
-		local followUp = attackId == "Downslam" and now < state.followUpUntil -- uppercut -> downslam no ar
-		if not followUp and (not comboAlive or state.combo < m1.ComboLength) then
+		if not comboAlive or state.combo < m1.ComboLength then
 			return
 		end
 	end
@@ -661,7 +659,6 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 		knockback = attackCfg.Knockback
 		state.combo = 1
 		state.nextAttackAt = now + attackCfg.Cooldown
-		state.followUpUntil = if attackId == "Uppercut" then now + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
 	end
 	state.lastAttackAt = now
 

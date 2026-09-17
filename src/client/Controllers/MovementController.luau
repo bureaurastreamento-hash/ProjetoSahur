@@ -4,7 +4,8 @@
 	  - Correr é AUTOMÁTICO ao andar para a frente (W / analógico para a frente): RequestSprint(true).
 	    Para os lados e para trás só anda. Mobile: botão CORRER força a corrida em qualquer direção.
 	  - Shift lock no Shift esquerdo, implementado aqui (mouse travado no centro, personagem
-	    vira com a câmera, ombro deslocado). O nativo está desligado no project.json
+	    vira com a câmera, ombro deslocado). Durante uma cutscene (CutsceneController.IsPlaying)
+	    ele solta o boneco e o mouse: senão a câmera da cena e o boneco giram um atrás do outro. O nativo está desligado no project.json
 	    (StarterPlayer.EnableMouseLockOption = false) para termos controle total. Ctrl fica livre.
 	  - Animações de movimento: com `ProcAnimDefs.Locomotion.Enabled` (Leva 8) quem manda é o
 	    ProcAnimController (Idle/Walk/Run procedurais, um jeito por personagem). Desligando a
@@ -39,6 +40,7 @@ local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local ProcAnimDefs = require(Modules:WaitForChild("ProcAnimDefs"))
+local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 
 local MovementController = {}
 
@@ -481,6 +483,12 @@ local function applyShiftLock(active: boolean)
 		local hum = char and char:FindFirstChildOfClass("Humanoid")
 		local root = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
 		if not hum or not root or hum.Health <= 0 or localPlayer:GetAttribute("Ragdolled") == true then
+			return
+		end
+		if CutsceneController.IsPlaying() then
+			-- cutscene com a câmera: não virar o boneco nem prender o mouse (senão a cena roda junto)
+			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+			hum.CameraOffset = Vector3.zero
 			return
 		end
 		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter

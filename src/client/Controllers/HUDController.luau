@@ -155,26 +155,50 @@ end
 -- Slots de habilidade
 -- ---------------------------------------------------------------------------
 
+--- Slots 1..4 + G. A ULTIMATE é uma habilidade numérica que só funciona DESPERTO (AbilityService):
+--- ela aparece no slot dela sempre — apagada com "(desperto)" fora do modo, acesa e dourada durante —
+--- senão ninguém descobre que existe (dono, 2026-09-17). O G é o DESPERTAR (a transformação).
+local ULT_SLOT_COLOR = Color3.fromRGB(255, 200, 70)
+local slotBaseColor: Color3? = nil
+local ultSlotIndex: number? = nil
+
 local function refreshSlots()
 	local characterId = localPlayer:GetAttribute("CharacterId")
 	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
 	characterNameLabel.Text = if def then def.DisplayName else ""
+	local now = Workspace:GetServerTimeNow()
+	local awakenedUntil = localPlayer:GetAttribute("AwakenedUntil")
+	local awakened = typeof(awakenedUntil) == "number" and awakenedUntil > now
+	if not slotBaseColor and slots[1] then
+		slotBaseColor = slots[1].BackgroundColor3
+	end
+	local base = slotBaseColor or Color3.fromRGB(30, 30, 30)
+	ultSlotIndex = nil
 	local ultDef: CharacterDefs.AbilityDef? = nil
 	for i, slot in slots do
 		local ability = def and def.Abilities[i]
 		local nameLabel = slot:FindFirstChild("Name") :: TextLabel
-		if ability and ability.EnergyCost >= CharacterDefs.Energy.Max then
-			ultDef = ability
-			ability = nil -- a ultimate não ocupa slot numérico: sai pelo G
-		end
+		local isUlt = ability ~= nil and ability.EnergyCost >= CharacterDefs.Energy.Max
 		if ability then
 			slot.Visible = true
-			nameLabel.Text = ability.DisplayName
+			if isUlt then
+				ultDef = ability
+				ultSlotIndex = i
+				nameLabel.Text = if awakened then ability.DisplayName else ability.DisplayName .. " (desperto)"
+				slot.BackgroundColor3 = if awakened then ULT_SLOT_COLOR else base
+				slot.BackgroundTransparency = if awakened then 0.1 else 0.55
+				nameLabel.TextTransparency = if awakened then 0 else 0.35
+			else
+				nameLabel.Text = ability.DisplayName
+				slot.BackgroundColor3 = base
+				slot.BackgroundTransparency = 0.1
+				nameLabel.TextTransparency = 0
+			end
 		else
 			slot.Visible = false
 		end
 	end
-	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if ultDef then ultDef.DisplayName else "Ultimate"
+	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if ultDef then "Despertar" else "Ultimate"
 end
 
 local function setCooldownOverlay(slot: Frame, remaining: number, total: number)
@@ -742,9 +766,11 @@ function HUDController.Start()
 	localPlayer:GetAttributeChangedSignal("Energy"):Connect(refreshEnergy)
 	localPlayer:GetAttributeChangedSignal("AwakenedUntil"):Connect(function()
 		local untilT = localPlayer:GetAttribute("AwakenedUntil")
+		refreshSlots() -- acende/apaga o slot da ultimate
 		if typeof(untilT) == "number" and untilT > Workspace:GetServerTimeNow() then
 			energyFill.BackgroundColor3 = ULT_COLOR
-			showBanner(("DESPERTAR! %ds de +dano/+velocidade"):format(CombatConfig.Awakening.Duration), 2)
+			local ultName = ultSlotIndex and ("%d = %s"):format(ultSlotIndex, ((slots[ultSlotIndex]:FindFirstChild("Name") :: TextLabel).Text)) or "ultimate liberada"
+			showBanner(("DESPERTAR! %ds de +dano/+velocidade · %s"):format(CombatConfig.Awakening.Duration, ultName), 2.5)
 		else
 			energyFill.BackgroundColor3 = ENERGY_COLOR
 			refreshEnergy()

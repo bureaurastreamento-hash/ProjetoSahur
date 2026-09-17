@@ -51,7 +51,6 @@ CombatController.TouchAttackEnabled = true
 -- o próximo é o 4º. myNextAttackAt/myStunnedUntil evitam animar/pedir golpe que o servidor vai recusar.
 local myNextCombo = 1
 local myLastAttackAt = -math.huge
-local myFollowUpUntil = 0 -- depois do uppercut: downslam livre
 local myNextAttackAt = 0
 local myStunnedUntil = 0
 local pendingAttacks = 0 -- socos previstos cuja confirmação (NotifyAttack) ainda não chegou
@@ -91,8 +90,8 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 	end
 end
 
---- Soco (M1). Usado pelo input e pelos botões de toque. No 4º golpe, no ar subindo vira Uppercut,
---- caindo vira Downslam (o servidor valida com a mesma regra).
+--- Soco (M1). Usado pelo input e pelos botões de toque. No ar CAINDO vira sempre Downslam (soco para
+--- baixo); no ar SUBINDO vira Uppercut só no 4º golpe do combo (o servidor valida com a mesma regra).
 function CombatController.Attack()
 	local character = localPlayer.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
@@ -100,16 +99,17 @@ function CombatController.Attack()
 	local attackId = "M1"
 	local m1 = CombatConfig.Attacks.M1
 	local finisherNext = myNextCombo >= m1.ComboLength and os.clock() - myLastAttackAt <= m1.ComboResetTime
-	local followUp = os.clock() < myFollowUpUntil
-	if humanoid and root and (finisherNext or followUp) then
+	if humanoid and root then
 		local st = humanoid:GetState()
 		local airborne = st == Enum.HumanoidStateType.Freefall or st == Enum.HumanoidStateType.Jumping
 		if airborne then
 			local rising = root.AssemblyLinearVelocity.Y > CombatConfig.AirRisingSpeed
-			if finisherNext and rising then
-				attackId = "Uppercut"
-			elseif not rising then
-				attackId = "Downslam"
+			if rising then
+				if finisherNext then
+					attackId = "Uppercut" -- subindo só no 4º golpe do combo
+				end
+			else
+				attackId = "Downslam" -- caindo: sempre o soco para baixo (dono 2026-09-17)
 			end
 		end
 	end
@@ -131,7 +131,6 @@ function CombatController.Attack()
 	else
 		myNextAttackAt = now + attackCfg.Cooldown
 		myNextCombo = 1
-		myFollowUpUntil = if attackId == "Uppercut" then now + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
 	end
 	myLastAttackAt = now
 	pendingAttacks += 1
@@ -240,7 +239,6 @@ local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex
 	if attackerChar == localPlayer.Character then
 		-- confirmação do servidor: sincroniza o combo (o servidor manda); a animação já saiu no clique
 		myNextCombo = if attackId == "M1" and comboIndex < CombatConfig.Attacks.M1.ComboLength then comboIndex + 1 else 1
-		myFollowUpUntil = if attackId == "Uppercut" then os.clock() + CombatConfig.Attacks.Uppercut.FollowUpWindow else 0
 		if pendingAttacks > 0 then
 			pendingAttacks -= 1
 			return

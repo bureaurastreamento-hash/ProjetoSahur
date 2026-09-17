@@ -150,15 +150,26 @@ local shotDuration = 0
 local shotStyle = Enum.EasingStyle.Quad
 local shotDirection = Enum.EasingDirection.InOut
 local shotRoot: BasePart? = nil
+local shotYaw = 0 -- direção do personagem CONGELADA no começo da cena (ver baseCF)
+local shotScale = 1 -- rig grande (boss) = planos mais longes, senão ele não cabe na tela
 
 function CutsceneController.IsPlaying(): boolean
 	return cameraBusy
 end
 
---- CFrame de câmera relativo ao HRP (frente = -Z) olhando para um ponto relativo.
+--- Base da câmera: segue a POSIÇÃO do personagem, mas com a direção congelada no começo da cena.
+--- (Se seguisse a rotação, o shift lock viraria o boneco para a câmera e a câmera atrás dele — os dois
+--- girando juntos cada vez mais rápido. Dono, 2026-09-17: "a tela gira muito rápido e o personagem roda".)
+local function baseCF(root: BasePart): CFrame
+	return CFrame.new(root.Position) * CFrame.Angles(0, shotYaw, 0)
+end
+
+--- CFrame de câmera relativo ao personagem (frente = -Z) olhando para um ponto relativo.
+--- Os offsets são multiplicados por `shotScale`: um rig grande (Big C.H.O.P.) precisa de mais distância.
 local function camAt(root: BasePart, offset: Vector3, lookOffset: Vector3): CFrame
-	local pos = root.CFrame:PointToWorldSpace(offset)
-	local look = root.CFrame:PointToWorldSpace(lookOffset)
+	local base = baseCF(root)
+	local pos = base:PointToWorldSpace(offset * shotScale)
+	local look = base:PointToWorldSpace(lookOffset * shotScale)
 	return CFrame.lookAt(pos, look)
 end
 
@@ -200,8 +211,24 @@ local function cameraShot(to: Shot, seconds: number, style: Enum.EasingStyle?, d
 	renderCamera()
 end
 
+--- Quanto este personagem é maior que um R6 comum (~5 studs): afasta os planos na mesma proporção.
+local function rigScale(character: Model): number
+	local ok, size = pcall(function()
+		return character:GetExtentsSize()
+	end)
+	if not ok or typeof(size) ~= "Vector3" then
+		return 1
+	end
+	local biggest = math.max(size.Y, size.X, size.Z)
+	return math.clamp(biggest / 5.5, 1, 4)
+end
+
 local function takeCamera(root: BasePart, first: Shot)
 	shotRoot = root
+	local look = root.CFrame.LookVector
+	shotYaw = math.atan2(-look.X, -look.Z) -- congela a direção de agora
+	local model = root:FindFirstAncestorOfClass("Model")
+	shotScale = if model then rigScale(model) else 1
 	shotFrom = nil
 	shotTo = nil
 	if cameraConn then
@@ -220,6 +247,7 @@ local function releaseCamera()
 	shotRoot = nil
 	shotFrom = nil
 	shotTo = nil
+	shotScale = 1
 	cameraBusy = false
 end
 
