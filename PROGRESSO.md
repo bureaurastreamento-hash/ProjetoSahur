@@ -200,6 +200,30 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
+## PLANO DE POLIMENTO (dono, 2026-09-17) — levas, uma por vez
+Decisões do dono: o tempo NÃO para globalmente (só o Guardian, raio pequeno); todo dash pra FRENTE (e o Piscar
+do Swift) dá um HIT ao chegar (dano, não conta combo; bem de frente = empurra longe); Big C.H.O.P. nunca entra em
+ragdoll; ult do Swift vira DOMÍNIO DO TEMPO (cúpula: tudo dentro muito lento, Swift um pouco mais rápido; sair
+quebra a cúpula e o Swift fica MUITO rápido até acabar); animações faltantes/erradas viram PROCEDURAIS por
+código com o tempo exato de cada ação (equipe pode substituir colando id).
+- **Leva 1 — combate (pedidos acima)**: FreezeRadius só Guardian (18 studs, 1,3 s; outros 0); dash frente/Blink
+  com hit de chegada (Dash.ArrivalHit: dano 4, "bem de frente" = dot > 0,8 → knockback forte sem ragdoll);
+  BigChop imune a ragdoll (HealthService/RagdollService checam `BossRig`); Swift/Tempest → "Domínio do Tempo"
+  (`TimeDome` effect: raio 22, 8 s, slow 0,25× de WalkSpeed/anim/cooldown pra quem está dentro, Swift ×1,25;
+  sair = cúpula quebra + Swift ×2,2 até o fim; VFX cúpula + relógio; som).
+- **Leva 2 — ProcAnim base** (`src/client/Controllers/ProcAnimController.luau` + `Shared/Modules/ProcAnimDefs.luau`):
+  motor de poses em Motor6D (como a cutscene), keyframes por ação com o tempo do CombatConfig: M1_1..4 (0,45 s
+  cada, impacto em 0,15), Uppercut, Downslam, Hit (reação), Parry, Block/BlockHit, Grabbed, Dash/DashBack,
+  RagdollCancel. Regra: id da equipe preenchido = toca o da equipe; vazio ou marcado `Proc` = procedural.
+- **Leva 3 — ProcAnim habilidades**: todas as habilidades de todos os personagens com CastTime (Blink, SweepKick,
+  ArcaneBolt, Mend, Meteor, Fortify, Quake, Bombo, Toque, Ritmo, Domínio, Rampage/GroundSlam/ShoulderBash
+  conferidos com o tempo) + poses do despertar por personagem.
+- **Leva 4 — Emotes/cenas**: 8 emotes (wave, taunt, dance, bow, flex, scene_power/dark/storm) procedurais em loop.
+- **Leva 5 — Sons por golpe + VFX** (lista do TRAILER_ASSETS: separar repetidos, Hit_Stun, Crit, BlackFlash…)
+  e revisão das 76 composições no F7 com o dono.
+- **Leva 6 — Trailer** (TRAILER_ASSETS.md).
+- **Leva 7 — Balanceamento com gente + o que o dono ainda não testou (2 clientes) + menus feedback.**
+
 ## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado, 27 services / 0 erros)
 
 ### PRÓXIMO PASSO (decidido com o dono no fim da sessão): arrumar o TRAILER — sons, animações e timing
