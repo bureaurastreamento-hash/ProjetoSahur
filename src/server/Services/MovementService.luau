@@ -105,6 +105,11 @@ local function doDashOverride(player: Player, character: Model, ability: any, di
 		return
 	end
 	local effect = ability.Effect
+	-- Despertado (AwakenedUntil vem do AbilityService, que já depende deste módulo): versão desperta
+	local awakenedUntil = player:GetAttribute("AwakenedUntil")
+	if ability.AwakenedEffect and typeof(awakenedUntil) == "number" and Workspace:GetServerTimeNow() < awakenedUntil then
+		effect = ability.AwakenedEffect
+	end
 	if not (effect and effect.Type == "Teleport") then
 		warn(("[MovementService] DashOverride %s: só Effect Teleport é suportado"):format(tostring(ability.Id)))
 		return

@@ -104,6 +104,8 @@ CharacterDefs.Characters = {
 				CastTime = 0.4,
 				-- agarra, carrega 0,8 s e esmaga no chão
 				Effect = { Type = "Grab", Finish = "Throw", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 1.8, Up = 25 } },
+				-- desperto: investida mais longa e larga, arremesso mais forte
+				AwakenedEffect = { Type = "Grab", Finish = "Throw", Speed = 85, Duration = 0.3, Range = 8, Width = 8, Height = 7, Carry = 0.7, Damage = 22, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.4, Up = 35 } },
 			},
 			{
 				Id = "GroundSlam",
@@ -141,6 +143,7 @@ CharacterDefs.Characters = {
 			EnergyCost = 0,
 			CastTime = 0.15,
 			Effect = { Type = "Teleport", Distance = 18 },
+			AwakenedEffect = { Type = "Teleport", Distance = 28 }, -- desperto: pisca mais longe
 		},
 		Abilities = {
 			{
@@ -187,6 +190,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "Heal", Amount = 30 },
+				AwakenedEffect = { Type = "Heal", Amount = 50 },
 			},
 			{
 				Id = "Meteor",
@@ -216,6 +220,8 @@ CharacterDefs.Characters = {
 				CastTime = 0.4,
 				-- chokeslam: ergue no escudo 0,8 s e esmaga no chão; quem está perto do impacto toma área
 				Effect = { Type = "Grab", Finish = "Chokeslam", Lift = 5, Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.8, Damage = 14, Knockback = { Speed = 10, Duration = 0.15, Ragdoll = 1.5 }, SlamRadius = 8, SlamDamage = 10, SlamKnockback = { Speed = 35, Duration = 0.2 } },
+				-- desperto: ergue mais alto e o impacto no chão pega uma área bem maior
+				AwakenedEffect = { Type = "Grab", Finish = "Chokeslam", Lift = 7, Speed = 65, Duration = 0.25, Range = 7, Width = 8, Height = 7, Carry = 0.8, Damage = 20, Knockback = { Speed = 15, Duration = 0.2, Ragdoll = 2 }, SlamRadius = 13, SlamDamage = 16, SlamKnockback = { Speed = 50, Duration = 0.25, Ragdoll = 1.2 } },
 			},
 			{
 				Id = "Fortify",
@@ -263,6 +269,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.6,
 				Effect = { Type = "DamageBuff", Multiplier = 1.5, Duration = 6 },
+				AwakenedEffect = { Type = "DamageBuff", Multiplier = 1.8, Duration = 8 }, -- soma com o buff do Awakening
 			},
 			{
 				Id = "Ritmo",
@@ -338,6 +345,7 @@ CharacterDefs.Characters = {
 				CastTime = 0.5,
 				-- investida pesada: quem está na frente é atropelado e cai
 				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } },
+				AwakenedEffect = { Type = "Dash", Speed = 75, Duration = 0.55, Damage = 32, Range = 12, Width = 14, Height = 11, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 2 } },
 			},
 			{
 				Id = "Crush",
@@ -346,6 +354,7 @@ CharacterDefs.Characters = {
 				EnergyCost = 0,
 				CastTime = 0.7,
 				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.5, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 22, Damage = 40, Delay = 0.4, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 } },
 			},
 			{
 				Id = "FleshWave",
@@ -355,6 +364,7 @@ CharacterDefs.Characters = {
 				CastTime = 0.8,
 				-- anel de choque: expulsa quem fica colado batendo
 				Effect = { Type = "AreaDamage", Radius = 22, Damage = 22, Delay = 0.7, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2 } },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 30, Damage = 30, Delay = 0.6, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.5 } },
 			},
 			{
 				Id = "Frenzy",

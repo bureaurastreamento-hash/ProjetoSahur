@@ -222,6 +222,13 @@ o que é som repetido entre golpes). Ordem combinada:
 4. Depois do trailer: polimento restante — menus minimalistas, `AwakenedEffect` faltando, lista final de assets
    por ação para a equipe; feedback do dono sobre as 76 composições de VFX no F7 (`Lib/…`).
 
+### 2026-09-16 (noite, depois do trailer) — polimento do jogo (trailer fica para depois, decisão do dono)
+- **`AwakenedEffect` completo**: toda habilidade que não é ultimate tem versão desperta em `CharacterDefs`:
+  Brawler/ShoulderBash (arremesso mais longo/forte), Swift/Blink (Piscar 18 → 28 studs; suporte no
+  `MovementService.doDashOverride` lendo o atributo `AwakenedUntil`), Mystic/Mend (30 → 50), Guardian/ShieldBash
+  (ergue 7, área do impacto 13/16), Sahur/Toque (×1,8 por 8 s), B.I.G. Devour/Crush/FleshWave. Testado via MCP:
+  despertar → ShieldBash desperto deu 26 (20 × 1,3), Fortify 0,2, Blink 28. `SetForm` zera o despertar (esperado).
+
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão
   soldado (2 clientes) → administração (mensagem/ban) → ciclo dia/noite → Arena_Antiga na guerra de clã →
