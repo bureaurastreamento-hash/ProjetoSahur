@@ -16,12 +16,12 @@
     "Size": {
      "UDim2": [
       [
-       0,
-       912
+       1,
+       -24
       ],
       [
-       0,
-       400
+       1,
+       -202
       ]
      ]
     },
@@ -50,9 +50,10 @@
       0.0
      ]
     },
-    "BackgroundTransparency": 0.5,
+    "BackgroundTransparency": 0.28,
     "BorderSizePixel": 0,
-    "Visible": false
+    "Visible": false,
+    "ClipsDescendants": true
    },
    "children": [
     {
@@ -63,7 +64,7 @@
       "CornerRadius": {
        "UDim": [
         0,
-        8
+        10
        ]
       }
      }
@@ -81,7 +82,7 @@
         1
        ]
       },
-      "Transparency": 0.86,
+      "Transparency": 0.84,
       "ApplyStrokeMode": "Border"
      }
     },
@@ -93,25 +94,44 @@
       "PaddingLeft": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingRight": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingTop": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingBottom": {
        "UDim": [
         0,
-        16
+        18
+       ]
+      }
+     }
+    },
+    {
+     "name": "UISizeConstraint",
+     "className": "UISizeConstraint",
+     "properties": {
+      "Name": "UISizeConstraint",
+      "MaxSize": {
+       "Vector2": [
+        1094,
+        400
+       ]
+      },
+      "MinSize": {
+       "Vector2": [
+        0,
+        0
        ]
       }
      }
@@ -129,7 +149,7 @@
         ],
         [
          0,
-         22
+         26
         ]
        ]
       },
@@ -152,14 +172,14 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "PERSONAGENS",
+      "Text": "Personagens",
       "Font": "GothamBold",
-      "TextSize": 16,
+      "TextSize": 20,
       "TextColor3": {
        "Color3": [
-        0.62,
-        0.62,
-        0.68
+        0.96,
+        0.96,
+        0.97
        ]
       },
       "TextXAlignment": "Left",
@@ -181,7 +201,7 @@
         ],
         [
          0,
-         22
+         26
         ]
        ]
       },
@@ -245,7 +265,7 @@
         ],
         [
          0,
-         26
+         28
         ]
        ]
       },
@@ -274,7 +294,7 @@
     },
     {
      "name": "List",
-     "className": "Frame",
+     "className": "ScrollingFrame",
      "properties": {
       "Name": "List",
       "Size": {
@@ -285,7 +305,7 @@
         ],
         [
          0,
-         300
+         310
         ]
        ]
       },
@@ -297,26 +317,28 @@
         ],
         [
          0,
-         52
+         54
         ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.0,
-        0.0,
-        0.0
        ]
       },
       "BackgroundTransparency": 1,
       "BorderSizePixel": 0,
-      "Visible": true
+      "ScrollBarThickness": 4,
+      "ScrollBarImageTransparency": 0.6,
+      "CanvasSize": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "AutomaticCanvasSize": "X",
+      "ScrollingDirection": "X"
      },
      "children": [
       {
@@ -421,7 +443,7 @@
             1
            ]
           },
-          "Transparency": 0.86,
+          "Transparency": 0.84,
           "ApplyStrokeMode": "Border"
          }
         },
@@ -1060,7 +1082,7 @@
           1
          ]
         },
-        "Transparency": 0.86,
+        "Transparency": 0.84,
         "ApplyStrokeMode": "Border"
        }
       }

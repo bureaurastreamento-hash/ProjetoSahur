@@ -50,7 +50,7 @@
       0.0
      ]
     },
-    "BackgroundTransparency": 0.5,
+    "BackgroundTransparency": 0.28,
     "BorderSizePixel": 0,
     "Visible": true
    },
@@ -81,7 +81,7 @@
         1
        ]
       },
-      "Transparency": 0.86,
+      "Transparency": 0.84,
       "ApplyStrokeMode": "Border"
      }
     },
@@ -3307,7 +3307,7 @@
       0.0
      ]
     },
-    "BackgroundTransparency": 0.5,
+    "BackgroundTransparency": 0.28,
     "BorderSizePixel": 0,
     "Visible": false
    },
@@ -3338,7 +3338,7 @@
         1
        ]
       },
-      "Transparency": 0.86,
+      "Transparency": 0.84,
       "ApplyStrokeMode": "Border"
      }
     },

@@ -13,10 +13,10 @@ UI = Path(__file__).resolve().parent.parent / "src" / "ui"
 
 # ---- tokens -----------------------------------------------------------------
 BG = [0.0, 0.0, 0.0]             # painéis: mesmo preto translúcido do TopbarPlus (discreto)
-BG_T = 0.5                       # transparência dos painéis (TopbarPlus usa 0.5)
+BG_T = 0.28                      # transparência dos painéis (TopbarPlus usa 0.5; 0.28 = texto legível sobre o mapa)
 CARD = [0.08, 0.08, 0.09]        # cartões/slots
 LINE = [1, 1, 1]                 # borda (com transparência)
-LINE_T = 0.86
+LINE_T = 0.84
 TEXT = [0.96, 0.96, 0.97]
 MUTED = [0.62, 0.62, 0.68]
 ACCENT = [0.35, 0.75, 1.0]       # energia / seleção
@@ -101,9 +101,11 @@ def textbox(name, placeholder, size, pos, anchor=(0, 0), ts=14, extra=None):
     return node(name, "TextBox", props, [corner(), stroke(), padding(8, 0)])
 
 
-def scroll(name, size, pos, children=None, extra=None):
+def scroll(name, size, pos, children=None, extra=None, horizontal=False):
+    axis = "X" if horizontal else "Y"
     props = {"Size": size, "Position": pos, "BackgroundTransparency": 1, "BorderSizePixel": 0, "ScrollBarThickness": 4,
-             "CanvasSize": {"UDim2": [[0, 0], [0, 0]]}, "AutomaticCanvasSize": "Y", "ScrollingDirection": "Y"}
+             "ScrollBarImageTransparency": 0.6, "CanvasSize": {"UDim2": [[0, 0], [0, 0]]}, "AutomaticCanvasSize": axis,
+             "ScrollingDirection": axis}
     props.update(extra or {})
     return node(name, "ScrollingFrame", props, children)
 
@@ -115,14 +117,27 @@ def screen(name, children, order=1, enabled=True, ignore_inset=True):
             "children": children}
 
 
-def panel(name, w, h, title, children, hidden=True):
-    """Painel padrão (aberto pelo TopbarPlus): título em caixa alta + conteúdo.
-    Abre como um DROPDOWN logo abaixo do topbar, à esquerda, com a mesma cor/transparência dos
-    ícones (jogo competitivo: o centro da tela nunca é coberto)."""
-    return frame(name, ud(0, w, 0, h), ud(0, 12, 0, 52), anchor=(0, 0), visible=not hidden, children=[
-        corner(8), stroke(), padding(16),
-        label("Title", title.upper(), ud(1, 0, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=MUTED),
-    ] + children)
+PANEL_PAD = 18
+PANEL_TITLE_H = 26  # altura do título; o conteúdo começa em y = PANEL_TITLE_H + 8
+
+
+def sizecap(w, h):
+    """Teto de tamanho (UISizeConstraint): o painel pede (w, h) mas encolhe se a tela for menor."""
+    return node("UISizeConstraint", "UISizeConstraint", {"MaxSize": {"Vector2": [w, h]}, "MinSize": {"Vector2": [0, 0]}})
+
+
+def panel(name, w, h, title, children, hidden=True, full_width=False):
+    """Painel padrão (aberto pelo TopbarPlus): título + conteúdo.
+    Abre como um DROPDOWN logo abaixo do topbar, à esquerda, com a mesma cor dos ícones (jogo
+    competitivo: o centro da tela nunca é coberto). Tamanho = (w, h) no máximo; em telas menores
+    encolhe até caber (largura = tela − 24, altura = tela − 202) e recorta o que estourar
+    (ClipsDescendants): listas devem ser ScrollingFrames com altura relativa."""
+    # altura máxima = tela − topbar (52) − faixa da HUD embaixo (~150): o painel nunca cobre a barra/slots
+    size = ud(1, -24, 1, -(52 + 150)) if full_width else ud(0, w, 1, -(52 + 150))
+    return frame(name, size, ud(0, 12, 0, 52), anchor=(0, 0), visible=not hidden, children=[
+        corner(10), stroke(), padding(PANEL_PAD), sizecap(w, h),
+        label("Title", title, ud(1, 0, 0, PANEL_TITLE_H), ud(0, 0, 0, 0), font=FONT_B, ts=20, color=TEXT),
+    ] + children, extra={"ClipsDescendants": True})
 
 
 def write(fname, data):
@@ -239,17 +254,18 @@ card = button("Template", "", ud(0, CARD_W, 0, CARD_H), ud(0, 0, 0, 0), bg=CARD,
           xalign="Center", extra={"BackgroundTransparency": 0.85, "BackgroundColor3": col([1, 1, 1])},
           children=[corner(5)]),
 ])
+N_CARDS = 6  # CharacterDefs.Order (Overlord só aparece para devs, mas o painel comporta todos)
 select = screen("CharacterSelect", [
-    panel("Panel", 5 * (CARD_W + 10) + 32 - 10, CARD_H + 100, "Personagens", [
-        label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+    panel("Panel", N_CARDS * (CARD_W + 10) - 10 + 2 * PANEL_PAD, CARD_H + 100, "Personagens", [
+        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
-        label("Hint", "", ud(1, 0, 0, 18), ud(0, 0, 0, 26), ts=12, color=MUTED),
-        frame("List", ud(1, 0, 0, CARD_H), ud(0, 0, 0, 52), t=1, children=[
+        label("Hint", "", ud(1, 0, 0, 18), ud(0, 0, 0, PANEL_TITLE_H + 2), ts=12, color=MUTED),
+        scroll("List", ud(1, 0, 0, CARD_H + 10), ud(0, 0, 0, PANEL_TITLE_H + 28), horizontal=True, children=[
             listlayout("Horizontal", 10, "Left"), card,
         ]),
         button("QueueButton", "Entrar na fila", ud(0, 160, 0, 30), ud(0.5, 0, 1, 0), anchor=(0.5, 1), bg=GREEN,
                extra={"Visible": False}),
-    ]),
+    ], full_width=True),
 ], order=3)
 write("CharacterSelect.model.json", select)
 
@@ -263,34 +279,35 @@ mission_row = label("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), font=FONT_B
         frame("Fill", ud(0, 0, 1, 0), ud(0, 0, 0, 0), bg=GREEN, t=0),
     ]),
 ])
+COL = 0.47  # largura de cada coluna do perfil (sobra 6% de vão no meio)
+Y0 = PANEL_TITLE_H + 26  # abaixo do título + linha de aviso
 profile = screen("ProfileGui", [
-    panel("Panel", 560, 460, "Perfil", [
-        label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+    panel("Panel", 580, 450, "Perfil", [
+        label("Coins", "", ud(0, 220, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
-        label("Warning", "", ud(1, 0, 0, 16), ud(0, 0, 0, 24), ts=11, color=HEALTH),
+        label("Warning", "", ud(1, 0, 0, 16), ud(0, 0, 0, PANEL_TITLE_H + 4), ts=11, color=HEALTH),
         # coluna esquerda: nível, stats, personagens, top global
-        label("Level", "", ud(0.48, 0, 0, 18), ud(0, 0, 0, 44), font=FONT_B, ts=14),
-        frame("XPBar", ud(0.48, 0, 0, 4), ud(0, 0, 0, 66), bg=[0, 0, 0], t=0.5, children=[
-            frame("Fill", ud(0, 0, 1, 0), ud(0, 0, 0, 0), bg=ACCENT, t=0),
+        label("Level", "", ud(COL, 0, 0, 18), ud(0, 0, 0, Y0), font=FONT_B, ts=14),
+        frame("XPBar", ud(COL, 0, 0, 4), ud(0, 0, 0, Y0 + 22), bg=[1, 1, 1], t=0.88, children=[
+            corner(2), frame("Fill", ud(0, 0, 1, 0), ud(0, 0, 0, 0), bg=ACCENT, t=0, children=[corner(2)]),
         ]),
-        frame("Stats", ud(0.48, 0, 0, 130), ud(0, 0, 0, 80), t=1, children=[
+        frame("Stats", ud(COL, 0, 0, 122), ud(0, 0, 0, Y0 + 36), t=1, children=[
             listlayout("Vertical", 2),
             label("Template", "", ud(1, 0, 0, 18), ud(0, 0, 0, 0), ts=13, extra={"Visible": False}),
         ]),
-        label("Characters", "", ud(0.48, 0, 0, 34), ud(0, 0, 0, 214), ts=12, color=MUTED, yalign="Top",
+        label("Characters", "", ud(COL, 0, 0, 32), ud(0, 0, 0, Y0 + 162), ts=11, color=MUTED, yalign="Top",
               extra={"TextWrapped": True}),
-        label("TopTitle", "TOP GLOBAL — KILLS", ud(0.48, 0, 0, 16), ud(0, 0, 0, 252), font=FONT_B, ts=11,
+        label("TopTitle", "TOP GLOBAL — KILLS", ud(COL, 0, 0, 14), ud(0, 0, 0, Y0 + 200), font=FONT_B, ts=11,
               color=MUTED),
-        label("Top", "", ud(0.48, 0, 0, 74), ud(0, 0, 0, 270), font="Code", ts=12, yalign="Top"),
-        label("TopRatingTitle", "TOP GLOBAL — RATING 1v1", ud(0.48, 0, 0, 16), ud(0, 0, 0, 346), font=FONT_B,
+        label("Top", "", ud(COL, 0, 0, 62), ud(0, 0, 0, Y0 + 216), font="Code", ts=12, yalign="Top"),
+        label("TopRatingTitle", "TOP GLOBAL — RATING 1v1", ud(COL, 0, 0, 14), ud(0, 0, 0, Y0 + 284), font=FONT_B,
               ts=11, color=MUTED),
-        label("TopRating", "", ud(0.48, 0, 0, 74), ud(0, 0, 0, 364), font="Code", ts=12, yalign="Top"),
-        # coluna direita: missões
-        label("MissionsTitle", "MISSÕES DE HOJE", ud(0.48, 0, 0, 16), ud(1, 0, 0, 44), anchor=(1, 0), font=FONT_B,
+        label("TopRating", "", ud(COL, 0, 0, 62), ud(0, 0, 0, Y0 + 300), font="Code", ts=12, yalign="Top"),
+        # coluna direita: missões (rola se precisar)
+        label("MissionsTitle", "MISSÕES DE HOJE", ud(COL, 0, 0, 14), ud(1, 0, 0, Y0), anchor=(1, 0), font=FONT_B,
               ts=11, color=MUTED),
-        frame("Missions", ud(0.48, 0, 1, -70), ud(1, 0, 0, 64), anchor=(1, 0), t=1, children=[
-            listlayout("Vertical", 8), mission_row,
-        ]),
+        scroll("Missions", ud(COL, 0, 1, -(Y0 + 20)), ud(1, 0, 0, Y0 + 20), extra={"AnchorPoint": {"Vector2": [1, 0]}},
+               children=[listlayout("Vertical", 8), mission_row]),
     ]),
 ], order=3)
 write("ProfileGui.model.json", profile)
@@ -305,7 +322,7 @@ member_row = button("Template", "", ud(1, -6, 0, 30), ud(0, 0, 0, 0), ts=13, ext
 clan = screen("ClanGui", [
     panel("Panel", 420, 440, "Clã", [
         # --- sem clã: fundar ---
-        frame("Create", ud(1, 0, 1, -30), ud(0, 0, 0, 30), t=1, children=[
+        frame("Create", ud(1, 0, 1, -(PANEL_TITLE_H + 10)), ud(0, 0, 0, PANEL_TITLE_H + 10), t=1, children=[
             label("Hint", "Funde um clã ou aceite um convite de um líder/oficial.", ud(1, 0, 0, 34), ud(0, 0, 0, 0),
                   ts=12, color=MUTED, yalign="Top", extra={"TextWrapped": True}),
             textbox("Name", "Nome do clã (3–20)", ud(1, 0, 0, 32), ud(0, 0, 0, 44)),
@@ -319,7 +336,7 @@ clan = screen("ClanGui", [
                    extra={"Visible": False}),
         ]),
         # --- com clã ---
-        frame("Info", ud(1, 0, 1, -30), ud(0, 0, 0, 30), t=1, visible=False, children=[
+        frame("Info", ud(1, 0, 1, -(PANEL_TITLE_H + 10)), ud(0, 0, 0, PANEL_TITLE_H + 10), t=1, visible=False, children=[
             label("Header", "", ud(1, -120, 0, 22), ud(0, 0, 0, 0), font=FONT_B, ts=16, color=GOLD),
             button("War", "GUERRA", ud(0, 110, 0, 24), ud(1, 0, 0, 0), anchor=(1, 0), bg=[0.4, 0.14, 0.14], ts=12),
             label("Sub", "", ud(1, 0, 0, 18), ud(0, 0, 0, 24), ts=12, color=MUTED),
@@ -390,12 +407,17 @@ HELP = "\n".join([
 setting_row = button("Template", "", ud(1, 0, 0, 26), ud(0, 0, 0, 0), bg=CARD, t=0.2, ts=12, extra={"Visible": False, "TextXAlignment": "Left"},
                      children=[padding(10, 0),
                                label("Value", "", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=12, color=ACCENT, xalign="Right")])
+SETTINGS_H = 7 * 26 + 6 * 4 + 22  # 7 linhas + título
 helpgui = screen("HelpGui", [
-    panel("Panel", 640, 560, "Controles", [
-        label("Body", HELP, ud(1, 0, 0, 330), ud(0, 0, 0, 30), ts=13, yalign="Top",
-              extra={"TextWrapped": True, "LineHeight": 1.35}),
-        label("SettingsTitle", "CONFIGURAÇÕES (clique para mudar; salva no perfil)", ud(1, 0, 0, 16), ud(0, 0, 0, 366), font=FONT_B, ts=11, color=MUTED),
-        frame("Settings", ud(1, 0, 1, -388), ud(0, 0, 0, 388), t=1, children=[listlayout("Vertical", 4), setting_row]),
+    panel("Panel", 640, 620, "Controles", [
+        scroll("Body", ud(1, 0, 1, -(PANEL_TITLE_H + 8 + SETTINGS_H + 12)), ud(0, 0, 0, PANEL_TITLE_H + 8), children=[
+            label("Text", HELP, ud(1, -8, 0, 0), ud(0, 0, 0, 0), ts=13, yalign="Top",
+                  extra={"TextWrapped": True, "LineHeight": 1.35, "AutomaticSize": "Y"}),
+        ]),
+        label("SettingsTitle", "CONFIGURAÇÕES  ·  clique para mudar (salva no perfil)", ud(1, 0, 0, 16), ud(0, 0, 1, -SETTINGS_H),
+              anchor=(0, 1), font=FONT_B, ts=11, color=MUTED),
+        frame("Settings", ud(1, 0, 0, SETTINGS_H - 22), ud(0, 0, 1, 0), anchor=(0, 1), t=1,
+              children=[listlayout("Vertical", 4), setting_row]),
     ]),
 ], order=3)
 write("HelpGui.model.json", helpgui)
@@ -419,16 +441,17 @@ pass_row = button("Template", "", ud(1, 0, 0, 52), ud(0, 0, 0, 0), bg=CARD, t=0.
     label("Price", "", ud(0.3, 0, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=13, color=GREEN,
           xalign="Right"),
 ])
+SY = PANEL_TITLE_H + 12
 shop = screen("ShopGui", [
-    panel("Panel", 640, 420, "Loja", [
-        label("Coins", "", ud(0, 200, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+    panel("Panel", 640, 520, "Loja", [
+        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
-        label("ProductsTitle", "ROLETA DE COSMÉTICOS (ROBUX)", ud(1, 0, 0, 16), ud(0, 0, 0, 34), font=FONT_B, ts=11, color=MUTED),
-        frame("Products", ud(1, 0, 0, PH), ud(0, 0, 0, 54), t=1, children=[
+        label("ProductsTitle", "ROLETA DE COSMÉTICOS  ·  ROBUX", ud(1, 0, 0, 16), ud(0, 0, 0, SY), font=FONT_B, ts=11, color=MUTED),
+        frame("Products", ud(1, 0, 0, PH), ud(0, 0, 0, SY + 20), t=1, children=[
             listlayout("Horizontal", 10), product_card,
         ]),
-        label("PassesTitle", "PASSES", ud(1, 0, 0, 16), ud(0, 0, 0, 54 + PH + 16), font=FONT_B, ts=11, color=MUTED),
-        frame("Passes", ud(1, 0, 1, -(54 + PH + 36 + 20)), ud(0, 0, 0, 54 + PH + 36), t=1, children=[
+        label("PassesTitle", "PASSES", ud(1, 0, 0, 16), ud(0, 0, 0, SY + 20 + PH + 16), font=FONT_B, ts=11, color=MUTED),
+        scroll("Passes", ud(1, 0, 1, -(SY + 20 + PH + 36 + 24)), ud(0, 0, 0, SY + 20 + PH + 36), children=[
             listlayout("Vertical", 6), pass_row,
         ]),
         label("Hint", "Personagens são comprados com pontos na tela Personagens (V).", ud(1, 0, 0, 16),
@@ -449,22 +472,23 @@ cos_row = button("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), bg=CARD, t=0.1
 ])
 tab_w = 100
 cosmetics = screen("CosmeticsGui", [
-    panel("Panel", 460, 470, "Cosméticos", [
-        label("Coins", "", ud(0, 160, 0, 22), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+    panel("Panel", 460, 500, "Cosméticos", [
+        label("Coins", "", ud(0, 160, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
-        frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, 34), t=1, children=[
+        frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, PANEL_TITLE_H + 12), t=1, children=[
             listlayout("Horizontal", 6),
             button("TabSkin", "SKINS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 1}),
             button("TabCape", "CAPAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 2}),
             button("TabAura", "AURAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 3}),
             button("TabEmote", "EMOTES", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 4}),
         ]),
-        button("Roll", "GIRAR", ud(0.5, -4, 0, 30), ud(0, 0, 0, 68), bg=GOLD_BG, ts=13),
-        button("Roll1", "1 giro · Robux", ud(0.25, -4, 0, 30), ud(0.5, 4, 0, 68), ts=11),
-        button("Roll5", "5 giros · Robux", ud(0.25, -4, 0, 30), ud(0.75, 4, 0, 68), ts=11),
+        button("Roll", "GIRAR", ud(0.5, -4, 0, 30), ud(0, 0, 0, PANEL_TITLE_H + 48), bg=GOLD_BG, ts=13),
+        button("Roll1", "1 giro · Robux", ud(0.25, -4, 0, 30), ud(0.5, 4, 0, PANEL_TITLE_H + 48), ts=11),
+        button("Roll5", "5 giros · Robux", ud(0.25, -4, 0, 30), ud(0.75, 4, 0, PANEL_TITLE_H + 48), ts=11),
         label("Hint", "Roleta da sorte: pontos (ganhos jogando) ou Robux. Só visual: nada dá vantagem.", ud(1, 0, 0, 16),
-              ud(0, 0, 0, 104), ts=11, color=MUTED),
-        frame("List", ud(1, 0, 1, -126), ud(0, 0, 0, 126), t=1, children=[listlayout("Vertical", 6), cos_row]),
+              ud(0, 0, 0, PANEL_TITLE_H + 84), ts=11, color=MUTED),
+        scroll("List", ud(1, 0, 1, -(PANEL_TITLE_H + 108)), ud(0, 0, 0, PANEL_TITLE_H + 108),
+               children=[listlayout("Vertical", 6), cos_row]),
     ]),
 ], order=3)
 write("CosmeticsGui.model.json", cosmetics)
@@ -492,3 +516,45 @@ emotes = screen("EmoteGui", [
           children=wheel_children),
 ], order=4)
 write("EmoteGui.model.json", emotes)
+
+# =============================================================================
+# Duelo (J) — DuelController. Nomes fixos: Tab1v1/Tab2v2/Hint/List/Status/Leave/Cancel/CreateRoom/
+# SwitchTeam/LeaveRoom; Invite (Text/Accept/Decline) e DuelStatus fora do painel.
+# =============================================================================
+duel_row = button("Template", "", ud(1, -6, 0, 32), ud(0, 0, 0, 0), ts=13, extra={"Visible": False, "TextXAlignment": "Left"},
+                  children=[padding(10, 0),
+                            label("Action", "DESAFIAR", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=11,
+                                  color=GREEN, xalign="Right")])
+DY = PANEL_TITLE_H + 10
+duel = screen("DuelGui", [
+    panel("Panel", 380, 420, "Duelo", [
+        button("Tab1v1", "1v1", ud(0.5, -5, 0, 26), ud(0, 0, 0, DY), ts=12),
+        button("Tab2v2", "2v2", ud(0.5, -5, 0, 26), ud(1, 0, 0, DY), anchor=(1, 0), ts=12),
+        label("Hint", "", ud(1, 0, 0, 32), ud(0, 0, 0, DY + 32), ts=12, color=MUTED, yalign="Top",
+              extra={"TextWrapped": True}),
+        scroll("List", ud(1, 0, 1, -(DY + 70 + 104)), ud(0, 0, 0, DY + 70),
+               children=[listlayout("Vertical", 4, sort="Name"), duel_row]),
+        label("Status", "", ud(1, 0, 0, 34), ud(0, 0, 1, -68), anchor=(0, 1), ts=12, color=GOLD, yalign="Top",
+              extra={"TextWrapped": True}),
+        button("CreateRoom", "Criar sala 2v2", ud(1, 0, 0, 28), ud(0, 0, 1, -32), anchor=(0, 1), bg=[0.16, 0.38, 0.24],
+               ts=12, extra={"Visible": False}),
+        button("SwitchTeam", "Trocar de time", ud(0.5, -5, 0, 28), ud(0, 0, 1, -32), anchor=(0, 1), ts=12,
+               extra={"Visible": False}),
+        button("LeaveRoom", "Sair da sala", ud(0.5, -5, 0, 28), ud(1, 0, 1, -32), anchor=(1, 1), bg=[0.4, 0.14, 0.14],
+               ts=12, extra={"Visible": False}),
+        button("Leave", "Desistir do duelo", ud(1, 0, 0, 28), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0.4, 0.14, 0.14], ts=12,
+               extra={"Visible": False}),
+        button("Cancel", "Cancelar desafio", ud(1, 0, 0, 28), ud(0, 0, 1, 0), anchor=(0, 1), ts=12,
+               extra={"Visible": False}),
+    ]),
+    # convite recebido: cartão no topo central
+    frame("Invite", ud(0, 360, 0, 96), ud(0.5, 0, 0, 70), anchor=(0.5, 0), t=0.15, visible=False, children=[
+        corner(10), stroke(), padding(12),
+        label("Text", "", ud(1, 0, 0, 36), ud(0, 0, 0, 0), font=FONT_B, ts=14, xalign="Center", extra={"TextWrapped": True}),
+        button("Accept", "ACEITAR (Y)", ud(0.5, -5, 0, 30), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0.16, 0.38, 0.24], ts=12),
+        button("Decline", "RECUSAR (N)", ud(0.5, -5, 0, 30), ud(1, 0, 1, 0), anchor=(1, 1), bg=[0.4, 0.14, 0.14], ts=12),
+    ]),
+    label("DuelStatus", "", ud(0, 520, 0, 40), ud(0.5, 0, 0, 110), anchor=(0.5, 0), font=FONT_B, ts=24, xalign="Center",
+          extra={"TextStrokeTransparency": 0.5, "Visible": False, "TextWrapped": True}),
+], order=3)
+write("DuelGui.model.json", duel)

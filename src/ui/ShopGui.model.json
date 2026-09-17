@@ -20,8 +20,8 @@
        640
       ],
       [
-       0,
-       420
+       1,
+       -202
       ]
      ]
     },
@@ -50,9 +50,10 @@
       0.0
      ]
     },
-    "BackgroundTransparency": 0.5,
+    "BackgroundTransparency": 0.28,
     "BorderSizePixel": 0,
-    "Visible": false
+    "Visible": false,
+    "ClipsDescendants": true
    },
    "children": [
     {
@@ -63,7 +64,7 @@
       "CornerRadius": {
        "UDim": [
         0,
-        8
+        10
        ]
       }
      }
@@ -81,7 +82,7 @@
         1
        ]
       },
-      "Transparency": 0.86,
+      "Transparency": 0.84,
       "ApplyStrokeMode": "Border"
      }
     },
@@ -93,25 +94,44 @@
       "PaddingLeft": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingRight": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingTop": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingBottom": {
        "UDim": [
         0,
-        16
+        18
+       ]
+      }
+     }
+    },
+    {
+     "name": "UISizeConstraint",
+     "className": "UISizeConstraint",
+     "properties": {
+      "Name": "UISizeConstraint",
+      "MaxSize": {
+       "Vector2": [
+        640,
+        520
+       ]
+      },
+      "MinSize": {
+       "Vector2": [
+        0,
+        0
        ]
       }
      }
@@ -129,7 +149,7 @@
         ],
         [
          0,
-         22
+         26
         ]
        ]
       },
@@ -152,14 +172,14 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "LOJA",
+      "Text": "Loja",
       "Font": "GothamBold",
-      "TextSize": 16,
+      "TextSize": 20,
       "TextColor3": {
        "Color3": [
-        0.62,
-        0.62,
-        0.68
+        0.96,
+        0.96,
+        0.97
        ]
       },
       "TextXAlignment": "Left",
@@ -181,7 +201,7 @@
         ],
         [
          0,
-         22
+         26
         ]
        ]
       },
@@ -245,7 +265,7 @@
         ],
         [
          0,
-         34
+         38
         ]
        ]
       },
@@ -256,7 +276,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "ROLETA DE COSMÉTICOS (ROBUX)",
+      "Text": "ROLETA DE COSMÉTICOS  ·  ROBUX",
       "Font": "GothamBold",
       "TextSize": 11,
       "TextColor3": {
@@ -297,7 +317,7 @@
         ],
         [
          0,
-         54
+         58
         ]
        ]
       },
@@ -420,7 +440,7 @@
             1
            ]
           },
-          "Transparency": 0.86,
+          "Transparency": 0.84,
           "ApplyStrokeMode": "Border"
          }
         },
@@ -640,7 +660,7 @@
         ],
         [
          0,
-         166
+         170
         ]
        ]
       },
@@ -669,7 +689,7 @@
     },
     {
      "name": "Passes",
-     "className": "Frame",
+     "className": "ScrollingFrame",
      "properties": {
       "Name": "Passes",
       "Size": {
@@ -680,7 +700,7 @@
         ],
         [
          1,
-         -206
+         -214
         ]
        ]
       },
@@ -692,26 +712,28 @@
         ],
         [
          0,
-         186
+         190
         ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.0,
-        0.0,
-        0.0
        ]
       },
       "BackgroundTransparency": 1,
       "BorderSizePixel": 0,
-      "Visible": true
+      "ScrollBarThickness": 4,
+      "ScrollBarImageTransparency": 0.6,
+      "CanvasSize": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "AutomaticCanvasSize": "Y",
+      "ScrollingDirection": "Y"
      },
      "children": [
       {
@@ -815,7 +837,7 @@
             1
            ]
           },
-          "Transparency": 0.86,
+          "Transparency": 0.84,
           "ApplyStrokeMode": "Border"
          }
         },

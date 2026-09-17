@@ -20,8 +20,8 @@
        640
       ],
       [
-       0,
-       560
+       1,
+       -202
       ]
      ]
     },
@@ -50,9 +50,10 @@
       0.0
      ]
     },
-    "BackgroundTransparency": 0.5,
+    "BackgroundTransparency": 0.28,
     "BorderSizePixel": 0,
-    "Visible": false
+    "Visible": false,
+    "ClipsDescendants": true
    },
    "children": [
     {
@@ -63,7 +64,7 @@
       "CornerRadius": {
        "UDim": [
         0,
-        8
+        10
        ]
       }
      }
@@ -81,7 +82,7 @@
         1
        ]
       },
-      "Transparency": 0.86,
+      "Transparency": 0.84,
       "ApplyStrokeMode": "Border"
      }
     },
@@ -93,25 +94,44 @@
       "PaddingLeft": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingRight": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingTop": {
        "UDim": [
         0,
-        16
+        18
        ]
       },
       "PaddingBottom": {
        "UDim": [
         0,
-        16
+        18
+       ]
+      }
+     }
+    },
+    {
+     "name": "UISizeConstraint",
+     "className": "UISizeConstraint",
+     "properties": {
+      "Name": "UISizeConstraint",
+      "MaxSize": {
+       "Vector2": [
+        640,
+        620
+       ]
+      },
+      "MinSize": {
+       "Vector2": [
+        0,
+        0
        ]
       }
      }
@@ -129,7 +149,7 @@
         ],
         [
          0,
-         22
+         26
         ]
        ]
       },
@@ -152,14 +172,14 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "CONTROLES",
+      "Text": "Controles",
       "Font": "GothamBold",
-      "TextSize": 16,
+      "TextSize": 20,
       "TextColor3": {
        "Color3": [
-        0.62,
-        0.62,
-        0.68
+        0.96,
+        0.96,
+        0.97
        ]
       },
       "TextXAlignment": "Left",
@@ -170,7 +190,7 @@
     },
     {
      "name": "Body",
-     "className": "TextLabel",
+     "className": "ScrollingFrame",
      "properties": {
       "Name": "Body",
       "Size": {
@@ -180,8 +200,8 @@
          0
         ],
         [
-         0,
-         330
+         1,
+         -274
         ]
        ]
       },
@@ -193,34 +213,86 @@
         ],
         [
          0,
-         30
+         34
         ]
        ]
       },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
       "BackgroundTransparency": 1,
-      "Text": "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático\n4º GOLPE: no chão empurra · pular e socar subindo = UPPERCUT (levanta o alvo com você) · socar caindo = DOWNSLAM (ignora block, esmaga)\nBLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe\nPARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nDASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)\nCAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)\nHABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)\nG = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)\nCARGA — dar golpe +6, receber +4, parry +10\nVIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C\nBOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã (C) > GUERRA: dominação A/B/C, 2 clãs, 5 min\nCONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo\nCELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
-      "Font": "GothamMedium",
-      "TextSize": 13,
-      "TextColor3": {
-       "Color3": [
-        0.96,
-        0.96,
-        0.97
+      "BorderSizePixel": 0,
+      "ScrollBarThickness": 4,
+      "ScrollBarImageTransparency": 0.6,
+      "CanvasSize": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         0
+        ]
        ]
       },
-      "TextXAlignment": "Left",
-      "TextYAlignment": "Top",
-      "BorderSizePixel": 0,
-      "RichText": false,
-      "TextWrapped": true,
-      "LineHeight": 1.35
-     }
+      "AutomaticCanvasSize": "Y",
+      "ScrollingDirection": "Y"
+     },
+     "children": [
+      {
+       "name": "Text",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Text",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -8
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "SOCO — botão esquerdo (combo de 4: 3/3/4/5%; o 4º derruba) · segurar = automático\n4º GOLPE: no chão empurra · pular e socar subindo = UPPERCUT (levanta o alvo com você) · socar caindo = DOWNSLAM (ignora block, esmaga)\nBLOQUEAR — segurar F (−90%, só pela frente; guarda quebra) · PARRY — F até 0,2 s antes do golpe\nPARRY → próximo soco é CRÍTICO (×3); dois seguidos = BLACK FLASH (×6)\nCORRER — automático ao andar para a frente (W)\nSHIFT LOCK — Shift\nDASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)\nCAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)\nHABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)\nG = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.)\nCARGA — dar golpe +6, receber +4, parry +10\nVIDA — regenera após 6 s sem dano\nPERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C\nBOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã (C) > GUERRA: dominação A/B/C, 2 clãs, 5 min\nCONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo\nCELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
+        "Font": "GothamMedium",
+        "TextSize": 13,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextYAlignment": "Top",
+        "BorderSizePixel": 0,
+        "RichText": false,
+        "TextWrapped": true,
+        "LineHeight": 1.35,
+        "AutomaticSize": "Y"
+       }
+      }
+     ]
     },
     {
      "name": "SettingsTitle",
@@ -246,19 +318,19 @@
          0
         ],
         [
-         0,
-         366
+         1,
+         -228
         ]
        ]
       },
       "AnchorPoint": {
        "Vector2": [
         0,
-        0
+        1
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "CONFIGURAÇÕES (clique para mudar; salva no perfil)",
+      "Text": "CONFIGURAÇÕES  ·  clique para mudar (salva no perfil)",
       "Font": "GothamBold",
       "TextSize": 11,
       "TextColor3": {
@@ -286,8 +358,8 @@
          0
         ],
         [
-         1,
-         -388
+         0,
+         206
         ]
        ]
       },
@@ -298,15 +370,15 @@
          0
         ],
         [
-         0,
-         388
+         1,
+         0
         ]
        ]
       },
       "AnchorPoint": {
        "Vector2": [
         0,
-        0
+        1
        ]
       },
       "BackgroundColor3": {
@@ -423,7 +495,7 @@
             1
            ]
           },
-          "Transparency": 0.86,
+          "Transparency": 0.84,
           "ApplyStrokeMode": "Border"
          }
         },
