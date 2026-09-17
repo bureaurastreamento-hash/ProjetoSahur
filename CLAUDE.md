@@ -15,13 +15,28 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
+- **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/
+  `Resolve`, camada de base no `ProcAnimController`, `ProcAnimHold` segura o rig na cutscene) e as
+  partes 1–3 da lista do dono: soco para BAIXO livre no ar caindo; cutscene da ult com direção
+  congelada + shift lock solto (fim do giro de tela) e câmera que escala com o tamanho do rig (boss);
+  ULTIMATE visível no slot numérico ("(desperto)" quando trancada); topbar com 4 botões e DROPDOWN
+  (Jogar/Loja/Perfil/Config, Dev dentro de Config); **CONQUISTAS** no lugar das missões
+  (`AchievementsConfig`/`AchievementService`, "zerar o jogo", Passe 1 de 60 dias com itens LIMITADOS
+  que só DEV entrega depois que o passe acaba; perfil salvo subiu para schema 2).
+- **Falta (próximo passo)**: parte 4 da lista — **menu DEV de verdade + sistema de DENÚNCIAS**
+  (denunciar com motivo predefinido + texto livre em DataStore; DEV teleporta para a arena, entra no
+  servidor de um jogador, assiste alguém, lê denúncias e dá itens). Depois: ajustes que o dono mandar
+  ao testar (andar/parar de cada personagem, VFX do F7, poses, trailer, metas do passe) e a Leva 7
+  (balanceamento, 2 clientes, acabamento dos menus).
+
 ## Estado do design (2026-09-17) — polimento em levas (ver PROGRESSO.md "RETOMAR AQUI")
 - Boss = **Big C.H.O.P.** (id `BigChop`; nunca ragdolla; Devorar cura). Levas 1–6 feitas: combate (hit de chegada
   do dash/Piscar, Domínio do Tempo do Swift, congelamento só do Guardian, noite rara 28/4 min), **animações
   PROCEDURAIS** (`RigPose` + `ProcAnimDefs` + `ProcAnimController` via gancho `FX.ProcAnim`; mandam sobre as
   dos packs — `team = true` devolve à equipe), sons com ids públicos, trailer com avatares reais e ações de fundo,
-  bonecos de treino com física/ragdoll/leash. Falta: lista de ajustes do dono (VFX F7, poses, trailer) e **Leva 8**
-  (idle que respira/andar/variações por personagem — nada repetido entre personagens).
+  bonecos de treino com física/ragdoll/leash. **Leva 8 (locomoção por personagem) também está FEITA** —
+  ver o bloco de cima; falta a lista de ajustes do dono (VFX F7, poses, trailer, jeito de andar).
 - Cutscene da ULT: `CutsceneController` (cinema, pós-processo, nome da ult, temas por personagem em
   `AwakeningDefs`, sons em camadas `Shared/Awakening_*`).
 - Screenshots do Studio funcionam (KWin + spectacle; scripts no scratchpad) — usar para conferir visual.

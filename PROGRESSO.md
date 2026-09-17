@@ -230,18 +230,39 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
   - DEV: `CompleteMissions` virou `CompleteAchievements` (empurra tudo para a meta) e entrou `GrantItem`.
   - Testado via MCP: 23 conquistas, passe com 60 dias, kills_10 pagou, conquista de passe entregou a aura
     limitada, DEV entregou a skin limitada, painel abre com a lista certa.
-- **Parte 4 — MENU DEV de verdade + DENÚNCIAS** (a fazer): teleportar para a arena, ir ao servidor de um
-  jogador, assistir um jogador (espectar), ver denúncias de um jogador e dar itens (limitados ou não).
-  Criar antes o sistema de denúncia (motivos predefinidos + texto livre) com armazenamento por DataStore.
+- **Parte 4 — MENU DEV de verdade + DENÚNCIAS — A FAZER (próximo passo desta lista)**:
+  - **Denúncia (novo sistema)**: jogador denuncia outro com MOTIVO PREDEFINIDO (hack/exploit, ofensa,
+    nome impróprio, bug abuse, outro) + TEXTO LIVRE; guardar em DataStore por UserId denunciado
+    (`ReportService` + `ReportConfig`), com data, quem denunciou, servidor (JobId) e o motivo. Entrada
+    pela UI: botão no placar (Tab) ou no perfil do jogador.
+  - **Menu DEV**: teleportar para a arena (Arena_Gerada/Arena_Antiga), ENTRAR no servidor de um jogador
+    (`TeleportService:TeleportToPlaceInstance` com o JobId — precisa de uma lista de jogadores online,
+    que hoje só existe por servidor; ver se vale um MemoryStore/DataStore com quem está onde),
+    ASSISTIR um jogador (câmera espectadora presa nele, sem sair do servidor), ver as DENÚNCIAS de um
+    jogador e DAR ITENS (o `AdminService.GrantItem {id}` já existe; falta a tela com busca de item).
+  - Já pronto para isso: `AdminService` com comandos por alvo, `DevGui` gerado por `tools/gerar_devgui.py`,
+    `AchievementService.GrantReward` (cosmético/emote/personagem).
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado, 27 services / 0 erros na análise)
-**Onde paramos**: Levas 1–6 e **8** do plano de polimento FEITAS (combate, animações procedurais base/
-habilidades/emotes, sons, trailer com avatares reais + coisas de fundo, locomoção procedural por personagem).
-O dono vai TESTAR TUDO e mandar uma lista com: VFX do F7 (`Lib/…`) para ajustar, poses procedurais feias
-(nome do clipe em `ProcAnimDefs.luau`), jeito de andar/parar de cada personagem, ritmo/ângulos do trailer.
-**Próximo passo quando ele voltar**: (1) aplicar a lista dele em lote; (2) Leva 7 (balanceamento/2 clientes/menus).
+## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado e no GitHub, 28 services / 0 erros na análise)
+**Onde paramos**: Levas 1–6 e **8** do polimento FEITAS + as partes **1, 2 e 3** da lista do dono
+(correções de combate/câmera/HUD, topbar com dropdown, conquistas com passe). Tudo passa na análise
+estática e foi testado via MCP no Studio, menos o que só se vê jogando.
+
+### O QUE FALTA (ordem combinada com o dono)
+1. **Parte 4 da lista — menu DEV de verdade + DENÚNCIAS** (não começada; detalhes abaixo em
+   "LISTA DO DONO"): teleportar para a arena, entrar no servidor de um jogador, assistir alguém jogar,
+   ver as denúncias de um jogador, dar itens (limitados ou não — o `GrantItem` do AdminService já existe).
+   Antes disso, criar o sistema de denúncia: o jogador denuncia outro com motivo predefinido + texto
+   livre, salvo em DataStore, e o DEV lê pelo menu.
+2. **O dono testar o que foi entregue hoje** e mandar a lista de ajustes: jeito de andar/parar de cada
+   personagem (Leva 8), VFX do F7 (`Lib/…`), poses feias (`ProcAnimDefs.luau`), ritmo/ângulos do trailer,
+   metas/duração do passe (`AchievementsConfig`: hoje 60 dias e 6 conquistas por passe, chutados por mim).
+3. **Leva 7 do polimento**: balanceamento, teste com 2 clientes, acabamento dos menus.
+4. **Pendências antigas que continuam de pé**: `AwakenedEffect` que faltar, lista final de assets por
+   ação para a equipe, ids de animação/som que a equipe ainda vai publicar no grupo, e marcar
+   `team = true` nos clipes de `ProcAnimDefs` conforme o dono for aprovando as animações da equipe.
 
 ### Leva 8 — animações "realistas" por personagem — FEITA 2026-09-17
 - `ProcAnimDefs.Locomotion` (ligar/desligar tudo em `Enabled`) + seção LOCOMOÇÃO: helper `locomotion(p)` monta
