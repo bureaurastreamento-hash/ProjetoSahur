@@ -235,6 +235,15 @@ o que é som repetido entre golpes). Ordem combinada:
   `DropLifetime` = 10 s; ninguém pegou = some (evento "vanished") e volta à fila. Jogador saiu = fila.
   DEV "Sortear flecha" continua imediato (para testar). Testado via MCP: boot sem flecha → sorteio → dar →
   morrer → 10 s → sumiu → próxima em 164 s.
+- **Menus (item 6 dos planos)** — vi as telas por screenshot (KWin ativa a janela do Studio + `spectacle`; script em
+  scratchpad `shot.sh`/`multishot.sh`; painéis abertos pelo servidor via `PlayerGui.<Gui>.Panel.Visible` num
+  `run_script_in_play_mode`). Problemas achados e corrigidos em `tools/gerar_ui.py`: Personagens com 6 cartões
+  estourando (agora lista horizontal rolável, painel largura da tela até 1104), Loja com passes por fora do painel
+  e texto por cima (passes roláveis), Controles com texto cortado e configurações por cima da HUD (texto rolável,
+  configurações fixas embaixo), Perfil com o top de rating fora do painel (relayout), Duelo em JSON à mão fora do
+  padrão (agora gerado). `panel()`: altura = min(h, tela − 202) via UISizeConstraint → NUNCA cobre a HUD;
+  ClipsDescendants; fundo 0,28 (mais legível); título 20 branco. Missões/Cosméticos/Duelo = ScrollingFrame.
+  Dono ainda não viu; ajustar cores/espaços conforme ele pedir.
 
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão
