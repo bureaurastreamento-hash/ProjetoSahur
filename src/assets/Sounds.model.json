@@ -99,8 +99,8 @@
           "name": "Hit_Stun",
           "className": "Sound",
           "properties": {
-            "SoundId": "",
-            "Volume": 0.5,
+            "SoundId": "rbxassetid://8595974357",
+            "Volume": 0.8,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
@@ -119,10 +119,11 @@
           "name": "RagdollCancel",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://3755636152",
+            "SoundId": "rbxassetid://9118159096",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
+            "RollOffMinDistance": 10,
+            "PlaybackSpeed": 1.1
           }
         },
         {
@@ -270,6 +271,45 @@
           "className": "Sound",
           "properties": {
             "SoundId": "rbxassetid://138054935062071"
+          }
+        },
+        {
+          "name": "Crit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7093763783",
+            "PlaybackSpeed": 1.25,
+            "Volume": 1
+          }
+        },
+        {
+          "name": "BlackFlash",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9114589190",
+            "PlaybackSpeed": 0.85,
+            "Volume": 1,
+            "RollOffMaxDistance": 140
+          }
+        },
+        {
+          "name": "Transform",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://4299623070",
+            "PlaybackSpeed": 0.6,
+            "Volume": 0.9,
+            "RollOffMaxDistance": 140
+          }
+        },
+        {
+          "name": "Transform_Burst",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://3763467977",
+            "PlaybackSpeed": 0.8,
+            "Volume": 1,
+            "RollOffMaxDistance": 160
           }
         }
       ]
@@ -582,7 +622,7 @@
           "name": "Quake2",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://114477616922523"
+            "SoundId": "rbxassetid://6324841214"
           }
         }
       ]
@@ -665,7 +705,7 @@
           "name": "Roar_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7093763783",
+            "SoundId": "rbxassetid://8595974357",
             "Volume": 0.6,
             "RollOffMaxDistance": 120,
             "RollOffMinDistance": 15
@@ -685,7 +725,7 @@
           "name": "Shockwave_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://7093763783",
+            "SoundId": "rbxassetid://3059775624",
             "Volume": 0.6,
             "RollOffMaxDistance": 120,
             "RollOffMinDistance": 15
@@ -695,7 +735,7 @@
           "name": "Leap",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://9114362943",
+            "SoundId": "rbxassetid://9126228977",
             "Volume": 0.6,
             "RollOffMaxDistance": 120,
             "RollOffMinDistance": 15
@@ -745,7 +785,7 @@
           "name": "Bombo_Hit",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://108572756136526",
+            "SoundId": "rbxassetid://3763467977",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -755,7 +795,7 @@
           "name": "Toque",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://106127557057356",
+            "SoundId": "rbxassetid://128227618240752",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
@@ -765,10 +805,11 @@
           "name": "Ritmo",
           "className": "Sound",
           "properties": {
-            "SoundId": "rbxassetid://8120249833",
+            "SoundId": "rbxassetid://3084314259",
             "Volume": 0.5,
             "RollOffMaxDistance": 80,
-            "RollOffMinDistance": 10
+            "RollOffMinDistance": 10,
+            "PlaybackSpeed": 1.3
           }
         },
         {
@@ -786,6 +827,80 @@
           "className": "Sound",
           "properties": {
             "SoundId": "rbxassetid://130746756274112"
+          }
+        }
+      ]
+    },
+    {
+      "name": "BigChop",
+      "className": "Folder",
+      "children": [
+        {
+          "name": "Devour",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://95614116572317"
+          }
+        },
+        {
+          "name": "Devour_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://71472197762839"
+          }
+        },
+        {
+          "name": "Crush",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://6324841214",
+            "PlaybackSpeed": 0.8
+          }
+        },
+        {
+          "name": "Crush_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://130746756274112"
+          }
+        },
+        {
+          "name": "FleshWave",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://94833998861837",
+            "PlaybackSpeed": 0.75
+          }
+        },
+        {
+          "name": "FleshWave_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7093763783"
+          }
+        },
+        {
+          "name": "Frenzy",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://106360494357341"
+          }
+        },
+        {
+          "name": "Frenzy_Hit",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://8595974357",
+            "PlaybackSpeed": 1.15
+          }
+        },
+        {
+          "name": "Awakening_Voice",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://106360494357341",
+            "PlaybackSpeed": 0.7,
+            "Volume": 1
           }
         }
       ]

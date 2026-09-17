@@ -122,6 +122,9 @@ local function onNotifyBoss(event: string, data: any)
 			attachLocomotion(data.model :: Model)
 		end
 		local shortName = (tostring(data.name):gsub(" %(.*%)$", ""))
+		if data.form and typeof(data.model) == "Instance" and data.model:IsA("Model") then
+			FX.PlaySoundAt(data.model :: Model, "Shared", "Transform_Burst")
+		end
 		if data.form and tostring(data.by) == localPlayer.Name then
 			showBanner("Você é o " .. shortName .. " — DEVORE para curar. Sobreviva até o tempo acabar!", 6)
 		elseif data.form then
@@ -129,7 +132,9 @@ local function onNotifyBoss(event: string, data: any)
 		else
 			showBanner(("%s invocou %s!"):format(tostring(data.by), tostring(data.name)), 4)
 		end
-		FX.PlaySoundUI("Match", "RoundStart")
+		if not data.form then
+			FX.PlaySoundUI("Match", "RoundStart") -- a forma já toca Transform_Burst
+		end
 		FX.Shake(0.6, 0.6)
 	elseif event == "state" then
 		setHealth(tonumber(data.health) or 0, tonumber(data.maxHealth) or 1)
@@ -237,6 +242,7 @@ local function onNotifyBoss(event: string, data: any)
 		showBanner(("%s está virando %s!"):format(tostring(data.by), tostring(data.name)), tonumber(data.seconds) or 2.5)
 		FX.Shake(0.5, 1.0)
 		if typeof(data.character) == "Instance" and data.character:IsA("Model") then
+			FX.PlaySoundAt(data.character :: Model, "Shared", "Transform")
 			FX.SetAura(data.character :: Model, Color3.fromRGB(196, 66, 108), "Transform")
 			FX.SpawnVFX(data.character :: Model, "Shared", "Transform", true)
 			task.delay(tonumber(data.seconds) or 2.5, function()

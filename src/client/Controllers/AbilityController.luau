@@ -229,7 +229,6 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 			FX.PlayAnimation(character, characterId, abilityId)
 			FX.SpawnVFX(character, characterId, abilityId, true, center)
 			FX.PlaySoundAt(character, characterId, abilityId)
-			FX.PlaySoundAt(character, "Shared", "Awakening_Burst")
 			if character == localPlayer.Character then
 				FX.Shake(0.8, 0.5)
 			end
@@ -262,16 +261,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.PlayAnimation(character, characterId, abilityId)
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)
-		-- ultimate (a habilidade com EnergyCost = Max): estouro da aura por cima do som próprio
-		local def = CharacterDefs.Get(characterId)
-		if def then
-			for _, ab in def.Abilities do
-				if ab.Id == abilityId and ab.EnergyCost >= CharacterDefs.Energy.Max then
-					FX.PlaySoundAt(character, "Shared", "Awakening_Burst")
-					break
-				end
-			end
-		end
+		-- (o estouro genérico Awakening_Burst por cima das ults saiu — dono: cada ult tem o próprio som)
 		if typeof(data) == "table" and typeof(data.Healed) == "number" and data.Healed > 0 then
 			FX.DamageNumber(character, "+" .. math.floor(data.Healed), Color3.fromRGB(120, 255, 140))
 		end

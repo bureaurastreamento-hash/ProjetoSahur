@@ -242,7 +242,14 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
 - **Leva 4 — FEITA 2026-09-17**: 8 emotes/cenas procedurais (`Emotes/wave|taunt|dance|bow|flex|scene_power|
   scene_dark|scene_storm`), dança = 3 ciclos; andar cancela também o clipe procedural (CosmeticsController).
 - **Leva 4 — Emotes/cenas (plano original)**: 8 emotes (wave, taunt, dance, bow, flex, scene_power/dark/storm) procedurais em loop.
-- **Leva 5 — Sons por golpe + VFX** (lista do TRAILER_ASSETS: separar repetidos, Hit_Stun, Crit, BlackFlash…)
+- **Leva 5 (sons) — FEITA 2026-09-17** com o que é PÚBLICO (todos os 57 ids do Sounds.model.json carregam +
+  12 dos packs JJS): criados `Shared/Hit_Stun|Crit|BlackFlash|Transform|Transform_Burst`, pasta `BigChop/*`
+  (Devour/Crush/FleshWave/Frenzy + _Hit + Awakening_Voice); repetidos separados (Quake2, Roar_Hit, Shockwave_Hit,
+  Leap, Ritmo, Toque, Bombo_Hit, RagdollCancel); transformação toca Transform/Transform_Burst e a forma não
+  toca mais RoundStart; o `Awakening_Burst` genérico saiu de cima das ults; socos/_Hit com variação de tom
+  (FX.playClone). Timbres repetem em alguns golpes — lista para a equipe gravar: Crit/BlackFlash próprios,
+  kit do Big C.H.O.P., Transform, Ritmo (tambor de verdade), Hit_Stun, música/ambiente. VFX no F7 = com o dono.
+- **Leva 5 — Sons por golpe + VFX (plano original)** (lista do TRAILER_ASSETS: separar repetidos, Hit_Stun, Crit, BlackFlash…)
   e revisão das 76 composições no F7 com o dono.
 - **Leva 6 — Trailer** (TRAILER_ASSETS.md).
 - **Leva 7 — Balanceamento com gente + o que o dono ainda não testou (2 clientes) + menus feedback.**

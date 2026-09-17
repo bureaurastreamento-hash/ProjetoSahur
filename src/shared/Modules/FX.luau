@@ -922,6 +922,10 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 	end
 	local sound = template:Clone()
 	local target = template.Volume
+	-- socos/acertos: leve variação de tom para não soar "metralhadora" igual
+	if template.Name:sub(1, 5) == "Punch" or template.Name:sub(-4) == "_Hit" then
+		sound.PlaybackSpeed = template.PlaybackSpeed * (0.94 + math.random() * 0.12)
+	end
 	sound.Parent = parent
 	activeSounds += 1
 	local done = false
