@@ -1,7 +1,7 @@
 --!strict
 --[[
 	BossFormService (servidor)
-	O jogador VIRA o boss (Notorious B.I.G.): o personagem R6 é trocado pelo rig por peças (BossRigs),
+	O jogador VIRA o boss (Big C.H.O.P.): o personagem R6 é trocado pelo rig por peças (BossRigs),
 	com CharacterId = BossConfig.Form.CharacterId (kit próprio em CharacterDefs), muita vida, socos
 	fortes (FormDamageMult) e hitbox grande (HitboxScale no Model). Todo mundo do servidor vê a barra do
 	boss (NotifyBoss "summoned"/"state") e caça ele. Acaba quando morre (quem bateu divide a recompensa,

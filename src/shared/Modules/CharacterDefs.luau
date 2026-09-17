@@ -327,10 +327,10 @@ CharacterDefs.Characters = {
 		},
 	} :: CharacterDef,
 	-- FORMA DE BOSS (ritual da flecha, BossFormService): não aparece na seleção (fora de Order, Access "form").
-	-- O jogador vira o Notorious B.I.G. (rig por peças, BossRigs) com muita vida; todo mundo caça ele.
-	NotoriousBIG = {
-		Id = "NotoriousBIG",
-		DisplayName = "Notorious B.I.G.",
+	-- O jogador vira o Big C.H.O.P. (rig por peças, BossRigs) com muita vida; todo mundo caça ele.
+	BigChop = {
+		Id = "BigChop",
+		DisplayName = "Big C.H.O.P.",
 		UnlockCost = 0,
 		Access = "form",
 		Tagline = "Stand de carne — não morre, só cresce",

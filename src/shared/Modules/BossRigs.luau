@@ -5,7 +5,7 @@
 	Jujutsu Shenanigans: nada de mesh externo, rig simples (HumanoidRootPart + Motor6D por membro,
 	WeldConstraint dentro de cada membro). Roda no servidor (personagem/NPC) e no cliente (preview).
 
-	Decisão do dono (2026-09-16): o jogo foca em JoJo; primeiro boss = Notorious B.I.G. (Stand de
+	Decisão do dono (2026-09-16): o jogo foca em JoJo; primeiro boss = Big C.H.O.P. (Stand de
 	Carne Hirose): cone listrado azul/branco, massa de carne rosa, dois olhos amarelos "de grade",
 	quatro barris listrados como patas, cauda de carne.
 
@@ -16,15 +16,15 @@
 	  Torso → Motor6D "Tail" → cauda
 	Os Motor6D têm nomes próprios (não "Neck"/"RootJoint") de propósito: animações R6 dos jogadores
 	não mexem neles; a animação é PROCEDURAL no cliente (BossController.animateRigs) usando o
-	atributo do Model: BossRig = "NotoriousBIG".
+	atributo do Model: BossRig = "BigChop".
 
 	API: BossRigs.Build(id: string, scale: number?) -> Model (Humanoid R6, HRP, atributos BossRig/HitboxScale)
-	     BossRigs.Ids -> { "NotoriousBIG" }
+	     BossRigs.Ids -> { "BigChop" }
 ]]
 
 local BossRigs = {}
 
-BossRigs.Ids = { "NotoriousBIG" }
+BossRigs.Ids = { "BigChop" }
 
 -- ---------------------------------------------------------------------------
 -- Helpers de construção
@@ -86,7 +86,7 @@ local function motor(name: string, part0: BasePart, part1: BasePart): Motor6D
 end
 
 -- ---------------------------------------------------------------------------
--- Notorious B.I.G.
+-- Big C.H.O.P.
 -- ---------------------------------------------------------------------------
 
 local BLUE = Color3.fromRGB(92, 124, 214)
@@ -108,10 +108,10 @@ local BLOBS = {
 }
 local TONES = { FLESH, FLESH_LIGHT, FLESH_DARK }
 
-local function buildNotoriousBIG(scale: number): Model
+local function buildBigChop(scale: number): Model
 	local S = scale
 	local model = Instance.new("Model")
-	model.Name = "NotoriousBIG"
+	model.Name = "BigChop"
 
 	local function v(x: number, y: number, z: number): Vector3
 		return Vector3.new(x * S, y * S, z * S)
@@ -228,14 +228,14 @@ local function buildNotoriousBIG(scale: number): Model
 	Instance.new("Animator").Parent = humanoid
 
 	model.PrimaryPart = root
-	model:SetAttribute("BossRig", "NotoriousBIG")
+	model:SetAttribute("BossRig", "BigChop")
 	model:SetAttribute("HitboxScale", 2.2 * S)
 	model:SetAttribute("RigScale", S)
 	return model
 end
 
 local builders: { [string]: (number) -> Model } = {
-	NotoriousBIG = buildNotoriousBIG,
+	BigChop = buildBigChop,
 }
 
 --- Monta o rig do boss `id` (escala 1 = ~15 studs de largura, ~13 de altura com o cone).
@@ -248,7 +248,7 @@ end
 --- Altura do chão até o centro do HRP no rig `id` (para posicionar ao nascer).
 function BossRigs.RootHeight(id: string, scale: number?): number
 	local S = scale or 1
-	if id == "NotoriousBIG" then
+	if id == "BigChop" then
 		return 4.4 * S
 	end
 	return 3 * S

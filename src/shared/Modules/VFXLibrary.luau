@@ -709,8 +709,8 @@ E["Overlord/Cataclysm"] = {
 }
 E["Overlord/Cataclysm_Hit"] = E["Shared/FinisherHit"]
 
--- ---- Notorious B.I.G. (forma de boss) -------------------------------------------------
-E["NotoriousBIG/Devour"] = {
+-- ---- Big C.H.O.P. (forma de boss) -------------------------------------------------
+E["BigChop/Devour"] = {
 	lifetime = 1.2,
 	layers = {
 		mesh("WindGrow", FLESH, 6, 20, 0.5, { offset = CFrame.new(0, 0, 4) * CFrame.Angles(math.rad(90), 0, 0), spin = Vector3.new(0, 0, 500), tr0 = 0.4 }),
@@ -718,7 +718,7 @@ E["NotoriousBIG/Devour"] = {
 		smokePuff(12, { ground = true, size = { 3, 6 } }),
 	},
 }
-E["NotoriousBIG/Devour_Hit"] = {
+E["BigChop/Devour_Hit"] = {
 	lifetime = 1.4,
 	layers = {
 		impactStar(FLESH, 14, 0.35),
@@ -729,7 +729,7 @@ E["NotoriousBIG/Devour_Hit"] = {
 		light(FLESH, 6, 22, 0.5),
 	},
 }
-E["NotoriousBIG/Crush"] = {
+E["BigChop/Crush"] = {
 	lifetime = 2.0,
 	layers = {
 		groundWave(FLESH, 5, 34, 0.7),
@@ -742,8 +742,8 @@ E["NotoriousBIG/Crush"] = {
 		light(FLESH, 8, 34, 0.6),
 	},
 }
-E["NotoriousBIG/Crush_Hit"] = E["Shared/FinisherHit"]
-E["NotoriousBIG/FleshWave"] = {
+E["BigChop/Crush_Hit"] = E["Shared/FinisherHit"]
+E["BigChop/FleshWave"] = {
 	lifetime = 2.4,
 	layers = {
 		mesh("Sphere", FLESH, 3, 44, 0.8, { tr0 = 0.35, ease = "Quart" }),
@@ -756,8 +756,8 @@ E["NotoriousBIG/FleshWave"] = {
 		light(FLESH, 10, 46, 0.9),
 	},
 }
-E["NotoriousBIG/FleshWave_Hit"] = E["Shared/FinisherHit"]
-E["NotoriousBIG/Frenzy"] = {
+E["BigChop/FleshWave_Hit"] = E["Shared/FinisherHit"]
+E["BigChop/Frenzy"] = {
 	lifetime = 2.2,
 	layers = {
 		mesh("RingPurple", FLESH, 8, 32, 1.9, { up = true, spin = Vector3.new(0, 600, 0), tr0 = 0.3, ease = "Sine", follow = true, offset = CFrame.new(0, 0, 0) }),
@@ -766,20 +766,20 @@ E["NotoriousBIG/Frenzy"] = {
 		light(FLESH, 6, 30, 1.9),
 	},
 }
-E["NotoriousBIG/Frenzy_Hit"] = E["Shared/Hit"]
+E["BigChop/Frenzy_Hit"] = E["Shared/Hit"]
 
 -- ---- Boss NPC (admin) reaproveita a forma ------------------------------------------------
 E["Boss/Swipe"] = E["Shared/Swing_4"]
-E["Boss/Swipe_Hit"] = E["NotoriousBIG/Devour_Hit"]
-E["Boss/Slam"] = E["NotoriousBIG/Crush"]
+E["Boss/Swipe_Hit"] = E["BigChop/Devour_Hit"]
+E["Boss/Slam"] = E["BigChop/Crush"]
 E["Boss/Slam_Hit"] = E["Shared/FinisherHit"]
-E["Boss/Shockwave"] = E["NotoriousBIG/FleshWave"]
+E["Boss/Shockwave"] = E["BigChop/FleshWave"]
 E["Boss/Shockwave_Hit"] = E["Shared/FinisherHit"]
-E["Boss/Charge"] = E["NotoriousBIG/Devour"]
-E["Boss/Charge_Hit"] = E["NotoriousBIG/Devour_Hit"]
-E["Boss/Leap"] = E["NotoriousBIG/Devour"]
-E["Boss/Leap_Hit"] = E["NotoriousBIG/Crush"]
-E["Boss/Roar"] = E["NotoriousBIG/Frenzy"]
+E["Boss/Charge"] = E["BigChop/Devour"]
+E["Boss/Charge_Hit"] = E["BigChop/Devour_Hit"]
+E["Boss/Leap"] = E["BigChop/Devour"]
+E["Boss/Leap_Hit"] = E["BigChop/Crush"]
+E["Boss/Roar"] = E["BigChop/Frenzy"]
 E["Boss/Roar_Hit"] = E["Shared/Hit"]
 
 --- Efeito por "Pasta/Nome" (nil se não houver composição para ele).

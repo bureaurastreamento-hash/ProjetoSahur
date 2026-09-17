@@ -9,7 +9,7 @@ local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
 
 local BossConfig = {}
 
-BossConfig.Name = "Notorious B.I.G."
+BossConfig.Name = "Big C.H.O.P."
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
 BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
 BossConfig.AutoSpawnMinutes = 0 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado; agora é ritual)
@@ -25,7 +25,7 @@ BossConfig.PhaseTwoSpeed = 20
 -- Ritual da FLECHA (dono, 2026-09-16, noite): uma flecha perdida aparece, de tempos em tempos, num ponto
 -- escondido do mapa. Quem encosta carrega a flecha (visível nas costas); morreu = a flecha cai ali por
 -- DropLifetime s e some.
--- À NOITE, o portador segura E no altar e VIRA o Notorious B.I.G. (BossConfig.Form) — controlável.
+-- À NOITE, o portador segura E no altar e VIRA o Big C.H.O.P. (BossConfig.Form) — controlável.
 BossConfig.Ritual = {
 	Enabled = true,
 	NightOnly = true,
@@ -51,8 +51,8 @@ BossConfig.Ritual = {
 -- Acaba quando morre ou em Duration s. Quem bateu divide RewardPool (como o boss NPC); o boss ganha
 -- FormKillPoints por kill (via HealthService.Died → ProgressionService normal) + FormSurviveCoins se sobreviver.
 BossConfig.Form = {
-	RigId = "NotoriousBIG",
-	CharacterId = "NotoriousBIG",
+	RigId = "BigChop",
+	CharacterId = "BigChop",
 	MaxHealth = 1500,
 	WalkSpeed = 15,
 	Duration = 240,

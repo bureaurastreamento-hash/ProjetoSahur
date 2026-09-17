@@ -17,7 +17,7 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
 
 ## Estado do design (2026-09-16, noite) — decisões novas
 - Foco do jogo = anime **JoJo**. Bosses feitos por **PEÇAS do Roblox** (`BossRigs.luau`, estilo JJS), nunca mesh
-  externo; 1º boss = Notorious B.I.G. Ritual da **flecha**: quem acha a flecha vira o boss à noite no altar
+  externo; 1º boss = Big C.H.O.P. Ritual da **flecha**: quem acha a flecha vira o boss à noite no altar
   (`RitualService` → `BossFormService`). Ciclo dia/noite no `EnvironmentService` (dev congela pelo painel).
 - VFX são **compostos por código** (`VFXLibrary.luau` + `FX.PlayComposed`, meshes/texturas por ID); packs
   antigos entram como camada `pack`. Preview no F7 (`Lib/…`). Nada de VFX pesado no Workspace.

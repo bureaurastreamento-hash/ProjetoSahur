@@ -179,7 +179,7 @@ children.append(button("TimeAuto", "Ciclo automático", udim2(0, COL_W, 0, 28), 
 children.append(button("GiveArrow", "Me dar a flecha", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y), GREEN))
 y += 32
 children.append(button("RespawnArrow", "Sortear flecha", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))
-children.append(button("BecomeBoss", "Virar Notorious BIG", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y), GREEN))
+children.append(button("BecomeBoss", "Virar Big CHOP", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y), GREEN))
 children.append(button("EndBossForm", "Encerrar forma", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y), RED))
 children.append(button("TestSounds", "Testar sons dos packs", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y)))
 y += 32

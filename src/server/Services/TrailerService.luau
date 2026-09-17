@@ -359,7 +359,7 @@ local function run(myToken: number)
 		actors.E:Destroy()
 		actors.E = nil
 	end
-	ability("BOSS", "NotoriousBIG", "FleshWave", "start")
+	ability("BOSS", "BigChop", "FleshWave", "start")
 	notifyBoss:FireAllClients("summoned", { event = "summoned", by = "?", name = BossConfig.Name, model = rig, health = 1500, maxHealth = 1500, form = true })
 	if not wait_(1.4, myToken) then
 		return
@@ -367,7 +367,7 @@ local function run(myToken: number)
 
 	-- 7) o boss em ação (9 s): câmera baixa orbitando, ele avança e esmaga atores trazidos para perto
 	shot({ orbit = "TrailerActor_BOSS", radius = 30, height = 6, from = 160, to = 260, t = 9, fov = 60 })
-	title("NOTORIOUS B.I.G.", 3.5, "controlado por um jogador")
+	title("BIG C.H.O.P.", 3.5, "controlado por um jogador")
 	local bossPos = rigRoot.Position
 	local ra, rd = actorRoot("A"), actorRoot("D")
 	if ra then
@@ -387,9 +387,9 @@ local function run(myToken: number)
 	if not wait_(1.0, myToken) then
 		return
 	end
-	ability("BOSS", "NotoriousBIG", "Crush", "start")
+	ability("BOSS", "BigChop", "Crush", "start")
 	task.delay(0.6, function()
-		ability("BOSS", "NotoriousBIG", "Crush", "hit")
+		ability("BOSS", "BigChop", "Crush", "hit")
 		notifyDamage:FireAllClients(rig, actors.D, 30, "finisher")
 		notifyDamage:FireAllClients(rig, actors.A, 30, "finisher")
 		local r1, r2 = actorRoot("A"), actorRoot("D")
@@ -403,7 +403,7 @@ local function run(myToken: number)
 	if not wait_(2.4, myToken) then
 		return
 	end
-	ability("BOSS", "NotoriousBIG", "Frenzy", "start")
+	ability("BOSS", "BigChop", "Frenzy", "start")
 	if not wait_(3.0, myToken) then
 		return
 	end

@@ -51,18 +51,18 @@ ANIM vítima Shared/Hit = VAZIO.
 ## Plano 6 — transformação vista de fora (37–41 s)
 - `NotifyBoss "transforming"`: aura (FX.SetAura) + VFX **Lib/Shared/Transform** (2,8 s). **Sem som nenhum**
   (não existe `Transform`/`Transform_Burst`). Sem animação no ator (fica parado).
-- 2,6 s: ator some, rig **NotoriousBIG** aparece no lugar (sem VFX de "estouro" próprio) + VFX
-  **Lib/NotoriousBIG/FleshWave** (para fingir o estouro) — SFX **NotoriousBIG/FleshWave = não existe** (mudo).
+- 2,6 s: ator some, rig **BigChop** aparece no lugar (sem VFX de "estouro" próprio) + VFX
+  **Lib/BigChop/FleshWave** (para fingir o estouro) — SFX **BigChop/FleshWave = não existe** (mudo).
 - `NotifyBoss "summoned"` → barra de boss (escondida no trailer) + SFX UI **Match/RoundStart** (3084314259) + shake.
 
 ## Plano 7 — B.I.G. em ação (41–50 s)
 - Anda até 12 studs (Humanoid:MoveTo): animação procedural do rig (barris pisando).
 - Soco: `NotifyAttack M1 1` → RigAnimController.Pulse (mordida) + ANIM Shared/M1_1 (não mexe o rig, ok) +
   VFX **Lib/Shared/Swing_1** + SFX **Shared/Punch_Whoosh**; acerto em A: VFX Hit + SFX Punch_Hit.
-- **Crush**: `NotifyAbility NotoriousBIG/Crush start` → Pulse 2 + ANIM **NotoriousBIG/Crush = não existe** + VFX
-  **Lib/NotoriousBIG/Crush** + SFX **NotoriousBIG/Crush = não existe** (mudo); 0,6 s: `_Hit` VFX (FinisherHit) +
+- **Crush**: `NotifyAbility BigChop/Crush start` → Pulse 2 + ANIM **BigChop/Crush = não existe** + VFX
+  **Lib/BigChop/Crush** + SFX **BigChop/Crush = não existe** (mudo); 0,6 s: `_Hit` VFX (FinisherHit) +
   SFX Crush_Hit = não existe; A e D levam "finisher" (VFX/SFX Finisher_Hit) e voam.
-- **Frenzy** (ult): VFX **Lib/NotoriousBIG/Frenzy** (2,2 s) + SFX Frenzy = não existe **+ Shared/Awakening_Burst** (regra da ult — soa deslocado aqui).
+- **Frenzy** (ult): VFX **Lib/BigChop/Frenzy** (2,2 s) + SFX Frenzy = não existe **+ Shared/Awakening_Burst** (regra da ult — soa deslocado aqui).
 - `despawned` → nada visual.
 
 ## Plano 8 — Arena_Antiga (50–57 s)
@@ -77,7 +77,7 @@ ANIM vítima Shared/Hit = VAZIO.
 **Sons que não existem (mudo ou fallback):**
 1. `Shared/Awakening_Charge` (5 s de carga em silêncio) — o mais importante.
 2. `Shared/Transform` + `Shared/Transform_Burst` (transformação no boss) — não existem nem no código; vou criar.
-3. `NotoriousBIG/Crush`, `Crush_Hit`, `FleshWave`, `Frenzy`, `Devour`, `Devour_Hit` — boss mudo.
+3. `BigChop/Crush`, `Crush_Hit`, `FleshWave`, `Frenzy`, `Devour`, `Devour_Hit` — boss mudo.
 4. `Shared/Crit` e `Shared/BlackFlash` (hoje caem no Finisher_Hit).
 5. `Shared/Hit_Stun` vazio; música/ambiente do trailer.
 **Sons repetidos entre golpes diferentes:** Quake2 = WallSplat; Quake_Hit = Roar_Hit = Shockwave_Hit; Tempest =
