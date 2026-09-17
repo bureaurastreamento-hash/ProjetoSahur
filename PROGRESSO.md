@@ -228,6 +228,9 @@ o que é som repetido entre golpes). Ordem combinada:
   `MovementService.doDashOverride` lendo o atributo `AwakenedUntil`), Mystic/Mend (30 → 50), Guardian/ShieldBash
   (ergue 7, área do impacto 13/16), Sahur/Toque (×1,8 por 8 s), B.I.G. Devour/Crush/FleshWave. Testado via MCP:
   despertar → ShieldBash desperto deu 26 (20 × 1,3), Fortify 0,2, Blink 28. `SetForm` zera o despertar (esperado).
+- **Flecha visível de longe**: `RitualService.placeArrow` cria um feixe Neon dourado (cilindro 3×220 studs, transp. 0,7)
+  + PointLight sobre a flecha no chão (spot ou onde o portador morreu); some junto com o modelo quando alguém pega.
+  Testar no Studio: ver o feixe do outro lado do mapa; ajustar `BEAM_HEIGHT`/transparência se ficar feio.
 
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão

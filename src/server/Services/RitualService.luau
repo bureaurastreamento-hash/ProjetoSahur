@@ -222,6 +222,8 @@ function RitualService.BuildArrow(): Model
 	return model
 end
 
+local BEAM_HEIGHT = 220 -- altura do feixe de luz sobre a flecha no chão
+
 local function clearGround()
 	if groundArrow then
 		groundArrow:Destroy()
@@ -253,6 +255,26 @@ local function placeArrow(cf: CFrame, spotName: string?)
 	trigger.CanQuery = false
 	trigger.CastShadow = false
 	trigger.Parent = model
+	-- Feixe de luz dourado visível de longe (dono, 2026-09-16: ArrowSpot precisa ser visto do outro lado do mapa)
+	local beam = Instance.new("Part")
+	beam.Name = "Beam"
+	beam.Shape = Enum.PartType.Cylinder
+	beam.Size = Vector3.new(BEAM_HEIGHT, 3, 3)
+	beam.CFrame = cf * CFrame.new(0, BEAM_HEIGHT / 2, 0) * CFrame.Angles(0, 0, math.rad(90))
+	beam.Color = Color3.fromRGB(255, 215, 90)
+	beam.Material = Enum.Material.Neon
+	beam.Transparency = 0.7
+	beam.Anchored = true
+	beam.CanCollide = false
+	beam.CanQuery = false
+	beam.CanTouch = false
+	beam.CastShadow = false
+	beam.Parent = model
+	local light = Instance.new("PointLight")
+	light.Color = beam.Color
+	light.Brightness = 2
+	light.Range = 30
+	light.Parent = trigger
 	if spotName then
 		model:SetAttribute("SpotName", spotName)
 	end
