@@ -200,6 +200,29 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
+## LISTA DO DONO (2026-09-17, depois de testar) — em levas
+Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu DEV + denúncias.
+- **Parte 1 (correções) — FEITA**: soco para BAIXO livre (qualquer soco no ar caindo vira Downslam,
+  Up = −55 joga o alvo para baixo, ragdoll 1,6 s; saiu o FollowUpWindow); cutscene do despertar com a
+  direção do personagem CONGELADA (`baseCF`) + shift lock solta o boneco/mouse durante a cena (era o
+  giro rápido da tela); câmera da cutscene escala com o tamanho do rig (`rigScale`, Big C.H.O.P. cabe
+  na tela); HUD mostra a ULTIMATE no slot numérico dela — apagada com "(desperto)" fora do modo,
+  dourada durante — e o G virou "Despertar" (o aviso do despertar diz a tecla).
+- **Parte 2 (menus) — FEITA, falta o dono testar**: topbar com 4 botões e DROPDOWN embaixo
+  (`TopbarController`): Jogar (Personagens V, Duelo J, Clã C, Placar Tab), Loja (Loja L, Cosméticos K),
+  Perfil (Perfil P), Config (Controles + Dev para quem é desenvolvedor). `TopbarController.AddToSettings`
+  pendura ícones no dropdown de Config (usa `joinDropdown`: `setDropdown` DESTRÓI os itens que já estão
+  lá). As teclas continuam abrindo os painéis direto.
+- **Parte 3 — CONQUISTAS no lugar das missões** (a fazer): "zerar o jogo"; recompensas = pontos,
+  cosméticos, emotes e itens LIMITADOS de passe/temporada (acabou o passe, nunca mais aparecem, só DEV);
+  passe novo = conquistas novas. Hoje as missões vivem em `ProgressionService`/`ProgressionConfig` e
+  aparecem no painel Perfil (`TopbarController.renderProfile`).
+- **Parte 4 — MENU DEV de verdade + DENÚNCIAS** (a fazer): teleportar para a arena, ir ao servidor de um
+  jogador, assistir um jogador (espectar), ver denúncias de um jogador e dar itens (limitados ou não).
+  Criar antes o sistema de denúncia (motivos predefinidos + texto livre) com armazenamento por DataStore.
+- **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
+  marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
+
 ## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado, 27 services / 0 erros na análise)
 **Onde paramos**: Levas 1–6 e **8** do plano de polimento FEITAS (combate, animações procedurais base/
 habilidades/emotes, sons, trailer com avatares reais + coisas de fundo, locomoção procedural por personagem).

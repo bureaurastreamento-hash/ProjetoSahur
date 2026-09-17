@@ -1,14 +1,16 @@
 --!strict
 --[[
 	TopbarController (cliente)
-	Ícones do topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon):
-	  Loja (B)        -> ShopGui.Panel (conteúdo no ShopController)
-	  Personagens (V) -> CharacterSelect.Panel (cartões; conteúdo no HUDController)
-	  Perfil (P)      -> ProfileGui.Panel (stats/pontos/nível/missões vindos de NotifyProfile)
-	  Placar (Tab)    -> HUD.Scoreboard (substitui a lista de jogadores padrão)
-	  Controles       -> HelpGui.Panel
-	  Duelo (J)       -> DuelGui.Panel (lógica no DuelController)
-	  Clã (C)         -> ClanGui.Panel (lógica no ClanController)
+	Topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon): 4 botões só, cada um com um
+	DROPDOWN embaixo (decisão do dono, 2026-09-17: "tem muito menu lá em cima"):
+	  Jogar  -> Personagens (V), Duelo (J), Clã (C), Placar (Tab)
+	  Loja   -> Loja (L), Cosméticos (K)
+	  Perfil -> Perfil (P)            [Conquistas entram aqui quando a leva delas chegar]
+	  Config -> Controles, Dev (só para quem é desenvolvedor; DevController se pendura aqui)
+	As teclas continuam abrindo os painéis direto, com ou sem o dropdown aberto.
+	Painéis: ShopGui.Panel, CharacterSelect.Panel, ProfileGui.Panel, HUD.Scoreboard, HelpGui.Panel,
+	DuelGui.Panel, ClanGui.Panel, CosmeticsController.GetPanel().
+	API: TopbarController.AddToSettings(icon) — pendura um ícone no dropdown de Config (DevController).
 	Só reflete estado do servidor; não decide nada.
 ]]
 
@@ -48,6 +50,9 @@ local missionsList: Frame
 local missionTemplate: TextLabel
 local charactersIcon: any
 local shopIcon: any
+local settingsIcon: any -- pai do dropdown de Config (engrenagem)
+local pendingSettings: { any } = {} -- ícones pedidos antes do pai existir (DevController)
+local settingsChildren: { any } = {}
 local notifiedAffordable = false
 
 local STAT_LABELS = {
@@ -181,6 +186,18 @@ function TopbarController.Init()
 	missionTemplate = get(missionsList, "Template") :: TextLabel
 end
 
+--- Pendura um ícone no dropdown de Config (engrenagem). Chamado pelo DevController quando o jogador
+--- é desenvolvedor; se o topbar ainda não montou, o ícone fica na fila e entra no Start.
+function TopbarController.AddToSettings(icon: any)
+	if not settingsIcon then
+		table.insert(pendingSettings, icon)
+		return
+	end
+	-- joinDropdown e NÃO setDropdown: setDropdown destrói os ícones que já estão lá dentro
+	table.insert(settingsChildren, icon)
+	icon:joinDropdown(settingsIcon)
+end
+
 function TopbarController.Start()
 	local scoreboard = get(get(playerGui, "HUD"), "Scoreboard") :: Frame
 	local helpPanel = get(get(playerGui, "HelpGui"), "Panel") :: Frame
@@ -194,71 +211,63 @@ function TopbarController.Start()
 		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
 	end)
 
-	shopIcon = Icon.new()
-		:setLabel("Loja")
-		:setCaption("Pontos e passes")
-		:setCaptionHint(Enum.KeyCode.L)
-		:bindToggleKey(Enum.KeyCode.L)
-		:bindToggleItem(shopPanel)
+	--- Item de dropdown: rótulo, dica, tecla (opcional) e o painel que ele abre.
+	local function item(label: string, caption: string, key: Enum.KeyCode?, panel: Instance?, order: number): any
+		local icon = Icon.new():setLabel(label):setCaption(caption):setOrder(order)
+		if key then
+			icon:setCaptionHint(key):bindToggleKey(key)
+		end
+		if panel then
+			icon:bindToggleItem(panel)
+		end
+		return icon
+	end
+
+	charactersIcon = item("Personagens", "Trocar personagem", Enum.KeyCode.V, selectPanel, 1)
+	local duelItem = item("Duelo", "Desafiar alguém para 1v1", Enum.KeyCode.J, duelPanel, 2)
+	local clanItem = item("Clã", "Fundar ou entrar em um clã", Enum.KeyCode.C, clanPanel, 3)
+	local scoreItem = item("Placar", "Kills da sessão", Enum.KeyCode.Tab, scoreboard, 4)
+	scoreItem:bindToggleKey(Controls.Gamepad.Scoreboard)
+
+	shopIcon = item("Loja", "Pontos e passes", Enum.KeyCode.L, shopPanel, 1)
+	local cosmeticsItem = item("Cosméticos", "Skins, capas, auras e emotes (roda: B)", Enum.KeyCode.K, CosmeticsController.GetPanel(), 2)
+
+	local profileItem = item("Perfil", "Estatísticas e pontos", Enum.KeyCode.P, profilePanel, 1)
+	local helpItem = item("Controles", "Como jogar", nil, helpPanel, 1)
+
+	-- Os 4 botões que ficam no topo
+	Icon.new()
+		:setLabel("Jogar")
+		:setCaption("Personagem, duelo, clã e placar")
 		:setOrder(0)
+		:setDropdown({ charactersIcon, duelItem, clanItem, scoreItem })
 
 	Icon.new()
-		:setLabel("Cosméticos")
-		:setCaption("Skins, capas, auras e emotes (roda: B)")
-		:setCaptionHint(Enum.KeyCode.K)
-		:bindToggleKey(Enum.KeyCode.K)
-		:bindToggleItem(CosmeticsController.GetPanel())
-		:setOrder(6)
-
-	charactersIcon = Icon.new()
-		:setLabel("Personagens")
-		:setCaption("Trocar personagem")
-		:setCaptionHint(Enum.KeyCode.V)
-		:bindToggleKey(Enum.KeyCode.V)
-		:bindToggleItem(selectPanel)
+		:setLabel("Loja")
+		:setCaption("Pontos, passes e cosméticos")
 		:setOrder(1)
-	HUDController.OpenShop.Event:Connect(function()
-		shopIcon:select() -- cartão VIP clicado
-	end)
+		:setDropdown({ shopIcon, cosmeticsItem })
 
 	Icon.new()
 		:setLabel("Perfil")
-		:setCaption("Estatísticas e pontos")
-		:setCaptionHint(Enum.KeyCode.P)
-		:bindToggleKey(Enum.KeyCode.P)
-		:bindToggleItem(profilePanel)
+		:setCaption("Suas estatísticas")
 		:setOrder(2)
+		:setDropdown({ profileItem })
 
-	Icon.new()
-		:setLabel("Placar")
-		:setCaption("Kills da sessão")
-		:setCaptionHint(Enum.KeyCode.Tab)
-		:bindToggleKey(Enum.KeyCode.Tab)
-		:bindToggleKey(Controls.Gamepad.Scoreboard)
-		:bindToggleItem(scoreboard)
+	settingsIcon = Icon.new()
+		:setLabel("Config")
+		:setCaption("Controles e ajustes")
 		:setOrder(3)
+	settingsChildren = { helpItem }
+	settingsIcon:setDropdown(settingsChildren)
+	for _, icon in pendingSettings do
+		TopbarController.AddToSettings(icon)
+	end
+	table.clear(pendingSettings)
 
-	Icon.new()
-		:setLabel("Duelo")
-		:setCaption("Desafiar alguém para 1v1")
-		:setCaptionHint(Enum.KeyCode.J)
-		:bindToggleKey(Enum.KeyCode.J)
-		:bindToggleItem(duelPanel)
-		:setOrder(4)
-
-	Icon.new()
-		:setLabel("Clã")
-		:setCaption("Fundar ou entrar em um clã")
-		:setCaptionHint(Enum.KeyCode.C)
-		:bindToggleKey(Enum.KeyCode.C)
-		:bindToggleItem(clanPanel)
-		:setOrder(5)
-
-	Icon.new()
-		:setLabel("Controles")
-		:setCaption("Como jogar")
-		:bindToggleItem(helpPanel)
-		:setOrder(6)
+	HUDController.OpenShop.Event:Connect(function()
+		shopIcon:select() -- cartão VIP clicado
+	end)
 
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(profile: any, sessionOnly: boolean)
 		if typeof(profile) == "table" then
