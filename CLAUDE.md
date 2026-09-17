@@ -15,6 +15,17 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado do design (2026-09-17) — polimento em levas (ver PROGRESSO.md "RETOMAR AQUI")
+- Boss = **Big C.H.O.P.** (id `BigChop`; nunca ragdolla; Devorar cura). Levas 1–6 feitas: combate (hit de chegada
+  do dash/Piscar, Domínio do Tempo do Swift, congelamento só do Guardian, noite rara 28/4 min), **animações
+  PROCEDURAIS** (`RigPose` + `ProcAnimDefs` + `ProcAnimController` via gancho `FX.ProcAnim`; mandam sobre as
+  dos packs — `team = true` devolve à equipe), sons com ids públicos, trailer com avatares reais e ações de fundo,
+  bonecos de treino com física/ragdoll/leash. Falta: lista de ajustes do dono (VFX F7, poses, trailer) e **Leva 8**
+  (idle que respira/andar/variações por personagem — nada repetido entre personagens).
+- Cutscene da ULT: `CutsceneController` (cinema, pós-processo, nome da ult, temas por personagem em
+  `AwakeningDefs`, sons em camadas `Shared/Awakening_*`).
+- Screenshots do Studio funcionam (KWin + spectacle; scripts no scratchpad) — usar para conferir visual.
+
 ## Estado do design (2026-09-16, noite) — decisões novas
 - Foco do jogo = anime **JoJo**. Bosses feitos por **PEÇAS do Roblox** (`BossRigs.luau`, estilo JJS), nunca mesh
   externo; 1º boss = Big C.H.O.P. Ritual da **flecha**: quem acha a flecha vira o boss à noite no altar
