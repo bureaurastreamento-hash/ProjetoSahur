@@ -896,9 +896,9 @@ local function fadeOut(sound: Sound)
 end
 
 --- Toca um clone do som; devolve uma função que o interrompe (com fade) ou nil se o teto foi atingido.
-local function playClone(template: Sound, parent: Instance): (() -> ())?
+local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound?)
 	if activeSounds >= FX.MaxActiveSounds then
-		return nil
+		return nil, nil
 	end
 	local sound = template:Clone()
 	local target = template.Volume
@@ -944,7 +944,7 @@ local function playClone(template: Sound, parent: Instance): (() -> ())?
 			fadeOut(sound)
 			task.delay(FX.SoundFadeOut + 0.05, finish)
 		end
-	end
+	end, sound
 end
 
 --- Som 3D em Assets.Sounds.<folder>.<name>, tocado no personagem.
@@ -968,6 +968,17 @@ function FX.PlaySoundAtStoppable(character: Model, folder: string, name: string)
 		return playClone(template, root)
 	end
 	return nil
+end
+
+--- Igual a PlaySoundAtStoppable, mas devolve também o Sound (para tweenar PlaybackSpeed/Volume — camadas
+--- da cutscene do despertar). O Sound é destruído ao acabar/parar: guardar só durante o uso.
+function FX.PlaySoundAtControl(character: Model, folder: string, name: string): ((() -> ())?, Sound?)
+	local template = Assets.GetSound(Assets.ResolveFolder("Sounds", folder, name, character), name)
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if template and root then
+		return playClone(template, root)
+	end
+	return nil, nil
 end
 
 --- Som de UI (não posicional).

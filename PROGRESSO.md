@@ -257,6 +257,27 @@ o que é som repetido entre golpes). Ordem combinada:
      barra do boss mostra **tempo restante** (`endsAt` no "summoned", também para quem entra depois);
      banner próprio ("Você é o Big C.H.O.P. — DEVORE para curar…") e para os outros ("derrubem antes do tempo").
   FALTA: sons próprios (junto com o trailer), VFX de transformação melhor, balancear com gente de verdade.
+- **Cutscene da ULT refeita (dono: "mais efeito, sons, aura")** — `CutsceneController` reescrito + `AwakeningDefs.luau`:
+  1. Mundo reage: barras de cinema, vinheta (5 anéis), HUD/CoreGui escondidos, ColorCorrection (dessatura e
+     tinge na cor do personagem na carga; satura/brilha no estouro) + Bloom, flash branco, **nome da ult em
+     texto grande** (FÚRIA/TEMPESTADE/METEORO/TERREMOTO/RITMO FINAL/CATACLISMO/FRENESI) com subtítulo.
+     **Tempo para**: no estouro o servidor congela todos os outros (`CombatConfig.Awakening.Cutscene.FreezeSeconds`
+     1,3 s; `FreezeRadius` 0 = servidor inteiro) via CutsceneUntil + Stun "frozen"; o cliente congela a animação
+     de todo mundo (Hitstop) e quem está a 110 studs vê flash na cor, dessaturação, nome pequeno da ult e o som
+     "Awakening_Freeze".
+  2. Temas por personagem (`THEMES`): rock (pedras levitam/voam) Brawler; lightning (pós-imagens + raios) Swift;
+     arcane (anel de runas + 5 esferas convergindo) Mystic; stone (6 pilares sobem e desmoronam) Guardian; drums
+     (anéis pulsando no ritmo + som Pulse) Sahur; void (esfera escura que colapsa) Overlord; flesh (bolhas) BigChop.
+     Estouro usa a composição da própria ult (`<Char>/<Ult>` do VFXLibrary).
+  3. Som em camadas (ids PÚBLICOS dos packs JJS, testados via MCP — 12 de 57 carregam): Awakening (nosso) +
+     `Awakening_Charge` loop (966888080, PlaybackSpeed 0,75 → 1,55 tweenado) + `Awakening_Riser` (4299624634,
+     4,9 s, alinhado ao estouro) + `Awakening_Pulse` (batidas 1,8/1,25/0,8/0,45/0,2 s antes) + `Awakening_Burst`
+     (nosso) + `Awakening_Impact` (9114589190) + `Awakening_Voice` (grito 17309157540; `<Char>/Awakening_Voice`
+     tem prioridade) + `Awakening_Freeze` (136494030417281). `FX.PlaySoundAtControl` devolve o Sound.
+  4. Modo despertado mais visível: `Shared/AwakenedSwing` (faíscas na cor a cada soco, CombatController) e anel
+     de energia no chão soldado ao root (`Shared/Awakening`).
+  Testado via MCP com screenshots (Brawler e Guardian). FALTA: ver com 2 clientes (o lado de quem assiste),
+  ajustar tempos/intensidade conforme o dono; equipe pode gravar Awakening_Voice por personagem.
 
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão

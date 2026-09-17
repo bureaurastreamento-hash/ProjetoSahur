@@ -746,6 +746,34 @@ local function onRequestAwaken(player: Player)
 		for _, victim in Hitbox.Around(character, cut.BurstRadius, 8) do
 			CombatService.ResolveHit(player, character, victim, cut.BurstDamage, false, cut.BurstKnockback, { BreaksBlock = true })
 		end
+		-- "o tempo para": os outros congelam por FreezeSeconds (o cliente deles congela animação/tela)
+		local freeze = tonumber(cut.FreezeSeconds) or 0
+		if freeze > 0 then
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local radius = tonumber(cut.FreezeRadius) or 0
+			local untilT = Workspace:GetServerTimeNow() + freeze
+			for _, other in Players:GetPlayers() do
+				local oc = other.Character
+				local oroot = oc and oc:FindFirstChild("HumanoidRootPart") :: BasePart?
+				if other == player or not oc or not oroot or not HealthService.IsAlive(oc) then
+					continue
+				end
+				if radius > 0 and root and (oroot.Position - root.Position).Magnitude > radius then
+					continue
+				end
+				local current = other:GetAttribute("CutsceneUntil")
+				if typeof(current) ~= "number" or current < untilT then
+					other:SetAttribute("CutsceneUntil", untilT)
+				end
+				CombatService.Stun(other, freeze, "frozen")
+				CombatService.RestoreWalkSpeed(other)
+				task.delay(freeze + 0.05, function()
+					if other.Parent == Players and other.Character == oc then
+						CombatService.RestoreWalkSpeed(other)
+					end
+				end)
+			end
+		end
 	end)
 	task.delay(cut.Duration, function()
 		release()

@@ -157,9 +157,63 @@
           "name": "Awakening_Charge",
           "className": "Sound",
           "properties": {
-            "SoundId": "",
+            "SoundId": "rbxassetid://966888080",
             "Looped": true,
-            "Volume": 0.6
+            "Volume": 0.45,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 12
+          }
+        },
+        {
+          "name": "Awakening_Riser",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://4299624634",
+            "Volume": 0.8,
+            "RollOffMaxDistance": 140,
+            "RollOffMinDistance": 12
+          }
+        },
+        {
+          "name": "Awakening_Pulse",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://3059775781",
+            "Volume": 0.7,
+            "PlaybackSpeed": 0.55,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 12
+          }
+        },
+        {
+          "name": "Awakening_Impact",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9114589190",
+            "Volume": 1,
+            "RollOffMaxDistance": 200,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "Awakening_Voice",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://17309157540",
+            "Volume": 0.9,
+            "RollOffMaxDistance": 160,
+            "RollOffMinDistance": 12
+          }
+        },
+        {
+          "name": "Awakening_Freeze",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://136494030417281",
+            "Volume": 0.6,
+            "PlaybackSpeed": 0.8,
+            "RollOffMaxDistance": 200,
+            "RollOffMinDistance": 15
           }
         },
         {

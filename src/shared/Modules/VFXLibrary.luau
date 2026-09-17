@@ -451,12 +451,23 @@ E["Shared/Awakening_Burst"] = {
 		light("$primary", 10, 40, 1.0),
 	},
 }
+E["Shared/AwakenedSwing"] = { -- faíscas na cor a cada soco durante o modo despertado
+	lifetime = 0.6,
+	layers = {
+		sparks("$primary", 14, { size = { 0.25, 0.6 }, life = { 0.2, 0.4 }, speed = { 12, 28 } }),
+		emit("Flare", "$primary", 2, { size = { 1.5, 2.5 }, life = { 0.12, 0.18 }, speed = { 0, 0 }, light = 1, orient = "FacingCamera" }),
+		light("$primary", 3, 10, 0.2),
+	},
+}
 E["Shared/Awakening"] = { -- aura do modo despertado (segue o personagem)
 	lifetime = 20,
 	layers = {
 		emit("AuraMain", "$primary", 0, { duration = 19.5, rate = 22, size = { 6, 6.4 }, life = { 0.25, 0.25 }, speed = { 6, 6 }, spread = { 10, 10 }, rot = { -5, 5 }, orient = "FacingCameraWorldUp", follow = true, offset = Vector3.new(0, -2.6, 0), direction = "up", light = 0.4, zOffset = -0.8, trSeq = { { 0, 1 }, { 0.68, 0.56 }, { 1, 1 } }, lockedToPart = true }),
 		emit("Bits", "$primary", 0, { duration = 19.5, rate = 12, size = { 0.5, 0.9 }, life = { 0.35, 0.5 }, speed = { 0.01, 0.01 }, accel = Vector3.new(0, 25, 0), follow = true, offset = Vector3.new(0, -1, 0), light = 1, shape = "Box", shapeSize = Vector3.new(4, 5, 4) }),
 		emit("Flame", "$primary", 0, { duration = 19.5, rate = 25, size = { 0.3, 0.3 }, life = { 0.6, 0.9 }, speed = { 4, 8 }, spread = { 20, 20 }, direction = "up", follow = true, offset = Vector3.new(0, -2, 0), light = 1, shape = "Box", shapeSize = Vector3.new(3, 1, 2), trSeq = { { 0, 1 }, { 0.2, 0 }, { 0.8, 0 }, { 1, 1 } } }),
+		-- anel de energia no chão girando e pulsando (visível de longe: "esse aí está despertado")
+		mesh("ShockGround", "$primary", 7, 8, 19.5, { ground = true, up = true, tr0 = 0.55, tr1 = 0.6, ease = "Sine", follow = true }), -- sem spin: soldado no root
+		light("$primary", 2.5, 18, 19.5),
 	},
 }
 E["Shared/Transform"] = { -- virando o boss (2,5 s)

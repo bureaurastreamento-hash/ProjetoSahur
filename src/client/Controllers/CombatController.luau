@@ -16,6 +16,7 @@
 ]]
 
 local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -74,6 +75,11 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 	end
 	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
 	FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
+	local attackerPlayer = Players:GetPlayerFromCharacter(attackerChar)
+	local awakenedUntil = attackerPlayer and attackerPlayer:GetAttribute("AwakenedUntil")
+	if typeof(awakenedUntil) == "number" and awakenedUntil > Workspace:GetServerTimeNow() then
+		FX.SpawnVFX(attackerChar, SHARED, "AwakenedSwing", true) -- modo despertado: faíscas na cor
+	end
 	if attackDef and comboIndex >= attackDef.ComboLength then
 		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
 		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then

@@ -165,6 +165,10 @@ CombatConfig.Awakening = {
 		BurstRadius = 12,
 		BurstDamage = 5,
 		BurstKnockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.0 } :: Knockback,
+		-- "O tempo para": no estouro TODOS os outros jogadores congelam (WalkSpeed 0 + sem agir) por
+		-- FreezeSeconds (dono, 2026-09-16: aceito). FreezeRadius = 0 → o servidor inteiro; > 0 → só quem está perto.
+		FreezeSeconds = 1.3,
+		FreezeRadius = 0,
 	},
 }
 
