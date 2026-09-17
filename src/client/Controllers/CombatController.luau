@@ -68,7 +68,7 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
 		FX.SpawnVFX(attackerChar, SHARED, attackId, true) -- Shared/Uppercut, Shared/Downslam (VFXLibrary)
 		local up = attackDef and attackDef.AttackerUp
-		if typeof(up) == "number" and attackerChar == localPlayer.Character then
+		if typeof(up) == "number" and up > 0 and attackerChar == localPlayer.Character then
 			FX.Push(attackerChar, Vector3.new(0, up, 0), 0.2)
 		end
 		return

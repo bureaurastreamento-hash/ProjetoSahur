@@ -171,7 +171,7 @@ CharacterDefs.Characters = {
 				CastTime = 0.8,
 				-- dono (2026-09-17): cúpula onde tudo fica MUITO lento e o Swift um pouco mais rápido; sair
 				-- quebra a cúpula e o Swift fica muito rápido até o fim
-				Effect = { Type = "TimeDome", Radius = 30, Duration = 8, SlowMultiplier = 0.25, SelfMultiplier = 1.25, BreakMultiplier = 3.0 },
+				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0 },
 				OncePerAwakening = true,
 			},
 		},

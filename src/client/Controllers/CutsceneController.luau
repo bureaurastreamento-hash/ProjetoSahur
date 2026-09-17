@@ -20,6 +20,7 @@ local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local RigPose = require(Modules:WaitForChild("RigPose"))
+local ProcAnimDefs = require(Modules:WaitForChild("ProcAnimDefs"))
 
 local CutsceneController = {}
 
@@ -838,6 +839,22 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	local burstAt = if typeof(data) == "table" and typeof(data.BurstAt) == "number" then data.BurstAt else cut.BurstAt
 	local def = CharacterDefs.Get(characterId)
 	local awDef = AwakeningDefs.Get(characterId)
+	-- poses do despertar por personagem (ProcAnimDefs.AwakeningPoses, em graus/off) → formato daqui (rad/offset)
+	local charPoses = (ProcAnimDefs :: any).AwakeningPoses[characterId]
+	local function cp(key: string, default: Pose): Pose
+		local src = charPoses and charPoses[key]
+		if not src then
+			return default
+		end
+		local out: Pose = {}
+		for joint, jp in src do
+			local rot = jp.rot or Vector3.zero
+			out[joint] = { rot = Vector3.new(math.rad(rot.X), math.rad(rot.Y), math.rad(rot.Z)), offset = jp.off }
+		end
+		return out
+	end
+	local P_CHARGE_1, P_CHARGE_2, P_CHARGE_3 = cp("charge1", POSE_CHARGE_1), cp("charge2", POSE_CHARGE_2), cp("charge3", POSE_CHARGE_3)
+	local P_BURST, P_STANCE = cp("burst", POSE_BURST), cp("stance", POSE_STANCE)
 	local color = awDef.Color or (def and def.Color) or GOLD
 	local isMe = character == localPlayer.Character
 	local rig = captureRig(character)
@@ -967,7 +984,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	FX.SpawnVFX(character, characterId, "Awakening_Charge", true) -- versão própria, se existir
 	theme.charge(ctx)
 	if rig then
-		applyPose(rig, POSE_CHARGE_1, 0.35)
+		applyPose(rig, P_CHARGE_1, 0.35)
 	end
 	-- riser (4,9 s) alinhado para acabar no estouro
 	at(math.max(0, burstAt - 4.7), function()
@@ -991,7 +1008,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	-- carga crescendo
 	at(burstAt * 0.32, function()
 		if rig then
-			applyPose(rig, POSE_CHARGE_2, burstAt * 0.2, Enum.EasingStyle.Sine)
+			applyPose(rig, P_CHARGE_2, burstAt * 0.2, Enum.EasingStyle.Sine)
 		end
 		if isMe then
 			FX.Shake(0.2, burstAt * 0.4)
@@ -999,7 +1016,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	end)
 	at(burstAt * 0.68, function()
 		if rig then
-			applyPose(rig, POSE_CHARGE_3, burstAt * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
+			applyPose(rig, P_CHARGE_3, burstAt * 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
 		end
 		if isMe then
 			FX.Shake(0.7, burstAt * 0.32)
@@ -1012,7 +1029,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	-- ===== ESTOURO =====
 	at(burstAt, function()
 		if rig then
-			applyPose(rig, POSE_BURST, 0.12, Enum.EasingStyle.Back)
+			applyPose(rig, P_BURST, 0.12, Enum.EasingStyle.Back)
 		end
 		if stopCharge then
 			stopCharge()
@@ -1086,7 +1103,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	-- pose de guarda e devolve o controle
 	at(burstAt + 0.45, function()
 		if rig then
-			applyPose(rig, POSE_STANCE, 0.45)
+			applyPose(rig, P_STANCE, 0.45)
 		end
 	end)
 	at(burstAt + 1.0, function()

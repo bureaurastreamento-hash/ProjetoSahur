@@ -77,8 +77,8 @@ CombatConfig.Attacks = {
 		Width = 5,
 		Height = 7,
 		MaxTargets = 3,
-		Knockback = { Speed = 8, Duration = 0.3, Up = 42 } :: Knockback,
-		AttackerUp = 42, -- o atacante também sobe (cliente)
+		Knockback = { Speed = 8, Duration = 0.3, Up = 46 } :: Knockback,
+		AttackerUp = 0, -- dono (2026-09-17): SEM pulo duplo — pulo normal socando, só o alvo sobe
 		FollowUpWindow = 1.6, -- s após o uppercut em que o downslam sai sem precisar de combo novo
 	},
 }
@@ -104,8 +104,8 @@ CombatConfig.Dash = {
 		Width = 5,
 		Height = 6,
 		MaxTargets = 3,
-		FrontDot = 0.8,
-		Knockback = { Speed = 70, Duration = 0.35, Up = 12 } :: Knockback,
+		FrontDot = 0.7,
+		Knockback = { Speed = 120, Duration = 0.5, Up = 20 } :: Knockback, -- dono: "taca ele meio longe"
 	},
 }
 

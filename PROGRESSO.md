@@ -228,7 +228,15 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   motor de poses em Motor6D (como a cutscene), keyframes por ação com o tempo do CombatConfig: M1_1..4 (0,45 s
   cada, impacto em 0,15), Uppercut, Downslam, Hit (reação), Parry, Block/BlockHit, Grabbed, Dash/DashBack,
   RagdollCancel. Regra: id da equipe preenchido = toca o da equipe; vazio ou marcado `Proc` = procedural.
-- **Leva 3 — ProcAnim habilidades**: todas as habilidades de todos os personagens com CastTime (Blink, SweepKick,
+- **Ajustes do dono (2026-09-17)**: hit de chegada empurra MUITO mais (Speed 120, Up 20, FrontDot 0,7); cúpula
+  14 s e lentidão 0,08× (quase parado); uppercut SEM pulo duplo (`AttackerUp = 0`, alvo sobe 46).
+- **Leva 3 — FEITA 2026-09-17**: clipes procedurais de TODAS as habilidades (Brawler ShoulderBash/+_Carry/
+  GroundSlam/Rampage; Swift Blink/SweepKick/TimeDome; Mystic ArcaneBolt/Mend/Meteor; Guardian ShieldBash/
+  +_Carry/Fortify/Quake; Sahur Bombo/Toque/Ritmo; Overlord reaproveita) com duração = CastTime/impacto, e
+  `ProcAnimDefs.AwakeningPoses` (charge1..3/burst/stance por personagem: Brawler punhos, Swift corredor,
+  Mystic conjurando, Guardian escudo, Sahur tambor) lidas pelo CutsceneController (converte graus→rad).
+  Preview: clonar o ModuleScript antes do require no run_code (o require do DataModel de edição fica em cache).
+- **Leva 3 — ProcAnim habilidades (plano original)**: todas as habilidades de todos os personagens com CastTime (Blink, SweepKick,
   ArcaneBolt, Mend, Meteor, Fortify, Quake, Bombo, Toque, Ritmo, Domínio, Rampage/GroundSlam/ShoulderBash
   conferidos com o tempo) + poses do despertar por personagem.
 - **Leva 4 — Emotes/cenas**: 8 emotes (wave, taunt, dance, bow, flex, scene_power/dark/storm) procedurais em loop.
