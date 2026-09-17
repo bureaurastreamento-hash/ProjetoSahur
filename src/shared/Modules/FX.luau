@@ -25,7 +25,7 @@ local FX = {}
 -- Gancho das animações PROCEDURAIS (ProcAnimController registra no Init): PlayAnimation/StopAnimation
 -- desviam para cá quando existe clipe em ProcAnimDefs para "<Pasta>/<Nome>".
 export type ProcAnimHook = {
-	Wants: (key: string, hasTeamId: boolean) -> boolean,
+	Wants: (key: string, hasTeamId: boolean, character: Model?) -> boolean,
 	Play: (character: Model, key: string, looped: boolean?) -> boolean,
 	Stop: (character: Model, key: string) -> (),
 }
@@ -179,7 +179,7 @@ function FX.PlayAnimation(character: Model, folder: string, name: string, looped
 	if hook then
 		local anim = Assets.GetAnimation(folder, name)
 		local hasTeamId = anim ~= nil and anim.AnimationId ~= "" and anim.AnimationId ~= "rbxassetid://"
-		if hook.Wants(folder .. "/" .. name, hasTeamId) and hook.Play(character, folder .. "/" .. name, looped) then
+		if hook.Wants(folder .. "/" .. name, hasTeamId, character) and hook.Play(character, folder .. "/" .. name, looped) then
 			return nil -- procedural tocando (sem track da Roblox)
 		end
 	end

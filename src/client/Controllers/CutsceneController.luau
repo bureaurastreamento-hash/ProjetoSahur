@@ -858,6 +858,10 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	local color = awDef.Color or (def and def.Color) or GOLD
 	local isMe = character == localPlayer.Character
 	local rig = captureRig(character)
+	if rig then
+		-- segura a locomoção procedural (ProcAnimController) enquanto a cutscene posa o rig
+		character:SetAttribute("ProcAnimHold", true)
+	end
 	local camera = Workspace.CurrentCamera
 	local alive = true
 	local steps: { thread } = {}
@@ -901,6 +905,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 			restoreRig(rig, 0.25)
 			task.delay(0.3, function()
 				cancelTweens(rig)
+				character:SetAttribute("ProcAnimHold", nil)
 			end)
 		end
 		FX.SetAura(character, nil, "AwakenCharge")

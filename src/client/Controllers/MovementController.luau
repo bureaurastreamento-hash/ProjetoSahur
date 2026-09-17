@@ -6,9 +6,11 @@
 	  - Shift lock no Shift esquerdo, implementado aqui (mouse travado no centro, personagem
 	    vira com a câmera, ombro deslocado). O nativo está desligado no project.json
 	    (StarterPlayer.EnableMouseLockOption = false) para termos controle total. Ctrl fica livre.
-	  - Animações de movimento da equipe (Assets.Animations.Shared.Idle/Walk/Run) tocadas por
-	    nós mesmos com prioridade Movement, por cima do script "Animate" padrão (que fica só
-	    com pulo/queda). Assim funciona mesmo se o place trocar/remover o Animate.
+	  - Animações de movimento: com `ProcAnimDefs.Locomotion.Enabled` (Leva 8) quem manda é o
+	    ProcAnimController (Idle/Walk/Run procedurais, um jeito por personagem). Desligando a
+	    locomoção procedural, voltam as da equipe (Assets.Animations.Shared.Idle/Walk/Run) tocadas
+	    por nós mesmos com prioridade Movement, por cima do script "Animate" padrão (que fica só
+	    com pulo/queda).
 	    Diagnóstico: se a track carrega com Length 0, avisa no Output (id não é da conta dona
 	    do jogo ou foi feita para outro rig).
 	  - DASH UNIVERSAL no Q (gamepad X): RequestDash(direção do WASD, frente da câmera). O servidor
@@ -36,6 +38,7 @@ local Assets = require(Modules:WaitForChild("Assets"))
 local FX = require(Modules:WaitForChild("FX"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local ProcAnimDefs = require(Modules:WaitForChild("ProcAnimDefs"))
 
 local MovementController = {}
 
@@ -159,15 +162,21 @@ local function setup(character: Model)
 		moving = false,
 		connections = {},
 	}
-	for _, name in { "Idle", "Walk", "Run" } do
-		local track = loadTrack(animator, name)
-		if track then
-			a.tracks[name] = track
+	if not ProcAnimDefs.Locomotion.Enabled then
+		-- Leva 8: com a locomoção PROCEDURAL ligada, quem anda/corre/respira é o ProcAnimController
+		-- (jeito próprio por personagem); as animações da equipe só voltam se ela for desligada.
+		for _, name in { "Idle", "Walk", "Run" } do
+			local track = loadTrack(animator, name)
+			if track then
+				a.tracks[name] = track
+			end
 		end
 	end
 	anims = a
 	if next(a.tracks) == nil then
-		Log.debug("[MovementController] sem animações de movimento (ids vazios); Animate padrão segue")
+		Log.debug(if ProcAnimDefs.Locomotion.Enabled
+			then "[MovementController] locomoção procedural ligada (ProcAnimController cuida de Idle/Walk/Run)"
+			else "[MovementController] sem animações de movimento (ids vazios); Animate padrão segue")
 		return
 	end
 

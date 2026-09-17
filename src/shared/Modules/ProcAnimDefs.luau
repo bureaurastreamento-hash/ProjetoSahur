@@ -7,7 +7,10 @@
 	  - chave = "<Pasta>/<Nome>" igual a Assets.Animations (Shared/M1_1, Swift/Blink…)
 	  - `team = true` = se a equipe colou um id em Animations.model.json, toca o dela em vez desta
 	    (padrão false: a procedural manda, mesmo com id — decisão do dono 2026-09-17, as dos packs
-	    têm tempo errado). Idle/Walk/Run não têm entrada aqui: continuam as da equipe.
+	    têm tempo errado). Idle/Walk/Run também são procedurais (seção LOCOMOÇÃO, Leva 8): cada
+	    personagem tem o seu jeito de ficar parado/andar/correr, tocado como camada de BASE.
+	  - Quem não tem clipe próprio "<Personagem>/<Nome>" ganha uma VARIAÇÃO do Shared pelo estilo do
+	    personagem (ProcAnimDefs.Styles + Resolve): nada fica igual entre personagens.
 	Frames: { t = segundos, pose = { Junta = { rot = Vector3 (graus), off = Vector3 } }, ease = "out"|"in"|"inout"|"linear" }
 	O frame em t=0 é o começo (faltando = neutro); depois do último frame a pose volta ao neutro em `blendOut`.
 	Loops (`loop = true`) repetem entre o primeiro e o último frame até StopAnimation.
@@ -462,6 +465,260 @@ C["Emotes/scene_storm"] = { -- cena: tempestade (braços ao céu, gira o tronco,
 		P(5.0, {}, "inout"),
 	},
 }
+
+-- ---------------------------------------------------------------------------
+-- LOCOMOÇÃO (Leva 8): Idle/Walk/Run PROCEDURAIS, um jeito por personagem.
+-- O ProcAnimController mantém isso como camada de BASE (por baixo dos socos/habilidades) em todo
+-- personagem que o cliente vê, escolhendo Idle/Walk/Run pela velocidade e acelerando o ciclo junto.
+-- `Locomotion.Enabled = false` devolve tudo para as animações da equipe (MovementController).
+-- ---------------------------------------------------------------------------
+ProcAnimDefs.Locomotion = {
+	Enabled = true,
+	WalkThreshold = 1.5, -- studs/s a partir de onde deixa de ser Idle
+	RunThreshold = 19, -- acima disso vira Run (corrida = WalkSpeed 24 no CombatConfig)
+	WalkReference = 16, -- velocidade em que o ciclo do Walk toca em 1×
+	RunReference = 24,
+}
+
+type Loco = {
+	-- Idle
+	idleCycle: number,
+	breath: number, -- quanto o tronco sobe/desce respirando (studs)
+	idleLean: number, -- inclinação do tronco parado (graus; − = para a frente)
+	idleSway: number, -- balanço lateral do corpo parado
+	idleArm: Vector3, -- repouso do braço direito (o esquerdo é espelhado no Z)
+	idleHead: Vector3,
+	idleLegOut: number, -- afastamento dos pés
+	idleAccentR: Vector3?, -- tempero que aparece no meio do ciclo (braço direito)
+	idleAccentL: Vector3?,
+	-- Walk / Run
+	walkCycle: number,
+	walkLeg: number,
+	walkArm: number,
+	walkArmOut: number,
+	walkLean: number,
+	walkBob: number,
+	walkSway: number,
+	walkTwist: number, -- quanto o tronco gira acompanhando o passo
+	runCycle: number,
+	runLeg: number,
+	runArm: number,
+	runLean: number,
+	runBob: number,
+	runTwist: number,
+}
+
+local function vadd(a: Vector3, b: Vector3?): Vector3
+	return if b then a + b else a
+end
+
+--- Monta Idle/Walk/Run (loops) de um personagem a partir do jeito dele de se mexer.
+local function locomotion(p: Loco): { [string]: Clip }
+	local ic = p.idleCycle
+	local armR, armL = p.idleArm, V(p.idleArm.X, -p.idleArm.Y, -p.idleArm.Z)
+	local legR, legL = V(0, 0, p.idleLegOut), V(0, 0, -p.idleLegOut)
+	local function idleFrame(t: number, k: number, accent: boolean, ease: string?): Frame
+		-- k = −1..1: fase da respiração (1 = peito cheio)
+		local up = p.breath * k
+		return P(t, {
+			Root = { rot = V(p.idleLean - 1.2 * k, 0, p.idleSway * k), off = V(0, up, 0) },
+			Neck = { rot = p.idleHead + V(1.5 * k, p.idleSway * 1.5 * k, 0) },
+			RA = { rot = vadd(armR + V(-2 * k, 0, 1.5 * k), if accent then p.idleAccentR else nil) },
+			LA = { rot = vadd(armL + V(-2 * k, 0, -1.5 * k), if accent then p.idleAccentL else nil) },
+			RL = { rot = legR },
+			LL = { rot = legL },
+		}, ease)
+	end
+	local idle: Clip = {
+		duration = ic,
+		loop = true,
+		frames = {
+			idleFrame(0, -1, false),
+			idleFrame(ic * 0.3, 1, false, "inout"),
+			idleFrame(ic * 0.55, -0.4, true, "inout"),
+			idleFrame(ic * 0.8, 0.6, true, "inout"),
+			idleFrame(ic, -1, false, "inout"),
+		},
+	}
+
+	--- Um passo: `s` = +1 (perna direita à frente) ou −1 (espelho); `pass` = pé passando (pernas juntas).
+	local function step(t: number, s: number, cycleLeg: number, cycleArm: number, lean: number, bob: number, twist: number, pass: boolean, ease: string?): Frame
+		local leg = if pass then 0 else cycleLeg * s
+		local arm = if pass then 0 else cycleArm * s
+		return P(t, {
+			Root = {
+				rot = V(lean, twist * s, (if pass then 0 else p.walkSway * s)),
+				off = V(0, (if pass then bob else -bob * 0.4), 0),
+			},
+			Neck = { rot = V(-lean * 0.35, -twist * 0.6 * s, 0) },
+			RA = { rot = V(-arm, 0, p.walkArmOut) },
+			LA = { rot = V(arm, 0, -p.walkArmOut) },
+			RL = { rot = V(leg, 0, p.idleLegOut * 0.6) },
+			LL = { rot = V(-leg, 0, -p.idleLegOut * 0.6) },
+		}, ease)
+	end
+
+	local wc = p.walkCycle
+	local walk: Clip = {
+		duration = wc,
+		loop = true,
+		frames = {
+			step(0, 1, p.walkLeg, p.walkArm, p.walkLean, p.walkBob, p.walkTwist, false),
+			step(wc * 0.25, 1, p.walkLeg, p.walkArm, p.walkLean, p.walkBob, p.walkTwist, true, "inout"),
+			step(wc * 0.5, -1, p.walkLeg, p.walkArm, p.walkLean, p.walkBob, p.walkTwist, false, "inout"),
+			step(wc * 0.75, -1, p.walkLeg, p.walkArm, p.walkLean, p.walkBob, p.walkTwist, true, "inout"),
+			step(wc, 1, p.walkLeg, p.walkArm, p.walkLean, p.walkBob, p.walkTwist, false, "inout"),
+		},
+	}
+	local rc = p.runCycle
+	local run: Clip = {
+		duration = rc,
+		loop = true,
+		frames = {
+			step(0, 1, p.runLeg, p.runArm, p.runLean, p.runBob, p.runTwist, false),
+			step(rc * 0.25, 1, p.runLeg, p.runArm, p.runLean, p.runBob, p.runTwist, true, "inout"),
+			step(rc * 0.5, -1, p.runLeg, p.runArm, p.runLean, p.runBob, p.runTwist, false, "inout"),
+			step(rc * 0.75, -1, p.runLeg, p.runArm, p.runLean, p.runBob, p.runTwist, true, "inout"),
+			step(rc, 1, p.runLeg, p.runArm, p.runLean, p.runBob, p.runTwist, false, "inout"),
+		},
+	}
+	return { Idle = idle, Walk = walk, Run = run }
+end
+
+-- Base (quem não tem personagem definido): postura neutra que respira
+local LOCO_DEFS: { [string]: Loco } = {
+	Shared = {
+		idleCycle = 3.6, breath = 0.09, idleLean = -2, idleSway = 1.2,
+		idleArm = V(6, 0, 7), idleHead = V(0, 0, 0), idleLegOut = 3,
+		walkCycle = 1.0, walkLeg = 26, walkArm = 22, walkArmOut = 6, walkLean = -6, walkBob = 0.12, walkSway = 2, walkTwist = 5,
+		runCycle = 0.66, runLeg = 42, runArm = 46, runLean = -14, runBob = 0.2, runTwist = 9,
+	},
+	-- Brawler: pesado, ombros largos, gingado de boxeador; corre socando o ar
+	Brawler = {
+		idleCycle = 3.0, breath = 0.14, idleLean = -5, idleSway = 2.4,
+		idleArm = V(14, 0, 16), idleHead = V(-3, 0, 0), idleLegOut = 6,
+		idleAccentR = V(10, 0, 4), idleAccentL = V(8, 0, -4), -- ergue a guarda de vez em quando
+		walkCycle = 1.05, walkLeg = 24, walkArm = 18, walkArmOut = 15, walkLean = -8, walkBob = 0.16, walkSway = 4, walkTwist = 7,
+		runCycle = 0.62, runLeg = 40, runArm = 52, runLean = -18, runBob = 0.26, runTwist = 12,
+	},
+	-- Swift: leve, na ponta dos pés, tronco à frente; corre com os braços baixos e soltos
+	Swift = {
+		idleCycle = 2.2, breath = 0.07, idleLean = -8, idleSway = 3.2,
+		idleArm = V(-6, 0, 5), idleHead = V(4, 0, 0), idleLegOut = 2,
+		idleAccentR = V(-8, 0, 2), idleAccentL = V(12, 0, -2), -- troca o peso de pé
+		walkCycle = 0.8, walkLeg = 30, walkArm = 26, walkArmOut = 4, walkLean = -10, walkBob = 0.1, walkSway = 2, walkTwist = 4,
+		runCycle = 0.46, runLeg = 52, runArm = 30, runLean = -26, runBob = 0.14, runTwist = 6,
+	},
+	-- Mystic: quase flutuando, braços à frente como se segurasse algo; passo curto e suave
+	Mystic = {
+		idleCycle = 4.4, breath = 0.12, idleLean = 2, idleSway = 1.0,
+		idleArm = V(28, 0, 10), idleHead = V(3, 0, 0), idleLegOut = 2,
+		idleAccentR = V(14, -10, -6), idleAccentL = V(6, 8, 6), -- desenha algo no ar
+		walkCycle = 1.15, walkLeg = 20, walkArm = 10, walkArmOut = 10, walkLean = -3, walkBob = 0.08, walkSway = 1, walkTwist = 3,
+		runCycle = 0.72, runLeg = 34, runArm = 22, runLean = -12, runBob = 0.16, runTwist = 6,
+	},
+	-- Guardian: firme, pés fincados, escudo (braço esquerdo) sempre erguido; passo militar
+	Guardian = {
+		idleCycle = 3.8, breath = 0.1, idleLean = -3, idleSway = 0.8,
+		idleArm = V(10, 0, 12), idleHead = V(-2, 0, 0), idleLegOut = 7,
+		idleAccentR = V(4, 0, 6), idleAccentL = V(34, 0, -6), -- ajeita o escudo
+		walkCycle = 1.2, walkLeg = 22, walkArm = 12, walkArmOut = 12, walkLean = -4, walkBob = 0.2, walkSway = 3, walkTwist = 3,
+		runCycle = 0.78, runLeg = 34, runArm = 26, runLean = -12, runBob = 0.28, runTwist = 7,
+	},
+	-- Sahur: ritmado, batendo o compasso; anda gingando como quem toca tambor
+	Sahur = {
+		idleCycle = 2.6, breath = 0.1, idleLean = -2, idleSway = 3.6,
+		idleArm = V(34, 0, 14), idleHead = V(0, 0, 0), idleLegOut = 4,
+		idleAccentR = V(26, 0, 6), idleAccentL = V(-14, 0, -6), -- toque no ar, alternado
+		walkCycle = 0.92, walkLeg = 28, walkArm = 24, walkArmOut = 13, walkLean = -5, walkBob = 0.18, walkSway = 5, walkTwist = 9,
+		runCycle = 0.58, runLeg = 44, runArm = 48, runLean = -16, runBob = 0.24, runTwist = 13,
+	},
+	-- Overlord: postura de quem não corre de ninguém; ombros para trás, passo largo e lento
+	Overlord = {
+		idleCycle = 4.0, breath = 0.13, idleLean = 4, idleSway = 1.6,
+		idleArm = V(-10, 0, 18), idleHead = V(-6, 0, 0), idleLegOut = 6,
+		idleAccentR = V(6, 0, 10), idleAccentL = V(-4, 0, -12),
+		walkCycle = 1.3, walkLeg = 24, walkArm = 14, walkArmOut = 17, walkLean = 2, walkBob = 0.14, walkSway = 4, walkTwist = 8,
+		runCycle = 0.8, runLeg = 38, runArm = 34, runLean = -10, runBob = 0.22, runTwist = 11,
+	},
+}
+for charId, def in LOCO_DEFS do
+	for name, clip in locomotion(def) do
+		C[charId .. "/" .. name] = clip
+	end
+end
+
+-- ---------------------------------------------------------------------------
+-- ESTILO por personagem (Leva 8): quem não tem clipe próprio de uma ação ganha uma VARIAÇÃO do
+-- clipe Shared — amplitude, postura e tempero de braço diferentes, para nada ficar igual entre
+-- personagens. `ProcAnimDefs.Resolve("Shared/M1_1", "Swift")` devolve a variação (em cache).
+-- ---------------------------------------------------------------------------
+export type Style = {
+	amp: number, -- multiplica as rotações do clipe (força do gesto)
+	off: number, -- multiplica os deslocamentos do corpo
+	lean: number, -- graus somados ao tronco durante o clipe (− = mais à frente)
+	twist: number, -- giro extra do tronco
+	head: number, -- inclinação extra da cabeça
+	accentR: Vector3?, -- tempero somado ao braço direito (só onde o clipe já mexe nele)
+	accentL: Vector3?,
+}
+ProcAnimDefs.Styles = {
+	Brawler = { amp = 1.15, off = 1.2, lean = -4, twist = 4, head = -3, accentR = V(0, 0, 8), accentL = V(0, 0, -8) },
+	Swift = { amp = 0.88, off = 0.9, lean = -7, twist = 8, head = 4, accentR = V(-6, 0, 0), accentL = V(-6, 0, 0) },
+	Mystic = { amp = 0.92, off = 0.85, lean = 3, twist = -5, head = 3, accentR = V(10, -8, 0), accentL = V(6, 8, 0) },
+	Guardian = { amp = 1.08, off = 0.8, lean = -2, twist = -3, head = -2, accentR = V(0, 0, 6), accentL = V(16, 0, -4) },
+	Sahur = { amp = 1.05, off = 1.1, lean = -1, twist = 10, head = 2, accentR = V(8, 0, 4), accentL = V(-8, 0, -4) },
+	Overlord = { amp = 1.2, off = 1.05, lean = 4, twist = -6, head = -5, accentR = V(-6, 0, 10), accentL = V(-6, 0, -10) },
+} :: { [string]: Style }
+
+local function styled(clip: Clip, s: Style): Clip
+	local frames: { Frame } = {}
+	for i, f in clip.frames do
+		local pose: Pose = {}
+		for joint, jp in f.pose do
+			local rot = (jp.rot or Vector3.zero) * s.amp
+			local off = (jp.off or Vector3.zero) * s.off
+			if joint == J.Root then
+				rot += V(s.lean, s.twist, 0)
+			elseif joint == J.Neck then
+				rot += V(s.head, 0, 0)
+			elseif joint == J.RA and s.accentR then
+				rot += s.accentR
+			elseif joint == J.LA and s.accentL then
+				rot += s.accentL
+			end
+			pose[joint] = { rot = rot, off = off }
+		end
+		frames[i] = { t = f.t, pose = pose, ease = f.ease }
+	end
+	return { duration = clip.duration, frames = frames, loop = clip.loop, blendOut = clip.blendOut, team = clip.team, upperOnly = clip.upperOnly }
+end
+
+local styleCache: { [string]: Clip } = {}
+
+--- Clipe da ação `key` ("Pasta/Nome") para o personagem `charId`:
+---   1) clipe próprio "<charId>/<Nome>"  2) variação de estilo do Shared  3) o Shared cru.
+function ProcAnimDefs.Resolve(key: string, charId: string?): Clip?
+	local own = if charId then C[charId .. "/" .. (key:match("/(.+)$") or key)] else nil
+	if own then
+		return own
+	end
+	local base = C[key]
+	if not base or not charId or not key:match("^Shared/") then
+		return base
+	end
+	local style = ProcAnimDefs.Styles[charId]
+	if not style then
+		return base
+	end
+	local cacheKey = charId .. "|" .. key
+	local cached = styleCache[cacheKey]
+	if not cached then
+		cached = styled(base, style)
+		styleCache[cacheKey] = cached
+	end
+	return cached
+end
 
 -- ---------------------------------------------------------------------------
 -- DESPERTAR: poses por personagem (CutsceneController lê AwakeningPoses[CharacterId]; ausente = padrão)

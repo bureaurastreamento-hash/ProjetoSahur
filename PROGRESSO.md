@@ -201,11 +201,32 @@ Memória entre sessões. Atualizar depois de cada mudança.
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
 ## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado, 27 services / 0 erros na análise)
-**Onde paramos**: Levas 1–6 do plano de polimento FEITAS (combate, animações procedurais base/habilidades/emotes,
-sons, trailer com avatares reais + coisas de fundo). O dono vai TESTAR TUDO e mandar uma lista com: VFX do F7
-(`Lib/…`) para ajustar, poses procedurais feias (nome do clipe em `ProcAnimDefs.luau`), ritmo/ângulos do trailer.
-**Próximo passo quando ele voltar**: (1) aplicar a lista dele em lote; (2) **Leva 8 — animações "realistas" por
-personagem** (abaixo); (3) Leva 7 (balanceamento/2 clientes/menus).
+**Onde paramos**: Levas 1–6 e **8** do plano de polimento FEITAS (combate, animações procedurais base/
+habilidades/emotes, sons, trailer com avatares reais + coisas de fundo, locomoção procedural por personagem).
+O dono vai TESTAR TUDO e mandar uma lista com: VFX do F7 (`Lib/…`) para ajustar, poses procedurais feias
+(nome do clipe em `ProcAnimDefs.luau`), jeito de andar/parar de cada personagem, ritmo/ângulos do trailer.
+**Próximo passo quando ele voltar**: (1) aplicar a lista dele em lote; (2) Leva 7 (balanceamento/2 clientes/menus).
+
+### Leva 8 — animações "realistas" por personagem — FEITA 2026-09-17
+- `ProcAnimDefs.Locomotion` (ligar/desligar tudo em `Enabled`) + seção LOCOMOÇÃO: helper `locomotion(p)` monta
+  **Idle/Walk/Run** de cada personagem a partir do jeito dele (ciclo, respiração, inclinação, gingado, balanço
+  de braço, abertura de pernas): Brawler pesado de guarda alta, Swift leve e inclinado à frente, Mystic quase
+  flutuando com as mãos à frente, Guardian firme com o escudo erguido, Sahur ritmado (compasso no ar), Overlord
+  lento e empertigado, mais o `Shared/*` para quem não tem personagem. Idle respira em 4 fases (nada de pose
+  congelada) e tem "tempero" (`idleAccent*`) no meio do ciclo.
+- `ProcAnimDefs.Styles` + `ProcAnimDefs.Resolve(key, charId)`: quem não tem clipe próprio ganha uma VARIAÇÃO do
+  clipe Shared (amplitude, postura, giro de tronco, tempero de braço) — socos, hit, dash, block… ninguém repete
+  ninguém. Cache por personagem; `<Char>/<Nome>` explícito sempre vence.
+- `ProcAnimController`: agora tem camada de **BASE** (locomoção, escolhida pela velocidade do HumanoidRootPart,
+  com o ciclo acelerando junto) por baixo da camada de **AÇÃO** (`overlay`: a ação manda só nas juntas que mexe;
+  o resto continua andando). Acompanha todo personagem com Humanoid que aparece no Workspace (jogadores e
+  bonecos), desliga o script `Animate` padrão do personagem deste cliente e para as tracks dele.
+  Sem locomoção quando: `BossRig` (RigAnimController cuida), ragdoll/pulo/queda/morto (`FREE_STATES`) ou
+  atributo **`ProcAnimHold`** (a cutscene do despertar marca isso para posar o rig sem briga).
+- `MovementController` não carrega mais Idle/Walk/Run da equipe enquanto `Locomotion.Enabled` (volta sozinho se
+  desligar). `FX.ProcAnim.Wants` passou a receber o `character` (resolução por personagem).
+- Testado no Studio: 65 clipes carregados, `[ProcAnimController] locomoção ligada`, boneco parado respirando e
+  passeio com MoveTo mostrando o ciclo de passos; análise estática 0 erros.
 **Regras novas do dono (2026-09-17)**: tempo só para com o Guardian (raio 18); dash frente/Piscar = hit de chegada
 (de frente = joga longe); Big C.H.O.P. nunca ragdolla; Swift ult = Domínio do Tempo (30 studs, 14 s, 0,08×, 1×
 por despertar, sair = quebra e 3×); noite rara (28/4 min); bonecos "de verdade" (física, ragdoll, leash, DEV
@@ -214,7 +235,7 @@ Trazer boneco); animações procedurais mandam sobre as dos packs (`team = true`
 janela + spectacle; painéis abrem pelo servidor via `PlayerGui.<Gui>.Panel.Visible` em run_script_in_play_mode);
 preview de poses = `run_code` clonando ModuleScripts (require do DataModel de edição fica em cache) + rigs R6
 com só o HRP ancorado; log do cliente em `~/.var/app/org.vinegarhq.Vinegar/.../logs/*_last.log` (grep FLog::Error).
-**Leva 8 — animações "realistas" por personagem (dono, 2026-09-17, ainda não começada)**:
+**Leva 8 — o que o dono pediu (feito acima; mantido como referência do pedido)**:
 - Idle com pose própria que "respira" (peso, balanço sutil) por personagem; andar/correr com jeito próprio
   ("maneiro"), cada personagem seu estilo; VARIAÇÕES de todas as animações por personagem (socos, hit, dash,
   block…): nada repetido entre personagens. Hoje Idle/Walk/Run são as da equipe (Shared) e os clipes de combate
@@ -285,7 +306,7 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   gravar e apontar ritmo/ângulos.
 - **Leva 6 — Trailer (plano original)** (TRAILER_ASSETS.md).
 - **Leva 7 — Balanceamento com gente + o que o dono ainda não testou (2 clientes) + menus feedback.**
-- **Leva 8 — Animações "realistas" por personagem** (ver RETOMAR AQUI).
+- **Leva 8 — Animações "realistas" por personagem** — FEITA (ver RETOMAR AQUI).
 - **Trailer (2026-09-17, 2ª passada)**: atores principais/E/F/W com AVATARES REAIS (`CAST` em TrailerService:
   guilacartinhasgames, gaubriel567895, humanoider_20, Ravi132012, skibid, ToduroDemais — todos carregam no
   Studio, sem repetir; fallback boneco colorido); ações de fundo afastadas do foco (dupla a ~60 studs, dançarino
