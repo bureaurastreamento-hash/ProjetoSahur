@@ -871,6 +871,9 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		end))
 	end
 	local function near(): boolean
+		if localPlayer:GetAttribute("TrailerWatching") == true then
+			return true -- trailer: a câmera está na cena, o jogador está estacionado longe
+		end
 		local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
 		return myRoot ~= nil and (myRoot.Position - root.Position).Magnitude <= OBSERVER_RANGE
 	end

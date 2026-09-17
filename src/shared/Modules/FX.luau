@@ -99,7 +99,8 @@ function FX.SetAura(character: Model, color: Color3?, name: string?)
 		return
 	end
 	local auraName = name or "Aura"
-	local existing = root:FindFirstChild(auraName)
+	local found = root:FindFirstChild(auraName)
+	local existing = if found and found:IsA("ParticleEmitter") then found else nil -- sons clonados no root podem ter o mesmo nome
 	if not color then
 		if existing then
 			existing:Destroy()

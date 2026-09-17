@@ -251,7 +251,15 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   kit do Big C.H.O.P., Transform, Ritmo (tambor de verdade), Hit_Stun, música/ambiente. VFX no F7 = com o dono.
 - **Leva 5 — Sons por golpe + VFX (plano original)** (lista do TRAILER_ASSETS: separar repetidos, Hit_Stun, Crit, BlackFlash…)
   e revisão das 76 composições no F7 com o dono.
-- **Leva 6 — Trailer** (TRAILER_ASSETS.md).
+- **Leva 6 — Trailer — FEITA 2026-09-17** (~85 s): roteiro novo com as novidades (Piscar + hit de chegada que
+  joga longe, uppercut, Domínio do Tempo real com cúpula, despertar com pedras/nome da ult — corte para dentro
+  no estouro, Devorar com cura, Transform com som) + **coisas de fundo**: dupla X/Y brigando o trailer inteiro
+  no canto, Z dançando, W provocando que toma o Terremoto e voa (e acena no final), R atravessando a praça
+  correndo, F reverenciando o altar e fugindo do boss, dupla G/H na arena. Helpers: sparLoop/emoteLoop/
+  dashAcross/launch. `TrailerWatching` (atributo local) faz a cutscene tratar a câmera como "perto".
+  Rodado via MCP com 24 capturas: ok. FX.SetAura corrigido (som com o mesmo nome do emissor). Falta: o dono
+  gravar e apontar ritmo/ângulos.
+- **Leva 6 — Trailer (plano original)** (TRAILER_ASSETS.md).
 - **Leva 7 — Balanceamento com gente + o que o dono ainda não testou (2 clientes) + menus feedback.**
 
 ## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado, 27 services / 0 erros)

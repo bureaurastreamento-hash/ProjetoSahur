@@ -230,6 +230,7 @@ function TrailerController.Start()
 		data = if typeof(data) == "table" then data else {}
 		if event == "begin" then
 			begin()
+			localPlayer:SetAttribute("TrailerWatching", true) -- CutsceneController: efeitos de "quem assiste" mesmo longe
 		elseif event == "shot" then
 			onShot(data)
 		elseif event == "title" then
@@ -240,6 +241,7 @@ function TrailerController.Start()
 			end
 		elseif event == "end" then
 			finish()
+			localPlayer:SetAttribute("TrailerWatching", nil)
 		end
 	end)
 	Log.debug("[TrailerController] pronto")
