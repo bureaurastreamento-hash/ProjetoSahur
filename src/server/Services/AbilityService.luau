@@ -48,6 +48,7 @@ type PlayerState = {
 	incomingMultiplier: number,
 	incomingMultiplierUntil: number,
 	awakenedUntil: number, -- os.clock()
+	ultUsedAwakenedUntil: number, -- despertar em que a ult OncePerAwakening já saiu
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -77,6 +78,7 @@ local function newState(characterId: string?): PlayerState
 		incomingMultiplier = 1,
 		incomingMultiplierUntil = 0,
 		awakenedUntil = 0,
+		ultUsedAwakenedUntil = -1,
 	}
 end
 
@@ -742,6 +744,9 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if ability.EnergyCost >= CharacterDefs.Energy.Max and not AbilityService.IsAwakened(player) then
 		return deny(player, slot, "use_g") -- ultimate: só no modo despertado (G = cutscene de transformação)
 	end
+	if ability.OncePerAwakening and state.ultUsedAwakenedUntil == state.awakenedUntil then
+		return deny(player, slot, "once") -- Domínio do Tempo: uma vez por despertar
+	end
 	local handler = effects[ability.Effect.Type]
 	if not handler then
 		warn(("[AbilityService] efeito '%s' sem handler (habilidade %s)"):format(ability.Effect.Type, ability.Id))
@@ -757,6 +762,9 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 		notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
 	end
 
+	if ability.OncePerAwakening then
+		state.ultUsedAwakenedUntil = state.awakenedUntil
+	end
 	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
 	-- Despertou: usa a versão desperta da habilidade se existir (mesmo Id: animação/VFX iguais)

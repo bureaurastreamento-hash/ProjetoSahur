@@ -98,6 +98,43 @@ function RagdollService.Ragdoll(player: Player, seconds: number)
 	end)
 end
 
+-- Ragdoll de NPC (bonecos de treino): mesmo rig/constraints, estado por Model, levanta sozinho.
+local npcStates: { [Model]: { until_: number, token: number } } = {}
+
+function RagdollService.IsModelRagdolled(model: Model): boolean
+	local s = npcStates[model]
+	return s ~= nil and os.clock() < s.until_
+end
+
+function RagdollService.RagdollModel(model: Model, seconds: number)
+	if not HealthService.IsAlive(model) or model:GetAttribute("BossRig") ~= nil then
+		return
+	end
+	seconds = math.clamp(seconds, 0.1, CombatConfig.CombatRagdoll.MaxSeconds)
+	local now = os.clock()
+	local existing = npcStates[model]
+	local token = (existing and existing.token or 0) + 1
+	local until_ = math.max(now + seconds, existing and existing.until_ or 0)
+	npcStates[model] = { until_ = until_, token = token }
+	if not existing then
+		RagdollRig.Apply(model)
+		model:SetAttribute(ATTR_RAGDOLLED, true)
+	end
+	notifyRagdoll:FireAllClients(model, true, until_ - now)
+	task.delay(until_ - now + 0.02, function()
+		local s = npcStates[model]
+		if s and s.token == token and os.clock() >= s.until_ then
+			npcStates[model] = nil
+			if model.Parent and HealthService.IsAlive(model) then
+				RagdollRig.Release(model)
+				RagdollService.GrantIFrames(model, CombatConfig.CombatRagdoll.GetUpIFrames)
+			end
+			model:SetAttribute(ATTR_RAGDOLLED, false)
+			notifyRagdoll:FireAllClients(model, false)
+		end
+	end)
+end
+
 function RagdollService.Init()
 	notifyRagdoll = Remotes.GetEvent(Remotes.Events.NotifyRagdoll)
 end

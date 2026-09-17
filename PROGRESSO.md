@@ -212,6 +212,12 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   BigChop imune a ragdoll (HealthService/RagdollService checam `BossRig`); Swift/Tempest → "Domínio do Tempo"
   (`TimeDome` effect: raio 22, 8 s, slow 0,25× de WalkSpeed/anim/cooldown pra quem está dentro, Swift ×1,25;
   sair = cúpula quebra + Swift ×2,2 até o fim; VFX cúpula + relógio; som).
+- **Bonecos de treino "de verdade"** (dono, 2026-09-17): rig com física (não ancorado, WalkSpeed 0, servidor
+  simula), atributo `Npc`; `CombatService.Knockback` aplica velocidade no NPC e `RagdollService.RagdollModel`
+  derruba/levanta; LEASH 20 studs (ou caiu) = volta ao ponto sozinho; DEV **Trazer boneco** move o boneco
+  parado (e o ponto dele) para a frente do admin — serve para testar dentro de arena de duelo/guerra.
+  Testado via MCP: finisher → ragdoll + 25 studs → levantou → leash trouxe → BringTo a 6 studs.
+- **Swift/Domínio**: raio 30, fora da cúpula 3,0×, `OncePerAwakening` (1× por despertar); texto de Controles.
 - **Leva 2 — ProcAnim base** (`src/client/Controllers/ProcAnimController.luau` + `Shared/Modules/ProcAnimDefs.luau`):
   motor de poses em Motor6D (como a cutscene), keyframes por ação com o tempo do CombatConfig: M1_1..4 (0,45 s
   cada, impacto em 0,15), Uppercut, Downslam, Hit (reação), Parry, Block/BlockHit, Grabbed, Dash/DashBack,

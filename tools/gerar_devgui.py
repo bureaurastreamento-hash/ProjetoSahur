@@ -166,6 +166,7 @@ for i, (cmd, text) in enumerate(world):
 y += 32
 children.append(button("SummonBoss", "Invocar boss", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y), GREEN))
 children.append(button("DespawnBoss", "Remover boss", udim2(0, COL_W, 0, 28), udim2(0, col_x(1), 0, y), RED))
+children.append(button("BringDummy", "Trazer boneco", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y)))
 children.append(button("InspectBoss", "Inspecionar BossModel", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y)))
 y += 32
 children.append(textbox("Time", "hora 0-24", udim2(0, COL_W, 0, 28), udim2(0, col_x(0), 0, y)))

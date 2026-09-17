@@ -540,6 +540,15 @@ global.RespawnDummies = function()
 	return true, ("%d boneco(s) recriados"):format(n)
 end
 
+global.BringDummy = function(admin)
+	local root = admin.Character and admin.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return false, "sem personagem"
+	end
+	local m = DummyService.BringTo(root.CFrame * CFrame.new(0, 0, -6))
+	return m ~= nil, if m then ("%s trazido (fica aqui até 'Recriar bonecos')"):format(m.Name) else "nenhum boneco vivo"
+end
+
 global.ToggleDummies = function()
 	local n = DummyService.SetEnabled(not DummyService.Enabled)
 	return true, ("bonecos %s (%d)"):format(if DummyService.Enabled then "ON" else "OFF", n)

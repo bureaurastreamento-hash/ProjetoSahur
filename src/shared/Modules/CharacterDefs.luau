@@ -58,6 +58,7 @@ export type AbilityDef = {
 	CastTime: number, -- tempo em que o jogador fica "ocupado" (não pode usar outra habilidade)
 	Effect: Effect,
 	AwakenedEffect: Effect?, -- versão DESPERTA (durante o Awakening); sem ela, só o buff de dano/velocidade
+	OncePerAwakening: boolean?, -- ultimate que só sai UMA vez por despertar (Domínio do Tempo)
 }
 
 export type CharacterDef = {
@@ -170,7 +171,8 @@ CharacterDefs.Characters = {
 				CastTime = 0.8,
 				-- dono (2026-09-17): cúpula onde tudo fica MUITO lento e o Swift um pouco mais rápido; sair
 				-- quebra a cúpula e o Swift fica muito rápido até o fim
-				Effect = { Type = "TimeDome", Radius = 22, Duration = 8, SlowMultiplier = 0.25, SelfMultiplier = 1.25, BreakMultiplier = 2.2 },
+				Effect = { Type = "TimeDome", Radius = 30, Duration = 8, SlowMultiplier = 0.25, SelfMultiplier = 1.25, BreakMultiplier = 3.0 },
+				OncePerAwakening = true,
 			},
 		},
 	} :: CharacterDef,

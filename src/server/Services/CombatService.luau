@@ -270,12 +270,28 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local aRoot = attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
-	if not victimPlayer or not aRoot or not vRoot then
+	if not aRoot or not vRoot then
 		return
 	end
 	local flat = vRoot.Position - aRoot.Position
 	flat = Vector3.new(flat.X, 0, flat.Z)
 	local direction = if directionOverride then directionOverride elseif flat.Magnitude > 0.1 then flat.Unit else aRoot.CFrame.LookVector
+	if not victimPlayer then
+		-- NPC (boneco de treino): o servidor simula — ragdoll próprio + velocidade em todas as partes
+		if victim:GetAttribute("Npc") ~= true then
+			return
+		end
+		if ragdollSeconds and ragdollSeconds > 0 then
+			RagdollService.RagdollModel(victim, ragdollSeconds)
+		end
+		local velocity = direction * speed + Vector3.new(0, up or 8, 0)
+		for _, part in victim:GetDescendants() do
+			if part:IsA("BasePart") and not part.Anchored then
+				part.AssemblyLinearVelocity = velocity
+			end
+		end
+		return
+	end
 	if CombatService.HasSuperArmor(victimPlayer) then
 		return -- agarrando alguém: nem empurrão nem queda
 	end
