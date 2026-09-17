@@ -22,14 +22,28 @@ BossConfig.WalkSpeed = 14
 BossConfig.PhaseTwoAt = 0.5 -- fração de vida que liga a fase 2 (mais rápido, investida)
 BossConfig.PhaseTwoSpeed = 20
 
--- Ritual da FLECHA (dono, 2026-09-16, noite): uma flecha perdida aparece num dos ArrowSpot* do mapa
--- (lanternas acesas). Quem encosta carrega a flecha (visível nas costas); morreu = a flecha cai ali.
+-- Ritual da FLECHA (dono, 2026-09-16, noite): uma flecha perdida aparece, de tempos em tempos, num ponto
+-- escondido do mapa. Quem encosta carrega a flecha (visível nas costas); morreu = a flecha cai ali por
+-- DropLifetime s e some.
 -- À NOITE, o portador segura E no altar e VIRA o Notorious B.I.G. (BossConfig.Form) — controlável.
 BossConfig.Ritual = {
 	Enabled = true,
 	NightOnly = true,
 	CollectRadius = 7, -- studs do personagem até a flecha para pegar
-	RespawnDelay = 30, -- s depois de a forma acabar até a flecha voltar ao mapa
+	RespawnDelay = 30, -- s depois de a forma acabar até a flecha entrar na fila de reaparecer
+	-- Dono (2026-09-16, noite): a flecha é RARA e ESCONDIDA. Não fica sempre no mapa: aparece em tempos
+	-- aleatórios (SpawnDelayMin..Max s depois de sumir; FirstSpawnMin..Max no boot), num ponto SORTEADO do
+	-- mapa (raycast do céu; ArrowSpot* só como reserva), sem feixe/lanterna. Quem morre com ela a deixa no
+	-- chão por DropLifetime s; ninguém pegou = some e volta para a fila aleatória.
+	SpawnDelayMin = 120,
+	SpawnDelayMax = 300,
+	FirstSpawnMin = 45,
+	FirstSpawnMax = 150,
+	DropLifetime = 10,
+	HiddenSpawn = true, -- true = ponto aleatório do mapa; false = só nos ArrowSpot*
+	SpawnRadius = 225, -- alcance (x/z) do sorteio a partir do centro do mapa
+	MinDistanceFromPlayers = 35, -- não nasce colado em alguém
+	MinDistanceFromAltar = 45,
 	ArrowModelName = "StandArrow", -- Model/BasePart em ServerStorage ou ReplicatedStorage.Assets (senão: flecha por código)
 }
 

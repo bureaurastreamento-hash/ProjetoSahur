@@ -1,12 +1,13 @@
 --!strict
 --[[
 	RitualService (servidor)
-	Ritual da FLECHA (dono, 2026-09-16): uma flecha perdida aparece num dos ArrowSpot* do ArenaExtras
-	(pedestais com lanterna acesa, fáceis de achar). Encostar pega a flecha: ela aparece nas costas do
-	portador (todo mundo vê quem está com ela — vira alvo). Se o portador morre, a flecha cai onde ele
-	caiu. À NOITE (EnvironmentService.IsNight), o portador segura E no altar e VIRA o Notorious B.I.G.
-	(BossFormService.Transform). Enquanto o boss está solto não há flecha; ela volta ao mapa
-	BossConfig.Ritual.RespawnDelay s depois de a forma acabar.
+	Ritual da FLECHA (dono, 2026-09-16): uma flecha perdida aparece de TEMPOS EM TEMPOS (BossConfig.Ritual
+	SpawnDelayMin..Max) num ponto ESCONDIDO sorteado do mapa (raycast do céu; os ArrowSpot* do ArenaExtras
+	são só reserva). Nada aponta para ela (sem feixe). Encostar pega a flecha: ela aparece nas costas do
+	portador (todo mundo vê quem está com ela — vira alvo). Se o portador morre, a flecha fica no chão por
+	DropLifetime s; ninguém pegou = some e entra na fila aleatória de novo. À NOITE
+	(EnvironmentService.IsNight), o portador segura E no altar e VIRA o boss (BossFormService.Transform).
+	Enquanto o boss está solto não há flecha; ela entra na fila RespawnDelay s depois de a forma acabar.
 
 	Altar (ArenaExtras): BossAltar (ProximityPrompt + letreiro, criados aqui), BossAltarTorch{i} (acendem
 	à noite), BossAltarRune/BossCrack* (acendem quando a flecha está com alguém à noite), BossAltarSkullSocket{i}
@@ -54,6 +55,7 @@ local groundTrigger: BasePart? = nil
 local carrier: Player? = nil
 local carriedVisual: Model? = nil
 local respawnToken = 0
+local dropToken = 0
 local rng = Random.new()
 
 RitualService.Changed = Instance.new("BindableEvent")
@@ -90,7 +92,7 @@ function RitualService.StatusText(): string
 	end
 	if not carrier then
 		if groundArrow then
-			return "Ache a FLECHA perdida (procure as lanternas)"
+			return "Uma FLECHA está perdida no mapa…"
 		end
 		return "A flecha ainda não caiu…"
 	end
@@ -222,8 +224,6 @@ function RitualService.BuildArrow(): Model
 	return model
 end
 
-local BEAM_HEIGHT = 220 -- altura do feixe de luz sobre a flecha no chão
-
 local function clearGround()
 	if groundArrow then
 		groundArrow:Destroy()
@@ -255,26 +255,6 @@ local function placeArrow(cf: CFrame, spotName: string?)
 	trigger.CanQuery = false
 	trigger.CastShadow = false
 	trigger.Parent = model
-	-- Feixe de luz dourado visível de longe (dono, 2026-09-16: ArrowSpot precisa ser visto do outro lado do mapa)
-	local beam = Instance.new("Part")
-	beam.Name = "Beam"
-	beam.Shape = Enum.PartType.Cylinder
-	beam.Size = Vector3.new(BEAM_HEIGHT, 3, 3)
-	beam.CFrame = cf * CFrame.new(0, BEAM_HEIGHT / 2, 0) * CFrame.Angles(0, 0, math.rad(90))
-	beam.Color = Color3.fromRGB(255, 215, 90)
-	beam.Material = Enum.Material.Neon
-	beam.Transparency = 0.7
-	beam.Anchored = true
-	beam.CanCollide = false
-	beam.CanQuery = false
-	beam.CanTouch = false
-	beam.CastShadow = false
-	beam.Parent = model
-	local light = Instance.new("PointLight")
-	light.Color = beam.Color
-	light.Brightness = 2
-	light.Range = 30
-	light.Parent = trigger
 	if spotName then
 		model:SetAttribute("SpotName", spotName)
 	end
@@ -285,12 +265,63 @@ local function placeArrow(cf: CFrame, spotName: string?)
 	trigger.Touched:Connect(function(hit)
 		RitualService.TryTake(trigger, hit)
 	end)
-	notifyBoss:FireAllClients("arrow", { event = "arrow", state = "spawned", position = trigger.Position })
+	notifyBoss:FireAllClients("arrow", { event = "arrow", state = "spawned" }) -- sem posição: escondida
 	refreshAltar()
 	RitualService.Changed:Fire()
 end
 
+--- Sorteia um ponto escondido do mapa: raycast do céu num (x, z) aleatório; aceita chão plano na altura
+--- do mapa, longe do altar e dos jogadores. nil se não achou (cai nos ArrowSpot*).
+local function randomHiddenSpot(): CFrame?
+	local cfg = BossConfig.Ritual
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	local exclude: { Instance } = { arrowFolder }
+	for _, p in Players:GetPlayers() do
+		if p.Character then
+			table.insert(exclude, p.Character)
+		end
+	end
+	params.FilterDescendantsInstances = exclude
+	params.IgnoreWater = true
+	for _ = 1, 40 do
+		local x = rng:NextNumber(-cfg.SpawnRadius, cfg.SpawnRadius)
+		local z = rng:NextNumber(-cfg.SpawnRadius, cfg.SpawnRadius)
+		local hit = Workspace:Raycast(Vector3.new(x, 200, z), Vector3.new(0, -260, 0), params)
+		if not hit or hit.Normal.Y < 0.85 or hit.Position.Y < -4 or hit.Position.Y > 14 then
+			continue
+		end
+		if hit.Material == Enum.Material.Water or (hit.Instance :: BasePart).Transparency >= 1 then
+			continue
+		end
+		if altar and (hit.Position - altar.Position).Magnitude < cfg.MinDistanceFromAltar then
+			continue
+		end
+		local tooClose = false
+		for _, p in Players:GetPlayers() do
+			local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root and (root.Position - hit.Position).Magnitude < cfg.MinDistanceFromPlayers then
+				tooClose = true
+				break
+			end
+		end
+		if not tooClose then
+			return CFrame.new(hit.Position)
+		end
+	end
+	return nil
+end
+
 local function spawnArrowAtSpot()
+	respawnToken += 1 -- cancela qualquer espera pendente
+	if BossConfig.Ritual.HiddenSpawn then
+		local cf = randomHiddenSpot()
+		if cf then
+			placeArrow(cf)
+			Log.debug(("[RitualService] flecha escondida em %.0f, %.0f, %.0f"):format(cf.X, cf.Y, cf.Z))
+			return
+		end
+	end
 	if #spots == 0 then
 		warn("[RitualService] sem ArrowSpot* no ArenaExtras; ritual desativado")
 		return
@@ -298,6 +329,37 @@ local function spawnArrowAtSpot()
 	local spot = spots[rng:NextInteger(1, #spots)]
 	placeArrow(spot.CFrame, spot.Name)
 	Log.debug(("[RitualService] flecha em %s"):format(spot.Name))
+end
+
+--- Agenda a próxima flecha para daqui a um tempo aleatório (min..max). Só uma espera por vez.
+local function scheduleSpawn(minSeconds: number, maxSeconds: number)
+	respawnToken += 1
+	local token = respawnToken
+	local delaySeconds = rng:NextNumber(minSeconds, maxSeconds)
+	Log.debug(("[RitualService] próxima flecha em %.0f s"):format(delaySeconds))
+	task.delay(delaySeconds, function()
+		if token ~= respawnToken or carrier or groundArrow or BossFormService.IsActive() then
+			return
+		end
+		spawnArrowAtSpot()
+	end)
+end
+
+--- Flecha no chão sem dono: some depois de DropLifetime s e volta para a fila aleatória.
+local function startDropTimer()
+	dropToken += 1
+	local token = dropToken
+	task.delay(BossConfig.Ritual.DropLifetime, function()
+		if token ~= dropToken or not groundArrow or carrier then
+			return
+		end
+		clearGround()
+		notifyBoss:FireAllClients("arrow", { event = "arrow", state = "vanished" })
+		refreshAltar()
+		RitualService.Changed:Fire()
+		Log.debug("[RitualService] ninguém pegou a flecha: sumiu")
+		scheduleSpawn(BossConfig.Ritual.SpawnDelayMin, BossConfig.Ritual.SpawnDelayMax)
+	end)
 end
 
 --- Flecha nas costas do portador (visível para todos).
@@ -354,6 +416,7 @@ function RitualService.TryTake(trigger: BasePart, hit: BasePart)
 		return
 	end
 	clearGround()
+	dropToken += 1 -- cancela o sumiço da flecha caída
 	setCarrier(player)
 	Log.debug(("[RitualService] %s pegou a flecha"):format(player.Name))
 	notifyBoss:FireAllClients("arrow", { event = "arrow", state = "taken", by = player.Name, night = EnvironmentService.IsNight() })
@@ -377,10 +440,12 @@ local function dropArrow(player: Player, position: Vector3?)
 		local hit = Workspace:Raycast(position + Vector3.new(0, 4, 0), Vector3.new(0, -60, 0), params)
 		local ground = if hit then hit.Position else Vector3.new(position.X, 0, position.Z)
 		placeArrow(CFrame.new(ground))
-		notifyBoss:FireAllClients("arrow", { event = "arrow", state = "dropped", by = player.Name, position = ground })
+		startDropTimer()
+		notifyBoss:FireAllClients("arrow", { event = "arrow", state = "dropped", by = player.Name, position = ground, seconds = BossConfig.Ritual.DropLifetime })
 		Log.debug(("[RitualService] a flecha caiu de %s"):format(player.Name))
 	else
-		spawnArrowAtSpot()
+		-- saiu do jogo: a flecha some e volta na fila aleatória
+		scheduleSpawn(BossConfig.Ritual.SpawnDelayMin, BossConfig.Ritual.SpawnDelayMax)
 	end
 end
 
@@ -410,16 +475,11 @@ function RitualService.GiveArrow(player: Player?)
 	end
 end
 
---- Forma acabou: flecha volta ao mapa depois de RespawnDelay.
+--- Forma acabou: flecha entra na fila aleatória depois de RespawnDelay.
 function RitualService.Restart(delaySeconds: number?)
-	respawnToken += 1
-	local token = respawnToken
-	task.delay(delaySeconds or BossConfig.Ritual.RespawnDelay, function()
-		if token ~= respawnToken or carrier or groundArrow or BossFormService.IsActive() then
-			return
-		end
-		spawnArrowAtSpot()
-	end)
+	local cfg = BossConfig.Ritual
+	local base = delaySeconds or cfg.RespawnDelay
+	scheduleSpawn(base + cfg.SpawnDelayMin, base + cfg.SpawnDelayMax)
 end
 
 function RitualService.Init()
@@ -515,7 +575,7 @@ function RitualService.Start()
 		refreshAltar()
 		return
 	end
-	spawnArrowAtSpot()
+	scheduleSpawn(BossConfig.Ritual.FirstSpawnMin, BossConfig.Ritual.FirstSpawnMax)
 	Workspace:GetAttributeChangedSignal("IsNight"):Connect(function()
 		refreshAltar()
 		RitualService.Changed:Fire()

@@ -196,7 +196,7 @@ local function onNotifyBoss(event: string, data: any)
 		showBanner(tostring(data.reason), 3)
 	elseif event == "arrow" then
 		if data.state == "spawned" then
-			showBanner("Uma FLECHA caiu no mapa — procure as lanternas", 4)
+			showBanner("Uma FLECHA caiu em algum lugar do mapa…", 4)
 		elseif data.state == "taken" then
 			local me = tostring(data.by) == localPlayer.Name
 			if me then
@@ -206,7 +206,9 @@ local function onNotifyBoss(event: string, data: any)
 			end
 			FX.PlaySoundUI("Match", "RoundStart")
 		elseif data.state == "dropped" then
-			showBanner(("%s caiu — a FLECHA está no chão!"):format(tostring(data.by)), 4)
+			showBanner(("%s caiu — a FLECHA fica no chão por %d s!"):format(tostring(data.by), tonumber(data.seconds) or 10), 4)
+		elseif data.state == "vanished" then
+			showBanner("A FLECHA sumiu… ela vai voltar", 3)
 		end
 	elseif event == "transforming" then
 		showBanner(("%s está virando %s!"):format(tostring(data.by), tostring(data.name)), tonumber(data.seconds) or 2.5)

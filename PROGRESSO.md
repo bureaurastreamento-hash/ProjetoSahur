@@ -228,9 +228,13 @@ o que é som repetido entre golpes). Ordem combinada:
   `MovementService.doDashOverride` lendo o atributo `AwakenedUntil`), Mystic/Mend (30 → 50), Guardian/ShieldBash
   (ergue 7, área do impacto 13/16), Sahur/Toque (×1,8 por 8 s), B.I.G. Devour/Crush/FleshWave. Testado via MCP:
   despertar → ShieldBash desperto deu 26 (20 × 1,3), Fortify 0,2, Blink 28. `SetForm` zera o despertar (esperado).
-- **Flecha visível de longe**: `RitualService.placeArrow` cria um feixe Neon dourado (cilindro 3×220 studs, transp. 0,7)
-  + PointLight sobre a flecha no chão (spot ou onde o portador morreu); some junto com o modelo quando alguém pega.
-  Testar no Studio: ver o feixe do outro lado do mapa; ajustar `BEAM_HEIGHT`/transparência se ficar feio.
+- **Flecha RARA e ESCONDIDA** (dono: "está muito fácil"): sem feixe/lanterna apontando. `RitualService`
+  agora sorteia um ponto do mapa por raycast do céu (`randomHiddenSpot`: chão plano, longe do altar e dos
+  jogadores; `ArrowSpot*` só de reserva) em tempos ALEATÓRIOS (`BossConfig.Ritual`: FirstSpawn 45–150 s no boot,
+  SpawnDelay 120–300 s depois de sumir; forma acabou = RespawnDelay + isso). Morreu = flecha fica no chão
+  `DropLifetime` = 10 s; ninguém pegou = some (evento "vanished") e volta à fila. Jogador saiu = fila.
+  DEV "Sortear flecha" continua imediato (para testar). Testado via MCP: boot sem flecha → sorteio → dar →
+  morrer → 10 s → sumiu → próxima em 164 s.
 
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão
