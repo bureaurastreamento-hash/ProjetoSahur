@@ -267,18 +267,22 @@ local function onNotifyEmote(character: Model?, emoteId: string, active: boolean
 			FX.SetAura(character, nil, SCENE_AURA)
 		end)
 	end
-	-- andar cancela a animação do emote
-	if track and CosmeticsConfig.EmoteMoveCancels then
+	-- andar cancela a animação do emote (track da equipe ou clipe procedural)
+	if CosmeticsConfig.EmoteMoveCancels then
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if humanoid then
 			local conn: RBXScriptConnection
 			conn = humanoid.Running:Connect(function(speed: number)
 				if speed > 0.5 then
-					track:Stop(0.2)
+					if track then
+						track:Stop(0.2)
+					end
+					FX.StopAnimation(character, EMOTES, emote.Id)
 					conn:Disconnect()
 				end
 			end)
-			task.delay(math.max(track.Length, 1) + 0.5, function()
+			local length = if track then math.max(track.Length, 1) else (emote.Duration or 3)
+			task.delay(length + 0.5, function()
 				conn:Disconnect()
 			end)
 		end

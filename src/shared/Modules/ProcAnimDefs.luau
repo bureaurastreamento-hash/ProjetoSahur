@@ -364,6 +364,106 @@ C["Overlord/Clutch_Carry"] = { -- giro: braços abertos rodando (1,6 s)
 C["Overlord/Cataclysm"] = C["Brawler/Rampage"]
 
 -- ---------------------------------------------------------------------------
+-- EMOTES / CENAS (Leva 4) — roda B. Andar cancela (CosmeticsController)
+-- ---------------------------------------------------------------------------
+C["Emotes/wave"] = { -- acenar: braço direito alto balançando 2×
+	duration = 2.0,
+	frames = {
+		P(0, {}),
+		P(0.3, { RA = { rot = V(170, 0, 30) }, Neck = { rot = V(0, -10, 0) }, Root = { rot = V(0, -8, 0) } }, "out"),
+		P(0.6, { RA = { rot = V(175, 0, 55) }, Neck = { rot = V(0, -12, 0) }, Root = { rot = V(0, -8, 0) } }, "inout"),
+		P(0.9, { RA = { rot = V(170, 0, 25) }, Neck = { rot = V(0, -8, 0) }, Root = { rot = V(0, -8, 0) } }, "inout"),
+		P(1.2, { RA = { rot = V(175, 0, 55) }, Neck = { rot = V(0, -12, 0) }, Root = { rot = V(0, -8, 0) } }, "inout"),
+		P(1.5, { RA = { rot = V(170, 0, 25) }, Neck = { rot = V(0, -8, 0) }, Root = { rot = V(0, -8, 0) } }, "inout"),
+		P(2.0, {}, "inout"),
+	},
+}
+C["Emotes/taunt"] = { -- provocar: "vem" com a mão, cabeça inclinada
+	duration = 2.4,
+	frames = {
+		P(0, {}),
+		P(0.3, { RA = { rot = V(80, 0, 10) }, Neck = { rot = V(-8, 0, 14) }, Root = { rot = V(6, 0, 0), off = V(0, 0.05, 0) } }, "out"),
+		P(0.6, { RA = { rot = V(60, 0, -10) }, Neck = { rot = V(-8, 0, 14) }, Root = { rot = V(6, 0, 0) } }, "inout"),
+		P(0.9, { RA = { rot = V(85, 0, 10) }, Neck = { rot = V(-8, 0, 14) }, Root = { rot = V(6, 0, 0) } }, "inout"),
+		P(1.2, { RA = { rot = V(60, 0, -10) }, Neck = { rot = V(-8, 0, 14) }, Root = { rot = V(6, 0, 0) } }, "inout"),
+		P(1.5, { RA = { rot = V(85, 0, 10) }, Neck = { rot = V(-8, 0, 14) }, Root = { rot = V(6, 0, 0) } }, "inout"),
+		P(1.9, { RA = { rot = V(20, 0, 30) }, LA = { rot = V(20, 0, -30) }, Neck = { rot = V(14, 0, 0) }, Root = { rot = V(10, 0, 0), off = V(0, 0.1, 0) } }, "out"),
+		P(2.4, {}, "inout"),
+	},
+}
+C["Emotes/dance"] = { -- dançar: quadril e braços alternando, 3 ciclos de 1,6 s
+	duration = 4.8,
+	frames = (function()
+		local frames: { Frame } = {}
+		local A: { [string]: JointPose } = { Root = { rot = V(0, -14, 6), off = V(0, -0.15, 0) }, RA = { rot = V(120, 0, 40) }, LA = { rot = V(20, 0, -40) }, Neck = { rot = V(0, 10, -6) }, RL = { rot = V(0, 0, 10) } }
+		local B: { [string]: JointPose } = { Root = { rot = V(0, 0, 0), off = V(0, 0.05, 0) }, RA = { rot = V(70, 0, 60) }, LA = { rot = V(70, 0, -60) }, Neck = { rot = V(-6, 0, 0) } }
+		local Cc: { [string]: JointPose } = { Root = { rot = V(0, 14, -6), off = V(0, -0.15, 0) }, RA = { rot = V(20, 0, 40) }, LA = { rot = V(120, 0, -40) }, Neck = { rot = V(0, -10, 6) }, LL = { rot = V(0, 0, -10) } }
+		for cycle = 0, 2 do
+			local t0 = cycle * 1.6
+			table.insert(frames, P(t0, A, "inout"))
+			table.insert(frames, P(t0 + 0.4, B, "inout"))
+			table.insert(frames, P(t0 + 0.8, Cc, "inout"))
+			table.insert(frames, P(t0 + 1.2, B, "inout"))
+		end
+		table.insert(frames, P(4.8, {}, "inout"))
+		return frames
+	end)(),
+}
+C["Emotes/bow"] = { -- reverência: curva o tronco com o braço no peito
+	duration = 2.2,
+	frames = {
+		P(0, {}),
+		P(0.5, { Root = { rot = V(-40, 0, 0), off = V(0, -0.2, 0.2) }, Neck = { rot = V(-10, 0, 0) }, RA = { rot = V(70, -50, -30) }, LA = { rot = V(-20, 0, -20) } }, "inout"),
+		P(1.5, { Root = { rot = V(-42, 0, 0), off = V(0, -0.2, 0.2) }, Neck = { rot = V(-10, 0, 0) }, RA = { rot = V(70, -50, -30) }, LA = { rot = V(-20, 0, -20) } }),
+		P(2.2, {}, "inout"),
+	},
+}
+C["Emotes/flex"] = { -- músculo: braços dobrados para cima, alternando o lado
+	duration = 2.6,
+	frames = {
+		P(0, {}),
+		P(0.4, { RA = { rot = V(90, 0, 90) }, LA = { rot = V(90, 0, -90) }, Root = { rot = V(6, 0, 0), off = V(0, 0.05, 0) }, Neck = { rot = V(6, 0, 0) } }, "out"),
+		P(0.8, { RA = { rot = V(100, 0, 100) }, LA = { rot = V(100, 0, -100) }, Root = { rot = V(8, -20, 0) }, Neck = { rot = V(4, 20, 0) } }, "inout"),
+		P(1.4, { RA = { rot = V(100, 0, 100) }, LA = { rot = V(100, 0, -100) }, Root = { rot = V(8, 20, 0) }, Neck = { rot = V(4, -20, 0) } }, "inout"),
+		P(2.0, { RA = { rot = V(100, 0, 100) }, LA = { rot = V(100, 0, -100) }, Root = { rot = V(8, 0, 0) }, Neck = { rot = V(6, 0, 0) } }, "inout"),
+		P(2.6, {}, "inout"),
+	},
+}
+C["Emotes/scene_power"] = { -- cena: despertar (carrega curvado e explode de braços abertos, 5 s)
+	duration = 5.0,
+	frames = {
+		P(0, {}),
+		P(0.8, { Root = { rot = V(-14, 0, 0), off = V(0, -0.4, 0) }, Neck = { rot = V(-20, 0, 0) }, RA = { rot = V(-25, 0, 16) }, LA = { rot = V(-25, 0, -16) }, RL = { rot = V(0, 0, 16) }, LL = { rot = V(0, 0, -16) } }, "inout"),
+		P(2.2, { Root = { rot = V(-20, 0, 0), off = V(0, -0.55, 0) }, Neck = { rot = V(-28, 0, 0) }, RA = { rot = V(-40, 0, 24) }, LA = { rot = V(-40, 0, -24) }, RL = { rot = V(0, 0, 20) }, LL = { rot = V(0, 0, -20) } }, "inout"),
+		P(2.6, { Root = { rot = V(14, 0, 0), off = V(0, 0.45, 0) }, Neck = { rot = V(28, 0, 0) }, RA = { rot = V(40, 0, 90) }, LA = { rot = V(40, 0, -90) }, RL = { rot = V(0, 0, 10) }, LL = { rot = V(0, 0, -10) } }, "out"),
+		P(4.4, { Root = { rot = V(10, 0, 0), off = V(0, 0.35, 0) }, Neck = { rot = V(24, 0, 0) }, RA = { rot = V(45, 0, 85) }, LA = { rot = V(45, 0, -85) }, RL = { rot = V(0, 0, 10) }, LL = { rot = V(0, 0, -10) } }),
+		P(5.0, {}, "inout"),
+	},
+}
+C["Emotes/scene_dark"] = { -- cena: trevas (cabeça baixa, mão erguida fechando devagar, 5 s)
+	duration = 5.0,
+	frames = {
+		P(0, {}),
+		P(0.8, { Root = { rot = V(-8, 0, 0) }, Neck = { rot = V(-30, 0, 0) }, RA = { rot = V(100, 0, -10) }, LA = { rot = V(-10, 0, -10) } }, "inout"),
+		P(2.6, { Root = { rot = V(-10, 0, 0) }, Neck = { rot = V(-32, 0, 0) }, RA = { rot = V(115, 0, -14) }, LA = { rot = V(-10, 0, -10) } }, "inout"),
+		P(3.2, { Root = { rot = V(8, 0, 0), off = V(0, 0.1, 0) }, Neck = { rot = V(16, 0, 0) }, RA = { rot = V(140, 0, -20) }, LA = { rot = V(-10, 0, -10) } }, "out"),
+		P(4.4, { Root = { rot = V(8, 0, 0), off = V(0, 0.1, 0) }, Neck = { rot = V(16, 0, 0) }, RA = { rot = V(140, 0, -20) }, LA = { rot = V(-10, 0, -10) } }),
+		P(5.0, {}, "inout"),
+	},
+}
+C["Emotes/scene_storm"] = { -- cena: tempestade (braços ao céu, gira o tronco, 5 s)
+	duration = 5.0,
+	frames = {
+		P(0, {}),
+		P(0.7, { Root = { rot = V(10, -20, 0), off = V(0, 0.2, 0) }, Neck = { rot = V(24, 0, 0) }, RA = { rot = V(175, 0, 40) }, LA = { rot = V(175, 0, -40) } }, "out"),
+		P(2.0, { Root = { rot = V(12, 20, 0), off = V(0, 0.25, 0) }, Neck = { rot = V(26, 0, 0) }, RA = { rot = V(180, 0, 50) }, LA = { rot = V(180, 0, -50) } }, "inout"),
+		P(3.3, { Root = { rot = V(12, -20, 0), off = V(0, 0.25, 0) }, Neck = { rot = V(26, 0, 0) }, RA = { rot = V(180, 0, 50) }, LA = { rot = V(180, 0, -50) } }, "inout"),
+		P(4.3, { Root = { rot = V(-20, 0, 0), off = V(0, -0.4, -0.2) }, Neck = { rot = V(-12, 0, 0) }, RA = { rot = V(30, 0, 20) }, LA = { rot = V(30, 0, -20) } }, "in"),
+		P(5.0, {}, "inout"),
+	},
+}
+
+-- ---------------------------------------------------------------------------
 -- DESPERTAR: poses por personagem (CutsceneController lê AwakeningPoses[CharacterId]; ausente = padrão)
 -- Chaves: charge1, charge2, charge3, burst, stance
 -- ---------------------------------------------------------------------------

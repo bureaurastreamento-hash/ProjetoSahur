@@ -239,7 +239,9 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
 - **Leva 3 — ProcAnim habilidades (plano original)**: todas as habilidades de todos os personagens com CastTime (Blink, SweepKick,
   ArcaneBolt, Mend, Meteor, Fortify, Quake, Bombo, Toque, Ritmo, Domínio, Rampage/GroundSlam/ShoulderBash
   conferidos com o tempo) + poses do despertar por personagem.
-- **Leva 4 — Emotes/cenas**: 8 emotes (wave, taunt, dance, bow, flex, scene_power/dark/storm) procedurais em loop.
+- **Leva 4 — FEITA 2026-09-17**: 8 emotes/cenas procedurais (`Emotes/wave|taunt|dance|bow|flex|scene_power|
+  scene_dark|scene_storm`), dança = 3 ciclos; andar cancela também o clipe procedural (CosmeticsController).
+- **Leva 4 — Emotes/cenas (plano original)**: 8 emotes (wave, taunt, dance, bow, flex, scene_power/dark/storm) procedurais em loop.
 - **Leva 5 — Sons por golpe + VFX** (lista do TRAILER_ASSETS: separar repetidos, Hit_Stun, Crit, BlackFlash…)
   e revisão das 76 composições no F7 com o dono.
 - **Leva 6 — Trailer** (TRAILER_ASSETS.md).
