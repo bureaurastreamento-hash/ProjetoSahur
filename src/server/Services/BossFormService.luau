@@ -194,6 +194,7 @@ function BossFormService.Transform(player: Player): (boolean, string)
 		AntiExploitService.Grace(player, 4)
 		RagdollService.GrantIFrames(model, 2)
 		local f: Form = { player = player, model = model, humanoid = humanoid, damageBy = {}, startedAt = os.clock(), finished = false }
+		local endsAt = Workspace:GetServerTimeNow() + cfg.Duration
 		active = f
 		humanoid.Died:Once(function()
 			if active == f then
@@ -216,7 +217,7 @@ function BossFormService.Transform(player: Player): (boolean, string)
 			end
 		end)
 		Log.debug(("[BossFormService] %s virou %s (%d HP, %ds)"):format(player.Name, BossConfig.Name, cfg.MaxHealth, cfg.Duration))
-		broadcast("summoned", { by = player.Name, name = BossConfig.Name .. " (" .. player.Name .. ")", model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth, form = true })
+		broadcast("summoned", { by = player.Name, name = BossConfig.Name .. " (" .. player.Name .. ")", model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth, form = true, endsAt = endsAt })
 		BossFormService.Changed:Fire()
 	end)
 	return true, "transformando"
@@ -247,7 +248,7 @@ function BossFormService.Start()
 		task.wait(1)
 		local f = active
 		if f then
-			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.player.Name, name = BossConfig.Name .. " (" .. f.player.Name .. ")", model = f.model, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth, form = true })
+			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.player.Name, name = BossConfig.Name .. " (" .. f.player.Name .. ")", model = f.model, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth, form = true, endsAt = f.startedAt + BossConfig.Form.Duration - os.clock() + Workspace:GetServerTimeNow() })
 		end
 	end)
 end

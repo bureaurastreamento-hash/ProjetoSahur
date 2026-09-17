@@ -244,6 +244,19 @@ o que é som repetido entre golpes). Ordem combinada:
   padrão (agora gerado). `panel()`: altura = min(h, tela − 202) via UISizeConstraint → NUNCA cobre a HUD;
   ClipsDescendants; fundo 0,28 (mais legível); título 20 branco. Missões/Cosméticos/Duelo = ScrollingFrame.
   Dono ainda não viu; ajustar cores/espaços conforme ele pedir.
+- **Boss Big C.H.O.P.** (renomeado; id `BigChop`) — leva dos 4 itens:
+  1. Kit: **Devorar cura 60 por alvo atingido** (`Dash.HealPerHit`, única fonte de vida da forma; desperto 90) e
+     agora aplica o Knockback declarado; Esmagar tem stun 0,6 s (emenda no Devorar); Onda de Carne cd 12;
+     Frenesi 8 × 8 a cada 0,22 s. Testado via MCP: Devorar 936 → 999 HP.
+  2. Visual do rig (`BossRigs`): CUTELO cravado nas costas (lâmina Metal + fio + furo + cabo Wood + rebite) com
+     respingos escuros, costuras (pontos) em dois blobs, baba na boca (3 gotas + fio), PointLight nos olhos.
+  3. Poses de habilidade (`RigAnimController.Pose(model, id)`, tabela `POSES`): Devour = agacha/abre a boca/
+     crava; Crush = empina 0,45 s e desaba; FleshWave = infla e estoura (patas abrem, cauda chicoteia);
+     Frenzy = mordidas a 0,22 s balançando. `AbilityController` chama no "start" (id sem pose = Pulse 2).
+  4. Câmera/HUD: ao virar boss a câmera é EMPURRADA para 42 studs (min=max por 0,3 s, depois 18–70);
+     barra do boss mostra **tempo restante** (`endsAt` no "summoned", também para quem entra depois);
+     banner próprio ("Você é o Big C.H.O.P. — DEVORE para curar…") e para os outros ("derrubem antes do tempo").
+  FALTA: sons próprios (junto com o trailer), VFX de transformação melhor, balancear com gente de verdade.
 
 ### O dono ainda NÃO testou (feito em 2026-09-16, ordem sugerida)
 - Trailer (DEV → "TRAILER (~70 s)"; gravar com OBS) → VFX no F7 → ritual da flecha/forma de boss → agarrão

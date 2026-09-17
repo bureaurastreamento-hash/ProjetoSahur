@@ -18,7 +18,9 @@
 	universal fica no Q e é de TODOS os personagens (CombatConfig.Dash, MovementService).
 
 	Tipos de efeito (implementados em AbilityService):
-	  Dash        { Speed, Duration, Damage, Range, Width, Height }  -> investida COM dano (movimento no cliente, hitbox no servidor)
+	  Dash        { Speed, Duration, Damage, Range, Width, Height, HealPerHit?, StunSeconds?, Knockback? }
+	                                                                 -> investida COM dano (movimento no cliente, hitbox no servidor);
+	                                                                    HealPerHit = cura o lançador por alvo atingido (Devorar)
 	  Grab        { Speed, Duration, Range, Width, Height, Carry, Damage, Knockback?, StunSeconds?, Finish? }
 	                                                                 -> investida; ao encostar SEGURA o alvo por Carry s (ele vai junto,
 	                                                                    sem poder agir; o atacante não é interrompido) e solta com o golpe.
@@ -343,9 +345,10 @@ CharacterDefs.Characters = {
 				Cooldown = 6,
 				EnergyCost = 0,
 				CastTime = 0.5,
-				-- investida pesada: quem está na frente é atropelado e cai
-				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } },
-				AwakenedEffect = { Type = "Dash", Speed = 75, Duration = 0.55, Damage = 32, Range = 12, Width = 14, Height = 11, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 2 } },
+				-- investida pesada: quem está na frente é atropelado e cai; cada alvo devorado CURA o boss
+				-- ("não morre, só cresce" — é a única fonte de vida da forma)
+				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, HealPerHit = 60, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } },
+				AwakenedEffect = { Type = "Dash", Speed = 75, Duration = 0.55, Damage = 32, Range = 12, Width = 14, Height = 11, HealPerHit = 90, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 2 } },
 			},
 			{
 				Id = "Crush",
@@ -353,16 +356,17 @@ CharacterDefs.Characters = {
 				Cooldown = 9,
 				EnergyCost = 0,
 				CastTime = 0.7,
-				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.5, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 22, Damage = 40, Delay = 0.4, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 } },
+				-- empina e desaba: quem sobreviver ainda fica tonto (stun) para o Devorar emendar
+				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.55, StunSeconds = 0.6, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } },
+				AwakenedEffect = { Type = "AreaDamage", Radius = 22, Damage = 40, Delay = 0.45, StunSeconds = 0.8, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 } },
 			},
 			{
 				Id = "FleshWave",
 				DisplayName = "Onda de Carne",
-				Cooldown = 14,
+				Cooldown = 12,
 				EnergyCost = 0,
 				CastTime = 0.8,
-				-- anel de choque: expulsa quem fica colado batendo
+				-- anel de choque: expulsa quem fica colado batendo (defensivo: dano baixo, empurrão enorme)
 				Effect = { Type = "AreaDamage", Radius = 22, Damage = 22, Delay = 0.7, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2 } },
 				AwakenedEffect = { Type = "AreaDamage", Radius = 30, Damage = 30, Delay = 0.6, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.5 } },
 			},
@@ -372,8 +376,8 @@ CharacterDefs.Characters = {
 				Cooldown = 30,
 				EnergyCost = 100,
 				CastTime = 0.6,
-				-- ultimate: mordidas em sequência em volta
-				Effect = { Type = "MultiHitArea", Radius = 14, Damage = 9, Hits = 6, Interval = 0.3 },
+				-- ultimate: mordidas em sequência em volta (8 × 8 = 64 num alvo parado; o boss trava no lugar 1,8 s)
+				Effect = { Type = "MultiHitArea", Radius = 14, Damage = 8, Hits = 8, Interval = 0.22, Knockback = { Speed = 12, Duration = 0.1 } },
 			},
 		},
 	} :: CharacterDef,

@@ -6,8 +6,9 @@
 	WeldConstraint dentro de cada membro). Roda no servidor (personagem/NPC) e no cliente (preview).
 
 	Decisão do dono (2026-09-16): o jogo foca em JoJo; primeiro boss = Big C.H.O.P. (Stand de
-	Carne Hirose): cone listrado azul/branco, massa de carne rosa, dois olhos amarelos "de grade",
-	quatro barris listrados como patas, cauda de carne.
+	Carne Hirose): cone listrado azul/branco, massa de carne rosa, dois olhos amarelos "de grade" (com luz),
+	boca babando, quatro barris listrados como patas, cauda de carne, um CUTELO cravado nas costas
+	(o "C.H.O.P.") com respingos e costuras na carne.
 
 	Estrutura do Model (todas as partes são filhas DIRETAS do Model — a Hitbox exige):
 	  HumanoidRootPart (invisível, colide) → Motor6D "Root" → Torso (massa de carne, centro do corpo)
@@ -97,6 +98,9 @@ local FLESH_DARK = Color3.fromRGB(160, 44, 88)
 local YELLOW = Color3.fromRGB(240, 196, 48)
 local DARK = Color3.fromRGB(28, 20, 24)
 local TOOTH = Color3.fromRGB(240, 236, 220)
+local DROOL = Color3.fromRGB(238, 170, 196)
+local STEEL = Color3.fromRGB(176, 182, 192)
+local WOOD = Color3.fromRGB(92, 58, 34)
 
 -- Blobs de carne em volta do núcleo: (x, y, z, diâmetro, tom). Espelhados à mão para ficar "gordo" e assimétrico.
 local BLOBS = {
@@ -170,6 +174,58 @@ local function buildBigChop(scale: number): Model
 		local tooth = block(model, "Tooth" .. (k + 3), v(0.62, 0.7, 0.5), CFrame.new(v(k * 0.85 + 0.42, -1.95, -7.3)), TOOTH)
 		weld(head :: Part, tooth)
 	end
+
+	-- luz nos olhos (vistos de longe à noite)
+	for _, eyeName in { "EyeL", "EyeR" } do
+		local eye = model:FindFirstChild(eyeName) :: Part?
+		if eye then
+			local light = Instance.new("PointLight")
+			light.Color = YELLOW
+			light.Brightness = 1.2
+			light.Range = 14 * S
+			light.Parent = eye
+		end
+	end
+	-- baba escorrendo da boca
+	for k, d in { { -1.3, 0.55 }, { 0.4, 0.8 }, { 1.5, 0.45 } } do
+		local drool = ball(model, "Drool" .. k, d[2] * S, v(d[1], -3.1 - d[2] * 0.6, -7.1), DROOL)
+		weld(head :: Part, drool)
+		if k == 2 then
+			local string_ = block(model, "DroolString", v(0.22, 1.1, 0.22), CFrame.new(v(d[1], -2.75, -7.1)), DROOL)
+			weld(head :: Part, string_)
+		end
+	end
+
+	-- o "C.H.O.P.": um CUTELO cravado na carne (lâmina de metal + cabo de madeira), do lado direito de cima
+	local bladeCF = CFrame.new(v(3.6, 4.9, 0.6)) * CFrame.Angles(math.rad(-20), math.rad(35), math.rad(-58))
+	local blade = block(model, "Cleaver", v(4.6, 3.4, 0.28), bladeCF, STEEL, Enum.Material.Metal)
+	weld(torso, blade)
+	local edge = block(model, "CleaverEdge", v(4.6, 0.35, 0.34), bladeCF * CFrame.new(0, -1.55, 0), Color3.fromRGB(230, 232, 236), Enum.Material.Metal)
+	weld(torso, edge)
+	local hole = cylinder(model, "CleaverHole", 0.32 * S, 0.4 * S, (bladeCF * CFrame.new(1.7 * S, 1.1 * S, 0)).Position, bladeCF.LookVector, DARK)
+	weld(torso, hole)
+	local handle = cylinder(model, "CleaverHandle", 0.42 * S, 3.0 * S, (bladeCF * CFrame.new(3.7 * S, 0.9 * S, 0)).Position, bladeCF.RightVector, WOOD, Enum.Material.Wood)
+	weld(torso, handle)
+	local rivet = cylinder(model, "CleaverRivet", 0.5 * S, 0.5 * S, (bladeCF * CFrame.new(2.3 * S, 0.9 * S, 0)).Position, bladeCF.RightVector, DARK)
+	weld(torso, rivet)
+	-- respingo escuro em volta do corte
+	for k, sp in { { 2.4, 4.2, 1.6, 1.3 }, { 4.6, 4.0, -0.4, 1.0 }, { 3.0, 5.6, -0.6, 0.8 } } do
+		local splat = ball(model, "Splat" .. k, sp[4] * S, v(sp[1], sp[2], sp[3]), FLESH_DARK)
+		weld(torso, splat)
+	end
+
+	-- costuras (pontos escuros) atravessando dois blobs grandes
+	local function stitches(name: string, center: Vector3, dirAlong: Vector3, count: number, spread: number)
+		local along = dirAlong.Unit
+		local across = along:Cross(Vector3.new(0, 1, 0)).Unit
+		for k = 0, count - 1 do
+			local pos = center + along * ((k - (count - 1) / 2) * spread * S)
+			local st = block(model, name .. k, v(0.18, 0.18, 1.1), CFrame.lookAt(pos, pos + across), DARK)
+			weld(torso, st)
+		end
+	end
+	stitches("StitchA", v(-3.4, 3.6, 2.6), Vector3.new(1, 0.15, -0.4), 4, 0.75)
+	stitches("StitchB", v(4.4, -0.2, 1.4), Vector3.new(0.1, 1, 0.3), 3, 0.8)
 
 	-- patas: 4 barris listrados deitados (eixo para a frente), abertos para fora
 	local limbs: { [string]: Part } = {}

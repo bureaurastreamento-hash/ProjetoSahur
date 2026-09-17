@@ -110,7 +110,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 	end
 	if phase == "start" then
 		if character:GetAttribute("BossRig") ~= nil then
-			RigAnimController.Pulse(character, 2)
+			RigAnimController.Pose(character, abilityId) -- rig por peças: pose própria da habilidade
 		end
 		FX.PlayAnimation(character, characterId, abilityId)
 		FX.SpawnVFX(character, characterId, abilityId, false, at)

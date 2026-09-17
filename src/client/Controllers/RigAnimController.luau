@@ -7,6 +7,8 @@
 	Cada cliente anima todos os rigs que vê. Só mexe em C0 (não replica; é visual).
 
 	API: RigAnimController.Pulse(model, strength?) — strength 1 = soco, 2 = habilidade pesada
+	     RigAnimController.Pose(model, id)        — pose de HABILIDADE (Devour/Crush/FleshWave/Frenzy),
+	                                                 curva no tempo definida em POSES; ids desconhecidos = Pulse(2)
 ]]
 
 local RunService = game:GetService("RunService")
@@ -14,7 +16,77 @@ local Workspace = game:GetService("Workspace")
 
 local RigAnimController = {}
 
-type RigAnim = { model: Model, root: BasePart, motors: { [string]: Motor6D }, base: { [string]: CFrame }, phase: number, pulseAt: number, pulseStrength: number }
+type RigAnim = { model: Model, root: BasePart, motors: { [string]: Motor6D }, base: { [string]: CFrame }, phase: number, pulseAt: number, pulseStrength: number, poseId: string?, poseAt: number }
+
+-- Poses de habilidade: função (t em segundos desde o início, set) que aplica offsets NOS MOTORES por cima
+-- da animação base; retorna false quando acabou. `ease` = 0→1 suave.
+local function ease(x: number): number
+	x = math.clamp(x, 0, 1)
+	return x * x * (3 - 2 * x)
+end
+type Setter = (name: string, cf: CFrame) -> ()
+local POSES: { [string]: (t: number, set: Setter) -> boolean } = {
+	-- Devorar: investida — corpo baixa e estica, cone abre a boca (levanta) e depois crava para a frente
+	Devour = function(t, set)
+		if t > 0.9 then
+			return false
+		end
+		local open = ease(t / 0.15) * (1 - ease((t - 0.35) / 0.2)) -- abre até 0,35 s, fecha em 0,55
+		local lunge = ease((t - 0.1) / 0.3) * (1 - ease((t - 0.6) / 0.3))
+		set("Root", CFrame.new(0, -0.6 * lunge, -1.6 * lunge) * CFrame.Angles(-0.18 * lunge, 0, 0))
+		set("Cone", CFrame.Angles(0.5 * open - 0.7 * lunge, 0, 0))
+		set("LimbFL", CFrame.new(0, 0, -1.4 * lunge))
+		set("LimbFR", CFrame.new(0, 0, -1.4 * lunge))
+		set("Tail", CFrame.Angles(-0.5 * lunge, 0, 0))
+		return true
+	end,
+	-- Esmagar: EMPINA (0–0,45 s) e DESABA (0,45–0,7 s) com quique
+	Crush = function(t, set)
+		if t > 1.1 then
+			return false
+		end
+		local rear = ease(t / 0.45) * (1 - ease((t - 0.45) / 0.12))
+		local slam = ease((t - 0.45) / 0.12) * (1 - ease((t - 0.7) / 0.4))
+		set("Root", CFrame.new(0, 3.2 * rear - 0.9 * slam, 0.6 * rear) * CFrame.Angles(0.75 * rear - 0.15 * slam, 0, 0))
+		set("Cone", CFrame.Angles(0.35 * rear - 0.5 * slam, 0, 0))
+		set("LimbFL", CFrame.new(0, 2.0 * rear, -0.8 * rear) * CFrame.Angles(-0.6 * rear, 0, 0))
+		set("LimbFR", CFrame.new(0, 2.0 * rear, -0.8 * rear) * CFrame.Angles(-0.6 * rear, 0, 0))
+		set("Tail", CFrame.Angles(0.6 * rear - 0.3 * slam, 0, 0))
+		return true
+	end,
+	-- Onda de Carne: INFLA (sobe/encolhe as patas, 0–0,6 s) e ESTOURA (patas abrem, cauda chicoteia)
+	FleshWave = function(t, set)
+		if t > 1.3 then
+			return false
+		end
+		local inflate = ease(t / 0.6) * (1 - ease((t - 0.65) / 0.1))
+		local burst = ease((t - 0.65) / 0.1) * (1 - ease((t - 0.85) / 0.45))
+		local wobble = math.sin(t * 40) * 0.05 * inflate
+		set("Root", CFrame.new(0, 1.4 * inflate - 0.5 * burst, 0) * CFrame.Angles(wobble, 0, -wobble))
+		set("Cone", CFrame.Angles(-0.25 * inflate + 0.3 * burst, 0, 0))
+		set("LimbFL", CFrame.new(-1.6 * burst + 0.6 * inflate, 0.8 * inflate, -0.8 * burst) * CFrame.Angles(0, 0, 0.5 * burst))
+		set("LimbFR", CFrame.new(1.6 * burst - 0.6 * inflate, 0.8 * inflate, -0.8 * burst) * CFrame.Angles(0, 0, -0.5 * burst))
+		set("LimbBL", CFrame.new(-1.6 * burst + 0.6 * inflate, 0.8 * inflate, 0.8 * burst) * CFrame.Angles(0, 0, 0.5 * burst))
+		set("LimbBR", CFrame.new(1.6 * burst - 0.6 * inflate, 0.8 * inflate, 0.8 * burst) * CFrame.Angles(0, 0, -0.5 * burst))
+		set("Tail", CFrame.Angles(-0.4 * inflate + 0.9 * burst, math.sin(t * 25) * 0.4 * burst, 0))
+		return true
+	end,
+	-- Frenesi: mordidas rápidas (8 × 0,22 s) girando o corpo de um lado para o outro
+	Frenzy = function(t, set)
+		if t > 2.2 then
+			return false
+		end
+		local on = 1 - ease((t - 1.9) / 0.3)
+		local chomp = math.abs(math.sin(t * math.pi / 0.22)) -- 1 mordida por hit
+		local sway = math.sin(t * 6) * 0.35
+		set("Root", CFrame.new(0, -0.3 * chomp * on, -0.6 * chomp * on) * CFrame.Angles(-0.1 * chomp * on, sway * on, 0))
+		set("Cone", CFrame.Angles((0.45 - 0.9 * chomp) * on, 0, math.sin(t * 12) * 0.12 * on))
+		set("LimbFL", CFrame.new(0, 0.5 * chomp * on, -0.9 * chomp * on))
+		set("LimbFR", CFrame.new(0, 0.5 * (1 - chomp) * on, -0.9 * (1 - chomp) * on))
+		set("Tail", CFrame.Angles(0.3 * chomp * on, -sway * 1.5 * on, 0))
+		return true
+	end,
+}
 local rigs: { [Model]: RigAnim } = {}
 
 local function trackRig(model: Model)
@@ -25,7 +97,7 @@ local function trackRig(model: Model)
 	if not root then
 		return
 	end
-	local anim: RigAnim = { model = model, root = root, motors = {}, base = {}, phase = math.random() * 6, pulseAt = -10, pulseStrength = 1 }
+	local anim: RigAnim = { model = model, root = root, motors = {}, base = {}, phase = math.random() * 6, pulseAt = -10, pulseStrength = 1, poseId = nil, poseAt = 0 }
 	for _, d in model:GetDescendants() do
 		if d:IsA("Motor6D") then
 			anim.motors[d.Name] = d
@@ -45,6 +117,23 @@ function RigAnimController.Pulse(model: Model, strength: number?)
 	if a then
 		a.pulseAt = os.clock()
 		a.pulseStrength = strength or 1
+	end
+end
+
+--- Pose de habilidade (ver POSES). Id sem pose = pulso forte.
+function RigAnimController.Pose(model: Model, id: string)
+	if not POSES[id] then
+		RigAnimController.Pulse(model, 2)
+		return
+	end
+	local a = rigs[model]
+	if not a then
+		trackRig(model)
+		a = rigs[model]
+	end
+	if a then
+		a.poseId = id
+		a.poseAt = os.clock()
 	end
 end
 
@@ -82,6 +171,19 @@ local function animateRigs()
 		set("LimbFR", CFrame.new(0, math.max(0, -math.sin(step)) * 0.9 * walk, -math.sin(step) * 0.8 * walk - pulse * 0.8) * CFrame.Angles(-math.sin(step) * 0.3 * walk, 0, 0))
 		set("LimbBL", CFrame.new(0, math.max(0, -math.sin(step)) * 0.9 * walk, -math.sin(step) * 0.8 * walk) * CFrame.Angles(-math.sin(step) * 0.3 * walk, 0, 0))
 		set("Tail", CFrame.Angles(math.sin(tt * 2.2) * 0.12 + pulse * 0.4, math.sin(tt * 1.7) * 0.25 + math.sin(step) * 0.1 * walk, 0))
+		-- pose de habilidade por cima (multiplica o C0 já calculado)
+		local poseFn = if a.poseId then POSES[a.poseId] else nil
+		if poseFn then
+			local function setPose(name: string, cf: CFrame)
+				local m = a.motors[name]
+				if m then
+					m.C0 = m.C0 * cf
+				end
+			end
+			if not poseFn(t - a.poseAt, setPose) then
+				a.poseId = nil
+			end
+		end
 	end
 end
 

@@ -28,6 +28,9 @@ local bannerToken = 0
 local locomotionConn: RBXScriptConnection? -- Idle/Walk do boss ativo
 
 local MOVING_SPEED = 1.5 -- velocidade horizontal do HRP acima disso = andando
+local formEndsAt: number? = nil -- forma de boss: quando acaba (GetServerTimeNow); nil = boss NPC
+local lastHealthText = ""
+local Workspace = game:GetService("Workspace")
 
 --- Idle/Walk do boss (Assets.Animations.Boss.Idle/Walk; id vazio = não toca). O boss é movido pelo
 --- servidor, então o cliente decide pela velocidade do HRP em vez do input. Ataques (Action) ficam por cima.
@@ -92,22 +95,40 @@ local function showBanner(text: string, seconds: number)
 	end)
 end
 
+local function refreshSub()
+	local text = lastHealthText
+	if formEndsAt then
+		local left = math.max(0, formEndsAt - Workspace:GetServerTimeNow())
+		text = ("%s   ·   %d:%02d"):format(text, math.floor(left / 60), math.floor(left % 60))
+	end
+	subLabel.Text = text
+end
+
 local function setHealth(health: number, maxHealth: number)
 	local frac = if maxHealth > 0 then math.clamp(health / maxHealth, 0, 1) else 0
 	fill.Size = UDim2.fromScale(frac, 1)
-	subLabel.Text = ("%d / %d"):format(math.floor(health), math.floor(maxHealth))
+	lastHealthText = ("%d / %d"):format(math.floor(health), math.floor(maxHealth))
+	refreshSub()
 end
 
 local function onNotifyBoss(event: string, data: any)
 	data = if typeof(data) == "table" then data else {}
 	if event == "summoned" then
 		nameLabel.Text = tostring(data.name or "Boss")
+		formEndsAt = tonumber(data.endsAt)
 		setHealth(tonumber(data.health) or 0, tonumber(data.maxHealth) or 1)
 		bar.Visible = true
 		if typeof(data.model) == "Instance" and data.model:IsA("Model") then
 			attachLocomotion(data.model :: Model)
 		end
-		showBanner(("%s invocou %s!"):format(tostring(data.by), tostring(data.name)), 4)
+		local shortName = (tostring(data.name):gsub(" %(.*%)$", ""))
+		if data.form and tostring(data.by) == localPlayer.Name then
+			showBanner("Você é o " .. shortName .. " — DEVORE para curar. Sobreviva até o tempo acabar!", 6)
+		elseif data.form then
+			showBanner(("%s virou %s — derrubem antes do tempo acabar!"):format(tostring(data.by), shortName), 5)
+		else
+			showBanner(("%s invocou %s!"):format(tostring(data.by), tostring(data.name)), 4)
+		end
 		FX.PlaySoundUI("Match", "RoundStart")
 		FX.Shake(0.6, 0.6)
 	elseif event == "state" then
@@ -164,6 +185,7 @@ local function onNotifyBoss(event: string, data: any)
 	elseif event == "defeated" then
 		stopLocomotion()
 		bar.Visible = false
+		formEndsAt = nil
 		local lines = { "BOSS DERROTADO!" }
 		local mine = 0
 		if typeof(data.rewards) == "table" then
@@ -191,6 +213,7 @@ local function onNotifyBoss(event: string, data: any)
 	elseif event == "despawned" then
 		stopLocomotion()
 		bar.Visible = false
+		formEndsAt = nil
 		showBanner("O boss foi embora...", 3)
 	elseif event == "denied" then
 		showBanner(tostring(data.reason), 3)
@@ -260,12 +283,28 @@ function BossController.Start()
 	end
 	CollectionService:GetInstanceAddedSignal(ARROW_TAG):Connect(trackArrow)
 	RunService.Heartbeat:Connect(animateArrows)
-	-- forma de boss: câmera mais longe (o corpo é grande)
+	-- contagem regressiva da forma na barra (a cada segundo)
+	task.spawn(function()
+		while true do
+			task.wait(1)
+			if bar.Visible and formEndsAt then
+				refreshSub()
+			end
+		end
+	end)
+	-- forma de boss: câmera mais longe (o corpo é grande). Travar min = max por um instante EMPURRA a
+	-- câmera para a distância inicial (o zoom atual do jogador é ~12, dentro do corpo); depois libera 18–70.
 	local savedMax, savedMin = localPlayer.CameraMaxZoomDistance, localPlayer.CameraMinZoomDistance
 	local function applyZoom()
 		if localPlayer:GetAttribute("BossForm") ~= nil then
-			localPlayer.CameraMaxZoomDistance = 70
-			localPlayer.CameraMinZoomDistance = 18
+			localPlayer.CameraMinZoomDistance = 42
+			localPlayer.CameraMaxZoomDistance = 42
+			task.delay(0.3, function()
+				if localPlayer:GetAttribute("BossForm") ~= nil then
+					localPlayer.CameraMaxZoomDistance = 70
+					localPlayer.CameraMinZoomDistance = 18
+				end
+			end)
 		else
 			localPlayer.CameraMaxZoomDistance = savedMax
 			localPlayer.CameraMinZoomDistance = savedMin

@@ -246,12 +246,17 @@ effects.Dash = function(player, character, ability, direction)
 			for _, victim in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
 				if not hitAlready[victim] then
 					hitAlready[victim] = true
-					CombatService.ResolveHit(player, character, victim, e.Damage, false)
+					CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { KnockbackDirection = dir })
 					local victimPlayer = Players:GetPlayerFromCharacter(victim)
 					if victimPlayer and typeof(e.StunSeconds) == "number" then
 						CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 					end
-					notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit")
+					-- Devorar (boss): cada alvo atingido cura o lançador
+					local healed = 0
+					if typeof(e.HealPerHit) == "number" and e.HealPerHit > 0 then
+						healed = HealthService.Heal(character, e.HealPerHit)
+					end
+					notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit", { Healed = healed })
 				end
 			end
 			task.wait(DASH_SAMPLE_INTERVAL)
