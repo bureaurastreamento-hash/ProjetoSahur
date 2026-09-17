@@ -8,7 +8,7 @@
 local DataConfig = {}
 
 DataConfig.StoreName = "PlayerData"
-DataConfig.SchemaVersion = 1
+DataConfig.SchemaVersion = 2
 
 DataConfig.AutosaveInterval = 90 -- segundos
 DataConfig.LoadRetries = 3
@@ -26,7 +26,13 @@ DataConfig.Rewards = {
 }
 
 export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number }
-export type Mission = { id: string, progress: number, done: boolean }
+export type Mission = { id: string, progress: number, done: boolean } -- legado (missões diárias, saíram em 2026-09-17)
+-- Conquistas (AchievementsConfig): contadores que só sobem + o que já foi pago.
+export type Achievements = {
+	counters: { [string]: number }, -- kills, duels, duel_wins, boss_damage, boss_kills, playtime…
+	done: { [string]: boolean }, -- id da conquista -> já pagou
+	season: { id: string, counters: { [string]: number } }, -- contadores DO PASSE atual (zeram no passe novo)
+}
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
@@ -36,7 +42,8 @@ export type Profile = {
 	xp: number, -- XP dentro do nível atual
 	level: number,
 	daily: { lastDay: number, streak: number }, -- lastDay = ProgressionConfig.DayIndex
-	missions: { day: number, list: { Mission } },
+	missions: { day: number, list: { Mission } }, -- legado: fica no save, ninguém mais usa
+	achievements: Achievements,
 	-- cosméticos (CosmeticsService): ids de CosmeticsConfig
 	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
 	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
@@ -56,6 +63,7 @@ function DataConfig.DefaultProfile(): Profile
 		level = 1,
 		daily = { lastDay = 0, streak = 0 },
 		missions = { day = 0, list = {} },
+		achievements = { counters = {}, done = {}, season = { id = "", counters = {} } },
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},

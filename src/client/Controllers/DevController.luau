@@ -47,7 +47,7 @@ local NUMBER_COMMANDS: { [string]: string } = {
 	SetStreak = "Streak",
 }
 local SIMPLE_COMMANDS = {
-	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteMissions",
+	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteAchievements",
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "BringDummy", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",

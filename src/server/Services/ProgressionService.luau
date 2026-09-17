@@ -1,16 +1,17 @@
 --!strict
 --[[
 	ProgressionService (servidor)
-	XP/nível e missões diárias, tudo salvo no perfil do DataService
-	(campos xp/level/missions; daily ficou só no save por compatibilidade) e replicado pelo NotifyProfile normal.
+	XP/nível e maestria, salvos no perfil do DataService e replicados pelo NotifyProfile normal.
+	As missões diárias SAÍRAM (dono, 2026-09-17): quem conta progresso agora é o AchievementService
+	(conquistas permanentes + as do passe); aqui a gente só avisa os contadores dele.
 
 	Fontes de progresso:
-	  - kill de jogador (HealthService.Died)            -> XP.Kill, missão "kills"
-	  - duelo (DuelService chama OnDuelResult)          -> XP.DuelWin/DuelLoss, missões "duels"/"duel_wins"
-	  - boss derrotado (BossService chama OnBossDefeated)-> XP por dano, missões "boss_damage"/"boss_kills"
-	  - tempo jogado (loop de 60 s)                     -> missão "playtime"
+	  - kill de jogador (HealthService.Died)            -> XP.Kill, contador "kills"
+	  - duelo (DuelService chama OnDuelResult)          -> XP.DuelWin/DuelLoss, "duels"/"duel_wins"
+	  - boss derrotado (BossService chama OnBossDefeated)-> XP por dano, "boss_damage"/"boss_kills"
+	  - tempo jogado (loop de 60 s)                     -> "playtime"
+	  - nível/maestria                                  -> contadores "level"/"mastery_max"
 	Ao subir de nível: moedas (ProgressionConfig.LevelUpCoins) + NotifyProgression("levelup").
-	Missão concluída: recompensa na hora + NotifyProgression("mission_done").
 	Atributo Level no Player (para HUD/placar).
 ]]
 
@@ -24,14 +25,11 @@ local DataConfig = require(Modules:WaitForChild("DataConfig"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
+local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 
 local ProgressionService = {}
 
 local notifyProgression: RemoteEvent
-local missionById: { [string]: ProgressionConfig.MissionDef } = {}
-for _, def in ProgressionConfig.MissionPool do
-	missionById[def.id] = def
-end
 
 local function notify(player: Player, event: string, data: { [string]: any })
 	if player.Parent == Players then
@@ -70,6 +68,7 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 	player:SetAttribute("Level", profile.level)
 	if leveled then
 		ProgressionService.RefreshTitle(player)
+		AchievementService.SetCounter(player, "level", profile.level)
 	end
 	if not leveled then
 		notify(player, "xp", { amount = amount, reason = reason })
@@ -78,59 +77,12 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 end
 
 -- ---------------------------------------------------------------------------
--- Missões diárias
+-- Progresso das conquistas (o AchievementService faz a conta e paga)
 -- ---------------------------------------------------------------------------
 
-local function rollMissions(player: Player, profile: DataConfig.Profile, day: number)
-	local rng = Random.new(day * 7919 + player.UserId)
-	local pool = table.clone(ProgressionConfig.MissionPool)
-	local list: { DataConfig.Mission } = {}
-	local usedKinds: { [string]: boolean } = {}
-	while #list < ProgressionConfig.MissionsPerDay and #pool > 0 do
-		local i = rng:NextInteger(1, #pool)
-		local def = table.remove(pool, i) :: ProgressionConfig.MissionDef
-		if not usedKinds[def.kind] then
-			usedKinds[def.kind] = true
-			table.insert(list, { id = def.id, progress = 0, done = false })
-		end
-	end
-	profile.missions = { day = day, list = list }
-end
-
---- Garante que as missões são do dia de hoje (sorteia de novo se virou o dia).
-local function ensureMissions(player: Player, profile: DataConfig.Profile): boolean
-	local day = ProgressionConfig.DayIndex()
-	if profile.missions.day ~= day or #profile.missions.list == 0 then
-		rollMissions(player, profile, day)
-		return true
-	end
-	return false
-end
-
---- Avança as missões de um tipo. amount = quanto somar (1 para eventos, dano para boss_damage).
+--- Avança o contador `kind` das conquistas. amount = quanto somar (1 para eventos, dano para boss).
 function ProgressionService.Progress(player: Player, kind: string, amount: number)
-	local profile = DataService.GetProfile(player)
-	if not profile or amount <= 0 then
-		return
-	end
-	local changed = ensureMissions(player, profile)
-	for _, m in profile.missions.list do
-		local def = missionById[m.id]
-		if def and def.kind == kind and not m.done then
-			m.progress = math.min(def.goal, m.progress + amount)
-			changed = true
-			if m.progress >= def.goal then
-				m.done = true
-				local coins = DataService.RewardCoins(player, def.coins)
-				notify(player, "mission_done", { id = def.id, text = def.text:format(def.goal), coins = coins, xp = def.xp })
-				Log.debug(("[Progression] %s concluiu a missão %s"):format(player.Name, def.id))
-				ProgressionService.AddXP(player, def.xp, "mission")
-			end
-		end
-	end
-	if changed then
-		DataService.MarkDirty(player)
-	end
+	AchievementService.Progress(player, kind, amount)
 end
 
 -- ---------------------------------------------------------------------------
@@ -185,6 +137,7 @@ function ProgressionService.AddMastery(player: Player, amount: number, reason: s
 	local lb, la = ProgressionConfig.MasteryLevel(before), ProgressionConfig.MasteryLevel(after)
 	if la > lb then
 		ProgressionService.RefreshTitle(player)
+		AchievementService.SetCounter(player, "mastery_max", la)
 		notify(player, "mastery_up", { characterId = characterId, level = la })
 		Log.debug(("[ProgressionService] %s: maestria %s nível %d (%s)"):format(player.Name, characterId, la, reason))
 	end
@@ -213,22 +166,6 @@ function ProgressionService.OnBossDefeated(player: Player, damage: number, share
 	ProgressionService.Progress(player, "boss_kills", 1)
 end
 
---- Snapshot das missões de hoje com definição (para admin/debug).
-function ProgressionService.GetMissions(player: Player): { { [string]: any } }
-	local profile = DataService.GetProfile(player)
-	local out = {}
-	if profile then
-		ensureMissions(player, profile)
-		for _, m in profile.missions.list do
-			local def = missionById[m.id]
-			if def then
-				table.insert(out, { id = m.id, text = def.text:format(def.goal), progress = m.progress, goal = def.goal, done = m.done })
-			end
-		end
-	end
-	return out
-end
-
 -- ---------------------------------------------------------------------------
 -- Ciclo de vida
 -- ---------------------------------------------------------------------------
@@ -236,13 +173,12 @@ end
 function ProgressionService.Init()
 	notifyProgression = Remotes.GetEvent(Remotes.Events.NotifyProgression)
 	-- Conectado no Init para pegar perfis que carregam durante o Start dos outros services.
+	-- o AchievementService paga XP das conquistas por aqui (sem require circular)
+	AchievementService.AddXP = ProgressionService.AddXP
 	DataService.ProfileLoaded.Event:Connect(function(player: Player, profile: DataConfig.Profile, sessionOnly: boolean)
 		player:SetAttribute("Level", profile.level)
 		ProgressionService.RefreshTitle(player)
-		local changed = ensureMissions(player, profile)
-		if changed then
-			DataService.MarkDirty(player)
-		end
+		AchievementService.SetCounter(player, "level", profile.level)
 	end)
 end
 
@@ -254,7 +190,7 @@ function ProgressionService.Start()
 			ProgressionService.Progress(killer, "kills", 1)
 		end
 	end)
-	-- tempo jogado (minutos) para a missão "playtime"
+	-- tempo jogado (minutos) para as conquistas de "playtime"
 	task.spawn(function()
 		while true do
 			task.wait(60)
@@ -263,7 +199,7 @@ function ProgressionService.Start()
 			end
 		end
 	end)
-	Log.debug("[ProgressionService] pronto (XP/nível, missões)")
+	Log.debug("[ProgressionService] pronto (XP/nível, maestria; conquistas no AchievementService)")
 end
 
 return ProgressionService

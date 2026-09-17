@@ -5,12 +5,13 @@
 	DROPDOWN embaixo (decisão do dono, 2026-09-17: "tem muito menu lá em cima"):
 	  Jogar  -> Personagens (V), Duelo (J), Clã (C), Placar (Tab)
 	  Loja   -> Loja (L), Cosméticos (K)
-	  Perfil -> Perfil (P)            [Conquistas entram aqui quando a leva delas chegar]
+	  Perfil -> Perfil (P), Conquistas (AchievementsController se pendura por AddToProfile)
 	  Config -> Controles, Dev (só para quem é desenvolvedor; DevController se pendura aqui)
 	As teclas continuam abrindo os painéis direto, com ou sem o dropdown aberto.
 	Painéis: ShopGui.Panel, CharacterSelect.Panel, ProfileGui.Panel, HUD.Scoreboard, HelpGui.Panel,
 	DuelGui.Panel, ClanGui.Panel, CosmeticsController.GetPanel().
-	API: TopbarController.AddToSettings(icon) — pendura um ícone no dropdown de Config (DevController).
+	API: TopbarController.AddToSettings(icon) / AddToProfile(icon) — penduram um ícone no dropdown de
+	     Config (DevController) ou de Perfil (AchievementsController).
 	Só reflete estado do servidor; não decide nada.
 ]]
 
@@ -46,10 +47,10 @@ local profileTop: TextLabel
 local profileTopRating: TextLabel
 local profileLevel: TextLabel
 local xpFill: Frame
-local missionsList: Frame
-local missionTemplate: TextLabel
 local charactersIcon: any
 local shopIcon: any
+local profileIcon: any -- pai do dropdown de Perfil
+local pendingProfile: { any } = {}
 local settingsIcon: any -- pai do dropdown de Config (engrenagem)
 local pendingSettings: { any } = {} -- ícones pedidos antes do pai existir (DevController)
 local settingsChildren: { any } = {}
@@ -69,11 +70,6 @@ local function get(parent: Instance, name: string): Instance
 	return child
 end
 
-local MISSION_DEFS: { [string]: ProgressionConfig.MissionDef } = {}
-for _, def in ProgressionConfig.MissionPool do
-	MISSION_DEFS[def.id] = def
-end
-
 local function renderProgression(profile: any)
 	local level = tonumber(profile.level) or 1
 	local xp = tonumber(profile.xp) or 0
@@ -86,29 +82,8 @@ local function renderProgression(profile: any)
 		xpFill.Size = UDim2.fromScale(math.clamp(xp / need, 0, 1), 1)
 	end
 
-	for _, child in missionsList:GetChildren() do
-		if child:IsA("TextLabel") and child ~= missionTemplate then
-			child:Destroy()
-		end
-	end
-	local missions = if typeof(profile.missions) == "table" and typeof(profile.missions.list) == "table" then profile.missions.list else {}
-	for i, m in ipairs(missions) do
-		local def = MISSION_DEFS[tostring(m.id)]
-		if not def then
-			continue
-		end
-		local row = missionTemplate:Clone()
-		row.Visible = true
-		row.LayoutOrder = i
-		local done = m.done == true
-		row.Text = (if done then "✓ " else "") .. def.text:format(def.goal)
-		row.TextColor3 = if done then Color3.fromRGB(150, 230, 170) else Color3.fromRGB(255, 255, 255)
-		local progress = row:FindFirstChild("Progress") :: TextLabel
-		progress.Text = ("%d/%d · +%d pontos · +%d XP"):format(tonumber(m.progress) or 0, def.goal, def.coins, def.xp)
-		local fill = (row:FindFirstChild("Bar") :: Frame):FindFirstChild("Fill") :: Frame
-		fill.Size = UDim2.fromScale(math.clamp((tonumber(m.progress) or 0) / def.goal, 0, 1), 1)
-		row.Parent = missionsList
-	end
+	-- A lista da direita (CONQUISTAS em andamento) é preenchida pelo AchievementsController, que já
+	-- tem os dados do FetchAchievements — aqui não se mexe nela.
 end
 
 --- Diagnóstico: aponta cópias alheias do TopbarPlus/"Example" que vieram com o place.
@@ -182,8 +157,15 @@ function TopbarController.Init()
 	statsTemplate = get(statsList, "Template") :: TextLabel
 	profileLevel = get(profilePanel, "Level") :: TextLabel
 	xpFill = get(get(profilePanel, "XPBar"), "Fill") :: Frame
-	missionsList = get(profilePanel, "Missions") :: Frame
-	missionTemplate = get(missionsList, "Template") :: TextLabel
+end
+
+--- Pendura um ícone no dropdown de Perfil (AchievementsController: "Conquistas").
+function TopbarController.AddToProfile(icon: any)
+	if not profileIcon then
+		table.insert(pendingProfile, icon)
+		return
+	end
+	icon:joinDropdown(profileIcon)
 end
 
 --- Pendura um ícone no dropdown de Config (engrenagem). Chamado pelo DevController quando o jogador
@@ -248,11 +230,15 @@ function TopbarController.Start()
 		:setOrder(1)
 		:setDropdown({ shopIcon, cosmeticsItem })
 
-	Icon.new()
+	profileIcon = Icon.new()
 		:setLabel("Perfil")
-		:setCaption("Suas estatísticas")
+		:setCaption("Estatísticas e conquistas")
 		:setOrder(2)
-		:setDropdown({ profileItem })
+	profileIcon:setDropdown({ profileItem })
+	for _, icon in pendingProfile do
+		TopbarController.AddToProfile(icon)
+	end
+	table.clear(pendingProfile)
 
 	settingsIcon = Icon.new()
 		:setLabel("Config")

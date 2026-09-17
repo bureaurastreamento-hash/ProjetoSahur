@@ -109,7 +109,7 @@ rows = [
     ("Health", "vida", "SetHealth", "Definir", "Heal", "Curar"),
     ("Speed", "WalkSpeed (16)", "SetSpeed", "Definir", "Respawn", "Respawn"),
     ("DamageMult", "dano x (1)", "SetDamageMult", "Definir", "Kill", "Matar"),
-    ("XP", "XP", "AddXP", "Somar XP", "CompleteMissions", "Missões OK"),
+    ("XP", "XP", "AddXP", "Somar XP", "CompleteAchievements", "Conquistas OK"),
 ]
 for i, (box, ph, cmd1, t1, cmd2, t2) in enumerate(rows):
     yy = y + i * 32

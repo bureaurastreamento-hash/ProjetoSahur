@@ -12,7 +12,8 @@
 	  4. NotifyAdminResult(ok, message) devolve o resultado para o painel.
 
 	Comandos por alvo (args.target = nome/UserId; ausente = o próprio dev; "*" = todos):
-	  SetCoins/AddCoins/AddXP/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount}, CompleteMissions,
+	  SetCoins/AddCoins/AddXP/SetEnergy/SetHealth/SetSpeed/SetDamageMult {amount}, CompleteAchievements,
+	  GrantItem {id} (entrega cosmético/emote/personagem, inclusive limitado de passe antigo),
 	  InfiniteEnergy/NoCooldown/God {enabled?} (toggle), ResetCooldowns, ClearFlags,
 	  GrantCharacter/RevokeCharacter/SetCharacter {characterId}, GrantAll, RevokeAll,
 	  Heal, Kill, Respawn, Teleport (dev -> alvo), Bring (alvo -> dev), Kick {reason}, ResetData,
@@ -32,9 +33,9 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
-local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local AdminConfig = require(script.Parent.Parent:WaitForChild("AdminConfig"))
+local AchievementsConfig = require(Modules:WaitForChild("AchievementsConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
@@ -45,6 +46,7 @@ local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardServic
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local BossService = require(script.Parent:WaitForChild("BossService"))
 local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
+local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
 -- RitualService/BossFormService dependem do AbilityService, que depende deste módulo: carregados no Start
 local RitualService: any = nil
@@ -206,21 +208,25 @@ perTarget.AddXP = function(_, target, args)
 	return true, ("%s: +%d XP (nível %d)"):format(target.Name, amount, if profile then profile.level else 0)
 end
 
-perTarget.CompleteMissions = function(_, target)
-	for _, m in ProgressionService.GetMissions(target) do
-		if not m.done then
-			local def = nil
-			for _, d in ProgressionConfig.MissionPool do
-				if d.id == m.id then
-					def = d
-				end
-			end
-			if def then
-				ProgressionService.Progress(target, def.kind, def.goal)
-			end
-		end
+--- Conclui TODAS as conquistas ativas (permanentes + passe) empurrando os contadores até a meta.
+perTarget.CompleteAchievements = function(_, target)
+	local n = 0
+	for _, ach in AchievementsConfig.Active() do
+		AchievementService.SetCounter(target, ach.Kind, ach.Goal)
+		n += 1
 	end
-	return true, ("%s: missões de hoje concluídas"):format(target.Name)
+	AchievementService.Refresh(target)
+	return true, ("%s: %d conquista(s) empurradas para a meta"):format(target.Name, n)
+end
+
+--- Entrega um cosmético/emote/personagem por id (inclusive LIMITADO de passe antigo).
+perTarget.GrantItem = function(_, target, args)
+	local id = args.id
+	if typeof(id) ~= "string" or id == "" then
+		return false, "id vazio"
+	end
+	local ok, msg = AchievementService.GrantReward(target, id)
+	return ok, ("%s: %s (%s)"):format(target.Name, id, msg)
 end
 
 perTarget.AddCoins = function(_, target, args)

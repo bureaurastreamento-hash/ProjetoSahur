@@ -168,7 +168,39 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
-	-- if raw.schemaVersion == 1 then ... migrações futuras aqui
+	-- conquistas (schema 2). Perfil antigo (só missões): os contadores começam do que já dá para
+	-- saber pelas estatísticas, para ninguém perder o que já jogou.
+	if typeof(raw.achievements) == "table" then
+		local a = raw.achievements :: any
+		if typeof(a.counters) == "table" then
+			for kind, value in a.counters do
+				if typeof(kind) == "string" and typeof(value) == "number" and value >= 0 then
+					profile.achievements.counters[kind] = math.floor(value)
+				end
+			end
+		end
+		if typeof(a.done) == "table" then
+			for id, done in a.done do
+				if typeof(id) == "string" and done == true then
+					profile.achievements.done[id] = true
+				end
+			end
+		end
+		if typeof(a.season) == "table" and typeof((a.season :: any).id) == "string" then
+			local counters: { [string]: number } = {}
+			if typeof((a.season :: any).counters) == "table" then
+				for kind, value in (a.season :: any).counters do
+					if typeof(kind) == "string" and typeof(value) == "number" and value >= 0 then
+						counters[kind] = math.floor(value)
+					end
+				end
+			end
+			profile.achievements.season = { id = (a.season :: any).id, counters = counters }
+		end
+	elseif typeof(raw.schemaVersion) == "number" and raw.schemaVersion < 2 then
+		profile.achievements.counters.kills = profile.stats.kills
+		profile.achievements.counters.level = profile.level
+	end
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
 end

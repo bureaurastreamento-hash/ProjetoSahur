@@ -2,6 +2,8 @@
 --[[
 	CosmeticsConfig
 	Cosméticos (skins, capas, auras) e emotes/cenas. Só visual: NUNCA dão buff.
+	`Limited = true` + `Season = "<id>"`: item de PASSE (AchievementsConfig) — sai só pelas conquistas
+	daquela temporada, nunca pela roleta; acabou o passe, ninguém mais ganha (só um DEV dá).
 	Aquisição = ROLETA da sorte: RollCost pontos (ganhos jogando) = 1 giro -> item aleatório que
 	o jogador ainda não tem (peso = Weight; VIP fica fora da roleta). Com Robux: giros (ShopConfig
 	roll_1/roll_5) ou "pick" = escolher um item específico. Weight 0 = de todos (não entra na roleta).
@@ -24,6 +26,8 @@ export type Item = {
 	Weight: number, -- peso na roleta (maior = mais comum); 0 = todo mundo tem
 	Color: Color3?, -- capa/aura: cor; skin: cor do corpo
 	Access: string?, -- nil = moedas | "vip" = passe VIP
+	Season: string?, -- LIMITADO: id da temporada (AchievementsConfig) que solta este item
+	Limited: boolean?, -- true = nunca entra na roleta; acabou a temporada, só um DEV dá
 }
 
 CosmeticsConfig.Items = {
@@ -42,6 +46,10 @@ CosmeticsConfig.Items = {
 	{ Id = "aura_purple", Name = "Aura Roxa", Category = "aura", Weight = 4, Color = Color3.fromRGB(180, 90, 255) },
 	{ Id = "aura_green", Name = "Aura Verde", Category = "aura", Weight = 4, Color = Color3.fromRGB(110, 255, 140) },
 	{ Id = "aura_gold", Name = "Aura Dourada", Category = "aura", Weight = 0, Access = "vip", Color = Color3.fromRGB(255, 210, 80) },
+	-- LIMITADOS do Passe 1 (só pelas conquistas da temporada; depois só DEV dá)
+	{ Id = "s1_skin_arrow", Name = "Flecha (Passe 1)", Category = "skin", Weight = 0, Season = "s1", Limited = true, Color = Color3.fromRGB(120, 90, 200) },
+	{ Id = "s1_cape_arrow", Name = "Capa da Flecha (Passe 1)", Category = "cape", Weight = 0, Season = "s1", Limited = true, Color = Color3.fromRGB(90, 60, 170) },
+	{ Id = "s1_aura_arrow", Name = "Aura da Flecha (Passe 1)", Category = "aura", Weight = 0, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255) },
 } :: { Item }
 
 CosmeticsConfig.Categories = { "skin", "cape", "aura" }
@@ -54,6 +62,8 @@ export type Emote = {
 	Weight: number, -- peso na roleta; 0 = de todos (o "wave" é o padrão)
 	Duration: number?, -- cena: s da aura (a animação manda se existir)
 	Color: Color3?, -- cena: cor da aura
+	Season: string?, -- LIMITADO: temporada que solta este emote
+	Limited: boolean?, -- true = fora da roleta; acabou a temporada, só um DEV dá
 }
 
 -- Roda de emotes (B): até 8 posições, na ordem abaixo.
@@ -66,6 +76,7 @@ CosmeticsConfig.Emotes = {
 	{ Id = "scene_power", Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80) },
 	{ Id = "scene_dark", Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200) },
 	{ Id = "scene_storm", Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255) },
+	{ Id = "s1_emote_arrow", Name = "Flecha ao Alto (Passe 1)", Kind = "scene", Weight = 0, Duration = 4, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255) },
 } :: { Emote }
 
 CosmeticsConfig.RollCost = 100 -- pontos por giro

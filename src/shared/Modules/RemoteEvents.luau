@@ -84,7 +84,8 @@ RemoteEvents.Events = ({
 	NotifyTrailer = "NotifyTrailer", -- all: (event: "begin"|"shot"|"title"|"fade"|"end", data: table) — TrailerService
 	NotifyAnnouncement = "NotifyAnnouncement", -- all/um: (text: string, scope: "global"|"server"|"you", from: string)
 	NotifyBoss = "NotifyBoss", -- all: (event: "summoned"|"warning"|"state"|"phase"|"enrage"|"attack"|"defeated"|"despawned"|"denied", data: table)
-	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mission_done"|"mastery_up", data: table)
+	NotifyProgression = "NotifyProgression", -- dono: (event: "xp"|"levelup"|"mastery_up", data: table)
+	NotifyAchievement = "NotifyAchievement", -- dono: (event: "done"|"list"|"granted", data: table) — AchievementService
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)
 	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
@@ -97,6 +98,7 @@ RemoteEvents.Events = ({
 RemoteEvents.Functions = ({
 	FetchServerTime = "FetchServerTime", -- () -> number
 	FetchAdminLogin = "FetchAdminLogin", -- () -> boolean (abre sessão dev; só para Players em AdminConfig)
+	FetchAchievements = "FetchAchievements", -- () -> { season: {...}?, list: { { id, name, desc, progress, goal, done, season, reward } } }
 }) :: { [string]: string }
 
 -- ---------------------------------------------------------------------------

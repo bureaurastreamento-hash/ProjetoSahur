@@ -88,12 +88,12 @@ local pendingPick: { [Player]: string } = {} -- id escolhido aguardando o recibo
 local function pool(profile: any, player: Player): { PoolEntry }
 	local list: { PoolEntry } = {}
 	for _, item in CosmeticsConfig.Items do
-		if item.Weight > 0 and item.Access == nil and not owns(profile, item, player) then
+		if item.Weight > 0 and item.Access == nil and item.Limited ~= true and not owns(profile, item, player) then
 			table.insert(list, { id = item.Id, name = item.Name, kind = item.Category, weight = item.Weight })
 		end
 	end
 	for _, emote in CosmeticsConfig.Emotes do
-		if emote.Weight > 0 and not ownsEmote(profile, emote) then
+		if emote.Weight > 0 and emote.Limited ~= true and not ownsEmote(profile, emote) then
 			table.insert(list, { id = emote.Id, name = emote.Name, kind = "emote", weight = emote.Weight })
 		end
 	end
@@ -128,6 +128,37 @@ local function rollOnce(player: Player, profile: any): PoolEntry?
 	end
 	grant(profile, list[#list])
 	return list[#list]
+end
+
+--- Entrega um cosmético/emote específico (conquista, DEV). Vale inclusive para itens LIMITADOS de
+--- passe, que nunca saem na roleta. false = já tinha ou id desconhecido.
+function CosmeticsService.Grant(player: Player, id: string, reason: string): boolean
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return false
+	end
+	local item = CosmeticsConfig.GetItem(id)
+	local emote = if item then nil else CosmeticsConfig.GetEmote(id)
+	if not item and not emote then
+		return false
+	end
+	local kind = if item then item.Category else "emote"
+	local name = if item then item.Name else (emote :: CosmeticsConfig.Emote).Name
+	if item then
+		if table.find(profile.cosmetics.owned, id) then
+			return false
+		end
+		table.insert(profile.cosmetics.owned, id)
+	else
+		if table.find(profile.emotes, id) then
+			return false
+		end
+		table.insert(profile.emotes, id)
+	end
+	DataService.MarkDirty(player)
+	notifyCosmetics:FireClient(player, "rolled", { items = { { id = id, name = name, kind = kind } }, reason = reason })
+	Log.debug(("[CosmeticsService] %s recebeu %s (%s)"):format(player.Name, id, reason))
+	return true
 end
 
 --- Giro grátis (drop do boss, eventos). Retorna o nome do item ou nil (já tem tudo / sem perfil).

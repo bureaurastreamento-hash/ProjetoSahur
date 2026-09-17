@@ -303,14 +303,39 @@ profile = screen("ProfileGui", [
         label("TopRatingTitle", "TOP GLOBAL — RATING 1v1", ud(COL, 0, 0, 14), ud(0, 0, 0, Y0 + 284), font=FONT_B,
               ts=11, color=MUTED),
         label("TopRating", "", ud(COL, 0, 0, 62), ud(0, 0, 0, Y0 + 300), font="Code", ts=12, yalign="Top"),
-        # coluna direita: missões (rola se precisar)
-        label("MissionsTitle", "MISSÕES DE HOJE", ud(COL, 0, 0, 14), ud(1, 0, 0, Y0), anchor=(1, 0), font=FONT_B,
+        # coluna direita: conquistas em andamento (a lista completa fica no painel Conquistas)
+        label("MissionsTitle", "CONQUISTAS", ud(COL, 0, 0, 14), ud(1, 0, 0, Y0), anchor=(1, 0), font=FONT_B,
               ts=11, color=MUTED),
         scroll("Missions", ud(COL, 0, 1, -(Y0 + 20)), ud(1, 0, 0, Y0 + 20), extra={"AnchorPoint": {"Vector2": [1, 0]}},
                children=[listlayout("Vertical", 8), mission_row]),
     ]),
 ], order=3)
 write("ProfileGui.model.json", profile)
+
+# =============================================================================
+# Conquistas (AchievementsController): lista com progresso e recompensa
+# =============================================================================
+ach_row = frame("Template", ud(1, 0, 0, 52), ud(0, 0, 0, 0), bg=CARD, t=0.25, visible=False, children=[
+    corner(5),
+    label("Name", "", ud(0.68, 0, 0, 16), ud(0, 10, 0, 6), font=FONT_B, ts=13),
+    label("Reward", "", ud(0.32, -12, 0, 16), ud(1, -10, 0, 6), anchor=(1, 0), ts=11, color=GOLD, xalign="Right"),
+    label("Desc", "", ud(0.68, 0, 0, 14), ud(0, 10, 0, 23), ts=11, color=MUTED),
+    label("Progress", "", ud(0.32, -12, 0, 14), ud(1, -10, 0, 23), anchor=(1, 0), ts=11, color=MUTED,
+          xalign="Right"),
+    frame("Bar", ud(1, -20, 0, 4), ud(0, 10, 1, -8), bg=[1, 1, 1], t=0.88, children=[
+        corner(2), frame("Fill", ud(0, 0, 1, 0), ud(0, 0, 0, 0), bg=GREEN, t=0, children=[corner(2)]),
+    ]),
+])
+achievements = screen("AchievementsGui", [
+    panel("Panel", 560, 470, "Conquistas", [
+        label("Summary", "", ud(0.6, 0, 0, 16), ud(0, 0, 0, PANEL_TITLE_H), ts=12, color=MUTED),
+        label("Season", "", ud(0.4, 0, 0, 16), ud(1, 0, 0, PANEL_TITLE_H), anchor=(1, 0), font=FONT_B, ts=12,
+              color=GOLD, xalign="Right"),
+        scroll("List", ud(1, 0, 1, -(PANEL_TITLE_H + 24)), ud(0, 0, 0, PANEL_TITLE_H + 24),
+               children=[listlayout("Vertical", 6), ach_row]),
+    ]),
+], order=4)
+write("AchievementsGui.model.json", achievements)
 
 
 # =============================================================================

@@ -1994,10 +1994,10 @@
      ]
     },
     {
-     "name": "CompleteMissions",
+     "name": "CompleteAchievements",
      "className": "TextButton",
      "properties": {
-      "Name": "CompleteMissions",
+      "Name": "CompleteAchievements",
       "Size": {
        "UDim2": [
         [
@@ -2029,7 +2029,7 @@
         0.17
        ]
       },
-      "Text": "Miss\u00f5es OK",
+      "Text": "Conquistas OK",
       "TextSize": 12,
       "Font": "GothamBold",
       "TextColor3": {

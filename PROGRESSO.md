@@ -213,10 +213,23 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
   Perfil (Perfil P), Config (Controles + Dev para quem é desenvolvedor). `TopbarController.AddToSettings`
   pendura ícones no dropdown de Config (usa `joinDropdown`: `setDropdown` DESTRÓI os itens que já estão
   lá). As teclas continuam abrindo os painéis direto.
-- **Parte 3 — CONQUISTAS no lugar das missões** (a fazer): "zerar o jogo"; recompensas = pontos,
-  cosméticos, emotes e itens LIMITADOS de passe/temporada (acabou o passe, nunca mais aparecem, só DEV);
-  passe novo = conquistas novas. Hoje as missões vivem em `ProgressionService`/`ProgressionConfig` e
-  aparecem no painel Perfil (`TopbarController.renderProfile`).
+- **Parte 3 (conquistas) — FEITA, falta o dono testar**: missões diárias SAÍRAM.
+  - `AchievementsConfig.luau`: 23 conquistas — 16 permanentes (kills/duelos/boss/tempo/nível/maestria/
+    coleção) + a final **ZEROU O SAHUR** (conta as outras permanentes) + 6 do **Passe 1 — Despertar**
+    (`Seasons`, começa 17/09/2026, dura 60 dias). Recompensa = pontos, XP, cosmético, emote ou personagem.
+  - Itens LIMITADOS: `CosmeticsConfig` com `Season`/`Limited` (s1_skin_arrow, s1_cape_arrow,
+    s1_aura_arrow, s1_emote_arrow) — fora da roleta; acabou o passe ninguém mais ganha, só DEV
+    (`AdminService.GrantItem {id}`). Passe novo = nova entrada em `Seasons` + conquistas `Season = "<id>"`.
+  - `AchievementService.luau` (servidor): contadores que só sobem no perfil (permanentes + do passe, que
+    zeram quando o passe muda), paga uma vez cada conquista, `FetchAchievements`/`NotifyAchievement`.
+    `ProgressionService` virou só XP/nível/maestria e empurra os contadores para cá.
+  - Perfil salvo: **schema 2** (`profile.achievements = { counters, done, season }`); perfil antigo
+    aproveita kills/nível das estatísticas. O campo `missions` fica no save sem uso.
+  - UI: `AchievementsGui` (lista com barra, recompensa e "Passe X — N dia(s)") + `AchievementsController`,
+    no dropdown **Perfil**; a coluna direita do painel Perfil virou "CONQUISTAS" (as 4 mais perto de fechar).
+  - DEV: `CompleteMissions` virou `CompleteAchievements` (empurra tudo para a meta) e entrou `GrantItem`.
+  - Testado via MCP: 23 conquistas, passe com 60 dias, kills_10 pagou, conquista de passe entregou a aura
+    limitada, DEV entregou a skin limitada, painel abre com a lista certa.
 - **Parte 4 — MENU DEV de verdade + DENÚNCIAS** (a fazer): teleportar para a arena, ir ao servidor de um
   jogador, assistir um jogador (espectar), ver denúncias de um jogador e dar itens (limitados ou não).
   Criar antes o sistema de denúncia (motivos predefinidos + texto livre) com armazenamento por DataStore.
