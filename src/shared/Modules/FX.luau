@@ -22,6 +22,15 @@ local CharacterDefs = require(script.Parent:WaitForChild("CharacterDefs"))
 
 local FX = {}
 
+-- Gancho das animações PROCEDURAIS (ProcAnimController registra no Init): PlayAnimation/StopAnimation
+-- desviam para cá quando existe clipe em ProcAnimDefs para "<Pasta>/<Nome>".
+export type ProcAnimHook = {
+	Wants: (key: string, hasTeamId: boolean) -> boolean,
+	Play: (character: Model, key: string, looped: boolean?) -> boolean,
+	Stop: (character: Model, key: string) -> (),
+}
+FX.ProcAnim = nil :: ProcAnimHook?
+
 FX.MaxActiveVFX = 12
 FX.MaxEmitPerEmitter = 30
 FX.MaxActiveSounds = 16
@@ -165,6 +174,14 @@ end
 --- Toca Assets.Animations.<folder>.<name>. Retorna a track (ou nil se não existir).
 function FX.PlayAnimation(character: Model, folder: string, name: string, looped: boolean?, priority: Enum.AnimationPriority?): AnimationTrack?
 	folder = Assets.ResolveFolder("Animations", folder, name, character) -- versão do personagem, se houver
+	local hook = FX.ProcAnim
+	if hook then
+		local anim = Assets.GetAnimation(folder, name)
+		local hasTeamId = anim ~= nil and anim.AnimationId ~= "" and anim.AnimationId ~= "rbxassetid://"
+		if hook.Wants(folder .. "/" .. name, hasTeamId) and hook.Play(character, folder .. "/" .. name, looped) then
+			return nil -- procedural tocando (sem track da Roblox)
+		end
+	end
 	local track = trackFor(character, folder, name)
 	if not track then
 		return nil
@@ -190,6 +207,9 @@ end
 
 function FX.StopAnimation(character: Model, folder: string, name: string)
 	folder = Assets.ResolveFolder("Animations", folder, name, character)
+	if FX.ProcAnim then
+		FX.ProcAnim.Stop(character, folder .. "/" .. name)
+	end
 	local byName = tracks[character]
 	local track = byName and byName[folder .. "/" .. name]
 	if track and track.IsPlaying then

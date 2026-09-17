@@ -62,6 +62,9 @@ local function stopGrabbed()
 		grabbedTrackRef.track = nil
 	end
 	local character = localPlayer.Character
+	if character then
+		FX.StopAnimation(character, "Shared", "Grabbed") -- versão procedural (loop)
+	end
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	if humanoid and localPlayer:GetAttribute("Ragdolled") ~= true then
 		humanoid.PlatformStand = false -- (caído, o RagdollService é quem manda)

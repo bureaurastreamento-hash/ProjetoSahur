@@ -19,6 +19,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local RigPose = require(Modules:WaitForChild("RigPose"))
 
 local CutsceneController = {}
 
@@ -48,7 +49,7 @@ local function captureRig(character: Model): Rig?
 	for _, d in character:GetDescendants() do
 		if d:IsA("Motor6D") and table.find(JOINTS, d.Name) then
 			rig.joints[d.Name] = d
-			rig.original[d.Name] = d.C0
+			rig.original[d.Name] = RigPose.Original(d) -- mesmo "de fábrica" das animações procedurais
 			found += 1
 		end
 	end

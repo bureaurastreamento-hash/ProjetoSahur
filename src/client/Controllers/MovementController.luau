@@ -393,12 +393,15 @@ local function onNotifyDash(character: Model?, data: any)
 		FX.Flash(character, Color3.fromRGB(255, 255, 255), 0.3)
 		FX.SpawnVFX(character, SHARED, "RagdollCancel", true)
 		FX.PlaySoundAt(character, SHARED, "RagdollCancel")
+		FX.PlayAnimation(character, SHARED, "RagdollCancel")
 	else
 		FX.SpawnVFX(character, SHARED, "Dash", true)
 		FX.PlaySoundAt(character, SHARED, "Dash")
 	end
 	-- DashBack existe (equipe); Dash (frente/lado) entra quando a equipe mandar o id
-	if not (backwards and FX.PlayAnimation(character, SHARED, "DashBack")) then
+	if backwards then
+		FX.PlayAnimation(character, SHARED, "DashBack")
+	else
 		FX.PlayAnimation(character, SHARED, "Dash")
 	end
 	if character == localPlayer.Character then

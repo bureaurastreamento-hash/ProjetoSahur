@@ -218,7 +218,13 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   parado (e o ponto dele) para a frente do admin — serve para testar dentro de arena de duelo/guerra.
   Testado via MCP: finisher → ragdoll + 25 studs → levantou → leash trouxe → BringTo a 6 studs.
 - **Swift/Domínio**: raio 30, fora da cúpula 3,0×, `OncePerAwakening` (1× por despertar); texto de Controles.
-- **Leva 2 — ProcAnim base** (`src/client/Controllers/ProcAnimController.luau` + `Shared/Modules/ProcAnimDefs.luau`):
+- **Leva 2 — FEITA 2026-09-17**: `RigPose.luau` (originais compartilhados, Target/Lerp/Apply), `ProcAnimDefs.luau`
+  (14 clipes: M1_1..4 0,45 s com impacto em 0,15, Uppercut, Downslam, Hit, Parry, Block loop, BlockHit, Grabbed
+  loop, Dash, DashBack, RagdollCancel) e `ProcAnimController` (gancho `FX.ProcAnim`: PlayAnimation desvia
+  quando existe clipe; `team = true` no clipe deixa o id da equipe mandar). Cutscene usa os mesmos originais.
+  Preview de poses: `run_code` com `RigPose.Capture/Apply` em rigs R6 (só HRP ancorado) + screenshot.
+  O dono precisa olhar in-game e apontar poses feias (ajustar ângulos em ProcAnimDefs).
+- **Leva 2 — ProcAnim base (plano original)** (`src/client/Controllers/ProcAnimController.luau` + `Shared/Modules/ProcAnimDefs.luau`):
   motor de poses em Motor6D (como a cutscene), keyframes por ação com o tempo do CombatConfig: M1_1..4 (0,45 s
   cada, impacto em 0,15), Uppercut, Downslam, Hit (reação), Parry, Block/BlockHit, Grabbed, Dash/DashBack,
   RagdollCancel. Regra: id da equipe preenchido = toca o da equipe; vazio ou marcado `Proc` = procedural.
