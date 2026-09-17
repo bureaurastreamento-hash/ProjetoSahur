@@ -548,6 +548,28 @@ E["Swift/SweepKick"] = {
 	},
 }
 E["Swift/SweepKick_Hit"] = E["Shared/Hit"]
+E["Swift/TimeDome"] = { -- abertura do Domínio do Tempo (a cúpula fica por conta do AbilityController)
+	lifetime = 1.6,
+	layers = {
+		groundWave(BLUE, 4, 46, 0.7),
+		ringFlat(WHITE, 3, 44, 0.6, { delay = 0.05 }),
+		mesh("Sphere", BLUE, 2, 44, 0.5, { tr0 = 0.5, ease = "Quart" }),
+		emit("Glow", WHITE, 1, { size = 8, sizeSeq = { { 0, 8 }, { 1, 0 } }, life = { 0.3, 0.3 }, speed = { 0, 0 }, light = 1 }),
+		sparks(BLUE, 30),
+		light(BLUE, 8, 40, 0.8),
+	},
+}
+E["Swift/TimeDome_Break"] = { -- cúpula quebrando
+	lifetime = 1.4,
+	layers = {
+		mesh("Sphere", WHITE, 40, 52, 0.35, { tr0 = 0.6, ease = "Quart" }),
+		emit("Lines", BLUE, 40, { size = { 1, 2.5 }, life = { 0.4, 0.7 }, speed = { 40, 80 }, orient = "VelocityParallel", spread = { 360, 360 } }),
+		sparks(WHITE, 30),
+		flash(WHITE, 20, 0.2),
+		light(BLUE, 8, 50, 0.6),
+	},
+}
+E["Swift/TimeDome_Hit"] = E["Shared/Hit"]
 E["Swift/Tempest"] = {
 	lifetime = 2.6,
 	layers = {

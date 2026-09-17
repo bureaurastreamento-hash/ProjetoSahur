@@ -595,6 +595,93 @@ effects.Shield = function(player, character, ability)
 	notifyAbility:FireAllClients(character, state.characterId, ability.Id, "start", { Duration = e.Duration })
 end
 
+-- DOMÍNIO DO TEMPO (Swift): cúpula fixa no ponto do cast. A cada tick, quem está dentro (jogadores) recebe
+-- Player.TimeSlow = SlowMultiplier (WalkSpeed, socos, dashes e habilidades ficam proporcionalmente lentos;
+-- o cliente desacelera as animações e tinge a tela). O lançador recebe SelfMultiplier enquanto está dentro;
+-- se SAIR, a cúpula quebra (todos liberados) e ele fica a BreakMultiplier até Duration acabar.
+local ATTR_TIME_SLOW = "TimeSlow"
+local activeDomes: { [Player]: boolean } = {}
+effects.TimeDome = function(player, character, ability)
+	local e = ability.Effect
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	if activeDomes[player] then
+		return
+	end
+	activeDomes[player] = true
+	local center = root.Position
+	local radius = tonumber(e.Radius) or 22
+	local duration = tonumber(e.Duration) or 8
+	local slowMult = tonumber(e.SlowMultiplier) or 0.25
+	local selfMult = tonumber(e.SelfMultiplier) or 1.25
+	local breakMult = tonumber(e.BreakMultiplier) or 2.2
+	local characterId = getState(player).characterId
+	local endsAt = os.clock() + duration
+	local slowed: { [Player]: boolean } = {}
+	local broken = false
+	local function setSlow(target: Player, value: number?)
+		if target:GetAttribute(ATTR_TIME_SLOW) ~= value then
+			target:SetAttribute(ATTR_TIME_SLOW, value)
+			CombatService.RestoreWalkSpeed(target)
+		end
+	end
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Position = center, Radius = radius, Duration = duration })
+	AntiExploitService.Grace(player, duration + 1)
+	task.spawn(function()
+		while os.clock() < endsAt do
+			if player.Parent ~= Players or player.Character ~= character or not HealthService.IsAlive(character) then
+				break
+			end
+			local myRoot = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local inside = myRoot ~= nil and (myRoot.Position - center).Magnitude <= radius
+			if not broken then
+				if inside then
+					setSlow(player, selfMult)
+				else
+					-- saiu: a cúpula quebra, todo mundo é liberado, o Swift fica MUITO rápido até o fim
+					broken = true
+					for other in slowed do
+						setSlow(other, nil)
+					end
+					table.clear(slowed)
+					setSlow(player, breakMult)
+					notifyAbility:FireAllClients(character, characterId, ability.Id, "break", { Position = center, Radius = radius })
+					Log.debug(("[AbilityService] %s saiu do Domínio do Tempo: cúpula quebrada"):format(player.Name))
+				end
+				if not broken then
+					for _, other in Players:GetPlayers() do
+						if other == player then
+							continue
+						end
+						local oc = other.Character
+						local oroot = oc and oc:FindFirstChild("HumanoidRootPart") :: BasePart?
+						local oin = oroot ~= nil and HealthService.IsAlive(oc :: Model) and (oroot.Position - center).Magnitude <= radius
+						if oin then
+							if not slowed[other] then
+								slowed[other] = true
+								setSlow(other, slowMult)
+							end
+						elseif slowed[other] then
+							slowed[other] = nil
+							setSlow(other, nil)
+						end
+					end
+				end
+			end
+			task.wait(0.1)
+		end
+		for other in slowed do
+			setSlow(other, nil)
+		end
+		table.clear(slowed)
+		setSlow(player, nil)
+		activeDomes[player] = nil
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "end", { Position = center, Radius = radius, Broken = broken })
+	end)
+end
+
 effects.DamageBuff = function(player, character, ability)
 	local e = ability.Effect
 	local state = getState(player)
@@ -663,8 +750,10 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 
 	-- Tudo validado: cobra o cooldown antes de executar (a ultimate não gasta carga: o Awakening já gastou)
 	if not noCooldown then
-		state.cooldownReadyAt[ability.Id] = now + ability.Cooldown
-		state.busyUntil = now + ability.CastTime
+		local timeSlow = player:GetAttribute("TimeSlow")
+		local slowDiv = if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then timeSlow else 1
+		state.cooldownReadyAt[ability.Id] = now + ability.Cooldown / slowDiv
+		state.busyUntil = now + ability.CastTime / slowDiv
 		notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
 	end
 
@@ -747,10 +836,11 @@ local function onRequestAwaken(player: Player)
 			CombatService.ResolveHit(player, character, victim, cut.BurstDamage, false, cut.BurstKnockback, { BreaksBlock = true })
 		end
 		-- "o tempo para": os outros congelam por FreezeSeconds (o cliente deles congela animação/tela)
-		local freeze = tonumber(cut.FreezeSeconds) or 0
+		local freezeCfg = cut.FreezeByCharacter and cut.FreezeByCharacter[state.characterId]
+		local freeze = if freezeCfg then tonumber(freezeCfg.Seconds) or 0 else 0
 		if freeze > 0 then
 			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
-			local radius = tonumber(cut.FreezeRadius) or 0
+			local radius = tonumber(freezeCfg.Radius) or 0
 			local untilT = Workspace:GetServerTimeNow() + freeze
 			for _, other in Players:GetPlayers() do
 				local oc = other.Character

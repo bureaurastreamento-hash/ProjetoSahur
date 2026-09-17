@@ -433,6 +433,38 @@
             "RollOffMaxDistance": 80,
             "RollOffMinDistance": 10
           }
+        },
+        {
+          "name": "TimeDome",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://3059775781",
+            "Volume": 0.9,
+            "RollOffMaxDistance": 160,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "TimeDome_Loop",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://7260423115",
+            "Volume": 0.35,
+            "Looped": true,
+            "PlaybackSpeed": 0.6,
+            "RollOffMaxDistance": 120,
+            "RollOffMinDistance": 15
+          }
+        },
+        {
+          "name": "TimeDome_Break",
+          "className": "Sound",
+          "properties": {
+            "SoundId": "rbxassetid://9114589190",
+            "Volume": 1,
+            "RollOffMaxDistance": 200,
+            "RollOffMinDistance": 15
+          }
         }
       ]
     },

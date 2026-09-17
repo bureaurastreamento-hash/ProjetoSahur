@@ -715,7 +715,7 @@ THEMES.lightning = {
 		end
 	end,
 	burst = function(ctx)
-		FX.SpawnVFX(ctx.character, "Swift", "Tempest", true)
+		FX.SpawnVFX(ctx.character, "Swift", "TimeDome", true)
 	end,
 }
 THEMES.drums = {
@@ -800,15 +800,23 @@ local activeByCharacter: { [Model]: { cancel: () -> () } } = {}
 local OBSERVER_RANGE = 110 -- a que distância os OUTROS sentem a cena (tela/congelamento)
 
 --- Congela a animação de todo personagem visível (o servidor já travou o movimento) — "o tempo parou".
-local function freezeWorld(except: Model, seconds: number)
+local function freezeWorld(except: Model, seconds: number, radius: number)
+	local root = except:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local function inRange(m: Model): boolean
+		if radius <= 0 or not root then
+			return true
+		end
+		local r = m:FindFirstChild("HumanoidRootPart") :: BasePart?
+		return r ~= nil and (r.Position - root.Position).Magnitude <= radius
+	end
 	for _, p in Players:GetPlayers() do
 		local c = p.Character
-		if c and c ~= except then
+		if c and c ~= except and inRange(c) then
 			FX.Hitstop(c, seconds)
 		end
 	end
 	for _, d in Workspace:GetChildren() do
-		if d:IsA("Model") and d ~= except and d:FindFirstChildOfClass("Humanoid") and not Players:GetPlayerFromCharacter(d) then
+		if d:IsA("Model") and d ~= except and d:FindFirstChildOfClass("Humanoid") and not Players:GetPlayerFromCharacter(d) and inRange(d) then
 			FX.Hitstop(d, seconds)
 		end
 	end
@@ -1032,9 +1040,11 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		end)
 		FX.SetOutline(character, GOLD)
 		-- "o tempo parou": todo mundo em volta congela a animação; a tela de quem vê responde
-		local freeze = tonumber(cut.FreezeSeconds) or 0
+		local freezeCfg = cut.FreezeByCharacter and cut.FreezeByCharacter[characterId]
+		local freeze = if freezeCfg then tonumber(freezeCfg.Seconds) or 0 else 0
+		local freezeRadius = if freezeCfg then tonumber(freezeCfg.Radius) or 0 else 0
 		if freeze > 0 then
-			freezeWorld(character, freeze)
+			freezeWorld(character, freeze, freezeRadius)
 		end
 		if isMe then
 			FX.Shake(1.2, 0.5)
@@ -1054,17 +1064,22 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 				cameraShot({ offset = Vector3.new(1.5, 3, -13), look = Vector3.new(0, 1, 0), fov = 64 }, 0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 			end
 		elseif near() then
-			-- quem está perto: flash, dessatura enquanto congelado, nome pequeno da ult e som de "tempo parou"
+			-- quem está perto: flash na cor + nome pequeno da ult; se foi congelado (Guardian, raio pequeno),
+			-- também perde a cor e ouve o "tempo parou"
 			FX.Shake(0.8, 0.4)
 			screenFlash(color, 0.55, 0.45)
-			local cc = post()
-			cc.Saturation = -0.7
-			tween(cc, math.max(freeze, 0.8), { Saturation = 0 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-			task.delay(math.max(freeze, 0.8) + 0.1, function()
-				clearPost(0.3)
-			end)
 			showUltName(awDef.UltName, ("%s despertou"):format(character.Name), color, 1.6, true)
-			FX.PlaySoundAt(character, SHARED, "Awakening_Freeze")
+			local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local frozen = freeze > 0 and myRoot ~= nil and (freezeRadius <= 0 or (myRoot.Position - root.Position).Magnitude <= freezeRadius)
+			if frozen then
+				local cc = post()
+				cc.Saturation = -0.7
+				tween(cc, math.max(freeze, 0.8), { Saturation = 0 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+				task.delay(math.max(freeze, 0.8) + 0.1, function()
+					clearPost(0.3)
+				end)
+				FX.PlaySoundAt(character, SHARED, "Awakening_Freeze")
+			end
 		end
 	end)
 	-- pose de guarda e devolve o controle

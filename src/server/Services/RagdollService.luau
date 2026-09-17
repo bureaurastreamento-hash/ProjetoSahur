@@ -75,6 +75,9 @@ function RagdollService.Ragdoll(player: Player, seconds: number)
 	if not character or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
 		return
 	end
+	if character:GetAttribute("BossRig") ~= nil then
+		return -- forma de boss (Big C.H.O.P.): nunca entra em ragdoll (dono, 2026-09-17)
+	end
 	seconds = math.clamp(seconds, 0.1, CombatConfig.CombatRagdoll.MaxSeconds)
 	local now = os.clock()
 	local existing = states[player]

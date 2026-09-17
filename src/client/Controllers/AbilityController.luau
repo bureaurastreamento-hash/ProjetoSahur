@@ -22,6 +22,9 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -91,11 +94,152 @@ AbilityController.CooldownChanged = Instance.new("BindableEvent")
 -- Handlers do servidor
 -- ---------------------------------------------------------------------------
 
+-- ---------------------------------------------------------------------------
+-- DOMÍNIO DO TEMPO (Swift): cúpula visual no ponto do cast (Ball ForceField + anel no chão + ponteiro
+-- girando devagar), som em loop; quebra (estilhaça) quando o Swift sai; some no fim.
+-- ---------------------------------------------------------------------------
+local domes: { [Model]: { parts: { BasePart }, stopLoop: (() -> ())?, conn: RBXScriptConnection? } } = {}
+local DOME_COLOR = Color3.fromRGB(110, 230, 255)
+
+local function destroyDome(character: Model, shatter: boolean)
+	local d = domes[character]
+	if not d then
+		return
+	end
+	domes[character] = nil
+	if d.conn then
+		d.conn:Disconnect()
+	end
+	if d.stopLoop then
+		d.stopLoop()
+	end
+	for _, p in d.parts do
+		if shatter then
+			TweenService:Create(p, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Transparency = 1, Size = p.Size * 1.08 }):Play()
+		else
+			TweenService:Create(p, TweenInfo.new(0.6, Enum.EasingStyle.Sine), { Transparency = 1 }):Play()
+		end
+		task.delay(0.7, function()
+			p:Destroy()
+		end)
+	end
+end
+
+local function createDome(character: Model, center: Vector3, radius: number, duration: number)
+	destroyDome(character, false)
+	local parts: { BasePart } = {}
+	local function mk(name: string, shape: Enum.PartType, size: Vector3, cf: CFrame, material: Enum.Material, transparency: number): Part
+		local p = Instance.new("Part")
+		p.Name = name
+		p.Shape = shape
+		p.Size = size
+		p.CFrame = cf
+		p.Color = DOME_COLOR
+		p.Material = material
+		p.Transparency = transparency
+		p.Anchored = true
+		p.CanCollide = false
+		p.CanQuery = false
+		p.CanTouch = false
+		p.CastShadow = false
+		p.Parent = Workspace
+		table.insert(parts, p)
+		return p
+	end
+	local dome = mk("TimeDome", Enum.PartType.Ball, Vector3.new(1, 1, 1), CFrame.new(center), Enum.Material.ForceField, 0.5)
+	TweenService:Create(dome, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = Vector3.new(radius * 2, radius * 2, radius * 2) }):Play()
+	local ring = mk("TimeDomeRing", Enum.PartType.Cylinder, Vector3.new(0.2, radius * 2, radius * 2), CFrame.new(center - Vector3.new(0, 2.5, 0)) * CFrame.Angles(0, 0, math.rad(90)), Enum.Material.Neon, 0.88)
+	local hand = mk("TimeDomeHand", Enum.PartType.Block, Vector3.new(0.35, 0.2, radius * 0.9), CFrame.new(center - Vector3.new(0, 2.4, 0)), Enum.Material.Neon, 0.3)
+	local light = Instance.new("PointLight")
+	light.Color = DOME_COLOR
+	light.Range = radius * 1.5
+	light.Brightness = 1.2
+	light.Parent = dome
+	local t0 = os.clock()
+	local conn = RunService.Heartbeat:Connect(function()
+		local t = os.clock() - t0
+		-- ponteiro do relógio girando DEVAGAR (o tempo quase parado) + anel pulsando
+		hand.CFrame = CFrame.new(center - Vector3.new(0, 2.4, 0)) * CFrame.Angles(0, -t * 0.35, 0) * CFrame.new(0, 0, -radius * 0.45)
+		ring.Transparency = 0.86 + math.sin(t * 3) * 0.06
+		dome.Transparency = 0.5 + math.sin(t * 1.5) * 0.05
+	end)
+	local stopLoop = FX.PlaySoundAtStoppable(character, "Swift", "TimeDome_Loop")
+	domes[character] = { parts = parts, stopLoop = stopLoop, conn = conn }
+	task.delay(duration + 0.5, function()
+		if domes[character] and domes[character].parts == parts then
+			destroyDome(character, false)
+		end
+	end)
+end
+
+-- Quem está lento (Player.TimeSlow < 1): animações na mesma velocidade; a própria tela fica azulada.
+local slowCC: ColorCorrectionEffect? = nil
+local function setLocalSlowScreen(slow: number?)
+	if slow and slow < 1 then
+		if not slowCC then
+			local cc = Instance.new("ColorCorrectionEffect")
+			cc.Name = "TimeSlowColor"
+			cc.Saturation = -0.4
+			cc.TintColor = Color3.fromRGB(170, 215, 255)
+			cc.Contrast = 0.1
+			cc.Parent = Lighting
+			slowCC = cc
+		end
+	elseif slowCC then
+		slowCC:Destroy()
+		slowCC = nil
+	end
+end
+local slowedTracks: { [Model]: boolean? } = {}
+local function applyAnimSlow()
+	for _, p in Players:GetPlayers() do
+		local c = p.Character
+		local hum = c and c:FindFirstChildOfClass("Humanoid")
+		local animator = hum and hum:FindFirstChildOfClass("Animator")
+		if not c or not animator then
+			continue
+		end
+		local slow = p:GetAttribute("TimeSlow")
+		local speed = if typeof(slow) == "number" then slow else 1
+		if speed ~= 1 or slowedTracks[c] then
+			for _, track in animator:GetPlayingAnimationTracks() do
+				if math.abs(track.Speed - speed) > 0.01 and track.Speed ~= 0 then
+					track:AdjustSpeed(speed)
+				end
+			end
+			slowedTracks[c] = if speed ~= 1 then true else nil
+		end
+	end
+end
+
 local function onNotifyAbility(character: Model?, characterId: string, abilityId: string, phase: string, data: any)
 	if not character then
 		return
 	end
 	local at: Vector3? = if typeof(data) == "table" and typeof(data.Position) == "Vector3" then data.Position else nil
+	if abilityId == "TimeDome" then
+		local radius = if typeof(data) == "table" then tonumber(data.Radius) or 22 else 22
+		if phase == "start" then
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local center = at or (if root then root.Position else Vector3.zero)
+			createDome(character, center, radius, if typeof(data) == "table" then tonumber(data.Duration) or 8 else 8)
+			FX.PlayAnimation(character, characterId, abilityId)
+			FX.SpawnVFX(character, characterId, abilityId, true, center)
+			FX.PlaySoundAt(character, characterId, abilityId)
+			FX.PlaySoundAt(character, "Shared", "Awakening_Burst")
+			if character == localPlayer.Character then
+				FX.Shake(0.8, 0.5)
+			end
+		elseif phase == "break" then
+			destroyDome(character, true)
+			FX.SpawnVFX(character, characterId, "TimeDome_Break", true, at)
+			FX.PlaySoundAt(character, characterId, "TimeDome_Break")
+			FX.Shake(0.6, 0.4)
+		elseif phase == "end" then
+			destroyDome(character, false)
+		end
+		return
+	end
 	if abilityId == "Awakening" then
 		-- Modo: aura que segue o personagem (VFX.<Char>.Awakening ou Shared.Awakening) + contorno dourado
 		if phase == "start" then
@@ -214,6 +358,12 @@ function AbilityController.Init()
 end
 
 function AbilityController.Start()
+	-- Domínio do Tempo: animações lentas de quem está preso + tela azulada do próprio jogador
+	RunService.Heartbeat:Connect(applyAnimSlow)
+	localPlayer:GetAttributeChangedSignal("TimeSlow"):Connect(function()
+		local v = localPlayer:GetAttribute("TimeSlow")
+		setLocalSlowScreen(if typeof(v) == "number" then v else nil)
+	end)
 	Remotes.GetEvent(Remotes.Events.NotifyAbility).OnClientEvent:Connect(onNotifyAbility)
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityCooldown).OnClientEvent:Connect(onNotifyAbilityCooldown)
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityDenied).OnClientEvent:Connect(onNotifyAbilityDenied)

@@ -80,11 +80,11 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 -- ---------------------------------------------------------------------------
 EnvironmentService.DayNight = {
 	Enabled = true,
-	DayMinutes = 10, -- duração real do dia (NightEnd → NightStart)
-	NightMinutes = 5, -- duração real da noite (NightStart → NightEnd)
+	DayMinutes = 28, -- duração real do dia (NightEnd → NightStart) — dono (2026-09-17): noite = evento RARO
+	NightMinutes = 4, -- duração real da noite (NightStart → NightEnd)
 	NightStart = 18.5, -- ClockTime em que começa a noite
 	NightEnd = 5.5, -- ClockTime em que amanhece
-	StartClock = 15.6, -- hora ao ligar o servidor (fim de tarde: primeira noite chega em ~2,5 min)
+	StartClock = 9.0, -- hora ao ligar o servidor (manhã: primeira noite só depois de ~20 min)
 	-- iluminação extra da noite (interpolada nos ~1,5 h de transição em volta de NightStart/NightEnd)
 	Night = {
 		Brightness = 0.9,

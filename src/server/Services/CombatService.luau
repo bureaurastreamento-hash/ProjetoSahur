@@ -112,6 +112,10 @@ local function restoreWalkSpeed(player: Player)
 		local base = if typeof(formSpeed) == "number" then formSpeed
 			elseif player:GetAttribute("Sprinting") == true then CombatConfig.Sprint.Speed
 			else CombatConfig.WalkSpeed
+		local timeSlow = player:GetAttribute("TimeSlow") -- Domínio do Tempo (AbilityService)
+		if typeof(timeSlow) == "number" then
+			mult *= timeSlow
+		end
 		humanoid.WalkSpeed = base * mult
 	end
 end
@@ -648,6 +652,11 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 	-- O cliente já esperou o wind-up (HitDelay) antes de pedir, animando na hora do clique: o cooldown
 	-- conta a partir do clique, e a hitbox é resolvida agora (vítimas vistas pelo cliente × caixa tolerante).
 	state.nextAttackAt = math.max(now, state.nextAttackAt - attackCfg.HitDelay)
+	-- Domínio do Tempo: quem está lento espera proporcionalmente mais entre golpes
+	local timeSlow = player:GetAttribute("TimeSlow")
+	if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then
+		state.nextAttackAt = now + (state.nextAttackAt - now) / timeSlow
+	end
 
 	notifyAttack:FireAllClients(character, attackId, comboIndex)
 

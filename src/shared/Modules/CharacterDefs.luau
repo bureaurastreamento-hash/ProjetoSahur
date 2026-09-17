@@ -38,6 +38,11 @@
 	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
 	  Heal        { Amount }                                         -> cura o próprio lançador
 	  Shield      { Multiplier, Duration }                           -> multiplica dano RECEBIDO (0.5 = metade)
+	  TimeDome    { Radius, Duration, SlowMultiplier, SelfMultiplier, BreakMultiplier }
+	                                                                 -> DOMÍNIO DO TEMPO (Swift): cúpula fixa no ponto do cast; quem está
+	                                                                    dentro anda/ataca/recarrega a SlowMultiplier (0.25 = 4× mais lento),
+	                                                                    o lançador a SelfMultiplier. Se o lançador SAI, a cúpula quebra e ele
+	                                                                    fica a BreakMultiplier até Duration acabar. Atributo Player.TimeSlow.
 ]]
 
 export type Effect = {
@@ -158,12 +163,14 @@ CharacterDefs.Characters = {
 				AwakenedEffect = { Type = "AreaDamage", Radius = 11, Damage = 16, Delay = 0.15, StunSeconds = 1.2, Knockback = { Speed = 30, Duration = 0.2, Ragdoll = 1.2 } },
 			},
 			{
-				Id = "Tempest",
-				DisplayName = "Tempestade",
+				Id = "TimeDome",
+				DisplayName = "Domínio do Tempo",
 				Cooldown = 30,
 				EnergyCost = 100,
-				CastTime = 1.5,
-				Effect = { Type = "MultiHitArea", Radius = 10, Damage = 6, Hits = 5, Interval = 0.3 },
+				CastTime = 0.8,
+				-- dono (2026-09-17): cúpula onde tudo fica MUITO lento e o Swift um pouco mais rápido; sair
+				-- quebra a cúpula e o Swift fica muito rápido até o fim
+				Effect = { Type = "TimeDome", Radius = 22, Duration = 8, SlowMultiplier = 0.25, SelfMultiplier = 1.25, BreakMultiplier = 2.2 },
 			},
 		},
 	} :: CharacterDef,

@@ -22,6 +22,7 @@ local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
@@ -97,6 +98,31 @@ function MovementService.Teleport(player: Player, character: Model, direction: V
 	return true
 end
 
+--- Hit de chegada do dash para a frente / Piscar (CombatConfig.Dash.ArrivalHit): dano fixo sem combo;
+--- vítima bem de frente = empurrão longe em vez do hit.
+local function arrivalHit(player: Player, character: Model, direction: Vector3)
+	local cfg = CombatConfig.Dash.ArrivalHit
+	if not cfg or not HealthService.IsAlive(character) or player.Character ~= character then
+		return
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local dir = Vector3.new(direction.X, 0, direction.Z)
+	dir = if dir.Magnitude > 0.1 then dir.Unit else root.CFrame.LookVector
+	for _, victim in Hitbox.InDirection(character, dir, cfg.Range, cfg.Width, cfg.Height, cfg.MaxTargets) do
+		local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+		local toVictim = if vRoot then Vector3.new(vRoot.Position.X - root.Position.X, 0, vRoot.Position.Z - root.Position.Z) else Vector3.zero
+		local front = toVictim.Magnitude > 0.1 and dir:Dot(toVictim.Unit) >= cfg.FrontDot
+		if front then
+			CombatService.ResolveHit(player, character, victim, cfg.Damage, false, cfg.Knockback, { KnockbackDirection = dir })
+		else
+			CombatService.ResolveHit(player, character, victim, cfg.Damage, false)
+		end
+	end
+end
+
 --- Q de um personagem com DashOverride (Swift = Piscar): teleporta em vez de dar dash; um cooldown só
 --- (mostrado nos dois "kinds" do HUD). Usa a mesma trava DashingUntil por CastTime.
 local function doDashOverride(player: Player, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean)
@@ -127,6 +153,14 @@ local function doDashOverride(player: Player, character: Model, ability: any, di
 	player:SetAttribute(ATTR_DASHING_UNTIL, now + (ability.CastTime or 0))
 	local characterId = player:GetAttribute("CharacterId")
 	notifyAbility:FireAllClients(character, if typeof(characterId) == "string" then characterId else "", ability.Id, "start", { Teleported = true })
+	-- chegou: hit de chegada (só quando o Piscar foi para a FRENTE da câmera)
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local look = if root then root.CFrame.LookVector else direction
+	if direction:Dot(Vector3.new(look.X, 0, look.Z)) >= 0 then
+		task.delay(0.05, function()
+			arrivalHit(player, character, direction)
+		end)
+	end
 end
 
 local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
@@ -185,6 +219,10 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 		return
 	end
 	local cooldown = if sideways then cfg.SideCooldown else cfg.ForwardBackCooldown
+	local timeSlow = player:GetAttribute("TimeSlow")
+	if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then
+		cooldown /= timeSlow -- Domínio do Tempo
+	end
 	if not noCooldown then
 		if sideways then
 			state.sideReadyAt = now + cooldown
@@ -198,6 +236,12 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	local scale = if sideways then CharacterDefs.DashTuning.SideScale else CharacterDefs.DashTuning.ForwardScale
 	player:SetAttribute(ATTR_DASHING_UNTIL, now + cfg.Duration * scale)
 	notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind })
+	-- dash para a FRENTE (não lateral, não para trás): hit de chegada no fim do deslocamento
+	if not sideways and direction:Dot(facing) > 0 then
+		task.delay(cfg.Duration * scale, function()
+			arrivalHit(player, character, direction)
+		end)
+	end
 end
 
 --- Está no meio de um dash (Q)?

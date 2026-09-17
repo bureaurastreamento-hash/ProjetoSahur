@@ -206,7 +206,8 @@ do Swift) dá um HIT ao chegar (dano, não conta combo; bem de frente = empurra 
 ragdoll; ult do Swift vira DOMÍNIO DO TEMPO (cúpula: tudo dentro muito lento, Swift um pouco mais rápido; sair
 quebra a cúpula e o Swift fica MUITO rápido até acabar); animações faltantes/erradas viram PROCEDURAIS por
 código com o tempo exato de cada ação (equipe pode substituir colando id).
-- **Leva 1 — combate (pedidos acima)**: FreezeRadius só Guardian (18 studs, 1,3 s; outros 0); dash frente/Blink
+- **Leva 1 — combate (pedidos acima)** — FEITA 2026-09-17 (testado via MCP: domínio 1,25 → sair 2,2 → nil; ragdoll
+  do boss bloqueado; noite 28/4 min começando 9h; hit de chegada só o dono testa com Q/Piscar): FreezeRadius só Guardian (18 studs, 1,3 s; outros 0); dash frente/Blink
   com hit de chegada (Dash.ArrivalHit: dano 4, "bem de frente" = dot > 0,8 → knockback forte sem ragdoll);
   BigChop imune a ragdoll (HealthService/RagdollService checam `BossRig`); Swift/Tempest → "Domínio do Tempo"
   (`TimeDome` effect: raio 22, 8 s, slow 0,25× de WalkSpeed/anim/cooldown pra quem está dentro, Swift ×1,25;

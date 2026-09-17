@@ -277,7 +277,7 @@ local function run(myToken: number)
 	if not wait_(1.6, myToken) then
 		return
 	end
-	ability("B", "Swift", "Tempest", "start")
+	ability("B", "Swift", "TimeDome", "start", { Position = nil, Radius = 22, Duration = 3 })
 	if not wait_(1.4, myToken) then
 		return
 	end

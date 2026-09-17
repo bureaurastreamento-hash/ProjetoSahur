@@ -95,6 +95,18 @@ CombatConfig.Dash = {
 	ForwardBackCooldown = 4.0,
 	SideCooldown = 2.0,
 	SideDot = 0.5, -- |direção·frente da câmera| abaixo disso = lateral
+	-- Dono (2026-09-17): dash para a FRENTE (e o Piscar do Swift) dá um HIT ao chegar — dano fixo, NÃO conta
+	-- combo. Quem estiver "bem de frente" (direção do dash · atacante→vítima ≥ FrontDot) em vez do hit é
+	-- EMPURRADO longe (Knockback, sem ragdoll). Dash lateral/para trás não bate.
+	ArrivalHit = {
+		Damage = 4,
+		Range = 6,
+		Width = 5,
+		Height = 6,
+		MaxTargets = 3,
+		FrontDot = 0.8,
+		Knockback = { Speed = 70, Duration = 0.35, Up = 12 } :: Knockback,
+	},
 }
 
 -- Ragdoll de combate: cai por `seconds` (juntas soltas, sem agir), permite follow-ups.
@@ -165,10 +177,11 @@ CombatConfig.Awakening = {
 		BurstRadius = 12,
 		BurstDamage = 5,
 		BurstKnockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.0 } :: Knockback,
-		-- "O tempo para": no estouro TODOS os outros jogadores congelam (WalkSpeed 0 + sem agir) por
-		-- FreezeSeconds (dono, 2026-09-16: aceito). FreezeRadius = 0 → o servidor inteiro; > 0 → só quem está perto.
-		FreezeSeconds = 1.3,
-		FreezeRadius = 0,
+		-- "O tempo para" (dono, 2026-09-17): NÃO é global. Só os personagens em FreezeByCharacter congelam
+		-- quem está a Radius studs por Seconds no estouro (WalkSpeed 0 + sem agir; o cliente trava animação).
+		FreezeByCharacter = {
+			Guardian = { Seconds = 1.3, Radius = 18 },
+		},
 	},
 }
 
