@@ -200,6 +200,30 @@ Memória entre sessões. Atualizar depois de cada mudança.
   menu Dev): lista pesquisável de todos os efeitos de `Assets.VFX.Packs`, clique toca em você
   (Shift = 12 studs à frente) e imprime `[VfxPreview] Packs/...` no Output.
 
+## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado, 27 services / 0 erros na análise)
+**Onde paramos**: Levas 1–6 do plano de polimento FEITAS (combate, animações procedurais base/habilidades/emotes,
+sons, trailer com avatares reais + coisas de fundo). O dono vai TESTAR TUDO e mandar uma lista com: VFX do F7
+(`Lib/…`) para ajustar, poses procedurais feias (nome do clipe em `ProcAnimDefs.luau`), ritmo/ângulos do trailer.
+**Próximo passo quando ele voltar**: (1) aplicar a lista dele em lote; (2) **Leva 8 — animações "realistas" por
+personagem** (abaixo); (3) Leva 7 (balanceamento/2 clientes/menus).
+**Regras novas do dono (2026-09-17)**: tempo só para com o Guardian (raio 18); dash frente/Piscar = hit de chegada
+(de frente = joga longe); Big C.H.O.P. nunca ragdolla; Swift ult = Domínio do Tempo (30 studs, 14 s, 0,08×, 1×
+por despertar, sair = quebra e 3×); noite rara (28/4 min); bonecos "de verdade" (física, ragdoll, leash, DEV
+Trazer boneco); animações procedurais mandam sobre as dos packs (`team = true` no clipe devolve à equipe).
+**Ferramentas desta sessão**: screenshots do Studio (scratchpad `shot.sh`/`burst.sh`/`slow.sh`: KWin ativa a
+janela + spectacle; painéis abrem pelo servidor via `PlayerGui.<Gui>.Panel.Visible` em run_script_in_play_mode);
+preview de poses = `run_code` clonando ModuleScripts (require do DataModel de edição fica em cache) + rigs R6
+com só o HRP ancorado; log do cliente em `~/.var/app/org.vinegarhq.Vinegar/.../logs/*_last.log` (grep FLog::Error).
+**Leva 8 — animações "realistas" por personagem (dono, 2026-09-17, ainda não começada)**:
+- Idle com pose própria que "respira" (peso, balanço sutil) por personagem; andar/correr com jeito próprio
+  ("maneiro"), cada personagem seu estilo; VARIAÇÕES de todas as animações por personagem (socos, hit, dash,
+  block…): nada repetido entre personagens. Hoje Idle/Walk/Run são as da equipe (Shared) e os clipes de combate
+  são compartilhados (`Shared/*`). Caminho: ProcAnimDefs com chaves `<Char>/M1_1` etc. resolvidas antes de
+  `Shared/…` (Assets.ResolveFolder já faz isso para animações da equipe; o gancho FX.ProcAnim precisa tentar
+  `<Char>/Nome` antes de `Shared/Nome`), + Idle/Walk/Run procedurais por personagem (MovementController toca
+  Shared/Idle|Walk|Run via FX.PlayAnimation: basta criar os clipes e o gancho pegar) com camadas de respiração.
+- O dono só vai avaliar as animações depois disso ("tem bonecos duros ainda").
+
 ## PLANO DE POLIMENTO (dono, 2026-09-17) — levas, uma por vez
 Decisões do dono: o tempo NÃO para globalmente (só o Guardian, raio pequeno); todo dash pra FRENTE (e o Piscar
 do Swift) dá um HIT ao chegar (dano, não conta combo; bem de frente = empurra longe); Big C.H.O.P. nunca entra em
@@ -261,8 +285,13 @@ código com o tempo exato de cada ação (equipe pode substituir colando id).
   gravar e apontar ritmo/ângulos.
 - **Leva 6 — Trailer (plano original)** (TRAILER_ASSETS.md).
 - **Leva 7 — Balanceamento com gente + o que o dono ainda não testou (2 clientes) + menus feedback.**
+- **Leva 8 — Animações "realistas" por personagem** (ver RETOMAR AQUI).
+- **Trailer (2026-09-17, 2ª passada)**: atores principais/E/F/W com AVATARES REAIS (`CAST` em TrailerService:
+  guilacartinhasgames, gaubriel567895, humanoider_20, Ravi132012, skibid, ToduroDemais — todos carregam no
+  Studio, sem repetir; fallback boneco colorido); ações de fundo afastadas do foco (dupla a ~60 studs, dançarino
+  a 50, corredor de −70 a +70, curioso do altar mais atrás).
 
-## Retomar aqui (última sessão: 2026-09-16, madrugada — tudo commitado, 27 services / 0 erros)
+## Retomar aqui — HISTÓRICO (sessão 2026-09-16; o atual está no topo)
 
 ### PRÓXIMO PASSO (decidido com o dono no fim da sessão): arrumar o TRAILER — sons, animações e timing
 Ler **`TRAILER_ASSETS.md`** (inventário plano a plano do que toca no trailer, o que está VAZIO, o que é fallback e

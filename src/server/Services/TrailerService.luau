@@ -73,10 +73,38 @@ local function wait_(t: number, myToken: number): boolean
 	return running and token == myToken
 end
 
---- Ator R6 (sem avatar: cinza) com Humanoid/Animator, colorido pelo personagem (só o torso).
-local function makeActor(name: string, characterId: string, cf: CFrame, color: Color3?): Model?
+-- Elenco (dono, 2026-09-17): os atores usam AVATARES REAIS de quem joga (o dono + participantes), sem repetir.
+-- Ordem = prioridade; quem não carregar (sem internet/nome inválido) cai no boneco colorido.
+local CAST = { "guilacartinhasgames", "gaubriel567895", "humanoider_20", "Ravi132012", "skibid", "ToduroDemais" }
+local castIndex = 0
+local descCache: { [string]: HumanoidDescription } = {}
+
+local function nextDescription(): HumanoidDescription?
+	while castIndex < #CAST do
+		castIndex += 1
+		local userName = CAST[castIndex]
+		local cached = descCache[userName]
+		if cached then
+			return cached
+		end
+		local ok, desc = pcall(function()
+			local userId = Players:GetUserIdFromNameAsync(userName)
+			return Players:GetHumanoidDescriptionFromUserId(userId)
+		end)
+		if ok and typeof(desc) == "Instance" then
+			descCache[userName] = desc :: HumanoidDescription
+			return desc :: HumanoidDescription
+		end
+		Log.debug(("[TrailerService] avatar de %s não carregou: %s"):format(userName, tostring(desc)))
+	end
+	return nil
+end
+
+--- Ator R6 com Humanoid/Animator. `real` = tenta o próximo avatar real do elenco; senão boneco colorido.
+local function makeActor(name: string, characterId: string, cf: CFrame, color: Color3?, real: boolean?): Model?
+	local desc = if real then nextDescription() else nil
 	local ok, model = pcall(function()
-		return Players:CreateHumanoidModelFromDescription(Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
+		return Players:CreateHumanoidModelFromDescription(desc or Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
 	end)
 	if not ok or typeof(model) ~= "Instance" then
 		return nil
@@ -86,17 +114,19 @@ local function makeActor(name: string, characterId: string, cf: CFrame, color: C
 	for _, d in m:GetDescendants() do
 		if d:IsA("Script") or d:IsA("LocalScript") then
 			d:Destroy()
-		elseif d:IsA("BasePart") then
+		elseif d:IsA("BasePart") and not desc then
 			d.Color = Color3.fromRGB(215, 205, 190)
 		end
 	end
-	local torso = m:FindFirstChild("Torso") :: BasePart?
-	if torso and color then
-		torso.Color = color
-	end
-	local head = m:FindFirstChild("Head") :: BasePart?
-	if head then
-		head.Color = Color3.fromRGB(235, 200, 170)
+	if not desc then
+		local torso = m:FindFirstChild("Torso") :: BasePart?
+		if torso and color then
+			torso.Color = color
+		end
+		local head = m:FindFirstChild("Head") :: BasePart?
+		if head then
+			head.Color = Color3.fromRGB(235, 200, 170)
+		end
 	end
 	local hum = m:FindFirstChildOfClass("Humanoid") :: Humanoid
 	hum.DisplayName = name
@@ -302,16 +332,18 @@ local function run(myToken: number)
 	local GREEN = Color3.fromRGB(120, 255, 160)
 	local GREY = Color3.fromRGB(120, 120, 130)
 	-- atores principais na praça
-	makeActor("A", "Brawler", CFrame.new(PLAZA + Vector3.new(-3, 0, 0)) * CFrame.Angles(0, -math.pi / 2, 0), ORANGE)
-	makeActor("B", "Swift", CFrame.new(PLAZA + Vector3.new(3, 0, 0)) * CFrame.Angles(0, math.pi / 2, 0), BLUE)
-	makeActor("C", "Mystic", CFrame.new(PLAZA + Vector3.new(14, 0, 12)) * CFrame.Angles(0, math.rad(200), 0), PURPLE)
-	makeActor("D", "Guardian", CFrame.new(PLAZA + Vector3.new(-12, 0, 14)) * CFrame.Angles(0, math.rad(150), 0), GOLD)
-	-- FUNDO: X e Y trocando socos o trailer inteiro num canto; Z dançando sem parar; W provocando; S "sahur"
-	makeActor("X", "Sahur", CFrame.new(PLAZA + Vector3.new(24, 0, -20)), GREEN)
-	makeActor("Y", "Brawler", CFrame.new(PLAZA + Vector3.new(28, 0, -20)), GREY)
-	makeActor("Z", "Swift", CFrame.new(PLAZA + Vector3.new(-26, 0, -12)) * CFrame.Angles(0, math.rad(40), 0), GREY)
-	makeActor("W", "Mystic", CFrame.new(PLAZA + Vector3.new(-4, 0, 24)) * CFrame.Angles(0, math.rad(180), 0), GREY)
-	makeActor("R", "Swift", CFrame.new(PLAZA + Vector3.new(-40, 0, -30)), GREY)
+	castIndex = 0
+	makeActor("A", "Brawler", CFrame.new(PLAZA + Vector3.new(-3, 0, 0)) * CFrame.Angles(0, -math.pi / 2, 0), ORANGE, true)
+	makeActor("B", "Swift", CFrame.new(PLAZA + Vector3.new(3, 0, 0)) * CFrame.Angles(0, math.pi / 2, 0), BLUE, true)
+	makeActor("C", "Mystic", CFrame.new(PLAZA + Vector3.new(14, 0, 12)) * CFrame.Angles(0, math.rad(200), 0), PURPLE, true)
+	makeActor("D", "Guardian", CFrame.new(PLAZA + Vector3.new(-12, 0, 14)) * CFrame.Angles(0, math.rad(150), 0), GOLD, true)
+	-- FUNDO (bem atrás do acontecimento principal, só "vida" na cena): X e Y trocando socos o trailer inteiro
+	-- lá no canto; Z dançando longe; W provocando (a ~14 studs do D: dentro do Terremoto, mas fora do foco)
+	makeActor("X", "Sahur", CFrame.new(PLAZA + Vector3.new(46, 0, -42)), GREEN)
+	makeActor("Y", "Brawler", CFrame.new(PLAZA + Vector3.new(50, 0, -42)), GREY)
+	makeActor("Z", "Swift", CFrame.new(PLAZA + Vector3.new(-44, 0, -28)) * CFrame.Angles(0, math.rad(40), 0), GREY)
+	makeActor("W", "Mystic", CFrame.new(PLAZA + Vector3.new(-22, 0, 28)) * CFrame.Angles(0, math.rad(180), 0), GREY, true)
+	makeActor("R", "Swift", CFrame.new(PLAZA + Vector3.new(-70, 0, -48)), GREY)
 	sparLoop("X", "Y", myToken)
 	emoteLoop("Z", "dance", 5.2, myToken)
 	emoteLoop("W", "taunt", 3.0, myToken)
@@ -330,7 +362,7 @@ local function run(myToken: number)
 	shot({ orbit = "TrailerActor_A", radius = 13, height = 3.5, from = 200, to = 290, t = 7, fov = 58 })
 	task.delay(1.2, function()
 		if running and token == myToken then
-			dashAcross("R", PLAZA + Vector3.new(-40, 3.05, -30), PLAZA + Vector3.new(40, 3.05, -26), 2.2)
+			dashAcross("R", PLAZA + Vector3.new(-70, 3.05, -48), PLAZA + Vector3.new(70, 3.05, -44), 3.0)
 		end
 	end)
 	for i = 1, 4 do
@@ -413,7 +445,7 @@ local function run(myToken: number)
 	title("HABILIDADES", 3)
 	local rw = actorRoot("W")
 	if rw then
-		rw.CFrame = CFrame.lookAt(PLAZA + Vector3.new(-8, 3.05, 18), PLAZA + Vector3.new(-12, 3.05, 14))
+		rw.CFrame = CFrame.lookAt(PLAZA + Vector3.new(-20, 3.05, 24), PLAZA + Vector3.new(-12, 3.05, 14))
 	end
 	ability("D", "Guardian", "Quake", "start")
 	task.delay(0.5, function()
@@ -468,7 +500,7 @@ local function run(myToken: number)
 	EnvironmentService.SetClockOverride(21.5)
 	shot({ from = CFrame.lookAt(Vector3.new(60, 40, 120), ALTAR + Vector3.new(0, 4, -10)), to = CFrame.lookAt(ALTAR + Vector3.new(-16, 8, -26), ALTAR + Vector3.new(0, 4, 0)), t = 6, fov = 60, ease = "Sine" })
 	title("À NOITE, A FLECHA", 3.5, "quem a encontra vira o boss")
-	local e = makeActor("E", "Overlord", CFrame.lookAt(ALTAR + Vector3.new(0, -4.3, -9), ALTAR), Color3.fromRGB(255, 80, 200))
+	local e = makeActor("E", "Overlord", CFrame.lookAt(ALTAR + Vector3.new(0, -4.3, -9), ALTAR), Color3.fromRGB(255, 80, 200), true)
 	if e then
 		local torso = e:FindFirstChild("Torso") :: BasePart?
 		local RitualService = (require :: any)(script.Parent:WaitForChild("RitualService"))
@@ -484,7 +516,7 @@ local function run(myToken: number)
 			arrow.Parent = e
 		end
 	end
-	makeActor("F", "Guardian", CFrame.lookAt(ALTAR + Vector3.new(11, -4.3, -14), ALTAR), GREY) -- curioso reverenciando
+	makeActor("F", "Guardian", CFrame.lookAt(ALTAR + Vector3.new(18, -4.3, -22), ALTAR), GREY, true) -- curioso reverenciando, atrás
 	emoteLoop("F", "bow", 2.6, myToken)
 	if not wait_(6, myToken) then
 		return
