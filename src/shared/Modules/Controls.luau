@@ -120,6 +120,9 @@ end
 
 export type SettingDef = { Default: number | boolean, Options: { number }?, Label: string, Hint: string }
 Controls.Settings = ({
+	-- dono (2026-09-20): "ser o personagem escolhido" = nascer com o MODELO do personagem
+	-- (ServerStorage.CharacterModels.<Id>, feito pela arte) em vez da própria skin; desligado = sua skin
+	CharacterModel = { Default = false, Label = "Ser o personagem escolhido", Hint = "usa o modelo dele em vez da sua skin" },
 	TouchScale = { Default = 1, Options = { 0.8, 1, 1.25 }, Label = "Tamanho dos botões", Hint = "toque" },
 	TouchOpacity = { Default = 0.65, Options = { 0.4, 0.65, 0.9 }, Label = "Opacidade dos botões", Hint = "toque" },
 	TouchMirror = { Default = false, Label = "Canhoto (botões à esquerda)", Hint = "toque" },
@@ -128,7 +131,7 @@ Controls.Settings = ({
 	Haptics = { Default = true, Label = "Vibração ao acertar/apanhar", Hint = "controle e celular" },
 	ScreenShake = { Default = true, Label = "Tremor de tela", Hint = "" },
 } :: { [string]: SettingDef })
-Controls.SettingsOrder = { "AttackHold", "BlockToggle", "ScreenShake", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
+Controls.SettingsOrder = { "CharacterModel", "AttackHold", "BlockToggle", "ScreenShake", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
 
 --- Valor válido para a configuração (nil = inválido).
 function Controls.ValidateSetting(key: any, value: any): (number | boolean)?

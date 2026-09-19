@@ -75,7 +75,7 @@ BossConfig.Loot = {
 		Chance = { 0.55, 0.40, 0.28 },
 		Fallback = 150,
 		Table = {
-			{ kind = "character", id = "Sahur", weight = 1 }, -- PERSONAGEM EXCLUSIVO do boss (dono confirma qual)
+			{ kind = "character", id = "Rick", weight = 1 }, -- PERSONAGEM EXCLUSIVO do boss (dono, 2026-09-20: Rick)
 			{ kind = "cosmetic", id = "aura_boss", weight = 3 },
 			{ kind = "cosmetic", id = "cape_boss", weight = 3 },
 			{ kind = "emote", id = "scene_boss", weight = 2 },

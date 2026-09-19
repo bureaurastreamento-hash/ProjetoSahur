@@ -65,7 +65,8 @@ export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
 	UnlockCost: number, -- moedas; 0 = todos começam com ele (só vale com Access = "coins"/nil)
-	Access: string?, -- nil/"coins" = pontos | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs) | "admin" = só devs, escondido dos outros
+	Access: string?, -- nil/"coins" = pontos | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs) | "admin" = só devs, escondido dos outros | "drop" = só cai do boss (BossConfig.Loot)
+	Model: string?, -- nome do rig em ServerStorage.CharacterModels (arte) para "Ser o personagem escolhido"; nil = o Id
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
@@ -395,9 +396,23 @@ CharacterDefs.Characters = {
 	} :: CharacterDef,
 }
 
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Sahur", "Overlord" }
+-- PERSONAGEM EXCLUSIVO DO BOSS (dono, 2026-09-20): Rick (Rick Prime, Rick and Morty). Só cai do loot do boss
+-- (Access "drop"). Kit PROVISÓRIO = cópia do Mystic até a reformulação dos personagens (ataques/ult/efeitos
+-- próprios ficam para a leva dos 5 decididos: Bruno Gollini, Jotaro, Dio, Rick Prime, Kira).
+CharacterDefs.Characters.Rick = {
+	Id = "Rick",
+	DisplayName = "Rick Prime",
+	UnlockCost = 0,
+	Access = "drop",
+	Tagline = "Exclusivo: cai do boss (top 3 de dano)",
+	Color = Color3.fromRGB(120, 220, 160),
+	Image = "",
+	Abilities = CharacterDefs.Characters.Mystic.Abilities, -- PROVISÓRIO
+} :: CharacterDef
 
---- "coins" | "vip" | "early" | "admin" | "form" (só via ritual, nunca selecionável)
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Sahur", "Overlord" }
+
+--- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string
 	return def.Access or "coins"
 end

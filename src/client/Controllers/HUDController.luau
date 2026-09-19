@@ -77,6 +77,8 @@ local scoreboard: Frame
 local scoreList: Frame
 local scoreTemplate: TextLabel
 local banner: TextLabel
+local toasts: Frame
+local toastTemplate: Frame
 local comboLabel: TextLabel
 local comboToken = 0
 local selectList: Frame
@@ -106,7 +108,7 @@ local function ownsCharacter(id: string): boolean
 	end
 	local access = CharacterDefs.AccessOf(def)
 	local dev = localPlayer:GetAttribute("IsDeveloper") == true
-	if access == "early" or access == "admin" then
+	if access == "early" or access == "admin" or access == "drop" then
 		return dev
 	elseif access == "vip" then
 		return dev or localPlayer:GetAttribute("Pass_vip") == true or localPlayer:GetAttribute("Pass_all_characters") == true
@@ -151,6 +153,52 @@ showBanner = function(text: string, seconds: number)
 			banner.Visible = false
 		end
 	end)
+end
+
+--- Pop-up minimalista no canto direito (nível, maestria, conquista, item): sem som, some sozinho
+--- (dono, 2026-09-20: "no máximo um pop-up minimalista no canto sem atrapalhar").
+local toastOrder = 0
+function HUDController.ShowToast(title: string, sub: string?, color: Color3?)
+	toastOrder += 1
+	local t = toastTemplate:Clone()
+	t.Visible = true
+	t.LayoutOrder = toastOrder
+	;(t:FindFirstChild("Title") :: TextLabel).Text = title
+	;(t:FindFirstChild("Sub") :: TextLabel).Text = sub or ""
+	if color then
+		(t:FindFirstChild("Stripe") :: Frame).BackgroundColor3 = color
+	end
+	-- entra deslizando da direita, some com fade
+	t.Position = UDim2.new(0, 60, 0, 0)
+	t.BackgroundTransparency = 1
+	t.Parent = toasts
+	TweenService:Create(t, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 0.25 }):Play()
+	task.delay(3.5, function()
+		local tween = TweenService:Create(t, TweenInfo.new(0.4), { BackgroundTransparency = 1 })
+		for _, d in t:GetDescendants() do
+			if d:IsA("TextLabel") then
+				TweenService:Create(d, TweenInfo.new(0.4), { TextTransparency = 1 }):Play()
+			elseif d:IsA("Frame") or d:IsA("UIStroke") then
+				TweenService:Create(d, TweenInfo.new(0.4), if d:IsA("UIStroke") then { Transparency = 1 } else { BackgroundTransparency = 1 }):Play()
+			end
+		end
+		tween:Play()
+		tween.Completed:Wait()
+		t:Destroy()
+	end)
+	-- no máximo 4 na tela
+	local alive = {}
+	for _, c in toasts:GetChildren() do
+		if c:IsA("Frame") and c ~= toastTemplate then
+			table.insert(alive, c)
+		end
+	end
+	if #alive > 4 then
+		table.sort(alive, function(a, b)
+			return a.LayoutOrder < b.LayoutOrder
+		end)
+		alive[1]:Destroy()
+	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -415,6 +463,8 @@ function HUDController.CharacterStatus(id: string): (string, boolean, boolean)
 		suffix = "VIP"
 	elseif access == "early" then
 		suffix = "em breve"
+	elseif access == "drop" then
+		suffix = "drop do boss"
 	else
 		suffix = ("%d pts"):format(def.UnlockCost)
 	end
@@ -606,6 +656,8 @@ function HUDController.Init()
 	scoreList = get(scoreboard, "List") :: Frame
 	scoreTemplate = get(scoreList, "Template") :: TextLabel
 	banner = get(hud, "Banner") :: TextLabel
+	toasts = get(hud, "Toasts") :: Frame
+	toastTemplate = get(toasts, "Template") :: Frame
 	comboLabel = get(hud, "Combo") :: TextLabel
 
 	local panel = get(selectGui, "Panel")
@@ -708,15 +760,13 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProgression).OnClientEvent:Connect(function(event: string, data: any)
 		data = if typeof(data) == "table" then data else {}
+		-- progressão = pop-up discreto, sem som (dono, 2026-09-20)
 		if event == "levelup" then
-			showBanner(("NÍVEL %d! +%d pontos"):format(tonumber(data.level) or 0, tonumber(data.coins) or 0), 3)
-			FX.PlaySoundUI("Shared", "UltReady")
+			HUDController.ShowToast(("Nível %d"):format(tonumber(data.level) or 0), ("+%d pontos"):format(tonumber(data.coins) or 0))
 		elseif event == "mastery_up" then
-			showBanner(("MAESTRIA %d — %s"):format(tonumber(data.level) or 0, tostring(data.characterId)), 3)
-			FX.PlaySoundUI("Match", "Victory")
+			HUDController.ShowToast(("Maestria %d"):format(tonumber(data.level) or 0), tostring(data.characterId), Color3.fromRGB(90, 190, 255))
 		elseif event == "mission_done" then
-			showBanner(("Missão concluída: %s (+%d pontos)"):format(tostring(data.text), tonumber(data.coins) or 0), 4)
-			FX.PlaySoundUI("Match", "Victory")
+			HUDController.ShowToast("Missão concluída", ("%s · +%d pontos"):format(tostring(data.text), tonumber(data.coins) or 0))
 		end
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)
@@ -731,7 +781,7 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied).OnClientEvent:Connect(function(characterId: string, reason: string)
 		local msgs = { coins = "Pontos insuficientes", locked = "Personagem bloqueado", not_loaded = "Dados ainda carregando", already_owned = "Já desbloqueado",
-			vip = "Exclusivo do passe VIP (Loja, tecla L)", early = "Acesso antecipado: ainda não liberado" }
+			vip = "Exclusivo do passe VIP (Loja, tecla L)", early = "Acesso antecipado: ainda não liberado", drop = "Exclusivo: só cai do boss (top 3 de dano)" }
 		local remaining = reason:match("^in_combat:(%d+)")
 		if remaining then
 			showBanner(("Em combate: fique %ss sem levar dano para trocar"):format(remaining), 2.5)

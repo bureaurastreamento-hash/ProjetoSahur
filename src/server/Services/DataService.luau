@@ -409,8 +409,8 @@ function DataService.HasCharacter(player: Player, characterId: string): boolean
 	local access = CharacterDefs.AccessOf(def)
 	if access == "form" then
 		return false -- forma de boss (ritual): nunca pela seleção
-	elseif access == "early" or access == "admin" then
-		return player:GetAttribute("IsDeveloper") == true
+	elseif access == "early" or access == "admin" or access == "drop" then
+		return player:GetAttribute("IsDeveloper") == true -- "drop": só quem ganhou do boss (já voltou true acima)
 	elseif access == "vip" then
 		return player:GetAttribute("Pass_vip") == true or player:GetAttribute("Pass_all_characters") == true
 			or player:GetAttribute("IsDeveloper") == true

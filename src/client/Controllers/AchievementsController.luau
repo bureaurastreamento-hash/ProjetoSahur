@@ -204,8 +204,8 @@ function AchievementsController.Start()
 		if event ~= "done" or typeof(data) ~= "table" then
 			return
 		end
-		local reward = if typeof(data.reward) == "string" and data.reward ~= "" then " · " .. data.reward else ""
-		HUDController.ShowBanner(("CONQUISTA: %s%s"):format(tostring(data.name), reward), 3)
+		local reward = if typeof(data.reward) == "string" then data.reward else ""
+		HUDController.ShowToast(("Conquista: %s"):format(tostring(data.name)), reward, Color3.fromRGB(255, 200, 70)) -- pop-up discreto, sem som
 		if panel.Visible then
 			AchievementsController.Refresh()
 		end

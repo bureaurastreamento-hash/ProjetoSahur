@@ -33,6 +33,15 @@ function SettingsService.Start()
 		if profile.settings[key :: string] ~= valid then
 			profile.settings[key :: string] = valid
 			DataService.MarkDirty(player)
+			if key == "CharacterModel" then
+				-- troca de skin/modelo = respawn (como trocar de personagem); em combate espera o próximo
+				local ok, CharacterService = pcall(require, script.Parent:WaitForChild("CharacterService"))
+				if ok and player:GetAttribute("InMatch") ~= true then
+					task.defer(function()
+						(CharacterService :: any).Load(player)
+					end)
+				end
+			end
 		end
 	end)
 end

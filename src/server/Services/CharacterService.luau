@@ -13,12 +13,16 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 local StarterPlayer = game:GetService("StarterPlayer")
 local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Log = require(Modules:WaitForChild("Log"))
+local Controls = require(Modules:WaitForChild("Controls"))
+local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local DataService = require(script.Parent:WaitForChild("DataService"))
 
 local CharacterService = {}
 
@@ -94,9 +98,43 @@ pickSpawn = function(player: Player): CFrame
 		* CFrame.Angles(0, math.rad(spawn.Orientation.Y), 0)
 end
 
+--- Rig do personagem feito pela arte (ServerStorage.CharacterModels.<Model|Id>), se a configuração
+--- "Ser o personagem escolhido" estiver ligada e o modelo existir. nil = usa a skin do jogador.
+local warnedMissing: { [string]: boolean } = {}
+local function characterModelFor(player: Player): Model?
+	local profile = DataService.GetProfile(player)
+	if not profile or Controls.Setting(profile.settings, "CharacterModel") ~= true then
+		return nil
+	end
+	local id = player:GetAttribute("CharacterId")
+	local def = if typeof(id) == "string" then CharacterDefs.Get(id) else nil
+	if not def then
+		return nil
+	end
+	local folder = ServerStorage:FindFirstChild("CharacterModels")
+	local name = def.Model or def.Id
+	local src = if folder then folder:FindFirstChild(name) else nil
+	if not src or not src:IsA("Model") or not src:FindFirstChildOfClass("Humanoid") or not src:FindFirstChild("HumanoidRootPart") then
+		if not warnedMissing[name] then
+			warnedMissing[name] = true
+			Log.debug(("[CharacterService] sem ServerStorage.CharacterModels.%s (rig R6 com Humanoid+HRP): usando a skin do jogador"):format(name))
+		end
+		return nil
+	end
+	local m = src:Clone()
+	for _, d in m:GetDescendants() do
+		if d:IsA("BasePart") then
+			d.Anchored = false
+		elseif d:IsA("Script") or d:IsA("LocalScript") then
+			d:Destroy() -- scripts da arte não rodam; os nossos vêm de StarterCharacterScripts
+		end
+	end
+	return m
+end
+
 local function buildCharacter(player: Player): (Model?, Humanoid?, BasePart?)
 	local ok, model = pcall(function()
-		return Players:CreateHumanoidModelFromDescription(getDescription(player), Enum.HumanoidRigType.R6)
+		return characterModelFor(player) or Players:CreateHumanoidModelFromDescription(getDescription(player), Enum.HumanoidRigType.R6)
 	end)
 	if not ok or typeof(model) ~= "Instance" then
 		warn(("[CharacterService] não consegui montar o rig R6 de %s: %s"):format(player.Name, tostring(model)))

@@ -417,13 +417,17 @@ function CosmeticsController.Start()
 			for _, it in data.items do
 				table.insert(names, tostring(it.name))
 			end
-			local how = if data.reason == "vendor" then "COMPRADO" elseif data.reason == "trade" then "TROCA" else "ROLETA"
+			local reason = tostring(data.reason or "")
+			local how = if reason == "vendor" then "Comprado" elseif reason == "trade" then "Troca" elseif reason == "boss" then "Drop do boss" elseif reason:find("achievement") then "Conquista" else "Roleta"
 			hintLabel.Text = ("%s: %s!"):format(how, table.concat(names, ", "))
-			HUDController.ShowBanner(("%s: %s"):format(how, table.concat(names, ", ")), 3)
-			FX.PlaySoundUI("Shared", "UltReady")
-			local character = localPlayer.Character
-			if character then
-				FX.Flash(character, Color3.fromRGB(255, 220, 90), 0.4)
+			-- item ganho = pop-up discreto (sem som); só a roleta/compra que o jogador pediu faz som e brilho
+			HUDController.ShowToast(how, table.concat(names, ", "), Color3.fromRGB(255, 200, 70))
+			if reason == "" or reason == "vendor" then
+				FX.PlaySoundUI("Shared", "UltReady")
+				local character = localPlayer.Character
+				if character then
+					FX.Flash(character, Color3.fromRGB(255, 220, 90), 0.4)
+				end
 			end
 			if panel.Visible then
 				task.delay(0.3, refreshList)

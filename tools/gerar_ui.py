@@ -240,6 +240,17 @@ hud = screen("HUD", [
           xalign="Center", extra={"Visible": False, "TextStrokeTransparency": 0.5, "TextWrapped": True}),
     label("Combo", "", ud(0, 80, 0, 30), ud(0.5, 120, 0.5, -40), anchor=(0.5, 0.5), font=FONT_B, ts=22,
           color=GOLD, xalign="Center", extra={"TextStrokeTransparency": 0.5}),
+    # Pop-ups minimalistas no canto direito (nível, maestria, conquista, item ganho) — SEM som (dono, 2026-09-20).
+    # HUDController.ShowToast clona o Template, desliza da direita e some sozinho.
+    frame("Toasts", ud(0, 300, 0, 260), ud(1, -12, 0.3, 0), anchor=(1, 0), t=1, children=[
+        listlayout("Vertical", 6, halign="Right"),
+        frame("Template", ud(0, 280, 0, 46), ud(0, 0, 0, 0), bg=BG, t=0.25, visible=False, children=[
+            corner(8), stroke(),
+            frame("Stripe", ud(0, 3, 1, -12), ud(0, 6, 0.5, 0), anchor=(0, 0.5), bg=GOLD, t=0, children=[corner(2)]),
+            label("Title", "", ud(1, -22, 0, 18), ud(0, 16, 0, 6), font=FONT_B, ts=13),
+            label("Sub", "", ud(1, -22, 0, 14), ud(0, 16, 0, 25), ts=11, color=MUTED),
+        ]),
+    ]),
 ])
 write("HUD.model.json", hud)
 
