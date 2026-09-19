@@ -245,7 +245,29 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-20 — lojas/trocas + taberna + clã com patentes + loot do boss; FALTA o dono testar)
+## RETOMAR AQUI (última sessão: 2026-09-20 — tudo commitado e no GitHub; o dono pediu /clear)
+
+### PRÓXIMA TAREFA (pedido do dono ao sair, 2026-09-20) — só PLANEJADA, nada feito no código
+**Boss x3 invocado pelo jogador (F no altar com a flecha) deve nascer no MAPA, quase no centro, perto dos
+spawns, e ANDAR LIVREMENTE pelo mapa — sem lugar fixo para ficar/voltar.** Hoje `BossService.summon` põe o
+boss em `BossSpawn` (santuário, agora na muralha sul) e a IA se prende a `BossArena`/`ArenaRadius` (leash).
+Plano:
+1. `BossService.summon(player, byName, power)`: se `power > 1` (invocado pela flecha), spawn = centro do
+   mapa entre os spawns (média das posições dos `SpawnLocation`/`Spawn*` do Workspace, raycast ao chão,
+   afastado ≥ 15 studs de qualquer jogador) em vez de `BossSpawn`. O boss automático de 2 h (power 1)
+   continua no santuário.
+2. Novo campo `f.roam = true` na `Fight`: na IA (`aiLoop`/`playersNear`/`pickTarget`), sem `roam` mantém
+   `BossArena`+`ArenaRadius`; com `roam` o raio de busca é o mapa inteiro (`BossConfig.RoamRadius`, ~300)
+   e o centro é a posição ATUAL do boss (nunca volta para um ponto). Sem jogador por perto: vaga
+   (MoveTo aleatório a 30–60 studs, a cada ~6 s) em vez de voltar ao spawn. Conferir `lastSeenPlayer`/
+   despawn por inatividade (não deixar despawnar só por estar longe da arena).
+3. `BossConfig`: `RoamRadius`, `RoamStepMin/Max`, `RoamIdleSeconds`; `Form.*` (jogador-boss) não muda.
+4. HUD/`BossController`: aviso "BOSS x3 À SOLTA" + seta/marcador de direção (opcional) porque ele não
+   tem lugar fixo.
+5. Testar via MCP: `BossService.SummonStrong(p, 3)` em play, conferir posição inicial e que ele persegue
+   pelo mapa (bonecos de treino); depois o dono testa.
+
+## Sessão 2026-09-20 (detalhe do que foi feito; FALTA o dono testar)
 
 ### Leva 2026-09-20 (2) — lista do dono — FEITO no código (testado via MCP o que dava)
 1. **Postes da flecha** (ArrowPad/Spot/Post/Arm/Lantern 0..7) saíram do `gerar_arena.py`/`ArenaExtras`

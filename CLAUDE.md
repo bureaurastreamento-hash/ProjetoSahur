@@ -15,6 +15,10 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## PRÓXIMO PASSO (2026-09-20, ao sair) — ver PROGRESSO.md "RETOMAR AQUI" / "PRÓXIMA TAREFA"
+- Boss x3 (invocado pela flecha, F no altar) nasce no centro do mapa entre os spawns e ANDA LIVRE (sem
+  `BossArena`/leash, sem voltar ao spawn). Só planejado; o boss automático de 2 h continua no santuário.
+
 ## Estado do design (2026-09-20) — lojas divididas (ver PROGRESSO.md "RETOMAR AQUI")
 - **Loja (L)** = só Robux. **Vendedor** (E no NPC da Lojinha, `VendorGui`) = tudo por PONTOS e por PONTOS DE
   EVENTO (`profile.eventPoints`, schema 3; `Price`/`EventPrice` em `CosmeticsConfig`; `VendorConfig.Catalog`)
