@@ -21,9 +21,9 @@ DataConfig.SimulateFailure = false
 
 -- Pontos são para ser DIFÍCEIS de juntar (dono, 2026-09-20: "deixar mais difícil conseguir pontos").
 DataConfig.Rewards = {
-	Win = 30,
-	Loss = 5,
-	Kill = 3,
+	Win = 20,
+	Loss = 3,
+	Kill = 2,
 }
 
 export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number }

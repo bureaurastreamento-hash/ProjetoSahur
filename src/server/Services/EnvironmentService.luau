@@ -89,14 +89,15 @@ EnvironmentService.DayNight = {
 	-- Noite "realista" (dono, 2026-09-19): luar azulado frio, sombras profundas, névoa mais densa e escura
 	-- (o que está longe some), cor dessaturada; as luzes do mapa (tochas/postes) ganham bloom.
 	Night = {
-		Brightness = 0.35,
-		Ambient = Color3.fromRGB(14, 16, 26),
-		OutdoorAmbient = Color3.fromRGB(26, 30, 50),
-		ExposureCompensation = -0.35,
-		ColorShift_Top = Color3.fromRGB(150, 175, 230),
-		ColorShift_Bottom = Color3.fromRGB(40, 48, 80),
-		Atmosphere = { Density = 0.42, Offset = 0.05, Color = Color3.fromRGB(120, 130, 165), Decay = Color3.fromRGB(30, 36, 60), Glare = 0.05, Haze = 2.4 },
-		Color = { Saturation = -0.18, Contrast = 0.16, Brightness = -0.03, TintColor = Color3.fromRGB(205, 215, 255) },
+		-- noite de LUA CHEIA (dono, 2026-09-20: "fica muito escuro"): ambiente azulado mas legível
+		Brightness = 0.9,
+		Ambient = Color3.fromRGB(46, 52, 78),
+		OutdoorAmbient = Color3.fromRGB(70, 80, 120),
+		ExposureCompensation = -0.05,
+		ColorShift_Top = Color3.fromRGB(170, 190, 240),
+		ColorShift_Bottom = Color3.fromRGB(70, 80, 120),
+		Atmosphere = { Density = 0.34, Offset = 0.1, Color = Color3.fromRGB(135, 145, 180), Decay = Color3.fromRGB(50, 58, 90), Glare = 0.08, Haze = 1.8 },
+		Color = { Saturation = -0.12, Contrast = 0.1, Brightness = 0.02, TintColor = Color3.fromRGB(215, 225, 255) },
 		Bloom = { Intensity = 0.6, Size = 24, Threshold = 1.2 },
 	},
 }

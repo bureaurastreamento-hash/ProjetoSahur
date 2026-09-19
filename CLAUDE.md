@@ -20,6 +20,10 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   EVENTO (`profile.eventPoints`, schema 3; `Price`/`EventPrice` em `CosmeticsConfig`; `VendorConfig.Catalog`)
   + TROCAS entre jogadores (`TradeService`/`TradeController`/`TradeConfig`; os dois no vendedor; pronto →
   confirmar). Economia e carga da ult ficaram mais duras a pedido do dono. Falta o dono testar (2 clientes).
+- **Clã com patentes** (`ClanConfig.Ranks`: total depositado → vagas, saque líder/oficial c/ teto diário, bônus
+  XP/pontos, cosméticos `Access = "clan"`; membro nunca saca). **Loot do boss por ranking** (`BossConfig.Loot`,
+  `BossLootService`: top 3 raro, 4º–5º bom, resto básico). **Taberna** = `Workspace.Taberna` montada por
+  `tools/montar_taberna.luau` via MCP (não passa pelo Rojo; o dono salva o place). Postes da flecha saíram.
 
 ## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
 - **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/

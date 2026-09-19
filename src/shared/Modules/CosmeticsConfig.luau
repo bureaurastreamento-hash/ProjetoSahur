@@ -29,7 +29,8 @@ export type Item = {
 	Weight: number, -- peso na roleta (maior = mais comum); 0 = todo mundo tem
 	Color: Color3?, -- capa/aura: cor
 	Style: string?, -- aura: wisps | flame | smoke | sparkle | electric
-	Access: string?, -- nil = moedas | "vip" = passe VIP
+	Access: string?, -- nil = moedas | "vip" = passe VIP | "clan" = clã com patente >= ClanRank (enquanto estiver nele)
+	ClanRank: number?, -- Access "clan": patente mínima (ClanConfig.Ranks)
 	Season: string?, -- LIMITADO: id da temporada (AchievementsConfig) que solta este item
 	Limited: boolean?, -- true = nunca entra na roleta; acabou a temporada, só um DEV dá
 	Price: number?, -- vendedor: preço em pontos (nil = não vende por pontos)
@@ -53,6 +54,12 @@ CosmeticsConfig.Items = {
 	{ Id = "aura_ember", Name = "Aura de Brasa", Category = "aura", Weight = 0, Color = Color3.fromRGB(255, 120, 40), Style = "flame" },
 	{ Id = "aura_shadow", Name = "Aura das Sombras", Category = "aura", Weight = 0, Color = Color3.fromRGB(60, 40, 80), Style = "smoke" },
 	{ Id = "aura_gold", Name = "Aura Dourada", Category = "aura", Weight = 0, Access = "vip", Color = Color3.fromRGB(255, 210, 80), Style = "flame" },
+	-- BOSS (só no loot do top 3 de dano — BossConfig.Loot; fora da roleta e do vendedor; trocáveis)
+	{ Id = "aura_boss", Name = "Aura do Big C.H.O.P.", Category = "aura", Weight = 0, Color = Color3.fromRGB(255, 40, 40), Style = "flame" },
+	{ Id = "cape_boss", Name = "Capa do Caçador de Boss", Category = "cape", Weight = 0, Color = Color3.fromRGB(40, 10, 10) },
+	-- CLÃ (ClanConfig.Ranks: liberados pela patente, só enquanto o jogador está no clã; não trocam, não vendem)
+	{ Id = "cape_clan", Name = "Capa da Ordem (clã)", Category = "cape", Weight = 0, Access = "clan", ClanRank = 4, Color = Color3.fromRGB(120, 20, 30) },
+	{ Id = "aura_clan", Name = "Aura da Lenda (clã)", Category = "aura", Weight = 0, Access = "clan", ClanRank = 5, Color = Color3.fromRGB(255, 80, 60), Style = "electric" },
 	-- EVENTO (só com pontos de evento, ganhos nos mini eventos do Canion; fora da roleta)
 	{ Id = "cape_canyon", Name = "Capa do Canion", Category = "cape", Weight = 0, EventPrice = 40, Color = Color3.fromRGB(196, 140, 70) },
 	{ Id = "aura_canyon", Name = "Aura de Areia", Category = "aura", Weight = 0, EventPrice = 80, Color = Color3.fromRGB(230, 190, 120), Style = "smoke" },
@@ -91,6 +98,7 @@ CosmeticsConfig.Emotes = {
 	{ Id = "scene_power", Price = 600, Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80), Theme = "rock" },
 	{ Id = "scene_dark", Price = 600, Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200), Theme = "void" },
 	{ Id = "scene_storm", Price = 600, Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255), Theme = "lightning" },
+	{ Id = "scene_boss", Name = "Cena: Devorador (boss)", Kind = "scene", Weight = 0, Duration = 5, Color = Color3.fromRGB(255, 50, 40), Theme = "flesh" },
 	{ Id = "scene_canyon", Name = "Cena: Tempestade de Areia", Kind = "scene", Weight = 0, EventPrice = 150, Duration = 5, Color = Color3.fromRGB(230, 190, 120), Theme = "stone" },
 	{ Id = "s1_emote_arrow", Name = "Flecha ao Alto (Passe 1)", Kind = "scene", Weight = 0, Duration = 4, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255), Theme = "arcane" },
 } :: { Emote }

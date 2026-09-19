@@ -29,8 +29,7 @@ local BossRigs = require(Modules:WaitForChild("BossRigs"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
-local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
-local CosmeticsService: any = nil -- carregado no Start (evita ciclo)
+local BossLootService: any = nil -- carregado no Start (evita ciclo; ele puxa CosmeticsService)
 
 local BossService = {}
 
@@ -318,35 +317,12 @@ end
 -- ---------------------------------------------------------------------------
 
 local function rewardAndFinish(f: Fight)
-	local total = 0
-	local top: Player? = nil
-	local topDamage = 0
-	for player, dmg in f.damageBy do
-		total += dmg
-		if dmg > topDamage then
-			top, topDamage = player, dmg
-		end
+	-- loot por posição no ranking de dano (BossConfig.Loot / BossLootService)
+	local rewards, top = {}, nil
+	if BossLootService then
+		rewards, top = BossLootService.Distribute(f.damageBy, nil)
 	end
-	local rewards = {}
-	for player, dmg in f.damageBy do
-		if player.Parent == Players and total > 0 then
-			local coins = math.max(BossConfig.RewardMin, math.floor(BossConfig.RewardPool * dmg / total))
-			if player == top then
-				coins += BossConfig.RewardTopBonus
-			end
-			coins = DataService.RewardCoins(player, coins)
-			ProgressionService.OnBossDefeated(player, dmg, dmg / total, player == top)
-			local drop: string? = nil
-			if player == top and math.random() < BossConfig.TopDropChance and CosmeticsService then
-				drop = CosmeticsService.FreeRoll(player, "boss")
-			end
-			table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg), drop = drop })
-		end
-	end
-	table.sort(rewards, function(a, b)
-		return a.damage > b.damage
-	end)
-	Log.debug(("[BossService] boss derrotado; %d participante(s), dano total %d"):format(#rewards, math.floor(total)))
+	Log.debug(("[BossService] boss derrotado; %d participante(s)"):format(#rewards))
 	broadcast("defeated", { rewards = rewards, top = if top then top.Name else nil })
 end
 
@@ -573,9 +549,11 @@ function BossService.Init()
 end
 
 function BossService.Start()
-	local okC, cos = pcall(require, script.Parent:WaitForChild("CosmeticsService"))
-	if okC then
-		CosmeticsService = cos
+	local okL, loot = pcall(require, script.Parent:WaitForChild("BossLootService"))
+	if okL then
+		BossLootService = loot
+	else
+		warn("[BossService] sem BossLootService: " .. tostring(loot))
 	end
 	findExtras()
 	if not spawnPart and not arenaPart then

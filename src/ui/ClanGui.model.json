@@ -1391,7 +1391,7 @@
           ],
           [
            1,
-           -196
+           -212
           ]
          ]
         },
@@ -1947,7 +1947,7 @@
         "Size": {
          "UDim2": [
           [
-           0.3,
+           0.22,
            -6
           ],
           [
@@ -2076,7 +2076,7 @@
         "Size": {
          "UDim2": [
           [
-           0.3,
+           0.24,
            -6
           ],
           [
@@ -2088,7 +2088,7 @@
         "Position": {
          "UDim2": [
           [
-           0.35,
+           0.24,
            0
           ],
           [
@@ -2113,7 +2113,96 @@
         "BackgroundTransparency": 0.0,
         "Text": "DEPOSITAR",
         "Font": "GothamBold",
-        "TextSize": 12,
+        "TextSize": 11,
+        "TextColor3": {
+         "Color3": [
+          0.96,
+          0.96,
+          0.97
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.84,
+          "ApplyStrokeMode": "Border"
+         }
+        }
+       ]
+      },
+      {
+       "name": "Withdraw",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Withdraw",
+        "Size": {
+         "UDim2": [
+          [
+           0.22,
+           -6
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0.5,
+           0
+          ],
+          [
+           1,
+           -36
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          1
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.08,
+          0.08,
+          0.09
+         ]
+        },
+        "BackgroundTransparency": 0.0,
+        "Text": "SACAR",
+        "Font": "GothamBold",
+        "TextSize": 11,
         "TextColor3": {
          "Color3": [
           0.96,
@@ -2165,7 +2254,7 @@
         "Size": {
          "UDim2": [
           [
-           0.3,
+           0.24,
            -6
           ],
           [
@@ -2254,7 +2343,7 @@
         "Size": {
          "UDim2": [
           [
-           0.3,
+           0.24,
            -6
           ],
           [
@@ -2291,7 +2380,7 @@
         "BackgroundTransparency": 0.0,
         "Text": "DISSOLVER",
         "Font": "GothamBold",
-        "TextSize": 12,
+        "TextSize": 11,
         "TextColor3": {
          "Color3": [
           0.96,
@@ -2335,6 +2424,59 @@
          }
         }
        ]
+      },
+      {
+       "name": "Rank",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Rank",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           -122
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          1
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "",
+        "Font": "GothamMedium",
+        "TextSize": 11,
+        "TextColor3": {
+         "Color3": [
+          1.0,
+          0.8,
+          0.3
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextYAlignment": "Center",
+        "BorderSizePixel": 0,
+        "RichText": false,
+        "TextWrapped": true
+       }
       }
      ]
     },

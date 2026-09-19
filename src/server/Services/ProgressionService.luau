@@ -47,7 +47,9 @@ function ProgressionService.AddXP(player: Player, amount: number, reason: string
 		return
 	end
 	local mult = player:GetAttribute("XpMultiplier") -- passe VIP (ShopService)
-	amount = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1))
+	local clanBonus = player:GetAttribute("ClanXpBonus") -- patente do clã (ClanService)
+	amount = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1)
+		* (1 + (if typeof(clanBonus) == "number" then clanBonus else 0)))
 	profile.xp += amount
 	local leveled = false
 	while profile.level < ProgressionConfig.MaxLevel do

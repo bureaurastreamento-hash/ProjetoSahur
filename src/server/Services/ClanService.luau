@@ -3,6 +3,9 @@
 	ClanService (servidor)
 	Clãs: criar (custa pontos), convidar (só online, mesmo servidor), entrar/sair, cargos
 	(líder > oficial > membro), expulsar, cofre de pontos, dissolver. Base da guerra de clã/dominação.
+	PATENTES (ClanConfig.Ranks): sobem pelo total depositado; liberam vagas, saque (líder/oficial, teto
+	diário) e bônus de XP/pontos + cosmético para os membros (atributos ClanRank/ClanXpBonus/ClanCoinBonus
+	no Player, lidos por ProgressionService/DataService/CosmeticsService).
 
 	Persistência: DataStore "Clans_v1", uma chave por clã ("clan_<TAG>"; a TAG é o id único). Toda
 	mutação passa por UpdateAsync (vários servidores podem mexer no mesmo clã). O perfil guarda só
@@ -146,11 +149,20 @@ local function setTag(player: Player, tag: string?)
 	CharacterService.RefreshDisplayName(player)
 end
 
+--- Perks da patente no Player (some quando sai do clã).
+local function applyRankPerks(player: Player, clan: Clan?)
+	local rank = if clan then ClanConfig.RankOf(clan) else nil
+	player:SetAttribute("ClanRank", if rank then rank.Level else 0)
+	player:SetAttribute("ClanXpBonus", if rank then rank.XpBonus else 0)
+	player:SetAttribute("ClanCoinBonus", if rank then rank.CoinBonus else 0)
+end
+
 local function pushState(player: Player, clan: Clan?)
 	if player.Parent ~= Players then
 		return
 	end
 	local me = memberOf(clan, player)
+	applyRankPerks(player, if me then clan else nil)
 	notifyClan:FireClient(player, "state", { clan = clan, role = if me then me.role else nil })
 end
 
@@ -229,6 +241,7 @@ actions.create = function(player, rawName, rawTag)
 			leader = player.UserId,
 			members = { [tostring(player.UserId)] = { name = player.Name, role = "leader", joinedAt = os.time() } },
 			vault = 0,
+			contributed = 0,
 			wins = 0,
 			createdAt = os.time(),
 		} :: Clan
@@ -253,7 +266,7 @@ actions.invite = function(player, rawUserId)
 	if ClanConfig.RoleRank(me.role) < ClanConfig.RoleRank("officer") then
 		return deny(player, "só líder e oficiais convidam")
 	end
-	if ClanConfig.MemberCount(clan) >= ClanConfig.MaxMembers then
+	if ClanConfig.MemberCount(clan) >= ClanConfig.RankOf(clan).MaxMembers then
 		return deny(player, "o clã está cheio")
 	end
 	local target = Players:GetPlayerByUserId(tonumber(rawUserId) or 0)
@@ -285,7 +298,7 @@ actions.accept = function(player)
 		return deny(player, "perfil temporário: não dá para entrar em clã agora")
 	end
 	local ok, result = update(inv.tag, function(clan)
-		if not clan or ClanConfig.MemberCount(clan) >= ClanConfig.MaxMembers then
+		if not clan or ClanConfig.MemberCount(clan) >= ClanConfig.RankOf(clan).MaxMembers then
 			return nil
 		end
 		clan.members[tostring(player.UserId)] = { name = player.Name, role = "member", joinedAt = os.time() }
@@ -413,11 +426,13 @@ actions.deposit = function(player, rawAmount)
 	end
 	-- debita antes (se o UpdateAsync falhar, devolve)
 	DataService.AddCoins(player, -amount)
+	local before = ClanConfig.RankOf(clan)
 	local ok, result = update(clan.tag, function(c)
 		if not c or not c.members[tostring(player.UserId)] then
 			return nil
 		end
 		c.vault = (c.vault or 0) + amount
+		c.contributed = (c.contributed or 0) + amount
 		return c
 	end)
 	if not ok then
@@ -425,7 +440,65 @@ actions.deposit = function(player, rawAmount)
 		return deny(player, tostring(result))
 	end
 	DataService.SaveNow(player, "clan_deposit")
-	info(player, ("+%d pontos no cofre"):format(amount))
+	info(player, ("+%d pontos no cofre (doação: ninguém recupera)"):format(amount))
+	local after = ClanConfig.RankOf(result :: Clan)
+	if after.Level > before.Level then
+		for _, other in Players:GetPlayers() do
+			if myTag[other] == clan.tag then
+				info(other, ("O clã subiu para %s (patente %d)!"):format(after.Name, after.Level))
+			end
+		end
+		Log.debug(("[ClanService] [%s] subiu para %s"):format(clan.tag, after.Name))
+	end
+	pushClan(clan.tag, result :: Clan)
+end
+
+--- Saque do cofre: só líder/oficial conforme a patente, teto por dia (ClanConfig.Ranks). Membro nunca.
+actions.withdraw = function(player, rawAmount)
+	local clan = currentClan(player)
+	local me = memberOf(clan, player)
+	if not clan or not me then
+		return deny(player, "você não está em um clã")
+	end
+	local rank = ClanConfig.RankOf(clan)
+	if not ClanConfig.CanWithdraw(rank, me.role) then
+		if rank.Withdraw == nil then
+			local nxt = ClanConfig.NextRank(clan)
+			return deny(player, if nxt then ("saque abre na patente %s (%d pontos depositados)"):format(nxt.Name, nxt.Points) else "saque indisponível")
+		end
+		return deny(player, if rank.Withdraw == "leader" then "nesta patente só o líder saca" else "membro não saca do cofre")
+	end
+	local amount = math.floor(tonumber(rawAmount) or 0)
+	if amount < ClanConfig.WithdrawMin then
+		return deny(player, ("saque mínimo: %d pontos"):format(ClanConfig.WithdrawMin))
+	end
+	local today = os.time() // 86400
+	local reason: string? = nil
+	local ok, result = update(clan.tag, function(c)
+		if not c or not c.members[tostring(player.UserId)] then
+			return nil
+		end
+		if (c.vault or 0) < amount then
+			reason = "o cofre não tem tanto"
+			return nil
+		end
+		local used = if c.withdrawDay == today then (c.withdrawnToday or 0) else 0
+		if used + amount > rank.WithdrawCap then
+			reason = ("teto de saque hoje: %d (já saiu %d)"):format(rank.WithdrawCap, used)
+			return nil
+		end
+		c.vault -= amount
+		c.withdrawDay = today
+		c.withdrawnToday = used + amount
+		return c
+	end)
+	if not ok then
+		return deny(player, reason or tostring(result))
+	end
+	DataService.AddCoins(player, amount)
+	DataService.SaveNow(player, "clan_withdraw")
+	info(player, ("-%d pontos do cofre para você"):format(amount))
+	Log.debug(("[ClanService] %s sacou %d de [%s]"):format(player.Name, amount, clan.tag))
 	pushClan(clan.tag, result :: Clan)
 end
 

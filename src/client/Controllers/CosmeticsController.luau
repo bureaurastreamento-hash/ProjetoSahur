@@ -134,6 +134,9 @@ local function ownsItem(item: CosmeticsConfig.Item): boolean
 	local inProfile = profile ~= nil and typeof(profile.cosmetics) == "table" and table.find(profile.cosmetics.owned or {}, item.Id) ~= nil
 	if item.Access == "vip" then
 		return localPlayer:GetAttribute("Pass_vip") == true or inProfile
+	elseif item.Access == "clan" then
+		local rank = localPlayer:GetAttribute("ClanRank")
+		return typeof(rank) == "number" and rank >= (item.ClanRank or 1)
 	end
 	return inProfile
 end
@@ -212,6 +215,8 @@ local function refreshList()
 			state, color = "equipar", COLOR_OWNED
 		elseif item.Access == "vip" then
 			state, color = "VIP", COLOR_PRICE
+		elseif item.Access == "clan" then
+			state, color = ("clã patente %d"):format(item.ClanRank or 1), COLOR_PRICE
 		else
 			state, color = "Vendedor · Robux", COLOR_PRICE
 		end
@@ -220,7 +225,7 @@ local function refreshList()
 				requestCosmetic:FireServer("unequip", item.Id)
 			elseif owned then
 				requestCosmetic:FireServer("equip", item.Id)
-			elseif item.Access ~= "vip" then
+			elseif item.Access == nil then
 				requestCosmetic:FireServer("pick_robux", item.Id) -- escolher com Robux
 			end
 		end)
@@ -404,7 +409,7 @@ function CosmeticsController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyCosmetics).OnClientEvent:Connect(function(event: string, data: any)
 		if event == "denied" and typeof(data) == "table" then
-			local msgs = { coins = "Pontos insuficientes para girar", vip = "Exclusivo do passe VIP", locked = "Você não tem este item", not_loaded = "Dados ainda carregando", already_owned = "Você já tem", all_owned = "Você já tem tudo da roleta!" }
+			local msgs = { coins = "Pontos insuficientes para girar", vip = "Exclusivo do passe VIP", clan = "Exclusivo de clã com patente alta", locked = "Você não tem este item", not_loaded = "Dados ainda carregando", already_owned = "Você já tem", all_owned = "Você já tem tudo da roleta!" }
 			Log.debug(("[CosmeticsController] negado: %s"):format(tostring(data.reason)))
 			hintLabel.Text = msgs[data.reason] or tostring(data.reason)
 		elseif event == "rolled" and typeof(data) == "table" and typeof(data.items) == "table" then

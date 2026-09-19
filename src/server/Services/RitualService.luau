@@ -323,7 +323,14 @@ local function spawnArrowAtSpot()
 		end
 	end
 	if #spots == 0 then
-		warn("[RitualService] sem ArrowSpot* no ArenaExtras; ritual desativado")
+		-- sem ArrowSpot* (saíram do mapa em 2026-09-20): insiste no sorteio escondido
+		local cf = randomHiddenSpot()
+		if cf then
+			placeArrow(cf)
+			return
+		end
+		warn("[RitualService] não achei lugar para a flecha; tento de novo em 30 s")
+		task.delay(30, spawnArrowAtSpot)
 		return
 	end
 	local spot = spots[rng:NextInteger(1, #spots)]

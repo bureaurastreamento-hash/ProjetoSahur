@@ -245,7 +245,43 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-20 — lojas divididas + trocas; FALTA o dono testar)
+## RETOMAR AQUI (última sessão: 2026-09-20 — lojas/trocas + taberna + clã com patentes + loot do boss; FALTA o dono testar)
+
+### Leva 2026-09-20 (2) — lista do dono — FEITO no código (testado via MCP o que dava)
+1. **Postes da flecha** (ArrowPad/Spot/Post/Arm/Lantern 0..7) saíram do `gerar_arena.py`/`ArenaExtras`
+   (o sync já apagou do place). `RitualService` sem ArrowSpot insiste no sorteio escondido (30 s de retry).
+2. **Noite mais clara**: `EnvironmentService.DayNight.Night` = lua cheia (Brightness 0.9, ambient 46/52/78,
+   outdoor 70/80/120, exposição -0.05, névoa 0.34). Ajustar ali se ainda estiver escuro/claro demais.
+3. **TABERNA NA CAVERNA**: `tools/montar_taberna.luau` (roda via MCP `run_code`; idempotente) montou
+   `Workspace.Taberna` (247 peças) dentro do `cav` (sala x 325..381, z 28..129, chão -1, teto 26; alcova
+   oeste x 283..325 z 76..112): piso de tábuas, vigas, pilares, 5 mesas redondas c/ banquinhos + lanternas
+   penduradas, mesa longa c/ bancos e louça, lareira na parede leste (fogo + luz), 13 tochas, barris,
+   tapete, piano, quadros, corvo/rádio no mantel, placa "TABERNA DA CAVERNA" na boca do corredor (z 143).
+   Aproveitou o que o dono já tinha: BAR no canto sudoeste (com 6 banquetas), balcão de boticário na
+   parede oeste, porta de entrada no norte (x 369, z 130). Clonou peças de `Moveis taverna` (o monte que
+   sobrou continua na alcova — o dono decide se apaga/guarda em ServerStorage). **O dono precisa SALVAR o
+   place** (Taberna não passa pelo Rojo). Screenshots conferidas via KWin+spectacle (scratchpad `shot.sh`).
+4. **Clã com PATENTES** (`ClanConfig.Ranks`): sobe pelo TOTAL depositado (`clan.contributed`; Bando 0,
+   Companhia 1500, Guilda 4000, Ordem 9000, Lenda 18000). Cada patente: vagas (10→25), quem SACA (ninguém →
+   líder → oficial+) e teto diário de saque (`withdrawDay/withdrawnToday`), bônus de XP (+5..20%) e de
+   pontos (+0..15%) para os membros (atributos `ClanRank/ClanXpBonus/ClanCoinBonus`; `DataService.RewardCoins`
+   e `ProgressionService.AddXP` leem), cosméticos `cape_clan` (Ordem) / `aura_clan` (Lenda) com `Access =
+   "clan"` (só enquanto no clã; não vendem/trocam). **Membro nunca saca; quem depositou não recupera.**
+   `RequestClan("withdraw", n)`; botão SACAR e linha "Patente N · perks · próxima" no `ClanGui`.
+5. **Pontos ainda mais difíceis**: kill 2, vitória 20, derrota 3, level-up 6+2L, conquistas ×0,5, guerra
+   40/10, streak 3.
+6. **LOOT DO BOSS por ranking de dano** (`BossConfig.Loot` + `BossLootService`, usado pelo BossService e
+   pelo BossFormService): 1º–3º = 90/70/55 pts + chance 55/40/28% de SUPER RARO (personagem exclusivo —
+   configurado como **"Sahur"**, o dono confirma —, `aura_boss`, `cape_boss`, `scene_boss`, 40 pts de
+   evento); 4º–5º = 35/30 pts + 45/35% de BOM (15 pts de evento, giro grátis, +60 pts); 6º+ = 12 pts.
+   Item já possuído sai da mesa; sem nada, `Fallback` em pontos. Tela do boss mostra "Nº em dano" e o drop.
+   Testado via MCP: 12 sorteios deram cena/aura do boss e pontos de evento. ATENÇÃO: o teste encheu o
+   perfil DEV do dono (nível 20, itens do boss, ~2100 pts) — usar DEV → ResetData se incomodar.
+- **FALTA o dono testar**: vendedor/trocas (item anterior), taberna ao vivo (luz à noite dentro da
+  caverna), clã: depositar até subir de patente, sacar como líder/membro, cosmético de clã em K; matar o
+  boss com 3+ jogadores e ver os drops.
+
+## Sessão anterior (2026-09-20 — lojas divididas + trocas)
 
 ### Leva 2026-09-20 — LOJAS DIVIDIDAS, VENDEDOR, TROCAS, economia mais dura — FEITO no código
 Pedido do dono: "loja do topbar = Robux; vendedor = trade entre jogadores + tudo de pontos (cosmético/

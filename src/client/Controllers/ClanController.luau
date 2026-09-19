@@ -33,6 +33,7 @@ local acceptButton: TextButton
 local declineButton: TextButton
 local header: TextLabel
 local sub: TextLabel
+local rankLabel: TextLabel
 local tabMembers: TextButton
 local tabInvite: TextButton
 local list: ScrollingFrame
@@ -166,9 +167,21 @@ local function render()
 	createFrame.Visible = c == nil
 	infoFrame.Visible = c ~= nil
 	if c then
-		header.Text = ("%s  [%s]"):format(c.name, c.tag)
+		local rank = ClanConfig.RankOf(c)
+		local nxt = ClanConfig.NextRank(c)
+		header.Text = ("%s  [%s]  ·  %s"):format(c.name, c.tag, rank.Name)
 		sub.Text = ("Cofre: %d pontos  ·  Membros: %d/%d  ·  Você: %s"):format(
-			c.vault or 0, ClanConfig.MemberCount(c), ClanConfig.MaxMembers, ClanConfig.RoleNames[myRole or "member"] or "?")
+			c.vault or 0, ClanConfig.MemberCount(c), rank.MaxMembers, ClanConfig.RoleNames[myRole or "member"] or "?")
+		local perks = {}
+		if rank.XpBonus > 0 then
+			table.insert(perks, ("+%d%% XP"):format(rank.XpBonus * 100))
+		end
+		if rank.CoinBonus > 0 then
+			table.insert(perks, ("+%d%% pontos"):format(rank.CoinBonus * 100))
+		end
+		table.insert(perks, if rank.Withdraw == nil then "ninguém saca" elseif rank.Withdraw == "leader" then ("líder saca até %d/dia"):format(rank.WithdrawCap) else ("oficial+ saca até %d/dia"):format(rank.WithdrawCap))
+		rankLabel.Text = ("Patente %d · %s  ·  %s%s"):format(rank.Level, rank.Name, table.concat(perks, " · "),
+			if nxt then ("  ·  próxima: %s aos %d depositados (%d)"):format(nxt.Name, nxt.Points, c.contributed or 0) else "  ·  patente máxima")
 		if selectedId and not c.members[tostring(selectedId)] then
 			selectedId = nil
 		end
@@ -224,6 +237,7 @@ function ClanController.Start()
 	declineButton = get(createFrame, "Decline") :: TextButton
 	header = get(infoFrame, "Header") :: TextLabel
 	sub = get(infoFrame, "Sub") :: TextLabel
+	rankLabel = get(infoFrame, "Rank") :: TextLabel
 	tabMembers = get(infoFrame, "TabMembers") :: TextButton
 	tabInvite = get(infoFrame, "TabInvite") :: TextButton
 	list = get(infoFrame, "List") :: ScrollingFrame
@@ -292,6 +306,10 @@ function ClanController.Start()
 	local depositButton = get(infoFrame, "Deposit") :: TextButton
 	depositButton.MouseButton1Click:Connect(function()
 		requestClan:FireServer("deposit", tonumber(amountBox.Text) or 0)
+		amountBox.Text = ""
+	end)
+	;(get(infoFrame, "Withdraw") :: TextButton).MouseButton1Click:Connect(function()
+		requestClan:FireServer("withdraw", tonumber(amountBox.Text) or 0)
 		amountBox.Text = ""
 	end)
 	leaveButton.MouseButton1Click:Connect(function()

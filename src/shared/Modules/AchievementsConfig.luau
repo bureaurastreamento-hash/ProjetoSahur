@@ -52,7 +52,7 @@ export type Season = {
 -- ---------------------------------------------------------------------------
 --- Escala dos PONTOS das conquistas (dono, 2026-09-20: pontos mais difíceis). Os valores da lista são
 --- os "cheios"; `CoinsOf` devolve o que se paga de verdade.
-AchievementsConfig.CoinScale = 0.6
+AchievementsConfig.CoinScale = 0.5
 
 function AchievementsConfig.CoinsOf(reward: Reward): number
 	return math.floor((reward.Coins or 0) * AchievementsConfig.CoinScale + 0.5)

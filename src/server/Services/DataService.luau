@@ -319,7 +319,9 @@ end
 --- "Moedas x2" (Player attr CoinMultiplier, ShopService). Retorna o valor realmente dado.
 function DataService.RewardCoins(player: Player, amount: number): number
 	local mult = player:GetAttribute("CoinMultiplier")
-	local final = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1) + 0.5)
+	local clanBonus = player:GetAttribute("ClanCoinBonus") -- patente do clã (ClanService)
+	local final = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1)
+		* (1 + (if typeof(clanBonus) == "number" then clanBonus else 0)) + 0.5)
 	DataService.AddCoins(player, final)
 	return final
 end

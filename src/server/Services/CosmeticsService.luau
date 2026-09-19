@@ -42,6 +42,9 @@ local function owns(profile: any, item: CosmeticsConfig.Item, player: Player): b
 	end
 	if item.Access == "vip" then
 		return player:GetAttribute("Pass_vip") == true or table.find(profile.cosmetics.owned, item.Id) ~= nil
+	elseif item.Access == "clan" then
+		local rank = player:GetAttribute("ClanRank")
+		return typeof(rank) == "number" and rank >= (item.ClanRank or 1)
 	end
 	return table.find(profile.cosmetics.owned, item.Id) ~= nil
 end
@@ -298,7 +301,7 @@ local function onRequestCosmetic(player: Player, action: any, id: any)
 			pendingPick[player] = id -- o cliente abre o prompt do produto "pick" (ShopService)
 			notifyCosmetics:FireClient(player, "pick_pending", { id = id })
 		else
-			deny(player, if item and item.Access == "vip" then "vip" else "already_owned", id)
+			deny(player, if item and item.Access == "vip" then "vip" elseif item and item.Access == "clan" then "clan" else "already_owned", id)
 		end
 		return
 	end
@@ -308,7 +311,7 @@ local function onRequestCosmetic(player: Player, action: any, id: any)
 	end
 	if action == "equip" then
 		if not owns(profile, item, player) then
-			return deny(player, if item.Access == "vip" then "vip" else "locked", id)
+			return deny(player, if item.Access == "vip" then "vip" elseif item.Access == "clan" then "clan" else "locked", id)
 		end
 		profile.cosmetics.equipped[item.Category] = id
 		DataService.MarkDirty(player)
@@ -365,6 +368,9 @@ function CosmeticsService.Start()
 		end)
 		player:GetAttributeChangedSignal("Pass_vip"):Connect(function()
 			apply(player)
+		end)
+		player:GetAttributeChangedSignal("ClanRank"):Connect(function()
+			apply(player) -- saiu do clã / patente mudou: cosmético de clã some ou aparece
 		end)
 		-- perfil pode chegar depois do personagem
 		task.spawn(function()

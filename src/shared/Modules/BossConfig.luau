@@ -62,11 +62,38 @@ BossConfig.Form = {
 	TransformSeconds = 2.5, -- tempo parado/invencível no altar antes de virar (cutscene curta)
 }
 
--- Recompensa: bolo dividido pela fração de dano causado + mínimo para quem participou
-BossConfig.RewardPool = 180
-BossConfig.RewardMin = 10
-BossConfig.RewardTopBonus = 30 -- quem mais causou dano
-BossConfig.TopDropChance = 0.35 -- chance de o top de dano ganhar um giro grátis da roleta (drop raro)
+-- Recompensa (dono, 2026-09-20): LOOT por posição no ranking de dano (BossLootService).
+--   Top 3  -> pontos altos + chance de item SUPER RARO (Rare: personagem exclusivo, cosmético/emote do boss)
+--   4º–5º  -> pontos médios + chance de item BOM (Good: pontos de evento, giro grátis da roleta)
+--   demais -> só pontos básicos
+-- A chance cai com a posição (Chance[i]); item já possuído é sorteado de novo entre os que faltam; se
+-- não sobrou nada, ganha `Fallback` pontos. Pontos passam por DataService.RewardCoins (multiplicadores).
+export type LootEntry = { kind: string, id: string?, amount: number?, weight: number } -- kind: character|cosmetic|emote|eventpoints|roll|coins
+BossConfig.Loot = {
+	Top = {
+		Coins = { 90, 70, 55 }, -- 1º, 2º, 3º
+		Chance = { 0.55, 0.40, 0.28 },
+		Fallback = 150,
+		Table = {
+			{ kind = "character", id = "Sahur", weight = 1 }, -- PERSONAGEM EXCLUSIVO do boss (dono confirma qual)
+			{ kind = "cosmetic", id = "aura_boss", weight = 3 },
+			{ kind = "cosmetic", id = "cape_boss", weight = 3 },
+			{ kind = "emote", id = "scene_boss", weight = 2 },
+			{ kind = "eventpoints", amount = 40, weight = 3 },
+		} :: { LootEntry },
+	},
+	Good = {
+		Coins = { 35, 30 }, -- 4º, 5º
+		Chance = { 0.45, 0.35 },
+		Fallback = 40,
+		Table = {
+			{ kind = "eventpoints", amount = 15, weight = 4 },
+			{ kind = "roll", weight = 3 },
+			{ kind = "coins", amount = 60, weight = 3 },
+		} :: { LootEntry },
+	},
+	Basic = { Coins = 12 }, -- 6º em diante
+}
 
 export type Attack = {
 	Damage: number,

@@ -28,7 +28,6 @@ local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
-local ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
 
 local BossFormService = {}
 
@@ -45,7 +44,7 @@ type Form = {
 
 local active: Form? = nil
 local notifyBoss: RemoteEvent
-local CosmeticsService: any = nil
+local BossLootService: any = nil -- carregado no Start (evita ciclo)
 
 local function broadcast(event: string, data: { [string]: any })
 	data.event = event
@@ -78,35 +77,13 @@ local function spawnCFrame(player: Player): CFrame
 end
 
 local function rewardHunters(f: Form, defeated: boolean)
-	local total = 0
 	local top: Player? = nil
-	local topDamage = 0
-	for player, dmg in f.damageBy do
-		total += dmg
-		if dmg > topDamage then
-			top, topDamage = player, dmg
-		end
-	end
 	local rewards = {}
 	if defeated then
-		for player, dmg in f.damageBy do
-			if player.Parent == Players and total > 0 and player ~= f.player then
-				local coins = math.max(BossConfig.RewardMin, math.floor(BossConfig.RewardPool * dmg / total))
-				if player == top then
-					coins += BossConfig.RewardTopBonus
-				end
-				coins = DataService.RewardCoins(player, coins)
-				ProgressionService.OnBossDefeated(player, dmg, dmg / total, player == top)
-				local drop: string? = nil
-				if player == top and math.random() < BossConfig.TopDropChance and CosmeticsService then
-					drop = CosmeticsService.FreeRoll(player, "boss")
-				end
-				table.insert(rewards, { name = player.Name, coins = coins, damage = math.floor(dmg), drop = drop })
-			end
+		-- loot por posição no ranking de dano (BossConfig.Loot); o jogador-boss não entra
+		if BossLootService then
+			rewards, top = BossLootService.Distribute(f.damageBy, f.player)
 		end
-		table.sort(rewards, function(a, b)
-			return a.damage > b.damage
-		end)
 		broadcast("defeated", { rewards = rewards, top = if top then top.Name else nil, name = BossConfig.Name, by = f.player.Name })
 	else
 		if f.player.Parent == Players then
@@ -228,9 +205,9 @@ function BossFormService.Init()
 end
 
 function BossFormService.Start()
-	local okC, cos = pcall(require, script.Parent:WaitForChild("CosmeticsService"))
+	local okC, cos = pcall(require, script.Parent:WaitForChild("BossLootService"))
 	if okC then
-		CosmeticsService = cos
+		BossLootService = cos
 	end
 	HealthService.Damaged.Event:Connect(function(victim: Model, amount: number, attacker: Player?)
 		local f = active

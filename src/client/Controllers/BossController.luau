@@ -193,21 +193,21 @@ local function onNotifyBoss(event: string, data: any)
 		formEndsAt = nil
 		local lines = { "BOSS DERROTADO!" }
 		local mine = 0
+		local myRank = 0
+		local myDrop: string? = nil
 		if typeof(data.rewards) == "table" then
 			for _, r in ipairs(data.rewards) do
 				if r.name == localPlayer.Name then
 					mine = tonumber(r.coins) or 0
+					myRank = tonumber(r.rank) or 0
+					myDrop = if typeof(r.drop) == "string" then r.drop else nil
 				end
 			end
 		end
 		if mine > 0 then
-			table.insert(lines, ("+%d pontos"):format(mine))
-			if typeof(data.rewards) == "table" then
-				for _, r in data.rewards do
-					if r.name == localPlayer.Name and typeof(r.drop) == "string" then
-						table.insert(lines, ("DROP RARO: %s!"):format(r.drop))
-					end
-				end
+			table.insert(lines, ("%s+%d pontos"):format(if myRank > 0 then ("%dº em dano · "):format(myRank) else "", mine))
+			if myDrop then
+				table.insert(lines, ("%s: %s!"):format(if myRank <= 3 then "DROP RARO" else "DROP", myDrop))
 			end
 		end
 		if data.top then
