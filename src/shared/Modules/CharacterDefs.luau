@@ -173,7 +173,7 @@ CharacterDefs.Characters = {
 				-- quebra a cúpula e o Swift fica muito rápido até o fim
 				-- Cinematic: câmera/efeitos de quem usa (CutsceneController.PlayUltimate); Charge = s até a cúpula
 				-- estourar (casar com a animação 99664142798158), Total = s até a câmera voltar
-				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0, Cinematic = { Charge = 1.1, Total = 2.8 } },
+				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0, Cinematic = { Charge = 1.6, Total = 3.8 } },
 				OncePerAwakening = true,
 			},
 		},
