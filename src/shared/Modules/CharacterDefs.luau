@@ -171,7 +171,9 @@ CharacterDefs.Characters = {
 				CastTime = 0.8,
 				-- dono (2026-09-17): cúpula onde tudo fica MUITO lento e o Swift um pouco mais rápido; sair
 				-- quebra a cúpula e o Swift fica muito rápido até o fim
-				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0 },
+				-- Cinematic: câmera/efeitos de quem usa (CutsceneController.PlayUltimate); Charge = s até a cúpula
+				-- estourar (casar com a animação 99664142798158), Total = s até a câmera voltar
+				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0, Cinematic = { Charge = 1.1, Total = 2.8 } },
 				OncePerAwakening = true,
 			},
 		},
@@ -415,6 +417,16 @@ function CharacterDefs.GetAbility(characterId: string, slot: number): AbilityDef
 		return nil
 	end
 	return def.Abilities[slot]
+end
+
+--- Habilidade pelo Id (ex.: "TimeDome") dentro de um personagem.
+function CharacterDefs.FindAbility(def: CharacterDef, abilityId: string): AbilityDef?
+	for _, ability in def.Abilities do
+		if ability.Id == abilityId then
+			return ability
+		end
+	end
+	return nil
 end
 
 return CharacterDefs

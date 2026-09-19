@@ -1156,6 +1156,155 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 	at(total, finish)
 end
 
+-- ---------------------------------------------------------------------------
+-- Cinemática CURTA de ultimate (Domínio do Tempo etc.): diferente do despertar, NÃO trava o jogador
+-- (a câmera segue o personagem enquanto ele se move). Quem usa: câmera baixa de frente subindo em
+-- espiral até um plano alto atrás durante a carga; no estouro flash + nome + pós-processo; depois volta.
+-- Os outros por perto: efeitos do tema + flash na cor + nome pequeno. Dono (2026-09-19): "ult do Swift:
+-- efeitos e câmera seguindo".
+-- ---------------------------------------------------------------------------
+export type UltimateOpts = {
+	Charge: number, -- s até o estouro (casar com a animação)
+	Total: number, -- s até a câmera voltar
+	Name: string,
+	Subtitle: string?,
+	Color: Color3,
+	Theme: string?, -- THEMES (lightning, arcane, ...)
+	OnBurst: (() -> ())?, -- gancho de quem chamou (ex.: a cúpula "estoura" para o tamanho final)
+}
+
+function CutsceneController.PlayUltimate(character: Model, opts: UltimateOpts)
+	local prev = activeByCharacter[character]
+	if prev then
+		prev.cancel()
+	end
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if not root or not humanoid then
+		return
+	end
+	local charge = math.max(0.3, opts.Charge)
+	local total = math.max(charge + 0.6, opts.Total)
+	local color = opts.Color
+	local isMe = character == localPlayer.Character
+	local camera = Workspace.CurrentCamera
+	local alive = true
+	local steps: { thread } = {}
+	local function at(t: number, fn: () -> ())
+		table.insert(steps, task.delay(t, function()
+			if alive then
+				fn()
+			end
+		end))
+	end
+	local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local near = isMe or (myRoot ~= nil and (myRoot.Position - root.Position).Magnitude <= OBSERVER_RANGE)
+	local folder = Instance.new("Folder")
+	folder.Name = "UltFX_" .. character.Name
+	folder.Parent = Workspace
+	local ctx: ThemeCtx = { character = character, root = root, color = color, folder = folder, burstAt = charge, total = total, alive = function()
+		return alive
+	end, rng = Random.new() }
+	local theme = THEMES[opts.Theme or ""] or THEMES.lightning
+	local savedCameraType = camera and camera.CameraType or Enum.CameraType.Custom
+	local savedFov = camera and camera.FieldOfView or 70
+
+	local function finish()
+		if not alive then
+			return
+		end
+		alive = false
+		activeByCharacter[character] = nil
+		for _, th in steps do
+			pcall(task.cancel, th)
+		end
+		local cleanup = burstCleanup[character]
+		if cleanup then
+			burstCleanup[character] = nil
+			cleanup()
+		end
+		task.delay(1, function()
+			folder:Destroy()
+		end)
+		if isMe then
+			if camera and cameraBusy then
+				releaseCamera()
+				camera.CameraType = savedCameraType
+				camera.FieldOfView = savedFov
+			end
+			setLetterbox(false, 0.35)
+			setVignette(0, 0.5)
+			clearPost(0.6)
+		end
+	end
+	activeByCharacter[character] = { cancel = finish }
+	local diedConn = humanoid.Died:Once(finish)
+	local removedConn = character.AncestryChanged:Connect(function(_, parent)
+		if not parent then
+			finish()
+		end
+	end)
+	at(total + 0.5, function()
+		diedConn:Disconnect()
+		removedConn:Disconnect()
+	end)
+
+	-- carga: efeitos do tema para todo mundo por perto; câmera só de quem usa
+	if near then
+		theme.charge(ctx)
+	end
+	if isMe and camera then
+		camera.CameraType = Enum.CameraType.Scriptable
+		takeCamera(root, { offset = Vector3.new(3, -0.5, -7), look = Vector3.new(0, 1.2, 0), fov = 72 })
+		cameraShot({ offset = Vector3.new(-5, 2.5, -8), look = Vector3.new(0, 1, 0), fov = 58 }, charge, Enum.EasingStyle.Sine)
+		setLetterbox(true, 0.35)
+		setVignette(0.3, charge)
+		local cc, bloom = post()
+		tween(cc, charge, { Saturation = -0.5, Contrast = 0.15, TintColor = color:Lerp(Color3.new(1, 1, 1), 0.7) }, Enum.EasingStyle.Sine)
+		tween(bloom, charge, { Intensity = 0.6 }, Enum.EasingStyle.Sine)
+	end
+	-- estouro
+	at(charge, function()
+		theme.burst(ctx)
+		local cleanup = burstCleanup[character]
+		if cleanup then
+			burstCleanup[character] = nil
+			cleanup()
+		end
+		if opts.OnBurst then
+			opts.OnBurst()
+		end
+		if isMe then
+			FX.Shake(1.0, 0.45)
+			screenFlash(Color3.new(1, 1, 1), 0.9, 0.45)
+			local cc, bloom = post()
+			cc.Saturation = 0.3
+			cc.Contrast = 0.3
+			cc.Brightness = 0.1
+			cc.TintColor = Color3.new(1, 1, 1)
+			bloom.Intensity = 1.5
+			tween(cc, 1.0, { Saturation = 0.05, Contrast = 0.05, Brightness = 0 })
+			tween(bloom, 1.0, { Intensity = 0.3 })
+			showUltName(opts.Name, opts.Subtitle, color, math.max(0.8, total - charge - 0.5))
+			if camera then
+				cameraShot({ offset = Vector3.new(0, 3, -12), look = Vector3.new(0, 1, 0), fov = 80 }, 0)
+				cameraShot({ offset = Vector3.new(6, 7, 16), look = Vector3.new(0, 1, 0), fov = 66 }, math.max(total - charge - 0.4, 0.5), Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+			end
+		elseif near then
+			FX.Shake(0.6, 0.35)
+			screenFlash(color, 0.5, 0.4)
+			showUltName(opts.Name, ("%s ativou"):format(character.Name), color, 1.4, true)
+		end
+	end)
+	at(math.max(total - 0.4, charge + 0.3), function()
+		if isMe and camera then
+			cameraShot({ offset = Vector3.new(0, 4, 11), look = Vector3.new(0, 1.5, 0), fov = savedFov }, 0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+			setLetterbox(false, 0.4)
+		end
+	end)
+	at(total, finish)
+end
+
 function CutsceneController.Init()
 	Players.LocalPlayer.CharacterRemoving:Connect(function(character)
 		local a = activeByCharacter[character]

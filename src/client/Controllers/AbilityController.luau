@@ -34,6 +34,7 @@ local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
+local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
 local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 
 local AbilityController = {}
@@ -128,7 +129,7 @@ local function destroyDome(character: Model, shatter: boolean)
 	end
 end
 
-local function createDome(character: Model, center: Vector3, radius: number, duration: number)
+local function createDome(character: Model, center: Vector3, radius: number, duration: number, growSeconds: number?)
 	destroyDome(character, false)
 	local parts: { BasePart } = {}
 	local function mk(name: string, shape: Enum.PartType, size: Vector3, cf: CFrame, material: Enum.Material, transparency: number): Part
@@ -150,7 +151,9 @@ local function createDome(character: Model, center: Vector3, radius: number, dur
 		return p
 	end
 	local dome = mk("TimeDome", Enum.PartType.Ball, Vector3.new(1, 1, 1), CFrame.new(center), Enum.Material.ForceField, 0.5)
-	TweenService:Create(dome, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = Vector3.new(radius * 2, radius * 2, radius * 2) }):Play()
+	-- cresce durante a "carga" da animação (Cinematic.Charge) e estoura no tamanho final
+	local grow = growSeconds or 0.35
+	TweenService:Create(dome, TweenInfo.new(grow, if growSeconds then Enum.EasingStyle.Quart else Enum.EasingStyle.Back, if growSeconds then Enum.EasingDirection.In else Enum.EasingDirection.Out), { Size = Vector3.new(radius * 2, radius * 2, radius * 2) }):Play()
 	local ring = mk("TimeDomeRing", Enum.PartType.Cylinder, Vector3.new(0.2, radius * 2, radius * 2), CFrame.new(center - Vector3.new(0, 2.5, 0)) * CFrame.Angles(0, 0, math.rad(90)), Enum.Material.Neon, 0.88)
 	local hand = mk("TimeDomeHand", Enum.PartType.Block, Vector3.new(0.35, 0.2, radius * 0.9), CFrame.new(center - Vector3.new(0, 2.4, 0)), Enum.Material.Neon, 0.3)
 	local light = Instance.new("PointLight")
@@ -225,12 +228,31 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if phase == "start" then
 			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local center = at or (if root then root.Position else Vector3.zero)
-			createDome(character, center, radius, if typeof(data) == "table" then tonumber(data.Duration) or 8 else 8)
+			local def = CharacterDefs.Get(characterId)
+			local ability = def and CharacterDefs.FindAbility(def, abilityId)
+			local cine = ability and (ability.Effect :: any).Cinematic
+			local charge = if cine then tonumber(cine.Charge) or 1 else 0.35
+			createDome(character, center, radius, if typeof(data) == "table" then tonumber(data.Duration) or 8 else 8, if cine then charge else nil)
 			FX.PlayAnimation(character, characterId, abilityId)
-			FX.SpawnVFX(character, characterId, abilityId, true, center)
 			FX.PlaySoundAt(character, characterId, abilityId)
-			if character == localPlayer.Character then
-				FX.Shake(0.8, 0.5)
+			if cine and ability then
+				local awDef = AwakeningDefs.Get(characterId)
+				CutsceneController.PlayUltimate(character, {
+					Charge = charge,
+					Total = tonumber(cine.Total) or charge + 1.6,
+					Name = ability.DisplayName:upper(),
+					Subtitle = awDef.Subtitle,
+					Color = awDef.Color or (def and def.Color) or Color3.fromRGB(90, 200, 255),
+					Theme = awDef.Theme,
+					OnBurst = function()
+						FX.SpawnVFX(character, characterId, abilityId, true, center)
+					end,
+				})
+			else
+				FX.SpawnVFX(character, characterId, abilityId, true, center)
+				if character == localPlayer.Character then
+					FX.Shake(0.8, 0.5)
+				end
 			end
 		elseif phase == "break" then
 			destroyDome(character, true)
