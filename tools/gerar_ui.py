@@ -277,7 +277,7 @@ card = button("Template", "", ud(0, CARD_W, 0, CARD_H), ud(0, 0, 0, 0), bg=CARD,
 N_CARDS = 6  # CharacterDefs.Order (Overlord só aparece para devs, mas o painel comporta todos)
 select = screen("CharacterSelect", [
     panel("Panel", N_CARDS * (CARD_W + 10) - 10 + 2 * PANEL_PAD, CARD_H + 100, "Personagens", [
-        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, -30, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         label("Hint", "", ud(1, 0, 0, 18), ud(0, 0, 0, PANEL_TITLE_H + 2), ts=12, color=MUTED),
         scroll("List", ud(1, 0, 0, CARD_H + 10), ud(0, 0, 0, PANEL_TITLE_H + 28), horizontal=True, children=[
@@ -303,7 +303,7 @@ COL = 0.47  # largura de cada coluna do perfil (sobra 6% de vão no meio)
 Y0 = PANEL_TITLE_H + 26  # abaixo do título + linha de aviso
 profile = screen("ProfileGui", [
     panel("Panel", 580, 450, "Perfil", [
-        label("Coins", "", ud(0, 220, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+        label("Coins", "", ud(0, 220, 0, PANEL_TITLE_H), ud(1, -30, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         label("Warning", "", ud(1, 0, 0, 16), ud(0, 0, 0, PANEL_TITLE_H + 4), ts=11, color=HEALTH),
         # coluna esquerda: nível, stats, personagens, top global
@@ -496,7 +496,7 @@ pass_row = button("Template", "", ud(1, 0, 0, 52), ud(0, 0, 0, 0), bg=CARD, t=0.
 SY = PANEL_TITLE_H + 12
 shop = screen("ShopGui", [
     panel("Panel", 640, 520, "Loja", [
-        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+        label("Coins", "", ud(0, 200, 0, PANEL_TITLE_H), ud(1, -30, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         label("ProductsTitle", "ROLETA DE COSMÉTICOS  ·  ROBUX", ud(1, 0, 0, 16), ud(0, 0, 0, SY), font=FONT_B, ts=11, color=MUTED),
         frame("Products", ud(1, 0, 0, PH), ud(0, 0, 0, SY + 20), t=1, children=[
@@ -525,7 +525,7 @@ cos_row = button("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), bg=CARD, t=0.1
 tab_w = 100
 cosmetics = screen("CosmeticsGui", [
     panel("Panel", 460, 500, "Cosméticos", [
-        label("Coins", "", ud(0, 160, 0, PANEL_TITLE_H), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
+        label("Coins", "", ud(0, 160, 0, PANEL_TITLE_H), ud(1, -30, 0, 0), anchor=(1, 0), font=FONT_B, ts=14, color=GOLD,
               xalign="Right"),
         frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, PANEL_TITLE_H + 12), t=1, children=[
             listlayout("Horizontal", 6),

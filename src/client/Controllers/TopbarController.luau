@@ -188,10 +188,14 @@ local function registerItem(icon: any)
 		closeParents(nil, icon)
 	end)
 	for item in icon.toggleItems do
-		local close = item:FindFirstChild("Close", true)
-		if close and close:IsA("GuiButton") and close.Parent == item then
+		local close = item:FindFirstChild("Close")
+		if close and close:IsA("GuiButton") then
 			close.Activated:Connect(function()
+				Log.debug(("[TopbarController] X fechou %s"):format(item:GetFullName()))
 				icon:deselect("Close", icon)
+				if item:IsA("GuiObject") then
+					item.Visible = false -- garantia: mesmo se o ícone já estava "deselecionado" por fora
+				end
 			end)
 		end
 	end

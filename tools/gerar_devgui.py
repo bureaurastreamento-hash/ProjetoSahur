@@ -120,12 +120,14 @@ y += 32 * len(rows) + 4
 
 # ---- Personagens --------------------------------------------------------------
 children.append(section("CharSection", "PERSONAGENS  (clique = usar · Shift = dar · Ctrl = tirar)", y)); y += 18
+# linha inteira para os personagens (6 × 82 + vãos = 512 px cabe nos 596); Dar/Tirar todos na linha de baixo
 children.append(node("Characters", "Frame", {
-    "Size": udim2(1, -PAD * 2 - COL_W * 2 - 16, 0, 28), "Position": udim2(0, PAD, 0, y), "BackgroundTransparency": 1,
+    "Size": udim2(1, -PAD * 2, 0, 28), "Position": udim2(0, PAD, 0, y), "BackgroundTransparency": 1,
 }, [
     node("UIListLayout", "UIListLayout", {"FillDirection": "Horizontal", "Padding": {"UDim": [0, 4]}, "SortOrder": "LayoutOrder"}),
     button("Template", "Char", udim2(0, 82, 0, 28), udim2(0, 0, 0, 0), visible=False),
 ]))
+y += 32
 children.append(button("GrantAll", "Dar todos", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y), GREEN))
 children.append(button("RevokeAll", "Tirar todos", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y), RED))
 y += 36
