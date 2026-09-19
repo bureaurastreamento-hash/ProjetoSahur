@@ -19,7 +19,6 @@
  "EmoteChorando.mp3": 136536875436304,
  "EmoteCofCof.mp3": 132049723749827,
  "EmoteDesapontados.mp3": 87990560551287,
- "EmoteFarpando.mp3": 118929483034025,
  "EmoteFogosDeArtificios.mp3": 131182516360661,
  "EmoteFogosDeArtificios2.mp3": 102127446128585,
  "EmoteFogosDeArtificios3.mp3": 85137856432371,
@@ -94,5 +93,8 @@
  "soco.mp3": 121799892935616,
  "terminando poder 2.mp3": 89869558404874,
  "vento 2.mp3": 134111806719524,
- "defender dano critico.mp3": 121171651458949
+ "defender dano critico.mp3": 121171651458949,
+ "_moderados": {
+  "EmoteFarpando.mp3": "118929483034025 — barrado pela Roblox em 2026-09-19 (gravação de voz / info pessoal). NÃO subir de novo."
+ }
 }

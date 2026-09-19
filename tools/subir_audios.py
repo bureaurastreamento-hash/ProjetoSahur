@@ -85,7 +85,9 @@ MAPA = {
 
 
 def load_ids():
-    return json.loads(IDS.read_text()) if IDS.exists() else {}
+    ids = json.loads(IDS.read_text()) if IDS.exists() else {}
+    ids.pop("_moderados", None)  # anotação, não é id
+    return ids
 
 
 def upload(path: Path, key: str) -> int:
@@ -147,6 +149,7 @@ def aplicar(ids: dict):
 
 def main():
     ids = load_ids()
+    # só a raiz de audios/: o que está em audios/_moderados/ foi barrado pela Roblox e NUNCA sobe de novo
     files = sorted(p for p in AUDIOS.glob("*.mp3"))
     if "--listar" in sys.argv:
         for p in files:
@@ -168,7 +171,9 @@ def main():
                 print(f"{p.name} -> {ids[p.name]}")
             except Exception as e:  # segue com os outros; roda de novo para tentar os que falharam
                 print(f"FALHOU {p.name}: {e}")
-            IDS.write_text(json.dumps(ids, indent=1, ensure_ascii=False) + "\n")
+            saved = json.loads(IDS.read_text()) if IDS.exists() else {}
+            saved.update(ids)
+            IDS.write_text(json.dumps(saved, indent=1, ensure_ascii=False) + "\n")
     aplicar(ids)
 
 
