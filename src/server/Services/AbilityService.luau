@@ -275,6 +275,17 @@ end
 --   Spin:          a vítima gira ao redor (Spin voltas/s) batendo em quem chega perto (SpinRadius/
 --                  SpinDamage a cada SpinInterval) e é solta na tangente
 local GRAB_OFFSET = 3 -- studs à frente do atacante onde a vítima fica presa
+local GRAB_COLLISION_GROUP = "Grabbed" -- vítima carregada: não colide com nada (ver attachVictim)
+do
+	local PhysicsService = game:GetService("PhysicsService")
+	pcall(function()
+		PhysicsService:RegisterCollisionGroup(GRAB_COLLISION_GROUP)
+	end)
+	pcall(function()
+		PhysicsService:CollisionGroupSetCollidable(GRAB_COLLISION_GROUP, "Default", false)
+		PhysicsService:CollisionGroupSetCollidable(GRAB_COLLISION_GROUP, GRAB_COLLISION_GROUP, false)
+	end)
+end
 local SPIN_DEFAULT = 1.25 -- voltas por segundo
 -- posição relativa da vítima no giro (mesma fórmula do cliente: AbilityController.startGrabbed)
 local function spinAngle(e: any, elapsed: number): number
@@ -301,7 +312,20 @@ local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Mo
 	if vHum then
 		vHum.PlatformStand = true
 	end
+	-- Soldada, a vítima NÃO pode colidir: as partes dela sobrepostas ao atacante/chão numa solda rígida
+	-- viram impulso enorme e os dois voam (bug do "vai pro void", dono 2026-09-19). Grupo de colisão em vez
+	-- de CanCollide porque o Humanoid religa o CanCollide do Torso sozinho. Sem massa para o atacante
+	-- andar normal. Devolvido no release.
+	local collisions: { [BasePart]: { Group: string, Massless: boolean } } = {}
+	for _, part in victim:GetDescendants() do
+		if part:IsA("BasePart") then
+			collisions[part] = { Group = part.CollisionGroup, Massless = part.Massless }
+			part.CollisionGroup = GRAB_COLLISION_GROUP
+			part.Massless = true
+		end
+	end
 	vRoot.AssemblyLinearVelocity = Vector3.zero
+	vRoot.AssemblyAngularVelocity = Vector3.zero
 	weld.Parent = vRoot
 	pcall(function()
 		vRoot:SetNetworkOwner(attacker)
@@ -332,6 +356,13 @@ local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Mo
 				vRoot:SetNetworkOwnershipAuto()
 			end
 		end)
+		-- na hora: sem colisão a vítima cairia pelo chão; a 3 studs de distância não há sobreposição
+		for part, saved in collisions do
+			if part.Parent then
+				part.Massless = saved.Massless
+				part.CollisionGroup = saved.Group
+			end
+		end
 	end
 end
 

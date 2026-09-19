@@ -275,7 +275,19 @@ Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo
   Automatic Save; `emotes pack 1` = vertical, rodaregina, emote67, sentar, sofa. Pedir ao dono o que é cada
   uma (KA1/KA2/DAZ1/AAAQ/aura) e publicar no grupo → ids.
 
-### PEDIDOS NOVOS DO DONO (2026-09-19) — itens 2 e 5 FEITOS (leva acima); 1, 3, 4 e 6 pendentes
+### Agarrões (item 4) — correção 2026-09-19, falta o dono testar com 2 jogadores
+- Causa provável do "os dois voam pro void": a vítima soldada (Weld HRP→HRP) continuava COLIDINDO com o
+  chão e com o corpo do atacante; peças sobrepostas numa solda rígida viram impulso gigante. `CanCollide`
+  não resolve (o Humanoid religa o do Torso). Agora `attachVictim` põe todas as peças da vítima no grupo
+  de colisão **`Grabbed`** (não colide com nada) + `Massless`, e devolve no release. Testado via MCP com
+  boneco (Brawler/Throw e Guardian/Chokeslam): atacante fica parado, vítima presa/erguida, solta normal.
+- Distâncias de arremesso são de design: Brawler Throw (Speed 70, Up 25) jogou o boneco ~44 studs. Se o
+  dono ainda achar "longe demais", baixar `Knockback.Speed/Duration` do agarrão em `CharacterDefs`.
+- **PVP "não sincronizado" (item 3)**: o M1 já tem previsão no cliente (anima no clique, vítimas do próprio
+  cliente validadas numa caixa tolerante no servidor). Sem um caso concreto do dono (qual golpe, o que
+  parece atrasado: animação, dano, empurrão, reação da vítima) não dá pra mexer sem chutar. PEDIR exemplo.
+
+### PEDIDOS NOVOS DO DONO (2026-09-19) — itens 2, 4 e 5 FEITOS; 1, 3 e 6 pendentes
 1. **Assets novos no place** (adicionados pelo dono em áreas vazias da place, esperando sair de lá e
    virar uso real — não foram colocados por mim, então não mexer neles sem entender o pedido primeiro):
    - `Canion`: mapa de EVENTO, grande, pra um boss grande + mini eventos interativos (tipo o `Arena_Antiga`
