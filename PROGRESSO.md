@@ -336,8 +336,20 @@ Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo
   (`serverplaceid=0`); o modo edição carrega normal. Nada desta leva foi visto rodando. O dono precisa
   FECHAR E ABRIR o Studio (relogar) antes de testar; eu ainda não medi a duração das animações novas.
 
+### Assets novos — o que já tem código (2026-09-19, testado via MCP)
+- **Lojinha**: `ShopNpcService` cria o NPC "Vendedor" (R6 ancorado, sem Combatant = não apanha) na frente
+  de `Workspace.Lojinha` (acha pelo NOME; o dono move a construção para onde quiser, o vendedor segue; se
+  a arte girar o modelo, "frente" = -Z do pivô). ProximityPrompt "Falar" (E) → `ShopController` abre a Loja
+  (sem remote: o cliente escuta `PromptTriggered`). Enquanto a Lojinha ficar na área vazia (1341,167,225)
+  o vendedor fica lá também.
+- **Canion** = área de evento: `EventService` (`Begin/Finish`; DEV "EVENTO no Canion" / "Encerrar
+  evento"): leva todos para spawns `EventSpawn*` dentro do modelo (a arte cria; sem nenhum = 8 pontos no
+  centro por raycast), `Workspace.EventActive`, quem entra/renasce durante o evento vai para lá; encerrar
+  devolve aos SpawnLocations do mapa livre (`CharacterService.PickSpawn`). Mini eventos/boss no canion
+  entram em cima disto quando o dono definir o que são.
+- Árvores/pedras 1–3, House Trink, LocalInicial, CasasKame: sem código — posicionamento é do dono.
+
 ### AINDA PENDENTE
-- Assets novos no place (Canion, árvores/pedras, lojinha com NPC, casas DB) — dono define o uso.
 - PVP "não sincronizado" — dono testa depois das levas e manda caso concreto.
 - Publicar KA1/KA2/DAZ1/AAAQ/aura no grupo e encaixar (KA1 = block animado, KA2 = pose fixa de block).
 - Ouvir os 51 sons novos e ajustar volumes/trocas; ver as 45 variações guardadas.

@@ -67,7 +67,12 @@ end
 
 --- Mesma regra do LoadCharacter: RespawnLocation, senão um SpawnLocation habilitado e neutro
 --- (fora das arenas de duelo), senão a origem.
-local function pickSpawn(player: Player): CFrame
+local pickSpawn: (Player) -> CFrame
+--- Spawn do mapa livre (SpawnLocation) para quem precisa devolver o jogador (EventService, AdminService).
+function CharacterService.PickSpawn(player: Player): CFrame
+	return pickSpawn(player)
+end
+pickSpawn = function(player: Player): CFrame
 	local respawn = player.RespawnLocation
 	if respawn and respawn.Parent and respawn.Enabled then
 		return respawn.CFrame + Vector3.new(0, respawn.Size.Y / 2, 0)

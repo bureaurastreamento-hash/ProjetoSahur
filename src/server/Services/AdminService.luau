@@ -824,18 +824,34 @@ global.TestSounds = function()
 	return true, ("testando %d sons no cliente (veja o Output: [SoundProbe])"):format(#list), { testSounds = true }
 end
 
+--- Evento no Canion (EventService): leva/traz todo mundo.
+global.StartEvent = function()
+	local EventService = lazyRequire("EventService")
+	if not EventService then
+		return false, "EventService não carregou"
+	end
+	return EventService.Begin()
+end
+
+global.EndEvent = function()
+	local EventService = lazyRequire("EventService")
+	if not EventService then
+		return false, "EventService não carregou"
+	end
+	return EventService.Finish()
+end
+
 --- Teleporta o dev para um ponto de spawn do mapa da arena (Workspace.CurrentMap.Spawns).
 global.TeleportArena = function(admin)
 	local root = admin.Character and admin.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
 		return false, "sem personagem"
 	end
+	-- mapa livre: SpawnLocations do Workspace (CharacterService); em rounds, os spawns do mapa carregado
 	local spawns = ArenaService.GetSpawnCFrames()
-	if #spawns == 0 then
-		return false, "arena sem pontos de spawn (mapa carregado?)"
-	end
+	local cf = if #spawns > 0 then spawns[math.random(1, #spawns)] + Vector3.new(0, 3, 0) else CharacterService.PickSpawn(admin) * CFrame.new(0, 3.05, 0)
 	AntiExploitService.Grace(admin, 2)
-	root.CFrame = spawns[math.random(1, #spawns)] + Vector3.new(0, 3, 0)
+	root.CFrame = cf
 	return true, "teleportado para a arena"
 end
 

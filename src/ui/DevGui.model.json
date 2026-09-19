@@ -5759,6 +5759,140 @@
      ]
     },
     {
+     "name": "StartEvent",
+     "className": "TextButton",
+     "properties": {
+      "Name": "StartEvent",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         982
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.55,
+        0.35
+       ]
+      },
+      "Text": "EVENTO no Canion (leva todos)",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "EndEvent",
+     "className": "TextButton",
+     "properties": {
+      "Name": "EndEvent",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         982
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.75,
+        0.25,
+        0.25
+       ]
+      },
+      "Text": "Encerrar evento (volta todos)",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
      "name": "LogSection",
      "className": "TextLabel",
      "properties": {
@@ -5783,7 +5917,7 @@
         ],
         [
          0,
-         986
+         1018
         ]
        ]
       },
@@ -5816,7 +5950,7 @@
         ],
         [
          0,
-         84
+         52
         ]
        ]
       },
@@ -5828,7 +5962,7 @@
         ],
         [
          0,
-         1004
+         1036
         ]
        ]
       },

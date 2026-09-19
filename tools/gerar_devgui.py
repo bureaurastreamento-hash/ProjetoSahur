@@ -198,6 +198,9 @@ y += 32
 children.append(button("PreviewVfx", "Preview VFX (F7)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y), GREEN))
 children.append(button("Trailer", "TRAILER (~70 s)", udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, y), GREEN))
 children.append(button("TrailerStop", "Parar trailer", udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, y), RED))
+y += 32
+children.append(button("StartEvent", "EVENTO no Canion (leva todos)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y), GREEN))
+children.append(button("EndEvent", "Encerrar evento (volta todos)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y), RED))
 y += 36
 
 # ---- Log --------------------------------------------------------------------------
