@@ -249,8 +249,66 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 **Onde paramos**: Parte 4 da lista do dono (sistema de denúncias + menu DEV de verdade) foi
 IMPLEMENTADA e passa 0 erros na análise estática, mas ainda **NÃO foi testada no Studio**
 (precisa de 2 clientes: um denuncia, o dev lê). Ver "Parte 4" logo abaixo para o que testar.
+No mesmo dia o dono mandou uma lista NOVA de pedidos (2026-09-19, ver bloco logo abaixo) — só
+ANOTADA por enquanto, ele pediu pra não implementar ainda ("anota tudo isso... depois prosseguimos").
+Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo o dono dizer outra ordem.
 
-### O QUE FALTA (ordem combinada com o dono)
+### PEDIDOS NOVOS DO DONO (2026-09-19) — só ANOTADO, não implementado ainda
+1. **Assets novos no place** (adicionados pelo dono em áreas vazias da place, esperando sair de lá e
+   virar uso real — não foram colocados por mim, então não mexer neles sem entender o pedido primeiro):
+   - `Canion`: mapa de EVENTO, grande, pra um boss grande + mini eventos interativos (tipo o `Arena_Antiga`
+     mas de evento, não de guerra de clã — provavelmente `WarOnly`-like, fora da rotação normal).
+   - `Arvore1`/`Arvore2`/`Arvore3`, `Pedra1`/`Pedra2`/`Pedra3`: props usáveis no mapa atual, mas o dono foi
+     claro — **não substituir TODAS as árvores/pedras atuais**, só variar/complementar.
+   - `Banheiro` e `Lojinha`: são modelos separados mas a intenção é a MESMA construção (provavelmente
+     lojinha com banheiro anexo ou a mesma estrutura reaproveitada). A `Lojinha` vai ter um **NPC vendedor**
+     que abre a tela de loja (pontos especiais de missões/gamepasses) via ProximityPrompt — checar se dá pra
+     reusar o fluxo do `RequestShop`/ShopGui já existente, só trocando o gatilho (NPC em vez do ícone Loja).
+   - `House Trink`, `LocalInicial`, `CasasKame`: temática Dragon Ball, modelador caro, o dono ainda não
+     decidiu o uso — não mexer até ele definir (podem virar mapa de evento, lobby alternativo, etc.).
+   Nenhum desses tem lugar oficial no Rojo/`ArenaService` ainda — quando o dono definir o uso, criar a
+   pasta certa (`ServerStorage.Maps` com `WarOnly`/tag de evento, ou fora da rotação normal).
+2. **Reforma do topbar** (bug: dropdown de um menu não fecha quando abre outro — `TopbarPlus`/`Icon`
+   provavelmente sem `autoDeselect` entre os 4 grupos, ou o `setOrder`/`bindToggleItem` dos grupos não
+   está descadastrando o anterior). Estrutura NOVA pedida pelo dono (substitui a de 2026-09-17):
+   - **Personagens**: vira DROPDOWN com os personagens diretamente dentro (não abre mais o painel
+     `CharacterSelect` próprio) — repensar `CharacterSelectController`/ícone.
+   - **Jogar** (ou outro nome): dropdown com Duelo, Clã, Placar.
+   - **Loja**: continua item único (painel `ShopGui`).
+   - **Perfil**: dropdown com Cosméticos, Perfil, Conquistas, **Denunciar** (o ícone que acabei de criar
+     em `ReportController` já está pendurado em `AddToProfile`, então já nasce no lugar certo).
+   - **Config**: Configurações (`HelpGui`/`Controls`), Controles, **DEV** (`AddToSettings`, já correto).
+   Trabalho: revisar `TopbarController.luau` (a estrutura de 4 grupos com dropdown já existe, o pedido é
+   1) corrigir o bug de não fechar o anterior e 2) mover Personagens para DENTRO de um dropdown com um
+   item por personagem em vez de abrir `CharacterSelect.Panel`).
+3. **PVP não está sincronizado/suave** — sensação de jogo bugada (o dono não deu exemplo técnico específico
+   além do grab). Investigar: replicação de golpes (`NotifyAttack`/`NotifyDamage`), possível falta de
+   interpolação/latência no cliente, ordem hit/animação.
+4. **Agarrões ("grab") bugando**: "a maioria das vezes" jogam AMBOS os jogadores pro void ou muito longe.
+   Suspeito: solda/CFrame do agarrão (`AbilityService` — efeito de agarrão descrito em
+   `feedback-dono-fluxo`: "servidor solda a vítima") brigando com física ao soltar, ou posição calculada
+   antes do personagem carregar de verdade. Precisa reproduzir e olhar o código de agarrão de cada
+   personagem (Brawler arremessa, Guardian esmaga, Overlord gira).
+5. **HUD dos dashs**: remover os DOIS ícones de dash (`Dash`/`DashSide`) da barra de baixo (`HUD.Abilities`
+   em `gerar_ui.py`/`slot()`), deixando só os slots de ataque (1/2/3/4 + Ult). O cooldown do dash não
+   some — muda de lugar: um símbolo de cooldown **acima da vida, à direita** (perto de `Vitals`/`Health`
+   no HUD). Mexe em `gerar_ui.py` (layout) e `HUDController.luau` (`updateDashSlot`/`dashSlot`/
+   `dashSideSlot` hoje apontam pros frames que vão sumir — trocar destino, não a lógica de cooldown).
+6. **Animações novas da equipe**: estão em `ServerStorage.RBX_ANIMSAVES` e em "Emotes Pack 1" dentro do
+   place (Studio), NÃO confirmado se já foram publicadas no GRUPO (lembrar: anim só funciona pro jogo de
+   grupo se o KeyframeSequence for salvo com o GRUPO como dono — ver regra em CLAUDE.md). Precisa: 1) abrir
+   o Studio e inspecionar `ServerStorage.RBX_ANIMSAVES`/pack de emotes via MCP (`run_code`), listar o que
+   tem; 2) para cada clipe, `Save to Roblox` com o grupo como criador (fluxo manual do dono, como sempre);
+   3) colar os ids nos lugares certos (`Animations.model.json` por personagem, ou `EmoteGui`/emotes se for
+   pack de emote).
+
+**Log do dono (2026-09-19, 11:38) conferido**: boot limpo depois da Parte 4 (52 RemoteEvents/3 Functions,
+29 services, 21 controllers, 0 erro) — ele ainda não testou denúncia/menu DEV nesse log, só jogou normal.
+Único aviso preexistente (não é da Parte 4): `[Assets] não encontrado: ...Animations.Shared.Dash (sem
+AnimationId)` — Shared/Dash não tem clipe (só existe Shared/DashBack); pode ficar sem dono se os 2 ícones
+de dash saírem da HUD (item 5), mas o efeito/cooldown do dash em si continua existindo.
+
+### O QUE FALTA (ordem combinada com o dono, itens de sessões anteriores)
 1. **Dono testar a Parte 4** (abaixo) com 2 clientes antes de seguir.
 2. **O dono testar o que foi entregue na sessão de 2026-09-17** e mandar a lista de ajustes: jeito de
    andar/parar de cada personagem (Leva 8), VFX do F7 (`Lib/…`), poses feias (`ProcAnimDefs.luau`),
