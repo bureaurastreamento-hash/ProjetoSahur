@@ -60,6 +60,8 @@ RemoteEvents.Events = ({
 	RequestClan = "RequestClan", -- (action: "create"|"invite"|"accept"|"decline"|"leave"|"kick"|"promote"|"demote"|"deposit"|"disband"|"refresh", a: any?, b: any?) — create(name, tag), invite/kick/promote/demote(userId), deposit(amount)
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
 	RequestReport = "RequestReport", -- (targetName: string, reasonId: string, text: string?) — ReportConfig.Reasons
+	RequestVendor = "RequestVendor", -- (action: "buy"|"roll", id: string?, currency: "points"|"event"?) — vendedor da Lojinha (VendorConfig)
+	RequestTrade = "RequestTrade", -- (action: "invite"|"accept"|"decline"|"cancel"|"add"|"remove"|"points"|"event_points"|"ready"|"confirm", a: any?, b: any?) — trocas no vendedor (TradeConfig)
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: "M1"|"Downslam"|"Uppercut", comboIndex: number)
@@ -94,6 +96,8 @@ RemoteEvents.Events = ({
 	NotifyClan = "NotifyClan", -- dono: (event: "state"|"invite"|"denied"|"info", data: table) — state = { clan: ClanConfig.Clan? , role: string? }
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"rating"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
 	NotifyReport = "NotifyReport", -- dono: (ok: boolean, message: string) — resultado do RequestReport
+	NotifyVendor = "NotifyVendor", -- dono: (event: "bought"|"denied", data: table)
+	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

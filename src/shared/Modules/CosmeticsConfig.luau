@@ -4,9 +4,13 @@
 	Cosméticos (capas, auras) e emotes/cenas. Só visual: NUNCA dão buff.
 	`Limited = true` + `Season = "<id>"`: item de PASSE (AchievementsConfig) — sai só pelas conquistas
 	daquela temporada, nunca pela roleta; acabou o passe, ninguém mais ganha (só um DEV dá).
-	Aquisição = ROLETA da sorte: RollCost pontos (ganhos jogando) = 1 giro -> item aleatório que
-	o jogador ainda não tem (peso = Weight; VIP fica fora da roleta). Com Robux: giros (ShopConfig
-	roll_1/roll_5) ou "pick" = escolher um item específico. Weight 0 = de todos (não entra na roleta).
+	Aquisição (dono, 2026-09-20 — lojas divididas):
+	  VENDEDOR (E no NPC da Lojinha, VendorService): compra direta por PONTOS (`Price`) ou por PONTOS DE
+	    EVENTO (`EventPrice`, moeda dos mini eventos do Canion) + roleta por pontos (RollCost = 1 giro ->
+	    item aleatório que o jogador ainda não tem, peso = Weight). Também é o ponto de TROCA entre jogadores.
+	  LOJA (L, ShopGui): só Robux — giros (ShopConfig roll_1/roll_5) ou "pick" = escolher um item.
+	Weight 0 = fora da roleta. `Free = true` = todo mundo tem (só o emote "wave"). Item sem Free, sem
+	Price/EventPrice e com Weight 0 só sai por conquista (aura_ember, aura_shadow) ou pela mão de um DEV.
 	Servidor (CosmeticsService) valida compra/equipar e replica por atributos no Player:
 	  CosmeticCape / CosmeticAura (id do item ou "")
 	Cliente (CosmeticsController) desenha capa/aura por atributo e toca emotes (NotifyEmote).
@@ -28,24 +32,30 @@ export type Item = {
 	Access: string?, -- nil = moedas | "vip" = passe VIP
 	Season: string?, -- LIMITADO: id da temporada (AchievementsConfig) que solta este item
 	Limited: boolean?, -- true = nunca entra na roleta; acabou a temporada, só um DEV dá
+	Price: number?, -- vendedor: preço em pontos (nil = não vende por pontos)
+	EventPrice: number?, -- vendedor: preço em pontos de EVENTO (nil = não vende por pontos de evento)
+	Free: boolean?, -- true = todo mundo tem (não precisa comprar)
 }
 
 CosmeticsConfig.Items = {
 	-- (skins que pintavam o corpo saíram a pedido do dono em 2026-09-19: cosmético não muda a cor do avatar;
 	--  skins de verdade entram quando a arte trouxer modelos)
 	-- capas
-	{ Id = "cape_red", Name = "Capa Vermelha", Category = "cape", Weight = 8, Color = Color3.fromRGB(180, 30, 30) },
-	{ Id = "cape_blue", Name = "Capa Azul", Category = "cape", Weight = 8, Color = Color3.fromRGB(40, 80, 200) },
-	{ Id = "cape_black", Name = "Capa Negra", Category = "cape", Weight = 3, Color = Color3.fromRGB(20, 20, 25) },
+	{ Id = "cape_red", Name = "Capa Vermelha", Category = "cape", Weight = 8, Price = 150, Color = Color3.fromRGB(180, 30, 30) },
+	{ Id = "cape_blue", Name = "Capa Azul", Category = "cape", Weight = 8, Price = 150, Color = Color3.fromRGB(40, 80, 200) },
+	{ Id = "cape_black", Name = "Capa Negra", Category = "cape", Weight = 3, Price = 450, Color = Color3.fromRGB(20, 20, 25) },
 	{ Id = "cape_gold", Name = "Capa Dourada", Category = "cape", Weight = 0, Access = "vip", Color = Color3.fromRGB(230, 190, 60) },
 	-- auras (Style = desenho: wisps = fiapos subindo, flame = chamas, smoke = fumaça densa, sparkle = brilhos,
 	--        electric = faíscas elétricas; ver FX.SetCosmeticAura)
-	{ Id = "aura_blue", Name = "Aura Azul", Category = "aura", Weight = 4, Color = Color3.fromRGB(90, 160, 255), Style = "wisps" },
-	{ Id = "aura_purple", Name = "Aura Roxa", Category = "aura", Weight = 4, Color = Color3.fromRGB(180, 90, 255), Style = "electric" },
-	{ Id = "aura_green", Name = "Aura Verde", Category = "aura", Weight = 4, Color = Color3.fromRGB(110, 255, 140), Style = "sparkle" },
+	{ Id = "aura_blue", Price = 350, Name = "Aura Azul", Category = "aura", Weight = 4, Color = Color3.fromRGB(90, 160, 255), Style = "wisps" },
+	{ Id = "aura_purple", Price = 350, Name = "Aura Roxa", Category = "aura", Weight = 4, Color = Color3.fromRGB(180, 90, 255), Style = "electric" },
+	{ Id = "aura_green", Price = 350, Name = "Aura Verde", Category = "aura", Weight = 4, Color = Color3.fromRGB(110, 255, 140), Style = "sparkle" },
 	{ Id = "aura_ember", Name = "Aura de Brasa", Category = "aura", Weight = 0, Color = Color3.fromRGB(255, 120, 40), Style = "flame" },
 	{ Id = "aura_shadow", Name = "Aura das Sombras", Category = "aura", Weight = 0, Color = Color3.fromRGB(60, 40, 80), Style = "smoke" },
 	{ Id = "aura_gold", Name = "Aura Dourada", Category = "aura", Weight = 0, Access = "vip", Color = Color3.fromRGB(255, 210, 80), Style = "flame" },
+	-- EVENTO (só com pontos de evento, ganhos nos mini eventos do Canion; fora da roleta)
+	{ Id = "cape_canyon", Name = "Capa do Canion", Category = "cape", Weight = 0, EventPrice = 40, Color = Color3.fromRGB(196, 140, 70) },
+	{ Id = "aura_canyon", Name = "Aura de Areia", Category = "aura", Weight = 0, EventPrice = 80, Color = Color3.fromRGB(230, 190, 120), Style = "smoke" },
 	-- LIMITADOS do Passe 1 (só pelas conquistas da temporada; depois só DEV dá)
 	{ Id = "s1_cape_arrow", Name = "Capa da Flecha (Passe 1)", Category = "cape", Weight = 0, Season = "s1", Limited = true, Color = Color3.fromRGB(90, 60, 170) },
 	{ Id = "s1_aura_arrow", Name = "Aura da Flecha (Passe 1)", Category = "aura", Weight = 0, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255), Style = "wisps" },
@@ -65,25 +75,39 @@ export type Emote = {
 	Theme: string?, -- cena: tema de efeitos/câmera (CutsceneController THEMES: rock, lightning, arcane, stone, drums, void, flesh)
 	Season: string?, -- LIMITADO: temporada que solta este emote
 	Limited: boolean?, -- true = fora da roleta; acabou a temporada, só um DEV dá
+	Price: number?, -- vendedor: preço em pontos
+	EventPrice: number?, -- vendedor: preço em pontos de evento
+	Free: boolean?, -- true = todo mundo tem
 }
 
 -- Roda de emotes (B): até 8 posições, na ordem abaixo.
 CosmeticsConfig.Emotes = {
-	{ Id = "wave", Name = "Acenar", Kind = "emote", Weight = 0 },
-	{ Id = "taunt", Name = "Provocar", Kind = "emote", Weight = 8 },
-	{ Id = "dance", Name = "Dançar", Kind = "emote", Weight = 6 },
-	{ Id = "bow", Name = "Reverência", Kind = "emote", Weight = 6 },
-	{ Id = "flex", Name = "Músculo", Kind = "emote", Weight = 6 },
-	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6 },
-	{ Id = "scene_power", Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80), Theme = "rock" },
-	{ Id = "scene_dark", Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200), Theme = "void" },
-	{ Id = "scene_storm", Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255), Theme = "lightning" },
+	{ Id = "wave", Name = "Acenar", Kind = "emote", Weight = 0, Free = true },
+	{ Id = "taunt", Name = "Provocar", Kind = "emote", Weight = 8, Price = 120 },
+	{ Id = "dance", Name = "Dançar", Kind = "emote", Weight = 6, Price = 200 },
+	{ Id = "bow", Name = "Reverência", Kind = "emote", Weight = 6, Price = 200 },
+	{ Id = "flex", Name = "Músculo", Kind = "emote", Weight = 6, Price = 200 },
+	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6, Price = 200 },
+	{ Id = "scene_power", Price = 600, Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80), Theme = "rock" },
+	{ Id = "scene_dark", Price = 600, Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200), Theme = "void" },
+	{ Id = "scene_storm", Price = 600, Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255), Theme = "lightning" },
+	{ Id = "scene_canyon", Name = "Cena: Tempestade de Areia", Kind = "scene", Weight = 0, EventPrice = 150, Duration = 5, Color = Color3.fromRGB(230, 190, 120), Theme = "stone" },
 	{ Id = "s1_emote_arrow", Name = "Flecha ao Alto (Passe 1)", Kind = "scene", Weight = 0, Duration = 4, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255), Theme = "arcane" },
 } :: { Emote }
 
 CosmeticsConfig.RollCost = 100 -- pontos por giro
 CosmeticsConfig.EmoteCooldown = 1.5 -- s entre emotes
 CosmeticsConfig.EmoteMoveCancels = true -- andar cancela
+
+--- Todo mundo tem (não precisa comprar nem ganhar).
+function CosmeticsConfig.IsFree(entry: Item | Emote): boolean
+	return entry.Free == true
+end
+
+--- Pode ser trocado entre jogadores: tudo que se compra/ganha, menos o grátis e o do passe VIP.
+function CosmeticsConfig.IsTradeable(entry: Item | Emote): boolean
+	return entry.Free ~= true and (entry :: any).Access == nil
+end
 
 function CosmeticsConfig.GetItem(id: string): Item?
 	for _, item in CosmeticsConfig.Items do

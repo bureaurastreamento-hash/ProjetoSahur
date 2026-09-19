@@ -32,8 +32,8 @@ WarConfig.FallDepth = 60
 
 -- Recompensas
 WarConfig.Rewards = {
-	WinnerCoins = 80, -- por jogador
-	LoserCoins = 25,
+	WinnerCoins = 50, -- por jogador
+	LoserCoins = 15,
 	WinnerVault = 250, -- para o cofre do clã
 	LoserVault = 60,
 }

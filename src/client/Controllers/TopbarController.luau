@@ -100,7 +100,7 @@ local function reportForeignTopbar()
 end
 
 local function renderProfile(profile: any, sessionOnly: boolean)
-	profileCoins.Text = ("%d pontos · rating %d"):format(profile.coins or 0, profile.rating or 1000)
+	profileCoins.Text = ("%d pontos · %d de evento · rating %d"):format(profile.coins or 0, profile.eventPoints or 0, profile.rating or 1000)
 	renderProgression(profile)
 	profileWarning.Text = if sessionOnly then "Sem conexão com os dados: esta sessão não será salva." else ""
 	for _, child in statsList:GetChildren() do
@@ -199,6 +199,11 @@ local function registerItem(icon: any)
 			end)
 		end
 	end
+end
+
+--- Fecha todos os dropdowns e painéis do topo (VendorController: o painel do vendedor ocupa o mesmo canto).
+function TopbarController.CloseAll()
+	closeParents(nil)
 end
 
 --- Pendura um ícone no dropdown de Perfil (AchievementsController: "Conquistas").

@@ -8,7 +8,7 @@
 local DataConfig = {}
 
 DataConfig.StoreName = "PlayerData"
-DataConfig.SchemaVersion = 2
+DataConfig.SchemaVersion = 3 -- 3 = eventPoints (pontos de evento, 2026-09-20)
 
 DataConfig.AutosaveInterval = 90 -- segundos
 DataConfig.LoadRetries = 3
@@ -19,10 +19,11 @@ DataConfig.RetryBaseDelay = 1 -- segundos; dobra a cada tentativa
 -- TODO(launch): manter false
 DataConfig.SimulateFailure = false
 
+-- Pontos são para ser DIFÍCEIS de juntar (dono, 2026-09-20: "deixar mais difícil conseguir pontos").
 DataConfig.Rewards = {
-	Win = 50,
-	Loss = 10,
-	Kill = 5,
+	Win = 30,
+	Loss = 5,
+	Kill = 3,
 }
 
 export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number }
@@ -36,6 +37,7 @@ export type Achievements = {
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
+	eventPoints: number, -- pontos ESPECIAIS de evento (mini eventos do Canion); só o vendedor aceita
 	unlockedCharacters: { string },
 	stats: Stats,
 	-- progressão (ProgressionService)
@@ -57,6 +59,7 @@ function DataConfig.DefaultProfile(): Profile
 	return {
 		schemaVersion = DataConfig.SchemaVersion,
 		coins = 0,
+		eventPoints = 0,
 		unlockedCharacters = { "Brawler" },
 		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0 },
 		xp = 0,

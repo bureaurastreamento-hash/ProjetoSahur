@@ -37,7 +37,7 @@ local notifyEmote: RemoteEvent
 local ATTR_BY_CATEGORY: { [string]: string } = { cape = "CosmeticCape", aura = "CosmeticAura" }
 
 local function owns(profile: any, item: CosmeticsConfig.Item, player: Player): boolean
-	if item.Weight <= 0 and item.Access == nil then
+	if CosmeticsConfig.IsFree(item) then
 		return true
 	end
 	if item.Access == "vip" then
@@ -47,7 +47,7 @@ local function owns(profile: any, item: CosmeticsConfig.Item, player: Player): b
 end
 
 local function ownsEmote(profile: any, emote: CosmeticsConfig.Emote): boolean
-	return emote.Weight <= 0 or table.find(profile.emotes, emote.Id) ~= nil
+	return CosmeticsConfig.IsFree(emote) or table.find(profile.emotes, emote.Id) ~= nil
 end
 
 --- Aplica os equipados no personagem atual (atributos; o cliente desenha capa/aura).
@@ -145,6 +145,75 @@ function CosmeticsService.Grant(player: Player, id: string, reason: string): boo
 	return true
 end
 
+--- Tem este cosmético/emote? (vendedor/trocas). Id desconhecido = false.
+function CosmeticsService.Owns(player: Player, id: string): boolean
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return false
+	end
+	local item = CosmeticsConfig.GetItem(id)
+	if item then
+		return owns(profile, item, player)
+	end
+	local emote = CosmeticsConfig.GetEmote(id)
+	return emote ~= nil and ownsEmote(profile, emote)
+end
+
+--- Tira um cosmético/emote do perfil (troca entre jogadores): desequipa se estava em uso.
+--- false = não tinha (ou é grátis / id desconhecido).
+function CosmeticsService.Remove(player: Player, id: string): boolean
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return false
+	end
+	local item = CosmeticsConfig.GetItem(id)
+	local emote = if item then nil else CosmeticsConfig.GetEmote(id)
+	if item then
+		local index = table.find(profile.cosmetics.owned, id)
+		if not index then
+			return false
+		end
+		table.remove(profile.cosmetics.owned, index)
+		if profile.cosmetics.equipped[item.Category] == id then
+			profile.cosmetics.equipped[item.Category] = nil
+		end
+	elseif emote then
+		local index = table.find(profile.emotes, id)
+		if not index then
+			return false
+		end
+		table.remove(profile.emotes, index)
+	else
+		return false
+	end
+	DataService.MarkDirty(player)
+	apply(player)
+	return true
+end
+
+--- Giro pago com PONTOS (vendedor). Retorna (ok, motivo | nome do item).
+function CosmeticsService.RollWithPoints(player: Player): (boolean, string)
+	local profile = DataService.GetProfile(player)
+	if not profile or DataService.IsSessionOnly(player) then
+		return false, "not_loaded"
+	end
+	if #pool(profile, player) == 0 then
+		return false, "all_owned"
+	end
+	if profile.coins < CosmeticsConfig.RollCost then
+		return false, "coins"
+	end
+	profile.coins -= CosmeticsConfig.RollCost
+	local e = rollOnce(player, profile)
+	DataService.MarkDirty(player)
+	if not e then
+		return false, "all_owned"
+	end
+	notifyCosmetics:FireClient(player, "rolled", { items = { { id = e.id, name = e.name, kind = e.kind } } })
+	Log.debug(("[CosmeticsService] %s girou a roleta: %s"):format(player.Name, e.id))
+	return true, e.name
+end
+
 --- Giro grátis (drop do boss, eventos). Retorna o nome do item ou nil (já tem tudo / sem perfil).
 function CosmeticsService.FreeRoll(player: Player, reason: string): string?
 	local profile = DataService.GetProfile(player)
@@ -212,21 +281,10 @@ local function onRequestCosmetic(player: Player, action: any, id: any)
 		return deny(player, "not_loaded", "")
 	end
 	if action == "roll" then
-		if DataService.IsSessionOnly(player) then
-			return deny(player, "not_loaded", "")
-		end
-		if #pool(profile, player) == 0 then
-			return deny(player, "all_owned", "")
-		end
-		if profile.coins < CosmeticsConfig.RollCost then
-			return deny(player, "coins", "")
-		end
-		profile.coins -= CosmeticsConfig.RollCost
-		local e = rollOnce(player, profile)
-		DataService.MarkDirty(player)
-		if e then
-			notifyCosmetics:FireClient(player, "rolled", { items = { { id = e.id, name = e.name, kind = e.kind } } })
-			Log.debug(("[CosmeticsService] %s girou a roleta: %s"):format(player.Name, e.id))
+		-- roleta por pontos agora é no VENDEDOR (VendorService); o painel K só equipa / Robux
+		local ok, reason = CosmeticsService.RollWithPoints(player)
+		if not ok then
+			deny(player, reason, "")
 		end
 		return
 	end

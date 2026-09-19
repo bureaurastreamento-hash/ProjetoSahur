@@ -245,7 +245,47 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-19, noite — tudo commitado e no GitHub)
+## RETOMAR AQUI (última sessão: 2026-09-20 — lojas divididas + trocas; FALTA o dono testar)
+
+### Leva 2026-09-20 — LOJAS DIVIDIDAS, VENDEDOR, TROCAS, economia mais dura — FEITO no código
+Pedido do dono: "loja do topbar = Robux; vendedor = trade entre jogadores + tudo de pontos (cosmético/
+customizável) por pontos e por pontos especiais de evento; pontos mais difíceis; ult carrega mais devagar".
+- **Loja (L, `ShopGui`)**: só Robux (giros roll_1/roll_5, "pick", passes). Dica nova. O prompt do NPC NÃO
+  abre mais ela. `CosmeticsGui` (K) perdeu o botão GIRAR por pontos (ficaram equipar + giros Robux + escolher
+  com Robux); a roda de emotes (B) perdeu o botão de roleta.
+- **Vendedor (E no NPC, `VendorGui`)** — `VendorController` + `VendorService` + `VendorConfig.Catalog()`:
+  aba COMPRAR = roleta (1 giro = `RollCost` 100 pts), personagens (UnlockCost), capas, auras, emotes por
+  PONTOS (`Price` em `CosmeticsConfig`) e seção EVENTO por PONTOS DE EVENTO (`EventPrice`: cape_canyon 40,
+  aura_canyon 80, scene_canyon 150 — itens novos, desenhados por código). Painel fecha sozinho a
+  `VendorConfig.Range` (16) studs do NPC; servidor exige perto (Range+6; dev passa). Só compra com perfil
+  salvável (sessionOnly = nega).
+  aba TROCAR = lista de jogadores → convite (`TradeController` + `TradeService` + `TradeConfig`).
+- **Trocas**: quem propõe precisa estar no vendedor; o outro recebe o cartão `VendorGui.Invite` e precisa
+  ir ao vendedor para ACEITAR (30 s). Mesa `VendorGui.Trade`: minha coluna = inventário trocável
+  (`TradeConfig.Tradeable`: personagens comprados com pontos, cosméticos/emotes não-grátis/não-VIP;
+  Limited PODE circular — `AllowLimited`), clique = oferece/tira; caixas de pontos e pontos de evento; a
+  outra coluna mostra a oferta dele. PRONTO nos dois → CONFIRMAR libera após `ConfirmDelay` 2 s; qualquer
+  mudança zera os prontos. Executa só se os dois ainda têm tudo e o receptor não tem o item; personagem em
+  uso trocado → volta ao Brawler; cosmético equipado trocado → desequipa; SaveNow nos dois. Sair = cancela.
+- **Pontos de evento**: `profile.eventPoints` (schema **3**), atributo `EventPoints`,
+  `DataService.AddEventPoints`, comando DEV `AddEventPoints` (linha nova no painel DEV), no Perfil
+  ("N de evento"). Ninguém dá ainda: os mini eventos do Canion vão dar.
+- **Bug corrigido de tabela**: `owns()` dava Weight 0 + Access nil = "todo mundo tem" → itens LIMITADOS do
+  passe e aura_ember/aura_shadow eram de graça. Agora só `Free = true` (emote wave) é de todos
+  (`CosmeticsConfig.IsFree`).
+- **Economia mais dura**: Kill 5→3, Win 50→30, Loss 10→5; level-up 20+5L→10+3L; streak 10→5, shutdown
+  2→1/kill; boss pool 300→180, min 20→10, top 50→30, sobreviver como boss 150→90; guerra 80/25→50/15;
+  conquistas ×0,6 (`AchievementsConfig.CoinScale`). Preços não mudaram (roleta 100, Swift 100, Mystic 250).
+- **Ult mais lenta**: `CharacterDefs.Energy` GainOnHitDealt 6→4, GainOnHitTaken 4→2; parry 10→7.
+- Testado: análise limpa; boot servidor/cliente sem erro; via MCP: catálogo (20 itens), AddEventPoints,
+  Owns/Grant/Remove, Tradeable, RollWithPoints negando sem pontos, posição do vendedor OK.
+- **FALTA o dono testar**: (1) E no vendedor → painel, comprar capa com pontos (dar pontos pelo DEV),
+  comprar item de evento (DEV "pontos de evento" → Somar), girar roleta; afastar = fecha. (2) Com 2
+  clientes (Test → Local Server, 2 players): propor troca, aceitar longe (deve negar "vá até o vendedor"),
+  aceitar perto, oferecer item/pontos, PRONTO nos dois, CONFIRMAR, ver o item mudar de dono e o perfil
+  salvar. (3) Sentir se os pontos/ult ficaram lentos demais.
+
+## Sessão anterior (2026-09-19, noite — tudo commitado e no GitHub)
 **Onde paramos**: dia inteiro de levas. FEITO e commitado: Parte 4 (denúncias + menu DEV), lajes do altar
 (place é dono), topbar novo (5 dropdowns que se fecham, X em todo painel, Configurações separado), HUD do
 dash (chips só na recarga), agarrão sem "voar" (grupo de colisão Grabbed), ids de animação/emote da equipe,
@@ -256,8 +296,8 @@ orbitando, auras em camadas (skins de cor saíram), vendedor da Lojinha (prompt 
 um áudio (EmoteFarpando, removido) — resolvido reativando a conta. Chave Open Cloud do grupo em
 `~/.config/sahur/roblox_api_key` (var `ROBLOX_API_KEY`).
 
-### PRÓXIMA SESSÃO — começar por aqui (pedido do dono ao sair, 2026-09-19)
-1. **Dividir as lojas** (não começado):
+### PRÓXIMA SESSÃO — (2026-09-19; o item 1 FOI FEITO em 2026-09-20, ver acima)
+1. **Dividir as lojas** (FEITO 2026-09-20):
    - **Loja do menu (L, `ShopGui`)** = só itens de ROBUX (giros da roleta, passes, "escolher" cosmético).
    - **Loja do vendedor (E no NPC)** = itens de PONTOS e de **pontos especiais de evento** (moeda nova que
      os mini eventos do Canion vão dar). Precisa: `EventPoints` no perfil (DataConfig, schema novo),

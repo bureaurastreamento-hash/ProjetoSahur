@@ -128,7 +128,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function ownsItem(item: CosmeticsConfig.Item): boolean
-	if item.Weight <= 0 and item.Access == nil then
+	if CosmeticsConfig.IsFree(item) then
 		return true
 	end
 	local inProfile = profile ~= nil and typeof(profile.cosmetics) == "table" and table.find(profile.cosmetics.owned or {}, item.Id) ~= nil
@@ -139,7 +139,7 @@ local function ownsItem(item: CosmeticsConfig.Item): boolean
 end
 
 local function ownsEmote(emote: CosmeticsConfig.Emote): boolean
-	return emote.Weight <= 0 or (profile ~= nil and table.find(profile.emotes or {}, emote.Id) ~= nil)
+	return CosmeticsConfig.IsFree(emote) or (profile ~= nil and table.find(profile.emotes or {}, emote.Id) ~= nil)
 end
 
 local function equippedId(category: string): string
@@ -186,7 +186,7 @@ local function refreshList()
 	if currentTab == "emote" then
 		for i, emote in CosmeticsConfig.Emotes do
 			local owned = ownsEmote(emote)
-			addRow(i, ("%d. %s"):format(i, emote.Name), emote.Color, if owned then "na roda (B)" else "roleta · Robux", if owned then COLOR_OWNED else COLOR_PRICE, function()
+			addRow(i, ("%d. %s"):format(i, emote.Name), emote.Color, if owned then "na roda (B)" else "Vendedor · Robux", if owned then COLOR_OWNED else COLOR_PRICE, function()
 				if not owned then
 					requestCosmetic:FireServer("pick_robux", emote.Id)
 				else
@@ -213,7 +213,7 @@ local function refreshList()
 		elseif item.Access == "vip" then
 			state, color = "VIP", COLOR_PRICE
 		else
-			state, color = "roleta · Robux", COLOR_PRICE
+			state, color = "Vendedor · Robux", COLOR_PRICE
 		end
 		addRow(order, item.Name, item.Color, state, color, function()
 			if isEquipped then
@@ -381,21 +381,12 @@ function CosmeticsController.Start()
 			setWheel(not wheel.Visible)
 		end
 	end)
-	local rollBtn = get(panel, "Roll") :: TextButton
-	rollBtn.Text = ("GIRAR — %d pontos"):format(CosmeticsConfig.RollCost)
-	rollBtn.Activated:Connect(function()
-		requestCosmetic:FireServer("roll")
-	end)
+	-- roleta por PONTOS fica no vendedor (VendorController); aqui só os giros por Robux
 	;(get(panel, "Roll1") :: TextButton).Activated:Connect(function()
 		requestShop:FireServer("product", "roll_1")
 	end)
 	;(get(panel, "Roll5") :: TextButton).Activated:Connect(function()
 		requestShop:FireServer("product", "roll_5")
-	end)
-	local wheelRoll = get(wheel, "Roll") :: TextButton
-	wheelRoll.Text = ("GIRAR\n%d pts"):format(CosmeticsConfig.RollCost)
-	wheelRoll.Activated:Connect(function()
-		requestCosmetic:FireServer("roll")
 	end)
 	panel:GetPropertyChangedSignal("Visible"):Connect(function()
 		if panel.Visible then
@@ -421,8 +412,9 @@ function CosmeticsController.Start()
 			for _, it in data.items do
 				table.insert(names, tostring(it.name))
 			end
-			hintLabel.Text = ("Roleta: %s!"):format(table.concat(names, ", "))
-			HUDController.ShowBanner(("ROLETA: %s"):format(table.concat(names, ", ")), 3)
+			local how = if data.reason == "vendor" then "COMPRADO" elseif data.reason == "trade" then "TROCA" else "ROLETA"
+			hintLabel.Text = ("%s: %s!"):format(how, table.concat(names, ", "))
+			HUDController.ShowBanner(("%s: %s"):format(how, table.concat(names, ", ")), 3)
 			FX.PlaySoundUI("Shared", "UltReady")
 			local character = localPlayer.Character
 			if character then

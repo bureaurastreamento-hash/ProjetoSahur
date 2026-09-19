@@ -170,7 +170,7 @@ CombatConfig.Awakening = {
 	DamageMultiplier = 1.3,
 	SpeedMultiplier = 1.1,
 	IFrames = 0.6, -- invencível na ativação (somado à cutscene)
-	ChargeOnParry = 10, -- carga extra ao parryar
+	ChargeOnParry = 7, -- carga extra ao parryar
 	-- Cutscene de transformação (decisão do dono 2026-09-16): G = o personagem para, carrega, ESTOURA e
 	-- volta despertado. O jogador fica invencível e sem agir durante Duration; no BurstAt quem estiver a
 	-- BurstRadius leva BurstDamage + empurrão. O buff/kit despertado só começa DEPOIS da cutscene.

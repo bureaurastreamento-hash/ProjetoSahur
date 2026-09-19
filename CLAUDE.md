@@ -15,6 +15,12 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado do design (2026-09-20) — lojas divididas (ver PROGRESSO.md "RETOMAR AQUI")
+- **Loja (L)** = só Robux. **Vendedor** (E no NPC da Lojinha, `VendorGui`) = tudo por PONTOS e por PONTOS DE
+  EVENTO (`profile.eventPoints`, schema 3; `Price`/`EventPrice` em `CosmeticsConfig`; `VendorConfig.Catalog`)
+  + TROCAS entre jogadores (`TradeService`/`TradeController`/`TradeConfig`; os dois no vendedor; pronto →
+  confirmar). Economia e carga da ult ficaram mais duras a pedido do dono. Falta o dono testar (2 clientes).
+
 ## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
 - **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/
   `Resolve`, camada de base no `ProcAnimController`, `ProcAnimHold` segura o rig na cutscene) e as

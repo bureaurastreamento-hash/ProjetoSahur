@@ -3,7 +3,8 @@
 	ShopNpcService (servidor)
 	Vendedor da LOJINHA (dono, 2026-09-19): um NPC R6 parado na frente do modelo `Workspace.Lojinha`
 	(o dono posiciona a construção onde quiser; o vendedor acha ela pelo nome) com um ProximityPrompt
-	"Falar". Quem aperta abre a tela de Loja (o cliente escuta o prompt em ShopController — sem remote).
+	"Falar". Quem aperta abre o painel do VENDEDOR (VendorController escuta o prompt — sem remote): compras
+	por pontos/pontos de evento e trocas entre jogadores (VendorService/TradeService).
 	O NPC é ancorado, sem Combatant, invulnerável e sem vida na cabeça: é cenário, não alvo.
 	Sem `Lojinha` no place = não faz nada (avisa no Studio).
 ]]
@@ -23,6 +24,25 @@ ShopNpcService.PromptName = "ShopPrompt" -- o ShopController procura este nome
 ShopNpcService.NpcName = "Vendedor"
 ShopNpcService.SpotName = "VendedorSpot" -- Part opcional no Workspace: posição/direção exatas do vendedor
 ShopNpcService.FrontOffset = 6 -- studs à frente da lojinha (eixo -Z do pivô do modelo)
+
+local current: Model? = nil
+
+--- Posição do vendedor (VendorService/TradeService: "está perto do vendedor?"). nil = sem vendedor.
+function ShopNpcService.GetPosition(): Vector3?
+	local npc = current
+	local root = if npc and npc.Parent then npc:FindFirstChild("HumanoidRootPart") else nil
+	return if root and root:IsA("BasePart") then root.Position else nil
+end
+
+--- Distância do jogador ao vendedor (math.huge sem vendedor/personagem).
+function ShopNpcService.DistanceTo(player: Player): number
+	local pos = ShopNpcService.GetPosition()
+	local root = if player.Character then player.Character:FindFirstChild("HumanoidRootPart") else nil
+	if not pos or not root or not root:IsA("BasePart") then
+		return math.huge
+	end
+	return (root.Position - pos).Magnitude
+end
 
 local function buildNpc(): Model?
 	local ok, model = pcall(function()
@@ -70,6 +90,7 @@ local function placeNpc(shop: Model)
 	if not npc then
 		return
 	end
+	current = npc
 	-- Lojinha e Banheiro são a MESMA construção (dono): a caixa é a união dos dois; a "frente" é o
 	-- LookVector do pivô da Lojinha (girou o modelo, gira a frente). O vendedor fica fora da caixa,
 	-- com os pés no chão de verdade (raycast ignorando a construção).

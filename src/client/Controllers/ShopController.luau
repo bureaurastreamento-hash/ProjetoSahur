@@ -1,15 +1,15 @@
 --!strict
 --[[
 	ShopController (cliente)
-	Preenche ShopGui.Panel com o catálogo de ShopConfig (pontos via Developer Product, passes)
+	Preenche ShopGui.Panel com o catálogo de ShopConfig (SÓ ROBUX: giros/escolha de cosmético e passes)
 	e pede a compra ao servidor (RequestShop), que abre o prompt oficial da Roblox.
+	Pontos e pontos de evento são gastos no VENDEDOR da Lojinha (VendorController), não aqui.
 	Só reflete: pontos vêm do atributo Coins; passes possuídos do atributo Pass_<key>.
 	O painel é aberto/fechado pelo ícone "Loja" (L) no TopbarController.
 	API: ShopController.Panel (Frame) para o topbar ligar.
 ]]
 
 local Players = game:GetService("Players")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
@@ -17,7 +17,6 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local ShopConfig = require(Modules:WaitForChild("ShopConfig"))
 local FX = require(Modules:WaitForChild("FX"))
-local HUDController = require(script.Parent:WaitForChild("HUDController"))
 
 local ShopController = {}
 
@@ -44,7 +43,7 @@ local function get(parent: Instance, name: string): Instance
 end
 
 local function setHint(text: string, seconds: number?)
-	local original = "Personagens são comprados com pontos na tela Personagens (V)."
+	local original = "Aqui só Robux. Pontos e pontos de evento: fale com o VENDEDOR da Lojinha (E)."
 	hint.Text = text
 	if seconds then
 		task.delay(seconds, function()
@@ -143,12 +142,6 @@ function ShopController.Start()
 			setHint("Este item ainda não está disponível.", 3)
 		elseif event == "owned" then
 			setHint("Você já tem este passe.", 3)
-		end
-	end)
-	-- vendedor da Lojinha (ShopNpcService): o prompt "ShopPrompt" abre a Loja de quem apertou
-	ProximityPromptService.PromptTriggered:Connect(function(prompt: ProximityPrompt, player: Player)
-		if player == localPlayer and prompt.Name == "ShopPrompt" then
-			HUDController.OpenShop:Fire()
 		end
 	end)
 	Log.debug("[ShopController] pronto")

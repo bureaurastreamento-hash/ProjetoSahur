@@ -50,6 +50,14 @@ export type Season = {
 -- Temporadas / passes. Para abrir a próxima: adicione aqui, crie as conquistas com
 -- `Season = "<id>"` e os itens limitados em CosmeticsConfig (Season = "<id>", Limited = true).
 -- ---------------------------------------------------------------------------
+--- Escala dos PONTOS das conquistas (dono, 2026-09-20: pontos mais difíceis). Os valores da lista são
+--- os "cheios"; `CoinsOf` devolve o que se paga de verdade.
+AchievementsConfig.CoinScale = 0.6
+
+function AchievementsConfig.CoinsOf(reward: Reward): number
+	return math.floor((reward.Coins or 0) * AchievementsConfig.CoinScale + 0.5)
+end
+
 AchievementsConfig.Seasons = {
 	{ Id = "s1", Name = "Passe 1 — Despertar", Start = { year = 2026, month = 9, day = 17 }, Days = 60 },
 } :: { Season }

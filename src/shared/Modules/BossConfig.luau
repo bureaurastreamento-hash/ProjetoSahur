@@ -58,14 +58,14 @@ BossConfig.Form = {
 	Duration = 240,
 	HitboxScale = 2.2,
 	DamageMultiplier = 2.2, -- socos (M1) da forma
-	SurviveCoins = 150, -- se aguentar até o fim
+	SurviveCoins = 90, -- se aguentar até o fim
 	TransformSeconds = 2.5, -- tempo parado/invencível no altar antes de virar (cutscene curta)
 }
 
 -- Recompensa: bolo dividido pela fração de dano causado + mínimo para quem participou
-BossConfig.RewardPool = 300
-BossConfig.RewardMin = 20
-BossConfig.RewardTopBonus = 50 -- quem mais causou dano
+BossConfig.RewardPool = 180
+BossConfig.RewardMin = 10
+BossConfig.RewardTopBonus = 30 -- quem mais causou dano
 BossConfig.TopDropChance = 0.35 -- chance de o top de dano ganhar um giro grátis da roleta (drop raro)
 
 export type Attack = {

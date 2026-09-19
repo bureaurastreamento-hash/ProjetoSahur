@@ -38,6 +38,7 @@ local COLOR_SELECTED = Color3.fromRGB(90, 165, 255)
 local NUMBER_COMMANDS: { [string]: string } = {
 	SetCoins = "Coins",
 	AddCoins = "Coins",
+	AddEventPoints = "EventPoints",
 	SetEnergy = "Energy",
 	SetHealth = "Health",
 	SetSpeed = "Speed",

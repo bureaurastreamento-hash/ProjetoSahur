@@ -77,8 +77,9 @@ local CharacterDefs = {}
 
 CharacterDefs.Energy = {
 	Max = 100,
-	GainOnHitDealt = 6,
-	GainOnHitTaken = 4,
+	-- dono (2026-09-20): ult carrega mais devagar (era 6/4)
+	GainOnHitDealt = 4,
+	GainOnHitTaken = 2,
 }
 
 CharacterDefs.DefaultCharacter = "Brawler"

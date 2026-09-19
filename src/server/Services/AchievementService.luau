@@ -59,8 +59,8 @@ end
 local function payReward(player: Player, ach: AchievementsConfig.Achievement): string
 	local parts: { string } = {}
 	local reward = ach.Reward
-	if reward.Coins and reward.Coins > 0 then
-		local coins = DataService.RewardCoins(player, reward.Coins)
+	if AchievementsConfig.CoinsOf(reward) > 0 then
+		local coins = DataService.RewardCoins(player, AchievementsConfig.CoinsOf(reward))
 		table.insert(parts, ("%d pontos"):format(coins))
 	end
 	if reward.XP and reward.XP > 0 then
@@ -214,8 +214,8 @@ function AchievementService.List(player: Player): { [string]: any }
 		end
 		for _, ach in AchievementsConfig.Active() do
 			local reward: { string } = {}
-			if ach.Reward.Coins then
-				table.insert(reward, ("%d pontos"):format(ach.Reward.Coins))
+			if AchievementsConfig.CoinsOf(ach.Reward) > 0 then
+				table.insert(reward, ("%d pontos"):format(AchievementsConfig.CoinsOf(ach.Reward)))
 			end
 			if ach.Reward.XP and ach.Reward.XP > 0 then
 				table.insert(reward, ("%d XP"):format(ach.Reward.XP))

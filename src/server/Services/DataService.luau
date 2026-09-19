@@ -86,6 +86,9 @@ local function migrate(raw: any): DataConfig.Profile
 	if typeof(raw.coins) == "number" and raw.coins >= 0 then
 		profile.coins = math.floor(raw.coins)
 	end
+	if typeof(raw.eventPoints) == "number" and raw.eventPoints >= 0 then
+		profile.eventPoints = math.floor(raw.eventPoints) -- schema 3
+	end
 	if typeof(raw.unlockedCharacters) == "table" then
 		for _, id in raw.unlockedCharacters do
 			if typeof(id) == "string" and CharacterDefs.Get(id) and not table.find(profile.unlockedCharacters, id) then
@@ -211,6 +214,7 @@ end
 
 local function pushToClient(player: Player, session: Session)
 	player:SetAttribute("Coins", session.profile.coins)
+	player:SetAttribute("EventPoints", session.profile.eventPoints)
 	notifyProfile:FireClient(player, session.profile, session.sessionOnly)
 end
 
@@ -318,6 +322,16 @@ function DataService.RewardCoins(player: Player, amount: number): number
 	local final = math.floor(amount * (if typeof(mult) == "number" and mult > 0 then mult else 1) + 0.5)
 	DataService.AddCoins(player, final)
 	return final
+end
+
+--- Pontos de EVENTO (mini eventos; o vendedor cobra em EventPrice). Sem multiplicador de passe.
+function DataService.AddEventPoints(player: Player, amount: number)
+	local profile = DataService.GetProfile(player)
+	if not profile or amount == 0 then
+		return
+	end
+	profile.eventPoints = math.max(0, math.floor(profile.eventPoints + amount))
+	touch(player)
 end
 
 --- Salva agora (compras). Se estiver salvando, espera terminar. false = não salvou.

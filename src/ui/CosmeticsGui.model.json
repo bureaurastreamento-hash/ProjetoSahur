@@ -667,10 +667,10 @@
      ]
     },
     {
-     "name": "Roll",
+     "name": "Roll1",
      "className": "TextButton",
      "properties": {
-      "Name": "Roll",
+      "Name": "Roll1",
       "Size": {
        "UDim2": [
         [
@@ -688,95 +688,6 @@
         [
          0,
          0
-        ],
-        [
-         0,
-         74
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.45,
-        0.35,
-        0.1
-       ]
-      },
-      "BackgroundTransparency": 0.0,
-      "Text": "GIRAR",
-      "Font": "GothamBold",
-      "TextSize": 13,
-      "TextColor3": {
-       "Color3": [
-        0.96,
-        0.96,
-        0.97
-       ]
-      },
-      "AutoButtonColor": true,
-      "BorderSizePixel": 0
-     },
-     "children": [
-      {
-       "name": "UICorner",
-       "className": "UICorner",
-       "properties": {
-        "Name": "UICorner",
-        "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
-        }
-       }
-      },
-      {
-       "name": "UIStroke",
-       "className": "UIStroke",
-       "properties": {
-        "Name": "UIStroke",
-        "Thickness": 1,
-        "Color": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "Transparency": 0.84,
-        "ApplyStrokeMode": "Border"
-       }
-      }
-     ]
-    },
-    {
-     "name": "Roll1",
-     "className": "TextButton",
-     "properties": {
-      "Name": "Roll1",
-      "Size": {
-       "UDim2": [
-        [
-         0.25,
-         -4
-        ],
-        [
-         0,
-         30
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0.5,
-         4
         ],
         [
          0,
@@ -852,7 +763,7 @@
       "Size": {
        "UDim2": [
         [
-         0.25,
+         0.5,
          -4
         ],
         [
@@ -864,8 +775,8 @@
       "Position": {
        "UDim2": [
         [
-         0.75,
-         4
+         1,
+         0
         ],
         [
          0,
@@ -875,7 +786,7 @@
       },
       "AnchorPoint": {
        "Vector2": [
-        0,
+        1,
         0
        ]
       },
@@ -969,7 +880,7 @@
        ]
       },
       "BackgroundTransparency": 1,
-      "Text": "Roleta da sorte: pontos (ganhos jogando) ou Robux. Só visual: nada dá vantagem.",
+      "Text": "Equipe o que você tem. Comprar: Robux aqui, pontos no VENDEDOR (E). Só visual.",
       "Font": "GothamMedium",
       "TextSize": 11,
       "TextColor3": {

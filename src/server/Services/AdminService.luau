@@ -243,6 +243,17 @@ perTarget.AddCoins = function(_, target, args)
 	return true, ("%s: %+d moedas (total %d)"):format(target.Name, amount, if profile then profile.coins else 0)
 end
 
+--- Pontos de EVENTO (moeda do vendedor para itens de evento; os mini eventos do Canion vão dar).
+perTarget.AddEventPoints = function(_, target, args)
+	local amount = number(args.amount)
+	if not amount then
+		return false, "quantidade inválida"
+	end
+	DataService.AddEventPoints(target, amount)
+	local profile = DataService.GetProfile(target)
+	return true, ("%s: %+d pontos de evento (total %d)"):format(target.Name, amount, if profile then profile.eventPoints else 0)
+end
+
 perTarget.SetEnergy = function(_, target, args)
 	local amount = number(args.amount)
 	if not amount then

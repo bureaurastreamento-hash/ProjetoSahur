@@ -506,7 +506,7 @@ shop = screen("ShopGui", [
         scroll("Passes", ud(1, 0, 1, -(SY + 20 + PH + 36 + 24)), ud(0, 0, 0, SY + 20 + PH + 36), children=[
             listlayout("Vertical", 6), pass_row,
         ]),
-        label("Hint", "Personagens são comprados com pontos na tela Personagens (V).", ud(1, 0, 0, 16),
+        label("Hint", "Aqui só Robux. Pontos e pontos de evento: fale com o VENDEDOR da Lojinha (E).", ud(1, 0, 0, 16),
               ud(0, 0, 1, 0), anchor=(0, 1), ts=11, color=MUTED),
     ]),
 ], order=3)
@@ -533,16 +533,110 @@ cosmetics = screen("CosmeticsGui", [
             button("TabAura", "AURAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 3}),
             button("TabEmote", "EMOTES", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 4}),
         ]),
-        button("Roll", "GIRAR", ud(0.5, -4, 0, 30), ud(0, 0, 0, PANEL_TITLE_H + 48), bg=GOLD_BG, ts=13),
-        button("Roll1", "1 giro · Robux", ud(0.25, -4, 0, 30), ud(0.5, 4, 0, PANEL_TITLE_H + 48), ts=11),
-        button("Roll5", "5 giros · Robux", ud(0.25, -4, 0, 30), ud(0.75, 4, 0, PANEL_TITLE_H + 48), ts=11),
-        label("Hint", "Roleta da sorte: pontos (ganhos jogando) ou Robux. Só visual: nada dá vantagem.", ud(1, 0, 0, 16),
+        button("Roll1", "1 giro · Robux", ud(0.5, -4, 0, 30), ud(0, 0, 0, PANEL_TITLE_H + 48), ts=11),
+        button("Roll5", "5 giros · Robux", ud(0.5, -4, 0, 30), ud(1, 0, 0, PANEL_TITLE_H + 48), anchor=(1, 0), ts=11),
+        label("Hint", "Equipe o que você tem. Comprar: Robux aqui, pontos no VENDEDOR (E). Só visual.", ud(1, 0, 0, 16),
               ud(0, 0, 0, PANEL_TITLE_H + 84), ts=11, color=MUTED),
         scroll("List", ud(1, 0, 1, -(PANEL_TITLE_H + 108)), ud(0, 0, 0, PANEL_TITLE_H + 108),
                children=[listlayout("Vertical", 6), cos_row]),
     ]),
 ], order=3)
 write("CosmeticsGui.model.json", cosmetics)
+
+# =============================================================================
+# Vendedor (E no NPC da Lojinha) — VendorController (aba COMPRAR) + TradeController (aba TROCAR,
+# convite e mesa de troca). Nomes fixos: Tabs/TabShop/TabTrade, Coins, Hint, Roll, List(Template),
+# Players(Template), Invite(Text/Accept/Decline), Trade(...).
+# =============================================================================
+vendor_row = button("Template", "", ud(1, 0, 0, 40), ud(0, 0, 0, 0), bg=CARD, t=0.1, extra={"Visible": False}, children=[
+    padding(10, 4),
+    frame("Swatch", ud(0, 18, 0, 18), ud(0, 0, 0.5, 0), anchor=(0, 0.5), bg=ACCENT, t=0, children=[corner(9)]),
+    label("Name", "", ud(0.6, -30, 1, 0), ud(0, 28, 0, 0), font=FONT_B, ts=13),
+    label("Price", "", ud(0.4, 0, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=12, color=GOLD,
+          xalign="Right"),
+])
+vendor_section = label("Section", "", ud(1, 0, 0, 18), ud(0, 0, 0, 0), font=FONT_B, ts=11, color=MUTED,
+                       extra={"Visible": False})
+vendor_player_row = button("Template", "", ud(1, -6, 0, 32), ud(0, 0, 0, 0), ts=13,
+                           extra={"Visible": False, "TextXAlignment": "Left"},
+                           children=[padding(10, 0),
+                                     label("Action", "PROPOR TROCA", ud(0, 110, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0),
+                                           font=FONT_B, ts=11, color=GREEN, xalign="Right")])
+VY = PANEL_TITLE_H + 12
+
+
+def trade_side(name, title, mine):
+    """Coluna da mesa de troca: título, lista de itens, pontos e pontos de evento."""
+    kids = [
+        label("Title", title, ud(1, 0, 0, 18), ud(0, 0, 0, 0), font=FONT_B, ts=12, color=MUTED),
+        scroll("Items", ud(1, 0, 1, -96), ud(0, 0, 0, 22), children=[
+            listlayout("Vertical", 4),
+            button("Template", "", ud(1, -6, 0, 28), ud(0, 0, 0, 0), bg=CARD, t=0.1, ts=12,
+                   extra={"Visible": False, "TextXAlignment": "Left"},
+                   children=[padding(8, 0),
+                             label("State", "", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=11,
+                                   color=GREEN, xalign="Right")]),
+        ]),
+    ]
+    if mine:
+        kids += [
+            textbox("Points", "pontos a dar (0)", ud(1, 0, 0, 28), ud(0, 0, 1, -34), anchor=(0, 1), ts=12),
+            textbox("EventPoints", "pontos de evento a dar (0)", ud(1, 0, 0, 28), ud(0, 0, 1, 0), anchor=(0, 1), ts=12),
+        ]
+    else:
+        kids += [
+            label("Points", "0 pontos", ud(1, 0, 0, 28), ud(0, 0, 1, -34), anchor=(0, 1), font=FONT_B, ts=12, color=GOLD),
+            label("EventPoints", "0 pontos de evento", ud(1, 0, 0, 28), ud(0, 0, 1, 0), anchor=(0, 1), font=FONT_B, ts=12,
+                  color=GOLD),
+        ]
+    return frame(name, ud(0.5, -6, 1, -110), ud(0 if mine else 1, 0, 0, 30), anchor=(0 if mine else 1, 0), t=1,
+                 children=kids)
+
+
+vendor = screen("VendorGui", [
+    panel("Panel", 520, 560, "Vendedor", [
+        label("Coins", "", ud(0, 220, 0, PANEL_TITLE_H), ud(1, -30, 0, 0), anchor=(1, 0), font=FONT_B, ts=13, color=GOLD,
+              xalign="Right"),
+        frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, VY), t=1, children=[
+            listlayout("Horizontal", 6),
+            button("TabShop", "COMPRAR", ud(0, 120, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 1}),
+            button("TabTrade", "TROCAR", ud(0, 120, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 2}),
+        ]),
+        label("Hint", "", ud(1, 0, 0, 30), ud(0, 0, 0, VY + 34), ts=11, color=MUTED, yalign="Top",
+              extra={"TextWrapped": True}),
+        # aba COMPRAR
+        scroll("List", ud(1, 0, 1, -(VY + 70)), ud(0, 0, 0, VY + 70), children=[
+            listlayout("Vertical", 4), vendor_row, vendor_section,
+        ]),
+        # aba TROCAR: jogadores do servidor
+        scroll("Players", ud(1, 0, 1, -(VY + 70)), ud(0, 0, 0, VY + 70), extra={"Visible": False}, children=[
+            listlayout("Vertical", 4, sort="Name"), vendor_player_row,
+        ]),
+    ]),
+    # convite de troca recebido (topo central, como o do duelo)
+    frame("Invite", ud(0, 380, 0, 96), ud(0.5, 0, 0, 70), anchor=(0.5, 0), t=0.15, visible=False, children=[
+        corner(10), stroke(), padding(12),
+        label("Text", "", ud(1, 0, 0, 36), ud(0, 0, 0, 0), font=FONT_B, ts=14, xalign="Center", extra={"TextWrapped": True}),
+        button("Accept", "ACEITAR", ud(0.5, -5, 0, 30), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0.16, 0.38, 0.24], ts=12),
+        button("Decline", "RECUSAR", ud(0.5, -5, 0, 30), ud(1, 0, 1, 0), anchor=(1, 1), bg=[0.4, 0.14, 0.14], ts=12),
+    ]),
+    # mesa de troca (centro): minha coluna = meu inventário trocável (clique = oferece/tira); a outra = o que
+    # o outro ofereceu. PRONTO nos dois -> CONFIRMAR libera depois de TradeConfig.ConfirmDelay.
+    frame("Trade", ud(0, 680, 0, 480), ud(0.5, 0, 0.5, 0), anchor=(0.5, 0.5), t=0.12, visible=False, children=[
+        corner(10), stroke(), padding(PANEL_PAD), sizecap(680, 480),
+        label("Title", "Troca", ud(1, -30, 0, PANEL_TITLE_H), ud(0, 0, 0, 0), font=FONT_B, ts=20),
+        button("Close", "✕", ud(0, 24, 0, 24), ud(1, 0, 0, 0), anchor=(1, 0), bg=CARD, t=0.3, ts=14, color=MUTED,
+               extra={"ZIndex": 5}),
+        trade_side("Mine", "VOCÊ OFERECE  (clique para pôr/tirar)", True),
+        trade_side("Theirs", "ELE OFERECE", False),
+        label("Status", "", ud(1, 0, 0, 30), ud(0, 0, 1, -40), anchor=(0, 1), ts=12, color=GOLD, yalign="Top",
+              extra={"TextWrapped": True}),
+        button("Ready", "PRONTO", ud(0.34, -6, 0, 32), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0.16, 0.38, 0.24], ts=13),
+        button("Confirm", "CONFIRMAR", ud(0.34, -6, 0, 32), ud(0.5, 0, 1, 0), anchor=(0.5, 1), bg=GOLD_BG, ts=13),
+        button("Cancel", "CANCELAR", ud(0.3, -6, 0, 32), ud(1, 0, 1, 0), anchor=(1, 1), bg=[0.4, 0.14, 0.14], ts=13),
+    ]),
+], order=3)
+write("VendorGui.model.json", vendor)
 
 # =============================================================================
 # Roda de emotes (B): 8 botões em círculo no centro-baixo, aparece enquanto aberta
@@ -553,9 +647,7 @@ wheel_children = [
         corner(35), stroke(),
         label("Label", "EMOTES", ud(1, 0, 1, 0), ud(0, 0, 0, 0), font=FONT_B, ts=11, color=MUTED, xalign="Center"),
     ]),
-    # roleta da sorte à direita da roda
-    button("Roll", "GIRAR", ud(0, 84, 0, 56), ud(0.5, 215, 0.5, 0), anchor=(0.5, 0.5), bg=GOLD_BG, ts=12,
-           extra={"TextWrapped": True}),
+    # (a roleta por pontos saiu daqui: fica no VENDEDOR)
 ]
 for i in range(8):
     a = -_m.pi / 2 + i * (2 * _m.pi / 8)

@@ -105,6 +105,7 @@ y += 34
 # linhas: campo + botão Set
 rows = [
     ("Coins", "moedas", "SetCoins", "Definir", "AddCoins", "Somar"),
+    ("EventPoints", "pontos de evento", "AddEventPoints", "Somar", None, None),
     ("Energy", "energia 0-100", "SetEnergy", "Definir", "ResetCooldowns", "Zerar CDs"),
     ("Health", "vida", "SetHealth", "Definir", "Heal", "Curar"),
     ("Speed", "WalkSpeed (16)", "SetSpeed", "Definir", "Respawn", "Respawn"),
@@ -115,7 +116,8 @@ for i, (box, ph, cmd1, t1, cmd2, t2) in enumerate(rows):
     yy = y + i * 32
     children.append(textbox(box, ph, udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, yy)))
     children.append(button(cmd1, t1, udim2(0, COL_W, 0, 28), udim2(0, col_x(2), 0, yy)))
-    children.append(button(cmd2, t2, udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, yy), RED if cmd2 == "Kill" else BG2))
+    if cmd2:
+        children.append(button(cmd2, t2, udim2(0, COL_W, 0, 28), udim2(0, col_x(3), 0, yy), RED if cmd2 == "Kill" else BG2))
 y += 32 * len(rows) + 4
 
 # ---- Personagens --------------------------------------------------------------

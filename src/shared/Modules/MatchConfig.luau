@@ -39,10 +39,10 @@ MatchConfig.AllowLobbyCombat = true -- DEBUG: permite socos/habilidades no lobby
 MatchConfig.KillStreak = {
 	Milestones = { 3, 5, 10 }, -- depois de 10, a cada Every
 	Every = 5,
-	MilestoneCoins = 10,
+	MilestoneCoins = 5,
 	AuraFrom = 10,
 	ShutdownMin = 5,
-	ShutdownCoinsPerKill = 2, -- bônus = streak da vítima × isto
+	ShutdownCoinsPerKill = 1, -- bônus = streak da vítima × isto
 }
 
 -- Atributos no Player usados como "contrato" entre serviços (sem acoplamento direto):

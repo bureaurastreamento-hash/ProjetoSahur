@@ -25,7 +25,7 @@ end
 
 --- Moedas ganhas ao chegar em `level`.
 function ProgressionConfig.LevelUpCoins(level: number): number
-	return 20 + level * 5
+	return 10 + level * 3
 end
 
 -- Recompensa diária: removida (2026-09-15). Só o campo `daily` do perfil sobrevive, sem uso.
