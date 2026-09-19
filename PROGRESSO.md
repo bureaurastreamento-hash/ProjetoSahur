@@ -245,24 +245,59 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-17, noite — tudo commitado e no GitHub, 28 services / 0 erros na análise)
-**Onde paramos**: Levas 1–6 e **8** do polimento FEITAS + as partes **1, 2 e 3** da lista do dono
-(correções de combate/câmera/HUD, topbar com dropdown, conquistas com passe). Tudo passa na análise
-estática e foi testado via MCP no Studio, menos o que só se vê jogando.
+## RETOMAR AQUI (última sessão: 2026-09-19 — parte 4: denúncias + menu DEV feitas, aguardando teste)
+**Onde paramos**: Parte 4 da lista do dono (sistema de denúncias + menu DEV de verdade) foi
+IMPLEMENTADA e passa 0 erros na análise estática, mas ainda **NÃO foi testada no Studio**
+(precisa de 2 clientes: um denuncia, o dev lê). Ver "Parte 4" logo abaixo para o que testar.
 
 ### O QUE FALTA (ordem combinada com o dono)
-1. **Parte 4 da lista — menu DEV de verdade + DENÚNCIAS** (não começada; detalhes abaixo em
-   "LISTA DO DONO"): teleportar para a arena, entrar no servidor de um jogador, assistir alguém jogar,
-   ver as denúncias de um jogador, dar itens (limitados ou não — o `GrantItem` do AdminService já existe).
-   Antes disso, criar o sistema de denúncia: o jogador denuncia outro com motivo predefinido + texto
-   livre, salvo em DataStore, e o DEV lê pelo menu.
-2. **O dono testar o que foi entregue hoje** e mandar a lista de ajustes: jeito de andar/parar de cada
-   personagem (Leva 8), VFX do F7 (`Lib/…`), poses feias (`ProcAnimDefs.luau`), ritmo/ângulos do trailer,
-   metas/duração do passe (`AchievementsConfig`: hoje 60 dias e 6 conquistas por passe, chutados por mim).
+1. **Dono testar a Parte 4** (abaixo) com 2 clientes antes de seguir.
+2. **O dono testar o que foi entregue na sessão de 2026-09-17** e mandar a lista de ajustes: jeito de
+   andar/parar de cada personagem (Leva 8), VFX do F7 (`Lib/…`), poses feias (`ProcAnimDefs.luau`),
+   ritmo/ângulos do trailer, metas/duração do passe (`AchievementsConfig`: hoje 60 dias e 6 conquistas
+   por passe, chutados por mim).
 3. **Leva 7 do polimento**: balanceamento, teste com 2 clientes, acabamento dos menus.
 4. **Pendências antigas que continuam de pé**: `AwakenedEffect` que faltar, lista final de assets por
    ação para a equipe, ids de animação/som que a equipe ainda vai publicar no grupo, e marcar
    `team = true` nos clipes de `ProcAnimDefs` conforme o dono for aprovando as animações da equipe.
+
+### Parte 4 — sistema de DENÚNCIAS + menu DEV de verdade — FEITO 2026-09-19 (falta testar)
+- **Denúncia (qualquer jogador)**: ícone "Denunciar" no dropdown de Perfil (`ReportController.luau`,
+  `ReportGui.model.json`) — escolhe um jogador online da lista, um motivo predefinido
+  (`ReportConfig.luau`: hack/exploit, tóxico/assédio, nome impróprio, spam, abuso de bug, outro) e
+  escreve um texto livre opcional (200 caracteres); `RequestReport` manda pro servidor.
+- **`ReportService.luau`** (novo): valida (não dá pra se denunciar, motivo tem que existir, alvo tem
+  que estar no servidor), cooldown de 30 s entre denúncias do mesmo jogador + rate limit (5 por 5 min),
+  grava no DataStore `Reports_v1` (chave = UserId do denunciado, guarda as últimas 30, mais recente
+  primeiro: quem denunciou, motivo, texto, data, jobId do servidor). `ReportService.GetReports(userId)`
+  é a função que o menu DEV usa pra ler.
+- **Menu DEV** (`AdminService.luau` + `DevController.luau` + `gerar_devgui.py`): seção nova "JOGADORES"
+  ganhou **Ir para a arena** (`TeleportArena`: teleporta pra um spawn de `Workspace.CurrentMap.Spawns`
+  via `ArenaService.GetSpawnCFrames()`), **Assistir alvo** (`Spectate`: toggle por jogador — câmera do
+  dev solta seguindo o HumanoidRootPart do alvo sem controlar o personagem dele; clicar de novo no
+  mesmo alvo solta a câmera) e **Entrar no servidor** (`JoinPlayerServer`: nome na caixa "Message",
+  usa `TeleportService:GetPlayerPlaceInstanceAsync` + `TeleportToPlaceInstance` — funciona mesmo se o
+  jogador estiver em OUTRO servidor, não só neste). Seção nova "DENÚNCIAS": **Ver denúncias do ALVO
+  selecionado** (`GetReports`, olha quem está marcado na lista de alvos) e **Buscar por nome**
+  (`GetReportsByName`, funciona pra jogador offline — usa `GetUserIdFromNameAsync`); o resultado lista
+  as últimas 10 no log do painel (data, motivo, quem denunciou, se foi neste servidor ou outro, texto).
+  `GrantItem` (dar cosmético/emote/personagem limitado ou não) já existia no `AdminService`, só não
+  tinha botão dedicado — segue disponível via `RequestAdminCommand("GrantItem", {id=...})` se precisar
+  de um pelo painel, não adicionei botão porque cada id precisa ser digitado (dono decide se quer isso
+  numa caixa de texto extra ou prefere só via GrantAll/personagens).
+- **TESTAR** (precisa 2 clientes, um deles com nick em `AdminConfig.Developers`):
+  1. Jogador comum abre Perfil > Denunciar, escolhe o outro jogador + motivo, manda texto, confirma que
+     a mensagem "denúncia enviada" aparece e que denunciar de novo antes de 30 s é bloqueado.
+  2. Dev abre o menu (F8), seleciona o jogador denunciado na lista de ALVO, clica "Ver denúncias do
+     ALVO selecionado" — confere se aparece no log.
+  3. Dev testa "Buscar por nome" com um nick que NÃO está online (offline lookup).
+  4. Dev clica "Ir para a arena" (confere se cai num spawn válido do mapa atual).
+  5. Dev seleciona um alvo e clica "Assistir alvo" — câmera deve soltar e seguir o jogador; clicar nele
+     de novo deve devolver a câmera pro dev.
+  6. "Entrar no servidor" com o nome de alguém rodando em OUTRO servidor Studio/Team Test (se não tiver
+     como testar 2 servidores agora, ao menos confirmar que não quebra nada com um nome inválido).
+  7. `DataStore Reports_v1`: no Studio precisa de "Enable Studio Access to API Services" ligado, senão
+     tanto a denúncia quanto a leitura falham com aviso (mensagem já trata isso).
 
 ### Leva 8 — animações "realistas" por personagem — FEITA 2026-09-17
 - `ProcAnimDefs.Locomotion` (ligar/desligar tudo em `Enabled`) + seção LOCOMOÇÃO: helper `locomotion(p)` monta

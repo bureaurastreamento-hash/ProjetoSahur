@@ -52,9 +52,10 @@ local SIMPLE_COMMANDS = {
 	"RespawnDummies", "ToggleDummies", "BringDummy", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
 	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerStop",
+	"TeleportArena", "Spectate", "GetReports",
 }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
-local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban" }
+local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName" }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 
 local localPlayer = Players.LocalPlayer
@@ -323,6 +324,47 @@ local function startFly()
 	end)
 end
 
+-- ---------------------------------------------------------------------------
+-- Assistir jogador (atributo SpectateTargetUserId do servidor): câmera solta acompanhando
+-- o HumanoidRootPart do alvo, sem controlar o personagem dele. Some ao zerar o atributo.
+-- ---------------------------------------------------------------------------
+
+local spectateConn: RBXScriptConnection? = nil
+local spectateCamera: Camera? = nil
+
+local function stopSpectate()
+	if spectateConn then
+		spectateConn:Disconnect()
+		spectateConn = nil
+	end
+	local camera = workspace.CurrentCamera
+	if camera and spectateCamera == camera then
+		camera.CameraType = Enum.CameraType.Custom
+		camera.CameraSubject = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+	end
+	spectateCamera = nil
+end
+
+local function startSpectate(userId: number)
+	stopSpectate()
+	local target = Players:GetPlayerByUserId(userId)
+	local camera = workspace.CurrentCamera
+	if not target or not camera then
+		return
+	end
+	spectateCamera = camera
+	local offset = Vector3.new(0, 4, 12)
+	spectateConn = game:GetService("RunService").RenderStepped:Connect(function()
+		local root = target.Character and target.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if not root or not camera.Parent then
+			stopSpectate()
+			return
+		end
+		camera.CameraType = Enum.CameraType.Scriptable
+		camera.CFrame = CFrame.new(root.Position + offset, root.Position)
+	end)
+end
+
 local function setOpen(open: boolean)
 	if not open then
 		panel.Visible = false
@@ -426,6 +468,16 @@ function DevController.Start()
 		stopFly()
 		if localPlayer:GetAttribute("DevFly") == true then
 			task.delay(1, startFly)
+		end
+	end)
+
+	-- assistir: idem, mas com o alvo (comando Spectate)
+	localPlayer:GetAttributeChangedSignal("SpectateTargetUserId"):Connect(function()
+		local userId = localPlayer:GetAttribute("SpectateTargetUserId")
+		if typeof(userId) == "number" then
+			startSpectate(userId)
+		else
+			stopSpectate()
 		end
 	end)
 

@@ -48,6 +48,10 @@ local BossService = require(script.Parent:WaitForChild("BossService"))
 local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
 local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
+local ReportService = require(script.Parent:WaitForChild("ReportService"))
+local ArenaService = require(script.Parent:WaitForChild("ArenaService"))
+local ReportConfig = require(Modules:WaitForChild("ReportConfig"))
+local TeleportService = game:GetService("TeleportService")
 -- RitualService/BossFormService dependem do AbilityService, que depende deste módulo: carregados no Start
 local RitualService: any = nil
 local BossFormService: any = nil
@@ -496,6 +500,20 @@ perTarget.Bring = function(admin, target)
 	return moveTo(target, admin)
 end
 
+--- Toggle: liga a câmera do dev no alvo (atributo lido pelo DevController); de novo no mesmo alvo desliga.
+perTarget.Spectate = function(admin, target)
+	if target == admin then
+		admin:SetAttribute("SpectateTargetUserId", nil)
+		return true, "câmera livre"
+	end
+	if admin:GetAttribute("SpectateTargetUserId") == target.UserId then
+		admin:SetAttribute("SpectateTargetUserId", nil)
+		return true, "parou de assistir " .. target.Name
+	end
+	admin:SetAttribute("SpectateTargetUserId", target.UserId)
+	return true, ("assistindo %s (de novo no mesmo alvo pra parar)"):format(target.Name)
+end
+
 perTarget.Kick = function(admin, target, args)
 	if target == admin then
 		return false, "não dá pra se kickar"
@@ -804,6 +822,103 @@ end
 global.TestSounds = function()
 	local list = require(Modules:WaitForChild("PackSounds")) :: { any }
 	return true, ("testando %d sons no cliente (veja o Output: [SoundProbe])"):format(#list), { testSounds = true }
+end
+
+--- Teleporta o dev para um ponto de spawn do mapa da arena (Workspace.CurrentMap.Spawns).
+global.TeleportArena = function(admin)
+	local root = admin.Character and admin.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return false, "sem personagem"
+	end
+	local spawns = ArenaService.GetSpawnCFrames()
+	if #spawns == 0 then
+		return false, "arena sem pontos de spawn (mapa carregado?)"
+	end
+	AntiExploitService.Grace(admin, 2)
+	root.CFrame = spawns[math.random(1, #spawns)] + Vector3.new(0, 3, 0)
+	return true, "teleportado para a arena"
+end
+
+--- Entra no servidor de um jogador (args.text = nick; funciona mesmo se ele estiver em OUTRO servidor).
+global.JoinPlayerServer = function(admin, args)
+	local name = textArg(args)
+	if not name then
+		return false, "escreva o NOME do jogador na caixa"
+	end
+	local okId, userId = pcall(function()
+		return Players:GetUserIdFromNameAsync(name)
+	end)
+	if not okId then
+		return false, "jogador não encontrado: " .. name
+	end
+	local okInfo, inServer, placeId, jobId = pcall(function()
+		return TeleportService:GetPlayerPlaceInstanceAsync(userId)
+	end)
+	if not okInfo or not inServer then
+		return false, name .. " não está em nenhum servidor agora"
+	end
+	local ok, err = pcall(function()
+		TeleportService:TeleportToPlaceInstance(placeId, jobId, admin)
+	end)
+	return ok, if ok then ("entrando no servidor de %s..."):format(name) else "erro: " .. tostring(err)
+end
+
+--- Denúncias contra um jogador. args.target = nick (online ou não), lido do seletor de alvo do menu.
+local function formatReports(list: { ReportService.ReportEntry }): string
+	if #list == 0 then
+		return "sem denúncias"
+	end
+	local reasonLabel: { [string]: string } = {}
+	for _, r in ReportConfig.Reasons do
+		reasonLabel[r.Id] = r.Label
+	end
+	local lines = {}
+	for i, entry in list do
+		if i > 10 then
+			table.insert(lines, ("... e mais %d"):format(#list - 10))
+			break
+		end
+		table.insert(lines, ("%s — %s (por %s, %s)%s"):format(
+			os.date("%d/%m %H:%M", entry.at),
+			reasonLabel[entry.reason] or entry.reason,
+			entry.reporter,
+			entry.jobId == game.JobId and "este servidor" or "outro servidor",
+			if entry.text ~= "" then ": " .. entry.text else ""
+		))
+	end
+	return ("%d denúncia(s):\n%s"):format(#list, table.concat(lines, "\n"))
+end
+
+global.GetReports = function(admin, args)
+	local targets = findTargets(admin, args.target)
+	local target = targets[1]
+	if not target then
+		return false, "selecione um jogador (não TODOS)"
+	end
+	local list, err = ReportService.GetReports(target.UserId)
+	if err and #list == 0 then
+		return false, "erro lendo denúncias: " .. err
+	end
+	return true, ("%s: %s"):format(target.Name, formatReports(list))
+end
+
+--- Denúncias de alguém que não está online agora (args.text = nick).
+global.GetReportsByName = function(_, args)
+	local name = textArg(args)
+	if not name then
+		return false, "escreva o NOME do jogador na caixa"
+	end
+	local okId, userId = pcall(function()
+		return Players:GetUserIdFromNameAsync(name)
+	end)
+	if not okId then
+		return false, "jogador não encontrado: " .. name
+	end
+	local list, err = ReportService.GetReports(userId)
+	if err and #list == 0 then
+		return false, "erro lendo denúncias: " .. err
+	end
+	return true, ("%s: %s"):format(name, formatReports(list))
 end
 
 global.ServerInfo = function()

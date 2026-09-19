@@ -59,6 +59,7 @@ RemoteEvents.Events = ({
 	RequestWar = "RequestWar", -- (action: "queue"|"leave"|"refresh") — guerra de clã (líder/oficial põe o clã na fila)
 	RequestClan = "RequestClan", -- (action: "create"|"invite"|"accept"|"decline"|"leave"|"kick"|"promote"|"demote"|"deposit"|"disband"|"refresh", a: any?, b: any?) — create(name, tag), invite/kick/promote/demote(userId), deposit(amount)
 	RequestDuel = "RequestDuel", -- (action: "challenge"|"accept"|"decline"|"cancel"|"leave"|"create_room"|"join_room"|"switch_team"|"leave_room"|"list_rooms", userId: number?)
+	RequestReport = "RequestReport", -- (targetName: string, reasonId: string, text: string?) — ReportConfig.Reasons
 
 	-- Notify: servidor -> cliente
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: "M1"|"Downslam"|"Uppercut", comboIndex: number)
@@ -92,6 +93,7 @@ RemoteEvents.Events = ({
 	NotifyWar = "NotifyWar", -- envolvidos: (event: "queue"|"start"|"state"|"end"|"denied"|"info", data: table); "queue" vai para os membros do clã
 	NotifyClan = "NotifyClan", -- dono: (event: "state"|"invite"|"denied"|"info", data: table) — state = { clan: ClanConfig.Clan? , role: string? }
 	NotifyDuel = "NotifyDuel", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"round_end"|"end"|"rating"|"denied"|"state"|"room_joined"|"room_left", data: table; melhor de 3: start/state/round_end trazem round, wins, roundsToWin); todos: "rooms" (lista de salas 2v2)
+	NotifyReport = "NotifyReport", -- dono: (ok: boolean, message: string) — resultado do RequestReport
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

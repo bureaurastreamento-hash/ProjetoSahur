@@ -21,7 +21,7 @@ GREY = [0.75, 0.75, 0.78]
 RED = [0.75, 0.25, 0.25]
 GREEN = [0.25, 0.55, 0.35]
 
-W, H = 620, 1000
+W, H = 620, 1100
 PAD = 12
 COL_W = (W - PAD * 2 - 8 * 3) // 4  # 4 colunas
 
@@ -135,6 +135,17 @@ children.append(section("ActionSection", "JOGADORES", y)); y += 18
 actions = [("Teleport", "Ir até", BG2), ("Bring", "Trazer", BG2), ("Kick", "Kick", RED), ("ResetData", "Zerar dados", RED)]
 for i, (cmd, text, color) in enumerate(actions):
     children.append(button(cmd, text, udim2(0, COL_W, 0, 28), udim2(0, col_x(i), 0, y), color))
+y += 32
+actions2 = [("TeleportArena", "Ir para a arena", BG2), ("Spectate", "Assistir alvo (de novo p/ parar)", BG2)]
+for i, (cmd, text, color) in enumerate(actions2):
+    children.append(button(cmd, text, udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(i * 2), 0, y), color))
+children.append(button("JoinPlayerServer", "Entrar no servidor (nome na caixa)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y)))
+y += 36
+
+# ---- Denúncias ----------------------------------------------------------------
+children.append(section("ReportSection", "DENÚNCIAS", y)); y += 18
+children.append(button("GetReports", "Ver denúncias do ALVO selecionado", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(0), 0, y), GREEN))
+children.append(button("GetReportsByName", "Buscar por nome (caixa Message)", udim2(0, COL_W * 2 + 8, 0, 28), udim2(0, col_x(2), 0, y)))
 y += 36
 
 children.append(section("AdminSection", "ADMINISTRAÇÃO  (mensagem na caixa; Ban/Enviar usam o alvo)", y)); y += 18

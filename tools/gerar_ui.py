@@ -584,3 +584,40 @@ duel = screen("DuelGui", [
           extra={"TextStrokeTransparency": 0.5, "Visible": False, "TextWrapped": True}),
 ], order=3)
 write("DuelGui.model.json", duel)
+
+# =============================================================================
+# Denúncia (ReportController) — jogador da lista + motivo predefinido + texto livre.
+# Motivos espelham ReportConfig.Reasons (src/shared/Modules/ReportConfig.luau); mudou lá,
+# muda aqui também.
+# =============================================================================
+REPORT_REASONS = [
+    ("exploit", "Hack / exploit"),
+    ("toxicity", "Comportamento tóxico / assédio"),
+    ("name", "Nome ou perfil impróprio"),
+    ("spam", "Spam"),
+    ("bug_abuse", "Abuso de bug"),
+    ("other", "Outro"),
+]
+report_player_row = button("Template", "", ud(1, -6, 0, 28), ud(0, 0, 0, 0), ts=13,
+                           extra={"Visible": False, "TextXAlignment": "Left"}, children=[padding(10, 0)])
+report_reason_row = button("Template", "", ud(1, 0, 0, 26), ud(0, 0, 0, 0), bg=CARD, t=0.15, ts=12,
+                           extra={"Visible": False, "TextXAlignment": "Left"}, children=[padding(10, 0)])
+RY = PANEL_TITLE_H + 8
+report = screen("ReportGui", [
+    panel("Panel", 380, 470, "Denunciar jogador", [
+        label("PlayerTitle", "JOGADOR", ud(1, 0, 0, 14), ud(0, 0, 0, RY), font=FONT_B, ts=11, color=MUTED),
+        scroll("Players", ud(1, 0, 0, 110), ud(0, 0, 0, RY + 16), children=[
+            listlayout("Vertical", 3, sort="Name"), report_player_row,
+        ]),
+        label("ReasonTitle", "MOTIVO", ud(1, 0, 0, 14), ud(0, 0, 0, RY + 132), font=FONT_B, ts=11, color=MUTED),
+        frame("Reasons", ud(1, 0, 0, len(REPORT_REASONS) * 30 - 4), ud(0, 0, 0, RY + 148), t=1, children=[
+            listlayout("Vertical", 4), report_reason_row,
+        ]),
+        textbox("Text", "Detalhes (opcional)", ud(1, 0, 0, 60), ud(0, 0, 1, -104), anchor=(0, 1), ts=12,
+               extra={"TextYAlignment": "Top", "MultiLine": True}),
+        label("Status", "", ud(1, 0, 0, 16), ud(0, 0, 1, -36), anchor=(0, 1), ts=11, color=MUTED,
+             extra={"TextWrapped": True}),
+        button("Submit", "ENVIAR DENÚNCIA", ud(1, 0, 0, 30), ud(0, 0, 1, -2), anchor=(0, 1), bg=[0.4, 0.14, 0.14], ts=13),
+    ]),
+], order=3)
+write("ReportGui.model.json", report)

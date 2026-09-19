@@ -60,7 +60,7 @@
       ],
       [
        0,
-       1000
+       1100
       ]
      ]
     },
@@ -2670,6 +2670,386 @@
      ]
     },
     {
+     "name": "TeleportArena",
+     "className": "TextButton",
+     "properties": {
+      "Name": "TeleportArena",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         478
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Ir para a arena",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "Spectate",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Spectate",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         478
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Assistir alvo (de novo p/ parar)",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "JoinPlayerServer",
+     "className": "TextButton",
+     "properties": {
+      "Name": "JoinPlayerServer",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         478
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Entrar no servidor (nome na caixa)",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "ReportSection",
+     "className": "TextLabel",
+     "properties": {
+      "Name": "ReportSection",
+      "Size": {
+       "UDim2": [
+        [
+         1,
+         -24
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         514
+        ]
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "Text": "DEN\u00daNCIAS",
+      "TextSize": 11,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        0.35,
+        0.65,
+        1.0
+       ]
+      },
+      "TextXAlignment": "Left",
+      "TextTruncate": "AtEnd"
+     },
+     "children": []
+    },
+    {
+     "name": "GetReports",
+     "className": "TextButton",
+     "properties": {
+      "Name": "GetReports",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         12
+        ],
+        [
+         0,
+         532
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.55,
+        0.35
+       ]
+      },
+      "Text": "Ver den\u00fancias do ALVO selecionado",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
+     "name": "GetReportsByName",
+     "className": "TextButton",
+     "properties": {
+      "Name": "GetReportsByName",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         294
+        ],
+        [
+         0,
+         28
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         314
+        ],
+        [
+         0,
+         532
+        ]
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.13,
+        0.13,
+        0.17
+       ]
+      },
+      "Text": "Buscar por nome (caixa Message)",
+      "TextSize": 12,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       },
+       "children": []
+      }
+     ]
+    },
+    {
      "name": "AdminSection",
      "className": "TextLabel",
      "properties": {
@@ -2694,7 +3074,7 @@
         ],
         [
          0,
-         482
+         568
         ]
        ]
       },
@@ -2739,7 +3119,7 @@
         ],
         [
          0,
-         500
+         586
         ]
        ]
       },
@@ -2813,7 +3193,7 @@
         ],
         [
          0,
-         500
+         586
         ]
        ]
       },
@@ -2887,7 +3267,7 @@
         ],
         [
          0,
-         532
+         618
         ]
        ]
       },
@@ -2954,7 +3334,7 @@
         ],
         [
          0,
-         532
+         618
         ]
        ]
       },
@@ -3021,7 +3401,7 @@
         ],
         [
          0,
-         532
+         618
         ]
        ]
       },
@@ -3088,7 +3468,7 @@
         ],
         [
          0,
-         532
+         618
         ]
        ]
       },
@@ -3155,7 +3535,7 @@
         ],
         [
          0,
-         564
+         650
         ]
        ]
       },
@@ -3222,7 +3602,7 @@
         ],
         [
          0,
-         600
+         686
         ]
        ]
       },
@@ -3267,7 +3647,7 @@
         ],
         [
          0,
-         618
+         704
         ]
        ]
       },
@@ -3334,7 +3714,7 @@
         ],
         [
          0,
-         618
+         704
         ]
        ]
       },
@@ -3401,7 +3781,7 @@
         ],
         [
          0,
-         618
+         704
         ]
        ]
       },
@@ -3468,7 +3848,7 @@
         ],
         [
          0,
-         618
+         704
         ]
        ]
       },
@@ -3535,7 +3915,7 @@
         ],
         [
          0,
-         650
+         736
         ]
        ]
       },
@@ -3609,7 +3989,7 @@
         ],
         [
          0,
-         650
+         736
         ]
        ]
       },
@@ -3676,7 +4056,7 @@
         ],
         [
          0,
-         650
+         736
         ]
        ]
       },
@@ -3743,7 +4123,7 @@
         ],
         [
          0,
-         650
+         736
         ]
        ]
       },
@@ -3810,7 +4190,7 @@
         ],
         [
          0,
-         686
+         772
         ]
        ]
       },
@@ -3855,7 +4235,7 @@
         ],
         [
          0,
-         704
+         790
         ]
        ]
       },
@@ -3922,7 +4302,7 @@
         ],
         [
          0,
-         704
+         790
         ]
        ]
       },
@@ -3989,7 +4369,7 @@
         ],
         [
          0,
-         704
+         790
         ]
        ]
       },
@@ -4056,7 +4436,7 @@
         ],
         [
          0,
-         704
+         790
         ]
        ]
       },
@@ -4123,7 +4503,7 @@
         ],
         [
          0,
-         736
+         822
         ]
        ]
       },
@@ -4190,7 +4570,7 @@
         ],
         [
          0,
-         736
+         822
         ]
        ]
       },
@@ -4257,7 +4637,7 @@
         ],
         [
          0,
-         736
+         822
         ]
        ]
       },
@@ -4324,7 +4704,7 @@
         ],
         [
          0,
-         736
+         822
         ]
        ]
       },
@@ -4391,7 +4771,7 @@
         ],
         [
          0,
-         768
+         854
         ]
        ]
       },
@@ -4465,7 +4845,7 @@
         ],
         [
          0,
-         768
+         854
         ]
        ]
       },
@@ -4532,7 +4912,7 @@
         ],
         [
          0,
-         768
+         854
         ]
        ]
       },
@@ -4599,7 +4979,7 @@
         ],
         [
          0,
-         768
+         854
         ]
        ]
       },
@@ -4666,7 +5046,7 @@
         ],
         [
          0,
-         800
+         886
         ]
        ]
       },
@@ -4733,7 +5113,7 @@
         ],
         [
          0,
-         800
+         886
         ]
        ]
       },
@@ -4800,7 +5180,7 @@
         ],
         [
          0,
-         800
+         886
         ]
        ]
       },
@@ -4867,7 +5247,7 @@
         ],
         [
          0,
-         800
+         886
         ]
        ]
       },
@@ -4934,7 +5314,7 @@
         ],
         [
          0,
-         832
+         918
         ]
        ]
       },
@@ -5001,7 +5381,7 @@
         ],
         [
          0,
-         832
+         918
         ]
        ]
       },
@@ -5068,7 +5448,7 @@
         ],
         [
          0,
-         832
+         918
         ]
        ]
       },
@@ -5135,7 +5515,7 @@
         ],
         [
          0,
-         832
+         918
         ]
        ]
       },
@@ -5202,7 +5582,7 @@
         ],
         [
          0,
-         864
+         950
         ]
        ]
       },
@@ -5269,7 +5649,7 @@
         ],
         [
          0,
-         864
+         950
         ]
        ]
       },
@@ -5336,7 +5716,7 @@
         ],
         [
          0,
-         864
+         950
         ]
        ]
       },
@@ -5403,7 +5783,7 @@
         ],
         [
          0,
-         900
+         986
         ]
        ]
       },
@@ -5436,7 +5816,7 @@
         ],
         [
          0,
-         70
+         84
         ]
        ]
       },
@@ -5448,7 +5828,7 @@
         ],
         [
          0,
-         918
+         1004
         ]
        ]
       },
