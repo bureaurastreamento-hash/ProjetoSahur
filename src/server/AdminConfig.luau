@@ -14,6 +14,8 @@ return {
 	Developers = {
 		"guilacartinhasgames",
 		"humanoider_20",
+		"BeasleyJavier5",
+		"fssjnjhgf",
 	} :: { string },
 	DeveloperIds = {
 		-- [123456789] = true,
