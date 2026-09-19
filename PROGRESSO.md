@@ -245,13 +245,30 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-19 — parte 4: denúncias + menu DEV feitas, aguardando teste)
-**Onde paramos**: Parte 4 da lista do dono (sistema de denúncias + menu DEV de verdade) foi
-IMPLEMENTADA e passa 0 erros na análise estática, mas ainda **NÃO foi testada no Studio**
-(precisa de 2 clientes: um denuncia, o dev lê). Ver "Parte 4" logo abaixo para o que testar.
-No mesmo dia o dono mandou uma lista NOVA de pedidos (2026-09-19, ver bloco logo abaixo) — só
-ANOTADA por enquanto, ele pediu pra não implementar ainda ("anota tudo isso... depois prosseguimos").
-Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo o dono dizer outra ordem.
+## RETOMAR AQUI (última sessão: 2026-09-19, noite — tudo commitado e no GitHub)
+**Onde paramos**: dia inteiro de levas. FEITO e commitado: Parte 4 (denúncias + menu DEV), lajes do altar
+(place é dono), topbar novo (5 dropdowns que se fecham, X em todo painel, Configurações separado), HUD do
+dash (chips só na recarga), agarrão sem "voar" (grupo de colisão Grabbed), ids de animação/emote da equipe,
+teto de empurrão, noite realista, cerca invisível no mapa da guerra, 96 áudios publicados no grupo (51 em
+uso), ult do Swift com câmera/efeitos (carga 1,6 s), efeitos dos agarrões, emotes de cena com câmera
+orbitando, auras em camadas (skins de cor saíram), vendedor da Lojinha (prompt abre a Loja), Canion como
+área de evento (só aparece no evento; 8 EventSpawns). Studio derrubou a sessão às 13:12 por moderação de
+um áudio (EmoteFarpando, removido) — resolvido reativando a conta. Chave Open Cloud do grupo em
+`~/.config/sahur/roblox_api_key` (var `ROBLOX_API_KEY`).
+
+### PRÓXIMA SESSÃO — começar por aqui (pedido do dono ao sair, 2026-09-19)
+1. **Dividir as lojas** (não começado):
+   - **Loja do menu (L, `ShopGui`)** = só itens de ROBUX (giros da roleta, passes, "escolher" cosmético).
+   - **Loja do vendedor (E no NPC)** = itens de PONTOS e de **pontos especiais de evento** (moeda nova que
+     os mini eventos do Canion vão dar). Precisa: `EventPoints` no perfil (DataConfig, schema novo),
+     `PointsShopConfig` (o que vende: cosméticos por pontos? personagens? — PERGUNTAR ao dono a lista),
+     painel próprio (`VendorGui` via `gerar_ui.py`) aberto pelo `ShopPrompt` em vez do `OpenShop`,
+     `RequestShop` ganha ações de compra por pontos validadas no servidor. Hoje o prompt abre o `ShopGui`.
+2. **Posição do vendedor**: `Workspace.Lojinha.VendedorSpot` (part amarela, criada via MCP) — o dono
+   arrasta/gira e o vendedor nasce em cima dela olhando para a frente da part. Ele disse que o NPC "ficou
+   fora da loja": se ainda estiver errado depois de mover a part, ver `ShopNpcService.placeNpc`.
+3. Dono testa tudo da lista de polimento e manda ajustes (sons, ult, agarrões, cenas, auras, PVP).
+4. Depois: mini eventos no Canion, publicar KA1/KA2/DAZ1/AAAQ, coisas de Dragon Ball (parkeadas).
 
 ### Leva 2026-09-19 (tarde) — lajes + topbar + HUD do dash — FEITA, falta o dono testar
 - **BossPathSlab0..13**: saíram do Rojo (`ArenaExtras.model.json`/`gerar_arena.py`), `Props` e `ArenaExtras`

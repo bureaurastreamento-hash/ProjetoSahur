@@ -21,6 +21,7 @@ local ShopNpcService = {}
 ShopNpcService.ModelName = "Lojinha"
 ShopNpcService.PromptName = "ShopPrompt" -- o ShopController procura este nome
 ShopNpcService.NpcName = "Vendedor"
+ShopNpcService.SpotName = "VendedorSpot" -- Part opcional no Workspace: posição/direção exatas do vendedor
 ShopNpcService.FrontOffset = 6 -- studs à frente da lojinha (eixo -Z do pivô do modelo)
 
 local function buildNpc(): Model?
@@ -88,6 +89,33 @@ local function placeNpc(shop: Model)
 			end
 		end
 	end
+	-- Lugar exato (dono): uma Part chamada `VendedorSpot` em qualquer lugar do Workspace manda — o vendedor
+	-- fica em cima dela olhando para a frente dela (-Z). Sem ela, cálculo automático abaixo.
+	local spot = Workspace:FindFirstChild(ShopNpcService.SpotName, true)
+	if spot and spot:IsA("BasePart") then
+		spot.Transparency = 1
+		spot.CanCollide = false
+		spot.CanQuery = false
+		local stand = spot.Position + Vector3.new(0, spot.Size.Y / 2 + 3, 0)
+		local lookFlat = Vector3.new(spot.CFrame.LookVector.X, 0, spot.CFrame.LookVector.Z)
+		local look = if lookFlat.Magnitude > 0.1 then lookFlat.Unit else Vector3.new(0, 0, -1)
+		npc:PivotTo(CFrame.lookAt(stand, stand + look))
+		npc.Parent = Workspace
+		local root0 = npc:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if root0 then
+			local prompt = Instance.new("ProximityPrompt")
+			prompt.Name = ShopNpcService.PromptName
+			prompt.ActionText = "Falar"
+			prompt.ObjectText = "Vendedor"
+			prompt.KeyboardKeyCode = Enum.KeyCode.E
+			prompt.HoldDuration = 0
+			prompt.MaxActivationDistance = 9
+			prompt.RequiresLineOfSight = false
+			prompt.Parent = root0
+		end
+		Log.debug(("[ShopNpcService] vendedor no VendedorSpot %s"):format(spot:GetFullName()))
+		return
+	end
 	local pivot = shop:GetPivot()
 	local center = if minV and maxV then (minV + maxV) / 2 else pivot.Position
 	local extent = if minV and maxV then math.max(maxV.X - minV.X, maxV.Z - minV.Z) / 2 else 8
@@ -131,7 +159,7 @@ function ShopNpcService.Start()
 	end
 	-- o dono pode mover/renomear a lojinha em Team Create: reposiciona se ela aparecer depois
 	Workspace.DescendantAdded:Connect(function(inst: Instance)
-		if (inst.Name == ShopNpcService.ModelName or inst.Name == "Banheiro") and inst:IsA("Model") then
+		if (inst.Name == ShopNpcService.ModelName or inst.Name == "Banheiro" or inst.Name == ShopNpcService.SpotName) then
 			task.wait(1)
 			local shop = Workspace:FindFirstChild(ShopNpcService.ModelName, true)
 			if shop and shop:IsA("Model") then
