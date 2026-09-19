@@ -24,6 +24,10 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   XP/pontos, cosméticos `Access = "clan"`; membro nunca saca). **Loot do boss por ranking** (`BossConfig.Loot`,
   `BossLootService`: top 3 raro, 4º–5º bom, resto básico). **Taberna** = `Workspace.Taberna` montada por
   `tools/montar_taberna.luau` via MCP (não passa pelo Rojo; o dono salva o place). Postes da flecha saíram.
+- Progressão/conquistas/itens = **pop-up discreto sem som** (`HUDController.ShowToast`), nunca banner+som.
+  Setting `CharacterModel` = nascer com o rig da arte (`ServerStorage.CharacterModels.<Id>`). **Rick** =
+  exclusivo do boss (`Access = "drop"`, kit provisório). Roster futuro: Bruno Gollini, Jotaro, Dio, Rick Prime,
+  Kira (cada um com moveset/ult/efeitos novos). Z-fighting: `tools/achar_sobreposicao.luau`.
 
 ## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
 - **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/

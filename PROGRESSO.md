@@ -277,7 +277,27 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
    Item já possuído sai da mesa; sem nada, `Fallback` em pontos. Tela do boss mostra "Nº em dano" e o drop.
    Testado via MCP: 12 sorteios deram cena/aura do boss e pontos de evento. ATENÇÃO: o teste encheu o
    perfil DEV do dono (nível 20, itens do boss, ~2100 pts) — usar DEV → ResetData se incomodar.
-- **FALTA o dono testar**: vendedor/trocas (item anterior), taberna ao vivo (luz à noite dentro da
+7. **Sobreposição (z-fighting)**: `tools/achar_sobreposicao.luau` (roda via MCP/barra de comando; só lê).
+   Acha faces coplanares sobrepostas entre peças ancoradas, lista no Output (pares ENTRE MODELOS primeiro)
+   e deixa as peças selecionadas. `FIX = true` recua a peça menor 0,02 stud (Ctrl+Z desfaz). Agrupar NÃO
+   resolve. Achados hoje entre modelos: `cav.Part4` × `Arena.Walls.Rocks` (3 faces), peças do kit
+   `Moveis taverna` no chão da arena/Taberna.
+8. **Pop-ups discretos, sem som**: `HUD.Toasts` + `HUDController.ShowToast(titulo, sub, cor)` (canto direito,
+   desliza e some em 3,5 s, máx. 4). Nível, maestria, missão, conquista e item ganho (conquista/boss/troca)
+   usam isso; nenhum som. Só a roleta/compra que o jogador pediu continua com som + brilho.
+9. **"Ser o personagem escolhido"** (`Controls.Settings.CharacterModel`, painel Configurações): ligado, o
+   jogador nasce com o rig da arte em `ServerStorage.CharacterModels.<Id ou CharacterDef.Model>` (R6 com
+   Humanoid + HumanoidRootPart; scripts da arte são removidos) em vez da própria skin; sem o modelo, cai
+   na skin e avisa no Studio. Mudar a opção = respawn (fora de combate). **A arte precisa colocar os rigs
+   em `ServerStorage.CharacterModels`** com o nome do personagem.
+10. **Rick** (`CharacterDefs.Characters.Rick`, "Rick Prime"): personagem EXCLUSIVO do boss (`Access =
+    "drop"`, só via `BossConfig.Loot`; aparece no dropdown como "drop do boss"; dev tem). Kit PROVISÓRIO =
+    habilidades do Mystic até a reformulação.
+- **Roster decidido pelo dono (2026-09-20)** — 5 personagens novos, cada um precisa de ataques/ult/efeitos
+  próprios (leva futura): Bruno Gollini (poder máx.), Jotaro (Stand máx.), Dio (Stand máx.), Rick Prime
+  (exclusivo do boss), Yoshikage Kira (Stand máx.). Universos: JoJo, MHA, Rick and Morty.
+- **FALTA o dono testar**: toasts (subir de nível/maestria), setting do modelo (precisa de um rig em
+  CharacterModels), Rick caindo do boss, vendedor/trocas (item anterior), taberna ao vivo (luz à noite dentro da
   caverna), clã: depositar até subir de patente, sacar como líder/membro, cosmético de clã em K; matar o
   boss com 3+ jogadores e ver os drops.
 
