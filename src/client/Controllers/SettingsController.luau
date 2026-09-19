@@ -84,7 +84,7 @@ function SettingsController.Init()
 	SettingsController.ApplyGlobals()
 end
 
---- Lista de configurações dentro do painel Controles (HelpGui.Panel.Settings): clique = alterna/avança.
+--- Lista de configurações (SettingsGui.Panel.Settings, item "Configurações" do dropdown Config): clique = alterna/avança.
 local function valueText(key: string): string
 	local v = SettingsController.Get(key)
 	if typeof(v) == "boolean" then
@@ -99,8 +99,8 @@ local function valueText(key: string): string
 end
 
 local function buildSettingsList()
-	local helpGui = playerGui:WaitForChild("HelpGui", 10)
-	local panel = helpGui and helpGui:FindFirstChild("Panel")
+	local settingsGui = playerGui:WaitForChild("SettingsGui", 10)
+	local panel = settingsGui and settingsGui:FindFirstChild("Panel")
 	local list = panel and panel:FindFirstChild("Settings")
 	local template = list and list:FindFirstChild("Template") :: TextButton?
 	if not list or not template then

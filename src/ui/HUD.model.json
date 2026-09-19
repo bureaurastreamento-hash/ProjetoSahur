@@ -419,7 +419,7 @@
       "Size": {
        "UDim2": [
         [
-         0.6,
+         0.5,
          0
         ],
         [
@@ -462,6 +462,646 @@
       "BorderSizePixel": 0,
       "RichText": false
      }
+    },
+    {
+     "name": "DashChips",
+     "className": "Frame",
+     "properties": {
+      "Name": "DashChips",
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         0
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.0,
+        0.0,
+        0.0
+       ]
+      },
+      "BackgroundTransparency": 1,
+      "BorderSizePixel": 0,
+      "Visible": true
+     },
+     "children": [
+      {
+       "name": "UIListLayout",
+       "className": "UIListLayout",
+       "properties": {
+        "Name": "UIListLayout",
+        "FillDirection": "Horizontal",
+        "Padding": {
+         "UDim": [
+          0,
+          6
+         ]
+        },
+        "HorizontalAlignment": "Right",
+        "VerticalAlignment": "Center",
+        "SortOrder": "LayoutOrder"
+       }
+      },
+      {
+       "name": "DashSide",
+       "className": "Frame",
+       "properties": {
+        "Name": "DashSide",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           88
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.08,
+          0.08,
+          0.09
+         ]
+        },
+        "BackgroundTransparency": 0.15,
+        "BorderSizePixel": 0,
+        "Visible": true,
+        "LayoutOrder": 1,
+        "ClipsDescendants": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            4
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.8,
+          "ApplyStrokeMode": "Border"
+         }
+        },
+        {
+         "name": "Key",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Key",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             14
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             5
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "Q",
+          "Font": "GothamBold",
+          "TextSize": 10,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Name",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Name",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             -22
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             20
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamMedium",
+          "TextSize": 9,
+          "TextColor3": {
+           "Color3": [
+            0.62,
+            0.62,
+            0.68
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Cooldown",
+         "className": "Frame",
+         "properties": {
+          "Name": "Cooldown",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            1
+           ]
+          },
+          "BackgroundColor3": {
+           "Color3": [
+            0,
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 0.4,
+          "BorderSizePixel": 0,
+          "Visible": true,
+          "ZIndex": 2
+         }
+        },
+        {
+         "name": "CooldownText",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "CooldownText",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             30
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             -4
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            1,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 10,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Right",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false,
+          "ZIndex": 3,
+          "TextStrokeTransparency": 0.5
+         }
+        }
+       ]
+      },
+      {
+       "name": "Dash",
+       "className": "Frame",
+       "properties": {
+        "Name": "Dash",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           88
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.08,
+          0.08,
+          0.09
+         ]
+        },
+        "BackgroundTransparency": 0.15,
+        "BorderSizePixel": 0,
+        "Visible": true,
+        "LayoutOrder": 2,
+        "ClipsDescendants": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            4
+           ]
+          }
+         }
+        },
+        {
+         "name": "UIStroke",
+         "className": "UIStroke",
+         "properties": {
+          "Name": "UIStroke",
+          "Thickness": 1,
+          "Color": {
+           "Color3": [
+            1,
+            1,
+            1
+           ]
+          },
+          "Transparency": 0.8,
+          "ApplyStrokeMode": "Border"
+         }
+        },
+        {
+         "name": "Key",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Key",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             14
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             5
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "Q",
+          "Font": "GothamBold",
+          "TextSize": 10,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Name",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "Name",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             -22
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             20
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamMedium",
+          "TextSize": 9,
+          "TextColor3": {
+           "Color3": [
+            0.62,
+            0.62,
+            0.68
+           ]
+          },
+          "TextXAlignment": "Left",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false
+         }
+        },
+        {
+         "name": "Cooldown",
+         "className": "Frame",
+         "properties": {
+          "Name": "Cooldown",
+          "Size": {
+           "UDim2": [
+            [
+             1,
+             0
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0,
+             0
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            0,
+            1
+           ]
+          },
+          "BackgroundColor3": {
+           "Color3": [
+            0,
+            0,
+            0
+           ]
+          },
+          "BackgroundTransparency": 0.4,
+          "BorderSizePixel": 0,
+          "Visible": true,
+          "ZIndex": 2
+         }
+        },
+        {
+         "name": "CooldownText",
+         "className": "TextLabel",
+         "properties": {
+          "Name": "CooldownText",
+          "Size": {
+           "UDim2": [
+            [
+             0,
+             30
+            ],
+            [
+             1,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             1,
+             -4
+            ],
+            [
+             0,
+             0
+            ]
+           ]
+          },
+          "AnchorPoint": {
+           "Vector2": [
+            1,
+            0
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "",
+          "Font": "GothamBold",
+          "TextSize": 10,
+          "TextColor3": {
+           "Color3": [
+            0.96,
+            0.96,
+            0.97
+           ]
+          },
+          "TextXAlignment": "Right",
+          "TextYAlignment": "Center",
+          "BorderSizePixel": 0,
+          "RichText": false,
+          "ZIndex": 3,
+          "TextStrokeTransparency": 0.5
+         }
+        }
+       ]
+      }
+     ]
     },
     {
      "name": "Health",
@@ -828,7 +1468,7 @@
      "UDim2": [
       [
        0,
-       496
+       352
       ],
       [
        0,
@@ -882,686 +1522,6 @@
       "VerticalAlignment": "Center",
       "SortOrder": "LayoutOrder"
      }
-    },
-    {
-     "name": "Dash",
-     "className": "Frame",
-     "properties": {
-      "Name": "Dash",
-      "Size": {
-       "UDim2": [
-        [
-         0,
-         64
-        ],
-        [
-         0,
-         64
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         0
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.08,
-        0.08,
-        0.09
-       ]
-      },
-      "BackgroundTransparency": 0.15,
-      "BorderSizePixel": 0,
-      "Visible": true,
-      "LayoutOrder": -1,
-      "ClipsDescendants": true
-     },
-     "children": [
-      {
-       "name": "UICorner",
-       "className": "UICorner",
-       "properties": {
-        "Name": "UICorner",
-        "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
-        }
-       }
-      },
-      {
-       "name": "UIStroke",
-       "className": "UIStroke",
-       "properties": {
-        "Name": "UIStroke",
-        "Thickness": 1,
-        "Color": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "Transparency": 0.8,
-        "ApplyStrokeMode": "Border"
-       }
-      },
-      {
-       "name": "Key",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Key",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           24
-          ],
-          [
-           0,
-           20
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           6
-          ],
-          [
-           0,
-           4
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "Q",
-        "Font": "GothamBold",
-        "TextSize": 16,
-        "TextColor3": {
-         "Color3": [
-          0.96,
-          0.96,
-          0.97
-         ]
-        },
-        "TextXAlignment": "Left",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false
-       }
-      },
-      {
-       "name": "Cost",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Cost",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           40
-          ],
-          [
-           0,
-           14
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           1,
-           -5
-          ],
-          [
-           0,
-           6
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          1,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamBold",
-        "TextSize": 10,
-        "TextColor3": {
-         "Color3": [
-          1.0,
-          0.8,
-          0.3
-         ]
-        },
-        "TextXAlignment": "Right",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false
-       }
-      },
-      {
-       "name": "Name",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Name",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           -8
-          ],
-          [
-           0,
-           26
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0.5,
-           0
-          ],
-          [
-           1,
-           -4
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0.5,
-          1
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamMedium",
-        "TextSize": 10,
-        "TextColor3": {
-         "Color3": [
-          0.62,
-          0.62,
-          0.68
-         ]
-        },
-        "TextXAlignment": "Center",
-        "TextYAlignment": "Bottom",
-        "BorderSizePixel": 0,
-        "RichText": false,
-        "TextWrapped": true
-       }
-      },
-      {
-       "name": "Cooldown",
-       "className": "Frame",
-       "properties": {
-        "Name": "Cooldown",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           1,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          1
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0,
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 0.4,
-        "BorderSizePixel": 0,
-        "Visible": true,
-        "ZIndex": 2
-       }
-      },
-      {
-       "name": "CooldownText",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "CooldownText",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           1,
-           0
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamBold",
-        "TextSize": 20,
-        "TextColor3": {
-         "Color3": [
-          0.96,
-          0.96,
-          0.97
-         ]
-        },
-        "TextXAlignment": "Center",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false,
-        "ZIndex": 3,
-        "TextStrokeTransparency": 0.5
-       }
-      }
-     ]
-    },
-    {
-     "name": "DashSide",
-     "className": "Frame",
-     "properties": {
-      "Name": "DashSide",
-      "Size": {
-       "UDim2": [
-        [
-         0,
-         64
-        ],
-        [
-         0,
-         64
-        ]
-       ]
-      },
-      "Position": {
-       "UDim2": [
-        [
-         0,
-         0
-        ],
-        [
-         0,
-         0
-        ]
-       ]
-      },
-      "AnchorPoint": {
-       "Vector2": [
-        0,
-        0
-       ]
-      },
-      "BackgroundColor3": {
-       "Color3": [
-        0.08,
-        0.08,
-        0.09
-       ]
-      },
-      "BackgroundTransparency": 0.15,
-      "BorderSizePixel": 0,
-      "Visible": true,
-      "LayoutOrder": 0,
-      "ClipsDescendants": true
-     },
-     "children": [
-      {
-       "name": "UICorner",
-       "className": "UICorner",
-       "properties": {
-        "Name": "UICorner",
-        "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
-        }
-       }
-      },
-      {
-       "name": "UIStroke",
-       "className": "UIStroke",
-       "properties": {
-        "Name": "UIStroke",
-        "Thickness": 1,
-        "Color": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "Transparency": 0.8,
-        "ApplyStrokeMode": "Border"
-       }
-      },
-      {
-       "name": "Key",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Key",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           24
-          ],
-          [
-           0,
-           20
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           6
-          ],
-          [
-           0,
-           4
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "Q",
-        "Font": "GothamBold",
-        "TextSize": 16,
-        "TextColor3": {
-         "Color3": [
-          0.96,
-          0.96,
-          0.97
-         ]
-        },
-        "TextXAlignment": "Left",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false
-       }
-      },
-      {
-       "name": "Cost",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Cost",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           40
-          ],
-          [
-           0,
-           14
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           1,
-           -5
-          ],
-          [
-           0,
-           6
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          1,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamBold",
-        "TextSize": 10,
-        "TextColor3": {
-         "Color3": [
-          1.0,
-          0.8,
-          0.3
-         ]
-        },
-        "TextXAlignment": "Right",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false
-       }
-      },
-      {
-       "name": "Name",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "Name",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           -8
-          ],
-          [
-           0,
-           26
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0.5,
-           0
-          ],
-          [
-           1,
-           -4
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0.5,
-          1
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamMedium",
-        "TextSize": 10,
-        "TextColor3": {
-         "Color3": [
-          0.62,
-          0.62,
-          0.68
-         ]
-        },
-        "TextXAlignment": "Center",
-        "TextYAlignment": "Bottom",
-        "BorderSizePixel": 0,
-        "RichText": false,
-        "TextWrapped": true
-       }
-      },
-      {
-       "name": "Cooldown",
-       "className": "Frame",
-       "properties": {
-        "Name": "Cooldown",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           1,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          1
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0,
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 0.4,
-        "BorderSizePixel": 0,
-        "Visible": true,
-        "ZIndex": 2
-       }
-      },
-      {
-       "name": "CooldownText",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "CooldownText",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           0
-          ],
-          [
-           1,
-           0
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           0
-          ],
-          [
-           0,
-           0
-          ]
-         ]
-        },
-        "AnchorPoint": {
-         "Vector2": [
-          0,
-          0
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "",
-        "Font": "GothamBold",
-        "TextSize": 20,
-        "TextColor3": {
-         "Color3": [
-          0.96,
-          0.96,
-          0.97
-         ]
-        },
-        "TextXAlignment": "Center",
-        "TextYAlignment": "Center",
-        "BorderSizePixel": 0,
-        "RichText": false,
-        "ZIndex": 3,
-        "TextStrokeTransparency": 0.5
-       }
-      }
-     ]
     },
     {
      "name": "Slot1",

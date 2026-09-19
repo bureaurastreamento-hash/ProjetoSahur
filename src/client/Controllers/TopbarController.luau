@@ -1,17 +1,17 @@
 --!strict
 --[[
 	TopbarController (cliente)
-	Topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon): 4 botões só, cada um com um
-	DROPDOWN embaixo (decisão do dono, 2026-09-17: "tem muito menu lá em cima"):
-	  Jogar  -> Personagens (V), Duelo (J), Clã (C), Placar (Tab)
-	  Loja   -> Loja (L), Cosméticos (K)
-	  Perfil -> Perfil (P), Conquistas (AchievementsController se pendura por AddToProfile)
-	  Config -> Controles, Dev (só para quem é desenvolvedor; DevController se pendura aqui)
-	As teclas continuam abrindo os painéis direto, com ou sem o dropdown aberto.
-	Painéis: ShopGui.Panel, CharacterSelect.Panel, ProfileGui.Panel, HUD.Scoreboard, HelpGui.Panel,
-	DuelGui.Panel, ClanGui.Panel, CosmeticsController.GetPanel().
-	API: TopbarController.AddToSettings(icon) / AddToProfile(icon) — penduram um ícone no dropdown de
-	     Config (DevController) ou de Perfil (AchievementsController).
+	Topo com TopbarPlus (ReplicatedStorage.Shared.Packages.Icon): 5 botões, cada um com DROPDOWN
+	(estrutura pedida pelo dono em 2026-09-19):
+	  Personagens (V) -> um item por personagem (clique = usar / comprar / abrir loja se VIP)
+	  Jogar           -> Duelo (J), Clã (C), Placar (Tab)
+	  Loja (L)        -> abre o painel direto (sem dropdown)
+	  Perfil          -> Cosméticos (K), Perfil (P), Conquistas (AchievementsController via AddToProfile),
+	                     Denunciar (ReportController via AddToProfile)
+	  Config          -> Configurações (SettingsGui), Controles (HelpGui), Dev (DevController via AddToSettings)
+	Abrir um dos 5 fecha os outros (TopbarPlus desliga o autoDeselect de quem tem dropdown; a gente
+	refaz isso à mão em closeOthers). As teclas continuam abrindo os painéis direto.
+	API: TopbarController.AddToSettings(icon) / AddToProfile(icon).
 	Só reflete estado do servidor; não decide nada.
 ]]
 
@@ -183,10 +183,10 @@ end
 function TopbarController.Start()
 	local scoreboard = get(get(playerGui, "HUD"), "Scoreboard") :: Frame
 	local helpPanel = get(get(playerGui, "HelpGui"), "Panel") :: Frame
+	local settingsPanel = get(get(playerGui, "SettingsGui"), "Panel") :: Frame
 	local duelPanel = get(get(playerGui, "DuelGui"), "Panel") :: Frame
 	local clanPanel = get(get(playerGui, "ClanGui"), "Panel") :: Frame
 	local shopPanel = get(get(playerGui, "ShopGui"), "Panel") :: Frame
-	local selectPanel = get(get(playerGui, "CharacterSelect"), "Panel") :: Frame
 
 	-- Nossa lista substitui a PlayerList padrão (Tab)
 	pcall(function()
@@ -205,36 +205,66 @@ function TopbarController.Start()
 		return icon
 	end
 
-	charactersIcon = item("Personagens", "Trocar personagem", Enum.KeyCode.V, selectPanel, 1)
-	local duelItem = item("Duelo", "Desafiar alguém para 1v1", Enum.KeyCode.J, duelPanel, 2)
-	local clanItem = item("Clã", "Fundar ou entrar em um clã", Enum.KeyCode.C, clanPanel, 3)
-	local scoreItem = item("Placar", "Kills da sessão", Enum.KeyCode.Tab, scoreboard, 4)
+	-- Personagens: um item por personagem DENTRO do dropdown (sem painel próprio, pedido do dono 2026-09-19).
+	local characterItems: { [string]: any } = {}
+	for i, id in CharacterDefs.Order do
+		local icon = Icon.new():setOrder(i):oneClick(true)
+		icon.selected:Connect(function()
+			HUDController.ActivateCharacter(id)
+			if charactersIcon then
+				charactersIcon:deselect("Topbar", icon) -- recolhe o dropdown depois de escolher
+			end
+		end)
+		characterItems[id] = icon
+	end
+	local function refreshCharacterItems()
+		for id, icon in characterItems do
+			local text, current, visible = HUDController.CharacterStatus(id)
+			icon:setLabel(text)
+			icon:setEnabled(visible)
+			icon:modifyTheme({ "IconLabel", "TextColor3", (if current then Color3.fromRGB(120, 200, 255) else Color3.new(1, 1, 1)) :: any })
+		end
+	end
+
+	local duelItem = item("Duelo", "Desafiar alguém para 1v1", Enum.KeyCode.J, duelPanel, 1)
+	local clanItem = item("Clã", "Fundar ou entrar em um clã", Enum.KeyCode.C, clanPanel, 2)
+	local scoreItem = item("Placar", "Kills da sessão", Enum.KeyCode.Tab, scoreboard, 3)
 	scoreItem:bindToggleKey(Controls.Gamepad.Scoreboard)
 
-	shopIcon = item("Loja", "Pontos e passes", Enum.KeyCode.L, shopPanel, 1)
-	local cosmeticsItem = item("Cosméticos", "Skins, capas, auras e emotes (roda: B)", Enum.KeyCode.K, CosmeticsController.GetPanel(), 2)
-
+	local cosmeticsItem = item("Cosméticos", "Skins, capas, auras e emotes (roda: B)", Enum.KeyCode.K, CosmeticsController.GetPanel(), 0)
 	local profileItem = item("Perfil", "Estatísticas e pontos", Enum.KeyCode.P, profilePanel, 1)
+	local settingsItem = item("Configurações", "Ajustes (salvam no perfil)", nil, settingsPanel, 0)
 	local helpItem = item("Controles", "Como jogar", nil, helpPanel, 1)
 
-	-- Os 4 botões que ficam no topo
-	Icon.new()
-		:setLabel("Jogar")
-		:setCaption("Personagem, duelo, clã e placar")
+	-- Os 5 botões que ficam no topo (ordem do dono: Personagens, Jogar, Loja, Perfil, Config)
+	charactersIcon = Icon.new()
+		:setLabel("Personagens")
+		:setCaption("Trocar personagem")
+		:setCaptionHint(Enum.KeyCode.V)
+		:bindToggleKey(Enum.KeyCode.V)
 		:setOrder(0)
-		:setDropdown({ charactersIcon, duelItem, clanItem, scoreItem })
+	local characterList = {}
+	for _, id in CharacterDefs.Order do
+		table.insert(characterList, characterItems[id])
+	end
+	charactersIcon:setDropdown(characterList)
+	refreshCharacterItems()
+	HUDController.CharactersChanged.Event:Connect(refreshCharacterItems)
+	localPlayer:GetAttributeChangedSignal("IsDeveloper"):Connect(refreshCharacterItems)
 
-	Icon.new()
-		:setLabel("Loja")
-		:setCaption("Pontos, passes e cosméticos")
+	local playIcon = Icon.new()
+		:setLabel("Jogar")
+		:setCaption("Duelo, clã e placar")
 		:setOrder(1)
-		:setDropdown({ shopIcon, cosmeticsItem })
+		:setDropdown({ duelItem, clanItem, scoreItem })
+
+	shopIcon = item("Loja", "Pontos e passes", Enum.KeyCode.L, shopPanel, 2)
 
 	profileIcon = Icon.new()
 		:setLabel("Perfil")
-		:setCaption("Estatísticas e conquistas")
-		:setOrder(2)
-	profileIcon:setDropdown({ profileItem })
+		:setCaption("Cosméticos, estatísticas, conquistas e denúncias")
+		:setOrder(3)
+	profileIcon:setDropdown({ cosmeticsItem, profileItem })
 	for _, icon in pendingProfile do
 		TopbarController.AddToProfile(icon)
 	end
@@ -242,14 +272,37 @@ function TopbarController.Start()
 
 	settingsIcon = Icon.new()
 		:setLabel("Config")
-		:setCaption("Controles e ajustes")
-		:setOrder(3)
-	settingsChildren = { helpItem }
+		:setCaption("Configurações, controles e dev")
+		:setOrder(4)
+	settingsChildren = { settingsItem, helpItem }
 	settingsIcon:setDropdown(settingsChildren)
 	for _, icon in pendingSettings do
 		TopbarController.AddToSettings(icon)
 	end
 	table.clear(pendingSettings)
+
+	-- TopbarPlus desliga o autoDeselect de quem tem dropdown (Utility.joinFeature), então um pai
+	-- aberto não fechava quando outro pai abria. Aqui: abriu um dos 5, os outros fecham (e os
+	-- filhos deles também, para não sobrar painel aberto de um menu recolhido).
+	local parents = { charactersIcon, playIcon, shopIcon, profileIcon, settingsIcon }
+	local function closeOthers(keep: any)
+		for _, parent in parents do
+			if parent ~= keep and parent.isSelected then
+				parent:deselect("Topbar", keep)
+				for uid in parent.childIconsDict do
+					local child = IconAny.getIconByUID(uid)
+					if child and child.isSelected and not child.oneClickEnabled then
+						child:deselect("Topbar", keep)
+					end
+				end
+			end
+		end
+	end
+	for _, parent in parents do
+		parent.selected:Connect(function()
+			closeOthers(parent)
+		end)
+	end
 
 	HUDController.OpenShop.Event:Connect(function()
 		shopIcon:select() -- cartão VIP clicado

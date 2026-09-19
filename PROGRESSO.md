@@ -253,7 +253,29 @@ No mesmo dia o dono mandou uma lista NOVA de pedidos (2026-09-19, ver bloco logo
 ANOTADA por enquanto, ele pediu pra não implementar ainda ("anota tudo isso... depois prosseguimos").
 Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo o dono dizer outra ordem.
 
-### PEDIDOS NOVOS DO DONO (2026-09-19) — só ANOTADO, não implementado ainda
+### Leva 2026-09-19 (tarde) — lajes + topbar + HUD do dash — FEITA, falta o dono testar
+- **BossPathSlab0..13**: saíram do Rojo (`ArenaExtras.model.json`/`gerar_arena.py`), `Props` e `ArenaExtras`
+  com `ignoreUnknownInstances`. ATENÇÃO: o sync apagou as 14 do place (Rojo remove o que sai do arquivo);
+  recriei via MCP nas posições geradas — **o dono precisa mover de novo para o lugar bonito e SALVAR o
+  place**; daí em diante o Rojo não encosta nelas.
+- **Topbar (item 2)**: 5 botões — Personagens (V, dropdown com um item por personagem: clique = usar /
+  comprar / abre loja se VIP, rótulo "Nome · em uso/250 pts/VIP/em breve"), Jogar (Duelo/Clã/Placar),
+  Loja (L, direto), Perfil (Cosméticos/Perfil/Conquistas/Denunciar), Config (Configurações/Controles/Dev).
+  Bug de não fechar: TopbarPlus desliga `autoDeselect` de quem tem dropdown (`Utility.joinFeature`);
+  `closeOthers` no TopbarController fecha os outros pais e os painéis abertos deles. Configurações agora é
+  painel próprio (`SettingsGui`, `SettingsController` lê de lá); `HelpGui` só controles. O painel
+  `CharacterSelect` continua existindo (cartões com habilidades/maestria) mas NADA abre ele — se o dono
+  não sentir falta, apagar `CharacterSelect` de `gerar_ui.py` + os cartões do HUDController.
+- **HUD do dash (item 5)**: os 2 slots saíram da barra (só 1/2/3/4 + Ult); cooldown do dash virou 2 chips
+  em `HUD.Vitals.DashChips` (Dash / DashSide, mesmos filhos de um slot), acima da vida à direita.
+- Testado: sync ok, boot do cliente sem erro. Falta o dono ver: dropdowns fechando, escolher personagem
+  pelo dropdown, chips do dash (tamanho/posição), painel Configurações.
+- **Animações da equipe (item 6) — INVENTÁRIO via MCP**: `ServerStorage.RBX_ANIMSAVES`: `R6` = KA1, KA2,
+  DAZ1 (+ "sem título"/Automatic Save); `cabecinha` = aura; `Noob` = AAAQ; `BossModel`/`Noob1` = só
+  Automatic Save; `emotes pack 1` = vertical, rodaregina, emote67, sentar, sofa. Pedir ao dono o que é cada
+  uma (KA1/KA2/DAZ1/AAAQ/aura) e publicar no grupo → ids.
+
+### PEDIDOS NOVOS DO DONO (2026-09-19) — itens 2 e 5 FEITOS (leva acima); 1, 3, 4 e 6 pendentes
 1. **Assets novos no place** (adicionados pelo dono em áreas vazias da place, esperando sair de lá e
    virar uso real — não foram colocados por mim, então não mexer neles sem entender o pedido primeiro):
    - `Canion`: mapa de EVENTO, grande, pra um boss grande + mini eventos interativos (tipo o `Arena_Antiga`

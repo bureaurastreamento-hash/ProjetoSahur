@@ -38,6 +38,8 @@ local HUDController = {}
 
 --- Disparado quando um cartão VIP é clicado (TopbarController abre a Loja).
 HUDController.OpenShop = Instance.new("BindableEvent")
+--- Disparado quando muda algo que altera os rótulos de personagem (perfil, personagem atual, pontos).
+HUDController.CharactersChanged = Instance.new("BindableEvent")
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
@@ -389,6 +391,45 @@ local function refreshMatchUI()
 	coinsLabel.Text = coinsText
 	selectCoinsLabel.Text = coinsText
 	refreshScoreboard()
+	HUDController.CharactersChanged:Fire()
+end
+
+--- Texto curto de um personagem para o dropdown "Personagens" do topbar + se é o atual + se aparece.
+function HUDController.CharacterStatus(id: string): (string, boolean, boolean)
+	local def = CharacterDefs.Get(id)
+	if not def then
+		return id, false, false
+	end
+	local access = CharacterDefs.AccessOf(def)
+	local dev = localPlayer:GetAttribute("IsDeveloper") == true
+	local visible = access ~= "admin" or dev
+	local current = localPlayer:GetAttribute("CharacterId") == id
+	local suffix
+	if current then
+		suffix = "em uso"
+	elseif ownsCharacter(id) then
+		suffix = ""
+	elseif access == "vip" then
+		suffix = "VIP"
+	elseif access == "early" then
+		suffix = "em breve"
+	else
+		suffix = ("%d pts"):format(def.UnlockCost)
+	end
+	return if suffix == "" then def.DisplayName else ("%s · %s"):format(def.DisplayName, suffix), current, visible
+end
+
+--- Clique num personagem (dropdown ou cartão): usar se tem, loja se é VIP, senão pede desbloqueio.
+function HUDController.ActivateCharacter(id: string)
+	local def = CharacterDefs.Get(id)
+	local access = if def then CharacterDefs.AccessOf(def) else "coins"
+	if ownsCharacter(id) then
+		requestSelectCharacter:FireServer(id)
+	elseif access == "vip" then
+		HUDController.OpenShop:Fire()
+	else
+		requestUnlockCharacter:FireServer(id) -- pontos; "early" o servidor nega e o banner avisa
+	end
 end
 
 local function updateTimer()
@@ -531,8 +572,9 @@ function HUDController.Init()
 	characterNameLabel = get(vitals, "CharacterName") :: TextLabel
 
 	local abilities = get(hud, "Abilities")
-	dashSlot = get(abilities, "Dash") :: Frame
-	dashSideSlot = get(abilities, "DashSide") :: Frame
+	local dashChips = get(vitals, "DashChips")
+	dashSlot = get(dashChips, "Dash") :: Frame
+	dashSideSlot = get(dashChips, "DashSide") :: Frame
 	ultSlot = get(abilities, "Ult") :: Frame
 	for i = 1, #SLOT_KEYS do
 		slots[i] = get(abilities, "Slot" .. i) :: Frame
@@ -630,14 +672,7 @@ function HUDController.Start()
 		table.insert(cardRefreshers, renderAbilities)
 		b.Parent = selectList
 		b.Activated:Connect(function()
-			local access = if def then CharacterDefs.AccessOf(def) else "coins"
-			if ownsCharacter(id) then
-				requestSelectCharacter:FireServer(id)
-			elseif access == "vip" then
-				HUDController.OpenShop:Fire()
-			else
-				requestUnlockCharacter:FireServer(id) -- pontos; "early" o servidor nega e o banner avisa
-			end
+			HUDController.ActivateCharacter(id)
 		end)
 		characterButtons[id] = b
 	end

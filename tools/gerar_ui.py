@@ -168,6 +168,20 @@ def slot(i, name=None, key=None, ult=False):
     ])
 
 
+def dash_chip(name, order):
+    """Cooldown do dash (Q): chip pequeno com os mesmos filhos de um slot (Key/Name/Cooldown/CooldownText)
+    para o HUDController usar o mesmo setCooldownOverlay."""
+    return frame(name, ud(0, 88, 0, 16), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": order,
+                 "ClipsDescendants": True}, children=[
+        corner(4), stroke(0.8),
+        label("Key", "Q", ud(0, 14, 1, 0), ud(0, 5, 0, 0), font=FONT_B, ts=10, color=TEXT),
+        label("Name", "", ud(1, -22, 1, 0), ud(0, 20, 0, 0), ts=9, color=MUTED),
+        frame("Cooldown", ud(1, 0, 0, 0), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0, 0, 0], t=0.4, extra={"ZIndex": 2}),
+        label("CooldownText", "", ud(0, 30, 1, 0), ud(1, -4, 0, 0), anchor=(1, 0), font=FONT_B, ts=10, xalign="Right",
+              extra={"ZIndex": 3, "TextStrokeTransparency": 0.5}),
+    ])
+
+
 hud = screen("HUD", [
     # Estado/timer do round (só fora do mapa livre; HUDController esconde no FreeRoam)
     frame("TopBar", ud(0, 320, 0, 34), ud(0.5, 0, 0, 10), anchor=(0.5, 0), children=[
@@ -184,9 +198,13 @@ hud = screen("HUD", [
         label("Template", "", ud(1, 0, 0, 18), ud(0, 0, 0, 0), ts=12, color=MUTED, xalign="Right",
               extra={"Visible": False, "TextStrokeTransparency": 0.7}),
     ]),
-    # Vida/energia + nome do personagem, embaixo no centro
+    # Vida/energia + nome do personagem, embaixo no centro; cooldown do dash acima da vida, à direita
     frame("Vitals", ud(0, 400, 0, 56), ud(0.5, 0, 1, -112), anchor=(0.5, 1), t=1, children=[
-        label("CharacterName", "", ud(0.6, 0, 0, 16), ud(0, 0, 0, 0), font=FONT_B, ts=12, color=MUTED),
+        label("CharacterName", "", ud(0.5, 0, 0, 16), ud(0, 0, 0, 0), font=FONT_B, ts=12, color=MUTED),
+        frame("DashChips", ud(0.5, 0, 0, 16), ud(1, 0, 0, 0), anchor=(1, 0), t=1, children=[
+            listlayout("Horizontal", 6, "Right", "Center"),
+            dash_chip("DashSide", 1), dash_chip("Dash", 2),
+        ]),
         frame("Health", ud(1, 0, 0, 14), ud(0, 0, 0, 20), bg=[0, 0, 0], t=0.45, children=[
             corner(3),
             frame("Fill", ud(1, 0, 1, 0), ud(0, 0, 0, 0), bg=HEALTH, t=0, children=[corner(3)]),
@@ -200,10 +218,9 @@ hud = screen("HUD", [
                   xalign="Right"),
         ]),
     ]),
-    # Habilidades
-    frame("Abilities", ud(0, SLOT * 7 + 8 * 6, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
+    # Habilidades (o dash não fica aqui: chips em Vitals.DashChips, pedido do dono 2026-09-19)
+    frame("Abilities", ud(0, SLOT * 5 + 8 * 4, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
         listlayout("Horizontal", 8, "Center", "Center"),
-        slot(-1, name="Dash", key="Q"), slot(0, name="DashSide", key="Q"),
         slot(1), slot(2), slot(3), slot(4), slot(5, name="Ult", key="G", ult=True),
     ]),
     # Placar (Tab)
@@ -433,20 +450,26 @@ HELP = "\n".join([
 setting_row = button("Template", "", ud(1, 0, 0, 26), ud(0, 0, 0, 0), bg=CARD, t=0.2, ts=12, extra={"Visible": False, "TextXAlignment": "Left"},
                      children=[padding(10, 0),
                                label("Value", "", ud(0, 90, 1, 0), ud(1, 0, 0, 0), anchor=(1, 0), font=FONT_B, ts=12, color=ACCENT, xalign="Right")])
-SETTINGS_H = 7 * 26 + 6 * 4 + 22  # 7 linhas + título
 helpgui = screen("HelpGui", [
     panel("Panel", 640, 620, "Controles", [
-        scroll("Body", ud(1, 0, 1, -(PANEL_TITLE_H + 8 + SETTINGS_H + 12)), ud(0, 0, 0, PANEL_TITLE_H + 8), children=[
+        scroll("Body", ud(1, 0, 1, -(PANEL_TITLE_H + 8)), ud(0, 0, 0, PANEL_TITLE_H + 8), children=[
             label("Text", HELP, ud(1, -8, 0, 0), ud(0, 0, 0, 0), ts=13, yalign="Top",
                   extra={"TextWrapped": True, "LineHeight": 1.35, "AutomaticSize": "Y"}),
         ]),
-        label("SettingsTitle", "CONFIGURAÇÕES  ·  clique para mudar (salva no perfil)", ud(1, 0, 0, 16), ud(0, 0, 1, -SETTINGS_H),
-              anchor=(0, 1), font=FONT_B, ts=11, color=MUTED),
-        frame("Settings", ud(1, 0, 0, SETTINGS_H - 22), ud(0, 0, 1, 0), anchor=(0, 1), t=1,
-              children=[listlayout("Vertical", 4), setting_row]),
     ]),
 ], order=3)
 write("HelpGui.model.json", helpgui)
+
+# Configurações (SettingsController): item próprio no dropdown Config, separado dos Controles
+SETTINGS_ROWS = 7
+settingsgui = screen("SettingsGui", [
+    panel("Panel", 420, PANEL_TITLE_H + 8 + 16 + SETTINGS_ROWS * 30 + 2 * PANEL_PAD, "Configurações", [
+        label("Hint", "clique para mudar (salva no perfil)", ud(1, 0, 0, 16), ud(0, 0, 0, PANEL_TITLE_H), ts=11, color=MUTED),
+        frame("Settings", ud(1, 0, 1, -(PANEL_TITLE_H + 24)), ud(0, 0, 0, PANEL_TITLE_H + 24), t=1,
+              children=[listlayout("Vertical", 4), setting_row]),
+    ]),
+], order=3)
+write("SettingsGui.model.json", settingsgui)
 
 # =============================================================================
 # Loja (pontos por Developer Product, Game Passes, personagens por pontos)
