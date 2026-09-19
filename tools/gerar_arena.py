@@ -510,10 +510,12 @@ SANCT_WORLD = (97.75, 0.6, 231.625)  # centro final (x, deslocamento y, z)
 SANCT_YAW = 180  # giro em graus no eixo Y
 DARK_STONE = ("Slate", (0.13, 0.13, 0.16))
 RUNE_RED = ("Neon", (0.85, 0.20, 0.20))
-# caminho de lajes da praça até o santuário
+# caminho de lajes (BossPathSlab0..13): o dono posiciona no Studio, o place é o dono delas
+# (2026-09-19). Rojo ignora o que não conhece dentro de Props (ignoreUnknownInstances).
+# As duas chamadas mantêm a sequência do rng igual à de antes, senão o resto do mapa mexe.
 for i in range(14):
-    z = 40 + i * 8
-    part(f"BossPathSlab{i}", (6, 0.4, 6.5), (jitter(0.6), 0.2, z), STONE_LIGHT, rot=(0, jitter(6), 0))
+    jitter(0.6)
+    jitter(6)
 # piso: disco de pedra escura + anel externo claro + degrau
 cylinder("BossFloor", SANCT_R, 1.2, (0, 0.6 - 0.6, SANCT_Z), DARK_STONE)
 cylinder("BossFloorRing", SANCT_R + 3, 0.8, (0, 0.4 - 0.6, SANCT_Z), BASALT)
@@ -648,6 +650,9 @@ for node in parts:
     ox, oy, oz = pr.get("Orientation", [0, 0, 0])
     pr["Orientation"] = [ox, (oy + SANCT_YAW + 180) % 360 - 180, oz]
 
-extras = {"className": "Model", "children": [folder("Props", list(parts)), folder("Spawns", extra_spawns)]}
+props = folder("Props", list(parts))
+props["ignoreUnknownInstances"] = True  # o que o dono move/cria em Props no Studio fica como está
+extras = {"className": "Model", "ignoreUnknownInstances": True,
+          "children": [props, folder("Spawns", extra_spawns)]}
 OUT_EXTRAS.write_text(json.dumps(extras, indent=1))
 print(f"{OUT_EXTRAS}: {len(parts)} partes + {len(extra_spawns)} spawns")
