@@ -322,7 +322,7 @@ perTarget.ResetCosmetics = function(_, target)
 	profile.cosmetics = { owned = {}, equipped = {} }
 	profile.emotes = {}
 	DataService.MarkDirty(target)
-	for _, attr in { "CosmeticSkin", "CosmeticCape", "CosmeticAura" } do
+	for _, attr in { "CosmeticCape", "CosmeticAura" } do
 		target:SetAttribute(attr, "")
 	end
 	return true, ("%s: cosméticos zerados"):format(target.Name)

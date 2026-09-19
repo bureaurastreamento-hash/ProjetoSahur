@@ -1,13 +1,12 @@
 --!strict
 --[[
 	CosmeticsService (servidor)
-	Roleta/equipar cosméticos (skins, capas, auras) e emotes; aplica no personagem.
+	Roleta/equipar cosméticos (capas, auras) e emotes; aplica no personagem.
 	  RequestCosmetic("roll")        -> gasta RollCost pontos -> item aleatório não possuído (Weight)
 	  RequestCosmetic("equip"|"unequip", id) -> perfil (DataService) -> atributos no Player
 	  RequestCosmetic("pick_robux", id) -> guarda o item pendente; o cliente abre o produto "pick"
 	  Robux: ShopService chama CosmeticsService.OnProduct(player, product) no recibo (giros / pick).
-	    CosmeticSkin / CosmeticCape / CosmeticAura (id ou "") -> o cliente desenha capa/aura;
-	    a skin placeholder (cor do corpo) é aplicada aqui via BodyColors.
+	    CosmeticCape / CosmeticAura (id ou "") -> o cliente desenha capa/aura;
 	  RequestEmote(id) -> valida (comprado ou grátis, cooldown, vivo, não caído/stunado) -> NotifyEmote
 	    a todos; o cliente toca a animação e, se for cena, a aura/VFX temporários.
 	Nada aqui dá vantagem: só visual.
@@ -35,7 +34,7 @@ local lastEmoteAt: { [Player]: number } = {}
 local notifyCosmetics: RemoteEvent
 local notifyEmote: RemoteEvent
 
-local ATTR_BY_CATEGORY: { [string]: string } = { skin = "CosmeticSkin", cape = "CosmeticCape", aura = "CosmeticAura" }
+local ATTR_BY_CATEGORY: { [string]: string } = { cape = "CosmeticCape", aura = "CosmeticAura" }
 
 local function owns(profile: any, item: CosmeticsConfig.Item, player: Player): boolean
 	if item.Weight <= 0 and item.Access == nil then
@@ -51,7 +50,7 @@ local function ownsEmote(profile: any, emote: CosmeticsConfig.Emote): boolean
 	return emote.Weight <= 0 or table.find(profile.emotes, emote.Id) ~= nil
 end
 
---- Aplica os equipados no personagem atual (atributos + skin placeholder).
+--- Aplica os equipados no personagem atual (atributos; o cliente desenha capa/aura).
 local function apply(player: Player)
 	local profile = DataService.GetProfile(player)
 	local equipped: { [string]: string } = if profile then profile.cosmetics.equipped else {}
@@ -62,21 +61,6 @@ local function apply(player: Player)
 			id = "" -- perdeu o VIP, por exemplo
 		end
 		player:SetAttribute(attr, id)
-	end
-	-- skin placeholder: cor do corpo
-	local character = player.Character
-	if character then
-		local skin = CosmeticsConfig.GetItem(equipped.skin or "")
-		local colors = character:FindFirstChildOfClass("BodyColors") or Instance.new("BodyColors")
-		colors.Parent = character
-		local color = if skin and skin.Color then skin.Color else Color3.fromRGB(163, 162, 165)
-		local bc = BrickColor.new(color)
-		colors.HeadColor = bc
-		colors.TorsoColor = bc
-		colors.LeftArmColor = bc
-		colors.RightArmColor = bc
-		colors.LeftLegColor = bc
-		colors.RightLegColor = bc
 	end
 end
 

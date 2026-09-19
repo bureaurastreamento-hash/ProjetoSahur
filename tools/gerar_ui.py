@@ -529,7 +529,6 @@ cosmetics = screen("CosmeticsGui", [
               xalign="Right"),
         frame("Tabs", ud(1, 0, 0, 28), ud(0, 0, 0, PANEL_TITLE_H + 12), t=1, children=[
             listlayout("Horizontal", 6),
-            button("TabSkin", "SKINS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 1}),
             button("TabCape", "CAPAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 2}),
             button("TabAura", "AURAS", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 3}),
             button("TabEmote", "EMOTES", ud(0, tab_w, 1, 0), ud(0, 0, 0, 0), ts=12, extra={"LayoutOrder": 4}),

@@ -121,6 +121,116 @@ function FX.SetAura(character: Model, color: Color3?, name: string?)
 	emitter.Parent = root
 end
 
+--- Aura COSMÉTICA em camadas (dono, 2026-09-19: "melhorar as auras"). Estilos:
+---   wisps    fiapos de luz subindo em volta do corpo + brilho no chão
+---   flame    chamas subindo do chão (flipbook) + brasas + luz
+---   smoke    fumaça densa e escura rodando + partículas escuras
+---   sparkle  estrelinhas piscando em volta + poeira brilhante
+---   electric faíscas elétricas curtas + raios miúdos
+--- Tudo dentro de uma pasta `name` no HRP para remover de uma vez; nil = tira.
+function FX.SetCosmeticAura(character: Model, color: Color3?, style: string?, name: string?)
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	local auraName = name or "Aura"
+	local old = root:FindFirstChild(auraName)
+	if old then
+		old:Destroy()
+	end
+	if not color then
+		return
+	end
+	local folder = Instance.new("Folder")
+	folder.Name = auraName
+	local function tex(key: string): string
+		local id = VFXLibrary.Textures[key]
+		return if id then "rbxassetid://" .. tostring(id) else ""
+	end
+	local function attachment(offset: Vector3): Attachment
+		local att = Instance.new("Attachment")
+		att.Position = offset
+		att.Parent = root
+		-- o Attachment precisa ficar no HRP; a pasta guarda uma ObjectValue para o destroy limpar
+		local ref = Instance.new("ObjectValue")
+		ref.Value = att
+		ref.Parent = folder
+		folder.Destroying:Connect(function()
+			att:Destroy()
+		end)
+		return att
+	end
+	local function emitter(parent: Instance, texture: string, props: { [string]: any }): ParticleEmitter
+		local e = Instance.new("ParticleEmitter")
+		e.Texture = tex(texture)
+		e.Color = ColorSequence.new(color)
+		e.LightEmission = 0.8
+		e.LightInfluence = 0
+		e.Enabled = true
+		for k, v in props do
+			(e :: any)[k] = v
+		end
+		e.Parent = parent
+		return e
+	end
+	local light = Instance.new("PointLight")
+	light.Color = color
+	light.Brightness = 0.8
+	light.Range = 9
+	light.Shadows = false
+	light.Parent = folder
+	local body = attachment(Vector3.new(0, 0, 0))
+	local feet = attachment(Vector3.new(0, -2.6, 0))
+	local styleName = style or "wisps"
+	if styleName == "flame" then
+		emitter(feet, "Flame", { Rate = 22, Lifetime = NumberRange.new(0.5, 0.8), Speed = NumberRange.new(4, 7), SpreadAngle = Vector2.new(15, 15), Acceleration = Vector3.new(0, 10, 0),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.2), NumberSequenceKeypoint.new(1, 0.4) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.3), NumberSequenceKeypoint.new(0.7, 0.5), NumberSequenceKeypoint.new(1, 1) }),
+			Shape = Enum.ParticleEmitterShape.Disc, ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward, Rotation = NumberRange.new(-20, 20), ZOffset = -0.5 })
+		emitter(body, "Sparks", { Rate = 10, Lifetime = NumberRange.new(0.6, 1.1), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(180, 180), Acceleration = Vector3.new(0, 12, 0), Drag = 2,
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 0) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }) })
+		light.Brightness = 1.2
+	elseif styleName == "smoke" then
+		emitter(feet, "SmokeLoop", { Rate = 14, Lifetime = NumberRange.new(1.0, 1.6), Speed = NumberRange.new(1.5, 3), SpreadAngle = Vector2.new(30, 30), Acceleration = Vector3.new(0, 2.5, 0),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.5), NumberSequenceKeypoint.new(1, 4.5) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.55), NumberSequenceKeypoint.new(1, 1) }),
+			Rotation = NumberRange.new(0, 360), RotSpeed = NumberRange.new(-40, 40), LightEmission = 0.1, ZOffset = -1,
+			Shape = Enum.ParticleEmitterShape.Disc, ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward })
+		emitter(body, "Specs", { Rate = 12, Lifetime = NumberRange.new(0.8, 1.4), Speed = NumberRange.new(1, 3), SpreadAngle = Vector2.new(180, 180), Acceleration = Vector3.new(0, 4, 0),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.25), NumberSequenceKeypoint.new(1, 0) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.2), NumberSequenceKeypoint.new(1, 1) }), LightEmission = 0.4 })
+		light.Brightness = 0.3
+	elseif styleName == "sparkle" then
+		emitter(body, "Star", { Rate = 16, Lifetime = NumberRange.new(0.7, 1.2), Speed = NumberRange.new(0.5, 2), SpreadAngle = Vector2.new(180, 180), Acceleration = Vector3.new(0, 3, 0), RotSpeed = NumberRange.new(60, 160),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.3, 0.7), NumberSequenceKeypoint.new(1, 0) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }),
+			Shape = Enum.ParticleEmitterShape.Box, ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward })
+		emitter(feet, "Glow", { Rate = 6, Lifetime = NumberRange.new(1.0, 1.4), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(10, 10), Acceleration = Vector3.new(0, 2, 0),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.8), NumberSequenceKeypoint.new(1, 0) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.4), NumberSequenceKeypoint.new(1, 1) }),
+			Shape = Enum.ParticleEmitterShape.Disc, ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward })
+	elseif styleName == "electric" then
+		emitter(body, "Electric", { Rate = 14, Lifetime = NumberRange.new(0.08, 0.16), Speed = NumberRange.new(0, 0), SpreadAngle = Vector2.new(180, 180), Rotation = NumberRange.new(0, 360),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1.6), NumberSequenceKeypoint.new(1, 1.2) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }), LightEmission = 1,
+			Shape = Enum.ParticleEmitterShape.Sphere, ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward })
+		emitter(feet, "Spark2", { Rate = 10, Lifetime = NumberRange.new(0.3, 0.5), Speed = NumberRange.new(6, 12), SpreadAngle = Vector2.new(60, 60), Acceleration = Vector3.new(0, -25, 0), Drag = 3,
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.3), NumberSequenceKeypoint.new(1, 0) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }), LightEmission = 1 })
+		light.Brightness = 1.0
+	else -- wisps
+		emitter(body, "Flare", { Rate = 18, Lifetime = NumberRange.new(0.6, 1.0), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(20, 20), Acceleration = Vector3.new(0, 8, 0), Drag = 1, Rotation = NumberRange.new(180, 180),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1.4), NumberSequenceKeypoint.new(1, 0.2) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) }), ZOffset = -0.3,
+			Shape = Enum.ParticleEmitterShape.Cylinder, ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward })
+		emitter(feet, "Glow", { Rate = 4, Lifetime = NumberRange.new(0.8, 1.2), Speed = NumberRange.new(0.1, 0.1),
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 3), NumberSequenceKeypoint.new(1, 4.5) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.7), NumberSequenceKeypoint.new(1, 1) }), Rotation = NumberRange.new(0, 360), Orientation = Enum.ParticleOrientation.VelocityPerpendicular, ZOffset = -1 })
+	end
+	folder.Parent = root
+end
+
 -- ---------------------------------------------------------------------------
 -- Animação
 -- ---------------------------------------------------------------------------

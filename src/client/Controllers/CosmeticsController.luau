@@ -1,7 +1,7 @@
 --!strict
 --[[
 	CosmeticsController (cliente)
-	  - Painel "Cosméticos" (K, TopbarPlus): abas Skins/Capas/Auras/Emotes; clique = equipar (o que
+	  - Painel "Cosméticos" (K, TopbarPlus): abas Capas/Auras/Emotes; clique = equipar (o que
 	    você tem) ou "escolher com Robux" (o que não tem). Botões: GIRAR (pontos) e giros com Robux.
 	  - Roda de emotes (B): 8 posições (CosmeticsConfig.Emotes); clique = RequestEmote; à direita
 	    o botão GIRAR (roleta da sorte com pontos).
@@ -45,7 +45,7 @@ local list: Frame
 local rowTemplate: TextButton
 local tabButtons: { [string]: TextButton } = {}
 local wheel: Frame
-local currentTab = "skin"
+local currentTab = "cape"
 local profile: any = nil
 
 local function get(parent: Instance, name: string): Instance
@@ -93,7 +93,7 @@ end
 
 local function applyAura(character: Model, id: string)
 	local item = if id ~= "" then CosmeticsConfig.GetItem(id) else nil
-	FX.SetAura(character, if item then item.Color else nil, AURA_NAME)
+	FX.SetCosmeticAura(character, if item then item.Color else nil, if item then item.Style else nil, AURA_NAME)
 end
 
 local function refreshPlayer(p: Player)
@@ -108,7 +108,7 @@ local function refreshPlayer(p: Player)
 end
 
 local function watchPlayer(p: Player)
-	for _, attr in { "CosmeticCape", "CosmeticAura", "CosmeticSkin" } do
+	for _, attr in { "CosmeticCape", "CosmeticAura" } do
 		p:GetAttributeChangedSignal(attr):Connect(function()
 			refreshPlayer(p)
 		end)
@@ -335,7 +335,6 @@ function CosmeticsController.Init()
 	rowTemplate = get(list, "Template") :: TextButton
 	local tabs = get(panel, "Tabs")
 	tabButtons = {
-		skin = get(tabs, "TabSkin") :: TextButton,
 		cape = get(tabs, "TabCape") :: TextButton,
 		aura = get(tabs, "TabAura") :: TextButton,
 		emote = get(tabs, "TabEmote") :: TextButton,

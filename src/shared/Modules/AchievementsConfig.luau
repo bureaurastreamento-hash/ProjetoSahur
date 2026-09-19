@@ -69,14 +69,14 @@ local list: { Achievement } = {
 	{ Id = "boss_10", Name = "Caçador de bosses", Desc = "Participe de %d vitórias contra o boss", Kind = "boss_kills", Goal = 10, Reward = { Coins = 700, XP = 700, Emote = "flex" } },
 	{ Id = "bossdmg_10k", Name = "Bateu até cansar", Desc = "Cause %d de dano ao boss", Kind = "boss_damage", Goal = 10000, Reward = { Coins = 500, XP = 500 } },
 	{ Id = "play_60", Name = "Pegou o jeito", Desc = "Jogue %d minutos", Kind = "playtime", Goal = 60, Reward = { Coins = 150, XP = 150 } },
-	{ Id = "play_600", Name = "Mora aqui", Desc = "Jogue %d minutos", Kind = "playtime", Goal = 600, Reward = { Coins = 600, XP = 600, Cosmetic = "skin_ember" } },
+	{ Id = "play_600", Name = "Mora aqui", Desc = "Jogue %d minutos", Kind = "playtime", Goal = 600, Reward = { Coins = 600, XP = 600, Cosmetic = "aura_ember" } },
 	{ Id = "level_10", Name = "Veterano", Desc = "Chegue ao nível %d", Kind = "level", Goal = 10, Reward = { Coins = 200, XP = 0 } },
 	{ Id = "level_25", Name = "Elite", Desc = "Chegue ao nível %d", Kind = "level", Goal = 25, Reward = { Coins = 500, XP = 0, Emote = "scene_power" } },
 	{ Id = "level_50", Name = "Lenda", Desc = "Chegue ao nível %d", Kind = "level", Goal = 50, Reward = { Coins = 1500, XP = 0, Cosmetic = "aura_green" } },
 	{ Id = "mastery_max", Name = "Mestre", Desc = "Chegue à maestria %d em algum personagem", Kind = "mastery_max", Goal = 10, Reward = { Coins = 600, XP = 400 } },
 	{ Id = "collector_10", Name = "Colecionador", Desc = "Tenha %d cosméticos/emotes", Kind = "cosmetics", Goal = 10, Reward = { Coins = 400, XP = 200 } },
 	-- "zerar o jogo": conta as PERMANENTES concluídas (o Goal é preenchido no fim deste arquivo)
-	{ Id = "zerou", Name = "ZEROU O SAHUR", Desc = "Conclua as outras %d conquistas permanentes", Kind = "achievements", Goal = 0, Reward = { Coins = 5000, XP = 2000, Cosmetic = "skin_shadow", Emote = "scene_storm" } },
+	{ Id = "zerou", Name = "ZEROU O SAHUR", Desc = "Conclua as outras %d conquistas permanentes", Kind = "achievements", Goal = 0, Reward = { Coins = 5000, XP = 2000, Cosmetic = "aura_shadow", Emote = "scene_storm" } },
 
 	-- PASSE 1 ----------------------------------------------------------------
 	{ Id = "s1_kills_50", Name = "Passe 1: pressão", Desc = "Elimine %d jogadores nesta temporada", Kind = "kills", Goal = 50, Season = "s1", Reward = { Coins = 250, XP = 250 } },
@@ -84,7 +84,7 @@ local list: { Achievement } = {
 	{ Id = "s1_boss_3", Name = "Passe 1: ritual", Desc = "Participe de %d vitórias contra o boss", Kind = "boss_kills", Goal = 3, Season = "s1", Reward = { Coins = 400, XP = 400, Cosmetic = "s1_aura_arrow" } },
 	{ Id = "s1_play_120", Name = "Passe 1: dedicação", Desc = "Jogue %d minutos nesta temporada", Kind = "playtime", Goal = 120, Season = "s1", Reward = { Coins = 300, XP = 300, Cosmetic = "s1_cape_arrow" } },
 	{ Id = "s1_bossdmg_5k", Name = "Passe 1: martelo", Desc = "Cause %d de dano ao boss nesta temporada", Kind = "boss_damage", Goal = 5000, Season = "s1", Reward = { Coins = 350, XP = 350 } },
-	{ Id = "s1_complete", Name = "Passe 1 completo", Desc = "Conclua %d conquistas do passe", Kind = "season_achievements", Goal = 5, Season = "s1", Reward = { Coins = 1200, XP = 800, Cosmetic = "s1_skin_arrow" } },
+	{ Id = "s1_complete", Name = "Passe 1 completo", Desc = "Conclua %d conquistas do passe", Kind = "season_achievements", Goal = 5, Season = "s1", Reward = { Coins = 1200, XP = 800, Cosmetic = "s1_aura_arrow_gold" } },
 }
 AchievementsConfig.List = list
 
