@@ -312,12 +312,36 @@ Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo
   (`ROBLOX_API_KEY`, permissão assets read/write) e grava em `audios/ids.json`; `MAPA` no script diz qual
   arquivo vira qual som (`--listar`), `--aplicar` escreve em `Sounds.model.json`. Falta o dono criar a key.
 
-### AINDA PENDENTE da lista 2 (polimento visual, próxima leva "VFX/SFX/modelos + combate satisfatório")
-- Emotes de cena: animações de câmera + efeitos. Ult do Swift: efeitos + câmera seguindo.
-- Cosméticos: tirar a opção de mudar a COR do personagem; melhorar as auras.
+### Leva 2026-09-19 (noite 2) — polimento visual — FEITO no código, NÃO testado (Studio sem sessão)
+- **Áudios**: chave Open Cloud do grupo criada pelo dono (`~/.config/sahur/roblox_api_key`, var
+  `ROBLOX_API_KEY`; permissões: assets, places, datastores, messaging, luau execution, user restrictions).
+  96 mp3 subidos (`audios/ids.json`), 51 ligados em `Sounds.model.json` pelo `MAPA` de
+  `tools/subir_audios.py`; 45 guardados para variações. Carregam no Studio (moderação ok).
+- **Ult do Swift**: `CutsceneController.PlayUltimate` (câmera de quem usa em espiral baixa→alta durante
+  a carga, letterbox, vinheta, flash + nome no estouro, volta suave; NÃO trava o jogador; quem está perto
+  vê o tema de raios + flash + nome pequeno). Cúpula cresce durante `Effect.Cinematic.Charge` (1,1 s,
+  em `CharacterDefs`) e estoura no tamanho final; `Total` = 2,8 s. Ajustar Charge pela animação.
+- **Agarrões**: fase "grab" = estalo (`Shared/GrabCatch`) + hitstop nos dois + poeira arrastada pelo
+  tempo do Carry (`Shared/GrabCarry`, emissores seguindo o HRP); fase "hit" por `Effect.Finish`:
+  Throw = vento (`GrabThrow`) + rastro na vítima, Chokeslam = rachadura (`GrabSlam`), Spin = redemoinho
+  (`GrabSpin`) + rastro. Os socos já tinham hitstop/flash/shake/puxão — não mexi.
+- **Emotes de cena**: câmera dá 3/4 de volta lenta (`PlayUltimate` com `Orbit`), efeitos do tema do
+  emote (`CosmeticsConfig.Emotes[].Theme`: rock/void/lightning/arcane) e nome da cena no estouro.
+- **Cosméticos**: categoria SKIN saiu (pintava o corpo — dono: cosmético não muda a cor do avatar);
+  `CosmeticsService` não mexe mais em BodyColors. Auras refeitas em camadas por `Style`
+  (`FX.SetCosmeticAura`: wisps/flame/smoke/sparkle/electric + luz). Auras novas: `aura_ember` (conquista
+  play_600), `aura_shadow` (zerou), `s1_aura_arrow_gold` (passe completo) no lugar das skins-recompensa.
+  Quem já tinha skin no perfil só perde a pintura.
+- **ATENÇÃO — Studio sem sessão**: desde ~15:30 todo Play dá `HTTP 403` em sons/animações/meshes/avatar
+  (`serverplaceid=0`); o modo edição carrega normal. Nada desta leva foi visto rodando. O dono precisa
+  FECHAR E ABRIR o Studio (relogar) antes de testar; eu ainda não medi a duração das animações novas.
+
+### AINDA PENDENTE
 - Assets novos no place (Canion, árvores/pedras, lojinha com NPC, casas DB) — dono define o uso.
-- PVP "não sincronizado" — pedir caso concreto.
-- Publicar KA1/KA2/DAZ1/AAAQ/aura no grupo e encaixar.
+- PVP "não sincronizado" — dono testa depois das levas e manda caso concreto.
+- Publicar KA1/KA2/DAZ1/AAAQ/aura no grupo e encaixar (KA1 = block animado, KA2 = pose fixa de block).
+- Ouvir os 51 sons novos e ajustar volumes/trocas; ver as 45 variações guardadas.
+- Painel `CharacterSelect` (cartões) órfão — apagar se o dono não sentir falta.
 
 ### PEDIDOS NOVOS DO DONO (2026-09-19, manhã) — itens 2, 4 e 5 FEITOS; 1, 3 e 6 pendentes
 1. **Assets novos no place** (adicionados pelo dono em áreas vazias da place, esperando sair de lá e
