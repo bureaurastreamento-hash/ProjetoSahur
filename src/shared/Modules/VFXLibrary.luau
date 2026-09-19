@@ -500,6 +500,51 @@ E["Brawler/ShoulderBash_Hit"] = {
 		light(ORANGE, 5, 18, 0.4),
 	},
 }
+-- ---- Agarrões (fases do AbilityController: grab = pegou, carry = carregando, throw = soltou) ----------
+E["Shared/GrabCatch"] = { -- pegou: estalo curto na vítima + poeira nos pés dos dois
+	lifetime = 0.6,
+	layers = {
+		impactStar("$primary", 5, 0.18),
+		flash(WHITE, 3.5, 0.1),
+		sparks("$primary", 8),
+		smokePuff(5, { ground = true }),
+		light("$primary", 3, 10, 0.2),
+	},
+}
+E["Shared/GrabCarry"] = { -- enquanto carrega: poeira arrastada atrás + linhas de velocidade (lifetime = Carry)
+	lifetime = 1.0,
+	layers = {
+		emit("Dust", Color3.fromRGB(150, 140, 130), 0, { size = { 1.5, 3 }, life = { 0.4, 0.7 }, speed = { 6, 12 }, spread = { 25, 25 }, direction = "back", light = 0.2, drag = 4, follow = true, offset = Vector3.new(0, -2.6, 1), rot = { 0, 360 }, rotSpeed = { -60, 60 }, duration = 0.8, rate = 14 }),
+		emit("Lines", "$primary", 0, { size = { 0.6, 1.4 }, life = { 0.12, 0.2 }, speed = { 20, 35 }, spread = { 20, 20 }, orient = "VelocityParallel", follow = true, offset = Vector3.new(0, 0.5, 1.5), direction = "back", light = 0.5, duration = 0.8, rate = 10 }),
+	},
+}
+E["Shared/GrabThrow"] = { -- soltou/arremessou: rajada de vento na direção do arremesso
+	lifetime = 0.8,
+	layers = {
+		mesh("WindGrow", WHITE, 3, 11, 0.32, { offset = CFrame.new(0, 0.5, -2.5) * CFrame.Angles(math.rad(90), 0, 0), spin = Vector3.new(0, 0, 800), tr0 = 0.4 }),
+		emit("Lines", "$primary", 14, { size = { 0.8, 2.0 }, life = { 0.18, 0.3 }, speed = { 45, 70 }, spread = { 10, 10 }, orient = "VelocityParallel", offset = Vector3.new(0, 0.5, -2), direction = "forward", light = 0.8 }),
+		smokePuff(6, { ground = true }),
+	},
+}
+E["Shared/GrabSlam"] = { -- esmagou no chão (Chokeslam): rachadura + terra
+	lifetime = 1.3,
+	layers = {
+		groundWave("$primary", 3, 14, 0.45),
+		ringFlat(WHITE, 2, 16, 0.35),
+		emit("Debris", Color3.fromRGB(120, 110, 100), 14, { size = { 0.4, 1.0 }, life = { 0.5, 0.9 }, speed = { 15, 30 }, spread = { 40, 40 }, direction = "up", light = 0, accel = Vector3.new(0, -60, 0), ground = true }),
+		smokePuff(10, { ground = true }),
+		flash(WHITE, 7, 0.15),
+	},
+}
+E["Shared/GrabSpin"] = { -- soltou do giro: redemoinho
+	lifetime = 1.0,
+	layers = {
+		mesh("Tornado", "$primary", 6, 14, 0.5, { offset = CFrame.new(0, 1, 0), up = true, spin = Vector3.new(0, 900, 0), tr0 = 0.4 }),
+		emit("Lines", "$primary", 16, { size = { 0.6, 1.6 }, life = { 0.2, 0.35 }, speed = { 30, 55 }, spread = { 90, 90 }, orient = "VelocityParallel", offset = Vector3.new(0, 1, 0), light = 0.7 }),
+		dustRing(Color3.fromRGB(160, 150, 140), 12),
+	},
+}
+
 E["Brawler/GroundSlam"] = {
 	lifetime = 1.6,
 	layers = {

@@ -35,6 +35,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
+local VFXLibrary = require(Modules:WaitForChild("VFXLibrary"))
 local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 
 local AbilityController = {}
@@ -301,8 +302,31 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		-- agarrou: a vítima segue o atacante (no cliente dela); todos veem a animação de carregar
 		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
 		local victim = if typeof(data) == "table" then data.Victim else nil
+		local carry = if typeof(data) == "table" then tonumber(data.Carry) or 0.8 else 0.8
+		-- captura: estalo na vítima + congela os dois por um instante (peso) + poeira arrastada enquanto carrega
+		if typeof(victim) == "Instance" and victim:IsA("Model") then
+			FX.SpawnVFX(victim, "Shared", "GrabCatch", true)
+			FX.Hitstop(victim, 0.08)
+			FX.PlaySoundAt(victim, "Shared", "Punch_Hit")
+		end
+		FX.Hitstop(character, 0.08)
+		local carryFx = VFXLibrary.Get("Shared", "GrabCarry")
+		if carryFx then
+			-- emissão contínua pelo tempo real do Carry (a definição tem 0,8 s de referência)
+			local fx = table.clone(carryFx)
+			fx.lifetime = carry + 0.3
+			fx.layers = {}
+			for _, layer in carryFx.layers do
+				local l = table.clone(layer)
+				if l.duration then
+					l.duration = carry
+				end
+				table.insert(fx.layers, l)
+			end
+			FX.PlayComposed(character, fx)
+		end
 		if typeof(victim) == "Instance" and victim == localPlayer.Character then
-			startGrabbed(character, tonumber(data.Carry) or 0.8)
+			startGrabbed(character, carry)
 			FX.Shake(0.4, 0.2)
 		end
 	elseif phase == "release" then
@@ -318,6 +342,23 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		end
 		FX.SpawnVFX(character, characterId, abilityId .. "_Hit", true, at)
 		FX.PlaySoundAt(character, characterId, abilityId .. "_Hit")
+		-- final do agarrão por tipo (CharacterDefs Effect.Finish): vento do arremesso / rachadura / redemoinho
+		local def = CharacterDefs.Get(characterId)
+		local ability = def and CharacterDefs.FindAbility(def, abilityId)
+		local effect = ability and (ability.Effect :: any)
+		if effect and effect.Type == "Grab" and typeof(victim) == "Instance" and victim:IsA("Model") then
+			local finish = if typeof(effect.Finish) == "string" then effect.Finish else "Slam"
+			if finish == "Throw" then
+				FX.SpawnVFX(character, "Shared", "GrabThrow", true)
+				FX.Trail(victim, trailColor(characterId), 0.5, 3)
+			elseif finish == "Chokeslam" then
+				FX.SpawnVFX(victim, "Shared", "GrabSlam", true, at)
+			elseif finish == "Spin" then
+				FX.SpawnVFX(character, "Shared", "GrabSpin", true)
+				FX.Trail(victim, trailColor(characterId), 0.4, 2)
+			end
+			FX.Hitstop(victim, 0.1)
+		end
 	end
 end
 
