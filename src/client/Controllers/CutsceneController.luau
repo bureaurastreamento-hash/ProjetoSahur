@@ -1171,6 +1171,7 @@ export type UltimateOpts = {
 	Color: Color3,
 	Theme: string?, -- THEMES (lightning, arcane, ...)
 	OnBurst: (() -> ())?, -- gancho de quem chamou (ex.: a cúpula "estoura" para o tamanho final)
+	Orbit: boolean?, -- emote de cena: a câmera dá uma volta lenta em vez do empurrão de ult
 }
 
 function CutsceneController.PlayUltimate(character: Model, opts: UltimateOpts)
@@ -1255,8 +1256,24 @@ function CutsceneController.PlayUltimate(character: Model, opts: UltimateOpts)
 	end
 	if isMe and camera then
 		camera.CameraType = Enum.CameraType.Scriptable
-		takeCamera(root, { offset = Vector3.new(3, -0.5, -7), look = Vector3.new(0, 1.2, 0), fov = 72 })
-		cameraShot({ offset = Vector3.new(-5, 2.5, -8), look = Vector3.new(0, 1, 0), fov = 58 }, charge, Enum.EasingStyle.Sine)
+		if opts.Orbit then
+			-- volta lenta de 3/4 em torno do personagem (segmentos retos encadeados ≈ arco)
+			local segments = 5
+			local radius, height = 9, 2.5
+			local function shotAt(i: number): Shot
+				local a = -math.pi * 0.35 + (i / segments) * math.pi * 1.5
+				return { offset = Vector3.new(math.sin(a) * radius, height, -math.cos(a) * radius), look = Vector3.new(0, 1.2, 0), fov = 62 }
+			end
+			takeCamera(root, shotAt(0))
+			for i = 1, segments do
+				at((i - 1) * charge / segments, function()
+					cameraShot(shotAt(i), charge / segments, Enum.EasingStyle.Linear)
+				end)
+			end
+		else
+			takeCamera(root, { offset = Vector3.new(3, -0.5, -7), look = Vector3.new(0, 1.2, 0), fov = 72 })
+			cameraShot({ offset = Vector3.new(-5, 2.5, -8), look = Vector3.new(0, 1, 0), fov = 58 }, charge, Enum.EasingStyle.Sine)
+		end
 		setLetterbox(true, 0.35)
 		setVignette(0.3, charge)
 		local cc, bloom = post()

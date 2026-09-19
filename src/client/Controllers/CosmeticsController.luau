@@ -21,6 +21,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
+local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 
@@ -281,6 +282,16 @@ local function onNotifyEmote(character: Model?, emoteId: string, active: boolean
 		FX.SpawnVFX(character, EMOTES, emote.Id, true)
 		FX.Flash(character, emote.Color or Color3.fromRGB(255, 255, 255), 0.4)
 		FX.PlaySoundAt(character, EMOTES, emote.Id)
+		-- câmera dando a volta + efeitos do tema (o "mundo reagindo") e nome da cena no estouro
+		CutsceneController.PlayUltimate(character, {
+			Charge = duration * 0.6,
+			Total = duration,
+			Name = emote.Name:gsub("^Cena: ", ""):upper(),
+			Subtitle = if character == localPlayer.Character then nil else character.Name,
+			Color = emote.Color or Color3.fromRGB(255, 255, 255),
+			Theme = emote.Theme,
+			Orbit = true,
+		})
 		task.delay(duration, function()
 			FX.SetAura(character, nil, SCENE_AURA)
 		end)

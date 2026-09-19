@@ -62,6 +62,7 @@ export type Emote = {
 	Weight: number, -- peso na roleta; 0 = de todos (o "wave" é o padrão)
 	Duration: number?, -- cena: s da aura (a animação manda se existir)
 	Color: Color3?, -- cena: cor da aura
+	Theme: string?, -- cena: tema de efeitos/câmera (CutsceneController THEMES: rock, lightning, arcane, stone, drums, void, flesh)
 	Season: string?, -- LIMITADO: temporada que solta este emote
 	Limited: boolean?, -- true = fora da roleta; acabou a temporada, só um DEV dá
 }
@@ -74,10 +75,10 @@ CosmeticsConfig.Emotes = {
 	{ Id = "bow", Name = "Reverência", Kind = "emote", Weight = 6 },
 	{ Id = "flex", Name = "Músculo", Kind = "emote", Weight = 6 },
 	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6 },
-	{ Id = "scene_power", Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80) },
-	{ Id = "scene_dark", Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200) },
-	{ Id = "scene_storm", Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255) },
-	{ Id = "s1_emote_arrow", Name = "Flecha ao Alto (Passe 1)", Kind = "scene", Weight = 0, Duration = 4, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255) },
+	{ Id = "scene_power", Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80), Theme = "rock" },
+	{ Id = "scene_dark", Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200), Theme = "void" },
+	{ Id = "scene_storm", Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255), Theme = "lightning" },
+	{ Id = "s1_emote_arrow", Name = "Flecha ao Alto (Passe 1)", Kind = "scene", Weight = 0, Duration = 4, Season = "s1", Limited = true, Color = Color3.fromRGB(160, 110, 255), Theme = "arcane" },
 } :: { Emote }
 
 CosmeticsConfig.RollCost = 100 -- pontos por giro
