@@ -89,6 +89,11 @@ CombatConfig.Attacks = {
 -- Dois cooldowns independentes: frente/trás e lateral. Não sai em stun nenhum (hitstun incluído:
 -- preso no combo só se sai quando o atacante para) nem caído; Q caído = ragdoll cancel (abaixo).
 -- Durante o dash (DashingUntil no Player) não dá para socar nem usar habilidade.
+-- Teto de empurrão (dono, 2026-09-19): nenhum golpe joga o inimigo mais longe que ESTE múltiplo do alcance do
+-- dash frontal (Speed × Duration × ForwardScale), para dar tempo de continuar o combo. Aplicado em
+-- CombatService.Knockback encurtando a Duration (a velocidade/impacto do golpe não muda).
+CombatConfig.KnockbackMaxTravelDashMultiple = 1.5
+
 CombatConfig.Dash = {
 	Speed = 74,
 	Duration = 0.24, -- base; CharacterDefs.DashTuning escala frente/lado

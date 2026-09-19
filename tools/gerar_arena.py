@@ -551,13 +551,8 @@ part("BossAltarStep", (12, 1, 12), (0, 2.2, ALTAR_Z), STONE_LIGHT)
 part("BossAltar", (4, 3.2, 4), (0, 4.3, ALTAR_Z), ("Slate", (0.10, 0.10, 0.13)))
 altar_rune = part("BossAltarRune", (2.6, 0.2, 2.6), (0, 6.0, ALTAR_Z), RUNE_RED, CastShadow=False)
 light(altar_rune, (0.9, 0.2, 0.2), 2.5, 24)
-for i in range(4):
-    a = math.radians(45 + i * 90)
-    px, pz = math.cos(a) * 7, ALTAR_Z + math.sin(a) * 7
-    cylinder(f"BossAltarPillar{i}", 0.8, 7, (px, 4.7, pz), STONE_LIGHT)
-    torch = cylinder(f"BossAltarTorch{i}", 0.5, 0.5, (px, 8.4, pz), ("Metal", (0.2, 0.18, 0.16)))
-    fire(torch, size=0.8, rate=12)
-    light(torch, (1.0, 0.45, 0.2), 1.5, 16)
+# (os 4 postes com tocha do ritual antigo das caveiras — BossAltarPillar/BossAltarTorch — saíram a pedido
+# do dono em 2026-09-19; o RitualService tolera altar sem tochas)
 # --- ambientação do altar (ritual das caveiras: RitualService acende as tochas e põe uma caveira em cada
 # BossAltarSkullSocket{i} conforme os jogadores coletam; a runa acende quando o ritual completa à noite)
 BONE = ("SmoothPlastic", (0.86, 0.82, 0.70))

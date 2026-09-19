@@ -257,9 +257,11 @@ local function updateCooldowns()
 	-- personagem sem dash (Swift): o Q é o DashOverride (Piscar); um cooldown só, o slot lateral some
 	local override = if typeof(characterId) == "string" then CharacterDefs.GetDashOverride(characterId) else nil
 	nameLabel.Text = if ragdolled then "Levantar" elseif override then override.DisplayName else "Dash ↑↓"
-	dashSideSlot.Visible = override == nil
+	-- chips só aparecem enquanto recarregam (dono, 2026-09-19)
+	dashSlot.Visible = remaining > 0
 	local side = dashCds.side
 	local sideRemaining = if side then side.readyAt - now else 0
+	dashSideSlot.Visible = override == nil and sideRemaining > 0
 	setCooldownOverlay(dashSideSlot, sideRemaining, if side then side.total else sideRemaining)
 	;(dashSideSlot:FindFirstChild("Name") :: TextLabel).Text = "Dash ←→"
 end

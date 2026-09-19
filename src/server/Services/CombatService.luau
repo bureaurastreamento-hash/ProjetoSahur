@@ -16,6 +16,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
@@ -292,6 +293,12 @@ function CombatService.Knockback(attackerChar: Model, victim: Model, speed: numb
 	end
 	if CombatService.HasSuperArmor(victimPlayer) then
 		return -- agarrando alguém: nem empurrão nem queda
+	end
+	-- teto de distância (CombatConfig.KnockbackMaxTravelDashMultiple × alcance do dash frontal)
+	local dashReach = CombatConfig.Dash.Speed * CombatConfig.Dash.Duration * CharacterDefs.DashTuning.ForwardScale
+	local maxTravel = dashReach * CombatConfig.KnockbackMaxTravelDashMultiple
+	if speed > 0 and speed * duration > maxTravel then
+		duration = maxTravel / speed
 	end
 	if ragdollSeconds and ragdollSeconds > 0 then
 		CombatService.CancelBlock(victimPlayer)

@@ -476,7 +476,7 @@
         ],
         [
          0,
-         16
+         12
         ]
        ]
       },
@@ -488,7 +488,7 @@
         ],
         [
          0,
-         0
+         2
         ]
        ]
       },
@@ -536,11 +536,11 @@
          "UDim2": [
           [
            0,
-           88
+           84
           ],
           [
            0,
-           16
+           12
           ]
          ]
         },
@@ -571,7 +571,7 @@
         },
         "BackgroundTransparency": 0.15,
         "BorderSizePixel": 0,
-        "Visible": true,
+        "Visible": false,
         "LayoutOrder": 1,
         "ClipsDescendants": true
        },
@@ -615,7 +615,7 @@
            "UDim2": [
             [
              0,
-             14
+             12
             ],
             [
              1,
@@ -644,7 +644,7 @@
           "BackgroundTransparency": 1,
           "Text": "Q",
           "Font": "GothamBold",
-          "TextSize": 10,
+          "TextSize": 9,
           "TextColor3": {
            "Color3": [
             0.96,
@@ -679,7 +679,7 @@
            "UDim2": [
             [
              0,
-             20
+             18
             ],
             [
              0,
@@ -696,7 +696,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamMedium",
-          "TextSize": 9,
+          "TextSize": 8,
           "TextColor3": {
            "Color3": [
             0.62,
@@ -796,7 +796,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamBold",
-          "TextSize": 10,
+          "TextSize": 9,
           "TextColor3": {
            "Color3": [
             0.96,
@@ -823,11 +823,11 @@
          "UDim2": [
           [
            0,
-           88
+           84
           ],
           [
            0,
-           16
+           12
           ]
          ]
         },
@@ -858,7 +858,7 @@
         },
         "BackgroundTransparency": 0.15,
         "BorderSizePixel": 0,
-        "Visible": true,
+        "Visible": false,
         "LayoutOrder": 2,
         "ClipsDescendants": true
        },
@@ -902,7 +902,7 @@
            "UDim2": [
             [
              0,
-             14
+             12
             ],
             [
              1,
@@ -931,7 +931,7 @@
           "BackgroundTransparency": 1,
           "Text": "Q",
           "Font": "GothamBold",
-          "TextSize": 10,
+          "TextSize": 9,
           "TextColor3": {
            "Color3": [
             0.96,
@@ -966,7 +966,7 @@
            "UDim2": [
             [
              0,
-             20
+             18
             ],
             [
              0,
@@ -983,7 +983,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamMedium",
-          "TextSize": 9,
+          "TextSize": 8,
           "TextColor3": {
            "Color3": [
             0.62,
@@ -1083,7 +1083,7 @@
           "BackgroundTransparency": 1,
           "Text": "",
           "Font": "GothamBold",
-          "TextSize": 10,
+          "TextSize": 9,
           "TextColor3": {
            "Color3": [
             0.96,

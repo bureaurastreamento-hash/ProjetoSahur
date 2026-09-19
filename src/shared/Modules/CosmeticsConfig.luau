@@ -73,6 +73,7 @@ CosmeticsConfig.Emotes = {
 	{ Id = "dance", Name = "Dançar", Kind = "emote", Weight = 6 },
 	{ Id = "bow", Name = "Reverência", Kind = "emote", Weight = 6 },
 	{ Id = "flex", Name = "Músculo", Kind = "emote", Weight = 6 },
+	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6 },
 	{ Id = "scene_power", Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80) },
 	{ Id = "scene_dark", Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200) },
 	{ Id = "scene_storm", Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255) },

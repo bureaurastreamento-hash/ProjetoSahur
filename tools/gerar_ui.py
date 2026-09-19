@@ -136,7 +136,10 @@ def panel(name, w, h, title, children, hidden=True, full_width=False):
     size = ud(1, -24, 1, -(52 + 150)) if full_width else ud(0, w, 1, -(52 + 150))
     return frame(name, size, ud(0, 12, 0, 52), anchor=(0, 0), visible=not hidden, children=[
         corner(10), stroke(), padding(PANEL_PAD), sizecap(w, h),
-        label("Title", title, ud(1, 0, 0, PANEL_TITLE_H), ud(0, 0, 0, 0), font=FONT_B, ts=20, color=TEXT),
+        label("Title", title, ud(1, -30, 0, PANEL_TITLE_H), ud(0, 0, 0, 0), font=FONT_B, ts=20, color=TEXT),
+        # X para sair em todo painel (dono, 2026-09-19); o TopbarController liga ao deselect do ícone
+        button("Close", "✕", ud(0, 24, 0, 24), ud(1, 0, 0, 0), anchor=(1, 0), bg=CARD, t=0.3, ts=14, color=MUTED,
+               extra={"ZIndex": 5}),
     ] + children, extra={"ClipsDescendants": True})
 
 
@@ -171,13 +174,13 @@ def slot(i, name=None, key=None, ult=False):
 def dash_chip(name, order):
     """Cooldown do dash (Q): chip pequeno com os mesmos filhos de um slot (Key/Name/Cooldown/CooldownText)
     para o HUDController usar o mesmo setCooldownOverlay."""
-    return frame(name, ud(0, 88, 0, 16), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": order,
-                 "ClipsDescendants": True}, children=[
+    return frame(name, ud(0, 84, 0, 12), ud(0, 0, 0, 0), bg=CARD, t=0.15, extra={"LayoutOrder": order,
+                 "ClipsDescendants": True, "Visible": False}, children=[
         corner(4), stroke(0.8),
-        label("Key", "Q", ud(0, 14, 1, 0), ud(0, 5, 0, 0), font=FONT_B, ts=10, color=TEXT),
-        label("Name", "", ud(1, -22, 1, 0), ud(0, 20, 0, 0), ts=9, color=MUTED),
+        label("Key", "Q", ud(0, 12, 1, 0), ud(0, 5, 0, 0), font=FONT_B, ts=9, color=TEXT),
+        label("Name", "", ud(1, -22, 1, 0), ud(0, 18, 0, 0), ts=8, color=MUTED),
         frame("Cooldown", ud(1, 0, 0, 0), ud(0, 0, 1, 0), anchor=(0, 1), bg=[0, 0, 0], t=0.4, extra={"ZIndex": 2}),
-        label("CooldownText", "", ud(0, 30, 1, 0), ud(1, -4, 0, 0), anchor=(1, 0), font=FONT_B, ts=10, xalign="Right",
+        label("CooldownText", "", ud(0, 30, 1, 0), ud(1, -4, 0, 0), anchor=(1, 0), font=FONT_B, ts=9, xalign="Right",
               extra={"ZIndex": 3, "TextStrokeTransparency": 0.5}),
     ])
 
@@ -201,7 +204,7 @@ hud = screen("HUD", [
     # Vida/energia + nome do personagem, embaixo no centro; cooldown do dash acima da vida, à direita
     frame("Vitals", ud(0, 400, 0, 56), ud(0.5, 0, 1, -112), anchor=(0.5, 1), t=1, children=[
         label("CharacterName", "", ud(0.5, 0, 0, 16), ud(0, 0, 0, 0), font=FONT_B, ts=12, color=MUTED),
-        frame("DashChips", ud(0.5, 0, 0, 16), ud(1, 0, 0, 0), anchor=(1, 0), t=1, children=[
+        frame("DashChips", ud(0.5, 0, 0, 12), ud(1, 0, 0, 2), anchor=(1, 0), t=1, children=[
             listlayout("Horizontal", 6, "Right", "Center"),
             dash_chip("DashSide", 1), dash_chip("Dash", 2),
         ]),

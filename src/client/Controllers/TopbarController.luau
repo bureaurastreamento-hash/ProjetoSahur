@@ -10,7 +10,7 @@
 	                     Denunciar (ReportController via AddToProfile)
 	  Config          -> Configurações (SettingsGui), Controles (HelpGui), Dev (DevController via AddToSettings)
 	Abrir um dos 5 fecha os outros (TopbarPlus desliga o autoDeselect de quem tem dropdown; a gente
-	refaz isso à mão em closeOthers). As teclas continuam abrindo os painéis direto.
+	refaz isso à mão em closeParents). As teclas continuam abrindo os painéis direto.
 	API: TopbarController.AddToSettings(icon) / AddToProfile(icon).
 	Só reflete estado do servidor; não decide nada.
 ]]
@@ -159,8 +159,47 @@ function TopbarController.Init()
 	xpFill = get(get(profilePanel, "XPBar"), "Fill") :: Frame
 end
 
+local parents: { any } = {} -- os 5 botões do topo (preenchido no Start)
+
+--- Fecha os dropdowns do topo (e os painéis abertos dentro deles), menos `keep`.
+local function closeParents(keep: any?, keepChild: any?)
+	for _, parent in parents do
+		if parent ~= keep and parent.isSelected then
+			parent:deselect("Topbar", keep)
+			for uid in parent.childIconsDict do
+				local child = IconAny.getIconByUID(uid)
+				if child and child ~= keepChild and child.isSelected and not child.oneClickEnabled then
+					child:deselect("Topbar", keep)
+				end
+			end
+		end
+	end
+end
+
+--- Item que abre um painel: abrir (tecla ou clique) recolhe os dropdowns; o botão Close do painel
+--- fecha o item (dono, 2026-09-19: "X pra sair em todos os menus", "abriu menu, dropbar fecha").
+local registered: { [any]: boolean } = {}
+local function registerItem(icon: any)
+	if registered[icon] then
+		return
+	end
+	registered[icon] = true
+	icon.selected:Connect(function()
+		closeParents(nil, icon)
+	end)
+	for item in icon.toggleItems do
+		local close = item:FindFirstChild("Close", true)
+		if close and close:IsA("GuiButton") and close.Parent == item then
+			close.Activated:Connect(function()
+				icon:deselect("Close", icon)
+			end)
+		end
+	end
+end
+
 --- Pendura um ícone no dropdown de Perfil (AchievementsController: "Conquistas").
 function TopbarController.AddToProfile(icon: any)
+	registerItem(icon)
 	if not profileIcon then
 		table.insert(pendingProfile, icon)
 		return
@@ -171,6 +210,7 @@ end
 --- Pendura um ícone no dropdown de Config (engrenagem). Chamado pelo DevController quando o jogador
 --- é desenvolvedor; se o topbar ainda não montou, o ícone fica na fila e entra no Start.
 function TopbarController.AddToSettings(icon: any)
+	registerItem(icon)
 	if not settingsIcon then
 		table.insert(pendingSettings, icon)
 		return
@@ -201,6 +241,7 @@ function TopbarController.Start()
 		end
 		if panel then
 			icon:bindToggleItem(panel)
+			registerItem(icon)
 		end
 		return icon
 	end
@@ -284,23 +325,10 @@ function TopbarController.Start()
 	-- TopbarPlus desliga o autoDeselect de quem tem dropdown (Utility.joinFeature), então um pai
 	-- aberto não fechava quando outro pai abria. Aqui: abriu um dos 5, os outros fecham (e os
 	-- filhos deles também, para não sobrar painel aberto de um menu recolhido).
-	local parents = { charactersIcon, playIcon, shopIcon, profileIcon, settingsIcon }
-	local function closeOthers(keep: any)
-		for _, parent in parents do
-			if parent ~= keep and parent.isSelected then
-				parent:deselect("Topbar", keep)
-				for uid in parent.childIconsDict do
-					local child = IconAny.getIconByUID(uid)
-					if child and child.isSelected and not child.oneClickEnabled then
-						child:deselect("Topbar", keep)
-					end
-				end
-			end
-		end
-	end
+	parents = { charactersIcon, playIcon, shopIcon, profileIcon, settingsIcon }
 	for _, parent in parents do
 		parent.selected:Connect(function()
-			closeOthers(parent)
+			closeParents(parent)
 		end)
 	end
 

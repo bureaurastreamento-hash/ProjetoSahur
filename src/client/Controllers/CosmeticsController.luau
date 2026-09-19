@@ -230,12 +230,30 @@ end
 -- Roda de emotes
 -- ---------------------------------------------------------------------------
 
+--- A roda tem 8 posições e a lista de emotes já passou disso: os que o jogador TEM entram primeiro
+--- (na ordem da config), os trancados preenchem o resto.
+local wheelEmotes: { CosmeticsConfig.Emote } = {}
+local function rebuildWheelEmotes()
+	wheelEmotes = {}
+	for _, emote in CosmeticsConfig.Emotes do
+		if ownsEmote(emote) then
+			table.insert(wheelEmotes, emote)
+		end
+	end
+	for _, emote in CosmeticsConfig.Emotes do
+		if not ownsEmote(emote) and not emote.Limited then
+			table.insert(wheelEmotes, emote)
+		end
+	end
+end
+
 local function setWheel(visible: boolean)
 	wheel.Visible = visible
 	if visible then
+		rebuildWheelEmotes()
 		for i = 1, 8 do
 			local b = wheel:FindFirstChild("Slot" .. i) :: TextButton?
-			local emote = CosmeticsConfig.Emotes[i]
+			local emote = wheelEmotes[i]
 			if b then
 				b.Visible = emote ~= nil
 				if emote then
@@ -337,7 +355,7 @@ function CosmeticsController.Start()
 		local b = wheel:FindFirstChild("Slot" .. i) :: TextButton?
 		if b then
 			b.Activated:Connect(function()
-				local emote = CosmeticsConfig.Emotes[i]
+				local emote = wheelEmotes[i]
 				if emote then
 					requestEmote:FireServer(emote.Id)
 				end

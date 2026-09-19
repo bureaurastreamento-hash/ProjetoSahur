@@ -287,7 +287,39 @@ Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo
   cliente validadas numa caixa tolerante no servidor). Sem um caso concreto do dono (qual golpe, o que
   parece atrasado: animação, dano, empurrão, reação da vítima) não dá pra mexer sem chutar. PEDIR exemplo.
 
-### PEDIDOS NOVOS DO DONO (2026-09-19) — itens 2, 4 e 5 FEITOS; 1, 3 e 6 pendentes
+### Leva 2026-09-19 (noite) — lista 2 do dono — FEITO (falta ele testar)
+- **Ids de animação** (`Animations.model.json`): Brawler/ShoulderBash 71266182110890 (anim tem 3,45 s e o
+  agarrão dura ~1,1 s: ou a equipe encurta, ou aumento `Carry`), Shared/Dash 95985041721346 (era vazio),
+  Swift/TimeDome 99664142798158 (ult; câmera/efeitos ainda NÃO feitos), Brawler/M1_1..4 (mesmos ids do
+  Shared), Guardian/ShieldBash 120293502970268 e Overlord/Clutch 125017727896276 (os "ataque grab"),
+  Brawler/GroundSlam 112099038975315 ("soco forte" — CONFIRMAR com o dono se era esse o lugar),
+  Emotes/sit 137046777584533 (+ emote "Sentar" em `CosmeticsConfig`; a roda de 8 agora mostra primeiro os
+  que o jogador tem). KA1/KA2 (block animado/fixo) continuam em `RBX_ANIMSAVES` sem id publicado.
+- **Teto de empurrão**: `CombatConfig.KnockbackMaxTravelDashMultiple = 1.5` × alcance do dash frontal
+  (74×0,24×1,4 ≈ 25 studs → máx ~37); `CombatService.Knockback` encurta a Duration. Ajustar o múltiplo.
+- **Chips do dash**: só aparecem enquanto recarregam e ficaram com 12 px de altura.
+- **Menus**: abrir qualquer painel (tecla ou clique) recolhe os dropdowns; todo painel `panel()` tem X
+  (`Close`) ligado ao `deselect` do ícone (`TopbarController.registerItem`). Placar (HUD) não tem X.
+- **Altar**: os 4 postes com tocha (`BossAltarPillar/Torch`) saíram (gerador + JSON; o sync apaga do place).
+- **Noite realista**: `EnvironmentService.DayNight.Night` agora também interpola ColorShift, Atmosphere
+  (densa, azulada), ColorCorrection (frio, dessaturado) e Bloom (luzes brilham). Testado: dia/noite trocam.
+- **Mapa da guerra (Arena_Antiga)**: raycast em grade de 2 studs não achou buraco no modelo, mas o mapa
+  é aberto em várias direções. Criei via MCP a pasta `Cerca` dentro de `ServerStorage.Maps.Arena_Antiga`
+  (5 parts invisíveis: chão a y=156,4 sob todo o mapa + 4 paredes até y=310) — fecha a abertura e nenhuma
+  cratera leva ao void. **O dono precisa SALVAR o place.** Se ele quiser fechar a abertura com parede
+  visível/bonita, é trabalho de modelagem dele.
+- **Áudios** (`audios/`, 96 mp3): `tools/subir_audios.py` sobe pela Open Cloud com a API key do grupo
+  (`ROBLOX_API_KEY`, permissão assets read/write) e grava em `audios/ids.json`; `MAPA` no script diz qual
+  arquivo vira qual som (`--listar`), `--aplicar` escreve em `Sounds.model.json`. Falta o dono criar a key.
+
+### AINDA PENDENTE da lista 2 (polimento visual, próxima leva "VFX/SFX/modelos + combate satisfatório")
+- Emotes de cena: animações de câmera + efeitos. Ult do Swift: efeitos + câmera seguindo.
+- Cosméticos: tirar a opção de mudar a COR do personagem; melhorar as auras.
+- Assets novos no place (Canion, árvores/pedras, lojinha com NPC, casas DB) — dono define o uso.
+- PVP "não sincronizado" — pedir caso concreto.
+- Publicar KA1/KA2/DAZ1/AAAQ/aura no grupo e encaixar.
+
+### PEDIDOS NOVOS DO DONO (2026-09-19, manhã) — itens 2, 4 e 5 FEITOS; 1, 3 e 6 pendentes
 1. **Assets novos no place** (adicionados pelo dono em áreas vazias da place, esperando sair de lá e
    virar uso real — não foram colocados por mim, então não mexer neles sem entender o pedido primeiro):
    - `Canion`: mapa de EVENTO, grande, pra um boss grande + mini eventos interativos (tipo o `Arena_Antiga`

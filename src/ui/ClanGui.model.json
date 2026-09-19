@@ -145,7 +145,7 @@
        "UDim2": [
         [
          1,
-         0
+         -30
         ],
         [
          0,
@@ -187,6 +187,96 @@
       "BorderSizePixel": 0,
       "RichText": false
      }
+    },
+    {
+     "name": "Close",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Close",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         24
+        ],
+        [
+         0,
+         24
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.08,
+        0.08,
+        0.09
+       ]
+      },
+      "BackgroundTransparency": 0.3,
+      "Text": "✕",
+      "Font": "GothamBold",
+      "TextSize": 14,
+      "TextColor3": {
+       "Color3": [
+        0.62,
+        0.62,
+        0.68
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "ZIndex": 5
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          6
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Name": "UIStroke",
+        "Thickness": 1,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.84,
+        "ApplyStrokeMode": "Border"
+       }
+      }
+     ]
     },
     {
      "name": "Create",

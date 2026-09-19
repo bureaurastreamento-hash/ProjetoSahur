@@ -86,13 +86,37 @@ EnvironmentService.DayNight = {
 	NightEnd = 5.5, -- ClockTime em que amanhece
 	StartClock = 9.0, -- hora ao ligar o servidor (manhã: primeira noite só depois de ~20 min)
 	-- iluminação extra da noite (interpolada nos ~1,5 h de transição em volta de NightStart/NightEnd)
+	-- Noite "realista" (dono, 2026-09-19): luar azulado frio, sombras profundas, névoa mais densa e escura
+	-- (o que está longe some), cor dessaturada; as luzes do mapa (tochas/postes) ganham bloom.
 	Night = {
-		Brightness = 0.9,
-		Ambient = Color3.fromRGB(28, 30, 44),
-		OutdoorAmbient = Color3.fromRGB(44, 48, 72),
-		ExposureCompensation = -0.15,
+		Brightness = 0.35,
+		Ambient = Color3.fromRGB(14, 16, 26),
+		OutdoorAmbient = Color3.fromRGB(26, 30, 50),
+		ExposureCompensation = -0.35,
+		ColorShift_Top = Color3.fromRGB(150, 175, 230),
+		ColorShift_Bottom = Color3.fromRGB(40, 48, 80),
+		Atmosphere = { Density = 0.42, Offset = 0.05, Color = Color3.fromRGB(120, 130, 165), Decay = Color3.fromRGB(30, 36, 60), Glare = 0.05, Haze = 2.4 },
+		Color = { Saturation = -0.18, Contrast = 0.16, Brightness = -0.03, TintColor = Color3.fromRGB(205, 215, 255) },
+		Bloom = { Intensity = 0.6, Size = 24, Threshold = 1.2 },
 	},
 }
+
+--- Interpola número/Color3 (a = 0 dia, 1 noite).
+local function mix(dayValue: any, nightValue: any, a: number): any
+	if typeof(dayValue) == "Color3" then
+		return dayValue:Lerp(nightValue, a)
+	end
+	return dayValue + (nightValue - dayValue) * a
+end
+
+local function effectDef(name: string): { [string]: any }
+	for _, def in CONFIG.Effects do
+		if def.Name == name then
+			return def.Properties
+		end
+	end
+	return {}
+end
 
 local clock = EnvironmentService.DayNight.StartClock
 local clockOverride: number? = nil -- dev congelou a hora
@@ -121,10 +145,21 @@ local function applyClock(hour: number)
 	Lighting.ClockTime = clock
 	local a = nightAmount(clock)
 	local day = CONFIG.Lighting
-	Lighting.Brightness = day.Brightness + (dn.Night.Brightness - day.Brightness) * a
-	Lighting.Ambient = day.Ambient:Lerp(dn.Night.Ambient, a)
-	Lighting.OutdoorAmbient = day.OutdoorAmbient:Lerp(dn.Night.OutdoorAmbient, a)
-	Lighting.ExposureCompensation = day.ExposureCompensation + (dn.Night.ExposureCompensation - day.ExposureCompensation) * a
+	for _, key in { "Brightness", "Ambient", "OutdoorAmbient", "ExposureCompensation", "ColorShift_Top", "ColorShift_Bottom" } do
+		(Lighting :: any)[key] = mix(day[key], dn.Night[key], a)
+	end
+	local nightEffects: { [string]: { [string]: any } } = { SahurAtmosphere = dn.Night.Atmosphere, SahurColor = dn.Night.Color, SahurBloom = dn.Night.Bloom }
+	for effectName, nightProps in nightEffects do
+		local inst = Lighting:FindFirstChild(effectName)
+		if inst then
+			local dayProps = effectDef(effectName)
+			for key, nightValue in nightProps do
+				if dayProps[key] ~= nil then
+					(inst :: any)[key] = mix(dayProps[key], nightValue, a)
+				end
+			end
+		end
+	end
 	local night = clock >= dn.NightStart or clock < dn.NightEnd
 	if night ~= isNight then
 		isNight = night
