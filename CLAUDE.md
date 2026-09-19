@@ -31,6 +31,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
 - Regras novas (2026-09-20): toda cena (emote "scene", Carry de agarrão) trava o jogador via
   `CombatService.HoldStill`; poses `Loop` ficam até agir (servidor manda parar); auras = casca ForceField +
   manto de chamas; ult do Rick = `FlyGrab` (voo pela câmera + agarrar + mergulho). Rick=normal, Rick Prime=ult.
+- Mapa (place, não Rojo): `Workspace.Taberna`, `LojinhaDecor`, `AltarGruta` montados por `tools/montar_*.luau`
+  via MCP. Santuário do boss agora na muralha sul (z 294, altar z 360 dentro da gruta atrás da cachoeira).
+  Altar com flecha: E = virar o boss, F = invocar x3. Boss automático 2 h. Bruno Gollini = id "Swift".
 
 ## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
 - **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/

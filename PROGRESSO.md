@@ -311,6 +311,33 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 16. **Roster**: `Rick` (normal, drop) → ult RICK PRIME; `Bruno`, `Jotaro`, `Dio`, `Kira` criados como
     `early` (só devs) com kits emprestados (Brawler/Swift/Guardian/Mystic) e nome da ult em
     `AwakeningDefs` (PODER MÁXIMO / STAR PLATINUM / THE WORLD / KILLER QUEEN). Movesets próprios = leva futura.
+17. **Lojinha estilizada**: `tools/montar_lojinha.luau` → `Workspace.LojinhaDecor` (127 peças, tudo relativo
+    ao `VendedorSpot`): balcão com mercadorias e baú, estante de poções atrás do vendedor, lanterna, toldo
+    listrado, placa "LOJINHA", bandeirinhas, postes com lanterna, caixotes, barril, vasos, tapete. Conferido
+    por screenshot. O dono SALVA o place.
+18. **Altar na muralha atrás da cachoeira**: `gerar_arena.py` moveu o santuário (`SANCT_WORLD` z 231→294,
+    `ALTAR_Z = SANCT_Z − 66`, anel de pilares girado para não tapar a entrada): altar em (97.75, 360), arco
+    em z 369, muralha sul em z≈376,5. `tools/montar_altar_cachoeira.luau` → `Workspace.AltarGruta` (343
+    peças): gruta de rocha colada na muralha (paredes, teto, lintel de arenito com lápis-lazúli e ouro,
+    pilastras-zigurate), cachoeira (fio d'água na muralha → lençol no teto → véu ForceField na boca, névoa,
+    respingos, lago raso atravessável, som `9120386436` — id chutado, trocar se não tocar), pedestais-
+    zigurate com braseiros, urnas, tabuletas cuneiformes, 8 palmeiras, cipós, juncos, musgo, tochas.
+    **ATENÇÃO**: as `BossPathSlab0..13` (lajes do caminho, do place) apontam para o altar antigo — o dono
+    move. O dono SALVA o place. (Não tirei screenshot final: o dono estava usando o Studio.)
+19. **Altar = escolha**: com a flecha, à noite: `E` = virar o boss (como antes) ou `F` = INVOCAR o boss
+    **x3** (`BossConfig.StrongPower`: vida, dano e recompensas ×3, chance de item ×2 até 90%). Boss
+    automático a cada **2 h** em força normal (`AutoSpawnMinutes = 120`). Flecha mais rara (8–15 min
+    depois de sumir; 4–10 min no boot) e nasce longe dos spawns (`MinDistanceFromSpawns = 80`).
+20. **Bruno Gollini = Swift** (id interno "Swift" mantido: perfis, pastas de animação/som/VFX); nome de
+    tela e ult ("PODER MÁXIMO") trocados. O `Bruno` separado saiu do roster.
+21. **Animações**: Shared.Idle = 111178125405490 (respirando; a locomoção procedural cede ao idle da
+    equipe), Shared.Pose = 119477589200226, Shared.PoseStill = 131414311175694 (sem respiração — para
+    stills/trailer), Shared.Uppercut = 112109080090418 ("ataque 1" — **dono confirma o lugar**). M1_1..4
+    já eram os ids da equipe.
+- **IDEIAS anotadas (dono, 2026-09-20)**: workshop de servidor privado (mods oficiais/comunidade); quest
+  com cada developer; mural na taberna; **clash/mini-game**: socos rápidos dos Stands (Jotaro/Dio) ou
+  poderes à distância (kamehameha) um contra o outro = QTE entre os 2 jogadores (teclas no teclado/
+  celular/console) decidindo quem vence a troca.
 - **Roster decidido pelo dono (2026-09-20)** — 5 personagens novos, cada um precisa de ataques/ult/efeitos
   próprios (leva futura): Bruno Gollini (poder máx.), Jotaro (Stand máx.), Dio (Stand máx.), Rick Prime
   (exclusivo do boss), Yoshikage Kira (Stand máx.). Universos: JoJo, MHA, Rick and Morty.

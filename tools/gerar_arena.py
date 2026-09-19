@@ -506,7 +506,10 @@ SANCT_Z = 195
 SANCT_R = 44
 # Onde o dono POSICIONOU o santuário no Studio (2026-09-16, lido via MCP): o conjunto é gerado em volta
 # de (0, 0, SANCT_Z) e depois movido/girado em bloco para cá. Mudar aqui, nunca no Studio + aqui.
-SANCT_WORLD = (97.75, 0.6, 231.625)  # centro final (x, deslocamento y, z)
+# 2026-09-20 (dono): santuário ENCOSTADO na muralha sul (face em z≈377, 111 studs de altura), o altar dentro
+# de uma gruta atrás de uma cachoeira (gruta/cachoeira/vegetação = tools/montar_altar_cachoeira.luau, no
+# place). Anel do piso termina em z≈341; altar em z≈360 (ALTAR_Z = SANCT_Z - 66).
+SANCT_WORLD = (97.75, 0.6, 294.0)  # centro final (x, deslocamento y, z)
 SANCT_YAW = 180  # giro em graus no eixo Y
 DARK_STONE = ("Slate", (0.13, 0.13, 0.16))
 RUNE_RED = ("Neon", (0.85, 0.20, 0.20))
@@ -530,7 +533,7 @@ part("BossRuneLineA", (0.6, 0.12, 30), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=
 part("BossRuneLineB", (30, 0.12, 0.6), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=False)
 # anel de pilares com braseiros
 for i in range(10):
-    a = i / 10 * math.tau + math.pi / 10
+    a = i / 10 * math.tau  # sem o +pi/10: assim NENHUM pilar cai no eixo do altar (entrada da gruta livre)
     x, z = math.cos(a) * (SANCT_R - 5), SANCT_Z + math.sin(a) * (SANCT_R - 5)
     cylinder(f"BossPillar{i}", 1.3, 11, (x, 5.5, z), STONE_LIGHT)
     part(f"BossPillarCap{i}", (3.4, 0.8, 3.4), (x, 11.4, z), BASALT)
@@ -545,7 +548,7 @@ for sx, name in ((-1, "W"), (1, "E")):
     part(f"BossStatueHead{name}", (1.8, 1.8, 1.8), (bx + sx * 0.6, 9.5, SANCT_Z), DARK_STONE, rot=(0, sx * 30, sx * 12))
     part(f"BossStatueArm{name}", (1, 4, 1), (bx - sx * 2.0, 6.5, SANCT_Z + 0.5), DARK_STONE, rot=(0, 0, -sx * 35))
 # altar ao NORTE do disco (quem chega da praça vê primeiro), boss nasce no centro
-ALTAR_Z = SANCT_Z - 30
+ALTAR_Z = SANCT_Z - 66  # fora do anel, dentro da gruta encostada na muralha (era -30)
 part("BossAltarBase", (16, 1, 16), (0, 1.2, ALTAR_Z), BASALT)
 part("BossAltarStep", (12, 1, 12), (0, 2.2, ALTAR_Z), STONE_LIGHT)
 part("BossAltar", (4, 3.2, 4), (0, 4.3, ALTAR_Z), ("Slate", (0.10, 0.10, 0.13)))
