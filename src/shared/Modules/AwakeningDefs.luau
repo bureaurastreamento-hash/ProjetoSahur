@@ -30,7 +30,7 @@ local AwakeningDefs = {}
 
 local characters: { [string]: Def } = {
 	Brawler = { UltName = "FÚRIA", Subtitle = "força bruta", Theme = "rock" },
-	Swift = { UltName = "TEMPESTADE", Subtitle = "velocidade absoluta", Theme = "lightning" },
+	Swift = { UltName = "PODER MÁXIMO", Subtitle = "Bruno Gollini", Theme = "lightning" }, -- Swift = Bruno Gollini (dono, 2026-09-20)
 	Mystic = { UltName = "METEORO", Subtitle = "o céu cai", Theme = "arcane" },
 	Guardian = { UltName = "TERREMOTO", Subtitle = "muralha viva", Theme = "stone" },
 	Sahur = { UltName = "RITMO FINAL", Subtitle = "o ritmo que esmaga", Theme = "drums" },
@@ -38,7 +38,6 @@ local characters: { [string]: Def } = {
 	BigChop = { UltName = "FRENESI", Subtitle = "não morre, só cresce", Theme = "flesh" },
 	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
 	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
-	Bruno = { UltName = "PODER MÁXIMO", Subtitle = "Bruno Gollini", Theme = "rock" },
 	Jotaro = { UltName = "STAR PLATINUM", Subtitle = "Stand no máximo", Theme = "lightning" },
 	Dio = { UltName = "THE WORLD", Subtitle = "Stand no máximo", Theme = "void" },
 	Kira = { UltName = "KILLER QUEEN", Subtitle = "Stand no máximo", Theme = "arcane" },

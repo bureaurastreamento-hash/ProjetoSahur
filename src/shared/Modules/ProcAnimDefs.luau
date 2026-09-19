@@ -91,6 +91,7 @@ C["Shared/M1_4"] = { -- finisher: direto pesado com o corpo inteiro (empurra)
 }
 C["Shared/Uppercut"] = { -- soco subindo: braço vem de baixo e sobe; corpo estica
 	duration = 0.5,
+	team = true, -- "ataque 1" da equipe (112109080090418) toca no lugar (dono confirma se é o lugar certo)
 	frames = {
 		P(0, { RA = { rot = V(-30, 0, 10) }, LA = { rot = V(40, 0, -14) }, Root = { rot = V(-14, 14, 0), off = V(0, -0.5, 0) } }),
 		P(0.12, { RA = { rot = V(160, 0, -4) }, LA = { rot = V(30, 0, -18) }, Root = { rot = V(12, -10, 0), off = V(0, 0.35, -0.2) }, Neck = { rot = V(14, 0, 0) }, RL = { rot = V(-10, 0, 4) }, LL = { rot = V(10, 0, -4) } }, "out"),
@@ -532,6 +533,7 @@ local function locomotion(p: Loco): { [string]: Clip }
 	local idle: Clip = {
 		duration = ic,
 		loop = true,
+		team = true, -- dono (2026-09-20): a respiração da equipe (111178125405490) manda sobre o idle procedural
 		frames = {
 			idleFrame(0, -1, false),
 			idleFrame(ic * 0.3, 1, false, "inout"),

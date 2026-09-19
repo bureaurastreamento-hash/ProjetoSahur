@@ -145,8 +145,8 @@ CharacterDefs.Characters = {
 	} :: CharacterDef,
 
 	Swift = {
-		Id = "Swift",
-		DisplayName = "Swift",
+		Id = "Swift", -- id interno continua "Swift" (perfis salvos, pastas de animação/som/VFX); na tela é o Bruno
+		DisplayName = "Bruno Gollini", -- dono (2026-09-20): o Bruno (MHA, cúpula que para o tempo) fica no lugar do Swift
 		UnlockCost = 100,
 		Tagline = "Velocidade e teleporte",
 		Color = Color3.fromRGB(110, 230, 255),
@@ -404,9 +404,10 @@ CharacterDefs.Characters = {
 
 -- ---------------------------------------------------------------------------
 -- ROSTER DECIDIDO PELO DONO (2026-09-20). Nome da esquerda = forma normal; direita (depois do "-") = forma
--- da ULT (o Despertar vira ele): Bruno Gollini - poder máx. | Jotaro - Stand máx. | Dio - Stand máx. |
--- Rick - Rick Prime | Yoshikage Kira - Stand máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios; por
--- enquanto os 4 "early" usam kits emprestados (só devs testam). O Rick já tem a ult de verdade (PrimeDive).
+-- da ULT (o Despertar vira ele): Bruno Gollini - poder máx. (= o "Swift": id interno mantido, cúpula do
+-- tempo reaproveitada) | Jotaro - Stand máx. | Dio - Stand máx. | Rick - Rick Prime | Yoshikage Kira - Stand
+-- máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios; os 3 "early" usam kits emprestados (só devs
+-- testam). O Rick já tem a ult de verdade (PrimeDive).
 -- ---------------------------------------------------------------------------
 local function borrowed(fromId: string, keepUlt: boolean): { AbilityDef }
 	local list = {}
@@ -447,11 +448,6 @@ CharacterDefs.Characters.Rick = {
 	Abilities = rickAbilities,
 } :: CharacterDef
 
-CharacterDefs.Characters.Bruno = {
-	Id = "Bruno", DisplayName = "Bruno Gollini", UnlockCost = 0, Access = "early",
-	Tagline = "Desperta no poder máximo", Color = Color3.fromRGB(255, 120, 40), Image = "",
-	Abilities = borrowed("Brawler", true), -- PROVISÓRIO
-} :: CharacterDef
 CharacterDefs.Characters.Jotaro = {
 	Id = "Jotaro", DisplayName = "Jotaro", UnlockCost = 0, Access = "early",
 	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(120, 90, 255), Image = "",
@@ -468,7 +464,7 @@ CharacterDefs.Characters.Kira = {
 	Abilities = borrowed("Mystic", true), -- PROVISÓRIO
 } :: CharacterDef
 
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Bruno", "Jotaro", "Dio", "Kira", "Sahur", "Overlord" }
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Jotaro", "Dio", "Kira", "Sahur", "Overlord" }
 
 --- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string

@@ -87,7 +87,7 @@ local function give(player: Player, e: BossConfig.LootEntry): string?
 	return nil
 end
 
-local function rewardFor(player: Player, rank: number): (number, string?)
+local function rewardFor(player: Player, rank: number, scale: number): (number, string?)
 	local loot = BossConfig.Loot
 	local tier, idx
 	if rank <= #loot.Top.Coins then
@@ -95,27 +95,30 @@ local function rewardFor(player: Player, rank: number): (number, string?)
 	elseif rank <= #loot.Top.Coins + #loot.Good.Coins then
 		tier, idx = loot.Good, rank - #loot.Top.Coins
 	else
-		return DataService.RewardCoins(player, loot.Basic.Coins), nil
+		return DataService.RewardCoins(player, loot.Basic.Coins * scale), nil
 	end
-	local coins = DataService.RewardCoins(player, tier.Coins[idx])
-	if rng:NextNumber() >= tier.Chance[idx] then
+	local coins = DataService.RewardCoins(player, tier.Coins[idx] * scale)
+	-- boss forte (flecha): chance de item também sobe (x2 por dobro de força, teto 90%)
+	local chance = math.min(0.9, tier.Chance[idx] * (1 + (scale - 1) * 0.5))
+	if rng:NextNumber() >= chance then
 		return coins, nil
 	end
 	local e = pick(player, tier.Table)
 	if not e then
-		local extra = DataService.RewardCoins(player, tier.Fallback)
+		local extra = DataService.RewardCoins(player, tier.Fallback * scale)
 		return coins + extra, ("+%d pontos (já tem tudo)"):format(extra)
 	end
 	local text = give(player, e)
 	if not text then
-		local extra = DataService.RewardCoins(player, tier.Fallback)
+		local extra = DataService.RewardCoins(player, tier.Fallback * scale)
 		return coins + extra, nil
 	end
 	return coins, text
 end
 
 --- Paga todo mundo que bateu (menos `exclude`, o jogador-boss). Retorna (lista ordenada, top).
-function BossLootService.Distribute(damageBy: { [Player]: number }, exclude: Player?): ({ Reward }, Player?)
+function BossLootService.Distribute(damageBy: { [Player]: number }, exclude: Player?, scale: number?): ({ Reward }, Player?)
+	local rewardScale = scale or 1
 	local total = 0
 	local ranked: { { player: Player, dmg: number } } = {}
 	for player, dmg in damageBy do
@@ -130,7 +133,7 @@ function BossLootService.Distribute(damageBy: { [Player]: number }, exclude: Pla
 	local rewards: { Reward } = {}
 	local top: Player? = if ranked[1] then ranked[1].player else nil
 	for rank, entry in ranked do
-		local coins, drop = rewardFor(entry.player, rank)
+		local coins, drop = rewardFor(entry.player, rank, rewardScale)
 		ProgressionService.OnBossDefeated(entry.player, entry.dmg, entry.dmg / total, rank == 1)
 		table.insert(rewards, { name = entry.player.Name, coins = coins, damage = math.floor(entry.dmg), rank = rank, drop = drop })
 		if drop then

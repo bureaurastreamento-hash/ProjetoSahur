@@ -43,6 +43,7 @@ type Fight = {
 	cooldowns: { [string]: number }, -- os.clock() em que o golpe libera
 	lastSeenPlayer: number,
 	finished: boolean,
+	power: number, -- multiplicador de força/recompensa (1 = normal; flecha no altar = BossConfig.StrongPower)
 	target: Player?,
 	targetChosenAt: number,
 	recentHits: { { t: number, amount: number } }, -- golpes recebidos (janela do enrage)
@@ -169,7 +170,7 @@ local function isEnraged(f: Fight): boolean
 end
 
 local function hitAround(f: Fight, center: Vector3, attack: BossConfig.Attack)
-	local damage = attack.Damage * (if f.phase >= 2 then BossConfig.AI.Phase2DamageScale else 1)
+	local damage = attack.Damage * (if f.phase >= 2 then BossConfig.AI.Phase2DamageScale else 1) * (f.power or 1)
 	if isEnraged(f) then
 		damage *= BossConfig.Enrage.DamageScale
 	end
@@ -320,7 +321,7 @@ local function rewardAndFinish(f: Fight)
 	-- loot por posição no ranking de dano (BossConfig.Loot / BossLootService)
 	local rewards, top = {}, nil
 	if BossLootService then
-		rewards, top = BossLootService.Distribute(f.damageBy, nil)
+		rewards, top = BossLootService.Distribute(f.damageBy, nil, f.power or 1)
 	end
 	Log.debug(("[BossService] boss derrotado; %d participante(s)"):format(#rewards))
 	broadcast("defeated", { rewards = rewards, top = if top then top.Name else nil })
@@ -443,7 +444,8 @@ local function aiLoop(f: Fight)
 	end
 end
 
-local function summon(player: Player, byName: string?)
+local function summon(player: Player, byName: string?, power: number?)
+	local mult = power or 1
 	if state ~= "Ready" or fight then
 		return
 	end
@@ -458,6 +460,12 @@ local function summon(player: Player, byName: string?)
 	local model, humanoid, root = buildBoss()
 	if not model or not humanoid or not root then
 		return
+	end
+	if mult ~= 1 then
+		humanoid.MaxHealth = BossConfig.MaxHealth * mult
+		humanoid.Health = humanoid.MaxHealth
+		model.Name = ("%s x%d"):format(BossConfig.Name, mult)
+		humanoid.DisplayName = model.Name
 	end
 	state = "Fighting"
 	local spawnCf = if spawnPart then spawnPart.CFrame else CFrame.new(arenaCenter())
@@ -481,6 +489,7 @@ local function summon(player: Player, byName: string?)
 		cooldowns = {},
 		lastSeenPlayer = os.clock(),
 		finished = false,
+		power = mult,
 		target = nil,
 		targetChosenAt = 0,
 	}
@@ -501,6 +510,18 @@ function BossService.Despawn(): boolean
 	end
 	endFight(f, false)
 	return true
+end
+
+--- Altar com a flecha: boss x`power` (vida, dano e recompensas). Não tem custo: a flecha é o preço.
+function BossService.SummonStrong(player: Player, power: number): (boolean, string)
+	if state == "Cooldown" then
+		state = "Ready"
+	end
+	if state ~= "Ready" or fight then
+		return false, "o boss já está no mapa"
+	end
+	summon(player, player.Name, power)
+	return true, "boss invocado"
 end
 
 --- [Admin] Invoca direto.

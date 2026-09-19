@@ -59,7 +59,7 @@
      "name": "Uppercut",
      "className": "Animation",
      "properties": {
-      "AnimationId": ""
+      "AnimationId": "rbxassetid://112109080090418"
      },
      "attributes": {
       "R15Id": ""
@@ -119,7 +119,7 @@
      "name": "Idle",
      "className": "Animation",
      "properties": {
-      "AnimationId": "rbxassetid://119477589200226"
+      "AnimationId": "rbxassetid://111178125405490"
      },
      "attributes": {
       "R15Id": ""
@@ -160,6 +160,26 @@
      "className": "Animation",
      "properties": {
       "AnimationId": "rbxassetid://74875282344858"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "Pose",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://119477589200226"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "PoseStill",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://131414311175694"
      },
      "attributes": {
       "R15Id": ""

@@ -34,6 +34,7 @@ local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
 local BossFormService = require(script.Parent:WaitForChild("BossFormService"))
+local BossService = require(script.Parent:WaitForChild("BossService"))
 
 local RitualService = {}
 
@@ -272,6 +273,7 @@ end
 
 --- Sorteia um ponto escondido do mapa: raycast do céu num (x, z) aleatório; aceita chão plano na altura
 --- do mapa, longe do altar e dos jogadores. nil se não achou (cai nos ArrowSpot*).
+local spawnPoints: { BasePart } = {} -- SpawnLocation / Spawn* do mapa (a flecha nasce longe deles)
 local function randomHiddenSpot(): CFrame?
 	local cfg = BossConfig.Ritual
 	local params = RaycastParams.new()
@@ -295,6 +297,16 @@ local function randomHiddenSpot(): CFrame?
 			continue
 		end
 		if altar and (hit.Position - altar.Position).Magnitude < cfg.MinDistanceFromAltar then
+			continue
+		end
+		local nearSpawn = false
+		for _, sp in spawnPoints do
+			if sp.Parent and (sp.Position - hit.Position).Magnitude < (cfg.MinDistanceFromSpawns or 0) then
+				nearSpawn = true
+				break
+			end
+		end
+		if nearSpawn then
 			continue
 		end
 		local tooClose = false
@@ -456,6 +468,21 @@ local function dropArrow(player: Player, position: Vector3?)
 	end
 end
 
+--- Altar, opção 2 (dono, 2026-09-20): o portador INVOCA o boss x3 em vez de virar ele.
+local function onAltarSummon(player: Player)
+	if not RitualService.CanTransform(player) then
+		notifyBoss:FireClient(player, "denied", { event = "denied", reason = RitualService.StatusText() })
+		return
+	end
+	local ok, why = BossService.SummonStrong(player, BossConfig.StrongPower)
+	if not ok then
+		notifyBoss:FireClient(player, "denied", { event = "denied", reason = why })
+		return
+	end
+	setCarrier(nil) -- a flecha foi consumida
+	RitualService.Restart()
+end
+
 --- Altar: só o portador, à noite, vira o boss.
 local function onAltarTriggered(player: Player)
 	if not RitualService.CanTransform(player) then
@@ -558,6 +585,22 @@ function RitualService.Start()
 		p.Parent = altar
 		p.Triggered:Connect(onAltarTriggered)
 		prompt = p
+		local p2 = Instance.new("ProximityPrompt")
+		p2.Name = "RitualSummonPrompt"
+		p2.ActionText = ("Invocar %s x%d"):format(BossConfig.Name, BossConfig.StrongPower)
+		p2.ObjectText = "Altar"
+		p2.HoldDuration = 1.2
+		p2.MaxActivationDistance = 12
+		p2.RequiresLineOfSight = false
+		p2.KeyboardKeyCode = Enum.KeyCode.F
+		p2.UIOffset = Vector2.new(0, 70)
+		p2.Parent = altar
+		p2.Triggered:Connect(onAltarSummon)
+		for _, d in Workspace:GetDescendants() do
+			if d:IsA("SpawnLocation") or (d:IsA("BasePart") and d.Name:match("^Spawn%d+$")) then
+				table.insert(spawnPoints, d)
+			end
+		end
 
 		local gui = Instance.new("BillboardGui")
 		gui.Name = "BossAltarGui"

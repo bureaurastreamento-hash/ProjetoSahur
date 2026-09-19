@@ -10,9 +10,12 @@ local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
 local BossConfig = {}
 
 BossConfig.Name = "Big C.H.O.P."
+-- Altar com a flecha (dono, 2026-09-20): escolher entre INVOCAR o boss x3 (vida, dano e recompensas) ou
+-- VIRAR o boss. `StrongPower` = multiplicador do boss invocado pela flecha.
+BossConfig.StrongPower = 3
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
 BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
-BossConfig.AutoSpawnMinutes = 0 -- além do altar: o Santuário invoca sozinho a cada N min (0 = desligado; agora é ritual)
+BossConfig.AutoSpawnMinutes = 120 -- além do altar: o boss nasce sozinho a cada 2 h em força NORMAL (dono, 2026-09-20)
 BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
 -- Modelo: rig por PEÇAS do Roblox (BossRigs, sem mesh externo) — ver BossConfig.Form.RigId.
@@ -35,15 +38,17 @@ BossConfig.Ritual = {
 	-- aleatórios (SpawnDelayMin..Max s depois de sumir; FirstSpawnMin..Max no boot), num ponto SORTEADO do
 	-- mapa (raycast do céu; ArrowSpot* só como reserva), sem feixe/lanterna. Quem morre com ela a deixa no
 	-- chão por DropLifetime s; ninguém pegou = some e volta para a fila aleatória.
-	SpawnDelayMin = 120,
-	SpawnDelayMax = 300,
-	FirstSpawnMin = 45,
-	FirstSpawnMax = 150,
+	-- dono (2026-09-20): flecha MAIS rara e longe dos spawns
+	SpawnDelayMin = 480,
+	SpawnDelayMax = 900,
+	FirstSpawnMin = 240,
+	FirstSpawnMax = 600,
 	DropLifetime = 10,
 	HiddenSpawn = true, -- true = ponto aleatório do mapa; false = só nos ArrowSpot*
 	SpawnRadius = 225, -- alcance (x/z) do sorteio a partir do centro do mapa
 	MinDistanceFromPlayers = 35, -- não nasce colado em alguém
 	MinDistanceFromAltar = 45,
+	MinDistanceFromSpawns = 80, -- longe de qualquer SpawnLocation / Spawn* do mapa (lugares "fora de mão")
 	ArrowModelName = "StandArrow", -- Model/BasePart em ServerStorage ou ReplicatedStorage.Assets (senão: flecha por código)
 }
 
