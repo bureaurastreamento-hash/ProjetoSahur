@@ -69,18 +69,42 @@ local function placeNpc(shop: Model)
 	if not npc then
 		return
 	end
-	local cf, size = shop:GetBoundingBox()
-	-- na frente da lojinha, virado para fora (-Z do pivô = frente por convenção; se a arte girar o modelo,
-	-- gira junto), com os pés no chão
-	local front = cf * CFrame.new(0, -size.Y / 2, -(size.Z / 2 + ShopNpcService.FrontOffset))
+	-- Lojinha e Banheiro são a MESMA construção (dono): a caixa é a união dos dois; a "frente" é o
+	-- LookVector do pivô da Lojinha (girou o modelo, gira a frente). O vendedor fica fora da caixa,
+	-- com os pés no chão de verdade (raycast ignorando a construção).
+	local building: { Instance } = { shop }
+	local bathroom = Workspace:FindFirstChild("Banheiro", true)
+	if bathroom then
+		table.insert(building, bathroom)
+	end
+	local minV, maxV = nil :: Vector3?, nil :: Vector3?
+	for _, m in building do
+		for _, d in m:GetDescendants() do
+			if d:IsA("BasePart") then
+				local half = d.Size / 2
+				local lo, hi = d.Position - half, d.Position + half
+				minV = if minV then Vector3.new(math.min(minV.X, lo.X), math.min(minV.Y, lo.Y), math.min(minV.Z, lo.Z)) else lo
+				maxV = if maxV then Vector3.new(math.max(maxV.X, hi.X), math.max(maxV.Y, hi.Y), math.max(maxV.Z, hi.Z)) else hi
+			end
+		end
+	end
+	local pivot = shop:GetPivot()
+	local center = if minV and maxV then (minV + maxV) / 2 else pivot.Position
+	local extent = if minV and maxV then math.max(maxV.X - minV.X, maxV.Z - minV.Z) / 2 else 8
+	local lookFlat = Vector3.new(pivot.LookVector.X, 0, pivot.LookVector.Z)
+	local look = if lookFlat.Magnitude > 0.1 then lookFlat.Unit else Vector3.new(0, 0, -1)
+	local frontPos = center + look * (extent + ShopNpcService.FrontOffset)
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = { npc, shop }
-	local hit = Workspace:Raycast(front.Position + Vector3.new(0, 20, 0), Vector3.new(0, -60, 0), params)
-	local groundY = if hit then hit.Position.Y else front.Position.Y
-	local look = (cf.Position - front.Position) * Vector3.new(1, 0, 1)
-	local facing = if look.Magnitude > 0.1 then -look.Unit else cf.LookVector -- olha para quem chega (costas para a loja)
-	npc:PivotTo(CFrame.lookAt(Vector3.new(front.Position.X, groundY + 3, front.Position.Z), Vector3.new(front.Position.X, groundY + 3, front.Position.Z) + facing))
+	local exclude: { Instance } = { npc }
+	for _, m in building do
+		table.insert(exclude, m)
+	end
+	params.FilterDescendantsInstances = exclude
+	local hit = Workspace:Raycast(Vector3.new(frontPos.X, (if maxV then maxV.Y else frontPos.Y) + 20, frontPos.Z), Vector3.new(0, -120, 0), params)
+	local groundY = if hit then hit.Position.Y else (if minV then minV.Y else frontPos.Y)
+	local stand = Vector3.new(frontPos.X, groundY + 3, frontPos.Z)
+	npc:PivotTo(CFrame.lookAt(stand, stand + look)) -- de costas para a loja, olhando para quem chega
 	npc.Parent = Workspace
 
 	local root = npc:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -107,9 +131,12 @@ function ShopNpcService.Start()
 	end
 	-- o dono pode mover/renomear a lojinha em Team Create: reposiciona se ela aparecer depois
 	Workspace.DescendantAdded:Connect(function(inst: Instance)
-		if inst.Name == ShopNpcService.ModelName and inst:IsA("Model") then
+		if (inst.Name == ShopNpcService.ModelName or inst.Name == "Banheiro") and inst:IsA("Model") then
 			task.wait(1)
-			placeNpc(inst :: Model)
+			local shop = Workspace:FindFirstChild(ShopNpcService.ModelName, true)
+			if shop and shop:IsA("Model") then
+				placeNpc(shop :: Model)
+			end
 		end
 	end)
 end

@@ -1,12 +1,13 @@
 --!strict
 --[[
 	EventService (servidor)
-	Área de EVENTO = modelo `Workspace.canion` (dono, 2026-09-19: mapa grande para boss grande + mini
+	Área de EVENTO = modelo `ServerStorage.EventMaps.canion` (dono, 2026-09-19: mapa grande para boss grande + mini
 	eventos interativos). Por enquanto: levar todo mundo para lá e trazer de volta (comandos DEV
 	StartEvent/EndEvent → Begin/Finish); os mini eventos entram depois em cima disto.
 
-	Spawns do evento: BaseParts chamadas `EventSpawn*` em qualquer lugar dentro do modelo (a arte cria e
-	posiciona; invisíveis se quiser). Sem nenhuma, usa o centro do modelo com raycast até o chão.
+	Spawns do evento: BaseParts chamadas `EventSpawn*` em qualquer lugar dentro do modelo (pasta EventSpawns,
+	8 parts verdes criadas via MCP; o dono move). Sem nenhuma, usa o centro do modelo com raycast até o chão.
+	Os spawns ficam invisíveis no jogo (Transparency 1 ao clonar).
 	Workspace.EventActive (atributo) = true enquanto o evento está rolando (HUD/outros serviços leem).
 	Quem entra no servidor durante o evento vai para lá também; quem morre renasce no evento.
 ]]
@@ -14,6 +15,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local ServerStorage = game:GetService("ServerStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Log = require(Modules:WaitForChild("Log"))
@@ -27,9 +29,24 @@ EventService.SpawnPrefix = "EventSpawn"
 
 local active = false
 
+-- O canion NÃO fica no mapa (dono, 2026-09-19): mora em ServerStorage.EventMaps e é clonado para o
+-- Workspace só durante o evento (na mesma posição em que a arte deixou), sumindo ao encerrar.
+local STORE_FOLDER = "EventMaps"
+local live: Model? = nil
+
+local function template(): Model?
+	local store = ServerStorage:FindFirstChild(STORE_FOLDER)
+	local m = store and store:FindFirstChild(EventService.MapName)
+	if m and m:IsA("Model") then
+		return m
+	end
+	-- alguém deixou no Workspace (edição antiga): usa dali mesmo
+	local w = Workspace:FindFirstChild(EventService.MapName, true)
+	return if w and w:IsA("Model") then w else nil
+end
+
 local function eventModel(): Model?
-	local m = Workspace:FindFirstChild(EventService.MapName, true)
-	return if m and m:IsA("Model") then m else nil
+	return live or template()
 end
 
 --- Pontos de spawn do evento (CFrames com 3 studs de folga do chão).
@@ -87,8 +104,23 @@ end
 
 --- Leva todo mundo para o evento. Retorna ok, mensagem. (Não é o Start() do boot.)
 function EventService.Begin(): (boolean, string)
-	if not eventModel() then
-		return false, ("modelo '%s' não está no Workspace"):format(EventService.MapName)
+	local tpl = template()
+	if not tpl then
+		return false, ("modelo '%s' não está em ServerStorage.%s"):format(EventService.MapName, STORE_FOLDER)
+	end
+	if not live then
+		if tpl.Parent == Workspace then
+			live = tpl
+		else
+			local clone = tpl:Clone()
+			for _, d in clone:GetDescendants() do
+				if d:IsA("BasePart") and d.Name:sub(1, #EventService.SpawnPrefix) == EventService.SpawnPrefix then
+					d.Transparency = 1
+				end
+			end
+			clone.Parent = Workspace
+			live = clone
+		end
 	end
 	active = true
 	Workspace:SetAttribute("EventActive", true)
@@ -111,6 +143,10 @@ function EventService.Finish(): (boolean, string)
 	for _, p in Players:GetPlayers() do
 		sendToArena(p)
 	end
+	if live and live.Parent == Workspace and ServerStorage:FindFirstChild(STORE_FOLDER) then
+		live:Destroy() -- era clone; o original continua em ServerStorage
+	end
+	live = nil
 	Log.debug("[EventService] evento encerrado")
 	return true, "evento encerrado: todos de volta à arena"
 end

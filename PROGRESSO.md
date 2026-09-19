@@ -342,11 +342,15 @@ Essa lista nova entra ANTES do resto de "O QUE FALTA" na próxima sessão, salvo
   a arte girar o modelo, "frente" = -Z do pivô). ProximityPrompt "Falar" (E) → `ShopController` abre a Loja
   (sem remote: o cliente escuta `PromptTriggered`). Enquanto a Lojinha ficar na área vazia (1341,167,225)
   o vendedor fica lá também.
-- **Canion** = área de evento: `EventService` (`Begin/Finish`; DEV "EVENTO no Canion" / "Encerrar
-  evento"): leva todos para spawns `EventSpawn*` dentro do modelo (a arte cria; sem nenhum = 8 pontos no
-  centro por raycast), `Workspace.EventActive`, quem entra/renasce durante o evento vai para lá; encerrar
-  devolve aos SpawnLocations do mapa livre (`CharacterService.PickSpawn`). Mini eventos/boss no canion
-  entram em cima disto quando o dono definir o que são.
+- **Canion** = área de evento, FORA do mapa: mora em `ServerStorage.EventMaps.canion` (movido via MCP a
+  pedido do dono, 2026-09-19) e o `EventService` clona para o Workspace só durante o evento (mesma posição),
+  destruindo ao encerrar. 8 parts verdes `EventSpawns/EventSpawn1..8` dentro do modelo (o dono move; ficam
+  invisíveis no jogo). DEV "EVENTO no Canion" / "Encerrar evento" (`Begin/Finish`), `Workspace.EventActive`,
+  quem entra/renasce durante o evento vai para lá; encerrar devolve aos SpawnLocations do mapa livre
+  (`CharacterService.PickSpawn`). Mini eventos/boss entram em cima disto. Testado: aparece/some, ida/volta.
+- **Lojinha no lugar** (dono moveu para ~(163, 5, -258), perto de Corners): Lojinha virou um Model VAZIO
+  (só pivô) e a construção inteira é `Banheiro.Union`; o `ShopNpcService` usa a caixa da união dos dois e a
+  frente = LookVector do pivô da Lojinha. Vendedor em (151, 3, -267), no chão, de costas para a loja.
 - Árvores/pedras 1–3, House Trink, LocalInicial, CasasKame: sem código — posicionamento é do dono.
 
 ### AINDA PENDENTE
