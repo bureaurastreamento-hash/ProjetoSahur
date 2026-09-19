@@ -424,6 +424,8 @@ effects.Grab = function(player, character, ability, direction)
 		})
 		local grabbedAt = os.clock()
 		local aRoot = character:FindFirstChild("HumanoidRootPart") :: BasePart
+		-- cena do agarrão: o atacante fica parado (dono, 2026-09-20: "consigo me mover durante"); o Spin gira no lugar
+		CombatService.HoldStill(player, e.Carry + 0.15, "grab")
 		local release = attachVictim(player, aRoot, victim, GRAB_OFFSET,
 			if finish == "Chokeslam" then (tonumber(e.Lift) or 5) else nil,
 			if finish == "Spin" then (tonumber(e.Spin) or SPIN_DEFAULT) else nil, e)
@@ -483,6 +485,122 @@ effects.Grab = function(player, character, ability, direction)
 			CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 		end
 		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", hitData)
+	end)
+end
+
+-- ULT DO RICK (dono, 2026-09-20): voo livre na direção da câmera (o cliente dono da física dirige;
+-- MovementController.Fly) por Duration s procurando alguém à frente; pegou = agarra, SOBE (RiseTime/
+-- RiseHeight) e MERGULHA (DiveSpeed) esmagando no chão. Subida/mergulho são do servidor (root ancorado,
+-- CFrame interpolado) para todo mundo ver igual; a vítima vai soldada (attachVictim).
+effects.FlyGrab = function(player, character, ability, direction)
+	local e = ability.Effect
+	local characterId = getState(player).characterId
+	local flyTime = tonumber(e.Duration) or 7
+	local riseTime = tonumber(e.RiseTime) or 1.4
+	local riseHeight = tonumber(e.RiseHeight) or 20
+	local diveSpeed = tonumber(e.DiveSpeed) or 100
+	AntiExploitService.Grace(player, flyTime + riseTime + 4)
+	CombatService.SetSuperArmor(player, flyTime + riseTime + 2)
+	RagdollService.GrantIFrames(character, flyTime + 0.1)
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Fly = true, Speed = e.FlySpeed, Duration = flyTime })
+	task.spawn(function()
+		local endsAt = os.clock() + flyTime
+		local caught: Model? = nil
+		while os.clock() < endsAt and not caught do
+			if not stillValid(player, character) then
+				return
+			end
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local vel = if root then root.AssemblyLinearVelocity else Vector3.zero
+			local dir = if vel.Magnitude > 5 then vel.Unit else (if root then root.CFrame.LookVector else direction)
+			for _, candidate in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 2) do
+				if not HealthService.IsInvulnerable(candidate, player) then
+					caught = candidate
+					break
+				end
+			end
+			if not caught then
+				task.wait(DASH_SAMPLE_INTERVAL)
+			end
+		end
+		local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if not caught or not root then
+			RagdollService.ClearIFrames(character)
+			notifyAbility:FireAllClients(character, characterId, ability.Id, "end", {})
+			return
+		end
+		local victim = caught :: Model
+		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		-- tempo total da cena: subida + mergulho (estimado pela altura + margem)
+		local carry = riseTime + (riseHeight + 30) / diveSpeed + 0.4
+		RagdollService.GrantIFrames(character, carry + 0.3)
+		HealthService.LockTo(victim, player, carry + 0.5)
+		if victimPlayer then
+			CombatService.CancelBlock(victimPlayer)
+			CombatService.Stun(victimPlayer, carry + 0.3, "grabbed")
+			AntiExploitService.Grace(victimPlayer, carry + 1.5)
+		end
+		CombatService.HoldStill(player, carry, "grab")
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", { Victim = victim, Carry = carry, Offset = GRAB_OFFSET, Lift = 1 })
+		local release = attachVictim(player, root, victim, GRAB_OFFSET, 1, nil, e)
+		-- servidor assume o corpo: ancora e interpola (o cliente parou de voar no "grab")
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+		root.Anchored = true
+		local flat = Vector3.new(root.CFrame.LookVector.X, 0, root.CFrame.LookVector.Z)
+		local look = if flat.Magnitude > 0.05 then flat.Unit else facing(character)
+		local startPos = root.Position
+		local topPos = startPos + Vector3.new(0, riseHeight, 0) + look * 4
+		local function alive(): boolean
+			return stillValid(player, character) and root.Parent ~= nil and HealthService.IsAlive(victim)
+		end
+		local function moveTo(from: Vector3, to: Vector3, seconds: number, pitch: number): boolean
+			local t0 = os.clock()
+			while true do
+				local a = math.clamp((os.clock() - t0) / seconds, 0, 1)
+				if not alive() then
+					return false
+				end
+				local pos = from:Lerp(to, a)
+				root.CFrame = CFrame.lookAt(pos, pos + look) * CFrame.Angles(pitch, 0, 0)
+				if a >= 1 then
+					return true
+				end
+				task.wait()
+			end
+		end
+		-- SOBE olhando para cima (a animação fica com a cabeça pra cima)
+		local ok = moveTo(startPos, topPos, riseTime, math.rad(35))
+		local groundPos = startPos
+		if ok then
+			-- MERGULHO: vira para o chão e desce até onde o raio acha piso à frente
+			local params = RaycastParams.new()
+			params.FilterType = Enum.RaycastFilterType.Exclude
+			params.FilterDescendantsInstances = { character, victim }
+			local hit = Workspace:Raycast(topPos + look * 6, Vector3.new(0, -(riseHeight + 80), 0), params)
+			groundPos = if hit then hit.Position + Vector3.new(0, 3, 0) else Vector3.new(topPos.X, startPos.Y, topPos.Z) + look * 6
+			local dist = (groundPos - topPos).Magnitude
+			ok = moveTo(topPos, groundPos, math.max(0.15, dist / diveSpeed), math.rad(-60))
+		end
+		root.CFrame = CFrame.lookAt(root.Position, root.Position + look)
+		root.Anchored = false
+		release()
+		RagdollService.ClearIFrames(character)
+		if not ok or not stillValid(player, character) or not HealthService.IsAlive(victim) then
+			HealthService.LockTo(victim, nil)
+			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
+			return
+		end
+		-- IMPACTO: a vítima toma o golpe no chão + área em volta
+		CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { BreaksBlock = true })
+		local at = groundPos + look * GRAB_OFFSET
+		for _, other in Hitbox.AroundPoint(character, at, tonumber(e.SlamRadius) or 10, MAX_AREA_TARGETS) do
+			if other ~= victim then
+				CombatService.ResolveHit(player, character, other, tonumber(e.SlamDamage) or 15, false, e.SlamKnockback)
+			end
+		end
+		HealthService.LockTo(victim, nil)
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Victim = victim, Position = at })
 	end)
 end
 
@@ -796,6 +914,7 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if ability.OncePerAwakening then
 		state.ultUsedAwakenedUntil = state.awakenedUntil
 	end
+	CombatService.NotifyAction(player) -- habilidade cancela emote em loop
 	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
 	-- Despertou: usa a versão desperta da habilidade se existir (mesmo Id: animação/VFX iguais)

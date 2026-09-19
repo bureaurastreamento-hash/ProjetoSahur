@@ -293,6 +293,24 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 10. **Rick** (`CharacterDefs.Characters.Rick`, "Rick Prime"): personagem EXCLUSIVO do boss (`Access =
     "drop"`, só via `BossConfig.Loot`; aparece no dropdown como "drop do boss"; dev tem). Kit PROVISÓRIO =
     habilidades do Mystic até a reformulação.
+11. **Loja (L) abrindo/fechando torta**: `closeParents` deselecionava o próprio ícone da Loja ao abrir
+    (ela é item direto, não dropdown) → painel sobreposto e "não quer sair". Corrigido; e abrir qualquer
+    menu do topo fecha o painel do vendedor (`TopbarController.MenuOpened`).
+12. **Auras de verdade** (`FX.SetCosmeticAura`): casca de energia em volta de cada membro (ForceField,
+    pulsando) + manto de chamas subindo colado ao torso; as partículas de cada estilo viraram detalhe.
+13. **Cenas travam**: `CombatService.HoldStill(player, s, motivo)` (WalkSpeed 0 + sem pulo + Stun) usado
+    na cena de emote (servidor, `Duration`) e no atacante durante o Carry de todo agarrão.
+14. **Poses em loop** (`Emote.Loop`, hoje só "sit"): ficam até andar/pular/atacar/usar habilidade/dash/
+    apanhar/morrer — o SERVIDOR vigia (`CosmeticsService.StopEmote` via `CombatService.ActionHook` +
+    Humanoid.Running/Jumping) e manda `NotifyEmote(false)` para todos; o cliente força `Looped = true`.
+15. **Ult do Rick = PRIME DIVE** (`Effect.Type = "FlyGrab"`, tecla 1 desperto): voa 7 s na direção da
+    câmera (`MovementController.Fly`, anim Rick/PrimeDive 71127142596119 em loop); encostou em alguém →
+    agarra, sobe 22 studs em 1,4 s e mergulha a 110 studs/s até o chão (servidor ancora e interpola; anim
+    Rick/PrimeDive_Carry 110066675368334), impacto = 45 + área 12 studs/18. Sem alvo = "end". Ajustar
+    `RiseTime/DiveSpeed` para casar com a animação. NÃO testado com input real (precisa do dono).
+16. **Roster**: `Rick` (normal, drop) → ult RICK PRIME; `Bruno`, `Jotaro`, `Dio`, `Kira` criados como
+    `early` (só devs) com kits emprestados (Brawler/Swift/Guardian/Mystic) e nome da ult em
+    `AwakeningDefs` (PODER MÁXIMO / STAR PLATINUM / THE WORLD / KILLER QUEEN). Movesets próprios = leva futura.
 - **Roster decidido pelo dono (2026-09-20)** — 5 personagens novos, cada um precisa de ataques/ult/efeitos
   próprios (leva futura): Bruno Gollini (poder máx.), Jotaro (Stand máx.), Dio (Stand máx.), Rick Prime
   (exclusivo do boss), Yoshikage Kira (Stand máx.). Universos: JoJo, MHA, Rick and Morty.

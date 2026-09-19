@@ -568,6 +568,32 @@
      }
     }
    ]
+  },
+  {
+   "name": "Rick",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "PrimeDive",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://71127142596119"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    },
+    {
+     "name": "PrimeDive_Carry",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://110066675368334"
+     },
+     "attributes": {
+      "R15Id": ""
+     }
+    }
+   ]
   }
  ]
 }

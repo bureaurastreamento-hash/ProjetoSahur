@@ -262,6 +262,11 @@ function VendorController.Start()
 		setTab("trade")
 	end)
 	;(get(panel, "Close") :: TextButton).Activated:Connect(VendorController.Close)
+	TopbarController.MenuOpened.Event:Connect(function()
+		if panel.Visible then
+			VendorController.Close() -- abriu um menu do topo: o vendedor sai (ocupam o mesmo canto)
+		end
+	end)
 
 	ProximityPromptService.PromptTriggered:Connect(function(prompt: ProximityPrompt, player: Player)
 		if player == localPlayer and prompt.Name == "ShopPrompt" then

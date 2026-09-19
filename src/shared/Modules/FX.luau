@@ -182,6 +182,64 @@ function FX.SetCosmeticAura(character: Model, color: Color3?, style: string?, na
 	local body = attachment(Vector3.new(0, 0, 0))
 	local feet = attachment(Vector3.new(0, -2.6, 0))
 	local styleName = style or "wisps"
+	-- AURA DE VERDADE (dono, 2026-09-20: "partícula voando não é aura"): uma CASCA de energia em volta do
+	-- corpo (cópia de cada membro em ForceField, pulsando) + um manto de chamas subindo colado ao corpo.
+	-- As partículas de cada estilo entram por cima como detalhe.
+	do
+		local LIMBS = { "Head", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg" }
+		local shells: { BasePart } = {}
+		for _, limbName in LIMBS do
+			local limb = character:FindFirstChild(limbName)
+			if limb and limb:IsA("BasePart") then
+				local shell = Instance.new("Part")
+				shell.Name = "Shell_" .. limbName
+				shell.Size = limb.Size * 1.14 + Vector3.new(0.12, 0.12, 0.12)
+				shell.CFrame = limb.CFrame
+				shell.Color = color
+				shell.Material = Enum.Material.ForceField
+				shell.Transparency = 0.25
+				shell.CanCollide = false
+				shell.CanQuery = false
+				shell.CanTouch = false
+				shell.Massless = true
+				shell.CastShadow = false
+				shell.Anchored = false
+				if limbName == "Head" then
+					shell.Shape = Enum.PartType.Ball
+					shell.Size = Vector3.new(1.5, 1.5, 1.5)
+				end
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = limb
+				weld.Part1 = shell
+				weld.Parent = shell
+				shell.Parent = folder
+				table.insert(shells, shell)
+			end
+		end
+		-- pulsa (a energia "respira")
+		local TweenService = game:GetService("TweenService")
+		for _, shell in shells do
+			TweenService:Create(shell, TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Transparency = 0.6 }):Play()
+		end
+		-- manto de chamas subindo, colado ao corpo: emite da SUPERFÍCIE do torso (cilindro), então fica no
+		-- Torso (não num Attachment, que não tem volume); o destroy da pasta limpa
+		local torso = character:FindFirstChild("Torso")
+		local sheathParent: Instance = if torso then torso else body
+		local sheath = emitter(sheathParent, if styleName == "smoke" then "SmokeLoop" elseif styleName == "electric" then "Electric" elseif styleName == "sparkle" then "Star" else "Flame", {
+			Rate = 40, Lifetime = NumberRange.new(0.28, 0.42), Speed = NumberRange.new(11, 16), SpreadAngle = Vector2.new(6, 6),
+			Acceleration = Vector3.new(0, 14, 0), Rotation = NumberRange.new(-10, 10), ZOffset = -0.2, LightEmission = if styleName == "smoke" then 0.1 else 0.9,
+			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.4), NumberSequenceKeypoint.new(0.5, 3.2), NumberSequenceKeypoint.new(1, 0.6) }),
+			Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.45), NumberSequenceKeypoint.new(0.6, 0.6), NumberSequenceKeypoint.new(1, 1) }),
+			Shape = Enum.ParticleEmitterShape.Cylinder, ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface, ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward,
+			Orientation = Enum.ParticleOrientation.FacingCamera,
+		})
+		sheath.Name = auraName .. "_Sheath"
+		folder.Destroying:Connect(function()
+			sheath:Destroy()
+		end)
+		light.Brightness = 1.4
+		light.Range = 12
+	end
 	if styleName == "flame" then
 		emitter(feet, "Flame", { Rate = 22, Lifetime = NumberRange.new(0.5, 0.8), Speed = NumberRange.new(4, 7), SpreadAngle = Vector2.new(15, 15), Acceleration = Vector3.new(0, 10, 0),
 			Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 2.2), NumberSequenceKeypoint.new(1, 0.4) }),

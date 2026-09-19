@@ -38,6 +38,12 @@
 	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
 	  Heal        { Amount }                                         -> cura o próprio lançador
 	  Shield      { Multiplier, Duration }                           -> multiplica dano RECEBIDO (0.5 = metade)
+	  FlyGrab     { FlySpeed, Duration, Range, Width, Height, RiseTime, RiseHeight, DiveSpeed, Damage, Knockback?,
+	                SlamRadius?, SlamDamage?, SlamKnockback? }
+	                                                                 -> ULT DO RICK (PRIME): voa na direção da câmera com a mão esticada
+	                                                                    por Duration s; ao encostar num inimigo SEGURA, sobe RiseHeight em
+	                                                                    RiseTime s e mergulha até o chão a DiveSpeed esmagando ele (Damage +
+	                                                                    área SlamRadius/SlamDamage). Sem alvo = só o voo.
 	  TimeDome    { Radius, Duration, SlowMultiplier, SelfMultiplier, BreakMultiplier }
 	                                                                 -> DOMÍNIO DO TEMPO (Swift): cúpula fixa no ponto do cast; quem está
 	                                                                    dentro anda/ataca/recarrega a SlowMultiplier (0.25 = 4× mais lento),
@@ -396,21 +402,73 @@ CharacterDefs.Characters = {
 	} :: CharacterDef,
 }
 
--- PERSONAGEM EXCLUSIVO DO BOSS (dono, 2026-09-20): Rick (Rick Prime, Rick and Morty). Só cai do loot do boss
--- (Access "drop"). Kit PROVISÓRIO = cópia do Mystic até a reformulação dos personagens (ataques/ult/efeitos
--- próprios ficam para a leva dos 5 decididos: Bruno Gollini, Jotaro, Dio, Rick Prime, Kira).
+-- ---------------------------------------------------------------------------
+-- ROSTER DECIDIDO PELO DONO (2026-09-20). Nome da esquerda = forma normal; direita (depois do "-") = forma
+-- da ULT (o Despertar vira ele): Bruno Gollini - poder máx. | Jotaro - Stand máx. | Dio - Stand máx. |
+-- Rick - Rick Prime | Yoshikage Kira - Stand máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios; por
+-- enquanto os 4 "early" usam kits emprestados (só devs testam). O Rick já tem a ult de verdade (PrimeDive).
+-- ---------------------------------------------------------------------------
+local function borrowed(fromId: string, keepUlt: boolean): { AbilityDef }
+	local list = {}
+	for _, a in CharacterDefs.Characters[fromId].Abilities do
+		if keepUlt or a.EnergyCost < CharacterDefs.Energy.Max then
+			table.insert(list, a)
+		end
+	end
+	return list
+end
+
+-- RICK (normal) -> RICK PRIME (ult). Exclusivo: só cai do loot do boss (Access "drop").
+-- Ult = tecla 1 com o modo desperto: voa 7 s com a mão esticada (anim 71127142596119); pegou alguém, sobe e
+-- mergulha esmagando no chão (anim 110066675368334, PrimeDive_Carry). RiseTime/DiveSpeed casam com a animação.
+local rickAbilities: { AbilityDef } = {
+	{
+		Id = "PrimeDive",
+		DisplayName = "Mergulho Prime",
+		Cooldown = 25,
+		EnergyCost = 100,
+		CastTime = 0.4,
+		Effect = { Type = "FlyGrab", FlySpeed = 55, Duration = 7, Range = 6, Width = 7, Height = 7, RiseTime = 1.4, RiseHeight = 22, DiveSpeed = 110, Damage = 45,
+			Knockback = { Speed = 30, Duration = 0.25, Ragdoll = 2.5 }, SlamRadius = 12, SlamDamage = 18, SlamKnockback = { Speed = 55, Duration = 0.25, Ragdoll = 1.2, Up = 20 } },
+		OncePerAwakening = true,
+	},
+}
+for _, a in borrowed("Mystic", false) do
+	table.insert(rickAbilities, a) -- PROVISÓRIO: 2/3/4 do Mystic até o kit próprio
+end
 CharacterDefs.Characters.Rick = {
 	Id = "Rick",
-	DisplayName = "Rick Prime",
+	DisplayName = "Rick",
 	UnlockCost = 0,
 	Access = "drop",
-	Tagline = "Exclusivo: cai do boss (top 3 de dano)",
+	Tagline = "Exclusivo do boss · desperta como Rick Prime",
 	Color = Color3.fromRGB(120, 220, 160),
 	Image = "",
-	Abilities = CharacterDefs.Characters.Mystic.Abilities, -- PROVISÓRIO
+	Abilities = rickAbilities,
 } :: CharacterDef
 
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Sahur", "Overlord" }
+CharacterDefs.Characters.Bruno = {
+	Id = "Bruno", DisplayName = "Bruno Gollini", UnlockCost = 0, Access = "early",
+	Tagline = "Desperta no poder máximo", Color = Color3.fromRGB(255, 120, 40), Image = "",
+	Abilities = borrowed("Brawler", true), -- PROVISÓRIO
+} :: CharacterDef
+CharacterDefs.Characters.Jotaro = {
+	Id = "Jotaro", DisplayName = "Jotaro", UnlockCost = 0, Access = "early",
+	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(120, 90, 255), Image = "",
+	Abilities = borrowed("Swift", true), -- PROVISÓRIO
+} :: CharacterDef
+CharacterDefs.Characters.Dio = {
+	Id = "Dio", DisplayName = "Dio", UnlockCost = 0, Access = "early",
+	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(240, 200, 60), Image = "",
+	Abilities = borrowed("Guardian", true), -- PROVISÓRIO
+} :: CharacterDef
+CharacterDefs.Characters.Kira = {
+	Id = "Kira", DisplayName = "Yoshikage Kira", UnlockCost = 0, Access = "early",
+	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(230, 120, 200), Image = "",
+	Abilities = borrowed("Mystic", true), -- PROVISÓRIO
+} :: CharacterDef
+
+CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Bruno", "Jotaro", "Dio", "Kira", "Sahur", "Overlord" }
 
 --- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string

@@ -28,6 +28,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   Setting `CharacterModel` = nascer com o rig da arte (`ServerStorage.CharacterModels.<Id>`). **Rick** =
   exclusivo do boss (`Access = "drop"`, kit provisório). Roster futuro: Bruno Gollini, Jotaro, Dio, Rick Prime,
   Kira (cada um com moveset/ult/efeitos novos). Z-fighting: `tools/achar_sobreposicao.luau`.
+- Regras novas (2026-09-20): toda cena (emote "scene", Carry de agarrão) trava o jogador via
+  `CombatService.HoldStill`; poses `Loop` ficam até agir (servidor manda parar); auras = casca ForceField +
+  manto de chamas; ult do Rick = `FlyGrab` (voo pela câmera + agarrar + mergulho). Rick=normal, Rick Prime=ult.
 
 ## Estado do design (2026-09-17, fim do dia) — lista do dono (ver PROGRESSO.md "RETOMAR AQUI")
 - **Feito hoje**: Leva 8 (locomoção PROCEDURAL por personagem: `ProcAnimDefs.Locomotion` + `Styles`/

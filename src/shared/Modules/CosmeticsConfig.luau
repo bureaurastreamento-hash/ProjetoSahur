@@ -78,6 +78,7 @@ export type Emote = {
 	Kind: string, -- "emote" (só animação) | "scene" (animação + aura/VFX por Duration s)
 	Weight: number, -- peso na roleta; 0 = de todos (o "wave" é o padrão)
 	Duration: number?, -- cena: s da aura (a animação manda se existir)
+	Loop: boolean?, -- pose: fica repetindo até o jogador andar/pular/atacar/apanhar (dono, 2026-09-20)
 	Color: Color3?, -- cena: cor da aura
 	Theme: string?, -- cena: tema de efeitos/câmera (CutsceneController THEMES: rock, lightning, arcane, stone, drums, void, flesh)
 	Season: string?, -- LIMITADO: temporada que solta este emote
@@ -94,7 +95,7 @@ CosmeticsConfig.Emotes = {
 	{ Id = "dance", Name = "Dançar", Kind = "emote", Weight = 6, Price = 200 },
 	{ Id = "bow", Name = "Reverência", Kind = "emote", Weight = 6, Price = 200 },
 	{ Id = "flex", Name = "Músculo", Kind = "emote", Weight = 6, Price = 200 },
-	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6, Price = 200 },
+	{ Id = "sit", Name = "Sentar", Kind = "emote", Weight = 6, Price = 200, Loop = true },
 	{ Id = "scene_power", Price = 600, Name = "Cena: Despertar", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(255, 220, 80), Theme = "rock" },
 	{ Id = "scene_dark", Price = 600, Name = "Cena: Trevas", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(120, 40, 200), Theme = "void" },
 	{ Id = "scene_storm", Price = 600, Name = "Cena: Tempestade", Kind = "scene", Weight = 2, Duration = 5, Color = Color3.fromRGB(90, 200, 255), Theme = "lightning" },

@@ -612,4 +612,72 @@ function MovementController.Start()
 	Log.debug(("[MovementController] pronto (corre sozinho para a frente a %d, Shift = shift lock, Q = dash)"):format(CombatConfig.Sprint.Speed))
 end
 
+-- ---------------------------------------------------------------------------
+-- VOO (ult do Rick, Effect FlyGrab): o dono da física voa na direção em que a CÂMERA olha (inclusive para
+-- cima/baixo) por `duration` s, de peito, mão esticada. O servidor só procura quem ele encosta.
+-- ---------------------------------------------------------------------------
+local flyCleanup: (() -> ())? = nil
+
+function MovementController.StopFly()
+	if flyCleanup then
+		flyCleanup()
+	end
+end
+
+function MovementController.Fly(character: Model, speed: number, duration: number)
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if not root or not humanoid then
+		return
+	end
+	MovementController.StopFly()
+	if dashCleanup then
+		dashCleanup()
+	end
+	local camera = workspace.CurrentCamera
+	local attachment = Instance.new("Attachment")
+	attachment.Parent = root
+	local lv = Instance.new("LinearVelocity")
+	lv.Attachment0 = attachment
+	lv.RelativeTo = Enum.ActuatorRelativeTo.World
+	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+	lv.MaxForce = math.huge
+	lv.VectorVelocity = camera.CFrame.LookVector * speed
+	lv.Parent = root
+	humanoid.AutoRotate = false
+	local conn: RBXScriptConnection? = nil
+	local endsAt = os.clock() + duration
+	local function finish()
+		if conn then
+			conn:Disconnect()
+			conn = nil
+		end
+		flyCleanup = nil
+		lv:Destroy()
+		attachment:Destroy()
+		if root.Parent then
+			-- endireita e tira o momento (senão sai voando pela inércia / AntiExploit reclama)
+			local flat = Vector3.new(root.CFrame.LookVector.X, 0, root.CFrame.LookVector.Z)
+			if flat.Magnitude > 0.05 then
+				root.CFrame = CFrame.lookAt(root.Position, root.Position + flat.Unit)
+			end
+			root.AssemblyLinearVelocity = Vector3.new(0, math.min(root.AssemblyLinearVelocity.Y, 0), 0)
+		end
+		if not shiftLock then
+			humanoid.AutoRotate = true
+		end
+	end
+	flyCleanup = finish
+	conn = RunService.Heartbeat:Connect(function()
+		if os.clock() >= endsAt or lv.Parent == nil or root.Parent == nil or localPlayer:GetAttribute("Ragdolled") == true or humanoid.Health <= 0 then
+			finish()
+			return
+		end
+		local look = camera.CFrame.LookVector
+		lv.VectorVelocity = look * speed
+		-- corpo inclinado na direção do voo (mão esticada à frente)
+		root.CFrame = CFrame.lookAt(root.Position, root.Position + look)
+	end)
+end
+
 return MovementController

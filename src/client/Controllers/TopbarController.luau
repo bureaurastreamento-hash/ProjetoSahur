@@ -161,10 +161,18 @@ end
 
 local parents: { any } = {} -- os 5 botões do topo (preenchido no Start)
 
+--- Disparado quando algum menu do topo abre (VendorController fecha o painel do vendedor: mesmo canto).
+TopbarController.MenuOpened = Instance.new("BindableEvent")
+
 --- Fecha os dropdowns do topo (e os painéis abertos dentro deles), menos `keep`.
 local function closeParents(keep: any?, keepChild: any?)
+	if keep or keepChild then
+		TopbarController.MenuOpened:Fire()
+	end
 	for _, parent in parents do
-		if parent ~= keep and parent.isSelected then
+		-- keepChild pode ser um dos PAIS (Loja é item direto, sem dropdown): não fechar ele mesmo ao abrir —
+		-- era isso que fazia a Loja abrir/fechar no mesmo clique (painel sobreposto e "não quer sair")
+		if parent ~= keep and parent ~= keepChild and parent.isSelected then
 			parent:deselect("Topbar", keep)
 			for uid in parent.childIconsDict do
 				local child = IconAny.getIconByUID(uid)

@@ -272,15 +272,30 @@ local function setWheel(visible: boolean)
 	end
 end
 
+local loopTracks: { [Model]: AnimationTrack? } = {}
 local function onNotifyEmote(character: Model?, emoteId: string, active: boolean)
-	if not character or not active then
+	if not character then
 		return
 	end
 	local emote = CosmeticsConfig.GetEmote(emoteId)
 	if not emote then
 		return
 	end
-	local track = FX.PlayAnimation(character, EMOTES, emote.Id, false, Enum.AnimationPriority.Action4)
+	if not active then
+		-- servidor mandou parar a pose (andou/pulou/agiu/apanhou)
+		local t = loopTracks[character]
+		if t then
+			t:Stop(0.25)
+			loopTracks[character] = nil
+		end
+		FX.StopAnimation(character, EMOTES, emote.Id)
+		return
+	end
+	local track = FX.PlayAnimation(character, EMOTES, emote.Id, emote.Loop == true, Enum.AnimationPriority.Action4)
+	if emote.Loop and track then
+		track.Looped = true -- a animação da equipe pode ter vindo sem loop: a pose fica até o servidor mandar parar
+		loopTracks[character] = track
+	end
 	if emote.Kind == "scene" then
 		local duration = emote.Duration or 5
 		FX.SetAura(character, emote.Color, SCENE_AURA)
@@ -301,7 +316,8 @@ local function onNotifyEmote(character: Model?, emoteId: string, active: boolean
 			FX.SetAura(character, nil, SCENE_AURA)
 		end)
 	end
-	-- andar cancela a animação do emote (track da equipe ou clipe procedural)
+	-- andar cancela a animação do emote (track da equipe ou clipe procedural); a pose em loop também é
+	-- parada pelo servidor (NotifyEmote false), isto aqui é só o atalho local
 	if CosmeticsConfig.EmoteMoveCancels then
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if humanoid then

@@ -120,6 +120,48 @@ local function restoreWalkSpeed(player: Player)
 end
 CombatService.RestoreWalkSpeed = restoreWalkSpeed
 
+--- Segura o jogador no lugar por `seconds` (cena de emote, carregando um agarrão): WalkSpeed 0 via
+--- CutsceneUntil, sem pulo, sem agir (Stun). Não dá i-frames: quem leva porrada durante sai da cena.
+--- Dono (2026-09-20): "em cutscenes de emotes/ataques estou conseguindo me mover".
+function CombatService.HoldStill(player: Player, seconds: number, reason: string)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or seconds <= 0 then
+		return
+	end
+	local untilT = Workspace:GetServerTimeNow() + seconds
+	local current = player:GetAttribute("CutsceneUntil")
+	if typeof(current) ~= "number" or current < untilT then
+		player:SetAttribute("CutsceneUntil", untilT)
+	end
+	CombatService.Stun(player, seconds, reason)
+	restoreWalkSpeed(player)
+	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if root then
+		root.AssemblyLinearVelocity = Vector3.new(0, root.AssemblyLinearVelocity.Y, 0)
+	end
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+	task.delay(seconds, function()
+		if humanoid.Parent then
+			local now = player:GetAttribute("CutsceneUntil")
+			if typeof(now) ~= "number" or Workspace:GetServerTimeNow() >= now - 0.05 then
+				humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+				restoreWalkSpeed(player)
+			end
+		end
+	end)
+end
+
+--- Gancho "o jogador AGIU" (soco, habilidade, dash, levou/deu golpe): CosmeticsService cancela o emote
+--- em loop (sentar etc.). Registrado no Start dele para não criar ciclo de require.
+CombatService.ActionHook = nil :: ((Player) -> ())?
+function CombatService.NotifyAction(player: Player)
+	local hook = CombatService.ActionHook
+	if hook then
+		hook(player)
+	end
+end
+
 --- Guarda atual com a regeneração aplicada preguiçosamente.
 local function currentGuard(state: PlayerState): number
 	local cfg = CombatConfig.Block
@@ -343,6 +385,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	local attackerState = getState(attacker)
 	local victimPlayer = Players:GetPlayerFromCharacter(victim)
 	local victimState = victimPlayer and states[victimPlayer]
+	if victimPlayer then
+		CombatService.NotifyAction(victimPlayer) -- ser atacado cancela emote em loop
+	end
 	local kind = "hit"
 	local now = os.clock()
 	if AbilityService then
@@ -606,6 +651,7 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 		warn(("[CombatService] %s pediu ataque desconhecido '%s'"):format(player.Name, attackId))
 		return
 	end
+	CombatService.NotifyAction(player) -- atacar cancela emote em loop
 
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")

@@ -288,7 +288,14 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if typeof(data) == "table" and typeof(data.Healed) == "number" and data.Healed > 0 then
 			FX.DamageNumber(character, "+" .. math.floor(data.Healed), Color3.fromRGB(120, 255, 140))
 		end
-		if typeof(data) == "table" and data.Speed and data.Duration then
+		if typeof(data) == "table" and data.Fly then
+			-- VOO (ult do Rick): a animação de voo fica em loop até "grab"/"end"; só o dono da física dirige
+			FX.PlayAnimation(character, characterId, abilityId, true)
+			FX.Trail(character, trailColor(characterId), tonumber(data.Duration) or 7)
+			if character == localPlayer.Character then
+				MovementController.Fly(character, tonumber(data.Speed) or 50, tonumber(data.Duration) or 7)
+			end
+		elseif typeof(data) == "table" and data.Speed and data.Duration then
 			-- Dash: rastro em todo mundo, movimento só no dono da física
 			FX.Trail(character, trailColor(characterId), data.Duration + 0.1)
 			if character == localPlayer.Character then
@@ -298,8 +305,18 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		elseif typeof(data) == "table" and data.Teleported then
 			FX.Trail(character, trailColor(characterId), 0.15, 3)
 		end
+	elseif phase == "end" then
+		-- voo acabou sem pegar ninguém
+		FX.StopAnimation(character, characterId, abilityId)
+		if character == localPlayer.Character then
+			MovementController.StopFly()
+		end
 	elseif phase == "grab" then
 		-- agarrou: a vítima segue o atacante (no cliente dela); todos veem a animação de carregar
+		FX.StopAnimation(character, characterId, abilityId) -- (voo) a animação do carregar substitui
+		if character == localPlayer.Character then
+			MovementController.StopFly()
+		end
 		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
 		local victim = if typeof(data) == "table" then data.Victim else nil
 		local carry = if typeof(data) == "table" then tonumber(data.Carry) or 0.8 else 0.8

@@ -30,6 +30,7 @@ local CosmeticsService = {}
 local requestLimiter = RateLimiter.new(5, 1)
 local emoteLimiter = RateLimiter.new(3, 1)
 local lastEmoteAt: { [Player]: number } = {}
+local loopEmote: { [Player]: { id: string, conns: { RBXScriptConnection } } } = {} -- pose em loop ativa (sentar)
 
 local notifyCosmetics: RemoteEvent
 local notifyEmote: RemoteEvent
@@ -325,6 +326,22 @@ local function onRequestCosmetic(player: Player, action: any, id: any)
 	end
 end
 
+--- Para a pose em loop (andar/pular/atacar/apanhar/dash/morrer): avisa todo mundo para parar a animação.
+function CosmeticsService.StopEmote(player: Player)
+	local active = loopEmote[player]
+	if not active then
+		return
+	end
+	loopEmote[player] = nil
+	for _, c in active.conns do
+		c:Disconnect()
+	end
+	local character = player.Character
+	if character then
+		notifyEmote:FireAllClients(character, active.id, false)
+	end
+end
+
 local function onRequestEmote(player: Player, id: any)
 	if not emoteLimiter:Allow(player) or typeof(id) ~= "string" then
 		return
@@ -346,7 +363,37 @@ local function onRequestEmote(player: Player, id: any)
 		return
 	end
 	lastEmoteAt[player] = now
+	CosmeticsService.StopEmote(player)
 	notifyEmote:FireAllClients(character, id, true)
+	if emote.Kind == "scene" then
+		-- cena = cutscene curta: preso no lugar e sem agir (o servidor manda; o cliente só desenha)
+		CombatService.HoldStill(player, emote.Duration or 5, "scene")
+	elseif emote.Loop then
+		-- pose: fica até andar/pular/agir; o servidor vigia o Humanoid (replica) e é a verdade para todos
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		local conns = {}
+		if humanoid then
+			table.insert(conns, humanoid.Running:Connect(function(speed: number)
+				if speed > 0.5 then
+					CosmeticsService.StopEmote(player)
+				end
+			end))
+			table.insert(conns, humanoid.Jumping:Connect(function(active: boolean)
+				if active then
+					CosmeticsService.StopEmote(player)
+				end
+			end))
+			table.insert(conns, humanoid.Died:Connect(function()
+				CosmeticsService.StopEmote(player)
+			end))
+		end
+		table.insert(conns, character.AncestryChanged:Connect(function()
+			if not character.Parent then
+				CosmeticsService.StopEmote(player)
+			end
+		end))
+		loopEmote[player] = { id = id, conns = conns }
+	end
 end
 
 function CosmeticsService.Init()
@@ -361,6 +408,7 @@ function CosmeticsService.Start()
 	end
 	Remotes.GetEvent(Remotes.Events.RequestCosmetic).OnServerEvent:Connect(onRequestCosmetic)
 	Remotes.GetEvent(Remotes.Events.RequestEmote).OnServerEvent:Connect(onRequestEmote)
+	CombatService.ActionHook = CosmeticsService.StopEmote -- soco/habilidade/dash/apanhar param a pose
 	local function onPlayer(player: Player)
 		player.CharacterAdded:Connect(function()
 			task.wait(0.5) -- depois do CharacterService montar o rig
@@ -388,6 +436,7 @@ function CosmeticsService.Start()
 		onPlayer(player)
 	end
 	Players.PlayerRemoving:Connect(function(player)
+		CosmeticsService.StopEmote(player)
 		lastEmoteAt[player] = nil
 		pendingPick[player] = nil
 	end)

@@ -36,6 +36,12 @@ local characters: { [string]: Def } = {
 	Sahur = { UltName = "RITMO FINAL", Subtitle = "o ritmo que esmaga", Theme = "drums" },
 	Overlord = { UltName = "CATACLISMO", Subtitle = "só admin", Theme = "void" },
 	BigChop = { UltName = "FRENESI", Subtitle = "não morre, só cresce", Theme = "flesh" },
+	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
+	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
+	Bruno = { UltName = "PODER MÁXIMO", Subtitle = "Bruno Gollini", Theme = "rock" },
+	Jotaro = { UltName = "STAR PLATINUM", Subtitle = "Stand no máximo", Theme = "lightning" },
+	Dio = { UltName = "THE WORLD", Subtitle = "Stand no máximo", Theme = "void" },
+	Kira = { UltName = "KILLER QUEEN", Subtitle = "Stand no máximo", Theme = "arcane" },
 }
 
 local default: Def = { UltName = "DESPERTAR", Theme = "rock" }

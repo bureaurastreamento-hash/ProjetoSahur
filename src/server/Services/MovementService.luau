@@ -169,6 +169,7 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	end
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	CombatService.NotifyAction(player) -- dash cancela emote em loop
 	if not character or not root or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
 		return
 	end
