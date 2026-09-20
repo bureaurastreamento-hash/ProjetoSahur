@@ -23,7 +23,11 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   `AwakenedAbilities`(4) em `CharacterDefs`; tipos novos `Buff`/`Mark`/`Homing`/`Rewind`, `Then` encadeado; kits de
   `PESQUISA_KITS.md`. B4 = `StandSilhouette` (silhueta de luz, sem modelo). **25/09: kits testados via MCP com bots
   (servidor OK; rajada com Offset + empurrão só no último golpe). PRÓXIMO: dono testa o VISUAL (lista no PROGRESSO) → C/D.**
-  Botão direito da câmera travado no Studio = `Workspace.Camera.CameraType` ficou `Scriptable` após o Play → pôr `Fixed`.
+  Botão direito da câmera travado no Studio (volta após todo Play nesta place): tentar toggle `CameraType`
+  `Scriptable → Fixed` via MCP; investigação em aberto (ver PROGRESSO "Pedidos do dono 25/09").
+  **Pedidos 25/09 (antes de C/D)**: B5 = Stand ANIMADO de verdade (rig procedural idle/entrada/rajada/saída, segue o
+  jogador suavizado, proporção por personagem) — aura parada ficou estranha; skin por personagem já existe
+  (setting `CharacterModel` + `ServerStorage.CharacterModels.<Id>`), falta a arte entregar os modelos.
   Regras: `CharacterDefs.GetAbility(id, slot, awakened)`; nunca usar `EnergyCost`/`AwakenedEffect` (só no DashOverride).
   Ideias novas anotadas em "D": anti-2v1 (tecla E), variações de golpe (JJS), evento "último de pé", log de
   atualização no jogo. Nunca escrever "Discord" em texto do jogo.

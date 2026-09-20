@@ -289,7 +289,23 @@ Falta o dono ver VISUAL/HUD/silhueta (lista abaixo). Bug do mouse no Studio RESO
 com `CameraType = Scriptable` deixado pelo Play (não Wine/plugin) — se o botão direito travar de novo, Command Bar:
 `workspace.CurrentCamera.CameraType = Enum.CameraType.Fixed`. O erro `cloud_122070500639295.Script:3596 Out of local
 registers` é de um plugin instalado, não do jogo.
-PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = silhueta) → C/D (anti-2v1, variantes, último de pé, log).
+**Pedidos do dono (25/09, fim da sessão) — fazer ANTES de C/D:**
+- **B5 — Stand "bem feito"**: só aura/contorno parado ficou estranho. O rig da silhueta (`StandSilhouette`, peças R6
+  neon) precisa de ANIMAÇÃO de verdade: pose idle flutuando com respiração/braços cruzados, entrada (surge de trás do
+  ombro com escala/fade), rajada com os braços socando alternados em ritmo (ORA/MUDA) + tronco inclinado, saída
+  (dissolve). Usar `RigPose`/`ProcAnimDefs` (animação procedural, como o resto) — clipes `Stand_Idle`, `Stand_Punch`,
+  `Stand_Enter/Exit` — e o Stand deve SEGUIR o jogador com suavização (não colado ao HRP). Por personagem: cor +
+  proporção (Star Platinum musculoso, The World, Killer Queen). Sem modelo externo (decisão mantida).
+- **Skin de cada personagem** ("virar o personagem"): JÁ previsto — setting `CharacterModel` faz nascer com o rig da
+  arte em `ServerStorage.CharacterModels.<Id>` (`CharacterService`, linha ~101). Falta a arte entregar os modelos
+  (Jotaro/Bruno/Dio/Kira/Rick) e o dono testar o toggle; anotar como item de teste.
+- **Bug do mouse no Studio VOLTOU** (25/09, com a `Workspace.Camera` já em `Fixed`): a hipótese "Camera Scriptable" não
+  explica sozinha — o que destravou da 1ª vez pode ter sido o TOGGLE `Scriptable → Fixed` (reinicializa o controle da
+  câmera). Sempre acontece nesta place depois de um Play. Próximos passos: (1) repetir o toggle via MCP e ver se
+  destrava; (2) se sim, procurar no cliente quem mexe em `workspace.CurrentCamera` sem restaurar ao parar o Play
+  (`CutsceneController`, `TrailerController`, seleção de personagem, `CharacterSelect`); (3) se não, testar com os
+  plugins desligados (RigEdit/Moon Animator/Kojo) e por fim sessão X11.
+PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = silhueta) → B5 (Stand animado) → C/D.
 
 **TESTES DO REDESIGN (dono, com o Studio aberto)**
 1. Jotaro: 1 Rajada ORA (cone à frente), 2 Arremesso, 3 Soco Estrela (dash com hit), 4 Pancada; R = Postura
