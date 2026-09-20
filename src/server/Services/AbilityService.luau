@@ -384,6 +384,7 @@ effects.Grab = function(player, character, ability, direction)
 	task.spawn(function()
 		local endsAt = os.clock() + maxDuration + DASH_SAMPLE_INTERVAL
 		local caught: Model? = nil
+		local blockedOnce: { [Model]: boolean } = {}
 		while os.clock() < endsAt and not caught do
 			if not stillValid(player, character) then
 				return
@@ -393,10 +394,19 @@ effects.Grab = function(player, character, ability, direction)
 			local dir = if vel.Magnitude > 5 then vel.Unit else direction
 			for _, candidate in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 2) do
 				-- não agarra quem está invencível (cutscene, i-frames, preso em outro agarrão)
-				if not HealthService.IsInvulnerable(candidate, player) then
-					caught = candidate
-					break
+				if HealthService.IsInvulnerable(candidate, player) then
+					continue
 				end
+				-- dono (2026-09-21): quem está BLOQUEANDO de frente não é agarrado — o block absorve (gasta guarda)
+				if CombatService.IsBlockingAgainst(candidate, character) then
+					if not blockedOnce[candidate] then
+						blockedOnce[candidate] = true
+						CombatService.ResolveHit(player, character, candidate, e.Damage, false)
+					end
+					continue
+				end
+				caught = candidate
+				break
 			end
 			if not caught then
 				task.wait(DASH_SAMPLE_INTERVAL)
@@ -514,6 +524,7 @@ effects.FlyGrab = function(player, character, ability, direction)
 			local vel = if root then root.AssemblyLinearVelocity else Vector3.zero
 			local dir = if vel.Magnitude > 5 then vel.Unit else (if root then root.CFrame.LookVector else direction)
 			for _, candidate in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, 2) do
+				-- (ult) pega até quem bloqueia: block só segura agarrão comum
 				if not HealthService.IsInvulnerable(candidate, player) then
 					caught = candidate
 					break
@@ -881,6 +892,12 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	local dashingUntil = player:GetAttribute("DashingUntil")
 	if typeof(dashingUntil) == "number" and now < dashingUntil then
 		return deny(player, slot, "dashing")
+	end
+	if CombatService.IsAttacking(player) then
+		return deny(player, slot, "attacking") -- ação individual (dono, 2026-09-21): soco em curso
+	end
+	if CombatService.IsTimeSlowed(player) then
+		return deny(player, slot, "timeslow") -- dentro do Domínio do Tempo não se age
 	end
 	local noCooldown = player:GetAttribute(ATTR_NO_COOLDOWN) == true
 	if now < state.busyUntil and not noCooldown then

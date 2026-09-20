@@ -126,6 +126,16 @@ function CombatController.Attack()
 	if not character or not root or now < myNextAttackAt or now < myStunnedUntil or localPlayer:GetAttribute("Ragdolled") == true then
 		return
 	end
+	-- espelho das regras do servidor (dono, 2026-09-21): dentro do Domínio do Tempo não soca; no meio do dash
+	-- só o LATERAL, nos últimos SidePunchWindow s, deixa 1 soco (M1) sair
+	local timeSlow = localPlayer:GetAttribute("TimeSlow")
+	if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then
+		return
+	end
+	local dashing, sideways, remaining = MovementController.DashState()
+	if dashing and not (sideways and attackId == "M1" and remaining <= CombatConfig.Dash.SidePunchWindow) then
+		return
+	end
 	local attackCfg = CombatConfig.Attacks[attackId]
 	-- Previsão: anima na hora do clique (sem esperar o servidor) e mantém o combo local
 	local comboIndex = 1

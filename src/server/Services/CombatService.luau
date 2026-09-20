@@ -46,6 +46,8 @@ type PlayerState = {
 	superArmorUntil: number, -- agarrão/ult: não toma hitstun nem cai (dano entra normal)
 	comboArmorUntil: number, -- acabou de acertar um M1: soco simples de TERCEIRO não interrompe o combo
 	comboTargetUserId: number, -- em quem o combo está entrando (o alvo em hitstun não bate mesmo)
+	attackingUntil: number, -- soco em execução (HitDelay + recuo): sem dash/habilidade até aqui (ação individual)
+	endlagUntil: number, -- depois do 4º M1: anda lento (ComboEndSlow)
 }
 
 local states: { [Player]: PlayerState } = {}
@@ -86,6 +88,8 @@ local function newState(): PlayerState
 		superArmorUntil = 0,
 		comboArmorUntil = 0,
 		comboTargetUserId = 0,
+		attackingUntil = 0,
+		endlagUntil = 0,
 	}
 end
 
@@ -106,6 +110,8 @@ local function restoreWalkSpeed(player: Player)
 		humanoid.WalkSpeed = CombatConfig.Block.WalkSpeed
 	elseif os.clock() < state.hitStunUntil then
 		humanoid.WalkSpeed = CombatConfig.HitStun.WalkSpeed
+	elseif os.clock() < state.endlagUntil then
+		humanoid.WalkSpeed = CombatConfig.Attacks.M1.ComboEndSlow.WalkSpeed
 	else
 		local formSpeed = character and character:GetAttribute("WalkSpeed")
 		local base = if typeof(formSpeed) == "number" then formSpeed
@@ -297,6 +303,20 @@ function CombatService.IsHardStunned(player: Player): boolean
 	return os.clock() < getState(player).hardStunUntil
 end
 
+--- Soco em execução (do pedido até o fim do recuo): dash/habilidade não saem (ação individual, dono 2026-09-21).
+function CombatService.IsAttacking(player: Player): boolean
+	return os.clock() < getState(player).attackingUntil
+end
+
+--- Domínio do Tempo: quem está lento (TimeSlow < 1) não age (CombatConfig.TimeSlowBlocksActions).
+function CombatService.IsTimeSlowed(player: Player): boolean
+	if not CombatConfig.TimeSlowBlocksActions then
+		return false
+	end
+	local t = player:GetAttribute("TimeSlow")
+	return typeof(t) == "number" and t > 0 and t < 1
+end
+
 -- ---------------------------------------------------------------------------
 -- Ataque
 -- ---------------------------------------------------------------------------
@@ -370,11 +390,22 @@ local function blockCovers(victim: Model, attackerChar: Model): boolean
 	return Vector3.new(look.X, 0, look.Z).Unit:Dot(toAttacker.Unit) >= CombatConfig.Block.FrontDot
 end
 
+--- Vítima está BLOQUEANDO de frente para o atacante? (AbilityService: agarrão não pega quem bloqueia)
+function CombatService.IsBlockingAgainst(victim: Model, attackerChar: Model): boolean
+	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	local st = victimPlayer and states[victimPlayer]
+	if st and st.blocking then
+		return blockCovers(victim, attackerChar)
+	end
+	return victim:GetAttribute("Blocking") == true and blockCovers(victim, attackerChar)
+end
+
 export type HitOptions = {
 	IsM1: boolean?, -- soco: consome o crítico do parry
 	BreaksBlock: boolean?, -- ignora o block (quem bloqueia toma guard break)
 	RagdollOnce: boolean?, -- não derruba de novo quem já está caído (downslam)
 	KnockbackDirection: Vector3?, -- horizontal unitária; substitui atacante→vítima (agarrão giratório)
+	AttackStartedAt: number?, -- os.clock() em que o golpe COMEÇOU (clique do atacante): o parry precisa de block anterior
 }
 
 --- Resolve um acerto contra `victim` considerando block (só frontal)/parry/crítico e buffs.
@@ -390,6 +421,11 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	end
 	local kind = "hit"
 	local now = os.clock()
+	if CombatConfig.NoM1OnRagdolled and opts.IsM1 and victimPlayer and RagdollService.IsRagdolled(victimPlayer) then
+		-- deitado: o soco simples passa por cima (dono, 2026-09-21); downslam/habilidades continuam
+		notifyDamage:FireAllClients(attackerChar, victim, 0, "immune")
+		return "immune"
+	end
 	if AbilityService then
 		damage *= AbilityService.GetDamageMultiplier(attacker)
 		if victimPlayer then
@@ -438,7 +474,16 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			victimState.guard = CombatConfig.Block.GuardMax
 			victimState.wantBlock = false
 			CombatService.Stun(victimPlayer, CombatConfig.Block.GuardBreakStun, "guardbreak")
-		elseif allowParry ~= false and blockAge <= CombatConfig.Block.ParryWindow then
+		elseif allowParry ~= false and (function(): boolean
+				-- Parry = block começado ANTES de o golpe sair (até ParryLateTolerance depois) e no máximo
+				-- ParryWindow antes dele. Sem AttackStartedAt (habilidade sem wind-up) vale a janela antiga.
+				local startedAt = opts.AttackStartedAt
+				if typeof(startedAt) ~= "number" then
+					return blockAge <= CombatConfig.Block.ParryWindow
+				end
+				local lead = startedAt - victimState.blockStart -- >0 = bloqueou antes do golpe
+				return lead >= -CombatConfig.Block.ParryLateTolerance and lead <= CombatConfig.Block.ParryWindow
+			end)() then
 			kind = "parry"
 			finalDamage = 0
 			CombatService.Stun(attacker, CombatConfig.Block.ParryStun, "parried")
@@ -467,6 +512,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 	local dealt = 0
 	if finalDamage > 0 then
 		dealt = HealthService.ApplyDamage(victim, finalDamage, attacker)
+		if dealt > 0 then
+			HealthService.MarkInCombat(attacker) -- quem ATACA também não troca de personagem (dono, 2026-09-21)
+		end
 		if dealt > 0 and AbilityService then
 			AbilityService.OnHitDealt(attacker, victimPlayer)
 		end
@@ -663,9 +711,16 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) then
 		return -- em cooldown/stun/ragdoll: ignorado silenciosamente
 	end
+	if CombatService.IsTimeSlowed(player) then
+		return -- dentro do Domínio do Tempo: não soca (dono, 2026-09-21)
+	end
 	local dashingUntil = player:GetAttribute("DashingUntil")
 	if typeof(dashingUntil) == "number" and now < dashingUntil then
-		return -- no meio do dash (MovementService)
+		-- no meio do dash (MovementService): só o LATERAL, nos últimos SidePunchWindow s, deixa o soco sair
+		local sideEnd = player:GetAttribute("DashKind") == "side" and now >= dashingUntil - CombatConfig.Dash.SidePunchWindow
+		if not sideEnd or attackId ~= "M1" then
+			return
+		end
 	end
 	-- Uppercut só como 4º GOLPE do combo (no lugar do finisher com empurrão); o Downslam é livre no ar
 	-- caindo (dono 2026-09-17: é o par do uppercut), com o cooldown próprio segurando o ritmo.
@@ -714,6 +769,23 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 		state.nextAttackAt = now + attackCfg.Cooldown
 	end
 	state.lastAttackAt = now
+	-- ação individual: até o recuo acabar não sai dash nem habilidade
+	state.attackingUntil = now + attackCfg.Cooldown
+	if isM1 and isFinisher then
+		-- endlag do 4º golpe: anda lento (o cooldown longo já segura o soco)
+		state.endlagUntil = now + attackCfg.ComboEndSlow.Seconds
+		restoreWalkSpeed(player)
+		task.delay(attackCfg.ComboEndSlow.Seconds + 0.02, function()
+			if states[player] == state then
+				restoreWalkSpeed(player)
+			end
+		end)
+	end
+	-- 3º golpe levanta um pouco (favorece o combo)
+	local lift = attackCfg.ComboLift
+	if isM1 and lift and comboIndex == lift.Index then
+		knockback = lift.Knockback
+	end
 
 	-- O cliente já esperou o wind-up (HitDelay) antes de pedir, animando na hora do clique: o cooldown
 	-- conta a partir do clique, e a hitbox é resolvida agora (vítimas vistas pelo cliente × caixa tolerante).
@@ -734,6 +806,7 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 				IsM1 = isM1,
 				BreaksBlock = attackCfg.BreaksBlock == true,
 				RagdollOnce = attackCfg.RagdollOnce == true,
+				AttackStartedAt = now - attackCfg.HitDelay, -- o clique foi HitDelay antes do pedido
 			})
 			if kind == "blocked" then
 				blocked = true

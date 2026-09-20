@@ -39,11 +39,15 @@ CombatConfig.Attacks = {
 		ComboDamage = { 3, 3, 4, 5 }, -- dano de cada golpe do combo (índice = golpe)
 		ComboLength = 4,
 		Cooldown = 0.3, -- entre golpes do combo
-		ComboEndCooldown = 1.2, -- depois do finisher ("downtime")
+		ComboEndCooldown = 1.6, -- depois do finisher ("downtime") — dono (2026-09-21): precisa ser sentido
+		-- Depois do 4º golpe o atacante fica LENTO por ComboEndSlow.Seconds (endlag de verdade, como no JJS)
+		ComboEndSlow = { Seconds = 0.9, WalkSpeed = 7 },
+		-- 3º golpe LEVANTA um pouco a vítima (sem ragdoll) para o 4º entrar — favorece o combo (dono, 2026-09-21)
+		ComboLift = { Index = 3, Knockback = { Speed = 4, Duration = 0.15, Up = 14 } :: Knockback },
 		ComboResetTime = 1.2, -- sem golpear por esse tempo, combo volta pro 1
 		HitDelay = 0.15, -- tempo entre o pedido e a checagem da hitbox (wind-up)
 		BlockedEndlagMultiplier = 2, -- M1 bloqueado = o dobro de espera até o próximo (punição)
-		PullStuds = 1.0, -- acerto puxa o atacante em direção à vítima (cliente)
+		PullStuds = 2.2, -- acerto puxa o atacante em direção à vítima (cliente) — maior = combo gruda (dono, 2026-09-21)
 		-- Hitbox (studs) à frente do HumanoidRootPart do atacante
 		Range = 7,
 		Width = 5,
@@ -88,7 +92,9 @@ CombatConfig.Attacks = {
 -- mantém a frente virada para a câmera durante o dash (strafe), sem girar para o lado.
 -- Dois cooldowns independentes: frente/trás e lateral. Não sai em stun nenhum (hitstun incluído:
 -- preso no combo só se sai quando o atacante para) nem caído; Q caído = ragdoll cancel (abaixo).
--- Durante o dash (DashingUntil no Player) não dá para socar nem usar habilidade.
+-- Durante o dash (DashingUntil no Player) não dá para socar nem usar habilidade — EXCETO no fim do dash
+-- LATERAL: nos últimos SidePunchWindow s sai 1 soco que emenda no M1 (dono, 2026-09-21: "ação individual").
+-- E no meio de um soco (HitDelay + Cooldown) não sai dash: CombatService.IsAttacking.
 -- Teto de empurrão (dono, 2026-09-19): nenhum golpe joga o inimigo mais longe que ESTE múltiplo do alcance do
 -- dash frontal (Speed × Duration × ForwardScale), para dar tempo de continuar o combo. Aplicado em
 -- CombatService.Knockback encurtando a Duration (a velocidade/impacto do golpe não muda).
@@ -100,6 +106,9 @@ CombatConfig.Dash = {
 	ForwardBackCooldown = 4.0,
 	SideCooldown = 2.0,
 	SideDot = 0.5, -- |direção·frente da câmera| abaixo disso = lateral
+	SidePunchWindow = 0.12, -- s antes do fim do dash LATERAL em que o soco já pode sair
+	-- Dono (2026-09-21): quem dá dash não empurra ninguém pelo corpo (grupo de colisão Dashing × Players off)
+	NoPlayerCollision = true,
 	-- Dono (2026-09-17): dash para a FRENTE (e o Piscar do Swift) dá um HIT ao chegar — dano fixo, NÃO conta
 	-- combo. Quem estiver "bem de frente" (direção do dash · atacante→vítima ≥ FrontDot) em vez do hit é
 	-- EMPURRADO longe (Knockback, sem ragdoll). Dash lateral/para trás não bate.
@@ -110,7 +119,8 @@ CombatConfig.Dash = {
 		Height = 6,
 		MaxTargets = 3,
 		FrontDot = 0.7,
-		Knockback = { Speed = 120, Duration = 0.5, Up = 20 } :: Knockback, -- dono: "taca ele meio longe"
+		-- dono (2026-09-21): "fui jogado longe SEM ragdoll" — agora derruba (fica claro que foi o golpe)
+		Knockback = { Speed = 70, Duration = 0.35, Up = 16, Ragdoll = 1.0 } :: Knockback,
 	},
 }
 
@@ -128,8 +138,11 @@ CombatConfig.Block = {
 	DamageMultiplier = 0.1, -- dano que passa enquanto bloqueia
 	WalkSpeed = 8,
 	FrontDot = 0, -- só cobre a frente: (atacante − vítima)·frente da vítima abaixo disso = golpe por trás, entra cheio
-	ParryWindow = 0.2, -- segundos após iniciar o block em que um golpe recebido vira parry
-	ParryStun = 0.4, -- tempo curto que o atacante fica sem agir após ser parryado (a recompensa real é o crítico)
+	-- Parry (dono, 2026-09-21: "deu para parryar no MEIO do M1"): o block precisa ter começado ANTES de o
+	-- golpe sair (até ParryLateTolerance s depois do clique do atacante) e no máximo ParryWindow s antes.
+	ParryWindow = 0.25, -- s ANTES do início do golpe em que o block conta como parry (leitura do golpe)
+	ParryLateTolerance = 0.05, -- folga de rede: block começado até isto DEPOIS do início do golpe ainda parrya
+	ParryStun = 0.8, -- quem levou parry fica sem soco/habilidade/dash por isto ("vira o jogo", dono 2026-09-21)
 	Cooldown = 0.4, -- tempo mínimo entre soltar e voltar a bloquear (evita spam de parry)
 	LockoutAfterAttack = 0.2, -- depois de um M1 não dá para bloquear por este tempo
 	-- Guarda: cada golpe bloqueado gasta o dano BRUTO dele; zerou = guard break
@@ -151,7 +164,7 @@ CombatConfig.Critical = {
 -- Levar golpe: interrompe o combo da vítima e freia por um instante (hitstun).
 -- Só socos/habilidades "hit" (não bloqueados). Não se acumula além de Duration.
 CombatConfig.HitStun = {
-	Duration = 0.7, -- > Cooldown do M1: dentro do combo a vítima só sai com dash (Q) ou parry antes
+	Duration = 0.8, -- > Cooldown do M1: dentro do combo a vítima só sai com dash (Q) ou parry antes
 	WalkSpeed = 6,
 }
 
@@ -170,7 +183,7 @@ CombatConfig.Awakening = {
 	DamageMultiplier = 1.3,
 	SpeedMultiplier = 1.1,
 	IFrames = 0.6, -- invencível na ativação (somado à cutscene)
-	ChargeOnParry = 7, -- carga extra ao parryar
+	ChargeOnParry = 4, -- carga extra ao parryar (2026-09-21: era 7)
 	-- Cutscene de transformação (decisão do dono 2026-09-16): G = o personagem para, carrega, ESTOURA e
 	-- volta despertado. O jogador fica invencível e sem agir durante Duration; no BurstAt quem estiver a
 	-- BurstRadius leva BurstDamage + empurrão. O buff/kit despertado só começa DEPOIS da cutscene.
@@ -189,6 +202,18 @@ CombatConfig.Awakening = {
 		},
 	},
 }
+
+-- Domínio do Tempo (cúpula do Bruno): quem está com TimeSlow < 1 NÃO dá dash, soco nem habilidade
+-- (dono, 2026-09-21); só anda devagar. Antes os cooldowns só escalavam.
+CombatConfig.TimeSlowBlocksActions = true
+
+-- Alvo DEITADO (ragdoll de combate): soco simples (M1) não entra (dono, 2026-09-21: "bater em quem está
+-- deitado"). Downslam/habilidades/agarrão continuam valendo.
+CombatConfig.NoM1OnRagdolled = true
+
+-- Kill streak visual (MatchService/HUDController): a partir de MatchConfig.KillStreak.AuraFrom o jogador fica
+-- DOURADO (contorno + aura) com uma COROA na cabeça (servidor, todo mundo vê). Some ao morrer.
+CombatConfig.StreakCrown = { Color = Color3.fromRGB(255, 205, 70) }
 
 -- Wall splat: golpe que derruba (4º M1, finisher, agarrão) com parede a até Distance studs na direção
 -- do empurrão = dano extra + ragdoll mais longo + efeito pesado (kind "wallsplat").

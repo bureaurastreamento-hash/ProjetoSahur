@@ -187,6 +187,17 @@ function CharacterService.LoadModel(player: Player, model: Model, cf: CFrame): b
 			end
 		end
 	end
+	-- grupo de colisão "Players" (MovementService registra): o dash (grupo Dashing) e o entulho não empurram
+	-- ninguém pelo corpo; acessórios que chegarem depois entram no grupo também
+	local function toPlayersGroup(d: Instance)
+		if d:IsA("BasePart") and d.CollisionGroup == "Default" then
+			d.CollisionGroup = "Players"
+		end
+	end
+	for _, d in model:GetDescendants() do
+		toPlayersGroup(d)
+	end
+	model.DescendantAdded:Connect(toPlayersGroup)
 	local old = player.Character
 	model:PivotTo(cf)
 	if old and old ~= model then

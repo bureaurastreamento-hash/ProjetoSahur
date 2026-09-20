@@ -26,7 +26,10 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
 - `FX.PlayAnimation(..., fitSeconds)` casa a animação com a duração real da ação; `Shared/Parried`,
   `CritPunch`, `CritHit` novos.
 - **Dono moveu peça do `Workspace.Sahur.Arena` no Studio?** → `tools/sincronizar_arena.luau` grava no rbxm.
-- Ainda planejado: boss x3 da flecha nasce no centro do mapa e anda livre (sem leash).
+- **Bloco A (combate) feito 2026-09-21**: parry só antecipado, block segura agarrão, ação individual soco/dash
+  (`IsAttacking`, `DashKind`+`SidePunchWindow`), grupos de colisão `Players`/`Dashing`, TimeSlow trava tudo,
+  M1 não entra em deitado, teleporte com raycast/chão, coroa do streak, highlight de clã. Falta o dono testar.
+- Ainda planejado: blocos B–F do PROGRESSO (cachoeira v2, construções maiores, menu DEV, mods/quests, boss x3).
 
 ## Estado do design (2026-09-20) — lojas divididas (ver PROGRESSO.md "RETOMAR AQUI")
 - **Loja (L)** = só Robux. **Vendedor** (E no NPC da Lojinha, `VendorGui`) = tudo por PONTOS e por PONTOS DE

@@ -17,6 +17,49 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local ClanConfig = require(Modules:WaitForChild("ClanConfig"))
 local WarController = require(script.Parent:WaitForChild("WarController"))
+local SettingsController = require(script.Parent:WaitForChild("SettingsController"))
+
+-- ---------------------------------------------------------------------------
+-- Aliados visíveis através das coisas (dono, 2026-09-21): Highlight AlwaysOnTop em quem tem o MESMO ClanTag.
+-- Configuração "ClanHighlight" desliga. Atributo Player.ClanTag vem do ClanService (replica sozinho).
+-- ---------------------------------------------------------------------------
+local ALLY_NAME = "ClanAllyHighlight"
+local ALLY_COLOR = Color3.fromRGB(90, 220, 140)
+local function refreshAlly(other: Player)
+	local me = Players.LocalPlayer
+	local character = other.Character
+	if not character or other == me then
+		return
+	end
+	local myTag = me:GetAttribute("ClanTag")
+	local theirTag = other:GetAttribute("ClanTag")
+	local wants = SettingsController.Get("ClanHighlight") ~= false and typeof(myTag) == "string" and myTag ~= "" and myTag == theirTag
+	local existing = character:FindFirstChild(ALLY_NAME)
+	if wants and not existing then
+		local hl = Instance.new("Highlight")
+		hl.Name = ALLY_NAME
+		hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		hl.FillColor = ALLY_COLOR
+		hl.FillTransparency = 0.85
+		hl.OutlineColor = ALLY_COLOR
+		hl.OutlineTransparency = 0.1
+		hl.Adornee = character
+		hl.Parent = character
+	elseif not wants and existing then
+		existing:Destroy()
+	end
+end
+local function refreshAllAllies()
+	for _, p in Players:GetPlayers() do
+		refreshAlly(p)
+	end
+end
+local function watchAlly(p: Player)
+	p:GetAttributeChangedSignal("ClanTag"):Connect(refreshAllAllies)
+	p.CharacterAdded:Connect(function()
+		task.delay(0.5, refreshAlly, p)
+	end)
+end
 
 local ClanController = {}
 
@@ -226,6 +269,19 @@ local function onNotifyClan(event: string, data: any)
 end
 
 function ClanController.Start()
+	Players.PlayerAdded:Connect(function(p)
+		watchAlly(p)
+		refreshAlly(p)
+	end)
+	for _, p in Players:GetPlayers() do
+		watchAlly(p)
+	end
+	SettingsController.Changed.Event:Connect(function(key: string)
+		if key == "ClanHighlight" then
+			refreshAllAllies()
+		end
+	end)
+	task.delay(1, refreshAllAllies)
 	local gui = get(playerGui, "ClanGui")
 	panel = get(gui, "Panel") :: Frame
 	createFrame = get(panel, "Create") :: Frame

@@ -315,6 +315,41 @@ Taberna.
 
 ## Sessão anterior (2026-09-20 — tudo commitado e no GitHub)
 
+### BLOCO A (combate) — FEITO no código em 2026-09-21 (boot testado via MCP; FALTA o dono jogar)
+1. Parry só com block ANTERIOR ao golpe: `HitOptions.AttackStartedAt` (= pedido − HitDelay) e
+   `Block.ParryWindow` 0,25 s ANTES + `ParryLateTolerance` 0,05 s depois. Block apertado no meio do M1 = só bloqueia.
+2. Agarrão não pega quem BLOQUEIA de frente (`CombatService.IsBlockingAgainst`; o block gasta guarda como um
+   golpe bloqueado). A ult do Rick (FlyGrab) continua pegando.
+3. Piscar do Bruno com 2 cooldowns: lateral `SideCooldown` 2,5 s × frente/trás `Cooldown` 5 s (`doDashOverride`).
+4. Endlag do 4º M1: `ComboEndCooldown` 1,6 s + `ComboEndSlow` (0,9 s a WalkSpeed 7).
+5. Ult mais lenta: `Energy.GainOnHitDealt/Taken` 2/1, `ChargeOnParry` 4.
+6. Domínio do Tempo: quem está lento NÃO dá dash, soco nem habilidade (`CombatConfig.TimeSlowBlocksActions`,
+   `CombatService.IsTimeSlowed`; cliente espelha no soco).
+7. M1 não entra em quem está DEITADO (`NoM1OnRagdolled` → "immune"); downslam/habilidades continuam.
+8. Dash não empurra pelo corpo: grupos de colisão `Players` (todo personagem, CharacterService) e `Dashing`
+   (durante o dash; MovementService) não colidem; `Grabbed`×`Players` também não. Hit de chegada do dash
+   frontal agora DERRUBA (Ragdoll 1,0, Speed 70) em vez de jogar longe sem ragdoll.
+9. Parry vira o jogo: `ParryStun` 0,8 s (sem soco/habilidade/dash para quem levou) + crítico armado.
+10. Combo: `PullStuds` 2,2, `HitStun` 0,8 s, 3º golpe LEVANTA (`ComboLift`: Up 14, sem ragdoll), 4º ragdoll.
+11. Boss morto congela (ancorado, sem colisão, fade) — NPC (`BossService.endFight`) e forma de jogador
+    (`HealthService.ragdoll` com `BossRig`).
+12. Ação individual: soco em curso (`CombatService.IsAttacking` = HitDelay+Cooldown) bloqueia dash e habilidade;
+    dash bloqueia soco EXCETO nos últimos `Dash.SidePunchWindow` 0,12 s do dash LATERAL (atributo `DashKind`;
+    cliente espelha por `MovementController.DashState`).
+13. Trocar personagem: quem DÁ dano também conta como "em combate" (`HealthService.MarkInCombat`,
+    atributo `LastCombatTime`; `SecondsSinceDamaged` usa o maior).
+14. Teleporte (Piscar/Warp/Effect Teleport): raycast do cenário (peito e pés) para antes do obstáculo (só
+    atravessa personagens/NPCs/flecha), e o destino precisa de chão — recua 85/70/55/40 % pelo caminho; sem
+    chão = não teleporta. Nunca cai no void.
+15. Kill streak: a partir de `MatchConfig.KillStreak.AuraFrom` (10) = contorno + manto DOURADOS (cliente) +
+    COROA de ouro na cabeça (servidor, `MatchService.buildCrown`); some ao morrer.
+16. Clã: aliados com o mesmo `ClanTag` têm Highlight AlwaysOnTop (verde) — `Controls.Settings.ClanHighlight`
+    (padrão ligado) em Configurações.
+- **FALTA o dono testar (2 clientes)**: parry só antecipando; block segurando agarrão; Bruno com 2 cooldowns
+  no Q; lentidão depois do 4º soco; cúpula travando o inimigo; soco em deitado não entra; dash não empurra
+  (e o hit de chegada derruba); dash bloqueado no meio do soco e soco só no fim do dash lateral; troca de
+  personagem negada após atacar; Piscar contra parede/borda; 10 kills = coroa; membro de clã visível.
+
 ### PLANOS (2026-09-21, pedido do dono: "planeja, sem ação ainda") — NOVA LISTA, em ordem sugerida
 (Studio reaberto + Rojo reconectado em 2026-09-21: conferido via MCP que NADA da leva foi desfeito.)
 

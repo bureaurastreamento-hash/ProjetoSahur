@@ -333,8 +333,25 @@ local function endFight(f: Fight, defeated: boolean)
 	end
 	f.finished = true
 	fight = nil
+	-- Dono (2026-09-21): o corpo morto ficava num ragdoll "sensível" batendo no cenário e saindo longe.
+	-- Congela o rig no lugar (ancorado, sem colisão) e some com fade; nada de física depois de morrer.
+	for _, d in f.model:GetDescendants() do
+		if d:IsA("BasePart") then
+			d.AssemblyLinearVelocity = Vector3.zero
+			d.AssemblyAngularVelocity = Vector3.zero
+			d.Anchored = true
+			d.CanCollide = false
+		end
+	end
 	if defeated then
 		rewardAndFinish(f)
+		task.delay(2.5, function()
+			for _, d in f.model:GetDescendants() do
+				if d:IsA("BasePart") then
+					game:GetService("TweenService"):Create(d, TweenInfo.new(1.4), { Transparency = 1 }):Play()
+				end
+			end
+		end)
 	else
 		broadcast("despawned", {})
 	end

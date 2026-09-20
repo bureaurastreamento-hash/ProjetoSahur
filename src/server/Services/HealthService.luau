@@ -41,14 +41,30 @@ HealthService.Died = Instance.new("BindableEvent")
 --- Disparado a cada dano aplicado (victim: Model, amount: number, attacker: Player?). BossService usa para crédito.
 HealthService.Damaged = Instance.new("BindableEvent")
 
---- Segundos desde a última vez que o jogador levou dano (math.huge se nunca / sem personagem).
+local ATTR_LAST_COMBAT_TIME = "LastCombatTime" -- deu OU levou dano (troca de personagem espera isto)
+
+--- Marca que o jogador está em combate (deu dano). CombatService chama; a troca de personagem espera.
+function HealthService.MarkInCombat(player: Player)
+	local character = player.Character
+	if character then
+		character:SetAttribute(ATTR_LAST_COMBAT_TIME, os.clock())
+	end
+end
+
+--- Segundos desde a última vez que o jogador LEVOU ou DEU dano (math.huge se nunca / sem personagem).
+--- Dono (2026-09-21): quem ataca também não pode trocar de personagem.
 function HealthService.SecondsSinceDamaged(player: Player): number
 	local character = player.Character
-	local lastHit = character and character:GetAttribute(ATTR_LAST_ATTACK_TIME)
-	if typeof(lastHit) ~= "number" then
+	if not character then
 		return math.huge
 	end
-	return os.clock() - lastHit
+	local lastHit = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
+	local lastCombat = character:GetAttribute(ATTR_LAST_COMBAT_TIME)
+	local last = math.max(if typeof(lastHit) == "number" then lastHit else -math.huge, if typeof(lastCombat) == "number" then lastCombat else -math.huge)
+	if last == -math.huge then
+		return math.huge
+	end
+	return os.clock() - last
 end
 
 --- Jogadores com atributo CanFight == false não dão nem recebem dano (ex.: lobby).
@@ -75,6 +91,18 @@ end
 --- Morte com peso: solta as juntas (RagdollRig, permanente até o respawn) e empurra o corpo para
 --- longe do último atacante. O empurrão vai pelo NotifyKnockback (o cliente é dono da física).
 local function ragdoll(player: Player, character: Model, attacker: Player?)
+	if character:GetAttribute("BossRig") ~= nil then
+		-- forma de boss (rig por peças): morto NÃO ragdolla (dono, 2026-09-21: o corpo batia no cenário e
+		-- saía voando). Congela no lugar.
+		for _, d in character:GetDescendants() do
+			if d:IsA("BasePart") then
+				d.AssemblyLinearVelocity = Vector3.zero
+				d.Anchored = true
+				d.CanCollide = false
+			end
+		end
+		return
+	end
 	RagdollRig.Apply(character) -- no-op se já estava em ragdoll de combate
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local attackerRoot = attacker and attacker.Character and attacker.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -199,6 +227,7 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	if attacker then
 		victim:SetAttribute(ATTR_LAST_ATTACKER, attacker.UserId)
 		victim:SetAttribute(ATTR_LAST_ATTACK_TIME, os.clock())
+		victim:SetAttribute(ATTR_LAST_COMBAT_TIME, os.clock())
 	end
 
 	if victimPlayer then

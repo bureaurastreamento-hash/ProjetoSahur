@@ -130,8 +130,10 @@ Controls.Settings = ({
 	AttackHold = { Default = true, Label = "Segurar soco = combo automático", Hint = "" },
 	Haptics = { Default = true, Label = "Vibração ao acertar/apanhar", Hint = "controle e celular" },
 	ScreenShake = { Default = true, Label = "Tremor de tela", Hint = "" },
+	-- dono (2026-09-21): membros do MESMO clã aparecem através das paredes (contorno na cor do clã)
+	ClanHighlight = { Default = true, Label = "Ver membros do clã através das coisas", Hint = "contorno nos aliados" },
 } :: { [string]: SettingDef })
-Controls.SettingsOrder = { "CharacterModel", "AttackHold", "BlockToggle", "ScreenShake", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
+Controls.SettingsOrder = { "CharacterModel", "AttackHold", "BlockToggle", "ClanHighlight", "ScreenShake", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
 
 --- Valor válido para a configuração (nil = inválido).
 function Controls.ValidateSetting(key: any, value: any): (number | boolean)?

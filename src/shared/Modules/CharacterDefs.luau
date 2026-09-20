@@ -65,6 +65,7 @@ export type AbilityDef = {
 	Effect: Effect,
 	AwakenedEffect: Effect?, -- versão DESPERTA (durante o Awakening); sem ela, só o buff de dano/velocidade
 	OncePerAwakening: boolean?, -- ultimate que só sai UMA vez por despertar (Domínio do Tempo)
+	SideCooldown: number?, -- só DashOverride: cooldown do teleporte LATERAL (frente/trás usa Cooldown)
 }
 
 export type CharacterDef = {
@@ -77,16 +78,16 @@ export type CharacterDef = {
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
 	Abilities: { AbilityDef }, -- índice = tecla (1..4); a última com EnergyCost = Max é a ultimate (G)
-	DashOverride: AbilityDef?, -- substitui o dash universal (Q) por esta habilidade (Swift: Piscar); só Effect Teleport hoje
+	DashOverride: AbilityDef?, -- substitui o dash universal (Q) por esta habilidade (Swift: Piscar); só Effect Teleport hoje. Campo extra `SideCooldown` = cooldown do lateral (sem ele, usa Cooldown)
 }
 
 local CharacterDefs = {}
 
 CharacterDefs.Energy = {
 	Max = 100,
-	-- dono (2026-09-20): ult carrega mais devagar (era 6/4)
-	GainOnHitDealt = 4,
-	GainOnHitTaken = 2,
+	-- dono (2026-09-20): ult carrega mais devagar (era 6/4); 2026-09-21: "ult muito rápida de pegar" → 2/1
+	GainOnHitDealt = 2,
+	GainOnHitTaken = 1,
 }
 
 CharacterDefs.DefaultCharacter = "Jotaro"
@@ -157,7 +158,8 @@ CharacterDefs.Characters = {
 		DashOverride = {
 			Id = "Blink",
 			DisplayName = "Piscar",
-			Cooldown = 5,
+			Cooldown = 5, -- frente/trás
+			SideCooldown = 2.5, -- lateral (dono, 2026-09-21: o Bruno precisa da divisão lateral × frente/trás)
 			EnergyCost = 0,
 			CastTime = 0.15,
 			Effect = { Type = "Teleport", Distance = 18 },

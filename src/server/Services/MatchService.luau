@@ -18,6 +18,7 @@ local Workspace = game:GetService("Workspace")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
@@ -189,6 +190,69 @@ local function eliminate(participant: Participant, killer: Player?)
 			scores = scoresData(round),
 			eliminated = participant.player.Name,
 		})
+	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Kill streak visual (dono, 2026-09-21): a partir de AuraFrom kills seguidas o jogador ganha uma COROA de ouro
+-- na cabeça (servidor: todo mundo vê; o dourado em volta é do HUDController). Some ao morrer/zerar.
+-- ---------------------------------------------------------------------------
+local CROWN_NAME = "StreakCrown"
+local function buildCrown(head: BasePart): Model
+	local crown = Instance.new("Model")
+	crown.Name = CROWN_NAME
+	local color = CombatConfig.StreakCrown.Color
+	local function piece(name: string, size: Vector3, offset: CFrame, material: Enum.Material, shape: Enum.PartType?)
+		local p = Instance.new("Part")
+		p.Name = name
+		p.Size = size
+		p.Color = color
+		p.Material = material
+		p.CanCollide = false
+		p.CanQuery = false
+		p.Massless = true
+		p.CastShadow = false
+		if shape then
+			p.Shape = shape
+		end
+		p.CFrame = head.CFrame * offset
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = head
+		weld.Part1 = p
+		weld.Parent = p
+		p.Parent = crown
+		return p
+	end
+	-- aro
+	piece("Ring", Vector3.new(0.5, 1.9, 1.9), CFrame.new(0, 0.75, 0) * CFrame.Angles(0, 0, math.rad(90)), Enum.Material.Metal, Enum.PartType.Cylinder)
+	-- 6 pontas com "joia" neon
+	for i = 0, 5 do
+		local a = i / 6 * math.pi * 2
+		local off = CFrame.new(math.cos(a) * 0.85, 1.25, math.sin(a) * 0.85) * CFrame.Angles(0, -a, 0)
+		piece("Spike" .. i, Vector3.new(0.35, 0.7, 0.2), off, Enum.Material.Metal)
+		piece("Gem" .. i, Vector3.new(0.22, 0.22, 0.22), off * CFrame.new(0, 0.42, 0), Enum.Material.Neon, Enum.PartType.Ball)
+	end
+	local light = Instance.new("PointLight")
+	light.Color = color
+	light.Brightness = 1.2
+	light.Range = 10
+	light.Parent = crown:FindFirstChild("Ring")
+	return crown
+end
+
+local function refreshCrown(player: Player)
+	local character = player.Character
+	local head = character and character:FindFirstChild("Head")
+	if not character or not head or not head:IsA("BasePart") then
+		return
+	end
+	local streak = player:GetAttribute("KillStreak")
+	local wants = typeof(streak) == "number" and streak >= MatchConfig.KillStreak.AuraFrom
+	local existing = character:FindFirstChild(CROWN_NAME)
+	if wants and not existing then
+		buildCrown(head).Parent = character
+	elseif not wants and existing then
+		existing:Destroy()
 	end
 end
 
@@ -398,6 +462,18 @@ end
 
 function MatchService.Start()
 	HealthService.Died.Event:Connect(onDied)
+	local function watchCrown(player: Player)
+		player:GetAttributeChangedSignal("KillStreak"):Connect(function()
+			refreshCrown(player)
+		end)
+		player.CharacterAdded:Connect(function()
+			task.delay(0.6, refreshCrown, player)
+		end)
+	end
+	Players.PlayerAdded:Connect(watchCrown)
+	for _, p in Players:GetPlayers() do
+		watchCrown(p)
+	end
 	Players.PlayerRemoving:Connect(onPlayerRemoving)
 
 	if MatchConfig.FreeRoam then

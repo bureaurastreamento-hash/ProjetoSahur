@@ -218,6 +218,14 @@ local DASH_STOP_DISTANCE = 3.5 -- studs de folga antes do obstáculo
 local DASH_RAY_OFFSETS = { Vector3.new(0, 1.5, 0), Vector3.new(0, 0, 0), Vector3.new(0, -1.2, 0) } -- cabeça, tronco, joelho (pés não: degrau baixo o Humanoid sobe)
 local DASH_MAX_UP = 6 -- studs/s: teto da velocidade vertical durante o dash (barreira baixa não lança para cima)
 local dashCleanup: (() -> ())? = nil -- encerra o dash em andamento (destrói o LinearVelocity)
+local dashEndsAt = 0 -- os.clock() em que o dash local acaba
+local dashSideways = false -- o dash local é lateral? (soco liberado no fim: CombatController)
+
+--- Dash local em andamento? Retorna (dashing, lateral, segundos que faltam).
+function MovementController.DashState(): (boolean, boolean, number)
+	local remaining = dashEndsAt - os.clock()
+	return dashCleanup ~= nil and remaining > 0, dashSideways, math.max(remaining, 0)
+end
 local TRAIL_DEFAULT = Color3.fromRGB(255, 255, 255)
 
 -- kind ("dash" | "cancel") -> { readyAt (GetServerTimeNow), total }
@@ -285,6 +293,8 @@ function MovementController.SteerableDash(character: Model, speed: number, durat
 	lv.Parent = root
 	local direction = initial
 	local endsAt = os.clock() + duration
+	dashEndsAt = endsAt
+	dashSideways = sideways
 	local rayParams = RaycastParams.new()
 	rayParams.FilterType = Enum.RaycastFilterType.Exclude
 	rayParams.FilterDescendantsInstances = { character }

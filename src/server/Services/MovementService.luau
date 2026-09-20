@@ -37,7 +37,12 @@ local ATTR_NO_COOLDOWN = "DevNoCooldown"
 
 type DashState = { forwardReadyAt: number, sideReadyAt: number, cancelReadyAt: number }
 local ATTR_DASHING_UNTIL = "DashingUntil" -- os.clock(); CombatService/AbilityService recusam ações até aqui
+local ATTR_DASH_KIND = "DashKind" -- "side" | "forward": o soco no fim do dash LATERAL é permitido (CombatService)
 local dashStates: { [Player]: DashState } = {}
+local PhysicsService = game:GetService("PhysicsService")
+local CollectionService = game:GetService("CollectionService")
+local DASH_GROUP = "Dashing" -- durante o dash o corpo não colide com jogadores (CombatConfig.Dash.NoPlayerCollision)
+local PLAYERS_GROUP = "Players" -- CharacterService põe todo personagem aqui
 
 local notifyDash: RemoteEvent
 local notifyDashCooldown: RemoteEvent
@@ -68,9 +73,27 @@ local function sanitizeDirection(root: BasePart, raw: any): Vector3
 	return facing(root)
 end
 
---- Teleporte de verdade (decisão do dono 2026-09-16): anda `distance` studs em `direction` ATRAVESSANDO o
---- que estiver na frente (sem raycast travando na parede) e encaixa no chão do destino, mantendo a
---- altura que o boneco tinha em relação ao chão de onde saiu. Sem chão no destino, mantém o Y.
+--- Teleporte (Piscar do Bruno, Warp do Overlord, Effect Teleport): anda até `distance` studs em `direction`
+--- ATRAVESSANDO só PERSONAGENS (jogadores/NPCs). Dono (2026-09-21): parede não se atravessa e nunca cai no
+--- void — o raio para antes do primeiro obstáculo do cenário e o destino precisa ter chão; sem chão, recua
+--- pelo caminho até achar (senão não teleporta). Mantém a altura que o boneco tinha em relação ao chão.
+local function characterFilter(exclude: Model): { Instance }
+	local list: { Instance } = { exclude }
+	for _, p in Players:GetPlayers() do
+		if p.Character then
+			table.insert(list, p.Character)
+		end
+	end
+	for _, m in CollectionService:GetTagged("Combatant") do
+		table.insert(list, m)
+	end
+	local arrow = Workspace:FindFirstChild("RitualArrow")
+	if arrow then
+		table.insert(list, arrow)
+	end
+	return list
+end
+
 function MovementService.Teleport(player: Player, character: Model, direction: Vector3, distance: number): boolean
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
@@ -83,19 +106,50 @@ function MovementService.Teleport(player: Player, character: Model, direction: V
 	flat = flat.Unit
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = { character }
+	params.FilterDescendantsInstances = characterFilter(character)
 	params.RespectCanCollide = true
 	local here = Workspace:Raycast(root.Position, Vector3.new(0, -12, 0), params)
-	local heightAboveGround = if here then root.Position.Y - here.Position.Y else 3
-	local target = root.Position + flat * distance
-	local ground = Workspace:Raycast(target + Vector3.new(0, 15, 0), Vector3.new(0, -45, 0), params)
-	if ground then
-		target = Vector3.new(target.X, ground.Position.Y + heightAboveGround, target.Z)
+	local heightAboveGround = if here then math.clamp(root.Position.Y - here.Position.Y, 2.5, 8) else 3
+	-- obstáculo do cenário no caminho (na altura do peito e dos pés): para 2 studs antes
+	local travel = distance
+	for _, dy in { 0, -2 } do
+		local hit = Workspace:Raycast(root.Position + Vector3.new(0, dy, 0), flat * distance, params)
+		if hit then
+			travel = math.min(travel, math.max(0, (hit.Position - root.Position).Magnitude - 2.5))
+		end
+	end
+	if travel < 2 then
+		return false
+	end
+	-- destino precisa ter chão: recua pelo caminho até achar
+	local target: Vector3? = nil
+	for _, frac in { 1, 0.85, 0.7, 0.55, 0.4 } do
+		local candidate = root.Position + flat * (travel * frac)
+		local ground = Workspace:Raycast(candidate + Vector3.new(0, 6, 0), Vector3.new(0, -60, 0), params)
+		if ground then
+			target = Vector3.new(candidate.X, ground.Position.Y + heightAboveGround, candidate.Z)
+			break
+		end
+	end
+	if not target then
+		return false
 	end
 	AntiExploitService.Grace(player, 1)
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.CFrame = CFrame.new(target) * (root.CFrame - root.CFrame.Position)
 	return true
+end
+
+--- Grupo de colisão do dash: liga/desliga em todas as peças do personagem.
+local function setDashCollision(character: Model, dashing: boolean)
+	if not CombatConfig.Dash.NoPlayerCollision then
+		return
+	end
+	for _, d in character:GetDescendants() do
+		if d:IsA("BasePart") and (d.CollisionGroup == PLAYERS_GROUP or d.CollisionGroup == DASH_GROUP or d.CollisionGroup == "Default") then
+			d.CollisionGroup = if dashing then DASH_GROUP else PLAYERS_GROUP
+		end
+	end
 end
 
 --- Hit de chegada do dash para a frente / Piscar (CombatConfig.Dash.ArrivalHit): dano fixo sem combo;
@@ -125,9 +179,10 @@ end
 
 --- Q de um personagem com DashOverride (Swift = Piscar): teleporta em vez de dar dash; um cooldown só
 --- (mostrado nos dois "kinds" do HUD). Usa a mesma trava DashingUntil por CastTime.
-local function doDashOverride(player: Player, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean)
+local function doDashOverride(player: Player, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean, sideways: boolean)
 	local now = os.clock()
-	if now < state.forwardReadyAt and not noCooldown then
+	local kind = if sideways then "side" else "forward"
+	if now < (if sideways then state.sideReadyAt else state.forwardReadyAt) and not noCooldown then
 		return
 	end
 	local effect = ability.Effect
@@ -144,12 +199,17 @@ local function doDashOverride(player: Player, character: Model, ability: any, di
 		return
 	end
 	if not noCooldown then
+		-- dois cooldowns como o dash universal (dono, 2026-09-21): lateral = SideCooldown (ou Cooldown)
 		local serverNow = Workspace:GetServerTimeNow()
-		state.forwardReadyAt = now + ability.Cooldown
-		state.sideReadyAt = state.forwardReadyAt
-		notifyDashCooldown:FireClient(player, "forward", serverNow + ability.Cooldown, ability.Cooldown)
-		notifyDashCooldown:FireClient(player, "side", serverNow + ability.Cooldown, ability.Cooldown)
+		local cd = if sideways then (tonumber(ability.SideCooldown) or ability.Cooldown) else ability.Cooldown
+		if sideways then
+			state.sideReadyAt = now + cd
+		else
+			state.forwardReadyAt = now + cd
+		end
+		notifyDashCooldown:FireClient(player, kind, serverNow + cd, cd)
 	end
+	player:SetAttribute(ATTR_DASH_KIND, kind)
 	player:SetAttribute(ATTR_DASHING_UNTIL, now + (ability.CastTime or 0))
 	local characterId = player:GetAttribute("CharacterId")
 	notifyAbility:FireAllClients(character, if typeof(characterId) == "string" then characterId else "", ability.Id, "start", { Teleported = true })
@@ -208,11 +268,15 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	if CombatService.IsStunned(player) then
 		return
 	end
+	-- Dono (2026-09-21): ação individual — no meio do soco não sai dash; dentro do Domínio do Tempo nada sai
+	if CombatService.IsAttacking(player) or CombatService.IsTimeSlowed(player) then
+		return
+	end
 	-- Personagem sem dash (Swift): o Q vira a habilidade DashOverride
 	local characterId = player:GetAttribute("CharacterId")
 	local override = if typeof(characterId) == "string" then CharacterDefs.GetDashOverride(characterId) else nil
 	if override then
-		doDashOverride(player, character, override, direction, state, noCooldown)
+		doDashOverride(player, character, override, direction, state, noCooldown, sideways)
 		return
 	end
 	local readyAt = if sideways then state.sideReadyAt else state.forwardReadyAt
@@ -235,7 +299,16 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	AntiExploitService.Grace(player, cfg.Duration * 2 + 1)
 	-- durante o dash não dá para socar/usar habilidade (lateral é mais curto: SideScale)
 	local scale = if sideways then CharacterDefs.DashTuning.SideScale else CharacterDefs.DashTuning.ForwardScale
-	player:SetAttribute(ATTR_DASHING_UNTIL, now + cfg.Duration * scale)
+	local dashUntil = now + cfg.Duration * scale
+	player:SetAttribute(ATTR_DASH_KIND, kind)
+	player:SetAttribute(ATTR_DASHING_UNTIL, dashUntil)
+	-- corpo não empurra ninguém durante o dash
+	setDashCollision(character, true)
+	task.delay(cfg.Duration * scale + 0.05, function()
+		if player.Character == character then
+			setDashCollision(character, false)
+		end
+	end)
 	notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind })
 	-- dash para a FRENTE (não lateral, não para trás): hit de chegada no fim do deslocamento
 	if not sideways and direction:Dot(facing) > 0 then
@@ -276,6 +349,16 @@ local function onRequestSprint(player: Player, active: any)
 end
 
 function MovementService.Init()
+	pcall(function()
+		PhysicsService:RegisterCollisionGroup(PLAYERS_GROUP)
+		PhysicsService:RegisterCollisionGroup(DASH_GROUP)
+	end)
+	pcall(function()
+		PhysicsService:CollisionGroupSetCollidable(DASH_GROUP, PLAYERS_GROUP, false)
+		PhysicsService:CollisionGroupSetCollidable(DASH_GROUP, DASH_GROUP, false)
+		PhysicsService:CollisionGroupSetCollidable(DASH_GROUP, "Grabbed", false)
+		PhysicsService:CollisionGroupSetCollidable("Grabbed", PLAYERS_GROUP, false) -- vítima carregada não bate em jogador
+	end)
 	notifyDash = Remotes.GetEvent(Remotes.Events.NotifyDash)
 	notifyDashCooldown = Remotes.GetEvent(Remotes.Events.NotifyDashCooldown)
 	notifyAbility = Remotes.GetEvent(Remotes.Events.NotifyAbility)

@@ -899,7 +899,12 @@ function HUDController.Start()
 			return
 		end
 		local streak = p:GetAttribute("KillStreak")
-		FX.SetAura(character, if typeof(streak) == "number" and streak >= MatchConfig.KillStreak.AuraFrom then STREAK_COLOR else nil)
+		-- dono (2026-09-21): a partir de AuraFrom fica DOURADO em volta (contorno + manto) — a coroa vem do servidor
+		local on = typeof(streak) == "number" and streak >= MatchConfig.KillStreak.AuraFrom
+		FX.SetCosmeticAura(character, if on then STREAK_COLOR else nil, "flame", "StreakAura")
+		if on then
+			FX.SetOutline(character, STREAK_COLOR)
+		end
 	end
 	-- Placar do mapa livre reage a kills e entradas/saídas
 	local function watchKills(p: Player)
