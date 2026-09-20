@@ -23,7 +23,8 @@
 	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
 	  DespawnBoss, RestoreDestructibles, TakeArrow, SummonTraitor/KillTraitor/DespawnTraitor (capítulo final),
 	  SetQuestChapter {amount} (por alvo), SpawnBotPassive/Aggressive/Idle {id}, BotsPassive/Aggressive/Idle,
-	  BotsFill, ClearBots (BotService: bots com o combate real), Trailer (tudo), TrailerScene {text} (uma cena)
+	  BotsFill, ClearBots (BotService: bots com o combate real), Trailer (tudo), TrailerScene {text} (uma cena),
+	  TournamentOpen {mode, coins, eventPoints, xp, cosmetic} / TournamentStart / TournamentCancel (Último de pé)
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
@@ -219,6 +220,10 @@ local function stateOf(target: Player): { [string]: any }
 				return ok and es ~= nil and es.IsActive()
 			end)(),
 			arrowCarrier = if RitualService and RitualService.GetCarrier() then RitualService.GetCarrier().Name else nil,
+			tournament = (function()
+				local ts = lazyRequire("TournamentService")
+				return if ts then ts.GetPhase() else "idle"
+			end)(),
 		},
 	}
 end
@@ -1023,6 +1028,33 @@ global.EndEvent = function()
 		return false, "EventService não carregou"
 	end
 	return EventService.Finish()
+end
+
+--- Torneio "Último de pé" (TournamentService, D3): args { mode = "solo"|"duo"|"clan", coins?, eventPoints?,
+--- xp?, cosmetic? } (ausentes = TournamentConfig.DefaultReward).
+global.TournamentOpen = function(_, args)
+	local TournamentService = lazyRequire("TournamentService")
+	if not TournamentService then
+		return false, "TournamentService não carregou"
+	end
+	local a: { [string]: any } = if typeof(args) == "table" then args else {}
+	return TournamentService.Open({ mode = a.mode, coins = number(a.coins), eventPoints = number(a.eventPoints), xp = number(a.xp), cosmetic = a.cosmetic })
+end
+
+global.TournamentStart = function()
+	local TournamentService = lazyRequire("TournamentService")
+	if not TournamentService then
+		return false, "TournamentService não carregou"
+	end
+	return TournamentService.Begin()
+end
+
+global.TournamentCancel = function()
+	local TournamentService = lazyRequire("TournamentService")
+	if not TournamentService then
+		return false, "TournamentService não carregou"
+	end
+	return TournamentService.Cancel()
 end
 
 --- Teleporta o dev para um ponto de spawn do mapa da arena (Workspace.CurrentMap.Spawns).

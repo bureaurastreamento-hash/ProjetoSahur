@@ -65,6 +65,7 @@ RemoteEvents.Events = ({
 	RequestReport = "RequestReport", -- (targetName: string, reasonId: string, text: string?) — ReportConfig.Reasons
 	RequestVendor = "RequestVendor", -- (action: "buy"|"roll", id: string?, currency: "points"|"event"?) — vendedor da Lojinha (VendorConfig)
 	RequestUpdateSeen = "RequestUpdateSeen", -- (version: string) — jogador fechou a tela de novidades dessa versão (UpdateLogService grava no perfil)
+	RequestTournament = "RequestTournament", -- (action: "join"|"leave"|"refresh") — torneio "Último de pé" (TournamentService)
 	RequestTrade = "RequestTrade", -- (action: "invite"|"accept"|"decline"|"cancel"|"add"|"remove"|"points"|"event_points"|"ready"|"confirm", a: any?, b: any?) — trocas no vendedor (TradeConfig)
 
 	-- Notify: servidor -> cliente
@@ -105,6 +106,7 @@ RemoteEvents.Events = ({
 	NotifyReport = "NotifyReport", -- dono: (ok: boolean, message: string) — resultado do RequestReport
 	NotifyVendor = "NotifyVendor", -- dono: (event: "bought"|"denied", data: table)
 	NotifyUpdateLog = "NotifyUpdateLog", -- dono: (entry: UpdateLogConfig.Entry) — versão publicada que ele ainda não viu (abre a tela sozinha)
+	NotifyTournament = "NotifyTournament", -- todos: (event: "state"|"start"|"eliminated"|"end"|"denied", data: table) — state = { phase, mode, modeLabel, endsAt, players, alive, teamsAlive, joined, reward }
 	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
 }) :: { [string]: string }
 

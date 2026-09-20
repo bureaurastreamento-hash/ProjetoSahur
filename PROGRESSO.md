@@ -248,6 +248,16 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**D3 FEITO (25/09, sem teste)** — TORNEIO "ÚLTIMO DE PÉ" por cima do mapa livre: `TournamentConfig` (solo/duo/clan,
+inscrição 90 s, contagem 10 s, máx. 10 min = empate; prêmio padrão 1500 pontos + 300 evento + 800 XP + cosmético
+opcional), `TournamentService` (idle→signup→countdown→running→fim; atributos `Tournament`/`TournamentTeam` no Player;
+morte por qualquer causa/sair do servidor = eliminado; companheiro não machuca companheiro — `HealthService.IsInvulnerable`;
+`profile.stats.tournamentWins` + contador `tournament_wins`), `TournamentController` + `TournamentGui` (barra centro-alto
+com ENTRAR/SAIR, timer, vivos; banner de início/vencedor; toast por eliminação), DEV → MAPA → "TORNEIO" (Abrir SOLO/
+DUPLAS/CLÃS com prêmio na caixa "pontos, evento, xp, cosmético"; Fechar e INICIAR; Cancelar). Bots não participam.
+FUTURO anotado: morte súbita (área encolhe), prêmio em Robux. TESTAR (2 clientes): DEV abre SOLO → os dois ENTRAR →
+INICIAR → contagem → um mata o outro → banner "ÚLTIMO DE PÉ: <nome>" + prêmio no vencedor; DUPLAS com 2 = cancela
+(1 time só); CLÃS sem clã = recusa; Cancelar no meio limpa a barra.
 **D2 FEITO (25/09, servidor testado via MCP)** — VARIAÇÕES DE GOLPE por contexto: `Ability.Variants = { OnDowned | Chain |
 Falling | Air | Sprint = Effect }` (Chain = Effect ou `{ [IdAnterior] = Effect, ["*"] = Effect }`, janela 2 s); o
 `AbilityService.pickVariant` escolhe nessa prioridade (caído na frente ≤ 9 studs → emendado → caindo → no ar → correndo),

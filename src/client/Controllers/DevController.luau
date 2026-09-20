@@ -61,9 +61,10 @@ local SIMPLE_COMMANDS = {
 	"SummonTraitor", "KillTraitor", "DespawnTraitor",
 	"BotsPassive", "BotsAggressive", "BotsIdle", "BotsFill", "ClearBots",
 	"PublishUpdate",
+	"TournamentStart", "TournamentCancel",
 }
 -- Ações perigosas: 1º clique arma ("Confirmar?"), 2º clique em CONFIRM_SECONDS envia
-local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, ClearBots = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true, PublishUpdate = true }
+local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, ClearBots = true, EndEvent = true, TournamentCancel = true, EndBossForm = true, AnnounceGlobal = true, PublishUpdate = true }
 local CONFIRM_SECONDS = 3
 local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
@@ -88,6 +89,8 @@ local SERVER_STATUS: { [string]: (any) -> string? } = {
 	SetNight = function(sv) return if sv.clockOverride ~= nil and sv.night then "on" else nil end,
 	TimeAuto = function(sv) return if sv.clockOverride == nil then "on" else nil end,
 	StartEvent = function(sv) return if sv.event then "on" else nil end,
+	TournamentStart = function(sv) return if sv.tournament == "signup" then "sel" elseif sv.tournament == "countdown" or sv.tournament == "running" then "on" else nil end,
+	TournamentCancel = function(sv) return if sv.tournament ~= nil and sv.tournament ~= "idle" then "sel" else nil end,
 	GiveArrow = function(sv) return if sv.arrowCarrier ~= nil then "on" else nil end,
 	BotsPassive = function(sv) return if (sv.bots or 0) > 0 and sv.botsBehavior == "passive" then "on" else nil end,
 	BotsAggressive = function(sv) return if (sv.bots or 0) > 0 and sv.botsBehavior == "aggressive" then "on" else nil end,
@@ -638,6 +641,23 @@ function DevController.Start()
 	bindButton("GrantItem", function()
 		send("GrantItem", { id = itemBox.Text })
 	end)
+	-- torneio "Último de pé" (D3): "TournamentOpen_<modo>" + prêmio da caixa "pontos, evento, xp, cosmético"
+	local prizeBox = get(panel, "TournamentPrize") :: TextBox
+	for _, tmode in { "solo", "duo", "clan" } do
+		bindButton("TournamentOpen_" .. tmode, function()
+			local fields = {}
+			for piece in prizeBox.Text:gmatch("[^,]+") do
+				table.insert(fields, (piece:gsub("^%s+", ""):gsub("%s+$", "")))
+			end
+			send("TournamentOpen", {
+				mode = tmode,
+				coins = tonumber(fields[1]),
+				eventPoints = tonumber(fields[2]),
+				xp = tonumber(fields[3]),
+				cosmetic = if fields[4] and fields[4] ~= "" then fields[4] else nil,
+			})
+		end)
+	end
 	-- cenas do trailer (predefinições)
 	for _, child in panel:GetDescendants() do
 		if child:IsA("TextButton") then
