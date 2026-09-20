@@ -250,10 +250,35 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ### PRÓXIMA SESSÃO — por onde começar
 1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
    à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
-2. Blocos que faltam dos PLANOS (2026-09-21): B cachoeira/jardim v2 (Amazônia antiga + templos astecas;
-   trocar o som `9120386436` que faz barulho de BUZINA) — PRÓXIMO; C construções JJS maiores/enteráveis;
-   E workshop de mods + quests. (D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22.)
+2. Blocos que faltam dos PLANOS (2026-09-21): C construções JJS maiores/enteráveis — PRÓXIMO; E workshop de
+   mods + quests. (B jardim v2, D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22, sem o dono ver.)
 3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-22 — BLOCO B FEITO: cachoeira + jardim v2 "Amazônia antiga + templos astecas" (só via MCP)
+- `tools/arena_santuario.py` (parte FORA reescrita; câmara interna igual): **cachoeira em 3 patamares** de rocha
+  molhada (Reflectance) saindo da muralha (y 86/68/50), lençol Glass quase opaco + espuma ForceField + cordões
+  Neon em cada queda, bacia por patamar, spray por patamar, queda final até o lago (véu da entrada continua
+  atravessável), lago maior, névoa/gotas mais fortes, **arco-íris** (7 arcos Neon transparentes) na névoa.
+  **SOM trocado**: `72131057531506` (waterfall3_looped do pack JJS; carregou no Studio, loop de 2 s) no lugar do
+  `9120386436` (0,4 s = BUZINA em loop).
+- **Mata**: 10 sumaúmas (tronco cinza 26–34, raízes tabulares em wedge, copa em guarda-chuva, bromélias no
+  tronco), 9 árvores médias, 22 cipós entre copas (`beam()` = cilindro entre 2 pontos, com barriga) + 8 pendurados,
+  samambaias gigantes (folhas radiais), bananeiras com heliconias, troncos caídos com musgo, musgo/flores,
+  **nevoeiro baixo** (`JungleFog`), vaga-lumes.
+- **Templos astecas**: pirâmide de 5 degraus (30→7) em CX ± 50 / z 316 (`TempleW*`/`TempleE*`), cornijas, glifos
+  coloridos na face da clareira, **escadaria** de 16 degraus descendo para o meio com corrimões e **cabeças de
+  serpente emplumada** (jade, olho neon, penas), santuário no topo (altar com mancha, 4 pilares, teto com crista e
+  glifos, 2 braseiros), musgo nos degraus, raízes por cima, samambaias na base. **Ruínas** tomadas pela mata em
+  CX ± 40 / z 358 (muro com glifo, cabeça de serpente tombada, coluna quebrada).
+- `free()` agora exclui pirâmide + escadaria (dxr −40..16 × z ±16); conferido via MCP: **0 colisões com o pinheiro
+  da arte** (110, 337); templo leste começou em z 335 e batia — movido para 316. 1238 peças fixas no jardim
+  (antes 1433 com a v1... a v2 tem menos por causa da exclusão maior).
+- NÃO feito (opcional do plano): dar o mesmo tom (glifos/serpentes) à câmara interna. Screenshot não foi
+  possível (o dono estava jogando outra coisa em tela cheia — a captura pegava o jogo dele).
+- **FALTA o dono ver**: cachoeira opaca/em patamares, som (sem buzina), arco-íris discreto, mata fechada com
+  cipós, subir a escadaria dos templos (16 degraus de 0,3–0,4 de altura: dá para subir andando?), altar no topo
+  como ponto de luta em altura, FPS na região (~1240 peças + partículas). Se algo sobrepor a arte:
+  `tools/achar_sobreposicao.luau`.
 
 ### Sessão 2026-09-22 — BLOCO D FEITO: menu DEV em abas ADM / MAPA / TESTE (boot testado via MCP)
 - `tools/gerar_devgui.py` reescrito: cabeçalho + ALVO (caixa `PlayerSearch` filtra a lista por nick/display;

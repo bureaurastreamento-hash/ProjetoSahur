@@ -7,6 +7,12 @@ saiu. A muralha é aberta por tools/escavar_muralha.luau (rochas de x 30..166 / 
 fundo ficar em y 34); aqui a CÂMARA fecha esse vão por dentro (casca de rocha) e o resto da região
 (x 0..30 e 166..210) é tapado com blocos de rocha.
 
+v2 (dono, 2026-09-21 → feito 2026-09-22): lá fora é "AMAZÔNIA ANTIGA + TEMPLOS ASTECAS" — cachoeira em
+patamares, opaca e cheia, mata fechada (sumaúmas com raízes tabulares, samambaias gigantes, bananeiras/
+heliconias, cipós, bromélias, troncos caídos, nevoeiro baixo) e duas pirâmides escalonadas com escadaria,
+serpentes emplumadas e altar no topo + ruínas tomadas pela mata. Som da cachoeira = waterfall3_looped do
+pack JJS (72131057531506, público; o id antigo 9120386436 tinha 0,4 s e virava BUZINA em loop).
+
 Nomes que os serviços procuram (RitualService/BossService/BossFormService): BossAltar (prompts E/F),
 BossAltarRune (acende no ritual), BossCrack0..7 (idem), BossSpawn (boss nasce), BossArena (centro da luta).
 """
@@ -225,144 +231,316 @@ def build(ctx):
     part("BossArena", (1, 1, 1), (CX, FLOOR_Y + 1.5, IN_Z0 + 34), SAND, Transparency=1, CanCollide=False, CastShadow=False)
 
     # =========================================================================================
-    # FORA: cachoeira caindo da rocha + lago + jardim mesopotâmico (só isso fica visível)
+    # FORA v2: cachoeira em PATAMARES + lago + AMAZÔNIA ANTIGA + TEMPLOS ASTECAS
     # =========================================================================================
     VEIL_W = DOOR_HALF * 2 + 6  # 34
     POOL_Z = FACE_Z - 12
     TOP_Y = CAVE_TOP + 52  # nascente lá em cima na rocha
-    # fio d'água descendo pela rocha até a boca (acima da abertura) e véu na frente do túnel
-    part("CascadeUpper", (VEIL_W * 0.55, TOP_Y - DOOR_H, 1.2), (CX, (TOP_Y + DOOR_H) / 2, FACE_Z - 0.9), WATER_FF, CanCollide=False, CanQuery=False, Transparency=0.12, CastShadow=False)
-    part("CascadeVeil", (VEIL_W, DOOR_H + 3, 1.2), (CX, OUT_GROUND + (DOOR_H + 3) / 2, FACE_Z - 2.2), WATER_FF, CanCollide=False, CanQuery=False, Transparency=0.05, CastShadow=False)
-    part("CascadeVeilWhite", (VEIL_W + 2, DOOR_H + 3, 0.6), (CX, OUT_GROUND + (DOOR_H + 3) / 2, FACE_Z - 3.1), WATER_WHITE, CanCollide=False, CanQuery=False, Transparency=0.45, CastShadow=False)
-    ledge = part("CascadeLedge", (VEIL_W + 6, 1.5, 4), (CX, TOP_Y + 0.5, FACE_Z - 1.5), ROCK_DARK)
-    # lago raso (atravessável) + borda de seixos + pedras
-    part("CascadePool", (VEIL_W + 26, 0.5, 24), (CX, OUT_GROUND + 0.25, POOL_Z), WATER, Transparency=0.35, Reflectance=0.3, CanCollide=False, CanQuery=False, CastShadow=False)
-    part("CascadePoolBed", (VEIL_W + 30, 0.35, 28), (CX, OUT_GROUND + 0.05, POOL_Z), ("Pebble", (0.42, 0.40, 0.36)), CanCollide=False, CastShadow=False)
-    for i in range(14):
+    WET_ROCK = ("Slate", (0.30, 0.31, 0.33))
+    STONE = ("Cobblestone", (0.52, 0.52, 0.50))
+    STONE_DARK = ("Slate", (0.40, 0.41, 0.40))
+    JADE = ("SmoothPlastic", (0.16, 0.52, 0.38))
+    FEATHER = ("Fabric", (0.10, 0.60, 0.45))
+    FEATHER_RED = ("Fabric", (0.80, 0.20, 0.15))
+    GLYPH = [("SmoothPlastic", (0.80, 0.30, 0.20)), ("SmoothPlastic", (0.20, 0.55, 0.60)), ("SmoothPlastic", (0.85, 0.70, 0.25))]
+    JUNGLE = ("LeafyGrass", (0.13, 0.33, 0.15))
+    JUNGLE2 = ("LeafyGrass", (0.18, 0.42, 0.18))
+    FERN = ("Grass", (0.20, 0.48, 0.18))
+    BANANA = ("Grass", (0.25, 0.55, 0.20))
+    HELICONIA = ("Fabric", (0.90, 0.25, 0.15))
+    BROMELIA = ("Fabric", (0.85, 0.35, 0.45))
+    LIANA = ("Wood", (0.30, 0.25, 0.16))
+    BARK = ("Wood", (0.36, 0.28, 0.20))
+    BARK_GREY = ("Wood", (0.50, 0.46, 0.40))
+
+    def beam(name, p0, p1, radius, mat, **extra):
+        """cilindro entre dois pontos (cipó, raiz, tronco caído)."""
+        dx, dy, dz = p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]
+        ln = math.sqrt(dx * dx + dy * dy + dz * dz)
+        if ln < 0.1:
+            return None
+        yaw = math.degrees(math.atan2(-dz, dx))
+        pitch = math.degrees(math.asin(max(-1, min(1, dy / ln))))
+        mid = ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2, (p0[2] + p1[2]) / 2)
+        return part(name, (ln, radius * 2, radius * 2), mid, mat, rot=(0, yaw, pitch), Shape="Cylinder", **extra)
+
+    # --- cachoeira: 3 patamares de rocha saindo da muralha, lençol opaco + espuma em cada queda ---
+    TIERS = [(TOP_Y, 0), (TOP_Y - 18, 3.0), (TOP_Y - 36, 5.5)]  # (y do patamar, quanto salta da face)
+    prev_y = TOP_Y + 6
+    for t, (ty, jut) in enumerate(TIERS):
+        w = VEIL_W * (0.55 + t * 0.2)
+        ledge = part(f"CascadeLedge{t}", (w + 8, 2.5, 6 + jut), (CX, ty, FACE_Z - 1 - (6 + jut) / 2), WET_ROCK, Reflectance=0.25)
+        for k in range(3):  # rochas molhadas na beira do patamar
+            ball(f"CascadeLedgeRock{t}_{k}", rng.uniform(1.4, 2.6), (CX + (-1 if k % 2 else 1) * (w / 2 + 2 + k), ty + 1.5, FACE_Z - 2 - jut * 0.5), WET_ROCK, Reflectance=0.3)
+        # bacia rasa no patamar (o lençol de cima cai aqui)
+        part(f"CascadeBasin{t}", (w + 2, 0.4, 4 + jut), (CX, ty + 1.45, FACE_Z - 1 - (4 + jut) / 2), WATER, Transparency=0.25, Reflectance=0.35, CanCollide=False, CanQuery=False, CastShadow=False)
+        # lençol caindo do patamar de cima até este
+        h = prev_y - ty
+        zf = FACE_Z - 1.5 - jut
+        part(f"CascadeSheet{t}", (w, h, 1.6), (CX, ty + h / 2, zf), WATER, Transparency=0.15, Reflectance=0.2, CanCollide=False, CanQuery=False, CastShadow=False)
+        part(f"CascadeFoam{t}", (w + 1.5, h, 0.8), (CX, ty + h / 2, zf - 1.2), WATER_WHITE, Transparency=0.35, CanCollide=False, CanQuery=False, CastShadow=False)
+        part(f"CascadeFoamB{t}", (w * 0.6, h, 0.5), (CX + jitter(w * 0.15), ty + h / 2, zf - 1.9), ("Neon", (0.95, 0.98, 1.0)), Transparency=0.6, CanCollide=False, CanQuery=False, CastShadow=False)
+        spl = part(f"CascadeSplash{t}", (w, 0.2, 3), (CX, ty + 1.8, zf - 1), WATER, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
+        emitter(spl, "Spray", (0.92, 0.97, 1.0), 1.5, 5, 10, (1.0, 1.8), (3, 7), 50, {"LightEmission": 0.15})
+        prev_y = ty + 1.5
+    # queda final: do último patamar até o lago, na frente da boca do túnel (véu continua atravessável)
+    last_y = TIERS[-1][0] + 1.5
+    part("CascadeVeil", (VEIL_W, last_y - OUT_GROUND, 1.8), (CX, (last_y + OUT_GROUND) / 2, FACE_Z - 2.4), WATER, Transparency=0.18, Reflectance=0.2, CanCollide=False, CanQuery=False, CastShadow=False)
+    part("CascadeVeilWhite", (VEIL_W + 2, last_y - OUT_GROUND, 0.8), (CX, (last_y + OUT_GROUND) / 2, FACE_Z - 3.5), WATER_WHITE, Transparency=0.35, CanCollide=False, CanQuery=False, CastShadow=False)
+    for k in range(4):  # cordões de espuma mais brancos
+        part(f"CascadeVeilCord{k}", (rng.uniform(2, 4), last_y - OUT_GROUND, 0.5), (CX - VEIL_W / 2 + 4 + k * (VEIL_W - 8) / 3 + jitter(1.5), (last_y + OUT_GROUND) / 2, FACE_Z - 4.1), ("Neon", (0.95, 0.98, 1.0)), Transparency=0.55, CanCollide=False, CanQuery=False, CastShadow=False)
+    # lago mais fundo e largo (atravessável) + leito + rochas molhadas na borda
+    part("CascadePool", (VEIL_W + 34, 0.6, 30), (CX, OUT_GROUND + 0.3, POOL_Z - 2), WATER, Transparency=0.3, Reflectance=0.35, CanCollide=False, CanQuery=False, CastShadow=False)
+    part("CascadePoolBed", (VEIL_W + 38, 0.35, 34), (CX, OUT_GROUND + 0.05, POOL_Z - 2), ("Pebble", (0.38, 0.37, 0.34)), CanCollide=False, CastShadow=False)
+    for i in range(18):
         a = rng.uniform(0, math.pi)
-        r = rng.uniform(VEIL_W / 2 + 9, VEIL_W / 2 + 15)
-        s = rng.uniform(1.2, 3.2)
-        ball(f"CascadeRock{i}", s / 2, (CX + math.cos(a) * r, OUT_GROUND + s * 0.25, POOL_Z - math.sin(a) * r * 0.5 + 4), ROCK_DARK if i % 2 else ("Slate", (0.45, 0.44, 0.42)))
-    mist = part("CascadeMist", (VEIL_W, 0.2, 4), (CX, OUT_GROUND + 1, FACE_Z - 3), WATER, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
-    emitter(mist, "Mist", (0.9, 0.96, 1.0), 3, 8, 16, (1.5, 2.5), (2, 5), 60, {"LightEmission": 0.2})
-    emitter(mist, "Drops", (0.9, 0.96, 1.0), 0.3, 0.0, 40, (0.5, 0.9), (8, 14), 70, {"Acceleration": {"Vector3": [0, -40, 0]}})
-    fall = part("CascadeFall", (VEIL_W, 0.2, 1), (CX, TOP_Y - 1, FACE_Z - 1.2), WATER, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
+        r = rng.uniform(VEIL_W / 2 + 12, VEIL_W / 2 + 19)
+        sz = rng.uniform(1.4, 3.6)
+        ball(f"CascadeRock{i}", sz / 2, (CX + math.cos(a) * r, OUT_GROUND + sz * 0.25, POOL_Z + 2 - math.sin(a) * r * 0.55), WET_ROCK if i % 2 else ("Slate", (0.45, 0.44, 0.42)), Reflectance=0.3 if i % 2 else 0.1)
+    mist = part("CascadeMist", (VEIL_W + 10, 0.2, 8), (CX, OUT_GROUND + 1, FACE_Z - 5), WATER, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
+    emitter(mist, "Mist", (0.9, 0.96, 1.0), 4, 12, 24, (1.8, 3.0), (2, 6), 70, {"LightEmission": 0.2})
+    emitter(mist, "Drops", (0.9, 0.96, 1.0), 0.3, 0.0, 60, (0.5, 0.9), (8, 16), 75, {"Acceleration": {"Vector3": [0, -40, 0]}})
+    fall = part("CascadeFall", (VEIL_W * 0.55, 0.2, 1), (CX, TOP_Y + 5, FACE_Z - 1.5), WATER, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
     emitter(fall, "Fall", (0.9, 0.96, 1.0), 0.8, 0.3, 40, (2.0, 2.6), (0, 1), 4, {"Acceleration": {"Vector3": [0, -28, 0]}, "EmissionDirection": "Bottom"})
+    # som de verdade (waterfall3_looped do pack JJS, público — testado via MCP 2026-09-22)
     mist.setdefault("children", []).append({"name": "Cachoeira", "className": "Sound", "properties": {
-        "SoundId": "rbxassetid://9120386436", "Looped": True, "Volume": 0.6, "RollOffMaxDistance": 100, "RollOffMinDistance": 14, "Playing": True}})
+        "SoundId": "rbxassetid://72131057531506", "Looped": True, "Volume": 0.7, "RollOffMaxDistance": 120, "RollOffMinDistance": 16, "Playing": True}})
     light(mist, (0.6, 0.8, 1.0), 0.8, 30)
+    # arco-íris leve na névoa (7 faixas finas em arco, bem transparentes)
+    RAINBOW = [(1.0, 0.2, 0.2), (1.0, 0.6, 0.1), (1.0, 0.95, 0.2), (0.3, 0.9, 0.3), (0.2, 0.6, 1.0), (0.3, 0.3, 0.9), (0.6, 0.3, 0.9)]
+    for c, col in enumerate(RAINBOW):
+        rr = 24 - c * 0.9
+        for sgm in range(10):
+            a0 = math.radians(15 + sgm * 15)
+            a1 = math.radians(15 + (sgm + 1) * 15)
+            p0 = (CX + math.cos(a0) * rr, OUT_GROUND + 2 + math.sin(a0) * rr, POOL_Z - 8)
+            p1 = (CX + math.cos(a1) * rr, OUT_GROUND + 2 + math.sin(a1) * rr, POOL_Z - 8)
+            beam(f"Rainbow{c}_{sgm}", p0, p1, 0.4, ("Neon", col), Transparency=0.78, CanCollide=False, CanQuery=False, CastShadow=False)
     # riacho saindo do lago pelo jardim (para o norte), com pedrinhas
     for i in range(6):
-        z = POOL_Z - 14 - i * 9
+        z = POOL_Z - 18 - i * 9
         x = CX + math.sin(i * 0.9) * 6
         part(f"StreamSeg{i}", (7 - i * 0.4, 0.3, 10), (x, OUT_GROUND + 0.18, z), WATER, rot=(0, math.cos(i * 0.9) * 20, 0), Transparency=0.4, Reflectance=0.2, CanCollide=False, CanQuery=False, CastShadow=False)
         part(f"StreamBed{i}", (9 - i * 0.4, 0.2, 11), (x, OUT_GROUND + 0.04, z), ("Pebble", (0.42, 0.40, 0.36)), rot=(0, math.cos(i * 0.9) * 20, 0), CanCollide=False, CastShadow=False)
 
-    # JARDIM: chão de vegetação, palmeiras, cedros, tamargueiras, papiro, flores, ruínas de tijolo
+    # --- MATA: chão de selva, clareira em volta do lago e do caminho ----------------------------
     GX0, GX1, GZ0, GZ1 = 24, 176, 298, FACE_Z - 4
-    cylinder("GardenFloorA", 44, 0.2, (CX - 38, OUT_GROUND + 0.1, 340), GARDEN, CastShadow=False)
-    cylinder("GardenFloorB", 44, 0.2, (CX + 38, OUT_GROUND + 0.1, 340), GARDEN, CastShadow=False)
-    cylinder("GardenFloorC", 34, 0.2, (CX, OUT_GROUND + 0.12, 312), GARDEN, CastShadow=False)
-    # caminho de lajes da praça até o lago
-    for i in range(9):
+    cylinder("GardenFloorA", 46, 0.2, (CX - 38, OUT_GROUND + 0.1, 340), JUNGLE, CastShadow=False)
+    cylinder("GardenFloorB", 46, 0.2, (CX + 38, OUT_GROUND + 0.1, 340), JUNGLE, CastShadow=False)
+    cylinder("GardenFloorC", 36, 0.2, (CX, OUT_GROUND + 0.12, 312), JUNGLE2, CastShadow=False)
+    for i in range(9):  # caminho de lajes da praça até o lago
         z = 296 + i * 7
-        part(f"GardenSlab{i}", (rng.uniform(3, 4.5), 0.3, rng.uniform(2.6, 3.6)), (CX + jitter(2.5), OUT_GROUND + 0.22, z), SAND_DARK, rot=(0, rng.uniform(-25, 25), 0), CastShadow=False)
-
-    def palm(x, z, h):
-        segs = 6
-        lx, lz = rng.uniform(-1, 1), rng.uniform(-1, 1)
-        top = None
-        for i in range(segs):
-            y0 = OUT_GROUND + i * h / segs
-            k = ((i + 1) / segs) ** 2 * 2.5
-            px, pz = x + lx * k, z + lz * k
-            cylinder(f"PalmTrunk{x:.0f}_{z:.0f}_{i}", 0.75 - i * 0.05, h / segs + 0.3, (px, y0 + h / segs / 2, pz), TRUNK)
-            top = (px, y0 + h / segs, pz)
-        for i in range(8):
-            a = i * 45 + rng.uniform(-10, 10)
-            ar = math.radians(a)
-            part(f"PalmLeaf{x:.0f}_{z:.0f}_{i}", (1.6, 0.15, 7), (top[0] + math.cos(ar) * 3.0, top[1] + 0.6, top[2] + math.sin(ar) * 3.0), PALM_LEAF, rot=(0, -a + 90, -28), CanCollide=False, CanQuery=False)
-        ball(f"PalmDates{x:.0f}_{z:.0f}", 0.6, (top[0] + 0.5, top[1] - 0.6, top[2] + 0.3), ("Fabric", (0.55, 0.30, 0.12)), CanCollide=False)
-
-    def cedar(x, z, h):
-        cylinder(f"CedarTrunk{x:.0f}_{z:.0f}", 0.9, h * 0.45, (x, OUT_GROUND + h * 0.225, z), TRUNK)
-        tiers = 4
-        for i in range(tiers):
-            r = 5.5 - i * 1.1
-            yy = OUT_GROUND + h * 0.35 + i * (h * 0.65 / tiers)
-            cylinder(f"CedarTier{x:.0f}_{z:.0f}_{i}", r, 1.4, (x, yy, z), CEDAR if i % 2 else CEDAR2, CanCollide=False)
-            cylinder(f"CedarTierB{x:.0f}_{z:.0f}_{i}", r * 0.75, 1.2, (x + jitter(0.6), yy + 1.2, z + jitter(0.6)), CEDAR2 if i % 2 else CEDAR, CanCollide=False)
-        ball(f"CedarTop{x:.0f}_{z:.0f}", 1.6, (x, OUT_GROUND + h, z), CEDAR, CanCollide=False)
-
-    def tamarisk(x, z):
-        cylinder(f"TamTrunk{x:.0f}_{z:.0f}", 0.4, 2.2, (x, OUT_GROUND + 1.1, z), TRUNK)
-        for i in range(4):
-            ball(f"TamBush{x:.0f}_{z:.0f}_{i}", rng.uniform(1.6, 2.6), (x + jitter(1.8), OUT_GROUND + 3 + jitter(0.8), z + jitter(1.8)), TAMARISK, CanCollide=False)
-
-    def papyrus(x, z):
-        for i in range(4):
-            hh = rng.uniform(3, 5)
-            px, pz = x + jitter(0.9), z + jitter(0.9)
-            cylinder(f"Papyrus{x:.0f}_{z:.0f}_{i}", 0.1, hh, (px, OUT_GROUND + hh / 2, pz), REED, CanCollide=False, CanQuery=False, CastShadow=False)
-            ball(f"PapyrusTop{x:.0f}_{z:.0f}_{i}", 0.5, (px, OUT_GROUND + hh + 0.2, pz), ("Grass", (0.45, 0.60, 0.25)), CanCollide=False, CanQuery=False, CastShadow=False)
+        part(f"GardenSlab{i}", (rng.uniform(3, 4.5), 0.3, rng.uniform(2.6, 3.6)), (CX + jitter(2.5), OUT_GROUND + 0.22, z), STONE_DARK, rot=(0, rng.uniform(-25, 25), 0), CastShadow=False)
 
     # (a arte tem um pinheiro em (110, 337): nada nasce a menos de 14 studs dele)
     ART_TREE = (110, 337)
+    TEMPLE_X = 50  # pirâmides em CX ± TEMPLE_X (x 33..63 e 133..163), z 301..331; escadaria para o meio
+    TEMPLE_Z = 316  # (o pinheiro da arte em (110, 337) fica 21 studs ao sul da escadaria leste)
 
     def free(x, z, r=8):
         if math.hypot(x - ART_TREE[0], z - ART_TREE[1]) < 14:
             return False
         if abs(x - CX) < 6 and z > 300:  # caminho + riacho
             return False
-        if abs(x - CX) < VEIL_W / 2 + 14 and z > POOL_Z - 16:  # lago
+        if abs(x - CX) < VEIL_W / 2 + 18 and z > POOL_Z - 20:  # lago
             return False
+        for sx in (-1, 1):  # pirâmides + escadaria (que desce 22 studs para o lado da clareira)
+            dxr = (x - (CX + sx * TEMPLE_X)) * sx  # > 0 = para fora, < 0 = para a clareira
+            if -40 - r * 0.5 < dxr < 16 + r * 0.5 and abs(z - TEMPLE_Z) < 16 + r * 0.5:
+                return False
         return True
 
-    palms = [(CX - 26, 372), (CX + 26, 372), (CX - 42, 362), (CX + 44, 360), (CX - 58, 372), (CX + 60, 370), (CX - 30, 322), (CX + 34, 318), (CX - 66, 340), (CX + 68, 336)]
-    for x, z in palms:
-        if free(x, z):
-            palm(x, z, rng.uniform(14, 21))
-    cedars = [(CX - 50, 348), (CX + 52, 346), (CX - 70, 318), (CX + 72, 314), (CX - 20, 304), (CX + 22, 302), (CX - 60, 300), (CX + 62, 298)]
-    for x, z in cedars:
-        if free(x, z):
-            cedar(x, z, rng.uniform(16, 24))
+    tops = []  # copas das árvores altas (para os cipós)
+
+    def kapok(x, z, h):
+        """sumaúma: tronco alto cinza, raízes tabulares (wedges) e copa larga em guarda-chuva."""
+        cylinder(f"KapokTrunk{x:.0f}_{z:.0f}", 1.6, h, (x, OUT_GROUND + h / 2, z), BARK_GREY)
+        cylinder(f"KapokTrunkB{x:.0f}_{z:.0f}", 2.4, 5, (x, OUT_GROUND + 2.5, z), BARK_GREY)
+        for i in range(6):
+            a = i * 60 + rng.uniform(-12, 12)
+            ar = math.radians(a)
+            ln = rng.uniform(5, 8)
+            wedge(f"KapokRoot{x:.0f}_{z:.0f}_{i}", (1.0, rng.uniform(4, 7), ln), (x + math.cos(ar) * (ln / 2 + 1.5), OUT_GROUND + 2.5, z - math.sin(ar) * (ln / 2 + 1.5)), BARK_GREY, rot=(0, a + 180, 0))
+        top = (x, OUT_GROUND + h, z)
+        for i in range(7):
+            a = i * 51 + rng.uniform(-15, 15)
+            ar = math.radians(a)
+            r = rng.uniform(6, 10)
+            bx, bz = x + math.cos(ar) * r * 0.75, z + math.sin(ar) * r * 0.75
+            beam(f"KapokBranch{x:.0f}_{z:.0f}_{i}", (x, top[1] - 2, z), (bx, top[1] + rng.uniform(0, 3), bz), 0.5, BARK_GREY, CanCollide=False, CanQuery=False)
+            ball(f"KapokCanopy{x:.0f}_{z:.0f}_{i}", rng.uniform(5, 7.5), (bx, top[1] + rng.uniform(1, 4), bz), JUNGLE if i % 2 else JUNGLE2, CanCollide=False, CanQuery=False)
+        ball(f"KapokCanopyTop{x:.0f}_{z:.0f}", 6, (x, top[1] + 5, z), JUNGLE2, CanCollide=False, CanQuery=False)
+        for i in range(3):  # bromélias no tronco
+            a = math.radians(rng.uniform(0, 360))
+            yy = OUT_GROUND + rng.uniform(6, h - 6)
+            ball(f"Bromelia{x:.0f}_{z:.0f}_{i}", 0.9, (x + math.cos(a) * 1.9, yy, z + math.sin(a) * 1.9), BROMELIA, CanCollide=False, CanQuery=False, CastShadow=False)
+            ball(f"BromeliaLeaf{x:.0f}_{z:.0f}_{i}", 1.3, (x + math.cos(a) * 2.2, yy - 0.5, z + math.sin(a) * 2.2), FERN, CanCollide=False, CanQuery=False, CastShadow=False)
+        tops.append((x, top[1] + 2, z))
+
+    def jungle_tree(x, z, h):
+        """árvore média de mata fechada: tronco escuro + copa densa de bolas."""
+        cylinder(f"JTrunk{x:.0f}_{z:.0f}", 0.9, h * 0.6, (x, OUT_GROUND + h * 0.3, z), BARK)
+        for i in range(5):
+            ball(f"JCanopy{x:.0f}_{z:.0f}_{i}", rng.uniform(3.5, 5.5), (x + jitter(3), OUT_GROUND + h * 0.6 + rng.uniform(0, 4), z + jitter(3)), JUNGLE if i % 2 else JUNGLE2, CanCollide=False, CanQuery=False)
+        tops.append((x, OUT_GROUND + h * 0.6 + 3, z))
+
+    def fern(x, z, s=1.0):
+        """samambaia gigante: folhas radiais inclinadas para cima."""
+        n = 9
+        for i in range(n):
+            a = i * 360 / n + rng.uniform(-10, 10)
+            ar = math.radians(a)
+            ln = rng.uniform(4, 6) * s
+            part(f"Fern{x:.0f}_{z:.0f}_{i}", (ln, 0.12, 1.4 * s), (x + math.cos(ar) * ln * 0.45, OUT_GROUND + 1.2 * s + ln * 0.25, z - math.sin(ar) * ln * 0.45), FERN, rot=(0, a, 32), CanCollide=False, CanQuery=False, CastShadow=False)
+
+    def banana(x, z):
+        """bananeira/heliconia: pseudocaule + folhas largas + cachos vermelhos."""
+        h = rng.uniform(5, 8)
+        cylinder(f"BananaStem{x:.0f}_{z:.0f}", 0.35, h, (x, OUT_GROUND + h / 2, z), BANANA)
+        for i in range(6):
+            a = i * 60 + rng.uniform(-15, 15)
+            ar = math.radians(a)
+            ln = rng.uniform(5, 7)
+            part(f"BananaLeaf{x:.0f}_{z:.0f}_{i}", (ln, 0.12, 2.2), (x + math.cos(ar) * ln * 0.4, OUT_GROUND + h - 0.5 + ln * 0.15, z - math.sin(ar) * ln * 0.4), BANANA, rot=(0, a, 20 - i * 3), CanCollide=False, CanQuery=False, CastShadow=False)
+        for i in range(3):
+            part(f"Heliconia{x:.0f}_{z:.0f}_{i}", (0.6, 0.35, 1.8), (x + jitter(1.2), OUT_GROUND + h - 1.5 - i * 0.7, z + jitter(1.2)), HELICONIA, rot=(0, rng.uniform(0, 360), 30), CanCollide=False, CanQuery=False, CastShadow=False)
+
+    def fallen_log(x, z):
+        a = rng.uniform(0, math.pi)
+        ln = rng.uniform(8, 13)
+        p0 = (x - math.cos(a) * ln / 2, OUT_GROUND + 0.9, z - math.sin(a) * ln / 2)
+        p1 = (x + math.cos(a) * ln / 2, OUT_GROUND + 1.4, z + math.sin(a) * ln / 2)
+        beam(f"FallenLog{x:.0f}_{z:.0f}", p0, p1, 1.0, BARK)
+        for i in range(3):
+            t = (i + 1) / 4
+            part(f"FallenLogMoss{x:.0f}_{z:.0f}_{i}", (2.2, 0.3, 1.6), (p0[0] + (p1[0] - p0[0]) * t, p0[1] + (p1[1] - p0[1]) * t + 1.0, p0[2] + (p1[2] - p0[2]) * t), MOSS, rot=(0, math.degrees(-a), 0), CanCollide=False, CanQuery=False, CastShadow=False)
+        fern(x + jitter(3), z + jitter(3), 0.7)
+
+    # árvores altas (sumaúmas) em anel em volta da clareira, árvores médias preenchendo
+    kapoks = [(CX - 34, 372), (CX + 36, 371), (CX - 68, 362), (CX + 70, 360), (CX - 28, 306), (CX + 30, 304), (CX - 72, 316), (CX + 74, 312), (CX - 60, 342), (CX + 64, 344)]
+    for x, z in kapoks:
+        if free(x, z, 10):
+            kapok(x, z, rng.uniform(26, 34))
+    placed = 0
+    for _ in range(80):
+        if placed >= 14:
+            break
+        x, z = rng.uniform(GX0 + 4, GX1 - 4), rng.uniform(GZ0 + 3, GZ1 - 8)
+        if free(x, z, 6) and all(math.hypot(x - kx, z - kz) > 9 for kx, _, kz in tops):
+            jungle_tree(x, z, rng.uniform(14, 20))
+            placed += 1
+    # cipós entre copas próximas (pendurados: passam por um ponto mais baixo no meio)
+    n_lianas = 0
+    for i, a in enumerate(tops):
+        for b in tops[i + 1:]:
+            d = math.hypot(a[0] - b[0], a[2] - b[2])
+            if 10 < d < 34 and n_lianas < 22:
+                sag = rng.uniform(4, 8)
+                mid = ((a[0] + b[0]) / 2 + jitter(2), min(a[1], b[1]) - sag, (a[2] + b[2]) / 2 + jitter(2))
+                beam(f"Liana{n_lianas}A", a, mid, 0.18, LIANA, CanCollide=False, CanQuery=False, CastShadow=False)
+                beam(f"Liana{n_lianas}B", mid, b, 0.18, LIANA, CanCollide=False, CanQuery=False, CastShadow=False)
+                n_lianas += 1
+    for i, (x, y, z) in enumerate(tops[:8]):  # cipós pendurados até perto do chão
+        ln = rng.uniform(8, 14)
+        beam(f"LianaDrop{i}", (x + jitter(4), y - 1, z + jitter(4)), (x + jitter(6), max(OUT_GROUND + 2, y - 1 - ln), z + jitter(6)), 0.15, LIANA, CanCollide=False, CanQuery=False, CastShadow=False)
+    for i in range(22):
+        x, z = rng.uniform(GX0, GX1), rng.uniform(GZ0, GZ1)
+        if free(x, z, 4):
+            fern(x, z, rng.uniform(0.8, 1.4))
     for i in range(14):
-        x, z = rng.uniform(GX0 + 6, GX1 - 6), rng.uniform(GZ0 + 4, GZ1 - 6)
-        if free(x, z):
-            tamarisk(x, z)
-    for i in range(16):
-        a = rng.uniform(0.1, math.pi - 0.1)
-        r = rng.uniform(VEIL_W / 2 + 12, VEIL_W / 2 + 18)
-        papyrus(CX + math.cos(a) * r, POOL_Z + 6 - math.sin(a) * r * 0.55)
+        x, z = rng.uniform(GX0, GX1), rng.uniform(GZ0, GZ1)
+        if free(x, z, 4):
+            banana(x, z)
     for i in range(6):
-        papyrus(CX + (-9 if i % 2 else 9) + jitter(2), POOL_Z - 16 - i * 9)
-    for i in range(40):
+        x, z = rng.uniform(GX0 + 8, GX1 - 8), rng.uniform(GZ0 + 6, GZ1 - 12)
+        if free(x, z, 7):
+            fallen_log(x, z)
+    for i in range(24):
         x, z = rng.uniform(GX0, GX1), rng.uniform(GZ0, GZ1)
-        if free(x, z):
+        if free(x, z, 2):
+            part(f"GardenMoss{i}", (rng.uniform(2, 6), 0.15, rng.uniform(2, 6)), (x, OUT_GROUND + 0.16, z), MOSS, rot=(0, rng.uniform(0, 360), 0), CanCollide=False, CanQuery=False, CastShadow=False)
+    for i in range(30):
+        x, z = rng.uniform(GX0, GX1), rng.uniform(GZ0, GZ1)
+        if free(x, z, 2):
             ball(f"GardenFlower{i}", rng.uniform(0.35, 0.6), (x, OUT_GROUND + 0.45, z), FLOWER[i % 3], CanCollide=False, CanQuery=False, CastShadow=False)
-    for i in range(18):
-        x, z = rng.uniform(GX0, GX1), rng.uniform(GZ0, GZ1)
-        if free(x, z):
-            part(f"GardenMoss{i}", (rng.uniform(2, 5), 0.15, rng.uniform(2, 5)), (x, OUT_GROUND + 0.16, z), MOSS, rot=(0, rng.uniform(0, 360), 0), CanCollide=False, CanQuery=False, CastShadow=False)
-    # ruínas de tijolo cru com azulejos de lápis (sobras de um templo antigo) e um pedestal com braseiro de cada lado
-    for sx, name in ((-1, "W"), (1, "E")):
-        x = CX + sx * 44
-        z = 330
-        for r in range(4):
-            ln = 12 - r * 1.5
-            part(f"GardenRuin{name}{r}", (ln, 1.6, 2.2), (x + sx * (12 - ln) / 2, OUT_GROUND + 0.8 + r * 1.6, z), BRICK, rot=(0, sx * 25, 0))
-        part(f"GardenRuinTile{name}", (6, 0.8, 2.3), (x - sx * 2, OUT_GROUND + 3.9, z), LAPIS, rot=(0, sx * 25, 0))
-        cylinder(f"GardenRuinCol{name}", 1.2, 7, (x - sx * 9, OUT_GROUND + 3.5, z + 6), SAND)
-        part(f"GardenRuinCap{name}", (3.2, 0.8, 3.2), (x - sx * 9, OUT_GROUND + 7.4, z + 6), SAND_DARK)
-        # pedestal-zigurate com braseiro na beira do lago
-        px, pz = CX + sx * (VEIL_W / 2 + 20), POOL_Z + 2
+    # nevoeiro baixo rente ao chão da mata
+    fog = part("JungleFog", (150, 1, 76), (CX, OUT_GROUND + 1.2, 337), SAND, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
+    emitter(fog, "Fog", (0.80, 0.88, 0.80), 10, 16, 6, (6, 9), (0.3, 0.8), 180, {"Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 1, "envelope": 0}, {"time": 0.3, "value": 0.86, "envelope": 0}, {"time": 0.7, "value": 0.86, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}}})
+
+    # --- TEMPLOS ASTECAS: pirâmide escalonada de cada lado, escadaria para a clareira ----------
+    def temple(sx, name):
+        x0, z0 = CX + sx * TEMPLE_X, TEMPLE_Z
+        tiers = [(30, 4.0), (24, 3.6), (18, 3.2), (12, 2.8), (7, 2.4)]
         yy = OUT_GROUND
-        for t, w in enumerate((8, 6, 4)):
-            part(f"GardenPedestal{name}{t}", (w, 1.4, w), (px, yy + 0.7, pz), SAND if t % 2 == 0 else SAND_DARK)
-            yy += 1.4
-        bowl = cylinder(f"GardenBrazier{name}", 1.5, 1.0, (px, yy + 0.5, pz), IRON)
-        fire(bowl, (1.0, 0.5, 0.15), 1.6, 26)
-        light(bowl, (1.0, 0.6, 0.3), 2.0, 30)
-    # vaga-lumes de noite (partículas suaves) sobre o jardim
-    glow = part("GardenFireflies", (120, 1, 60), (CX, OUT_GROUND + 4, 336), SAND, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
-    emitter(glow, "Fireflies", (1.0, 0.95, 0.5), 0.25, 0.1, 5, (4, 7), (0.4, 1.2), 180, {"LightEmission": 1})
+        for t, (w, h) in enumerate(tiers):
+            part(f"Temple{name}Tier{t}", (w, h, w), (x0, yy + h / 2, z0), STONE if t % 2 == 0 else STONE_DARK)
+            # cornija de pedra mais clara + glifos coloridos na face virada para a clareira (lado -sx)
+            part(f"Temple{name}Cornice{t}", (w + 0.6, 0.5, w + 0.6), (x0, yy + h - 0.25, z0), ("Cobblestone", (0.62, 0.62, 0.58)))
+            for g in range(int(w // 3)):
+                part(f"Temple{name}Glyph{t}_{g}", (0.15, 1.2, 1.2), (x0 - sx * (w / 2 + 0.05), yy + h / 2, z0 - w / 2 + 2 + g * 3), GLYPH[(t + g) % 3], CanCollide=False, CanQuery=False, CastShadow=False)
+            yy += h
+        top_y = yy
+        # escadaria central na face voltada para a clareira (lado -sx), com corrimões-serpente
+        total_h = top_y - OUT_GROUND
+        run = 22
+        steps = 16
+        for k in range(steps):
+            sy = OUT_GROUND + (k + 0.5) * total_h / steps
+            dx = (run - k * run / steps)
+            part(f"Temple{name}Step{k}", (run / steps + 0.4, total_h / steps, 6), (x0 - sx * (15 + dx - run / steps / 2), sy, z0), ("Cobblestone", (0.58, 0.57, 0.53)))
+        for side in (-1, 1):
+            beam(f"Temple{name}Rail{'N' if side < 0 else 'S'}", (x0 - sx * (15 + run), OUT_GROUND + 1.2, z0 + side * 3.6), (x0 - sx * 15.5, top_y + 0.8, z0 + side * 3.6), 0.45, STONE_DARK)
+            # cabeça de serpente emplumada no pé do corrimão
+            hx, hz = x0 - sx * (15 + run + 1.5), z0 + side * 3.6
+            ball(f"Temple{name}SerpentHead{'N' if side < 0 else 'S'}", 1.4, (hx, OUT_GROUND + 1.6, hz), JADE)
+            part(f"Temple{name}SerpentJaw{'N' if side < 0 else 'S'}", (2.2, 0.6, 1.4), (hx - sx * 1.2, OUT_GROUND + 1.0, hz), JADE)
+            for f in range(4):
+                part(f"Temple{name}SerpentFeather{'N' if side < 0 else 'S'}{f}", (0.3, 1.8, 0.5), (hx + sx * 0.8 + jitter(0.3), OUT_GROUND + 3.0, hz + (f - 1.5) * 0.5), FEATHER if f % 2 else FEATHER_RED, rot=(0, 0, sx * -30), CanCollide=False, CanQuery=False, CastShadow=False)
+            ball(f"Temple{name}SerpentEye{'N' if side < 0 else 'S'}", 0.3, (hx - sx * 0.9, OUT_GROUND + 2.0, hz + side * 0.9), ("Neon", (1.0, 0.3, 0.2)), CanCollide=False, CanQuery=False, CastShadow=False)
+        # santuário no topo: altar de sacrifício (laje), pilares e teto de pedra, braseiros
+        part(f"Temple{name}TopFloor", (8, 0.4, 8), (x0, top_y + 0.2, z0), ("Cobblestone", (0.62, 0.62, 0.58)))
+        part(f"Temple{name}Altar", (3.2, 1.2, 1.8), (x0, top_y + 1.0, z0), ("Slate", (0.36, 0.34, 0.36)))
+        part(f"Temple{name}AltarStain", (2.4, 0.06, 1.2), (x0, top_y + 1.63, z0), ("SmoothPlastic", (0.45, 0.10, 0.10)), CanCollide=False, CanQuery=False, CastShadow=False)
+        for cx_, cz_ in ((-2.8, -2.8), (2.8, -2.8), (-2.8, 2.8), (2.8, 2.8)):
+            part(f"Temple{name}Pillar{cx_:+.0f}{cz_:+.0f}", (1.0, 5, 1.0), (x0 + cx_, top_y + 2.9, z0 + cz_), STONE_DARK)
+        part(f"Temple{name}Roof", (8.4, 0.8, 8.4), (x0, top_y + 5.8, z0), STONE)
+        part(f"Temple{name}RoofCrest", (8.8, 1.2, 1.2), (x0, top_y + 6.8, z0), STONE_DARK)
+        for g in range(4):
+            part(f"Temple{name}RoofGlyph{g}", (1.4, 0.9, 0.15), (x0 - 3 + g * 2, top_y + 6.8, z0 - sx * 0.7), GLYPH[g % 3], CanCollide=False, CanQuery=False, CastShadow=False)
+        for side in (-1, 1):
+            bowl = cylinder(f"Temple{name}Brazier{'N' if side < 0 else 'S'}", 0.9, 0.8, (x0 - sx * 3.2, top_y + 0.8, z0 + side * 3.2), IRON)
+            fire(bowl, (1.0, 0.5, 0.15), 1.4, 22)
+            light(bowl, (1.0, 0.6, 0.3), 1.8, 26)
+        # a mata tomou a pirâmide: musgo nos degraus, raízes por cima, samambaias na base
+        for i in range(8):
+            t = rng.randrange(0, 4)
+            w = tiers[t][0]
+            side = rng.choice((-1, 1))
+            yy_ = OUT_GROUND + sum(hh for _, hh in tiers[: t + 1])
+            part(f"Temple{name}Moss{i}", (rng.uniform(2, 5), 0.2, rng.uniform(1.5, 3)), (x0 + jitter(w / 2 - 2), yy_ + 0.35, z0 + side * (w / 2 - 1.2)), MOSS, rot=(0, rng.uniform(0, 360), 0), CanCollide=False, CanQuery=False, CastShadow=False)
+        for i in range(3):
+            a = math.radians(rng.uniform(20, 160) + (180 if sx > 0 else 0))
+            p0 = (x0 + sx * 3, top_y - 4 - i * 3, z0 + math.sin(a) * 6)
+            p1 = (x0 + sx * (15 + 4 + i * 3), OUT_GROUND + 0.4, z0 + math.sin(a) * (14 + i * 3))
+            beam(f"Temple{name}Root{i}", p0, p1, 0.5, BARK_GREY, CanCollide=False)
+        for i in range(4):
+            fern(x0 + sx * (17 + jitter(3)), z0 + (i - 1.5) * 8 + jitter(2), rng.uniform(0.9, 1.3))
+
+    temple(-1, "W")
+    temple(1, "E")
+    # ruínas tomadas pela mata (muro caído com glifos, cabeça de serpente tombada, coluna quebrada)
+    for sx, name in ((-1, "W"), (1, "E")):
+        x, z = CX + sx * 40, 358
+        if free(x, z, 6):
+            for r in range(3):
+                ln = 10 - r * 2.5
+                part(f"Ruin{name}Wall{r}", (ln, 1.5, 1.6), (x + sx * (10 - ln) / 2, OUT_GROUND + 0.75 + r * 1.5, z), STONE if r % 2 else STONE_DARK, rot=(0, sx * 30, 0))
+            part(f"Ruin{name}Glyph", (3, 0.9, 1.7), (x - sx * 1.5, OUT_GROUND + 2.3, z), GLYPH[1], rot=(0, sx * 30, 0))
+            part(f"Ruin{name}Moss", (4, 0.2, 2), (x, OUT_GROUND + 4.6, z), MOSS, rot=(0, sx * 30, 0), CanCollide=False, CanQuery=False, CastShadow=False)
+            ball(f"Ruin{name}SerpentHead", 1.6, (x + sx * 7, OUT_GROUND + 1.2, z + 5), JADE, Orientation=[40, sx * 60, 20])
+            cylinder(f"Ruin{name}Column", 1.1, 4.5, (x - sx * 7, OUT_GROUND + 2.25, z + 4), STONE_DARK)
+            part(f"Ruin{name}ColumnTop", (2.6, 1.6, 2.6), (x - sx * 7 + 3, OUT_GROUND + 0.8, z + 8), STONE_DARK, rot=(0, 25, 35))
+            fern(x + jitter(3), z + 6 + jitter(2), 0.9)
+    # vaga-lumes de noite (partículas suaves) sobre a mata
+    glow = part("GardenFireflies", (130, 1, 70), (CX, OUT_GROUND + 4, 336), SAND, Transparency=1, CanCollide=False, CanQuery=False, CastShadow=False)
+    emitter(glow, "Fireflies", (1.0, 0.95, 0.5), 0.25, 0.1, 6, (4, 7), (0.4, 1.2), 180, {"LightEmission": 1})
