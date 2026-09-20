@@ -248,6 +248,16 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 FEITOS em leva autônoma; próximo = dono testa TUDO → C2/C3)
 
 ### ONDE PARAMOS (ler primeiro)
+**25/09 (noite, dono de volta) — HALL DE ENTRADA da Taberna FEITO**: `tools/montar_hall.luau` (roda via MCP; idempotente;
+DEVOLVE os móveis à pilha antes de recriar — nunca apagar `Taberna.Hall` à mão sem tirar `Hall.Moveis` de dentro) monta
+`Workspace.Taberna.Hall` na sala do `cav` a oeste do salão (x 274..325, z 78..110): piso/tapete/vigas, batentes + placa
+"TABERNA" + lanternas, PORTAS DE SALOON (`Entrada.PortaSaloon`, asas `AsaSul`/`AsaNorte` + `Gatilho`), tochas, e os 50
+móveis da pilha `Moveis taverna` reaproveitados (nada apagado). `SaloonDoorService` (Rojo) abre/fecha as asas (testado
+no Play: abre para o lado oposto de quem vem, balança ao fechar) e põe prompt "Trancada" na porta dos fundos (norte).
+Incidente: um rerun apagou os 50 móveis junto com o Hall antigo → restaurados do backup `workspace_dono_2026-09-25b.jsonl`
+via rbxm temporário no Rojo (`restaurar_workspace.luau` aceita nome da pasta no 3º arg). O dono SALVA o place.
+Para o dono conferir amanhã: orientação dos móveis (frente/costas), a "haste" fina vista perto do tapete (luminária?),
+tochas, e ajustar o que quiser no próprio Studio (não rodar o montar_hall de novo depois de editar à mão).
 **D3 FEITO (25/09, sem teste)** — TORNEIO "ÚLTIMO DE PÉ" por cima do mapa livre: `TournamentConfig` (solo/duo/clan,
 inscrição 90 s, contagem 10 s, máx. 10 min = empate; prêmio padrão 1500 pontos + 300 evento + 800 XP + cosmético
 opcional), `TournamentService` (idle→signup→countdown→running→fim; atributos `Tournament`/`TournamentTeam` no Player;

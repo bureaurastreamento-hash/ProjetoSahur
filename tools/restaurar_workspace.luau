@@ -35,7 +35,7 @@ local function cf(t)
 end
 
 local root = Instance.new("Folder")
-root.Name = "WorkspaceDono"
+root.Name = process.args[3] or "WorkspaceDono"
 local byId = { [0] = root }
 local perdidas, total = 0, 0
 
