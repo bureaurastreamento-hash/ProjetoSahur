@@ -4,7 +4,8 @@
 	Câmera e cartelas do trailer (TrailerService manda os eventos por NotifyTrailer):
 	  begin              esconde HUD/topbar, barras pretas, câmera Scriptable
 	  shot { from, to, t, fov?, ease?, look? }             dolly de CFrame a CFrame (look = nome de Model a olhar)
-	  shot { orbit, radius, height, from, to, t, fov? }    órbita em volta do Model `orbit` (graus from→to)
+	  shot { orbit, radius, height, from, to, t, fov? }    órbita em volta do Model `orbit` (nome) OU de um GRUPO
+	                                                       (lista de nomes): centro = média, raio cresce para caber todos
 	  title { text, seconds, sub? }                        cartela
 	  fade { seconds }                                     escurece
 	  end                                                  devolve tudo
@@ -113,6 +114,29 @@ local function modelPos(m: Model?): Vector3?
 	return if root then root.Position else m:GetPivot().Position
 end
 
+--- Centro e "espalhamento" (maior distância ao centro) de um grupo de modelos pelo nome; nil se nenhum existe.
+local function groupCenter(names: { string }): (Vector3?, number)
+	local sum, n = Vector3.zero, 0
+	local positions = {}
+	for _, name in names do
+		local p = modelPos(findModel(name))
+		if p then
+			sum += p
+			n += 1
+			table.insert(positions, p)
+		end
+	end
+	if n == 0 then
+		return nil, 0
+	end
+	local center = sum / n
+	local spread = 0
+	for _, p in positions do
+		spread = math.max(spread, (Vector3.new(p.X, 0, p.Z) - Vector3.new(center.X, 0, center.Z)).Magnitude)
+	end
+	return center, spread
+end
+
 local function onShot(data: { [string]: any })
 	local camera = Workspace.CurrentCamera
 	if not camera or not active then
@@ -126,17 +150,29 @@ local function onShot(data: { [string]: any })
 	camera.CameraType = Enum.CameraType.Scriptable
 	camera.FieldOfView = fov
 	local lookName = data.look
+	local orbitNames: { string }? = if typeof(data.orbit) == "string" then { data.orbit } elseif typeof(data.orbit) == "table" then data.orbit else nil
+	local smoothCenter: Vector3? = nil
+	local smoothRadius: number? = nil
 	shotConn = RunService.RenderStepped:Connect(function()
 		local alpha = math.clamp((os.clock() - t0) / dur, 0, 1)
 		local a = TweenService:GetValue(alpha, style, Enum.EasingDirection.InOut)
 		local cf: CFrame
-		if data.orbit then
-			local center = modelPos(findModel(data.orbit)) or Vector3.zero
+		if orbitNames then
+			-- órbita em volta de um modelo ou de um GRUPO: centro suavizado; raio cresce para caber todo mundo
+			-- (dono, 2026-09-23: "saíram da tela da área da câmera")
+			local found, spread = groupCenter(orbitNames)
+			local center: Vector3 = found or smoothCenter or Vector3.zero
+			local baseRadius = tonumber(data.radius) or 12
+			local radius = math.max(baseRadius, spread * 1.7 + 6)
+			local prev = smoothCenter
+			smoothCenter = if prev then prev:Lerp(center, 0.08) else center
+			smoothRadius = if smoothRadius then smoothRadius + (radius - smoothRadius) * 0.05 else radius
+			local c: Vector3 = smoothCenter :: Vector3
+			local r: number = smoothRadius :: number
 			local ang = math.rad((data.from or 0) + ((data.to or 360) - (data.from or 0)) * a)
-			local radius = tonumber(data.radius) or 12
-			local height = tonumber(data.height) or 3
-			local pos = center + Vector3.new(math.cos(ang) * radius, height, math.sin(ang) * radius)
-			cf = CFrame.lookAt(pos, center + Vector3.new(0, 2, 0))
+			local height = (tonumber(data.height) or 3) * math.max(1, r / baseRadius)
+			local pos = c + Vector3.new(math.cos(ang) * r, height, math.sin(ang) * r)
+			cf = CFrame.lookAt(pos, c + Vector3.new(0, 2, 0))
 		else
 			local from: CFrame = data.from
 			local to: CFrame = data.to

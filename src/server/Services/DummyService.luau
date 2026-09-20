@@ -89,6 +89,8 @@ local function buildRig(index: number): Model?
 		humanoid.BreakJointsOnDeath = false
 		humanoid.WalkSpeed = 0
 		humanoid.JumpPower = 0
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false) -- nunca deita "duro" (ver BotService)
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	end
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then

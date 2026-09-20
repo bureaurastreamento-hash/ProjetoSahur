@@ -208,6 +208,8 @@ local function buildBoss(): (Model?, Humanoid?, BasePart?)
 	h.WalkSpeed = BossConfig.WalkSpeed
 	h.JumpPower = 0
 	h.AutoRotate = true
+	h:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false) -- nunca deita "duro" (ver BotService)
+	h:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	CollectionService:AddTag(m, "Combatant")
 	return m, h, rt
 end

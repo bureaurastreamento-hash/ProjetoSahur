@@ -175,6 +175,8 @@ local function buildRig(): (Model?, Humanoid?, BasePart?)
 	humanoid.WalkSpeed = CFG.WalkSpeed
 	humanoid.JumpPower = 0
 	humanoid.AutoRotate = true
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false) -- nunca deita "duro" (ver BotService)
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			d.Anchored = false

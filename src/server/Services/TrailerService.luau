@@ -214,12 +214,14 @@ scenes.brawl = function(myToken)
 		local at = S + Vector3.new(math.cos(ang) * 9, 0, math.sin(ang) * 9)
 		actor(("Briga %d"):format(i), id, at, S, "aggressive", if i % 2 == 0 then "A" else "B")
 	end
-	shot({ from = CFrame.lookAt(S + Vector3.new(-260, 140, -420), S + Vector3.new(0, 10, 0)), to = CFrame.lookAt(S + Vector3.new(-26, 14, -40), S + Vector3.new(0, 4, 0)), t = 8, fov = 62, ease = "Sine" })
+	local names = { "Briga 1", "Briga 2", "Briga 3", "Briga 4" }
+	shot({ from = CFrame.lookAt(S + Vector3.new(-260, 140, -420), S + Vector3.new(0, 10, 0)), to = CFrame.lookAt(S + Vector3.new(-26, 14, -40), S + Vector3.new(0, 4, 0)), t = 6, fov = 62, ease = "Sine" })
 	title("SAHUR", 4.5, "battlegrounds")
-	if not wait_(8, myToken) then
+	if not wait_(6, myToken) then
 		return false
 	end
-	shot({ from = CFrame.lookAt(S + Vector3.new(-26, 14, -40), S + Vector3.new(0, 4, 0)), to = CFrame.lookAt(S + Vector3.new(30, 9, -22), S + Vector3.new(0, 4, 0)), t = 6, fov = 60, ease = "Sine" })
+	-- órbita do GRUPO: o raio cresce para caber quem se espalhar
+	shot({ orbit = names, radius = 16, height = 6, from = 220, to = 300, t = 6, fov = 60 })
 	if not wait_(6, myToken) then
 		return false
 	end
@@ -232,7 +234,7 @@ scenes.combo = function(myToken)
 	local S = stage()
 	local a = actor("A", "Jotaro", S + Vector3.new(-4, 0, 0), S + Vector3.new(4, 0, 0), "aggressive", "A")
 	local b = actor("B", "Swift", S + Vector3.new(4, 0, 0), S + Vector3.new(-4, 0, 0), "idle", "B")
-	shot({ orbit = "A", radius = 13, height = 3.5, from = 200, to = 290, t = 7, fov = 58 })
+	shot({ orbit = { "A", "B" }, radius = 12, height = 3.5, from = 200, to = 290, t = 7, fov = 58 })
 	title("COMBO", 2.5, "4 socos · o último derruba")
 	if not wait_(3.2, myToken) then
 		return false
@@ -346,7 +348,7 @@ scenes.abilities = function(myToken, arg)
 		if not a or not b then
 			return false
 		end
-		shot({ orbit = "A", radius = 16, height = 5, from = 210, to = 300, t = 9, fov = 56 })
+		shot({ orbit = { "A", "B" }, radius = 14, height = 5, from = 210, to = 300, t = 9, fov = 56 })
 		local def = CharacterDefs.Get(id)
 		for slot = 1, 3 do
 			local ability = def and def.Abilities[slot]
@@ -407,7 +409,7 @@ scenes.ult = function(myToken, arg)
 		put(b, S + Vector3.new(6, 0, 0), S + Vector3.new(-2, 0, 0))
 	end
 	put(a, S + Vector3.new(-2, 0, 0), S + Vector3.new(6, 0, 0))
-	shot({ orbit = "A", radius = 14, height = 4.5, from = 220, to = 300, t = 5, fov = 56 })
+	shot({ orbit = { "A", "B" }, radius = 13, height = 4.5, from = 220, to = 300, t = 5, fov = 56 })
 	local def = CharacterDefs.Get(id)
 	local abilities: { CharacterDefs.AbilityDef } = if def then def.Abilities else {}
 	for slot, ability in abilities do
@@ -451,7 +453,7 @@ scenes.boss = function(myToken)
 		return false
 	end
 	local bossModel = Workspace:FindFirstChild(BossConfig.Name)
-	shot({ orbit = if bossModel then bossModel.Name else "Caçador 1", radius = 30, height = 7, from = 160, to = 280, t = 11, fov = 60 })
+	shot({ orbit = { if bossModel then bossModel.Name else "Caçador 1", "Caçador 1", "Caçador 2", "Caçador 3" }, radius = 26, height = 7, from = 160, to = 280, t = 11, fov = 60 })
 	title("BIG C.H.O.P.", 3.5, "loot por ranking de dano")
 	if not wait_(11, myToken) then
 		return false

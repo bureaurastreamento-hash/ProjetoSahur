@@ -153,6 +153,10 @@ local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, 
 	humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOn
 	humanoid.BreakJointsOnDeath = false
 	humanoid.AutoRotate = true
+	-- Nunca cai "duro" (estado FallingDown/Ragdoll do Humanoid ao levar empurrão forte: o boneco deita rígido e
+	-- fica preso — dono, 2026-09-23); o ragdoll de combate é o RagdollRig, não este estado
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			d.Anchored = false
