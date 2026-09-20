@@ -315,6 +315,94 @@ Taberna.
 
 ## Sessão anterior (2026-09-20 — tudo commitado e no GitHub)
 
+### PLANOS (2026-09-21, pedido do dono: "planeja, sem ação ainda") — NOVA LISTA, em ordem sugerida
+(Studio reaberto + Rojo reconectado em 2026-09-21: conferido via MCP que NADA da leva foi desfeito.)
+
+**A. Lista de COMBATE do dono (bugs + ajustes de feeling; cada item = 1 mudança testável)**
+1. Parry só na janela certa: hoje dá para parryar no MEIO do M1 do inimigo (rever `CombatService.ResolveHit`:
+   parry deve exigir block iniciado ANTES do wind-up do golpe, `ParryWindow` contado do início do block; golpe
+   já em execução não deve ser parryável depois do HitDelay).
+2. Block não segura habilidades de AGARRÃO: defendendo, o inimigo ainda agarra (decidir: agarrão quebra block
+   — como JJS — ou block nega o grab. Dono: "consegue usar habilidades em mim, as de grab" = tratar como bug:
+   `AbilityService` Grab deve respeitar `CombatService.IsBlocking` frontal, ou ao menos aplicar guard damage).
+3. Bruno Gollini (Swift) tem só 1 dash: o `DashOverride` (Piscar) não divide lateral × frente/trás como o dash
+   universal (`MovementService`: cooldowns separados). Aplicar a mesma divisão ao Blink.
+4. Socos OP em combo: sem delay real depois do 4º M1 (`ComboEndCooldown` precisa ser sentido — hoje o cliente
+   desconta HitDelay e a previsão deixa emendar). Rever `nextAttackAt` e travar input local até acabar.
+5. Ult carrega rápido demais (mesmo depois de 4/2): baixar `CharacterDefs.Energy.GainOnHitDealt/Taken` ou
+   trocar para carga por TEMPO em combate + dano (ex.: 2/1 + 1/s lutando).
+6. Dentro da Cúpula do Tempo do Bruno: quem está lento AINDA dá dash (na velocidade normal) e ataca. Aplicar
+   `TimeSlow` no `MovementService` (dash speed/cooldown ×) e no `CombatService.onRequestAttack` (bloquear ou
+   escalar `nextAttackAt` — hoje só escala o cooldown, o soco sai).
+7. Dá para bater em quem está DEITADO/ragdoll: `ResolveHit` ignorar (ou dar dano reduzido sem knockback) alvo
+   com `Ragdolled = true`, exceto finisher/agarrão especial (decidir com o dono).
+8. Dash frontal jogou o alvo longe SEM ragdoll: provável colisão (o dash empurra o corpo fisicamente). Dash
+   universal não deve empurrar (grupo de colisão temporário `Dashing` sem colidir com jogadores) — dano/
+   knockback só pelo `Effect.Dash` de habilidade.
+9. Parry deve dar VANTAGEM: quem levou parry fica X ms sem atacar/usar habilidade (`ParryStun` já existe —
+   conferir se vale para habilidades também: `AbilityService` deve checar `IsStunned` no request) + o parryador
+   ganha janela de crítico (já tem).
+10. Combos difíceis de montar: reformular o M1 para favorecer sequência — hitstun maior que o intervalo entre
+    socos (vítima não sai do 1º ao 3º), 3º golpe puxa/levanta, 4º ragdoll; dash lateral perto do FIM permite 1
+    soco que emenda no M1 (até 3 vezes) para o combo de ragdoll (regra do dono, item 12).
+11. Boss morto = ragdoll "sensível" que interage com o cenário e sai voando: ao morrer, congelar o rig do boss
+    (ancorar as peças / `RagdollService` sem colisão com cenário / massa alta) ou sumir em fade.
+12. AÇÃO INDIVIDUAL: no meio do soco não dá dash, no meio do dash não dá soco — EXCETO no fim do dash LATERAL,
+    onde sai 1 soco (`CombatService`: lock `actionUntil` compartilhado entre soco/dash/habilidade; cliente
+    espelha). Combo continua com M1 até 3 vezes → ragdoll.
+13. Trocar personagem: hoje quem ATACA ainda troca (só quem apanha é travado). `SwapOutOfCombatSeconds` deve
+    contar dano DADO também (`CharacterService`: marcar `lastCombatAt` no atacante em `ResolveHit`).
+14. Teleporte (Piscar do Bruno, Warp do Overlord, qualquer `Teleport`) atravessa PAREDE e cai no void: fazer
+    raycast do ponto de origem ao destino (só atravessa PERSONAGEM: filtro por `Players`/Combatant) e parar
+    antes do primeiro obstáculo; garantir chão (raycast para baixo) antes de mover.
+15. Kill streak não funciona: a partir de 10 kills o jogador fica DOURADO (contorno/aura) com COROA na cabeça
+    (`ProgressionService`/`HealthService` streak → atributo `KillStreak`; `FX.SetOutline` dourado + acessório
+    coroa por código; some ao morrer).
+16. Clã: membros veem os outros membros do mesmo clã ATRAVÉS das coisas (Highlight `AlwaysOnTop` na cor do clã),
+    com opção para desligar em Configurações (`Controls.Settings.ClanHighlight`).
+
+**B. Cachoeira + jardim v2 ("Amazônia antiga + templos astecas")** — `tools/arena_santuario.py`
+- Vegetação densa e alta: samambaias gigantes, bananeiras/heliconias (folhas largas), cipós entre árvores,
+  árvores com raízes tabulares (sumaúma), bromélias, orquídeas, troncos caídos com musgo, nevoeiro baixo; menos
+  "jardim", mais mata fechada em volta do lago com clareira.
+- Templos astecas (pirâmides escalonadas de pedra cinza com escadaria central e serpentes-emplumadas nos
+  corrimãos, altar de sacrifício no topo, glifos) em volta da cachoeira — 1 grande de cada lado + ruínas
+  tomadas pela mata. A câmara interna pode ganhar o mesmo tom (glifos/serpentes) para combinar.
+- CACHOEIRA mais "cheia" e OPACA: várias camadas (lençol Glass opaco + espuma branca em Neon/ForceField +
+  quedas escalonadas em 2–3 patamares de rocha), spray largo na base, rochas molhadas (Reflectance), arco-íris
+  leve, som de verdade. Véu na entrada ainda atravessável.
+- **BUG: barulho de BUZINA perto da cachoeira** = o id `9120386436` (chutado) não é cachoeira. Trocar por um id
+  público de água/cachoeira testado com o fluxo "Testar sons" (ou subir um do grupo com `tools/subir_audios.py`)
+  em `arena_santuario.py` (parte `CascadeMist`, som `Cachoeira`).
+
+**C. Construções JJS MAIORES e "enteráveis"** — `tools/arena_construcoes.py`
+- Casas com 2 andares (pé-direito 10–12), interior real (piso, escada interna, mesa/vasos), portas 6×9 e
+  janelas largas, telhado acessível por escada externa; pátios murados; um mercado coberto; o zigurate passa a
+  ter câmara interna e rampa até o topo (área de luta em altura).
+- Tijolos maiores (6×3×3) para manter ~2,5k peças com o dobro de volume; miolo dos andares (lajes) também
+  destrutível em chunks; regra opcional de DESABAMENTO: tijolo sem apoio embaixo cai (limitado por golpe).
+- Casca "quebra em pedaços grandes" nos ataques pesados (finisher/ult tira 2× mais tijolos: `MaxPerHit` por
+  tipo de golpe).
+
+**D. Menu DEV mais prático (ADM primeiro)** — `DevController`/`AdminService`/`gerar_devgui.py`
+- Ordem nova: 1) ADM (teleportar até jogador / trazer jogador / entrar no servidor / assistir / kick / ban
+  temporário / denúncias / dar item-pontos-personagem) com campo de jogador único no topo (lista clicável);
+  2) MAPA (boss: invocar x1/x3, matar; flecha: dar/tirar; dia/noite; restaurar cenário destrutível
+  `DestructionService.RestoreAll`); 3) TESTE (vida/energia cheias, god, velocidade, sons dos packs, F7, trailer,
+  ResetData). Menos botões por tela, busca por nome, ações perigosas com confirmação de 1 clique.
+
+**E. WORKSHOP DE MODS (servidor privado) + QUESTS** — anotado (dono 2026-09-20/21), design:
+- Mods: os jogadores criam (kit oficial: template de mod = pasta com `ModConfig` + assets permitidos: mapa/
+  cosméticos/regras de sala/eventos), mandam pela comunidade no DISCORD, a equipe analisa e publica; mods
+  aprovados ficam num catálogo `ModsConfig` (nome, autor, versão, ativos por sala) que o DONO do servidor
+  privado escolhe ao criar a sala (`PrivateServerId`). Servidor sempre carrega só o que está aprovado no
+  código/assets (nada vem do cliente). Créditos ao autor na tela do mod.
+- Quests: uma HISTÓRIA a ser seguida (capítulos com objetivos: falar com NPC, achar lugar, vencer X, matar
+  boss, ritual) com progresso no perfil (`profile.quests`), NPCs de quest (um por developer, ideia do dono),
+  mural na taberna com a etapa atual e recompensas (pontos de evento, cosméticos exclusivos, personagem).
+
+**F. Boss x3 da flecha nasce no CENTRO e anda livre** — plano detalhado logo abaixo (PRÓXIMA TAREFA de 2026-09-20).
+
 ### PRÓXIMA TAREFA (pedido do dono ao sair, 2026-09-20) — só PLANEJADA, nada feito no código
 **Boss x3 invocado pelo jogador (F no altar com a flecha) deve nascer no MAPA, quase no centro, perto dos
 spawns, e ANDAR LIVREMENTE pelo mapa — sem lugar fixo para ficar/voltar.** Hoje `BossService.summon` põe o
