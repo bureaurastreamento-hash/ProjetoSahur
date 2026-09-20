@@ -66,7 +66,7 @@ local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetC
 local CONFIRM_SECONDS = 3
 local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
-local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName" }
+local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName", "TrailerScene" }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 
 local localPlayer = Players.LocalPlayer

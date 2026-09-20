@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local BossRigs = require(Modules:WaitForChild("BossRigs"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
@@ -38,13 +39,13 @@ type Fight = {
 	humanoid: Humanoid,
 	root: BasePart,
 	summoner: Player,
-	damageBy: { [Player]: number },
+	damageBy: { [Combatant.Fighter]: number }, -- jogadores e bots (loot só para Player)
 	phase: number,
 	cooldowns: { [string]: number }, -- os.clock() em que o golpe libera
 	lastSeenPlayer: number,
 	finished: boolean,
 	power: number, -- multiplicador de força/recompensa (1 = normal; flecha no altar = BossConfig.StrongPower)
-	target: Player?,
+	target: Combatant.Fighter?,
 	targetChosenAt: number,
 	recentHits: { { t: number, amount: number } }, -- golpes recebidos (janela do enrage)
 	enragedUntil: number,
@@ -153,10 +154,11 @@ local function roamSpawnPosition(): Vector3?
 end
 
 --- Jogadores vivos e aptos dentro da arena, do mais perto ao mais longe do ponto.
-local function playersNear(from: Vector3, radius: number): { { player: Player, root: BasePart, dist: number } }
+-- jogadores E bots (Combatant.All): o boss caça e bate em bots do mesmo jeito (trailer/testes)
+local function playersNear(from: Vector3, radius: number): { { player: Combatant.Fighter, root: BasePart, dist: number } }
 	local out = {}
-	for _, player in Players:GetPlayers() do
-		local character = player.Character
+	for _, player in Combatant.All() do
+		local character = Combatant.CharacterOf(player)
 		local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 		if root and HealthService.IsAlive(character) and HealthService.CanFight(player) and player:GetAttribute("InMatch") ~= true then
 			local dist = (root.Position - from).Magnitude
@@ -240,7 +242,7 @@ local function hitAround(f: Fight, center: Vector3, attack: BossConfig.Attack)
 		damage *= BossConfig.Enrage.DamageScale
 	end
 	for _, victim in Hitbox.AroundPoint(f.model, center, attack.Radius, 12) do
-		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		local victimPlayer = Combatant.Of(victim) -- jogador ou bot
 		if victimPlayer then
 			local dealt = CombatService.ResolveNpcHit(f.model, victim, damage, attack.Knockback)
 			if dealt > 0 and typeof(attack.StunSeconds) == "number" then
@@ -358,7 +360,8 @@ end
 
 --- Prioridade: quem mais bateu no boss, perto e sem bloquear. Reavalia a cada RetargetSeconds
 --- ou quando o alvo some/morre/sai da arena.
-local function pickTarget(f: Fight, near: { { player: Player, root: BasePart, dist: number } }, center: Vector3, radius: number): { player: Player, root: BasePart, dist: number }?
+type Near = { player: Combatant.Fighter, root: BasePart, dist: number }
+local function pickTarget(f: Fight, near: { Near }, center: Vector3, radius: number): Near?
 	local best, bestScore = nil, -math.huge
 	for _, entry in near do
 		if (entry.root.Position - center).Magnitude > radius then
@@ -386,7 +389,14 @@ local function rewardAndFinish(f: Fight)
 	-- loot por posição no ranking de dano (BossConfig.Loot / BossLootService)
 	local rewards, top = {}, nil
 	if BossLootService then
-		rewards, top = BossLootService.Distribute(f.damageBy, nil, f.power or 1)
+		local byPlayer: { [Player]: number } = {} -- bots não recebem loot
+		for fighter, amount in f.damageBy do
+			local asPlayer = Combatant.PlayerOf(fighter)
+			if asPlayer then
+				byPlayer[asPlayer] = amount
+			end
+		end
+		rewards, top = BossLootService.Distribute(byPlayer, nil, f.power or 1)
 	end
 	Log.debug(("[BossService] boss derrotado; %d participante(s)"):format(#rewards))
 	broadcast("defeated", { rewards = rewards, top = if top then top.Name else nil })

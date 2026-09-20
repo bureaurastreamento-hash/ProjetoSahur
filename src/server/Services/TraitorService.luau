@@ -28,6 +28,7 @@ local QuestConfig = require(Modules:WaitForChild("QuestConfig"))
 local TeamConfig = require(Modules:WaitForChild("TeamConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
@@ -92,10 +93,10 @@ local function toastAll(title: string, text: string)
 	end
 end
 
-local function playersNear(from: Vector3, radius: number): { { player: Player, root: BasePart, dist: number } }
+local function playersNear(from: Vector3, radius: number): { { player: Combatant.Fighter, root: BasePart, dist: number } }
 	local list = {}
-	for _, player in Players:GetPlayers() do
-		local character = player.Character
+	for _, player in Combatant.All() do -- jogadores e bots
+		local character = Combatant.CharacterOf(player)
 		local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 		if root and HealthService.IsAlive(character) then
 			local dist = (root.Position - from).Magnitude
@@ -262,7 +263,7 @@ local function burst(f: Fight)
 	end
 	local center = f.root.Position
 	for _, victim in Hitbox.AroundPoint(f.model, center, b.Radius, 12) do
-		if Players:GetPlayerFromCharacter(victim) then
+		if Combatant.Of(victim) then -- jogador ou bot
 			CombatService.ResolveNpcHit(f.model, victim, b.Damage, b.Knockback)
 		end
 	end

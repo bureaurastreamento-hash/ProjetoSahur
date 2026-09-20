@@ -23,7 +23,7 @@
 	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
 	  DespawnBoss, RestoreDestructibles, TakeArrow, SummonTraitor/KillTraitor/DespawnTraitor (capítulo final),
 	  SetQuestChapter {amount} (por alvo), SpawnBotPassive/Aggressive/Idle {id}, BotsPassive/Aggressive/Idle,
-	  BotsFill, ClearBots (BotService: bots com o combate real)
+	  BotsFill, ClearBots (BotService: bots com o combate real), Trailer (tudo), TrailerScene {text} (uma cena)
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
@@ -936,8 +936,19 @@ global.Trailer = function()
 	if not TrailerService then
 		return false, "TrailerService não carregou"
 	end
-	local ok, msg = TrailerService.Run()
+	local ok, msg = TrailerService.Run("all")
 	return ok, msg
+end
+
+--- Uma cena só (caixa Message): "combo" | "parry" | "dash" | "abilities [id]" | "ult [id]" | "boss" | "brawl";
+--- "me" no fim = você fica na cena (não é estacionado).
+global.TrailerScene = function(_, args)
+	local TrailerService = lazyRequire("TrailerService")
+	if not TrailerService then
+		return false, "TrailerService não carregou"
+	end
+	local text = if typeof(args) == "table" and typeof(args.text) == "string" then args.text else ""
+	return TrailerService.Run(if text ~= "" then text else "combo")
 end
 
 global.TrailerStop = function()

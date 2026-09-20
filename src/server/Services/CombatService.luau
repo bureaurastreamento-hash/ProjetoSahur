@@ -635,6 +635,9 @@ function CombatService.NotifyNpcBlock(character: Model, active: boolean, player:
 	end
 end
 
+--- Gancho: um NPC (boss/traidor/boneco) acertou `victim` (BotService: bot passivo revida contra o NPC).
+CombatService.NpcHitHook = nil :: ((attackerChar: Model, victim: Model, dealt: number) -> ())?
+
 --- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
 function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: Knockback?): number
 	local victimPlayer = Combatant.Of(victim) -- Player ou bot
@@ -654,6 +657,10 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	end
 	if dealt > 0 and victimPlayer and AbilityService then
 		AbilityService.OnHitTaken(victimPlayer)
+	end
+	local hook = CombatService.NpcHitHook
+	if dealt > 0 and hook then
+		hook(attackerChar, victim, dealt)
 	end
 	if kind == "hit" and dealt > 0 and victimPlayer and HealthService.IsAlive(victim) then
 		CombatService.HitStun(victimPlayer)

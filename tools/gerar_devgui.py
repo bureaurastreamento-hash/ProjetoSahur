@@ -227,7 +227,8 @@ teste.box_row("DamageMult", "dano x (1)", [("SetDamageMult", "Definir", None)])
 teste.box_row("Streak", "kill streak (10 = coroa)", [("SetStreak", "Definir", None), ("ResetCosmetics", "Zerar cosméticos", RED)])
 teste.gap()
 teste.section("ToolsSection", "FERRAMENTAS")
-teste.row([("PreviewVfx", "Preview VFX (F7)", GREEN, 1), ("TestSounds", "Testar sons dos packs", None, 1), ("Trailer", "TRAILER (~70 s)", GREEN, 1), ("TrailerStop", "Parar trailer", RED, 1)])
+teste.row([("PreviewVfx", "Preview VFX (F7)", GREEN, 1), ("TestSounds", "Testar sons dos packs", None, 1), ("Trailer", "TRAILER (~95 s)", GREEN, 1), ("TrailerStop", "Parar trailer", RED, 1)])
+teste.row([("TrailerScene", "CENA (caixa Mensagem da aba Adm: combo · parry · dash · abilities [id] · ult [id] · boss · brawl · +me)", None, 4)])
 
 pages = [adm, mapa, teste]
 for i, pg in enumerate(pages):

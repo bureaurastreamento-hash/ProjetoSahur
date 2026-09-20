@@ -15,6 +15,14 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado 2026-09-23 (tarde) — núcleo do combate aceita BOTS; trailer v2 real
+- **`Combatant.Fighter` = Player | Model de bot**: Health/Ragdoll/Combat/Movement/AbilityService recebem Fighter.
+  Regras: estado por Instance; `Combatant.CharacterOf/Of/PlayerOf/Notify`; FireClient/AntiExploit/DataStore/crédito
+  SÓ para Player. Ao escrever código novo nesses services, nunca assuma `player.Character`/`Players:GetPlayerFromCharacter`.
+- **`BotService`**: bots com o combate REAL (M1, dash, block, habilidades, despertar + ult). Padrão do dono: só
+  revidam quando apanham. DEV: Mapa → BOTS. **`TrailerService` v2**: cenas com bots (`TrailerScene <cena> [id] [me]`).
+- Ficou para o dono testar visualmente (animações/VFX dos bots, câmera do trailer).
+
 ## Estado 2026-09-23 — bloco E fechado (ver PROGRESSO.md "RETOMAR AQUI")
 - **Capítulo final**: traidor = adryan_keep (`QuestConfig.Traitor`, `TraitorService` = NPC hostil R6 com o avatar
   no santuário; `DeliverNpcUserId` = entrega com o Humanoider_20). DEV: `SetQuestChapter`, `SummonTraitor`.

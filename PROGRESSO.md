@@ -248,11 +248,50 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-23 — pendências do bloco E FEITAS; tudo commitado)
 
 ### PRÓXIMA SESSÃO — por onde começar
+0. **Bots + trailer v2 (2026-09-23 tarde)**: o dono grava o trailer e testa os bots (ver "FALTA o dono testar" da
+   seção da tarde). Qualquer regressão no combate do JOGADOR (refatoração do núcleo) tem prioridade máxima.
 1. **O dono testa TUDO** e traz a lista do que mudar/adicionar/corrigir/tirar. Corrigir isso primeiro.
    O que está sem teste dele (listas "FALTA o dono testar" nas seções abaixo): BLOCO A combate (2026-09-21),
    muralha/destruição/roster (2026-09-21), os blocos de 2026-09-22 (F boss x3 à solta, D menu DEV em abas,
    B jardim v2, C construções v2, E quests + mods, input buffer do M1) e o de 2026-09-23 (capítulo final com o
    TRAIDOR, NPCs no chão, loaders de mods de asset + mod de exemplo `[TESTE]` no painel Config → Mods).
+
+### Sessão 2026-09-23 (tarde) — COMBATE PARA BOTS (refatoração do núcleo) + BotService + TRAILER v2 real
+Pedido do dono: refazer o trailer (o antigo era encenado: NPCs parados + eventos falsos) e poder DEMONSTRAR
+ataques/ults "em medida de testes". Decisão do dono: **refatorar o núcleo** para bots com habilidades REAIS
+(em vez de autopilot no cliente); bots por padrão **só revidam quando apanham**.
+- **`Combatant.luau`** (shared): `Fighter = Player | Model de bot` (atributo `Bot`, `BotUserId` negativo, `Npc`).
+  `Of(character)`, `CharacterOf`, `PlayerOf`, `IsPresent`, `UserId`, `ByUserId`, `Notify` (FireClient só p/ Player),
+  `All()` (jogadores + bots).
+- **Refatoração** (`HealthService`, `RagdollService`, `CombatService`, `MovementService`, `AbilityService`, +`RateLimiter`):
+  estado por `Instance` (Player ou Model), `player.Character` → `Combatant.CharacterOf`, `GetPlayerFromCharacter` →
+  `Combatant.Of`, FireClient/AntiExploit/Progression/DataStore só quando há Player. Novidades: `HealthService.SetupBot`,
+  `HealthService.FighterDied` (qualquer lutador; `Died` continua só p/ jogador e killer bot = nil), `RagdollService`
+  unificado (RagdollModel/IsModelRagdolled redirecionam para o lutador), `MovementService.Dash/Sprint/ServerDash`
+  (bot: LinearVelocity no servidor — mesma receita do cliente), `CombatService.Attack/Block` (mesmo caminho do clique/F),
+  `CombatService.NpcHitHook`, `AbilityService.Awaken/SetEnergy/GetEnergy/IsBusy`; investida/agarrão/voo do Rick de bot
+  movidos pelo servidor; TimeDome/despertar consideram bots. Cliente: `MovementController`/`CombatController` leem
+  `CharacterId`/`AwakenedUntil` do Model quando é bot. Regressão do jogador testada via MCP (M1, hab., dash 27 studs).
+- **`BotService`**: bot = rig R6 com avatar da equipe (roda `TeamConfig`), tag `Bot`+`Combatant`, grupo de colisão
+  `Players`, direto no Workspace (ProcAnim anima). IA (0,1 s): `passive` (padrão: revida contra quem bateu por 12 s),
+  `aggressive` (caça o mais perto em 70 studs — jogadores, bots e boss/traidor), `idle`. Faz: combo M1, dash (12–40
+  studs), block quando o alvo ataca, habilidades 1–3 prontas no alcance, despertar com carga cheia + ULT perto,
+  ragdoll cancel, respawn no ponto de origem. `Spawn(opts{CharacterId,Name,UserId,CFrame,Behavior,Respawn,Team})`,
+  `Clear`, `SetBehavior`, `Fill` (ult carregada), `Provoke`, `List/Count`. Times: `TeamId` (sem fogo amigo).
+  Boss e traidor caçam/batem em bots (`Combatant.All`); loot do boss só para Players.
+- **DEV** (Mapa → BOTS): caixa `BotCharacter` + "Bot: só revida" / "Bot: agressivo" / "Bot: parado", "Encher ult dos
+  bots", "Todos: só revidam/agressivos/parados", "Remover bots". Bots nascem 12 studs à sua frente, lado a lado.
+- **TRAILER v2** (`TrailerService` reescrito): cenas com bots reais, cada uma rodável sozinha —
+  `brawl` (6 bots em 2 times na praça), `combo`, `parry` (block coreografado antes do golpe → parry → crítico → 2º
+  parry → BLACK FLASH), `dash` (hit de chegada, distância = alcance real), `abilities [id]` (1..3 com cartela do nome),
+  `ult [id]` (Fill → Awaken → câmera orbita/corta no estouro → ult), `boss` (BossService.Summon real + 3 bots), `all`
+  (~95 s, cartela final + fade). "me" no argumento = você fica na cena. DEV: Teste → "TRAILER (~95 s)" e "CENA"
+  (texto na caixa Mensagem da aba Adm, ex.: `ult Kira`, `combo me`). Câmera/cartelas: `TrailerController` (igual).
+- Testes MCP: cada cena rodou com logs reais (parry/crit/blackflash, dash hit 4, Meteor 58,5, boss 1500→1476 com
+  bots ragdollados). Cliente sem erro.
+- **FALTA o dono testar (visual!)**: Config → Dev → Mapa → criar 2 bots agressivos e ver a luta (animações, VFX,
+  dash, ult com cutscene vista de fora); bater num bot passivo e ver ele revidar; Teste → TRAILER e gravar; cada
+  CENA; verificar câmera/cartelas e se algum golpe ficou feio (ajustar tempos em `TrailerService.scenes`).
 
 ### Sessão 2026-09-23 — BLOCO E fechado: capítulo FINAL (traidor) + loaders de mods de asset
 Decisões do dono (2026-09-23): traidor = **adryan_keep**; luta = chefe no SANTUÁRIO (NPC hostil com o avatar

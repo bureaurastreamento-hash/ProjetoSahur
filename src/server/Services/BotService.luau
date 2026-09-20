@@ -68,7 +68,7 @@ type Bot = {
 	opts: SpawnOptions,
 	home: CFrame,
 	index: number,
-	target: Combatant.Fighter?,
+	target: Instance?, -- Fighter (Player/bot) ou NPC de chefe (boss/traidor: Model com BossRig/Traitor)
 	aggroUntil: number,
 	blockUntil: number,
 	holdUntil: number, -- usou habilidade: não emenda soco/dash até aqui (CastTime + folga)
@@ -184,13 +184,24 @@ end
 -- IA
 -- ---------------------------------------------------------------------------
 
-local function rootOf(fighter: Combatant.Fighter?): BasePart?
+local function rootOf(fighter: Instance?): BasePart?
 	local character = Combatant.CharacterOf(fighter)
 	return character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 end
 
-local function validTarget(b: Bot, fighter: Combatant.Fighter?): boolean
-	if not fighter or fighter == b.model or not Combatant.IsPresent(fighter) then
+--- Chefe NPC que o bot pode caçar (boss por peças, traidor) — não é lutador, mas leva golpe.
+local function isBossNpc(inst: Instance?): boolean
+	return inst ~= nil and inst:IsA("Model") and (inst:GetAttribute("BossRig") ~= nil or inst:GetAttribute("Traitor") == true)
+end
+
+local function validTarget(b: Bot, fighter: Instance?): boolean
+	if not fighter or fighter == b.model then
+		return false
+	end
+	if isBossNpc(fighter) then
+		return fighter.Parent ~= nil and HealthService.IsAlive(fighter :: Model)
+	end
+	if not Combatant.IsPresent(fighter) then
 		return false
 	end
 	local character = Combatant.CharacterOf(fighter)
@@ -204,9 +215,23 @@ local function validTarget(b: Bot, fighter: Combatant.Fighter?): boolean
 	return true
 end
 
-local function nearestFighter(b: Bot, radius: number): Combatant.Fighter?
+--- Lutadores + chefes NPC (boss/traidor) para a caça do agressivo.
+local function candidates(): { Instance }
+	local list: { Instance } = {}
+	for _, f in Combatant.All() do
+		table.insert(list, f)
+	end
+	for _, m in CollectionService:GetTagged("Combatant") do
+		if isBossNpc(m) then
+			table.insert(list, m)
+		end
+	end
+	return list
+end
+
+local function nearestFighter(b: Bot, radius: number): Instance?
 	local best, bestDist = nil, radius
-	for _, fighter in Combatant.All() do
+	for _, fighter in candidates() do
 		if validTarget(b, fighter) then
 			local r = rootOf(fighter)
 			local d = if r then (r.Position - b.root.Position).Magnitude else math.huge
@@ -284,7 +309,7 @@ local function think(b: Bot)
 	if CombatService.IsBlocking(b.model) then
 		CombatService.Block(b.model, false)
 	end
-	if dist <= 9 and CombatService.IsAttacking(target) and math.random() < C.BlockChancePerTick then
+	if dist <= 9 and not isBossNpc(target) and CombatService.IsAttacking(target) and math.random() < C.BlockChancePerTick then
 		b.root.CFrame = CFrame.lookAt(b.root.Position, b.root.Position + dir)
 		CombatService.Block(b.model, true)
 		b.blockUntil = now + C.BlockSeconds
@@ -483,8 +508,8 @@ function BotService.SetBehavior(model: Model?, behavior: string)
 	end
 end
 
---- Faz o bot revidar contra `fighter` agora (passive ganha aggro).
-function BotService.Provoke(model: Model, fighter: Combatant.Fighter)
+--- Faz o bot revidar contra `fighter` agora (passive ganha aggro). Aceita boss/traidor também.
+function BotService.Provoke(model: Model, fighter: Instance)
 	local b = bots[model]
 	if b then
 		b.target = fighter
@@ -535,6 +560,16 @@ function BotService.Start()
 			mine.aggroUntil = os.clock() + BotService.Config.AggroSeconds
 		end
 	end)
+	-- boss/traidor/boneco bateu num bot: o passivo revida contra o NPC
+	CombatService.NpcHitHook = function(attackerChar: Model, victim: Model, _dealt: number)
+		local b = bots[victim]
+		if b and isBossNpc(attackerChar) then
+			if not b.target or b.model:GetAttribute("Behavior") ~= "aggressive" then
+				b.target = attackerChar
+			end
+			b.aggroUntil = os.clock() + BotService.Config.AggroSeconds
+		end
+	end
 	Log.debug("[BotService] pronto (bots com o combate real; padrão: só revidam quando apanham)")
 end
 
