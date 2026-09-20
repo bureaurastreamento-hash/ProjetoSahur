@@ -45,6 +45,7 @@ CombatConfig.Attacks = {
 		-- 3º golpe LEVANTA um pouco a vítima (sem ragdoll) para o 4º entrar — favorece o combo (dono, 2026-09-21)
 		ComboLift = { Index = 3, Knockback = { Speed = 4, Duration = 0.15, Up = 14 } :: Knockback },
 		ComboResetTime = 1.2, -- sem golpear por esse tempo, combo volta pro 1
+		InputBuffer = 0.25, -- clique até esse tanto ANTES de liberar não se perde: sai no 1º instante livre (cliente)
 		HitDelay = 0.15, -- tempo entre o pedido e a checagem da hitbox (wind-up)
 		BlockedEndlagMultiplier = 2, -- M1 bloqueado = o dobro de espera até o próximo (punição)
 		PullStuds = 2.2, -- acerto puxa o atacante em direção à vítima (cliente) — maior = combo gruda (dono, 2026-09-21)

@@ -53,6 +53,7 @@ local myNextCombo = 1
 local myLastAttackAt = -math.huge
 local myNextAttackAt = 0
 local myStunnedUntil = 0
+local bufferedAttackAt = 0 -- input buffer: os.clock() em que o clique guardado vai sair (0 = nenhum)
 local pendingAttacks = 0 -- socos previstos cuja confirmação (NotifyAttack) ainda não chegou
 local myCritReadyUntil = 0 -- parryou: até aqui o próximo M1 é crítico (anima o CritPunch no clique)
 
@@ -123,7 +124,21 @@ function CombatController.Attack()
 		end
 	end
 	local now = os.clock()
-	if not character or not root or now < myNextAttackAt or now < myStunnedUntil or localPlayer:GetAttribute("Ragdolled") == true then
+	if not character or not root or now < myStunnedUntil or localPlayer:GetAttribute("Ragdolled") == true then
+		return
+	end
+	if now < myNextAttackAt then
+		-- INPUT BUFFER (estilo TSB/JJS): clique um pouco antes de liberar fica guardado e sai no 1º instante livre
+		local wait = myNextAttackAt - now
+		if wait <= (m1.InputBuffer or 0) and bufferedAttackAt < myNextAttackAt then
+			bufferedAttackAt = myNextAttackAt
+			task.delay(wait + 0.005, function()
+				if bufferedAttackAt == myNextAttackAt or os.clock() >= myNextAttackAt then
+					bufferedAttackAt = 0
+					CombatController.Attack()
+				end
+			end)
+		end
 		return
 	end
 	-- espelho das regras do servidor (dono, 2026-09-21): dentro do Domínio do Tempo não soca; no meio do dash
