@@ -1090,6 +1090,24 @@ function AbilityService.SetForm(player: Player, characterId: string?)
 	player:SetAttribute("CharacterId", state.characterId)
 end
 
+--- [Mods/DEV] Troca o personagem na marra (sem checar posse/combate) e respawna. Fora da forma de boss.
+function AbilityService.ForceCharacter(player: Player, characterId: string)
+	if not CharacterDefs.Get(characterId) or formPrevious[player] then
+		return
+	end
+	local state = getState(player)
+	if state.characterId == characterId then
+		return
+	end
+	state.characterId = characterId
+	state.cooldownReadyAt = {}
+	state.damageMultiplierUntil = 0
+	state.incomingMultiplierUntil = 0
+	player:SetAttribute("CharacterId", characterId)
+	AntiExploitService.Grace(player, 3)
+	CharacterService.Load(player)
+end
+
 function AbilityService.IsInForm(player: Player): boolean
 	return formPrevious[player] ~= nil
 end

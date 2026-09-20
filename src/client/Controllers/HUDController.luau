@@ -26,6 +26,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
@@ -682,8 +683,8 @@ function HUDController.Start()
 		showBanner(prefix .. tostring(text), 7)
 		FX.PlaySoundUI("Match", "RoundStart")
 	end)
-	-- Botões de personagem
-	for i, id in CharacterDefs.Order do
+	-- Botões de personagem (mods de personagem entram/saem em tempo real: ModRegistry.Changed)
+	local function buildCard(id: string, i: number)
 		local def = CharacterDefs.Get(id)
 		local b = selectTemplate:Clone()
 		-- personagem de admin: cartão só aparece para devs (atributo chega depois do boot)
@@ -730,6 +731,26 @@ function HUDController.Start()
 		end)
 		characterButtons[id] = b
 	end
+	for i, id in CharacterDefs.Order do
+		buildCard(id, i)
+	end
+	ModRegistry.Changed.Event:Connect(function(modId: string, active: boolean)
+		if active then
+			for _, id in ModRegistry.CharactersOf(modId) do
+				if not characterButtons[id] then
+					buildCard(id, table.find(CharacterDefs.Order, id) or #CharacterDefs.Order)
+				end
+			end
+		else
+			for id, b in characterButtons do
+				if not CharacterDefs.Get(id) then
+					b:Destroy()
+					characterButtons[id] = nil
+				end
+			end
+		end
+		HUDController.CharactersChanged:Fire()
+	end)
 	queueButton.Activated:Connect(function()
 		requestQueue:FireServer(localPlayer:GetAttribute("InQueue") ~= true)
 	end)

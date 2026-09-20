@@ -15,6 +15,15 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado 2026-09-23 — bloco E fechado (ver PROGRESSO.md "RETOMAR AQUI")
+- **Capítulo final**: traidor = adryan_keep (`QuestConfig.Traitor`, `TraitorService` = NPC hostil R6 com o avatar
+  no santuário; `DeliverNpcUserId` = entrega com o Humanoider_20). DEV: `SetQuestChapter`, `SummonTraitor`.
+- **Mods de asset prontos**: `ModRegistry` (compartilhado) injeta `CharacterDef`/`Cosmetics`/`VFX` de
+  `ReplicatedStorage.ModsActive.<Id>` (clonado de `ServerStorage.Mods.<Id>` pelo `ModService`); no Studio toda pasta
+  de `ServerStorage.Mods` com `ModConfig` vira mod `[TESTE]` no painel. Templates: `tools/place_criacao/`.
+  Nunca chamar `setDropdown` de novo no TopbarPlus (destrói os ícones) — usar `joinDropdown`/`leave`.
+- PRÓXIMA: lista de testes do dono; place de criação (item 2) e mural de votação (item 3) do PROGRESSO.
+
 ## Estado 2026-09-22 — blocos B–F feitos SEM o dono ver (ver PROGRESSO.md "RETOMAR AQUI")
 - **PRÓXIMA SESSÃO**: (1) lista de testes do dono → corrigir; (2) PLACE DE CRIAÇÃO separada para a comunidade
   (quase sem scripts do jogo — só templates do kit); (3) MURAL DE VOTAÇÃO de mods (OrderedDataStore, voto grátis

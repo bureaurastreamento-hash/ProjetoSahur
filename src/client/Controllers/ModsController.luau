@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local ModsConfig = require(Modules:WaitForChild("ModsConfig"))
+local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local TopbarController = require(script.Parent:WaitForChild("TopbarController"))
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
@@ -52,6 +53,8 @@ local function mk(class: string, props: { [string]: any }, parent: Instance?): I
 	return inst
 end
 
+local addRow: (any, number) -> ()
+
 local function buildGui()
 	gui = mk("ScreenGui", { Name = "ModsGui", ResetOnSpawn = false, DisplayOrder = 9, IgnoreGuiInset = false }, playerGui) :: ScreenGui
 	panel = mk("Frame", { Name = "Panel", Size = UDim2.fromOffset(560, 520), Position = UDim2.new(0.5, -280, 0.5, -260), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.06, BorderSizePixel = 0, Visible = false, Active = true }, gui) :: Frame
@@ -67,6 +70,20 @@ local function buildGui()
 	list = mk("ScrollingFrame", { Size = UDim2.new(1, -28, 1, -90), Position = UDim2.fromOffset(14, 78), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 5, AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new() }, panel) :: ScrollingFrame
 	mk("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, list)
 	for i, mod in ModsConfig.Catalog do
+		addRow(mod, i)
+	end
+	-- chip no HUD (embaixo do topbar, esquerda): créditos aos autores dos mods ativos
+	chip = mk("TextLabel", { Name = "ModsChip", Size = UDim2.fromOffset(420, 22), Position = UDim2.fromOffset(12, 48), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.4, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Visible = false, Text = "" }, gui) :: TextLabel
+	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, chip)
+	mk("UIPadding", { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) }, chip)
+end
+
+--- Linha do painel (catálogo ou mod de teste do Studio). `mod` = { Id, Name, Version, Author, Desc }.
+addRow = function(mod: any, i: number)
+	if rows[mod.Id] then
+		return
+	end
+	do
 		local row = mk("Frame", { Name = mod.Id, Size = UDim2.new(1, -8, 0, 54), BackgroundColor3 = COLOR_ROW, BorderSizePixel = 0, LayoutOrder = i }, list) :: Frame
 		mk("UICorner", { CornerRadius = UDim.new(0, 6) }, row)
 		mk("TextLabel", { Size = UDim2.new(1, -130, 0, 20), Position = UDim2.fromOffset(10, 6), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, Text = ("%s   <font color=\"#A5A5B2\">v%s · por %s</font>"):format(mod.Name, mod.Version, mod.Author), RichText = true, TextTruncate = Enum.TextTruncate.AtEnd }, row)
@@ -88,10 +105,6 @@ local function buildGui()
 		end)
 		rows[mod.Id] = { frame = row, toggle = toggle }
 	end
-	-- chip no HUD (embaixo do topbar, esquerda): créditos aos autores dos mods ativos
-	chip = mk("TextLabel", { Name = "ModsChip", Size = UDim2.fromOffset(420, 22), Position = UDim2.fromOffset(12, 48), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.4, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Visible = false, Text = "" }, gui) :: TextLabel
-	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, chip)
-	mk("UIPadding", { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) }, chip)
 end
 
 local function render()
@@ -145,6 +158,7 @@ local function ensureIcon()
 end
 
 function ModsController.Init()
+	ModRegistry.Start() -- mods de asset: CharacterDef/Cosmetics/VFX entram nos módulos do cliente
 	requestToggle = Remotes.GetEvent(Remotes.Events.RequestModToggle)
 	buildGui()
 end
@@ -153,6 +167,12 @@ function ModsController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyMods).OnClientEvent:Connect(function(payload: any, result: any)
 		if typeof(payload) == "table" then
 			state = payload
+			-- mods de TESTE (Studio: pastas em ServerStorage.Mods sem entrada no catálogo)
+			if typeof(payload.extra) == "table" then
+				for i, m in payload.extra do
+					addRow({ Id = m.id, Name = ("%s [TESTE]"):format(tostring(m.name)), Version = tostring(m.version), Author = tostring(m.author), Desc = ("%s (%s)"):format(tostring(m.desc), tostring(m.kind)) }, 100 + i)
+				end
+			end
 			ensureIcon()
 			render()
 		end

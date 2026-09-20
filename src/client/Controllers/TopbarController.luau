@@ -22,6 +22,7 @@ local StarterGui = game:GetService("StarterGui")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
@@ -265,7 +266,7 @@ function TopbarController.Start()
 
 	-- Personagens: um item por personagem DENTRO do dropdown (sem painel próprio, pedido do dono 2026-09-19).
 	local characterItems: { [string]: any } = {}
-	for i, id in CharacterDefs.Order do
+	local function makeCharacterItem(id: string, i: number)
 		local icon = Icon.new():setOrder(i):oneClick(true)
 		icon.selected:Connect(function()
 			HUDController.ActivateCharacter(id)
@@ -274,6 +275,9 @@ function TopbarController.Start()
 			end
 		end)
 		characterItems[id] = icon
+	end
+	for i, id in CharacterDefs.Order do
+		makeCharacterItem(id, i)
 	end
 	local function refreshCharacterItems()
 		for id, icon in characterItems do
@@ -307,6 +311,29 @@ function TopbarController.Start()
 	end
 	charactersIcon:setDropdown(characterList)
 	refreshCharacterItems()
+	-- mods de personagem (servidor privado) entram e saem da lista em tempo real. Nunca chamar setDropdown de
+	-- novo (o TopbarPlus DESTRÓI todos os ícones antigos): entra com joinDropdown, sai com leave + destroy.
+	ModRegistry.Changed.Event:Connect(function(modId: string, active: boolean)
+		if active then
+			for _, id in ModRegistry.CharactersOf(modId) do
+				if not characterItems[id] then
+					makeCharacterItem(id, table.find(CharacterDefs.Order, id) or #CharacterDefs.Order)
+					characterItems[id]:joinDropdown(charactersIcon)
+				end
+			end
+		else
+			for id, icon in characterItems do
+				if not CharacterDefs.Get(id) then
+					pcall(function()
+						icon:leave()
+						icon:destroy()
+					end)
+					characterItems[id] = nil
+				end
+			end
+		end
+		refreshCharacterItems()
+	end)
 	HUDController.CharactersChanged.Event:Connect(refreshCharacterItems)
 	localPlayer:GetAttributeChangedSignal("IsDeveloper"):Connect(refreshCharacterItems)
 

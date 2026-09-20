@@ -245,14 +245,58 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-22 — tudo commitado e no GitHub; o dono estava SEM TESTERS)
+## RETOMAR AQUI (última sessão: 2026-09-23 — pendências do bloco E FEITAS; tudo commitado)
 
 ### PRÓXIMA SESSÃO — por onde começar
-1. **O dono testa TUDO amanhã** e traz a lista do que mudar/adicionar/corrigir/tirar. Corrigir isso primeiro.
+1. **O dono testa TUDO** e traz a lista do que mudar/adicionar/corrigir/tirar. Corrigir isso primeiro.
    O que está sem teste dele (listas "FALTA o dono testar" nas seções abaixo): BLOCO A combate (2026-09-21),
-   muralha/destruição/roster (2026-09-21) e os blocos de 2026-09-22: F boss x3 à solta, D menu DEV em abas,
-   B jardim v2 (cachoeira/amazônia/templos + som), C construções v2 (2 andares, zigurate, desabamento, golpe
-   pesado), E quests (NPCs = devs, murais na Taberna) + mods (painel Config → Mods), input buffer do M1.
+   muralha/destruição/roster (2026-09-21), os blocos de 2026-09-22 (F boss x3 à solta, D menu DEV em abas,
+   B jardim v2, C construções v2, E quests + mods, input buffer do M1) e o de 2026-09-23 (capítulo final com o
+   TRAIDOR, NPCs no chão, loaders de mods de asset + mod de exemplo `[TESTE]` no painel Config → Mods).
+
+### Sessão 2026-09-23 — BLOCO E fechado: capítulo FINAL (traidor) + loaders de mods de asset
+Decisões do dono (2026-09-23): traidor = **adryan_keep**; luta = chefe no SANTUÁRIO (NPC hostil com o avatar
+dele); outros jogadores podem ajudar (crédito para quem deu dano e está no capítulo final).
+- **`QuestConfig`**: `Traitor` (UserId, vida ×3, WalkSpeed 20/24 na fase 2, ArenaRadius 45 em `BossArena`,
+  AbandonSeconds 60, Punch 6, Dash, Burst raio 10/dano 14/knockback+ragdoll, Regen) e capítulo `final` DESTRANCADO:
+  aceita com o adryan_keep na cachoeira (`NpcUserId`), objetivo `traitor_kill`, entrega com o Humanoider_20 na
+  Taberna (**`DeliverNpcUserId`**, campo novo), recompensa 1000 EP + 1000 pts + 1500 XP. Fala do cap. 7 aponta
+  para a cachoeira. Textos PROVISÓRIOS.
+- **`TraitorService`** (novo): rig R6 com o avatar real (GetHumanoidDescriptionFromUserId), física/ragdoll como o
+  boneco (atributo Npc, tag Combatant), Highlight vermelho + luz, direto no Workspace (ProcAnim anima). IA 0,1 s:
+  alvo mais perto na arena, MoveTo, combo de 4 socos (`CombatService.NpcPunch`), dash em arco quando longe,
+  rajada com anel de aviso; fase 2 na metade da vida; some sem crédito após 60 s sem ninguém; morte → ragdoll,
+  fade, `traitor_kill` para quem deu dano e está no `final`. Um por servidor; `Summon/Kill/Despawn/IsActive`.
+  Toasts via `NotifyQuest "toast"` (evento novo no QuestController).
+- **`QuestService`**: `OnTalk(fn)` (accept/progress/done), `IsActiveOn`, `SetChapter` (DEV), `delivererOf`
+  (chip/toast apontam para quem recebe a entrega), entrega com NPC diferente; o traidor responde "vai contar
+  para o Humanoider_20" e nunca entrega. **NPCs apoiados pela parte MAIS BAIXA do rig** (R6 afundava 3,5 studs
+  porque HipHeight = 0; RIP_ACE R15 escalado flutuava 3,2) — os 7 ficaram a 0,05 do chão; **1 NPC por membro**
+  (cap. 4 e final usam o mesmo adryan_keep; antes nasciam 2); LRY no tapete da Lojinha (VendedorSpot −6/+6,
+  olhando para onde o vendedor olha; antes ficava em cima de um vaso e depois no toldo).
+- **DEV** (aba Mapa → HISTÓRIA / TRAIDOR): `SetQuestChapter {n}` (por alvo; 8 = final, 9 = zerada),
+  `SummonTraitor`, `KillTraitor`, `DespawnTraitor`.
+- **Loaders de mods de asset** (`ModRegistry.luau` novo, compartilhado): `ModService` clona `ServerStorage.Mods.<Id>`
+  para `ReplicatedStorage.ModsActive.<Id>` (Map → `Workspace.ModMaps.<Id>`); o registry injeta `CharacterDef` em
+  `CharacterDefs` (+Order), `Cosmetics` em `CosmeticsConfig` (Free, sem preço), `VFX` na `VFXLibrary` (só chaves
+  novas), e no servidor copia `Animations/Sounds/VFX` para `ReplicatedStorage.Assets`; tetos do kit no load. Personagem
+  de mod = todo mundo ganha (`GrantCharacter`; quem entra depois também); desligar = `AbilityService.ForceCharacter`
+  (novo) devolve ao padrão + `RevokeCharacter` + tudo retirado. Cliente: `ModsController` inicia o registry; dropdown
+  de personagens (Topbar, `joinDropdown`/`leave` — `setDropdown` de novo DESTRÓI os ícones) e cartões do HUD
+  reagem a `ModRegistry.Changed`. **Mods de TESTE no Studio**: toda pasta `ServerStorage.Mods.<Id>` com `ModConfig`
+  válido aparece no painel como `[TESTE]` sem entrar no catálogo (`payload.extra`).
+- **Kit**: `tools/place_criacao/` (LEIA-ME + `Mods/exemplo_mod/` com ModConfig/CharacterDef/Cosmetics/VFX comentados);
+  `ServerStorage.Mods.exemplo_mod` montado no place via MCP (personagem "Exemplo" + capa/aura esmeralda + emote +
+  efeito `Exemplo/Onda`). `MODS_KIT.md` atualizado (estrutura, fluxo de teste no Studio).
+- Testes MCP: capítulo 8 → falar com adryan_keep invoca o traidor no BossSpawn (300 HP), ele persegue/bate (jogador
+  100→67, 2 ragdolls), morte → crédito → Humanoider_20 entrega → capítulo 9; liga/desliga do exemplo_mod 2× sem erro
+  no cliente, personagem forçado usa `Exemplo.Onda`, tudo volta ao desligar.
+- **FALTA o dono testar**: capítulo final de verdade (SetQuestChapter 8 → E no adryan_keep na cachoeira → entrar
+  no santuário e lutar: socos/dash/rajada, fase 2, ragdoll ao morrer → E no Humanoider_20), visual do traidor (avatar,
+  aura), NPCs nos pés (Praça/zigurate/Lojinha), painel Config → Mods → ligar "Exemplo [TESTE]" → V mostra o
+  personagem Exemplo → habilidades 1/2/G e o efeito → K mostra capa/aura esmeralda → desligar volta ao Jotaro.
+- Pendências que ficaram: textos/recompensas dos capítulos (dono), `Function`/`Quote` do `TeamConfig`, place de
+  criação da comunidade (item 2) e mural de votação (item 3) — planos abaixo.
 2. **PLACE DE CRIAÇÃO/TESTE para a comunidade** (pedido do dono, 2026-09-22): uma place SEPARADA, liberada para a
    comunidade criar mods/VFX/skins/etc., com QUASE NENHUM script do jogo (nada que possam copiar e reaproveitar).
    Plano: place em branco do grupo com (a) rig R6 de referência + boneco de treino simples, (b) a estrutura
@@ -267,9 +311,9 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
    1 voto por jogador por ciclo (perfil ou DataStore), aba "VOTAÇÃO" no painel Mods com ranking "mais hypados" +
    "vencedor da semana/mês"; o vencedor a equipe sobe para o jogo de verdade (skin/emote/mod, qualquer coisa da
    comunidade) com crédito. Kit deve dizer que ao enviar o autor autoriza o uso no jogo.
-4. Pendências do E: capítulo final (dev traidor — o dono escolhe), loaders de mods de asset (character/cosmetic/
-   vfx/map), textos/recompensas/posições dos NPCs (RIP_ACE em y 4,6 no santuário pode flutuar).
-5. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+4. ~~Pendências do E~~ FEITAS em 2026-09-23 (ver seção abaixo). Restam textos/recompensas dos capítulos (dono).
+5. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + `ServerStorage.Mods.exemplo_mod` + sync
+   do Rojo).
 
 ### Sessão 2026-09-22 — BLOCO E FEITO (v1): QUESTS (história em capítulos) + MODS de servidor privado
 Decisões do dono (2026-09-22): formato A (linha de capítulos; final = lutar contra um dev TRAIDOR, a escolher);
