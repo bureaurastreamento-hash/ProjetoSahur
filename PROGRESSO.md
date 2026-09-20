@@ -245,7 +245,17 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-21 — leva "muralha + destruição + animações + roster")
+## RETOMAR AQUI (última sessão: 2026-09-21 — tudo commitado e no GitHub; o dono saiu)
+
+### PRÓXIMA SESSÃO — por onde começar
+1. Perguntar ao dono o resultado dos testes do BLOCO A (combate) e da leva da muralha/destruição/roster (listas
+   "FALTA o dono testar" abaixo); corrigir o que ele reportar.
+2. Depois seguir os blocos B–F dos PLANOS (2026-09-21), na ordem que o dono escolher: B cachoeira/jardim v2
+   (Amazônia antiga + templos astecas; trocar o som `9120386436` que faz barulho de BUZINA), C construções JJS
+   maiores/enteráveis, D menu DEV (ADM primeiro), E workshop de mods + quests, F boss x3 nasce no centro.
+3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-21 (2) — leva "muralha + destruição + animações + roster" + BLOCO A de combate
 
 ### Sessão 2026-09-21 — FEITO no código (testado via MCP só no servidor; FALTA o dono testar jogando)
 Pedido do dono: santuário do boss DENTRO da muralha (fora só a cachoeira com floresta mesopotâmica; altar
