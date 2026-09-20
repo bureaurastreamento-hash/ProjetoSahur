@@ -47,6 +47,7 @@ RemoteEvents.Events = ({
 	RequestDash = "RequestDash", -- (direction: Vector3?, cameraLook: Vector3?) — dash universal (Q); ragdollado = ragdoll cancel
 	RequestAbility = "RequestAbility", -- (slot: number, direction: Vector3?)
 	RequestAwaken = "RequestAwaken", -- () — G: ativa o Awakening se a carga da ult estiver cheia
+	RequestCounter = "RequestCounter", -- () — E: contra-ataque anti-2v1 se a barra "Revide" estiver cheia (CounterService)
 	RequestSelectCharacter = "RequestSelectCharacter", -- (characterId: string)
 	RequestQueue = "RequestQueue", -- (inQueue: boolean)
 	RequestUnlockCharacter = "RequestUnlockCharacter", -- (characterId: string)

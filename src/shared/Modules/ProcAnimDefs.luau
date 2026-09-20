@@ -137,6 +137,19 @@ C["Shared/Parried"] = { -- LEVOU parry: o braço que socava é jogado para fora,
 		P(0.5, GUARD, "inout"),
 	},
 }
+C["Shared/Counter"] = { -- REVIDE (anti-2v1): agacha, e gira 360° com os braços abertos varrendo quem está em volta (acerta em 0,18)
+	duration = 0.55,
+	frames = {
+		P(0, { Root = { rot = V(-14, 0, 0), off = V(0, -0.45, 0) }, Neck = { rot = V(10, 0, 0) }, RA = { rot = V(60, 0, -40) }, LA = { rot = V(60, 0, 40) }, RL = { rot = V(30, 0, 10) }, LL = { rot = V(30, 0, -10) } }),
+		P(0.1, { Root = { rot = V(-6, 90, 0), off = V(0, -0.2, 0) }, Neck = { rot = V(4, 0, 0) }, RA = { rot = V(85, 0, 95) }, LA = { rot = V(85, 0, -95) }, RL = { rot = V(10, 0, 22) }, LL = { rot = V(-10, 0, -22) } }, "in"),
+		P(0.2, { Root = { rot = V(-4, 200, 0), off = V(0, 0.15, 0) }, Neck = { rot = V(0, 0, 0) }, RA = { rot = V(90, 0, 100) }, LA = { rot = V(90, 0, -100) }, RL = { rot = V(-10, 0, 24) }, LL = { rot = V(10, 0, -24) } }, "linear"),
+		P(0.32, { Root = { rot = V(-2, 320, 0), off = V(0, 0.1, 0) }, RA = { rot = V(88, 0, 96) }, LA = { rot = V(88, 0, -96) }, RL = { rot = V(6, 0, 20) }, LL = { rot = V(-6, 0, -20) } }, "linear"),
+		P(0.42, { Root = { rot = V(-6, 360, 0), off = V(0, -0.1, 0) }, RA = { rot = V(50, 0, 30) }, LA = { rot = V(50, 0, -30) }, RL = { rot = V(4, 0, 12) }, LL = { rot = V(-4, 0, -12) } }, "out"),
+		-- 360° ≡ 0°: o frame colado troca para 0 sem girar de volta no blendOut (o lerp não faz wrap)
+		P(0.4201, { Root = { rot = V(-6, 0, 0), off = V(0, -0.1, 0) }, RA = { rot = V(50, 0, 30) }, LA = { rot = V(50, 0, -30) }, RL = { rot = V(4, 0, 12) }, LL = { rot = V(-4, 0, -12) } }, "linear"),
+		P(0.55, GUARD, "inout"),
+	},
+}
 C["Shared/CritPunch"] = { -- CRÍTICO (depois do parry): recua o braço atrás da cabeça e desce um direto com o corpo inteiro (impacto em 0,15)
 	duration = 0.5,
 	frames = {

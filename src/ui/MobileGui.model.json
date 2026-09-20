@@ -399,6 +399,98 @@
      ]
     },
     {
+     "name": "Counter",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Counter",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         52
+        ],
+        [
+         0,
+         52
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         150
+        ],
+        [
+         1,
+         -222
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.85,
+        0.25,
+        0.2
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "REVIDE",
+      "TextSize": 11,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0,
+      "Visible": false
+     },
+     "attributes": {
+      "BaseX": 150,
+      "BaseY": 222,
+      "Side": "left"
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
      "name": "Slot1",
      "className": "TextButton",
      "properties": {

@@ -406,6 +406,21 @@ E["Shared/GuardBreak"] = {
 		light(BLUE, 5, 16, 0.4),
 	},
 }
+E["Shared/Counter"] = { -- REVIDE (anti-2v1): estalo vermelho no corpo + onda de choque 360° que abre no chão
+	lifetime = 1.0,
+	layers = {
+		flash(WHITE, 9, 0.12),
+		mesh("ShockInward", RED, 10, 2, 0.18, { camera = true, tr0 = 0.2 }),
+		light(RED, 6, 18, 0.5),
+		{ kind = "sound", folder = "Shared", name = "Parry" },
+		groundWave(RED, 3, 26, 0.45, { delay = 0.16 }),
+		ringFlat(RED, 2, 30, 0.4, { delay = 0.16 }),
+		emit("Lines", RED, 24, { size = { 0.8, 2 }, life = { 0.25, 0.4 }, speed = { 40, 70 }, spread = { 10, 10 }, orient = "VelocityParallel", delay = 0.16 }),
+		sparks(RED, 30, { delay = 0.16 }),
+		{ kind = "sound", folder = "Shared", name = "Awakening_Impact", delay = 0.16 },
+	},
+}
+E["Shared/Counter_Hit"] = E["Shared/FinisherHit"]
 E["Shared/Stun"] = {
 	lifetime = 1.3,
 	layers = {

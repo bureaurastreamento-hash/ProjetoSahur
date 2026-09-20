@@ -248,6 +248,17 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**D1 FEITO (25/09, SEM teste no Studio)** — ANTI 2v1 "Revide": `CounterService` (novo) escuta `HealthService.Damaged`;
+2+ lutadores distintos acertando o mesmo alvo em 6 s = "desvantagem" → barra carrega 2,5×dano (cheia em 100). Atributos
+replicados `CounterCharge`/`CounterReadyAt`; HUD = barra vermelha fina sob a da ult (só aparece com carga; cheia pulsa
+"REVIDE — E"); celular = botão REVIDE (só visível cheia); `Controls.Counter` = E / L3. `RequestCounter` → servidor
+valida (cheia, vivo, sem stun DURO/ragdoll/agarrão/cutscene/Domínio; hitstun de soco NÃO impede — é a fuga), tira o
+hitstun, i-frames + super armor 0,6 s, `NotifyAbility("Shared","Counter")` (clipe `Shared/Counter` = giro 360° com
+braços abertos; VFX `Shared/Counter` = estalo + onda vermelha), 0,18 s depois acerta TODOS a 12 studs quebrando block
+(25 de dano + knockback/ragdoll 1,5 s); 20 s de recarga. E com ProximityPrompt na tela NÃO dispara (prompt vem primeiro).
+Bots revidam também (`BotService.think`). Config: `CombatConfig.Counter`. TESTAR: DEV → BOTS 2 agressivos batendo em
+você → barra aparece e enche → E → todos voam; conferir que E perto do vendedor/altar/NPC continua abrindo o prompt;
+bot cercado por 2 jogadores revida; a barra some ~6 s depois de ficar 1v1.
 **D4 FEITO (25/09, sem teste)** — LOG DE ATUALIZAÇÃO: `UpdateLogConfig` (versões 1.0/1.1 de exemplo, `Current`),
 `UpdateLogService` (versão publicada em DataStore `UpdateLog_v1` + MessagingService `SahurUpdateLog`; ao carregar o
 perfil, se publicada ≠ `profile.lastUpdateSeen` (schema 4) manda `NotifyUpdateLog`; `RequestUpdateSeen` grava;

@@ -1456,6 +1456,182 @@
        }
       }
      ]
+    },
+    {
+     "name": "Counter",
+     "className": "Frame",
+     "properties": {
+      "Name": "Counter",
+      "Size": {
+       "UDim2": [
+        [
+         0.5,
+         -4
+        ],
+        [
+         0,
+         5
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         50
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        0,
+        0
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0,
+        0,
+        0
+       ]
+      },
+      "BackgroundTransparency": 0.45,
+      "BorderSizePixel": 0,
+      "Visible": false
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "Name": "UICorner",
+        "CornerRadius": {
+         "UDim": [
+          0,
+          3
+         ]
+        }
+       }
+      },
+      {
+       "name": "Fill",
+       "className": "Frame",
+       "properties": {
+        "Name": "Fill",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           0
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          1.0,
+          0.3,
+          0.25
+         ]
+        },
+        "BackgroundTransparency": 0,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            3
+           ]
+          }
+         }
+        }
+       ]
+      },
+      {
+       "name": "Text",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "Text",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           0
+          ],
+          [
+           0,
+           12
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ]
+         ]
+        },
+        "AnchorPoint": {
+         "Vector2": [
+          0,
+          0
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "",
+        "Font": "GothamBold",
+        "TextSize": 10,
+        "TextColor3": {
+         "Color3": [
+          1.0,
+          0.45,
+          0.4
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextYAlignment": "Center",
+        "BorderSizePixel": 0,
+        "RichText": false
+       }
+      }
+     ]
     }
    ]
   },

@@ -34,6 +34,7 @@ local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local MovementService = require(script.Parent:WaitForChild("MovementService"))
 local AbilityService = require(script.Parent:WaitForChild("AbilityService"))
+local CounterService = require(script.Parent:WaitForChild("CounterService"))
 
 local BotService = {}
 
@@ -307,6 +308,11 @@ local function think(b: Bot)
 		if math.random() < C.CancelChancePerTick then
 			MovementService.Dash(b.model, -dir, dir)
 		end
+		return
+	end
+	-- anti-2v1: barra "Revide" cheia (2+ batendo nele) → contra-ataque 360° (sai até de dentro do hitstun)
+	if CounterService.IsReady(b.model) and dist <= CombatConfig.Counter.Radius and CounterService.Use(b.model) then
+		b.holdUntil = now + CombatConfig.Counter.Delay + 0.4
 		return
 	end
 	if CombatService.IsStunned(b.model) or CombatService.IsTimeSlowed(b.model) or CombatService.IsGrabbed(b.model) then
