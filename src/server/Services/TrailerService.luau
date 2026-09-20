@@ -7,7 +7,7 @@
 	coreografia só decide QUEM faz O QUÊ e QUANDO (CombatService.Attack/Block, MovementService.Dash,
 	AbilityService.Use/Awaken) e a câmera (TrailerController: shots/cartelas por NotifyTrailer).
 	Cada CENA roda sozinha (DEV: "TrailerScene <nome>") — serve para demonstrar/testar um golpe:
-	  brawl        6 bots agressivos brigando na praça (plano aberto)
+	  brawl        4 bots agressivos (2 times) brigando na praça (plano aberto)
 	  combo        combo de 4 socos + finisher (ragdoll)
 	  parry        parry → crítico → segundo parry → BLACK FLASH
 	  dash         dash de longe com hit de chegada
@@ -208,7 +208,7 @@ local scenes: { [string]: (myToken: number, arg: string?) -> boolean } = {}
 --- Abertura: voo sobre o mapa até a praça onde 6 bots brigam de verdade (3 × 3 em times, sem ninguém parado).
 scenes.brawl = function(myToken)
 	local S = stage()
-	local ids = { "Jotaro", "Swift", "Dio", "Kira", "Jotaro", "Swift" }
+	local ids = { "Jotaro", "Swift", "Dio", "Kira" } -- dono (2026-09-23): 6 era caos; 4 em 2 times
 	for i, id in ids do
 		local ang = (i - 1) / #ids * math.pi * 2
 		local at = S + Vector3.new(math.cos(ang) * 9, 0, math.sin(ang) * 9)

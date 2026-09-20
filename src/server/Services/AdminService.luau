@@ -960,15 +960,22 @@ global.Trailer = function()
 	return ok, msg
 end
 
---- Uma cena só (caixa Message): "combo" | "parry" | "dash" | "abilities [id]" | "ult [id]" | "boss" | "brawl";
---- "me" no fim = você fica na cena (não é estacionado).
+--- Uma cena só: args { scene = "combo"|"parry"|"dash"|"abilities"|"ult"|"boss"|"brawl", id = personagem?,
+--- me = true (você fica na cena, não é estacionado) }.
 global.TrailerScene = function(_, args)
 	local TrailerService = lazyRequire("TrailerService")
 	if not TrailerService then
 		return false, "TrailerService não carregou"
 	end
-	local text = if typeof(args) == "table" and typeof(args.text) == "string" then args.text else ""
-	return TrailerService.Run(if text ~= "" then text else "combo")
+	local scene = if typeof(args) == "table" and typeof(args.scene) == "string" then args.scene else "combo"
+	local parts = { scene }
+	if typeof(args) == "table" and typeof(args.id) == "string" and args.id ~= "" then
+		table.insert(parts, args.id)
+	end
+	if typeof(args) == "table" and args.me == true then
+		table.insert(parts, "me")
+	end
+	return TrailerService.Run(table.concat(parts, " "))
 end
 
 global.TrailerStop = function()
