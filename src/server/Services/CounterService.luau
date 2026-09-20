@@ -135,8 +135,9 @@ function CounterService.IsReady(fighter: Fighter): boolean
 	return now >= s.readyAt and now >= s.usingUntil
 end
 
---- Motivo pelo qual NÃO pode revidar agora (nil = pode). Hitstun de soco NÃO impede: o Revide é a fuga do 2v1;
---- stun duro (parry/guard break/habilidade), ragdoll, agarrão, cutscene e Domínio do Tempo impedem.
+--- Motivo pelo qual NÃO pode revidar agora (nil = pode). Hitstun de soco e RAGDOLL não impedem: o Revide é a
+--- fuga do 2v1 e num 2v1 você vive no chão (teste 25/09: 2 bots = ragdoll atrás de ragdoll) — ele levanta na hora,
+--- como o ragdoll cancel do Q. Stun duro (parry/guard break/habilidade), agarrão, cutscene e Domínio do Tempo impedem.
 local function blockedReason(fighter: Fighter, character: Model): string?
 	if not HealthService.IsAlive(character) or not HealthService.CanFight(fighter) then
 		return "dead"
@@ -144,8 +145,8 @@ local function blockedReason(fighter: Fighter, character: Model): string?
 	if CombatService.IsHardStunned(fighter) then
 		return "stunned"
 	end
-	if RagdollService.IsRagdolled(fighter) or CombatService.IsGrabbed(character) then
-		return "ragdoll"
+	if CombatService.IsGrabbed(character) then
+		return "grabbed"
 	end
 	local cutscene = fighter:GetAttribute("CutsceneUntil")
 	if typeof(cutscene) == "number" and Workspace:GetServerTimeNow() < cutscene then
@@ -179,7 +180,8 @@ function CounterService.Use(fighter: Fighter): boolean
 	publish(fighter, s)
 	fighter:SetAttribute(ATTR_READY_AT, Workspace:GetServerTimeNow() + cfg.Cooldown)
 
-	-- fuga: sai do hitstun, fica intocável durante o giro e não cai
+	-- fuga: levanta do ragdoll, sai do hitstun, fica intocável durante o giro e não cai
+	RagdollService.Recover(fighter)
 	CombatService.ClearStun(fighter)
 	CombatService.CancelBlock(fighter)
 	CombatService.SetSuperArmor(fighter, cfg.Invuln)
@@ -193,12 +195,16 @@ function CounterService.Use(fighter: Fighter): boolean
 			return
 		end
 		local hits = 0
-		for _, victim in Hitbox.Around(character, cfg.Radius, cfg.MaxTargets) do
+		local around = Hitbox.Around(character, cfg.Radius, cfg.MaxTargets)
+		local kinds = {}
+		for _, victim in around do
 			local kind = CombatService.ResolveHit(fighter, character, victim, cfg.Damage, false, cfg.Knockback, { BreaksBlock = true })
+			kinds[#kinds + 1] = victim.Name .. "=" .. tostring(kind)
 			if kind ~= "immune" then
 				hits += 1
 			end
 		end
+		Log.debug(("[CounterService] %s: giro acertou %d de %d (%s)"):format(fighter.Name, hits, #around, table.concat(kinds, ", ")))
 		notifyAbility:FireAllClients(character, "Shared", "Counter", "hit", { Hits = hits })
 	end)
 	return true
