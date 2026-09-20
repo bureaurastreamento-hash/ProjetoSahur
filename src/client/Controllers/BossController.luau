@@ -41,6 +41,66 @@ local function stopLocomotion()
 	end
 end
 
+-- Boss À SOLTA (x3 da flecha): ele não tem lugar fixo, então um marcador acima dele (visível através das
+-- paredes, com a distância) diz onde ele está. Some com o boss.
+local roamMarker: BillboardGui? = nil
+local roamMarkerConn: RBXScriptConnection? = nil
+
+local function removeRoamMarker()
+	if roamMarkerConn then
+		roamMarkerConn:Disconnect()
+		roamMarkerConn = nil
+	end
+	if roamMarker then
+		roamMarker:Destroy()
+		roamMarker = nil
+	end
+end
+
+local function attachRoamMarker(model: Model, title: string)
+	removeRoamMarker()
+	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local _, size = model:GetBoundingBox()
+	local gui = Instance.new("BillboardGui")
+	gui.Name = "BossRoamMarker"
+	gui.Size = UDim2.fromOffset(220, 46)
+	gui.StudsOffset = Vector3.new(0, size.Y / 2 + 4, 0)
+	gui.AlwaysOnTop = true
+	gui.MaxDistance = 1000
+	gui.ResetOnSpawn = false
+	gui.Adornee = root
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBlack
+	label.TextScaled = true
+	label.TextColor3 = Color3.fromRGB(255, 96, 64)
+	label.TextStrokeTransparency = 0.2
+	label.Text = title
+	label.Parent = gui
+	gui.Parent = playerGui
+	roamMarker = gui
+	local acc = 0
+	roamMarkerConn = RunService.Heartbeat:Connect(function(dt)
+		if not model.Parent or not root.Parent then
+			removeRoamMarker()
+			return
+		end
+		acc += dt
+		if acc < 0.25 then
+			return
+		end
+		acc = 0
+		local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if myRoot then
+			label.Text = ("%s  ·  %dm"):format(title, math.floor((myRoot.Position - root.Position).Magnitude))
+		end
+	end)
+end
+
 local function attachLocomotion(model: Model)
 	stopLocomotion()
 	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -129,6 +189,11 @@ local function onNotifyBoss(event: string, data: any)
 			showBanner("Você é o " .. shortName .. " — DEVORE para curar. Sobreviva até o tempo acabar!", 6)
 		elseif data.form then
 			showBanner(("%s virou %s — derrubem antes do tempo acabar!"):format(tostring(data.by), shortName), 5)
+		elseif data.roam then
+			showBanner(("BOSS x%d À SOLTA! %s soltou %s no meio do mapa — sigam o marcador."):format(tonumber(data.power) or 3, tostring(data.by), shortName), 6)
+			if typeof(data.model) == "Instance" and data.model:IsA("Model") then
+				attachRoamMarker(data.model :: Model, tostring(data.name))
+			end
 		else
 			showBanner(("%s invocou %s!"):format(tostring(data.by), tostring(data.name)), 4)
 		end
@@ -189,6 +254,7 @@ local function onNotifyBoss(event: string, data: any)
 		end
 	elseif event == "defeated" then
 		stopLocomotion()
+		removeRoamMarker()
 		bar.Visible = false
 		formEndsAt = nil
 		local lines = { "BOSS DERROTADO!" }
@@ -217,6 +283,7 @@ local function onNotifyBoss(event: string, data: any)
 		FX.PlaySoundUI("Match", "Victory")
 	elseif event == "despawned" then
 		stopLocomotion()
+		removeRoamMarker()
 		bar.Visible = false
 		formEndsAt = nil
 		showBanner("O boss foi embora...", 3)

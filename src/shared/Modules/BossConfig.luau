@@ -22,6 +22,16 @@ BossConfig.MaxHealth = 1500
 BossConfig.ArenaRadius = 55 -- studs a partir de BossArena; fora disso o boss ignora/volta
 BossConfig.AbandonSeconds = 30 -- sem jogador vivo na arena por esse tempo = boss some (sem recompensa)
 BossConfig.WalkSpeed = 14
+-- Boss x3 da flecha (dono, 2026-09-20): nasce no CENTRO do mapa (média dos spawns), não no santuário, e
+-- ANDA LIVRE — sem ponto fixo para ficar/voltar. O boss automático (power 1) continua preso ao santuário.
+BossConfig.Roam = {
+	Radius = 300, -- studs a partir da posição ATUAL do boss em que ele enxerga jogadores (mapa inteiro)
+	StepMin = 30, -- vagar sem alvo: passo aleatório entre StepMin e StepMax studs
+	StepMax = 60,
+	IdleSeconds = 6, -- s parado entre um passo de vagar e o próximo
+	MinDistFromPlayers = 15, -- não nasce em cima de ninguém
+	AbandonSeconds = 180, -- à solta: some só depois desse tempo sem NENHUM jogador vivo no alcance
+}
 BossConfig.PhaseTwoAt = 0.5 -- fração de vida que liga a fase 2 (mais rápido, investida)
 BossConfig.PhaseTwoSpeed = 20
 

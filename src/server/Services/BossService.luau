@@ -49,6 +49,8 @@ type Fight = {
 	recentHits: { { t: number, amount: number } }, -- golpes recebidos (janela do enrage)
 	enragedUntil: number,
 	enrageReadyAt: number,
+	roam: boolean, -- x3 da flecha: nasce no centro do mapa e anda livre (BossConfig.Roam), sem leash
+	nextRoamAt: number, -- os.clock() do próximo passo de vagar (sem alvo)
 }
 
 local state = "Ready" -- Ready | Fighting | Cooldown | Missing
@@ -85,6 +87,69 @@ local function findExtras()
 			end
 		end
 	end
+end
+
+local RAY_PARAMS = RaycastParams.new()
+RAY_PARAMS.FilterType = Enum.RaycastFilterType.Exclude
+RAY_PARAMS.RespectCanCollide = true
+
+--- Chão sólido abaixo de `pos` (ignora personagens e o próprio boss); nil = nada em 120 studs.
+local function groundBelow(pos: Vector3, ignore: { Instance }): Vector3?
+	RAY_PARAMS.FilterDescendantsInstances = ignore
+	local hit = Workspace:Raycast(pos + Vector3.new(0, 40, 0), Vector3.new(0, -160, 0), RAY_PARAMS)
+	return if hit then hit.Position else nil
+end
+
+local function characterList(): { Instance }
+	local list: { Instance } = {}
+	for _, player in Players:GetPlayers() do
+		if player.Character then
+			table.insert(list, player.Character)
+		end
+	end
+	return list
+end
+
+--- Centro do mapa livre = média dos SpawnLocation/Spawn* do Workspace (o boss da flecha nasce perto dos
+--- spawns, dono 2026-09-20). Afasta de qualquer jogador (Roam.MinDistFromPlayers) tentando um anel de
+--- posições; sempre com chão embaixo. Sem spawns = cai no santuário.
+local function roamSpawnPosition(): Vector3?
+	local sum, count = Vector3.zero, 0
+	for _, d in Workspace:GetDescendants() do
+		if d:IsA("SpawnLocation") or (d:IsA("BasePart") and d.Name:match("^Spawn%d+$")) then
+			sum += d.Position
+			count += 1
+		end
+	end
+	if count == 0 then
+		return nil
+	end
+	local center = sum / count
+	local ignore = characterList()
+	local minDist = BossConfig.Roam.MinDistFromPlayers
+	local function farFromPlayers(pos: Vector3): boolean
+		for _, player in Players:GetPlayers() do
+			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root and (Vector3.new(root.Position.X, 0, root.Position.Z) - Vector3.new(pos.X, 0, pos.Z)).Magnitude < minDist then
+				return false
+			end
+		end
+		return true
+	end
+	local candidates = { center }
+	for ring = 1, 3 do
+		for i = 0, 7 do
+			local a = i * math.pi / 4 + ring * 0.3
+			table.insert(candidates, center + Vector3.new(math.cos(a), 0, math.sin(a)) * (minDist * ring + 5))
+		end
+	end
+	for _, pos in candidates do
+		local ground = groundBelow(pos, ignore)
+		if ground and farFromPlayers(ground) then
+			return ground
+		end
+	end
+	return groundBelow(center, ignore)
 end
 
 --- Jogadores vivos e aptos dentro da arena, do mais perto ao mais longe do ponto.
@@ -293,10 +358,10 @@ end
 
 --- Prioridade: quem mais bateu no boss, perto e sem bloquear. Reavalia a cada RetargetSeconds
 --- ou quando o alvo some/morre/sai da arena.
-local function pickTarget(f: Fight, near: { { player: Player, root: BasePart, dist: number } }, center: Vector3): { player: Player, root: BasePart, dist: number }?
+local function pickTarget(f: Fight, near: { { player: Player, root: BasePart, dist: number } }, center: Vector3, radius: number): { player: Player, root: BasePart, dist: number }?
 	local best, bestScore = nil, -math.huge
 	for _, entry in near do
-		if (entry.root.Position - center).Magnitude > BossConfig.ArenaRadius then
+		if (entry.root.Position - center).Magnitude > radius then
 			continue
 		end
 		local score = (f.damageBy[entry.player] or 0) * BossConfig.AI.AggroDamageWeight - entry.dist * 0.05
@@ -366,20 +431,43 @@ local function endFight(f: Fight, defeated: boolean)
 	end)
 end
 
+--- Vagar sem alvo (boss à solta): um passo aleatório de StepMin..StepMax studs a cada IdleSeconds,
+--- só para onde tem chão. Nunca volta para um ponto fixo.
+local function roamStep(f: Fight)
+	if os.clock() < f.nextRoamAt then
+		return
+	end
+	local cfg = BossConfig.Roam
+	f.nextRoamAt = os.clock() + cfg.IdleSeconds + math.random() * 2
+	local ignore = characterList()
+	table.insert(ignore, f.model)
+	for _ = 1, 4 do
+		local a = math.random() * math.pi * 2
+		local dist = cfg.StepMin + math.random() * (cfg.StepMax - cfg.StepMin)
+		local goal = groundBelow(f.root.Position + Vector3.new(math.cos(a), 0, math.sin(a)) * dist, ignore)
+		if goal and math.abs(goal.Y - f.root.Position.Y) < 20 then
+			f.humanoid:MoveTo(goal)
+			return
+		end
+	end
+end
+
 local function aiLoop(f: Fight)
-	local center = arenaCenter()
 	local lastState = 0
 	while not f.finished and f.humanoid.Health > 0 and f.model.Parent do
-		local near = playersNear(f.root.Position, BossConfig.ArenaRadius * 1.3)
+		-- à solta: o "centro" é onde o boss ESTÁ e o alcance é o mapa; preso: BossArena + ArenaRadius
+		local center = if f.roam then f.root.Position else arenaCenter()
+		local radius = if f.roam then BossConfig.Roam.Radius else BossConfig.ArenaRadius
+		local near = playersNear(f.root.Position, radius * 1.3)
 		-- alvo atual continua válido? senão (ou passou RetargetSeconds) escolhe de novo
 		local target = nil
 		for _, entry in near do
-			if entry.player == f.target and (entry.root.Position - center).Magnitude <= BossConfig.ArenaRadius then
+			if entry.player == f.target and (entry.root.Position - center).Magnitude <= radius then
 				target = entry
 			end
 		end
 		if not target or os.clock() - f.targetChosenAt > BossConfig.AI.RetargetSeconds then
-			local picked = pickTarget(f, near, center)
+			local picked = pickTarget(f, near, center, radius)
 			if picked then
 				target = picked
 				f.target = picked.player
@@ -401,6 +489,14 @@ local function aiLoop(f: Fight)
 				end
 			else
 				f.humanoid:MoveTo(target.root.Position)
+			end
+		elseif f.roam then
+			-- ninguém no alcance: vaga pelo mapa (sem lugar para voltar)
+			roamStep(f)
+			if os.clock() - f.lastSeenPlayer > BossConfig.Roam.AbandonSeconds then
+				Log.debug("[BossService] boss à solta sem jogadores; removendo")
+				endFight(f, false)
+				return
 			end
 		else
 			-- ninguém na arena: volta para o spawn e espera
@@ -485,9 +581,15 @@ local function summon(player: Player, byName: string?, power: number?)
 		humanoid.DisplayName = model.Name
 	end
 	state = "Fighting"
-	local spawnCf = if spawnPart then spawnPart.CFrame else CFrame.new(arenaCenter())
+	-- x3 da flecha (mult > 1): nasce no centro do mapa e fica à solta; boss normal: santuário
+	local roam = mult > 1
+	local roamPos = if roam then roamSpawnPosition() else nil
+	if not roamPos then
+		roam = false
+	end
+	local spawnPos: Vector3 = roamPos or (if spawnPart then spawnPart.Position else arenaCenter())
 	local lift = humanoid.HipHeight + root.Size.Y / 2 + 1
-	model:PivotTo(CFrame.new(spawnCf.Position + Vector3.new(0, lift, 0)))
+	model:PivotTo(CFrame.new(spawnPos + Vector3.new(0, lift, 0)))
 	model.Parent = Workspace
 	pcall(function()
 		root:SetNetworkOwner(nil) -- servidor simula
@@ -509,13 +611,15 @@ local function summon(player: Player, byName: string?, power: number?)
 		power = mult,
 		target = nil,
 		targetChosenAt = 0,
+		roam = roam,
+		nextRoamAt = 0,
 	}
 	fight = f
 	humanoid.Died:Once(function()
 		endFight(f, true)
 	end)
-	Log.debug(("[BossService] %s invocou o boss"):format(byName or player.Name))
-	broadcast("summoned", { by = byName or player.Name, name = BossConfig.Name, model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth })
+	Log.debug(("[BossService] %s invocou o boss%s em (%.0f, %.0f, %.0f)"):format(byName or player.Name, if roam then " à solta" else "", spawnPos.X, spawnPos.Y, spawnPos.Z))
+	broadcast("summoned", { by = byName or player.Name, name = model.Name, model = model, health = humanoid.Health, maxHealth = humanoid.MaxHealth, roam = roam, power = mult })
 	task.spawn(aiLoop, f)
 end
 
@@ -613,7 +717,7 @@ function BossService.Start()
 		task.wait(1)
 		local f = fight
 		if f then
-			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.summoner.Name, name = BossConfig.Name, model = f.model, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth })
+			notifyBoss:FireClient(player, "summoned", { event = "summoned", by = f.summoner.Name, name = BossConfig.Name, model = f.model, health = f.humanoid.Health, maxHealth = f.humanoid.MaxHealth, roam = f.roam, power = f.power })
 		end
 	end)
 

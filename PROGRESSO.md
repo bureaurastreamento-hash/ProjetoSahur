@@ -245,15 +245,31 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-21 — tudo commitado e no GitHub; o dono saiu)
+## RETOMAR AQUI (última sessão: 2026-09-22 — o dono está SEM TESTERS; seguimos os blocos sem testar)
 
 ### PRÓXIMA SESSÃO — por onde começar
-1. Perguntar ao dono o resultado dos testes do BLOCO A (combate) e da leva da muralha/destruição/roster (listas
-   "FALTA o dono testar" abaixo); corrigir o que ele reportar.
-2. Depois seguir os blocos B–F dos PLANOS (2026-09-21), na ordem que o dono escolher: B cachoeira/jardim v2
+1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
+   à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
+2. Blocos que faltam dos PLANOS (2026-09-21): D menu DEV (ADM primeiro) — PRÓXIMO; B cachoeira/jardim v2
    (Amazônia antiga + templos astecas; trocar o som `9120386436` que faz barulho de BUZINA), C construções JJS
-   maiores/enteráveis, D menu DEV (ADM primeiro), E workshop de mods + quests, F boss x3 nasce no centro.
+   maiores/enteráveis, E workshop de mods + quests.
 3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-22 — BLOCO F FEITO: boss x3 da flecha nasce no CENTRO e anda LIVRE (testado via MCP)
+- `BossConfig.Roam` (Radius 300, StepMin/Max 30/60, IdleSeconds 6, MinDistFromPlayers 15, AbandonSeconds 180).
+- `BossService.summon`: `power > 1` (F no altar com a flecha / `SummonStrong`) → `roamSpawnPosition()` = média
+  dos `SpawnLocation`/`Spawn*` do Workspace, raycast ao chão, afastado ≥ 15 studs de todo jogador (anel de
+  candidatos); sem spawns/chão cai no santuário. Boss automático (power 1) e admin `Summon` seguem no santuário.
+- `Fight.roam`: na IA o centro é a posição ATUAL do boss e o raio é `Roam.Radius` (pickTarget recebe o raio);
+  sem alvo ele VAGA (`roamStep`: passo aleatório com chão, desnível < 20) e só some após `Roam.AbandonSeconds`
+  sem ninguém no alcance. Boss preso (santuário) continua igual (`ArenaRadius`, volta ao centro, 30 s).
+- `NotifyBoss summoned` leva `roam`/`power` (também para quem entra depois). `BossController`: banner
+  "BOSS x3 À SOLTA! … sigam o marcador" + `BossRoamMarker` (BillboardGui AlwaysOnTop no HRP do boss com nome
+  e distância em m, some na derrota/despawn).
+- Teste MCP (run_server): nasceu em (106, 0, 82) ≈ média dos 13 spawns; vida 4500; vagou 20–48 studs por ciclo.
+- **FALTA o dono testar**: F no altar com a flecha à noite → boss aparece no meio do mapa, persegue pelo mapa
+  todo (sem voltar), marcador vermelho com distância visível através das paredes; boss automático continua
+  nascendo dentro da muralha.
 
 ### Sessão 2026-09-21 (2) — leva "muralha + destruição + animações + roster" + BLOCO A de combate
 
