@@ -8,7 +8,7 @@
 local DataConfig = {}
 
 DataConfig.StoreName = "PlayerData"
-DataConfig.SchemaVersion = 3 -- 3 = eventPoints (pontos de evento, 2026-09-20)
+DataConfig.SchemaVersion = 4 -- 3 = eventPoints (pontos de evento, 2026-09-20); 4 = lastUpdateSeen (log de atualização, 2026-09-25)
 
 DataConfig.AutosaveInterval = 90 -- segundos
 DataConfig.LoadRetries = 3
@@ -61,6 +61,7 @@ export type Profile = {
 	rating: number, -- Elo de duelo 1v1 (DuelConfig.RatingStart)
 	clanTag: string?, -- clã atual (ClanService; a verdade é o registro do clã, isto é cache)
 	settings: { [string]: any }, -- acessibilidade/controles (Controls.Settings; SettingsService valida)
+	lastUpdateSeen: string, -- última versão do log de atualização que o jogador viu ("" = nenhuma; UpdateLogService)
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -81,6 +82,7 @@ function DataConfig.DefaultProfile(): Profile
 		mastery = {},
 		rating = 1000,
 		settings = {},
+		lastUpdateSeen = "",
 	}
 end
 

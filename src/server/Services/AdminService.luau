@@ -867,6 +867,15 @@ global.AnnounceGlobal = function(admin, args)
 	return true, "mensagem GLOBAL publicada (todos os servidores)"
 end
 
+-- D4: log de atualização — publica UpdateLogConfig.Current para todos os servidores (UpdateLogService)
+global.PublishUpdate = function()
+	local ok, svc = pcall(require, script.Parent:WaitForChild("UpdateLogService"))
+	if not ok then
+		return false, "UpdateLogService não carregou"
+	end
+	return (svc :: any).Publish()
+end
+
 perTarget.Announce = function(admin, target, args)
 	local text = textArg(args)
 	if not text then

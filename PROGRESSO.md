@@ -248,6 +248,14 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**D4 FEITO (25/09, sem teste)** — LOG DE ATUALIZAÇÃO: `UpdateLogConfig` (versões 1.0/1.1 de exemplo, `Current`),
+`UpdateLogService` (versão publicada em DataStore `UpdateLog_v1` + MessagingService `SahurUpdateLog`; ao carregar o
+perfil, se publicada ≠ `profile.lastUpdateSeen` (schema 4) manda `NotifyUpdateLog`; `RequestUpdateSeen` grava;
+`FetchUpdateLog` lista), `UpdateLogController` + `UpdateLogGui` (tela "Novidades" centrada, tween curto, sem som,
+botão "versões anteriores"), item **Config → Novidades** na topbar, botão DEV (aba ADM) "PUBLICAR novidades" (pede 2º
+clique). TESTAR: (1) DEV → PUBLICAR novidades → a tela abre para todos online (~2 s); fechar e reentrar = não abre de
+novo (em Studio/servidor privado o perfil não salva, então pode reabrir — esperado); (2) Config → Novidades reabre e
+"versões anteriores" alterna 1.1/1.0; (3) subir `Current` para "1.2" com uma entrada nova e publicar de novo.
 **C0 FEITO (25/09, sem teste)** — história com arco do adryan: 10 capítulos (`cap2b` "Um favor para o adryan" — ele paga
 demais para você manter o mapa ocupado longe da cachoeira; `cap4b` "Pegadas na lama" com o Toduro; falas de LRY/Ravy/
 approx_verde/RIP_ACE plantando a desconfiança; final referencia o favor). Progresso migra por Id (`migrateChapter`

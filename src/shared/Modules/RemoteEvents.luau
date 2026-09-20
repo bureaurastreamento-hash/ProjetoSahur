@@ -63,6 +63,7 @@ RemoteEvents.Events = ({
 	RequestModToggle = "RequestModToggle", -- (modId: string, enabled: boolean) — só dono do servidor privado / dev (ModService)
 	RequestReport = "RequestReport", -- (targetName: string, reasonId: string, text: string?) — ReportConfig.Reasons
 	RequestVendor = "RequestVendor", -- (action: "buy"|"roll", id: string?, currency: "points"|"event"?) — vendedor da Lojinha (VendorConfig)
+	RequestUpdateSeen = "RequestUpdateSeen", -- (version: string) — jogador fechou a tela de novidades dessa versão (UpdateLogService grava no perfil)
 	RequestTrade = "RequestTrade", -- (action: "invite"|"accept"|"decline"|"cancel"|"add"|"remove"|"points"|"event_points"|"ready"|"confirm", a: any?, b: any?) — trocas no vendedor (TradeConfig)
 
 	-- Notify: servidor -> cliente
@@ -102,6 +103,7 @@ RemoteEvents.Events = ({
 	NotifyMods = "NotifyMods", -- todos: (state: { active: {id}, catalog: {...}, canEdit: boolean }) — ModService
 	NotifyReport = "NotifyReport", -- dono: (ok: boolean, message: string) — resultado do RequestReport
 	NotifyVendor = "NotifyVendor", -- dono: (event: "bought"|"denied", data: table)
+	NotifyUpdateLog = "NotifyUpdateLog", -- dono: (entry: UpdateLogConfig.Entry) — versão publicada que ele ainda não viu (abre a tela sozinha)
 	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
 }) :: { [string]: string }
 
@@ -109,6 +111,7 @@ RemoteEvents.Events = ({
 RemoteEvents.Functions = ({
 	FetchServerTime = "FetchServerTime", -- () -> number
 	FetchAdminLogin = "FetchAdminLogin", -- () -> boolean (abre sessão dev; só para Players em AdminConfig)
+	FetchUpdateLog = "FetchUpdateLog", -- () -> { published: string?, versions: { UpdateLogConfig.Entry } } — botão "Novidades"
 	FetchAchievements = "FetchAchievements", -- () -> { season: {...}?, list: { { id, name, desc, progress, goal, done, season, reward } } }
 }) :: { [string]: string }
 
