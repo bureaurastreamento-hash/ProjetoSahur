@@ -15,7 +15,14 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
-## ONDE PARAMOS (2026-09-24) — ler PROGRESSO.md "RETOMAR AQUI" → "ONDE PARAMOS"
+## ONDE PARAMOS (2026-09-25, noite) — ler PROGRESSO.md "RETOMAR AQUI" → "ONDE PARAMOS"
+- **Leva autônoma de 25/09 (dono fora do PC, autorizou)**: B5 Stand animado; C0 história com arco do adryan (10 capítulos,
+  migração por Id, NPCs sempre R6); D1 anti-2v1 (`CounterService`, barra Revide + E, funciona no ragdoll); D2 variações
+  de golpe (`Ability.Variants`, `pickVariant`); D3 torneio "Último de pé" (`TournamentService`, DEV → MAPA → TORNEIO);
+  D4 log de atualização (`UpdateLogConfig`/`UpdateLogService`, Config → Novidades, DEV "PUBLICAR novidades").
+  Servidor testado via MCP; VISUAL/cliente ainda sem o dono ver. **Mapa do dono**: ele edita a Taberna/entorno à mão no
+  Studio — ao voltar, sincronizar (`sincronizar_arena.luau`, `comparar_extras.py`, backup JSONL) ANTES de Play/regenerar;
+  `montar_taberna.luau` está travado. PRÓXIMO: lista de testes do dono (tudo acima) → C2 place de criação → C3 mural.
 - A1–A6 da lista do dono FEITOS (DEV com ON/OFF, cenas predefinidas, agarrão trava, boss/traidor à solta, trailer
   com órbita de grupo, NPC nunca deita "duro", **traidor = bot especial OP** via `BotService.Spawn` com
   `Attributes`/`Tuning`, atributo `DamageMult`) + intocável no agarrão/ult. Nada disso foi testado pelo dono ainda.

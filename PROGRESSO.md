@@ -245,7 +245,7 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
+## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 FEITOS em leva autônoma; próximo = dono testa TUDO → C2/C3)
 
 ### ONDE PARAMOS (ler primeiro)
 **D3 FEITO (25/09, sem teste)** — TORNEIO "ÚLTIMO DE PÉ" por cima do mapa livre: `TournamentConfig` (solo/duo/clan,
