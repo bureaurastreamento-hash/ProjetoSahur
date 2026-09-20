@@ -50,7 +50,7 @@ type Fight = {
 	recentHits: { { t: number, amount: number } }, -- golpes recebidos (janela do enrage)
 	enragedUntil: number,
 	enrageReadyAt: number,
-	roam: boolean, -- x3 da flecha: nasce no centro do mapa e anda livre (BossConfig.Roam), sem leash
+	roam: boolean, -- à solta (todos desde 2026-09-23): centro = onde está, alcance = mapa, sem lugar para voltar
 	nextRoamAt: number, -- os.clock() do próximo passo de vagar (sem alvo)
 }
 
@@ -595,12 +595,11 @@ local function summon(player: Player, byName: string?, power: number?)
 		humanoid.DisplayName = model.Name
 	end
 	state = "Fighting"
-	-- x3 da flecha (mult > 1): nasce no centro do mapa e fica à solta; boss normal: santuário
-	local roam = mult > 1
-	local roamPos = if roam then roamSpawnPosition() else nil
-	if not roamPos then
-		roam = false
-	end
+	-- x3 da flecha (mult > 1): nasce no CENTRO do mapa; boss normal: santuário. Os DOIS ficam à solta
+	-- (dono, 2026-09-23: "precisam poder sair da cachoeira, sempre voltavam para lá") — perseguem pelo mapa
+	-- (BossConfig.Roam.Radius) e só somem após Roam.AbandonSeconds sem ninguém por perto.
+	local roam = true
+	local roamPos = if mult > 1 then roamSpawnPosition() else nil
 	local spawnPos: Vector3 = roamPos or (if spawnPart then spawnPart.Position else arenaCenter())
 	local lift = humanoid.HipHeight + root.Size.Y / 2 + 1
 	model:PivotTo(CFrame.new(spawnPos + Vector3.new(0, lift, 0)))

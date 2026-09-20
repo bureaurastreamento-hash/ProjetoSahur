@@ -79,10 +79,6 @@ local function findExtras()
 	arenaPart = extras:FindFirstChild(CFG.ArenaPartName, true) :: BasePart?
 end
 
-local function arenaCenter(): Vector3
-	return if arenaPart then arenaPart.Position elseif spawnPart then spawnPart.Position else QuestConfig.Spots.Santuario.Pos
-end
-
 local function toast(player: Player, title: string, text: string)
 	notifyQuest:FireClient(player, "toast", { title = title, text = text })
 end
@@ -332,7 +328,6 @@ end
 -- ---------------------------------------------------------------------------
 
 local function aiLoop(f: Fight)
-	local center = arenaCenter()
 	f.lastSeenPlayer = os.clock()
 	while not f.finished and f.model.Parent and f.humanoid.Health > 0 do
 		task.wait(0.1)
@@ -354,15 +349,12 @@ local function aiLoop(f: Fight)
 		if RagdollService.IsModelRagdolled(f.model) or now < f.busyUntil or f.model:GetAttribute("Grabbed") == true then
 			continue
 		end
-		-- saiu da arena (empurrado para fora) = volta
-		if (f.root.Position - center).Magnitude > CFG.ArenaRadius + 15 then
-			f.humanoid:MoveTo(center)
-			continue
-		end
-		local near = playersNear(center, CFG.ArenaRadius)
+		-- À SOLTA (dono, 2026-09-23): o traidor persegue pelo mapa inteiro a partir de onde ESTÁ (ChaseRadius);
+		-- sem ninguém por perto ele fica parado onde parou (não volta ao santuário) e some após AbandonSeconds.
+		local near = playersNear(f.root.Position, CFG.ChaseRadius)
 		local target = near[1]
 		if not target then
-			f.humanoid:MoveTo(center)
+			f.humanoid:MoveTo(f.root.Position)
 			f.combo = 1
 			if now - f.lastSeenPlayer > CFG.AbandonSeconds then
 				endFight(f, false)

@@ -51,10 +51,11 @@ QuestConfig.Traitor = {
 	WalkSpeed = 20,
 	ChaseSpeed = 24, -- fase 2 (metade da vida)
 	PhaseTwoAt = 0.5,
-	ArenaRadius = 45, -- studs a partir de BossArena (santuário): fora disso ele volta/ignora
+	ArenaRadius = 45, -- (legado) raio do santuário onde nasce
+	ChaseRadius = 300, -- à solta: enxerga/persegue lutadores até aqui a partir de onde ESTÁ (mapa inteiro)
 	SpawnPartName = "BossSpawn", -- Workspace.Sahur.ArenaExtras (Props)
 	ArenaPartName = "BossArena",
-	AbandonSeconds = 60, -- sem ninguém vivo na arena por esse tempo = some (fala de novo com o NPC para voltar)
+	AbandonSeconds = 120, -- sem ninguém vivo por perto por esse tempo = some (fala de novo com o NPC para voltar)
 	Punch = { Damage = 6, Range = 7 }, -- combo de 4 no ritmo do M1 (ResolveNpcHit respeita block)
 	Dash = { MinDist = 12, MaxDist = 40, Seconds = 0.4, Cooldown = 3.5 }, -- pulo até o alvo quando está longe
 	Burst = { Radius = 10, Damage = 14, Windup = 0.9, Cooldown = 9, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } :: CombatConfig.Knockback }, -- rajada com aviso no chão
