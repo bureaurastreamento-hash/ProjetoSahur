@@ -194,9 +194,9 @@ local function areaHit(player: Fighter, character: Model, effect: CharacterDefs.
 		victims = Hitbox.Around(character, effect.Radius, MAX_AREA_TARGETS)
 	end
 	for _, victim in victims do
-		CombatService.ResolveHit(player, character, victim, damage, false, effect.Knockback)
+		local kind = CombatService.ResolveHit(player, character, victim, damage, false, effect.Knockback)
 		local stunSeconds = effect.StunSeconds
-		if typeof(stunSeconds) == "number" then
+		if typeof(stunSeconds) == "number" and kind ~= "immune" then
 			local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 			if victimPlayer then
 				CombatService.Stun(victimPlayer, stunSeconds, "stunned")
@@ -263,9 +263,9 @@ effects.Dash = function(player, character, ability, direction)
 			for _, victim in Hitbox.InDirection(character, dir, e.Range, e.Width, e.Height, MAX_AREA_TARGETS) do
 				if not hitAlready[victim] then
 					hitAlready[victim] = true
-					CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { KnockbackDirection = dir })
+					local kind = CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { KnockbackDirection = dir })
 					local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
-					if victimPlayer and typeof(e.StunSeconds) == "number" then
+					if victimPlayer and typeof(e.StunSeconds) == "number" and kind ~= "immune" then
 						CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 					end
 					-- Devorar (boss): cada alvo atingido cura o lançador
@@ -482,7 +482,8 @@ effects.Grab = function(player, character, ability, direction)
 		end
 		task.wait(e.Carry)
 		release() -- solta ANTES do golpe: a física volta para a vítima e o empurrão entra no cliente dela
-		RagdollService.ClearIFrames(character)
+		-- dono (2026-09-23): intocável até o golpe final sair (nada de dano/hitstun/ragdoll no meio do agarrão)
+		RagdollService.GrantIFrames(character, 0.5)
 		if not stillValid(player, character) or not HealthService.IsAlive(victim) then
 			HealthService.LockTo(victim, nil)
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
@@ -647,7 +648,7 @@ effects.FlyGrab = function(player, character, ability, direction)
 		root.CFrame = CFrame.lookAt(root.Position, root.Position + look)
 		root.Anchored = false
 		release()
-		RagdollService.ClearIFrames(character)
+		RagdollService.GrantIFrames(character, 0.5) -- intocável até o impacto sair
 		if not ok or not stillValid(player, character) or not HealthService.IsAlive(victim) then
 			HealthService.LockTo(victim, nil)
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "release", { Victim = victim })
@@ -986,6 +987,10 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 		state.ultUsedAwakenedUntil = state.awakenedUntil
 	end
 	CombatService.NotifyAction(player) -- habilidade cancela emote em loop
+	if ability.EnergyCost >= CharacterDefs.Energy.Max then
+		-- dono (2026-09-23): ativando a ULT o jogador é intocável (sem dano/hitstun/knockback/ragdoll/agarrão)
+		RagdollService.GrantIFrames(character, ability.CastTime + 0.3)
+	end
 	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
 
 	-- Despertou: usa a versão desperta da habilidade se existir (mesmo Id: animação/VFX iguais)
