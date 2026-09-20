@@ -15,6 +15,15 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## Estado 2026-09-22 — blocos B–F feitos SEM o dono ver (ver PROGRESSO.md "RETOMAR AQUI")
+- **Quests** (`QuestConfig`/`QuestService`/`QuestController`): história em capítulos, NPC = membro do grupo
+  (`TeamConfig`, gerado por `tools/atualizar_equipe.py`), murais na Taberna (`QuestBoards`; `TeamBoardService`
+  = mural dos devs). **Mods** (`ModsConfig`/`ModService`/`ModsController`, `MODS_KIT.md`): só servidor privado/
+  Studio; dono do privado ou dev liga; **servidor privado NUNCA salva** (`DataService.sessionOnly`).
+- Boss x3 da flecha nasce no centro e anda livre (`BossConfig.Roam`); menu DEV em abas (`gerar_devgui.py`);
+  jardim v2 amazônia/asteca + som `72131057531506`; construções v2 (tijolo 6×3×3, 2 andares, zigurate com
+  câmara/rampa) + desabamento + golpe pesado ×2; M1 com input buffer.
+
 ## Estado 2026-09-21 — ver PROGRESSO.md "RETOMAR AQUI" (FALTA o dono testar)
 - **Santuário do boss DENTRO da muralha sul** (`tools/arena_santuario.py` via `gerar_arena.py` → ArenaExtras;
   muralha aberta por `tools/escavar_muralha.luau` no `Arena.rbxm`). Fora só a cachoeira + jardim mesopotâmico.

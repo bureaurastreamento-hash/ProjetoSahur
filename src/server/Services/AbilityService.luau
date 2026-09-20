@@ -865,6 +865,9 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if not abilityLimiter:Allow(player) then
 		return
 	end
+	if player:GetAttribute("NoAbilities") == true then
+		return -- mod "só na mão" (ModService): sem habilidades
+	end
 	local state = getState(player)
 	local now = os.clock()
 
@@ -953,6 +956,9 @@ end
 local function onRequestAwaken(player: Player)
 	if not awakenLimiter:Allow(player) then
 		return
+	end
+	if player:GetAttribute("NoAbilities") == true then
+		return -- mod "só na mão": sem ult
 	end
 	local state = getState(player)
 	local character = player.Character

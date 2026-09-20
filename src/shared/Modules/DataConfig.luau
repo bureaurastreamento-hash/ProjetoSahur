@@ -34,6 +34,13 @@ export type Achievements = {
 	done: { [string]: boolean }, -- id da conquista -> já pagou
 	season: { id: string, counters: { [string]: number } }, -- contadores DO PASSE atual (zeram no passe novo)
 }
+export type Quests = {
+	chapter: number, -- capítulo atual (1 = primeiro; > #QuestConfig.Chapters = zerou a história)
+	active: boolean, -- já falou com o NPC do capítulo (objetivos contando)
+	counters: { [string]: number }, -- progresso dos objetivos do capítulo ATUAL (zera ao avançar)
+	done: { [string]: boolean }, -- capítulos concluídos (Id)
+}
+
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
@@ -46,6 +53,7 @@ export type Profile = {
 	daily: { lastDay: number, streak: number }, -- lastDay = ProgressionConfig.DayIndex
 	missions: { day: number, list: { Mission } }, -- legado: fica no save, ninguém mais usa
 	achievements: Achievements,
+	quests: Quests, -- história em capítulos (QuestService, 2026-09-22)
 	-- cosméticos (CosmeticsService): ids de CosmeticsConfig
 	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
 	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
@@ -67,6 +75,7 @@ function DataConfig.DefaultProfile(): Profile
 		daily = { lastDay = 0, streak = 0 },
 		missions = { day = 0, list = {} },
 		achievements = { counters = {}, done = {}, season = { id = "", counters = {} } },
+		quests = { chapter = 1, active = false, counters = {}, done = {} }, -- QuestService (história em capítulos)
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},

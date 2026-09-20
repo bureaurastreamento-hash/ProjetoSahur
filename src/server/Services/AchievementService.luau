@@ -139,11 +139,21 @@ end
 -- API para os outros services
 -- ---------------------------------------------------------------------------
 
+local listeners: { (Player, string, number) -> () } = {}
+
+--- Outro service quer saber de todo Progress (QuestService): fn(player, kind, amount).
+function AchievementService.OnProgress(fn: (Player, string, number) -> ())
+	table.insert(listeners, fn)
+end
+
 --- Soma `amount` no contador `kind` (permanente e o do passe) e confere as conquistas.
 function AchievementService.Progress(player: Player, kind: string, amount: number)
 	local profile = DataService.GetProfile(player)
 	if not profile or amount <= 0 then
 		return
+	end
+	for _, fn in listeners do
+		task.spawn(fn, player, kind, amount)
 	end
 	local changed = ensureSeason(profile)
 	local counters = profile.achievements.counters

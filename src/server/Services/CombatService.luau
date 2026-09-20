@@ -25,6 +25,7 @@ local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local CombatService = {}
 
 -- AbilityService depende deste módulo; é carregado tardiamente em Start() para evitar ciclo.
+local ProgressionService: any = nil -- carregado no Start (evita ciclo Cosmetics→Combat→Progression)
 local AbilityService: any = nil
 
 type PlayerState = {
@@ -120,6 +121,10 @@ local function restoreWalkSpeed(player: Player)
 		local timeSlow = player:GetAttribute("TimeSlow") -- Domínio do Tempo (AbilityService)
 		if typeof(timeSlow) == "number" then
 			mult *= timeSlow
+		end
+		local modMult = player:GetAttribute("ModSpeedMult") -- mod de sala (ModService, servidor privado)
+		if typeof(modMult) == "number" and modMult > 0 then
+			mult *= modMult
 		end
 		humanoid.WalkSpeed = base * mult
 	end
@@ -488,6 +493,9 @@ function CombatService.ResolveHit(attacker: Player, attackerChar: Model, victim:
 			finalDamage = 0
 			CombatService.Stun(attacker, CombatConfig.Block.ParryStun, "parried")
 			victimState.critUntil = now + CombatConfig.Critical.Window
+			if ProgressionService then
+				ProgressionService.Progress(victimPlayer, "parries", 1) -- conquistas/quests
+			end
 			if AbilityService then
 				AbilityService.OnParry(victimPlayer)
 			end
@@ -855,6 +863,9 @@ function CombatService.Init()
 end
 
 function CombatService.Start()
+	pcall(function()
+		ProgressionService = (require :: any)(script.Parent:FindFirstChild("ProgressionService")) -- FindFirstChild: o analisador não vê ciclo
+	end)
 	local ok, result = pcall(require, script.Parent:WaitForChild("AbilityService"))
 	if ok then
 		AbilityService = result

@@ -28,8 +28,11 @@ local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local Log = require(Modules:WaitForChild("Log"))
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 
+local ProgressionService: any = nil -- carregado no Start (evita ciclo)
+
 local DestructionService = {}
 
+DestructionService.Enabled = true -- false = nada quebra (ModService)
 DestructionService.Tag = "Destructible"
 DestructionService.CollisionGroup = "Debris"
 DestructionService.DebrisSeconds = 4.5 -- tijolo solto some depois disso
@@ -275,6 +278,9 @@ local function collapseAbove(removed: { BasePart }, from: Vector3?): { BasePart 
 end
 
 local function onHit(parts: { BasePart }, attacker: Model)
+	if not DestructionService.Enabled then
+		return -- mod "cenário indestrutível" (ModService)
+	end
 	local root = attacker and attacker:FindFirstChild("HumanoidRootPart")
 	local from = if root and root:IsA("BasePart") then root.Position else nil
 	local positions: { Vector3 } = {}
@@ -298,6 +304,12 @@ local function onHit(parts: { BasePart }, attacker: Model)
 		if tree and ti and not ti.down then
 			table.insert(treePositions, ti.base)
 			toppleTree(tree, ti, from)
+		end
+	end
+	if #removed > 0 and ProgressionService then
+		local player = Players:GetPlayerFromCharacter(attacker)
+		if player then
+			ProgressionService.Progress(player, "bricks", #removed) -- conquistas/quests
 		end
 	end
 	if notify then
@@ -400,6 +412,9 @@ function DestructionService.Init()
 end
 
 function DestructionService.Start()
+	pcall(function()
+		ProgressionService = require(script.Parent:WaitForChild("ProgressionService"))
+	end)
 	local sahur = Workspace:FindFirstChild("Sahur")
 	if not sahur then
 		return

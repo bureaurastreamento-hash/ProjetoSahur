@@ -213,6 +213,28 @@ local function migrate(raw: any): DataConfig.Profile
 		profile.achievements.counters.kills = profile.stats.kills
 		profile.achievements.counters.level = profile.level
 	end
+	-- quests (história em capítulos, 2026-09-22; sem trocar o schema: perfil sem o campo começa do 1)
+	if typeof(raw.quests) == "table" then
+		local q = raw.quests :: any
+		if typeof(q.chapter) == "number" and q.chapter >= 1 then
+			profile.quests.chapter = math.floor(q.chapter)
+		end
+		profile.quests.active = q.active == true
+		if typeof(q.counters) == "table" then
+			for kind, value in q.counters do
+				if typeof(kind) == "string" and typeof(value) == "number" and value >= 0 then
+					profile.quests.counters[kind] = math.floor(value)
+				end
+			end
+		end
+		if typeof(q.done) == "table" then
+			for id, done in q.done do
+				if typeof(id) == "string" and done == true then
+					profile.quests.done[id] = true
+				end
+			end
+		end
+	end
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
 end
@@ -249,7 +271,12 @@ local function load(player: Player)
 
 	if ok then
 		session.profile = migrate(raw)
-		session.sessionOnly = false
+		-- SERVIDOR PRIVADO (dono, 2026-09-22): NADA salva — nem pontos, nem itens, nem quests. O perfil carrega
+		-- (o jogador usa o que já tem) e fica só na sessão; DataService.IsSessionOnly = true bloqueia compras.
+		session.sessionOnly = game.PrivateServerId ~= ""
+		if session.sessionOnly then
+			Log.debug(("[DataService] %s em servidor PRIVADO: perfil carregado, nada será salvo"):format(player.Name))
+		end
 		Log.debug(("[DataService] %s carregado: %d moedas, %d personagens, %d vitórias"):format(
 			player.Name, session.profile.coins, #session.profile.unlockedCharacters, session.profile.stats.wins))
 	else

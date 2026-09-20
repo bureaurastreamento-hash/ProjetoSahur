@@ -250,9 +250,53 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ### PRÓXIMA SESSÃO — por onde começar
 1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
    à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
-2. Bloco que falta dos PLANOS (2026-09-21): E workshop de mods + quests (design grande — fechar escopo com o
-   dono antes). (B jardim v2, C construções v2, D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22, sem o dono ver.)
+2. TODOS os blocos B–F dos PLANOS (2026-09-21) estão FEITOS em 2026-09-22 (sem o dono ver): B jardim v2,
+   C construções v2, D menu DEV, E quests + mods (v1), F boss x3 à solta. Próximo = o que o dono mandar depois
+   de testar; pendências do E: textos/recompensas/posições dos NPCs (o dono ajusta), capítulo final (traidor),
+   loaders de mods de asset (character/cosmetic/vfx/map), place de criação + divulgação no Discord.
 3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-22 — BLOCO E FEITO (v1): QUESTS (história em capítulos) + MODS de servidor privado
+Decisões do dono (2026-09-22): formato A (linha de capítulos; final = lutar contra um dev TRAIDOR, a escolher);
+quests/mini-games envolvem o battlegrounds; NPCs = membros do grupo FX_Bacons; mural das quests na Taberna +
+mural SÓ dos devs com agradecimento; mods: comunidade cria numa place de criação (kit), manda pelo Discord,
+equipe confere lista exigente e sobe; só o dono do servidor privado escolhe; em servidor privado NADA salva;
+painel MODS em Config só em servidor privado e sempre para ADMs.
+- **`TeamConfig.luau`** (gerado por `tools/atualizar_equipe.py` da API pública do grupo 9835819): 7 membros —
+  Humanoider_20 e ToduroDemais (Owner), adryan_keep, LRY, Ravy (Admin), approx_verde, RIP_ACE (Membro).
+  `Function`/`Quote` editáveis à mão (preservados por UserId ao regerar).
+- **`QuestConfig.luau`**: 7 capítulos (1 por membro) + `final` trancado ("O traidor"). Objetivos por contador:
+  kills, parries (NOVO no CombatService), bricks (NOVO no DestructionService), streak (máx., atributo KillStreak),
+  duel_wins, boss_kills, visit_<Spot>. Spots: Taberna, Praça, Lojinha (ao lado do vendedor), Cachoeira,
+  ZigurateSE (topo), MercadoNW, Santuário. Recompensas: pontos de evento + pontos + XP (+ emote no cap. 7).
+  **Textos, metas, recompensas e posições são PROVISÓRIOS** (o dono ajusta).
+- **`QuestService`**: NPC com o AVATAR real do membro (`CreateHumanoidModelFromUserId`, fallback R6), ancorado,
+  prompt E "Falar", marcador "!"; fluxo aceitar → contar → entregar (só o NPC do capítulo atual; os outros
+  apontam o certo); `profile.quests` (chapter/active/counters/done; migração sem trocar schema);
+  `AchievementService.OnProgress` (gancho novo) alimenta; visita por raio a cada 2 s; `QuestService.Talk`
+  (DEV/testes). Mural das quests: `Workspace.QuestBoards.QuestBoard` (parede SUL da Taberna, z 28.7) — conteúdo
+  por jogador via SurfaceGui no PlayerGui (QuestController).
+- **`TeamBoardService`**: mural dos devs (`QuestBoards.TeamBoard`, parede LESTE da Taberna x 380.1 / z 114, 16×13,
+  entre o pilar z 124 e a tocha z 104): headshots + nome + cargo + função + frase + AGRADECIMENTO ESPECIAL.
+- **`QuestController`**: chip do capítulo (canto direito), diálogo com foto do dev, toasts de objetivo, mural.
+- **MODS**: `ModsConfig.Catalog` (12 mods `rules` aprovados: vida ×2/×0,5, dano ×2, sem cooldown, só socos,
+  gravidade da Lua, acelerado, noite/meio-dia eterno, todos personagens, boss a cada 10 min, cenário fixo;
+  `Exclusive` por grupo). `ModService`: só liga em servidor PRIVADO ou Studio; edita = dono do privado ou dev;
+  vê = todos no privado + devs sempre; aplica via atributos já lidos (DevDamageMult, DevNoCooldown, NoAbilities
+  NOVO no AbilityService, ModSpeedMult NOVO no CombatService), Workspace.Gravity, SetClockOverride, MaxHealth/
+  JumpPower, BossService.Summon periódico, `DestructionService.Enabled` NOVO. `ModsController`: ícone "Mods" no
+  dropdown Config + painel (catálogo, autor/versão, toggle) + chip "MODS ATIVOS: nome (autor)".
+  **`DataService`: em servidor privado o perfil carrega mas `sessionOnly = true` → NADA salva.**
+- **`MODS_KIT.md`**: estrutura da pasta `ServerStorage.Mods.<Id>`, ficha do Discord, LISTA DE EXIGÊNCIAS (10 itens),
+  como a equipe sobe um mod, painel. Loaders de `character/cosmetic/vfx/map` = estrutura pronta, código em breve.
+- Testes MCP: boot 38 services; 7 NPCs nos spots com prompt; murais montados sem bater em móveis; mods ligam/
+  desligam (gravidade 60, hora 22→13 pelo exclusivo, destruição off) e voltam; fluxo de quest em Play com o
+  dono: aceitar → kills 5/parries 3 → entregar → capítulo 2, +150 pts +100 EP +100 XP.
+- **FALTA o dono testar**: falar com o Humanoider_20 na Taberna (E), ver chip/diálogo/mural, parryar 3× e
+  matar 5 (2 clientes), entregar; visual dos NPCs (avatar real carrega no Studio?), posição de cada NPC (RIP_ACE
+  ficou em y 4,6 no santuário — conferir se flutua), mural dos devs na parede leste; painel Config → Mods no
+  Studio (é dev): ligar "Gravidade da Lua" e "Só na mão"; num SERVIDOR PRIVADO de verdade: painel para todos,
+  só o dono liga, e nada salva ao sair.
 
 ### Sessão 2026-09-22 — BLOCO C FEITO: construções JJS MAIORES e enteráveis + desabamento + golpe pesado
 - `tools/arena_construcoes.py` v2: tijolo **6×3×3** (dobro do volume); **casas de 2 andares** (pé-direito 11,
