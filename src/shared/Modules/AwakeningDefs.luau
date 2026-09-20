@@ -24,6 +24,7 @@ export type Def = {
 	Theme: string,
 	Color: Color3?, -- sobrescreve CharacterDefs.Color na cena
 	VoiceAt: number?, -- segundos DEPOIS do estouro para o grito (padrão 0.05)
+	Stand: boolean?, -- tem Stand: silhueta de luz atrás (StandSilhouette) na cutscene e nas rajadas ORA/MUDA
 }
 
 local AwakeningDefs = {}
@@ -36,9 +37,9 @@ local characters: { [string]: Def } = {
 	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
 	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
 	-- (2026-09-21: os antigos Brawler/Mystic/Guardian viraram Jotaro/Kira/Dio — kits mantidos até os movesets próprios)
-	Jotaro = { UltName = "STAR PLATINUM: THE WORLD", Subtitle = "o tempo é meu", Theme = "rock" },
-	Dio = { UltName = "THE WORLD", Subtitle = "ZA WARUDO", Theme = "stone" },
-	Kira = { UltName = "KILLER QUEEN", Subtitle = "já tocou", Theme = "arcane" },
+	Jotaro = { UltName = "STAR PLATINUM: THE WORLD", Subtitle = "o tempo é meu", Theme = "rock", Stand = true },
+	Dio = { UltName = "THE WORLD", Subtitle = "ZA WARUDO", Theme = "stone", Stand = true },
+	Kira = { UltName = "KILLER QUEEN", Subtitle = "já tocou", Theme = "arcane", Stand = true },
 }
 
 local default: Def = { UltName = "DESPERTAR", Theme = "rock" }

@@ -245,7 +245,7 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 + B1–B3 FEITOS sem teste; próximo = testes do redesign → B4 silhueta)
+## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 + B1–B4 FEITOS sem teste; próximo = dono testa o redesign)
 
 ### ONDE PARAMOS (ler primeiro)
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
@@ -277,7 +277,11 @@ nome da ult do `AwakeningDefs`; tecla R / D-pad ← / botão R no celular; bots 
 `abilities` mostra 1–4+R e `ult` os 4 despertos; `ModRegistry` valida o esquema novo e migra o antigo (EnergyCost
 100 → 1º golpe desperto); aliases de VFX (`VFXLibrary`) e clipes (`ProcAnimDefs`) para todos os ids novos;
 `Animations.model.json` copia os ids publicados equivalentes (Swift/Ultimate, Jotaro/StarImpact, Dio/RoyalKnee…).
-PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo) → **B4** silhueta do Stand (cutscene + ORA/MUDA) → C/D.
+**B4 FEITO (24/09, sem teste)**: `StandSilhouette` (Shared/Modules, só cliente) = silhueta R6 de peças neon
+translúcidas com a cor do personagem flutuando atrás do ombro; `AwakeningDefs.Stand = true` (Jotaro/Dio/Kira);
+aparece do estouro da cutscene até 1,5 s depois dela e, nas rajadas (MultiHitArea com Offset = ORA/MUDA), com os
+braços socando pelo tempo da rajada.
+PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo; item 8 = silhueta) → C/D (anti-2v1, variantes, último de pé, log).
 
 **TESTES DO REDESIGN (dono, com o Studio aberto)**
 1. Jotaro: 1 Rajada ORA (cone à frente), 2 Arremesso, 3 Soco Estrela (dash com hit), 4 Pancada; R = Postura
@@ -296,6 +300,8 @@ PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo) → **B4** silhueta do Stan
 6. HUD: 5 slots (R no 5º), cooldowns certos ao despertar/voltar; celular tem botão R; cartão da seleção mostra
    1–4, R e G. Bots (DEV → BOTS) usam R e despertam; trailer `abilities`/`ult`.
 7. Mods: o mod [TESTE] antigo (EnergyCost 100) ainda carrega (ult vira 1º golpe desperto).
+8. Silhueta do Stand (Jotaro/Dio/Kira): aparece atrás no estouro da cutscene e socando nas rajadas ORA/MUDA;
+   tamanho/posição/cor (`StandSilhouette.ANCHOR`, `scale`) para o dono ajustar a gosto.
 Dono avisou (24/09): vai editar o mapa (Taberna/construções) no Studio; ao voltar, SINCRONIZAR antes de qualquer
 Play/fechar (`tools/sincronizar_arena.luau` para peças da arena; Taberna = ler pelo MCP e gravar em
 `tools/montar_taberna.luau`). Bug do botão direito da câmera no Studio (edição) = ambiente Wine/XWayland,

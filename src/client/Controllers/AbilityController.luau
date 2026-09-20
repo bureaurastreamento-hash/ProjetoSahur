@@ -35,6 +35,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
+local StandSilhouette = require(Modules:WaitForChild("StandSilhouette"))
 local VFXLibrary = require(Modules:WaitForChild("VFXLibrary"))
 local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 
@@ -315,6 +316,15 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 			FX.PlaySoundAt(victim, characterId, abilityId .. "_Mark")
 		end
 		return
+	end
+	if phase == "start" and effectType == "MultiHitArea" and abilityForType and (abilityForType.Effect :: any).Offset then
+		-- rajada ORA/MUDA: quem tem Stand mostra a silhueta socando pelo tempo da rajada (B4, dono)
+		local awDef = AwakeningDefs.Get(characterId)
+		if awDef.Stand then
+			local e: any = abilityForType.Effect
+			local seconds = (tonumber(e.Hits) or 6) * (tonumber(e.Interval) or 0.12) + 0.5
+			StandSilhouette.Show(character, awDef.Color or (defForType and defForType.Color) or Color3.fromRGB(200, 200, 255), seconds, { punch = true })
+		end
 	end
 	if phase == "start" then
 		if character:GetAttribute("BossRig") ~= nil then

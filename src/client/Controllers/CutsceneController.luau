@@ -256,6 +256,7 @@ end
 -- ---------------------------------------------------------------------------
 local Lighting = game:GetService("Lighting")
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
+local StandSilhouette = require(Modules:WaitForChild("StandSilhouette"))
 
 local screenGui: ScreenGui? = nil
 local barTop: Frame
@@ -1077,6 +1078,10 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 		FX.SpawnVFX(character, SHARED, "Awakening_Burst", true)
 		FX.SpawnVFX(character, characterId, "Awakening_Burst", true)
 		FX.SpawnVFX(character, characterId, "Awakening", false) -- aura do modo (segue o personagem)
+		if awDef.Stand then
+			-- B4 (dono): o Stand é uma silhueta de luz atrás do personagem, do estouro até um pouco depois da cena
+			StandSilhouette.Show(character, color, total - burstAt + 1.5, { scale = 1.3 })
+		end
 		theme.burst(ctx)
 		local cleanup = burstCleanup[character]
 		if cleanup then
