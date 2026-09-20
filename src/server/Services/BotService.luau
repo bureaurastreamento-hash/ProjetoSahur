@@ -534,6 +534,20 @@ function BotService.List(): { Model }
 	return list
 end
 
+--- Comportamento predominante dos bots ("" sem bots).
+function BotService.Behavior(): string
+	local count: { [string]: number } = {}
+	local best, bestN = "", 0
+	for m in bots do
+		local b = tostring(m:GetAttribute("Behavior") or "passive")
+		count[b] = (count[b] or 0) + 1
+		if count[b] > bestN then
+			best, bestN = b, count[b]
+		end
+	end
+	return best
+end
+
 function BotService.Count(): number
 	return #BotService.List()
 end

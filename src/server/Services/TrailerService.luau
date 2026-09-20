@@ -188,6 +188,10 @@ local function cleanup()
 	running = false
 end
 
+function TrailerService.IsRunning(): boolean
+	return running
+end
+
 function TrailerService.Stop()
 	if running then
 		token += 1

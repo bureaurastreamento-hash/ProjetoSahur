@@ -167,6 +167,18 @@ local function applySpeed(target: Player)
 end
 
 --- Estado do alvo para o painel.
+--- Módulos que dependem (indiretamente) deste: carregados só na hora (evita ciclo de require).
+local lazyCache: { [string]: any } = {}
+local function lazyRequire(name: string): any
+	if lazyCache[name] == nil then
+		local ok, mod = pcall(function()
+			return (require :: any)(script.Parent:WaitForChild(name))
+		end)
+		lazyCache[name] = if ok then mod else false
+	end
+	return lazyCache[name] or nil
+end
+
 local function stateOf(target: Player): { [string]: any }
 	local profile = DataService.GetProfile(target)
 	local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
@@ -188,6 +200,26 @@ local function stateOf(target: Player): { [string]: any }
 		streak = target:GetAttribute("KillStreak") or 0,
 		damageMult = target:GetAttribute("DevDamageMult") or 1,
 		sessionOnly = DataService.IsSessionOnly(target),
+		-- estado do SERVIDOR (o painel pinta os botões de toggle/ação por isto)
+		server = {
+			dummies = DummyService.Enabled,
+			bots = if BotService then BotService.Count() else 0,
+			botsBehavior = if BotService then BotService.Behavior() else "",
+			trailer = (function()
+				local ts = lazyRequire("TrailerService")
+				return ts ~= nil and ts.IsRunning()
+			end)(),
+			boss = BossService.GetState(), -- Ready | Fighting | Cooldown | Missing
+			bossForm = BossFormService ~= nil and BossFormService.IsActive(),
+			traitor = TraitorService ~= nil and TraitorService.IsActive(),
+			clockOverride = Workspace:GetAttribute("ClockOverride"), -- nil = ciclo automático
+			night = EnvironmentService.IsNight(),
+			event = (function()
+				local ok, es = pcall(require, script.Parent:FindFirstChild("EventService"))
+				return ok and es ~= nil and es.IsActive()
+			end)(),
+			arrowCarrier = if RitualService and RitualService.GetCarrier() then RitualService.GetCarrier().Name else nil,
+		},
 	}
 end
 
@@ -794,18 +826,6 @@ local MessagingService = game:GetService("MessagingService")
 local DataStoreService = game:GetService("DataStoreService")
 local ANNOUNCE_TOPIC = "SahurAnnounce"
 local BAN_STORE = "Bans_v1"
-
---- Módulos que dependem (indiretamente) deste: carregados só na hora (evita ciclo de require).
-local lazyCache: { [string]: any } = {}
-local function lazyRequire(name: string): any
-	if lazyCache[name] == nil then
-		local ok, mod = pcall(function()
-			return (require :: any)(script.Parent:WaitForChild(name))
-		end)
-		lazyCache[name] = if ok then mod else false
-	end
-	return lazyCache[name] or nil
-end
 
 local function textArg(args: { [string]: any }): string?
 	local t = args.text

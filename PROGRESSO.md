@@ -289,6 +289,15 @@ B3. Servidor: `AbilityService` (troca de kit ao despertar e volta ao fim; R com 
 B4. STANDS: modelo do Stand (arte ou peças) aparece atrás do personagem só na animação da ult (cutscene +
     golpes despertos); `AwakeningDefs` por personagem; VFX/sons.
 
+**C0 — HISTÓRIA e NPCs (dono, 2026-09-23 noite — anotado, fazer depois de A)**
+- História "ruinzinha e incompleta" (tester: "por que o adryan é traidor se nem tivemos missão/contexto com ele
+  antes?"). AUMENTAR: mais capítulos/contexto com o adryan antes da traição (pistas em capítulos anteriores, falas
+  dos outros devs desconfiando, um capítulo com ele "ajudando" que depois se revela armadilha), textos/recompensas.
+- NPCs dos devs "bugados": roupas do avatar não aparecem em alguns (CreateHumanoidModelFromUserId sem os
+  acessórios/roupas carregados? conferir Shirt/Pants/Accessory vs. rig R6/R15), marcador "!" longe da cabeça em
+  alguns (Adornee/StudsOffset por altura do rig), posições estranhas (talvez falta de âncora/colisão; hoje ancorado
+  e CanCollide=false). CORRIGIR UM POR UM, com perguntas individuais ao dono sobre cada NPC (lugar, pose, fala).
+
 **C — Backlog anterior (continua valendo, depois de A e B)**
 C1. Lista de testes do dono (blocos A–F de 21/22-09 + capítulo final + mods de asset + bots/trailer).
 C2. Place de criação da comunidade (item 2 abaixo). C3. Mural de votação de mods (item 3). C4. Textos/recompensas

@@ -68,6 +68,32 @@ local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
 local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName", "TrailerScene" }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
+-- Botões pintados pelo estado do SERVIDOR (state.server): "on" (verde + contorno) / "sel" (azul) / nil (cor original).
+-- Dono (2026-09-23): "não sei quais estão ativos" — todo toggle/ação com estado mostra aqui.
+local SERVER_STATUS: { [string]: (any) -> string? } = {
+	ToggleDummies = function(sv) return if sv.dummies then "on" else nil end,
+	Trailer = function(sv) return if sv.trailer then "on" else nil end,
+	TrailerScene = function(sv) return if sv.trailer then "on" else nil end,
+	TrailerStop = function(sv) return if sv.trailer then "sel" else nil end,
+	SummonBoss = function(sv) return if sv.boss == "Fighting" then "on" elseif sv.boss == "Cooldown" then "sel" else nil end,
+	SummonBossStrong = function(sv) return if sv.boss == "Fighting" then "on" else nil end,
+	BecomeBoss = function(sv) return if sv.bossForm then "on" else nil end,
+	SummonTraitor = function(sv) return if sv.traitor then "on" else nil end,
+	SetTime = function(sv) return if sv.clockOverride ~= nil then "on" else nil end,
+	SetDay = function(sv) return if sv.clockOverride ~= nil and not sv.night then "on" else nil end,
+	SetNight = function(sv) return if sv.clockOverride ~= nil and sv.night then "on" else nil end,
+	TimeAuto = function(sv) return if sv.clockOverride == nil then "on" else nil end,
+	StartEvent = function(sv) return if sv.event then "on" else nil end,
+	GiveArrow = function(sv) return if sv.arrowCarrier ~= nil then "on" else nil end,
+	BotsPassive = function(sv) return if (sv.bots or 0) > 0 and sv.botsBehavior == "passive" then "on" else nil end,
+	BotsAggressive = function(sv) return if (sv.bots or 0) > 0 and sv.botsBehavior == "aggressive" then "on" else nil end,
+	BotsIdle = function(sv) return if (sv.bots or 0) > 0 and sv.botsBehavior == "idle" then "on" else nil end,
+	ClearBots = function(sv) return if (sv.bots or 0) > 0 then "sel" else nil end,
+}
+local originalColors: { [TextButton]: Color3 } = {} -- cor de fábrica de cada botão (para voltar do ON/flash)
+local paint: (TextButton, string?) -> ()
+local strokes: { [TextButton]: UIStroke } = {}
+local lastServerState: any = nil
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
@@ -125,6 +151,34 @@ end
 -- Estado do alvo
 -- ---------------------------------------------------------------------------
 
+--- Pinta um botão pelo estado: "on" = verde com contorno, "sel" = azul, nil = cor de fábrica.
+paint = function(b: TextButton, status: string?)
+	if not originalColors[b] then
+		originalColors[b] = b.BackgroundColor3
+	end
+	local stroke: UIStroke = strokes[b] or (function()
+		local st = Instance.new("UIStroke")
+		st.Thickness = 2
+		st.Color = Color3.fromRGB(150, 255, 190)
+		st.Enabled = false
+		st.Parent = b
+		strokes[b] = st
+		return st
+	end)()
+	if status == "on" then
+		b.BackgroundColor3 = COLOR_ON
+		stroke.Color = Color3.fromRGB(150, 255, 190)
+		stroke.Enabled = true
+	elseif status == "sel" then
+		b.BackgroundColor3 = COLOR_SELECTED
+		stroke.Color = Color3.fromRGB(200, 225, 255)
+		stroke.Enabled = true
+	else
+		b.BackgroundColor3 = originalColors[b] :: Color3
+		stroke.Enabled = false
+	end
+end
+
 local function renderState(state: { [string]: any })
 	local unlocked = if typeof(state.unlocked) == "table" then table.concat(state.unlocked, ",") else "?"
 	stateLabel.Text = ("%s (%d)%s · %s · pontos %d · kills %d · vida %d/%d · energia %s · speed %d · dano x%s\npersonagens: %s"):format(
@@ -137,8 +191,39 @@ local function renderState(state: { [string]: any })
 	for buttonName, key in TOGGLE_BUTTONS do
 		local b = panel:FindFirstChild(buttonName) :: TextButton?
 		if b then
-			b.BackgroundColor3 = if state[key] == true then COLOR_ON else COLOR_OFF
+			paint(b, if state[key] == true then "on" else nil)
 		end
+	end
+	if typeof(state.server) == "table" then
+		lastServerState = state.server
+		for buttonName, fn in SERVER_STATUS do
+			local b = panel:FindFirstChild(buttonName, true) :: TextButton?
+			if b then
+				paint(b, fn(state.server))
+			end
+		end
+		local sv = state.server
+		local bits = {}
+		if (sv.bots or 0) > 0 then
+			table.insert(bits, ("%d bot(s) %s"):format(sv.bots, tostring(sv.botsBehavior)))
+		end
+		if sv.trailer then
+			table.insert(bits, "TRAILER rodando")
+		end
+		if sv.boss == "Fighting" then
+			table.insert(bits, "boss vivo")
+		end
+		if sv.traitor then
+			table.insert(bits, "traidor vivo")
+		end
+		table.insert(bits, if sv.clockOverride ~= nil then ("hora congelada (%s)"):format(if sv.night then "noite" else "dia") else "ciclo dia/noite")
+		if sv.event then
+			table.insert(bits, "EVENTO ativo")
+		end
+		if not sv.dummies then
+			table.insert(bits, "bonecos OFF")
+		end
+		stateLabel.Text ..= "\nservidor: " .. table.concat(bits, " · ")
 	end
 	for _, id in CharacterDefs.Order do
 		local b = charactersList:FindFirstChild(id) :: TextButton?
@@ -218,10 +303,29 @@ end
 
 -- Liga o clique de um botão de comando; os de CONFIRM pedem 2º clique.
 local armed: { [TextButton]: number } = {}
+local FLASH = Color3.fromRGB(255, 255, 255)
+--- Clique = "flash" branco por um instante (o dono não sabia se o clique tinha entrado) e, logo depois,
+--- o estado é pedido de novo para os toggles refletirem o resultado.
+local function flash(b: TextButton)
+	if not originalColors[b] then
+		originalColors[b] = b.BackgroundColor3
+	end
+	local before = b.BackgroundColor3
+	b.BackgroundColor3 = FLASH
+	task.delay(0.12, function()
+		if b.BackgroundColor3 == FLASH then
+			b.BackgroundColor3 = before
+		end
+	end)
+	task.delay(0.35, requestState)
+end
 local function bindButton(name: string, fire: () -> ())
 	local b = get(panel, name) :: TextButton
 	if not CONFIRM[name] then
-		b.MouseButton1Click:Connect(fire)
+		b.MouseButton1Click:Connect(function()
+			flash(b)
+			fire()
+		end)
 		return
 	end
 	local originalText = b.Text
@@ -230,6 +334,7 @@ local function bindButton(name: string, fire: () -> ())
 		if armed[b] then
 			armed[b] = nil
 			b.Text = originalText
+			flash(b)
 			fire()
 			return
 		end
