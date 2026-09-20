@@ -245,7 +245,34 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-23 — pendências do bloco E FEITAS; tudo commitado)
+## RETOMAR AQUI (última sessão: 2026-09-23 noite — A1–A5 FEITOS; parar antes do A6; tudo commitado e no GitHub)
+
+### ONDE PARAMOS (ler primeiro)
+Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
+(`Combatant.Fighter`), `BotService` (bots com combate real), `TrailerService` v2 (cenas), e as correções A1–A5 da
+lista do dono (DEV com ON/OFF, cenas predefinidas, agarrão trava quem está preso, boss/traidor à solta, trailer com
+órbita de grupo + bug do "deitado duro"). **Intocável** no agarrão/ult (pedido do dono). O dono ainda NÃO testou
+A1–A5 nem o "intocável". PRÓXIMO PASSO = **A6** (traidor = bot especial OP) e depois **B** (redesign das habilidades,
+começando pela PESQUISA para o dono aprovar). Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
+golpe estilo Jujutsu Shenanigans, evento de admin "último de pé", log de atualização no jogo — ver "D" abaixo.
+
+**D — Ideias novas do dono (2026-09-23 noite) — anotadas, ordenar junto com B**
+D1. ANTI 2v1 (tecla E): quando 2+ jogadores batem no mesmo alvo, o alvo sozinho carrega uma barra própria; cheia,
+    E (se a tecla estiver livre) dispara um contra-ataque que acerta TODOS os agressores de uma vez (+ variações).
+    Servidor: contador de agressores distintos numa janela (ex.: 6 s) por vítima; barra = dano recebido enquanto
+    em desvantagem; HUD com a barra; ataque em área/varredura 360° com knockback; anim/VFX próprios.
+D2. VARIAÇÕES DE GOLPE (estilo "Jujutsu Shenanigans"): a maioria dos ataques muda conforme o contexto — emendado
+    com outro ataque (combo de habilidades), no pulo (aéreo), caindo de altura (mergulho), correndo, contra alvo
+    caído/ragdoll, etc. Entra no esquema do redesign B2 (cada Ability com `Variants = { Air, Falling, Sprint,
+    Chain = <AbilityId>, OnDowned }`), servidor decide a variante pelo estado (airState, velocidade, último golpe).
+D3. EVENTO DE ADMIN "ÚLTIMO DE PÉ": o admin abre um torneio de eliminação — todos lutam (1v1 / grupos / clãs),
+    quem morre sai (fica de espectador/lobby), até sobrar o último jogador/grupo/clã; prêmio especial (pontos/
+    cosmético agora; Robux/payout futuramente). Reaproveita MatchService (rounds) + EventService + arena; painel
+    DEV: abrir/fechar inscrição, iniciar, modo (solo/duo/clã), prêmio.
+D4. LOG DE ATUALIZAÇÃO no jogo: mensagem/animação de "novidades" a cada atualização grande — o dev prepara o texto
+    (versão + lista) num config (`UpdateLogConfig`), escolhe QUANDO ativar (DEV "Publicar novidades"), e cada
+    jogador vê uma vez (flag no perfil por versão) uma tela animada; botão "Novidades" no menu para rever.
+
 
 ### SEQUÊNCIA NOVA (dono, 2026-09-23 noite — depois de testar bots/trailer) — seguir NESTA ORDEM
 Relato do dono: botões do DEV sem feedback de ativo/inativo; traidor fraco (sem ult, não comba) — tem que ser mais
@@ -256,7 +283,8 @@ REDESIGN das habilidades: 1/2/3/4 = 4 ataques sem ult, R = 1 passiva/suporte, G 
 acabar; tirar ults/animações/ataques sem sentido; pesquisar kits coerentes por personagem; STANDS dos personagens
 de JoJo aparecem na animação da ult.
 
-**A — Correções do que foi entregue (curtas, uma por commit)**
+**A — Correções do que foi entregue (curtas, uma por commit)** — A1..A5 FEITOS em 23/09 (commits bcc2c8a, fd8a5ea,
+cd0af36, f8d5f7a, b00ca5c + 810695d "intocável"); falta o dono testar. A6 = PRÓXIMO.
 A1. DEV: todo botão de toggle mostra ON/OFF (cor + contorno) pelo `GetState`; botões de ação dão "flash" ao
     clicar; bots/traidor/trailer com estado (ex.: "TRAILER rodando", "N bots"). Hoje só God/Energia/Cooldown/Voar.
 A2. DEV: "CENA" vira PREDEFINIÇÕES (aba Teste → TRAILER): botões Combo · Parry · Dash · Habilidades (por

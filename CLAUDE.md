@@ -15,6 +15,13 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## ONDE PARAMOS (2026-09-23 noite) — ler PROGRESSO.md "RETOMAR AQUI" → "ONDE PARAMOS"
+- A1–A5 da lista do dono FEITOS (DEV com ON/OFF, cenas predefinidas, agarrão trava, boss/traidor à solta, trailer
+  com órbita de grupo, NPC nunca deita "duro") + intocável no agarrão/ult. **PRÓXIMO: A6** (traidor = bot OP), depois
+  **B** (redesign: 1–4 ataques, R passiva, G ult troca o kit, Stands) começando pela PESQUISA aprovada pelo dono.
+  Ideias novas anotadas em "D": anti-2v1 (tecla E), variações de golpe (JJS), evento "último de pé", log de
+  atualização no jogo. Nunca escrever "Discord" em texto do jogo.
+
 ## Estado 2026-09-23 (tarde) — núcleo do combate aceita BOTS; trailer v2 real
 - **`Combatant.Fighter` = Player | Model de bot**: Health/Ragdoll/Combat/Movement/AbilityService recebem Fighter.
   Regras: estado por Instance; `Combatant.CharacterOf/Of/PlayerOf/Notify`; FireClient/AntiExploit/DataStore/crédito
