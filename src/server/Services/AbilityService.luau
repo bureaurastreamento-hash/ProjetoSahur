@@ -327,6 +327,8 @@ local function attachVictim(attacker: Fighter, attackerRoot: BasePart, victim: M
 	if vHum then
 		vHum.PlatformStand = true
 	end
+	-- dono (2026-09-23): preso no agarrão NINGUÉM age — bot, traidor, boss, boneco (as IAs e o NpcPunch leem isto)
+	victim:SetAttribute("Grabbed", true)
 	-- Soldada, a vítima NÃO pode colidir: as partes dela sobrepostas ao atacante/chão numa solda rígida
 	-- viram impulso enorme e os dois voam (bug do "vai pro void", dono 2026-09-19). Grupo de colisão em vez
 	-- de CanCollide porque o Humanoid religa o CanCollide do Torso sozinho. Sem massa para o atacante
@@ -361,6 +363,7 @@ local function attachVictim(attacker: Fighter, attackerRoot: BasePart, victim: M
 		end
 		released = true
 		weld:Destroy()
+		victim:SetAttribute("Grabbed", false)
 		if vHum and not (victimPlayer and victimPlayer:GetAttribute("Ragdolled") == true) then
 			vHum.PlatformStand = false
 		end
@@ -934,7 +937,7 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	if not HealthService.CanFight(player) then
 		return deny(player, slot, "cant_fight")
 	end
-	if CombatService.IsStunned(player) then
+	if CombatService.IsStunned(player) or CombatService.IsGrabbed(character) then
 		return deny(player, slot, "stunned")
 	end
 	if RagdollService.IsRagdolled(player) then

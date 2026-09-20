@@ -350,8 +350,8 @@ local function aiLoop(f: Fight)
 		if now - f.lastHitAt >= CFG.Regen.Delay and f.humanoid.Health < f.humanoid.MaxHealth then
 			f.humanoid.Health = math.min(f.humanoid.MaxHealth, f.humanoid.Health + CFG.Regen.PerSecond * 0.1)
 		end
-		-- caído/atordoado: espera
-		if RagdollService.IsModelRagdolled(f.model) or now < f.busyUntil then
+		-- caído/atordoado/AGARRADO: espera
+		if RagdollService.IsModelRagdolled(f.model) or now < f.busyUntil or f.model:GetAttribute("Grabbed") == true then
 			continue
 		end
 		-- saiu da arena (empurrado para fora) = volta

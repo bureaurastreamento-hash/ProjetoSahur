@@ -295,7 +295,7 @@ local function think(b: Bot)
 		end
 		return
 	end
-	if CombatService.IsStunned(b.model) or CombatService.IsTimeSlowed(b.model) then
+	if CombatService.IsStunned(b.model) or CombatService.IsTimeSlowed(b.model) or CombatService.IsGrabbed(b.model) then
 		return
 	end
 	local cutscene = b.model:GetAttribute("CutsceneUntil")

@@ -319,8 +319,8 @@ local function onRequestDash(player: Fighter, rawDirection: any, rawLook: any)
 		return
 	end
 
-	-- Preso no combo/stun: não sai (a brecha é quando o atacante para de bater)
-	if CombatService.IsStunned(player) then
+	-- Preso no combo/stun/agarrão: não sai (a brecha é quando o atacante para de bater)
+	if CombatService.IsStunned(player) or CombatService.IsGrabbed(character) then
 		return
 	end
 	-- Dono (2026-09-21): ação individual — no meio do soco não sai dash; dentro do Domínio do Tempo nada sai

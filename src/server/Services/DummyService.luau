@@ -174,7 +174,7 @@ local function spawnAt(pad: BasePart, index: number)
 			local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
 			while model.Parent and humanoid.Health > 0 and root do
 				local m1 = CombatConfig.Attacks.M1
-				local targets = Hitbox.Around(model, ATTACK_RANGE, 1)
+				local targets = if model:GetAttribute("Grabbed") == true then {} else Hitbox.Around(model, ATTACK_RANGE, 1)
 				local target = targets[1]
 				local tRoot = target and target:FindFirstChild("HumanoidRootPart") :: BasePart?
 				if tRoot and HealthService.IsAlive(target) then

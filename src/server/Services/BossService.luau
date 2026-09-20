@@ -465,6 +465,10 @@ end
 local function aiLoop(f: Fight)
 	local lastState = 0
 	while not f.finished and f.humanoid.Health > 0 and f.model.Parent do
+		if f.model:GetAttribute("Grabbed") == true then
+			task.wait(0.1) -- preso num agarrão (Rick): nem anda nem bate até soltar
+			continue
+		end
 		-- à solta: o "centro" é onde o boss ESTÁ e o alcance é o mapa; preso: BossArena + ArenaRadius
 		local center = if f.roam then f.root.Position else arenaCenter()
 		local radius = if f.roam then BossConfig.Roam.Radius else BossConfig.ArenaRadius

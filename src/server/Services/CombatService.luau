@@ -613,11 +613,14 @@ end
 --- Soco de NPC (boneco atacante): anima em todos (NotifyAttack) e, após o wind-up, acerta jogadores à
 --- frente com ResolveNpcHit. `comboIndex` só para a animação/knockback do 4º.
 function CombatService.NpcPunch(attackerChar: Model, comboIndex: number, damage: number)
+	if CombatService.IsGrabbed(attackerChar) then
+		return
+	end
 	local cfg = CombatConfig.Attacks.M1
 	notifyAttack:FireAllClients(attackerChar, "M1", comboIndex)
 	task.delay(cfg.HitDelay, function()
-		if not attackerChar.Parent or not HealthService.IsAlive(attackerChar) then
-			return
+		if not attackerChar.Parent or not HealthService.IsAlive(attackerChar) or CombatService.IsGrabbed(attackerChar) then
+			return -- morreu ou foi AGARRADO no wind-up: o soco não sai
 		end
 		local kb = if comboIndex >= cfg.ComboLength then cfg.FinisherKnockback else nil
 		for _, victim in Hitbox.InFront(attackerChar, cfg.Range, cfg.Width, cfg.Height, cfg.MaxTargets) do
@@ -633,6 +636,11 @@ function CombatService.NotifyNpcBlock(character: Model, active: boolean, player:
 	else
 		notifyBlock:FireAllClients(character, active)
 	end
+end
+
+--- Preso num agarrão (AbilityService.attachVictim põe o atributo): não soca, não bloqueia, não usa nada.
+function CombatService.IsGrabbed(character: Model?): boolean
+	return character ~= nil and character:GetAttribute("Grabbed") == true
 end
 
 --- Gancho: um NPC (boss/traidor/boneco) acertou `victim` (BotService: bot passivo revida contra o NPC).
@@ -734,8 +742,8 @@ local function onRequestAttack(player: Fighter, attackId: any, claimed: any)
 	end
 
 	local now = os.clock()
-	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) then
-		return -- em cooldown/stun/ragdoll: ignorado silenciosamente
+	if now < state.stunnedUntil or now < state.nextAttackAt or RagdollService.IsRagdolled(player) or CombatService.IsGrabbed(character) then
+		return -- em cooldown/stun/ragdoll/agarrado: ignorado silenciosamente
 	end
 	if CombatService.IsTimeSlowed(player) then
 		return -- dentro do Domínio do Tempo: não soca (dono, 2026-09-21)
@@ -866,8 +874,8 @@ local function onRequestBlock(player: Fighter, active: any)
 	if not HealthService.IsAlive(Combatant.CharacterOf(player)) or not HealthService.CanFight(player) then
 		return
 	end
-	if active and RagdollService.IsRagdolled(player) then
-		return -- caído: sem block (o botão precisa ser apertado de novo ao levantar)
+	if active and (RagdollService.IsRagdolled(player) or CombatService.IsGrabbed(Combatant.CharacterOf(player))) then
+		return -- caído/agarrado: sem block (o botão precisa ser apertado de novo ao levantar)
 	end
 	state.wantBlock = active
 	setBlocking(player, active)
