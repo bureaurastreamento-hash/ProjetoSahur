@@ -26,7 +26,7 @@ DataConfig.Rewards = {
 	Kill = 2,
 }
 
-export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number }
+export type Stats = { wins: number, losses: number, kills: number, deaths: number, matches: number, tournamentWins: number }
 export type Mission = { id: string, progress: number, done: boolean } -- legado (missões diárias, saíram em 2026-09-17)
 -- Conquistas (AchievementsConfig): contadores que só sobem + o que já foi pago.
 export type Achievements = {
@@ -69,7 +69,7 @@ function DataConfig.DefaultProfile(): Profile
 		coins = 0,
 		eventPoints = 0,
 		unlockedCharacters = { "Jotaro" },
-		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0 },
+		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0, tournamentWins = 0 }, -- tournamentWins: "Último de pé" (D3); perfil antigo começa em 0 (a carga copia só chaves conhecidas)
 		xp = 0,
 		level = 1,
 		daily = { lastDay = 0, streak = 0 },

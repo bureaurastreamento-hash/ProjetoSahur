@@ -63,6 +63,7 @@ RemoteEvents.Events = ({
 	RequestModToggle = "RequestModToggle", -- (modId: string, enabled: boolean) — só dono do servidor privado / dev (ModService)
 	RequestReport = "RequestReport", -- (targetName: string, reasonId: string, text: string?) — ReportConfig.Reasons
 	RequestVendor = "RequestVendor", -- (action: "buy"|"roll", id: string?, currency: "points"|"event"?) — vendedor da Lojinha (VendorConfig)
+	RequestTournament = "RequestTournament", -- (action: "join"|"leave"|"refresh") — torneio "Último de pé" (TournamentService)
 	RequestTrade = "RequestTrade", -- (action: "invite"|"accept"|"decline"|"cancel"|"add"|"remove"|"points"|"event_points"|"ready"|"confirm", a: any?, b: any?) — trocas no vendedor (TradeConfig)
 
 	-- Notify: servidor -> cliente
@@ -102,6 +103,7 @@ RemoteEvents.Events = ({
 	NotifyMods = "NotifyMods", -- todos: (state: { active: {id}, catalog: {...}, canEdit: boolean }) — ModService
 	NotifyReport = "NotifyReport", -- dono: (ok: boolean, message: string) — resultado do RequestReport
 	NotifyVendor = "NotifyVendor", -- dono: (event: "bought"|"denied", data: table)
+	NotifyTournament = "NotifyTournament", -- todos: (event: "state"|"start"|"eliminated"|"end"|"denied", data: table) — state = { phase, mode, modeLabel, endsAt, players, alive, teamsAlive, joined, reward }
 	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
 }) :: { [string]: string }
 

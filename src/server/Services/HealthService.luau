@@ -210,6 +210,13 @@ function HealthService.IsInvulnerable(victim: Model, attacker: Fighter?): boolea
 	if victimFighter and victimFighter:GetAttribute("Invulnerable") == true then
 		return true -- modo deus (AdminService)
 	end
+	if attacker and victimFighter and attacker ~= victimFighter then
+		-- torneio "Último de pé" em duplas/clãs (D3): companheiro de time não machuca companheiro
+		local team = victimFighter:GetAttribute("TournamentTeam")
+		if team ~= nil and attacker:GetAttribute("TournamentTeam") == team then
+			return true
+		end
+	end
 	local iframes = victim:GetAttribute(ATTR_IFRAMES)
 	if typeof(iframes) == "number" and os.clock() < iframes then
 		return true -- i-frames (ragdoll cancel / levantar / cutscene / agarrando)

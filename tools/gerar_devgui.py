@@ -209,6 +209,10 @@ mapa.kids.append(button("SetNight", "NOITE", udim2(0, COL_W, 0, 28), udim2(0, co
 mapa.y += 32
 mapa.row([("TimeAuto", "Ciclo automático", None, 1)])
 mapa.gap()
+mapa.section("TournamentSection", "TORNEIO ÚLTIMO DE PÉ  (inscrição 90 s · quem morre sai · prêmio na caixa; vazio = padrão)")
+mapa.box_row("TournamentPrize", "prêmio: pontos, evento, xp, cosmético (ex.: 1500, 300, 800, cape_gold)", [("TournamentOpen_solo", "Abrir: SOLO", GREEN), ("TournamentOpen_duo", "Abrir: DUPLAS", GREEN)])
+mapa.row([("TournamentOpen_clan", "Abrir: CLÃS", GREEN, 1), ("TournamentStart", "Fechar e INICIAR", None, 1), ("TournamentCancel", "Cancelar torneio", RED, 1)])
+mapa.gap()
 mapa.section("WorldSection", "CENÁRIO / SERVIDOR")
 mapa.row([("RestoreDestructibles", "Restaurar cenário destrutível", GREEN, 2), ("StartEvent", "EVENTO no Canion", GREEN, 1), ("EndEvent", "Encerrar evento", RED, 1)])
 mapa.row([("RespawnDummies", "Recriar bonecos", None, 1), ("ToggleDummies", "Bonecos ON/OFF", None, 1), ("BringDummy", "Trazer boneco", None, 1), ("RefreshLeaderboard", "Atualizar placar", None, 1)])
