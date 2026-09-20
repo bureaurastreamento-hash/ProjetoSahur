@@ -16,6 +16,9 @@ o mapa é novo e a equipe de arte está produzindo as animações dentro do Stud
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
 ## Estado 2026-09-22 — blocos B–F feitos SEM o dono ver (ver PROGRESSO.md "RETOMAR AQUI")
+- **PRÓXIMA SESSÃO**: (1) lista de testes do dono → corrigir; (2) PLACE DE CRIAÇÃO separada para a comunidade
+  (quase sem scripts do jogo — só templates do kit); (3) MURAL DE VOTAÇÃO de mods (OrderedDataStore, voto grátis
+  1/jogador/ciclo; vencedor da semana/mês entra no jogo com crédito) — detalhes no PROGRESSO.
 - **Quests** (`QuestConfig`/`QuestService`/`QuestController`): história em capítulos, NPC = membro do grupo
   (`TeamConfig`, gerado por `tools/atualizar_equipe.py`), murais na Taberna (`QuestBoards`; `TeamBoardService`
   = mural dos devs). **Mods** (`ModsConfig`/`ModService`/`ModsController`, `MODS_KIT.md`): só servidor privado/

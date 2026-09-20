@@ -245,16 +245,31 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-22 — o dono está SEM TESTERS; seguimos os blocos sem testar)
+## RETOMAR AQUI (última sessão: 2026-09-22 — tudo commitado e no GitHub; o dono estava SEM TESTERS)
 
 ### PRÓXIMA SESSÃO — por onde começar
-1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
-   à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
-2. TODOS os blocos B–F dos PLANOS (2026-09-21) estão FEITOS em 2026-09-22 (sem o dono ver): B jardim v2,
-   C construções v2, D menu DEV, E quests + mods (v1), F boss x3 à solta. Próximo = o que o dono mandar depois
-   de testar; pendências do E: textos/recompensas/posições dos NPCs (o dono ajusta), capítulo final (traidor),
-   loaders de mods de asset (character/cosmetic/vfx/map), place de criação + divulgação no Discord.
-3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+1. **O dono testa TUDO amanhã** e traz a lista do que mudar/adicionar/corrigir/tirar. Corrigir isso primeiro.
+   O que está sem teste dele (listas "FALTA o dono testar" nas seções abaixo): BLOCO A combate (2026-09-21),
+   muralha/destruição/roster (2026-09-21) e os blocos de 2026-09-22: F boss x3 à solta, D menu DEV em abas,
+   B jardim v2 (cachoeira/amazônia/templos + som), C construções v2 (2 andares, zigurate, desabamento, golpe
+   pesado), E quests (NPCs = devs, murais na Taberna) + mods (painel Config → Mods), input buffer do M1.
+2. **PLACE DE CRIAÇÃO/TESTE para a comunidade** (pedido do dono, 2026-09-22): uma place SEPARADA, liberada para a
+   comunidade criar mods/VFX/skins/etc., com QUASE NENHUM script do jogo (nada que possam copiar e reaproveitar).
+   Plano: place em branco do grupo com (a) rig R6 de referência + boneco de treino simples, (b) a estrutura
+   `ServerStorage.Mods.<Id>` com os ModuleScripts-template (`ModConfig`, `CharacterDef`, `Cosmetics`) vazios e
+   comentados, (c) um preview mínimo de VFX/animação (script pequeno e isolado, sem VFXLibrary/FX do jogo),
+   (d) o `MODS_KIT.md` como texto dentro da place, (e) NENHUM Service/Controller/Config do jogo. Montar via
+   MCP numa place nova (não é este repo; só as ferramentas/templates podem ficar em `tools/place_criacao/`).
+3. **MURAL DE VOTAÇÃO de mods** (ideia do dono, 2026-09-22 — é permitido pela Roblox: asset publicado pelo grupo,
+   voto GRÁTIS 1 por jogador por ciclo, sem sorteio/Robux no voto, conteúdo dentro das regras; pagar criador só
+   por payout do grupo). Plano: `ModVoteService` com `OrderedDataStore` (chave por ciclo semana/mês), candidatos =
+   fila de mods enviados/aprovados-para-votação (`ModsConfig.Candidates` ou lista no DataStore editada pelo DEV),
+   1 voto por jogador por ciclo (perfil ou DataStore), aba "VOTAÇÃO" no painel Mods com ranking "mais hypados" +
+   "vencedor da semana/mês"; o vencedor a equipe sobe para o jogo de verdade (skin/emote/mod, qualquer coisa da
+   comunidade) com crédito. Kit deve dizer que ao enviar o autor autoriza o uso no jogo.
+4. Pendências do E: capítulo final (dev traidor — o dono escolhe), loaders de mods de asset (character/cosmetic/
+   vfx/map), textos/recompensas/posições dos NPCs (RIP_ACE em y 4,6 no santuário pode flutuar).
+5. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
 
 ### Sessão 2026-09-22 — BLOCO E FEITO (v1): QUESTS (história em capítulos) + MODS de servidor privado
 Decisões do dono (2026-09-22): formato A (linha de capítulos; final = lutar contra um dev TRAIDOR, a escolher);
