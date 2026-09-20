@@ -298,6 +298,10 @@ B4. STANDS: modelo do Stand (arte ou peças) aparece atrás do personagem só na
   alguns (Adornee/StudsOffset por altura do rig), posições estranhas (talvez falta de âncora/colisão; hoje ancorado
   e CanCollide=false). CORRIGIR UM POR UM, com perguntas individuais ao dono sobre cada NPC (lugar, pose, fala).
 
+- (dono, 2026-09-23) Painel Mods SEM tutorial de criação: entra junto com a place de criação (C2) — aba "Criar
+  mod" no painel com passo a passo, link da place e da comunidade do grupo. NUNCA escrever "Discord" em texto do
+  jogo (Roblox bloqueia/modera) — usar "comunidade do grupo"/"link na página do jogo". Já trocado no painel.
+
 **C — Backlog anterior (continua valendo, depois de A e B)**
 C1. Lista de testes do dono (blocos A–F de 21/22-09 + capítulo final + mods de asset + bots/trailer).
 C2. Place de criação da comunidade (item 2 abaixo). C3. Mural de votação de mods (item 3). C4. Textos/recompensas

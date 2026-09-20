@@ -130,7 +130,7 @@ local function render()
 	elseif state.canEdit then
 		status.Text = "Só dá para LIGAR mods em servidor privado (ou no Studio). Aqui você só vê o catálogo aprovado."
 	else
-		status.Text = "Só o dono do servidor privado liga/desliga mods. Quer criar um mod? Veja o kit no Discord."
+		status.Text = "Só o dono do servidor privado liga/desliga mods. Quer criar um mod? Kit e tutorial na comunidade do grupo (em breve aqui no jogo)."
 	end
 	chip.Visible = #names > 0
 	chip.Text = "MODS ATIVOS: " .. table.concat(names, " · ")
