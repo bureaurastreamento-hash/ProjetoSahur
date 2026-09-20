@@ -245,7 +245,75 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-20 — tudo commitado e no GitHub; o dono pediu /clear)
+## RETOMAR AQUI (última sessão: 2026-09-21 — leva "muralha + destruição + animações + roster")
+
+### Sessão 2026-09-21 — FEITO no código (testado via MCP só no servidor; FALTA o dono testar jogando)
+Pedido do dono: santuário do boss DENTRO da muralha (fora só a cachoeira com floresta mesopotâmica; altar
+antigo fora), animação de parry e crítico, tirar personagens antigos, casar duração de ataque × animação,
+construções destrutíveis estilo JJS nas 2 áreas vazias (+ árvores), e salvar as peças que ele moveu perto da
+Taberna.
+1. **Peças movidas perto da Taberna SALVAS no `Arena.rbxm`** (chão `Outter` leste alargado 65→168 e as 2 rochas
+   da muralha leste encurtadas/subidas para abrir a caverna). Ferramenta nova: `tools/sincronizar_arena.luau`
+   (lune) — cola o dump do Studio (trecho no cabeçalho do arquivo), lista as diferenças e com `aplicar` grava.
+   **Usar sempre que o dono mover algo do `Workspace.Sahur.Arena` no Studio** (senão o Rojo desfaz).
+2. **Muralha escavada**: `tools/escavar_muralha.luau` (lune, idempotente) sobe 8 rochas da muralha sul
+   (x 30..166 / z 380..470) até o fundo ficar em y 34 — mesma técnica que o dono usou para a caverna.
+3. **Santuário dentro da muralha** (`tools/arena_santuario.py`, chamado pelo `gerar_arena.py` → ArenaExtras):
+   câmara x 34..162 / z 388..462, pé-direito 30, casca de rocha fechando o vão + tapa-buracos (x 0..30 e 166..210);
+   túnel de 28 studs atrás do véu da cachoeira; piso em tabuleiro de arenito + tapete de lápis-lazúli; ALTAR =
+   zigurate de 5 degraus com pedestal (`BossAltar`, prompts E/F do RitualService), placa `BossAltarRune` e
+   `BossCrack0..7` (acendem no ritual); disco solar alado e faixas de lápis no fundo, tabuletas cuneiformes,
+   2 lamassu (touros alados) flanqueando, 6 colunas com capitel de palmeira, braseiros, lamparinas penduradas,
+   tanques laterais com lótus, urnas, poeira dourada. `BossSpawn` (98, 1.5, 418) e `BossArena` (98, 1.5, 422)
+   no centro da câmara. O santuário ANTIGO (disco escuro, runas vermelhas, ossos, arco) saiu do gerador (o Rojo
+   já apagou do place). `Workspace.AltarGruta` foi para `ServerStorage.Backup_AltarGruta_antigo` (não apaguei;
+   o dono decide). **O dono precisa SALVAR o place** (o backup e o sync são edições do place).
+4. **Jardim da cachoeira** (fora, x 24..176 / z 298..376): cascata caindo da rocha (fio d'água + véu sobre a
+   entrada + lago raso + névoa/gotas + som), riacho saindo do lago, palmeiras (tâmaras), cedros em camadas,
+   tamargueiras, papiro, flores, musgo, lajes até a praça, ruínas de tijolo com azulejo de lápis, 2 pedestais-
+   zigurate com braseiro, vaga-lumes. (O pinheiro da arte em (110, 337) foi respeitado.)
+5. **Construções DESTRUTÍVEIS estilo JJS** (`tools/arena_construcoes.py` → `ArenaExtras.Destructible`, 2416
+   peças): em cada área (SE x 40..180 / z 165..290 e NW espelhada) um zigurate de 3 degraus, 9 casas de tijolo
+   cru (terraço com lajes de madeira, mureta, porta, janelas, escada, toldo, vasos), 6 barracas de mercado,
+   colunata, muro baixo, entulho, jarros e caixotes — tudo TIJOLO A TIJOLO (4×2×2,4). `ZigCore`/`ZigGold` são
+   fixos. O chão dessas áreas está em y −0,87 fora dos `Tiles` (|z| > 190): `ground(z)` no gerador.
+6. **DestructionService** (servidor) + **DestructionController** (cliente) + gancho `Hitbox.DestructibleHook`:
+   TODA consulta de ataque da Hitbox (soco, habilidade, boss) que cobre uma peça com a tag `Destructible` solta
+   a peça: desancora, voa para longe de quem bateu (grupo de colisão `Debris`: entulho não bate em entulho/
+   agarrado; bate em jogador como no JJS), some em 4,5 s e VOLTA em 50 s (fade). Tetos: 22 tijolos por golpe,
+   60 soltos ao mesmo tempo. **Árvores da arte** (`Arena.Trees.*.Oak/Pine`, `Corners.*.Trees`, 20 no total)
+   TOMBAM para o lado oposto ao atacante (rotação por CFrame em volta do pé; os meshes vêm com `CanQuery =
+   false`, o serviço liga) e voltam em 50 s. Efeitos `Shared/BrickBreak` e `Shared/TreeFall` (VFXLibrary) +
+   `NotifyDestruction`. `DestructionService.RestoreAll()` repõe tudo (pode virar comando DEV).
+   Testado via MCP (run_server): 10 tijolos soltos num golpe, sumiram em 5 s; carvalho tombou; altar com prompts.
+7. **Animações de PARRY e CRÍTICO** (ProcAnimDefs): `Shared/Parried` (quem levou o parry cambaleia com o braço
+   jogado para fora — tocada no atacante em todo cliente + hitstop), `Shared/CritPunch` (golpe crítico armado
+   pelo parry: braço atrás da cabeça e direto com o corpo inteiro; o atacante local toca no clique enquanto
+   `crit_ready`, os outros pelo 4º arg novo do `NotifyAttack`), `Shared/CritHit` (vítima: cabeça chicoteia,
+   tronco gira). `Shared/Parry` (quem parryou) já existia.
+8. **Duração casada** (`FX.PlayAnimation(..., fitSeconds)`): animação da equipe tem a velocidade ajustada
+   (`Length / fitSeconds`, entre `FX.FitSpeedMin` 0,7× e `FitSpeedMax` 4×; espera o Length carregar) e a
+   procedural escala o tempo (`ProcAnimController.Play(..., fitSeconds)`). Quem passa: socos (HitDelay +
+   Cooldown = 0,45 s), habilidades (`AbilityController.actionSeconds`: Dash/Grab = CastTime + Duration;
+   AreaDamage = max(CastTime, Delay) + 0,25; MultiHit = Hits × Interval; resto = CastTime; FlyGrab não),
+   `_Carry` (tempo real do Carry), TimeDome (Cinematic.Total), Awakening da equipe (Cutscene), emotes de cena
+   (Duration). Ex.: `Swift/TimeDome` 3,78 s → 3,8 s; `Shared/Uppercut` 1,83 s → 0,5 s (3,7×; se ficar
+   rápido demais, baixar `FitSpeedMax` ou desligar `team = true` desse clipe).
+9. **Personagens antigos SAÍRAM** (Brawler/Mystic/Guardian → **Jotaro/Kira/Dio** herdam os kits, provisórios):
+   rename global de ids em `src/` (CharacterDefs, ProcAnimDefs, VFXLibrary, Assets, AwakeningDefs, Trailer,
+   pastas `Assets/VFX|Animations|Sounds`), `DefaultCharacter = "Jotaro"` (grátis), Bruno/Swift 100 pts,
+   Kira 250 pts, Dio = VIP (como era o Guardian). `Order = Jotaro, Swift, Dio, Kira, Rick, Sahur, Overlord`.
+   Perfis antigos: `DataService.RENAMED_CHARACTERS` migra `unlockedCharacters` e `mastery` em todo carregamento
+   (schema continua 3). Ult names: STAR PLATINUM (tema rock), THE WORLD (stone), KILLER QUEEN (arcane).
+- **FALTA o dono testar**: entrar na câmara pela cachoeira (E/F no altar com a flecha à noite), boss automático
+  nascendo lá dentro (cabe? `ArenaRadius` 55 × câmara 128×74), socar casas/árvores nas 2 áreas (FPS com 2416
+  peças; tranco do entulho em jogador), parry → ver `Parried` no outro e `CritPunch`/`CritHit` no golpe seguinte,
+  velocidade das animações da equipe casadas (Uppercut), personagens novos na seleção (V) e perfil antigo
+  migrado. Se algo do jardim/câmara sobrepor a arte: `tools/achar_sobreposicao.luau`.
+- **Ainda planejado**: boss x3 da flecha nascendo no centro e andando livre (item abaixo); lajes `BossPathSlab`
+  do place sumiram com o sync — o caminho até a cachoeira agora são as `GardenSlab` do gerador.
+
+## Sessão anterior (2026-09-20 — tudo commitado e no GitHub)
 
 ### PRÓXIMA TAREFA (pedido do dono ao sair, 2026-09-20) — só PLANEJADA, nada feito no código
 **Boss x3 invocado pelo jogador (F no altar com a flecha) deve nascer no MAPA, quase no centro, perto dos

@@ -26,7 +26,7 @@ local FX = {}
 -- desviam para cá quando existe clipe em ProcAnimDefs para "<Pasta>/<Nome>".
 export type ProcAnimHook = {
 	Wants: (key: string, hasTeamId: boolean, character: Model?) -> boolean,
-	Play: (character: Model, key: string, looped: boolean?) -> boolean,
+	Play: (character: Model, key: string, looped: boolean?, fitSeconds: number?) -> boolean,
 	Stop: (character: Model, key: string) -> (),
 }
 FX.ProcAnim = nil :: ProcAnimHook?
@@ -340,14 +340,44 @@ local function trackFor(character: Model, folder: string, name: string): Animati
 	return track
 end
 
+--- Velocidade mínima/máxima ao CASAR uma animação com a duração da ação (FX.PlayAnimation fitSeconds):
+--- 5 s de animação para uma ação de 3 s = 1,67×; nunca fica em câmera lenta demais nem absurda.
+FX.FitSpeedMin = 0.7
+FX.FitSpeedMax = 4
+
+--- Ajusta a velocidade da track para ela durar `seconds` (espera o Length carregar, até ~3 s).
+local function fitTrack(track: AnimationTrack, seconds: number)
+	local function apply()
+		if track.Length <= 0 or seconds <= 0 then
+			return false
+		end
+		track:AdjustSpeed(math.clamp(track.Length / seconds, FX.FitSpeedMin, FX.FitSpeedMax))
+		return true
+	end
+	if apply() then
+		return
+	end
+	task.spawn(function()
+		local deadline = os.clock() + 3
+		while os.clock() < deadline and track.IsPlaying do
+			task.wait(0.05)
+			if apply() then
+				return
+			end
+		end
+	end)
+end
+
 --- Toca Assets.Animations.<folder>.<name>. Retorna a track (ou nil se não existir).
-function FX.PlayAnimation(character: Model, folder: string, name: string, looped: boolean?, priority: Enum.AnimationPriority?): AnimationTrack?
+--- `fitSeconds` = duração REAL da ação (CastTime, HitDelay+Cooldown, Carry…): a animação é acelerada/
+--- desacelerada para acabar junto com a ação (dono, 2026-09-21: ataque de 3 s usando animação de 5 s+).
+function FX.PlayAnimation(character: Model, folder: string, name: string, looped: boolean?, priority: Enum.AnimationPriority?, fitSeconds: number?): AnimationTrack?
 	folder = Assets.ResolveFolder("Animations", folder, name, character) -- versão do personagem, se houver
 	local hook = FX.ProcAnim
 	if hook then
 		local anim = Assets.GetAnimation(folder, name)
 		local hasTeamId = anim ~= nil and anim.AnimationId ~= "" and anim.AnimationId ~= "rbxassetid://"
-		if hook.Wants(folder .. "/" .. name, hasTeamId, character) and hook.Play(character, folder .. "/" .. name, looped) then
+		if hook.Wants(folder .. "/" .. name, hasTeamId, character) and hook.Play(character, folder .. "/" .. name, looped, fitSeconds) then
 			return nil -- procedural tocando (sem track da Roblox)
 		end
 	end
@@ -358,6 +388,11 @@ function FX.PlayAnimation(character: Model, folder: string, name: string, looped
 	track.Looped = looped == true
 	track.Priority = priority or Enum.AnimationPriority.Action
 	track:Play(0.1)
+	if fitSeconds and fitSeconds > 0 and not track.Looped then
+		fitTrack(track, fitSeconds)
+	else
+		track:AdjustSpeed(1)
+	end
 	-- Length 0 depois de carregar = o asset não veio (id errado ou publicado fora do criador do place:
 	-- jogo de grupo só carrega animação do grupo). Avisa uma vez por animação, só em Studio.
 	local key = folder .. "/" .. name

@@ -6,10 +6,10 @@
 	Lido só pelo cliente (CutsceneController); nada aqui muda regra de jogo.
 
 	Temas (implementados em CutsceneController.THEMES):
-	  rock      pedras levitando + chão rachando; estouro = pedras voam           (Brawler)
+	  rock      pedras levitando + chão rachando; estouro = pedras voam           (Jotaro)
 	  lightning pós-imagens do corpo + raios do chão; estouro = raios em volta    (Swift)
-	  arcane    anel de runas no chão + esferas orbitando; estouro = convergem     (Mystic)
-	  stone     pilares de pedra sobem em círculo; estouro = desmoronam            (Guardian)
+	  arcane    anel de runas no chão + esferas orbitando; estouro = convergem     (Kira)
+	  stone     pilares de pedra sobem em círculo; estouro = desmoronam            (Dio)
 	  drums     pulsos de luz/anéis no ritmo (acelerando); estouro = anel gigante  (Sahur)
 	  void      esfera escura crescendo + mundo dessaturado; estouro = colapsa     (Overlord)
 	  flesh     bolhas de carne borbulhando; estouro = estouram                    (BigChop)
@@ -29,17 +29,15 @@ export type Def = {
 local AwakeningDefs = {}
 
 local characters: { [string]: Def } = {
-	Brawler = { UltName = "FÚRIA", Subtitle = "força bruta", Theme = "rock" },
 	Swift = { UltName = "PODER MÁXIMO", Subtitle = "Bruno Gollini", Theme = "lightning" }, -- Swift = Bruno Gollini (dono, 2026-09-20)
-	Mystic = { UltName = "METEORO", Subtitle = "o céu cai", Theme = "arcane" },
-	Guardian = { UltName = "TERREMOTO", Subtitle = "muralha viva", Theme = "stone" },
 	Sahur = { UltName = "RITMO FINAL", Subtitle = "o ritmo que esmaga", Theme = "drums" },
 	Overlord = { UltName = "CATACLISMO", Subtitle = "só admin", Theme = "void" },
 	BigChop = { UltName = "FRENESI", Subtitle = "não morre, só cresce", Theme = "flesh" },
 	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
 	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
-	Jotaro = { UltName = "STAR PLATINUM", Subtitle = "Stand no máximo", Theme = "lightning" },
-	Dio = { UltName = "THE WORLD", Subtitle = "Stand no máximo", Theme = "void" },
+	-- (2026-09-21: os antigos Brawler/Mystic/Guardian viraram Jotaro/Kira/Dio — kits mantidos até os movesets próprios)
+	Jotaro = { UltName = "STAR PLATINUM", Subtitle = "Stand no máximo", Theme = "rock" },
+	Dio = { UltName = "THE WORLD", Subtitle = "Stand no máximo", Theme = "stone" },
 	Kira = { UltName = "KILLER QUEEN", Subtitle = "Stand no máximo", Theme = "arcane" },
 }
 

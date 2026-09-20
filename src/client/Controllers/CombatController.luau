@@ -54,16 +54,19 @@ local myLastAttackAt = -math.huge
 local myNextAttackAt = 0
 local myStunnedUntil = 0
 local pendingAttacks = 0 -- socos previstos cuja confirmação (NotifyAttack) ainda não chegou
+local myCritReadyUntil = 0 -- parryou: até aqui o próximo M1 é crítico (anima o CritPunch no clique)
 
 --- Animação + som do golpe (previsto no atacante local, NotifyAttack nos outros).
-local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: number)
+local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: number, crit: boolean?)
 	local attackDef = CombatConfig.Attacks[attackId]
 	if attackerChar:GetAttribute("BossRig") ~= nil then
 		RigAnimController.Pulse(attackerChar, if attackId == "M1" and comboIndex < 4 then 1 else 1.6) -- rig por peças: "mordida"
 	end
+	-- duração real do golpe = wind-up (HitDelay) + recuo (Cooldown): a animação (procedural ou da equipe) casa com isso
+	local fit = if attackDef then (attackDef.HitDelay or 0) + (attackDef.Cooldown or 0) else nil
 	if attackId ~= "M1" then
 		-- Downslam / Uppercut: animação com o próprio nome; o uppercut levanta o atacante junto
-		FX.PlayAnimation(attackerChar, SHARED, attackId)
+		FX.PlayAnimation(attackerChar, SHARED, attackId, false, nil, fit)
 		FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")
 		FX.SpawnVFX(attackerChar, SHARED, attackId, true) -- Shared/Uppercut, Shared/Downslam (VFXLibrary)
 		local up = attackDef and attackDef.AttackerUp
@@ -72,8 +75,14 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		end
 		return
 	end
-	FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex))
-	FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
+	if crit then
+		-- golpe crítico armado pelo parry: soco pesado próprio (dono, 2026-09-21) + rastro do finisher
+		FX.PlayAnimation(attackerChar, SHARED, "CritPunch", false, nil, fit)
+		FX.SpawnVFX(attackerChar, SHARED, "Swing_4", true)
+	else
+		FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex), false, nil, fit)
+		FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
+	end
 	local attackerPlayer = Players:GetPlayerFromCharacter(attackerChar)
 	local awakenedUntil = attackerPlayer and attackerPlayer:GetAttribute("AwakenedUntil")
 	if typeof(awakenedUntil) == "number" and awakenedUntil > Workspace:GetServerTimeNow() then
@@ -134,7 +143,7 @@ function CombatController.Attack()
 	end
 	myLastAttackAt = now
 	pendingAttacks += 1
-	playAttackFx(character, attackId, comboIndex)
+	playAttackFx(character, attackId, comboIndex, attackId == "M1" and now < myCritReadyUntil)
 	-- Wind-up aqui, com as posições exatas deste cliente; o servidor valida a lista numa caixa tolerante
 	task.delay(attackCfg.HitDelay, function()
 		if localPlayer.Character ~= character or os.clock() < myStunnedUntil then
@@ -232,7 +241,7 @@ local HITSTOP_LIGHT = 0.05
 local HITSTOP_HEAVY = 0.09
 local HITSTOP_FINISHER = 0.14
 
-local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex: number)
+local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex: number, crit: boolean?)
 	if not attackerChar then
 		return
 	end
@@ -245,7 +254,7 @@ local function onNotifyAttack(attackerChar: Model?, attackId: string, comboIndex
 		end
 		-- sem previsão pendente (ex.: golpe disparado por outro caminho): anima agora
 	end
-	playAttackFx(attackerChar, attackId, comboIndex)
+	playAttackFx(attackerChar, attackId, comboIndex, crit == true)
 end
 
 local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: number, kind: string)
@@ -263,6 +272,10 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		FX.SpawnVFX(victimChar, SHARED, "Parry", true)
 		FX.PlaySoundAt(victimChar, SHARED, "Parry")
 		FX.PlayAnimation(victimChar, SHARED, "Parry")
+		if attackerChar then
+			FX.PlayAnimation(attackerChar, SHARED, "Parried") -- quem levou o parry cambaleia
+			FX.Hitstop(attackerChar, HITSTOP_HEAVY)
+		end
 	elseif kind == "blocked" then
 		FX.DamageNumber(victimChar, ("%d"):format(math.floor(amount + 0.5)), COLOR_NUMBER_BLOCK)
 		FX.Flash(victimChar, COLOR_BLOCK, 0.15)
@@ -287,6 +300,9 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 	elseif kind == "crit" or kind == "blackflash" then
 		-- Recompensa do parry: crítico ×3 (vermelho) / Black Flash ×6 (escuro, tela treme)
 		local black = kind == "blackflash"
+		if attackerChar == localPlayer.Character then
+			myCritReadyUntil = 0 -- gastou o crítico
+		end
 		FX.DamageNumber(victimChar, ("%s %d"):format(if black then "BLACK FLASH" else "CRÍTICO", math.floor(amount + 0.5)), if black then COLOR_FINISHER else COLOR_CRIT)
 		FX.Flash(victimChar, if black then COLOR_BLACKFLASH else COLOR_CRIT, 0.35)
 		FX.Hitstop(victimChar, HITSTOP_FINISHER)
@@ -297,7 +313,7 @@ local function onNotifyDamage(attackerChar: Model?, victimChar: Model?, amount: 
 		if not FX.PlaySoundAt(victimChar, SHARED, if black then "BlackFlash" else "Crit") then
 			FX.PlaySoundAt(victimChar, SHARED, "Finisher_Hit")
 		end
-		FX.PlayAnimation(victimChar, SHARED, "Hit")
+		FX.PlayAnimation(victimChar, SHARED, "CritHit") -- reação pesada própria do crítico
 		if isMe or attackerChar == localPlayer.Character then
 			FX.Shake(if black then 1.2 else 0.8, 0.35)
 		end
@@ -398,6 +414,7 @@ local function onNotifyCooldown(reason: string, seconds: number)
 			FX.SpawnVFX(character, SHARED, "Stun", true) -- tontura em quem foi parryado
 		end
 	elseif reason == "crit_ready" then
+		myCritReadyUntil = os.clock() + seconds
 		local character = localPlayer.Character
 		if character then
 			FX.SetOutline(character, COLOR_CRIT) -- parryou: próximo soco é crítico

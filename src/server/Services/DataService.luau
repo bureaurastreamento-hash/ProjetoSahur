@@ -77,6 +77,13 @@ local function withRetry(label: string, attempts: number, fn: () -> any): (boole
 	return false, lastErr
 end
 
+--- Ids de personagem que MUDARAM de nome (2026-09-21: Brawler/Mystic/Guardian saíram; Jotaro/Kira/Dio
+--- herdaram os kits). Aplicado em todo carregamento (idempotente), sem trocar o schema.
+local RENAMED_CHARACTERS: { [string]: string } = { Brawler = "Jotaro", Mystic = "Kira", Guardian = "Dio" }
+local function renameCharacter(id: any): any
+	return if typeof(id) == "string" then (RENAMED_CHARACTERS[id] or id) else id
+end
+
 local function migrate(raw: any): DataConfig.Profile
 	local profile = DataConfig.DefaultProfile()
 	if typeof(raw) ~= "table" then
@@ -90,7 +97,8 @@ local function migrate(raw: any): DataConfig.Profile
 		profile.eventPoints = math.floor(raw.eventPoints) -- schema 3
 	end
 	if typeof(raw.unlockedCharacters) == "table" then
-		for _, id in raw.unlockedCharacters do
+		for _, rawId in raw.unlockedCharacters do
+			local id = renameCharacter(rawId)
 			if typeof(id) == "string" and CharacterDefs.Get(id) and not table.find(profile.unlockedCharacters, id) then
 				table.insert(profile.unlockedCharacters, id)
 			end
@@ -152,9 +160,10 @@ local function migrate(raw: any): DataConfig.Profile
 		end
 	end
 	if typeof(raw.mastery) == "table" then
-		for id, xp in raw.mastery do
+		for rawId, xp in raw.mastery do
+			local id = renameCharacter(rawId)
 			if typeof(id) == "string" and typeof(xp) == "number" and xp >= 0 then
-				profile.mastery[id] = math.floor(xp)
+				profile.mastery[id] = (profile.mastery[id] or 0) + math.floor(xp)
 			end
 		end
 	end

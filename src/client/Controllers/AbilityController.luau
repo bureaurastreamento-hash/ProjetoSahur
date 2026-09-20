@@ -219,6 +219,30 @@ local function applyAnimSlow()
 	end
 end
 
+--- Duração REAL da ação da habilidade (para casar a animação: FX.PlayAnimation fitSeconds). nil = sem casar
+--- (loops como o voo do Rick).
+local function actionSeconds(characterId: string, abilityId: string, data: any): number?
+	local def = CharacterDefs.Get(characterId)
+	local ability = def and CharacterDefs.FindAbility(def, abilityId)
+	if not ability then
+		return nil
+	end
+	local effect: any = ability.Effect
+	local cast = tonumber(ability.CastTime) or 0
+	local d = if typeof(data) == "table" then data else {}
+	local t = effect.Type
+	if t == "FlyGrab" then
+		return nil
+	elseif t == "Dash" or t == "Grab" then
+		return cast + (tonumber(d.Duration) or tonumber(effect.Duration) or 0)
+	elseif t == "AreaDamage" then
+		return math.max(cast, tonumber(effect.Delay) or 0) + 0.25
+	elseif t == "MultiHitArea" then
+		return math.max(cast, (tonumber(effect.Hits) or 1) * (tonumber(effect.Interval) or 0.3))
+	end
+	return math.max(cast, 0.25)
+end
+
 local function onNotifyAbility(character: Model?, characterId: string, abilityId: string, phase: string, data: any)
 	if not character then
 		return
@@ -270,7 +294,9 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if phase == "start" then
 			-- Cutscene de transformação (câmera + poses + VFX + sons); a aura/contorno do modo ficam depois
 			CutsceneController.PlayAwakening(character, characterId, data)
-			FX.PlayAnimation(character, characterId, "Awakening") -- se a equipe publicar uma, toca por cima
+			-- se a equipe publicar uma, toca por cima, casada com a duração da cutscene
+			local total = if typeof(data) == "table" then tonumber(data.Cutscene) else nil
+			FX.PlayAnimation(character, characterId, "Awakening", false, nil, total)
 		else
 			FX.SetOutline(character, nil)
 			FX.PlaySoundAt(character, "Shared", "Awakening_End")
@@ -281,7 +307,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if character:GetAttribute("BossRig") ~= nil then
 			RigAnimController.Pose(character, abilityId) -- rig por peças: pose própria da habilidade
 		end
-		FX.PlayAnimation(character, characterId, abilityId)
+		FX.PlayAnimation(character, characterId, abilityId, false, nil, actionSeconds(characterId, abilityId, data))
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)
 		-- (o estouro genérico Awakening_Burst por cima das ults saiu — dono: cada ult tem o próprio som)
@@ -317,9 +343,9 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if character == localPlayer.Character then
 			MovementController.StopFly()
 		end
-		FX.PlayAnimation(character, characterId, abilityId .. "_Carry")
 		local victim = if typeof(data) == "table" then data.Victim else nil
 		local carry = if typeof(data) == "table" then tonumber(data.Carry) or 0.8 else 0.8
+		FX.PlayAnimation(character, characterId, abilityId .. "_Carry", false, nil, carry) -- casa com o tempo real do Carry
 		-- captura: estalo na vítima + congela os dois por um instante (peso) + poeira arrastada enquanto carrega
 		if typeof(victim) == "Instance" and victim:IsA("Model") then
 			FX.SpawnVFX(victim, "Shared", "GrabCatch", true)

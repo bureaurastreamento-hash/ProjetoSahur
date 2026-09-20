@@ -13,6 +13,11 @@ local COMBATANT_TAG = "Combatant" -- NPCs/dummies precisam desta tag para levar 
 
 local Hitbox = {}
 
+--- Gancho do SERVIDOR (DestructionService): recebe as peças DESTRUTÍVEIS que a consulta de um ataque
+--- cobriu (tijolos das construções, árvores) e quem atacou. No cliente fica nil (só previsão).
+Hitbox.DestructibleHook = nil :: ((parts: { BasePart }, attacker: Model) -> ())?
+local DESTRUCTIBLE_TAG = "Destructible"
+
 local function isAlive(model: Model): boolean
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
 	if humanoid == nil or humanoid.Health <= 0 then
@@ -24,7 +29,13 @@ end
 local function collect(parts: { BasePart }, exclude: Model, maxTargets: number): { Model }
 	local found: { Model } = {}
 	local seen: { [Model]: boolean } = {}
+	local hook = Hitbox.DestructibleHook
+	local broken: { BasePart } = {}
 	for _, part in parts do
+		if hook and CollectionService:HasTag(part, DESTRUCTIBLE_TAG) then
+			table.insert(broken, part)
+			continue
+		end
 		-- Só partes DIRETAS do personagem (Head/Torso/braços/pernas/HRP). Handles de acessórios
 		-- (chapéu gigante, asas) ficam de fora: skin nunca muda a hitbox.
 		local model = part.Parent
@@ -35,6 +46,9 @@ local function collect(parts: { BasePart }, exclude: Model, maxTargets: number):
 				break
 			end
 		end
+	end
+	if hook and #broken > 0 then
+		task.spawn(hook, broken, exclude)
 	end
 	return found
 end

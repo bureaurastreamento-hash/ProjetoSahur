@@ -486,9 +486,9 @@ for i, a in enumerate((30, 150, 270)):
     ar = math.radians(a)
     cylinder(f"DummyPad{i}", 3, 0.3, (math.cos(ar) * 18, 0.15, math.sin(ar) * 18), BASALT, CastShadow=False)
 # ---------------------------------------------------------------------------
-# SANTUÁRIO DO BOSS (ao sul, z ~ 150..240): piso circular de pedra escura, anel de pilares com
-# braseiros, runas no chão, estátuas quebradas, caminho de lajes desde a praça. BossService acha
-# por nome: BossAltar (ProximityPrompt), BossSpawn (nasce), BossArena (centro/raio da luta).
+# SANTUÁRIO DO BOSS — DENTRO DA MURALHA SUL (dono, 2026-09-21), atrás da cachoeira: tools/arena_santuario.py.
+# A muralha é escavada por tools/escavar_muralha.luau (rochas de x 30..166 / z 380..470 sobem até y 34).
+# O santuário antigo (disco de pedra escura, runas vermelhas, ossos, arco) saiu: não combinava.
 # ---------------------------------------------------------------------------
 def fire(node, color=(1.0, 0.45, 0.15), size=1.2, rate=18):
     node.setdefault("children", []).append({
@@ -502,113 +502,19 @@ def fire(node, color=(1.0, 0.45, 0.15), size=1.2, rate=18):
         },
     })
 
-SANCT_Z = 195
-SANCT_R = 44
-# Onde o dono POSICIONOU o santuário no Studio (2026-09-16, lido via MCP): o conjunto é gerado em volta
-# de (0, 0, SANCT_Z) e depois movido/girado em bloco para cá. Mudar aqui, nunca no Studio + aqui.
-# 2026-09-20 (dono): santuário ENCOSTADO na muralha sul (face em z≈377, 111 studs de altura), o altar dentro
-# de uma gruta atrás de uma cachoeira (gruta/cachoeira/vegetação = tools/montar_altar_cachoeira.luau, no
-# place). Anel do piso termina em z≈341; altar em z≈360 (ALTAR_Z = SANCT_Z - 66).
-SANCT_WORLD = (97.75, 0.6, 294.0)  # centro final (x, deslocamento y, z)
-SANCT_YAW = 180  # giro em graus no eixo Y
-DARK_STONE = ("Slate", (0.13, 0.13, 0.16))
-RUNE_RED = ("Neon", (0.85, 0.20, 0.20))
-# caminho de lajes (BossPathSlab0..13): o dono posiciona no Studio, o place é o dono delas
-# (2026-09-19). Rojo ignora o que não conhece dentro de Props (ignoreUnknownInstances).
-# As duas chamadas mantêm a sequência do rng igual à de antes, senão o resto do mapa mexe.
-for i in range(14):
-    jitter(0.6)
-    jitter(6)
-# piso: disco de pedra escura + anel externo claro + degrau
-cylinder("BossFloor", SANCT_R, 1.2, (0, 0.6 - 0.6, SANCT_Z), DARK_STONE)
-cylinder("BossFloorRing", SANCT_R + 3, 0.8, (0, 0.4 - 0.6, SANCT_Z), BASALT)
-cylinder("BossFloorInner", 14, 0.3, (0, 0.75, SANCT_Z), ("Slate", (0.09, 0.09, 0.11)))
-# runas no chão: cruz + anel de traços neon (só visual; o anel vermelho da luta é do BossService)
-for i in range(12):
-    a = i / 12 * math.tau
-    r = 22
-    part(f"BossRune{i}", (1.2, 0.15, 4), (math.cos(a) * r, 0.7, SANCT_Z + math.sin(a) * r), RUNE_RED,
-         rot=(0, -math.degrees(a), 0), CastShadow=False)
-part("BossRuneLineA", (0.6, 0.12, 30), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=False)
-part("BossRuneLineB", (30, 0.12, 0.6), (0, 0.72, SANCT_Z), RUNE_RED, CastShadow=False)
-# anel de pilares com braseiros
-for i in range(10):
-    a = i / 10 * math.tau  # sem o +pi/10: assim NENHUM pilar cai no eixo do altar (entrada da gruta livre)
-    x, z = math.cos(a) * (SANCT_R - 5), SANCT_Z + math.sin(a) * (SANCT_R - 5)
-    cylinder(f"BossPillar{i}", 1.3, 11, (x, 5.5, z), STONE_LIGHT)
-    part(f"BossPillarCap{i}", (3.4, 0.8, 3.4), (x, 11.4, z), BASALT)
-    brazier = cylinder(f"BossBrazier{i}", 1.1, 0.8, (x, 12.2, z), ("Metal", (0.2, 0.18, 0.16)))
-    fire(brazier)
-    light(brazier, (1.0, 0.5, 0.2), 2.0, 22)
-# estátuas quebradas (guardiões) nas entradas leste/oeste
-for sx, name in ((-1, "W"), (1, "E")):
-    bx = sx * (SANCT_R - 12)
-    part(f"BossStatueBase{name}", (5, 2, 5), (bx, 1.7, SANCT_Z), BASALT)
-    part(f"BossStatueBody{name}", (2.6, 6, 2), (bx, 5.7, SANCT_Z), DARK_STONE, rot=(0, 0, sx * 6))
-    part(f"BossStatueHead{name}", (1.8, 1.8, 1.8), (bx + sx * 0.6, 9.5, SANCT_Z), DARK_STONE, rot=(0, sx * 30, sx * 12))
-    part(f"BossStatueArm{name}", (1, 4, 1), (bx - sx * 2.0, 6.5, SANCT_Z + 0.5), DARK_STONE, rot=(0, 0, -sx * 35))
-# altar ao NORTE do disco (quem chega da praça vê primeiro), boss nasce no centro
-ALTAR_Z = SANCT_Z - 66  # fora do anel, dentro da gruta encostada na muralha (era -30)
-part("BossAltarBase", (16, 1, 16), (0, 1.2, ALTAR_Z), BASALT)
-part("BossAltarStep", (12, 1, 12), (0, 2.2, ALTAR_Z), STONE_LIGHT)
-part("BossAltar", (4, 3.2, 4), (0, 4.3, ALTAR_Z), ("Slate", (0.10, 0.10, 0.13)))
-altar_rune = part("BossAltarRune", (2.6, 0.2, 2.6), (0, 6.0, ALTAR_Z), RUNE_RED, CastShadow=False)
-light(altar_rune, (0.9, 0.2, 0.2), 2.5, 24)
-# (os 4 postes com tocha do ritual antigo das caveiras — BossAltarPillar/BossAltarTorch — saíram a pedido
-# do dono em 2026-09-19; o RitualService tolera altar sem tochas)
-# --- ambientação do altar (ritual das caveiras: RitualService acende as tochas e põe uma caveira em cada
-# BossAltarSkullSocket{i} conforme os jogadores coletam; a runa acende quando o ritual completa à noite)
-BONE = ("SmoothPlastic", (0.86, 0.82, 0.70))
-BONE_OLD = ("Sand", (0.70, 0.64, 0.52))
-for i in range(4):
-    a = math.radians(45 + i * 90)
-    sx, sz = math.cos(a) * 4.6, ALTAR_Z + math.sin(a) * 4.6
-    cylinder(f"BossAltarSkullSocket{i}", 0.9, 0.5, (sx, 2.95, sz), ("Slate", (0.10, 0.10, 0.13)))
-    part(f"BossAltarSocketRune{i}", (1.2, 0.08, 1.2), (sx, 3.24, sz), ("Neon", (0.35, 0.08, 0.08)), rot=(0, 45, 0), CastShadow=False)
-# pilhas de ossos/caveiras velhas nos cantos da base
-for i, (ox, oz) in enumerate(((-6.2, -5.5), (6.4, -5.2), (-6.0, 5.8), (6.1, 6.0))):
-    for j in range(4):
-        r = 0.55 + rng.uniform(-0.1, 0.15)
-        ball(f"BossBonePile{i}_{j}", r, (ox + jitter(1.1), 1.7 + (0.5 if j == 3 else 0) + r * 0.5, ALTAR_Z + oz + jitter(1.1)), BONE_OLD, CastShadow=False)
-    part(f"BossBoneLong{i}", (0.35, 0.35, 2.6), (ox + jitter(0.8), 1.9, ALTAR_Z + oz + jitter(0.8)), BONE, rot=(0, rng.uniform(0, 180), 0), CastShadow=False)
-# rachaduras no chão que "vazam" luz vermelha a partir do altar (acendem com o ritual)
-for i in range(8):
-    a = math.radians(i * 45 + 22)
-    ln = rng.uniform(5, 8.5)
-    cx, cz = math.cos(a) * (8 + ln / 2), ALTAR_Z + math.sin(a) * (8 + ln / 2)
-    part(f"BossCrack{i}", (0.35, 0.12, ln), (cx, 0.72, cz), ("Neon", (0.30, 0.06, 0.06)), rot=(0, -math.degrees(a) + 90, 0), CastShadow=False)
-# arco de pedra atrás do altar (moldura do santuário) com correntes penduradas
-for sx in (-1, 1):
-    cylinder(f"BossArchPost{'W' if sx < 0 else 'E'}", 1.2, 14, (sx * 9, 8.2, ALTAR_Z - 9), DARK_STONE)
-part("BossArchTop", (21, 2.2, 2.6), (0, 15.6, ALTAR_Z - 9), DARK_STONE)
-part("BossArchKey", (3, 3.2, 2.9), (0, 16.4, ALTAR_Z - 9), BASALT)
-for i, cx in enumerate((-5.5, -2, 2, 5.5)):
-    part(f"BossChain{i}", (0.3, rng.uniform(3.5, 6.5), 0.3), (cx, 12.2, ALTAR_Z - 9), ("Metal", (0.25, 0.24, 0.24)), rot=(0, 0, jitter(6)), CastShadow=False)
-# névoa baixa e brasas em volta do altar
-_mist = part("BossAltarMist", (18, 0.2, 18), (0, 1.9, ALTAR_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
-_mist.setdefault("children", []).append({
-    "name": "Mist", "className": "ParticleEmitter",
-    "properties": {
-        "Color": {"ColorSequence": {"keypoints": [{"time": 0, "color": [0.55, 0.2, 0.2]}, {"time": 1, "color": [0.2, 0.05, 0.08]}]}},
-        "Size": {"NumberSequence": {"keypoints": [{"time": 0, "value": 4, "envelope": 0}, {"time": 1, "value": 7, "envelope": 0}]}},
-        "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 1, "envelope": 0}, {"time": 0.3, "value": 0.85, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}},
-        "Rate": 4, "Lifetime": {"NumberRange": [4, 6]}, "Speed": {"NumberRange": [0.4, 1.0]}, "SpreadAngle": {"Vector2": [80, 80]},
-        "Rotation": {"NumberRange": [0, 360]}, "RotSpeed": {"NumberRange": [-8, 8]}, "LightEmission": 0.15,
-    },
-})
-_embers = part("BossAltarEmbers", (6, 0.2, 6), (0, 6.2, ALTAR_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
-_embers.setdefault("children", []).append({
-    "name": "Embers", "className": "ParticleEmitter",
-    "properties": {
-        "Color": {"ColorSequence": {"keypoints": [{"time": 0, "color": [1.0, 0.35, 0.2]}, {"time": 1, "color": [0.5, 0.05, 0.0]}]}},
-        "Size": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.18, "envelope": 0.05}, {"time": 1, "value": 0, "envelope": 0}]}},
-        "Transparency": {"NumberSequence": {"keypoints": [{"time": 0, "value": 0.1, "envelope": 0}, {"time": 1, "value": 1, "envelope": 0}]}},
-        "Rate": 10, "Lifetime": {"NumberRange": [1.5, 3]}, "Speed": {"NumberRange": [1, 2.5]}, "SpreadAngle": {"Vector2": [60, 60]},
-        "Acceleration": {"Vector3": [0, 1.5, 0]}, "LightEmission": 1, "Drag": 1,
-    },
-})
-part("BossSpawn", (6, 1, 6), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
-part("BossArena", (1, 1, 1), (0, 1.5, SANCT_Z), BASALT, Transparency=1, CanCollide=False, CastShadow=False)
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import arena_santuario  # noqa: E402
+import arena_construcoes  # noqa: E402
+
+_ctx = {"part": part, "cylinder": cylinder, "ball": ball, "wedge": wedge, "light": light, "fire": fire, "rng": rng, "jitter": jitter}
+arena_santuario.build(_ctx)
+_n_props = len(parts)
+# CONSTRUÇÕES DESTRUTÍVEIS (estilo JJS) nas 2 áreas vazias: vão para a pasta Destructible (o
+# DestructionService solta tijolo a tijolo o que um ataque acerta). tools/arena_construcoes.py.
+arena_construcoes.build(_ctx)
+destructible_parts = parts[_n_props:]
+del parts[_n_props:]
 extra_spawns = []
 for i in range(12):
     a = i / 12 * math.tau
@@ -625,23 +531,11 @@ for i in range(12):
 # RitualService cai no sorteio de novo em vez de desativar.
 # ---------------------------------------------------------------------------
 
-# aplica o deslocamento/giro do santuário em todas as partes Boss* (altar, spawn, arena, pilares...)
-_yaw = math.radians(SANCT_YAW)
-for node in parts:
-    if not node["name"].startswith("Boss"):
-        continue
-    pr = node["properties"]
-    x, y, z = pr["Position"]
-    dx, dz = x, z - SANCT_Z
-    rx = dx * math.cos(_yaw) + dz * math.sin(_yaw)
-    rz = -dx * math.sin(_yaw) + dz * math.cos(_yaw)
-    pr["Position"] = [round(SANCT_WORLD[0] + rx, 3), round(y + SANCT_WORLD[1], 3), round(SANCT_WORLD[2] + rz, 3)]
-    ox, oy, oz = pr.get("Orientation", [0, 0, 0])
-    pr["Orientation"] = [ox, (oy + SANCT_YAW + 180) % 360 - 180, oz]
-
 props = folder("Props", list(parts))
 props["ignoreUnknownInstances"] = True  # o que o dono move/cria em Props no Studio fica como está
+destr = folder("Destructible", destructible_parts)
+destr["ignoreUnknownInstances"] = True
 extras = {"className": "Model", "ignoreUnknownInstances": True,
-          "children": [props, folder("Spawns", extra_spawns)]}
+          "children": [props, destr, folder("Spawns", extra_spawns)]}
 OUT_EXTRAS.write_text(json.dumps(extras, indent=1))
-print(f"{OUT_EXTRAS}: {len(parts)} partes + {len(extra_spawns)} spawns")
+print(f"{OUT_EXTRAS}: {len(parts)} partes + {len(destructible_parts)} destrutíveis + {len(extra_spawns)} spawns")

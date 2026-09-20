@@ -333,16 +333,16 @@ local function run(myToken: number)
 	local GREY = Color3.fromRGB(120, 120, 130)
 	-- atores principais na praça
 	castIndex = 0
-	makeActor("A", "Brawler", CFrame.new(PLAZA + Vector3.new(-3, 0, 0)) * CFrame.Angles(0, -math.pi / 2, 0), ORANGE, true)
+	makeActor("A", "Jotaro", CFrame.new(PLAZA + Vector3.new(-3, 0, 0)) * CFrame.Angles(0, -math.pi / 2, 0), ORANGE, true)
 	makeActor("B", "Swift", CFrame.new(PLAZA + Vector3.new(3, 0, 0)) * CFrame.Angles(0, math.pi / 2, 0), BLUE, true)
-	makeActor("C", "Mystic", CFrame.new(PLAZA + Vector3.new(14, 0, 12)) * CFrame.Angles(0, math.rad(200), 0), PURPLE, true)
-	makeActor("D", "Guardian", CFrame.new(PLAZA + Vector3.new(-12, 0, 14)) * CFrame.Angles(0, math.rad(150), 0), GOLD, true)
+	makeActor("C", "Kira", CFrame.new(PLAZA + Vector3.new(14, 0, 12)) * CFrame.Angles(0, math.rad(200), 0), PURPLE, true)
+	makeActor("D", "Dio", CFrame.new(PLAZA + Vector3.new(-12, 0, 14)) * CFrame.Angles(0, math.rad(150), 0), GOLD, true)
 	-- FUNDO (bem atrás do acontecimento principal, só "vida" na cena): X e Y trocando socos o trailer inteiro
 	-- lá no canto; Z dançando longe; W provocando (a ~14 studs do D: dentro do Terremoto, mas fora do foco)
 	makeActor("X", "Sahur", CFrame.new(PLAZA + Vector3.new(46, 0, -42)), GREEN)
-	makeActor("Y", "Brawler", CFrame.new(PLAZA + Vector3.new(50, 0, -42)), GREY)
+	makeActor("Y", "Jotaro", CFrame.new(PLAZA + Vector3.new(50, 0, -42)), GREY)
 	makeActor("Z", "Swift", CFrame.new(PLAZA + Vector3.new(-44, 0, -28)) * CFrame.Angles(0, math.rad(40), 0), GREY)
-	makeActor("W", "Mystic", CFrame.new(PLAZA + Vector3.new(-22, 0, 28)) * CFrame.Angles(0, math.rad(180), 0), GREY, true)
+	makeActor("W", "Kira", CFrame.new(PLAZA + Vector3.new(-22, 0, 28)) * CFrame.Angles(0, math.rad(180), 0), GREY, true)
 	makeActor("R", "Swift", CFrame.new(PLAZA + Vector3.new(-70, 0, -48)), GREY)
 	sparLoop("X", "Y", myToken)
 	emoteLoop("Z", "dance", 5.2, myToken)
@@ -447,9 +447,9 @@ local function run(myToken: number)
 	if rw then
 		rw.CFrame = CFrame.lookAt(PLAZA + Vector3.new(-20, 3.05, 24), PLAZA + Vector3.new(-12, 3.05, 14))
 	end
-	ability("D", "Guardian", "Quake", "start")
+	ability("D", "Dio", "Quake", "start")
 	task.delay(0.5, function()
-		ability("D", "Guardian", "Quake", "hit")
+		ability("D", "Dio", "Quake", "hit")
 		launch(actors.D, "W", 38, 24, 12, "finisher")
 	end)
 	if not wait_(1.6, myToken) then
@@ -462,18 +462,18 @@ local function run(myToken: number)
 		return
 	end
 	local meteorAt = PLAZA + Vector3.new(0, 0.6, 4)
-	ability("C", "Mystic", "Meteor", "start", { Position = meteorAt })
+	ability("C", "Kira", "Meteor", "start", { Position = meteorAt })
 	if not wait_(1.5, myToken) then
 		return
 	end
-	ability("C", "Mystic", "Meteor", "hit", { Position = meteorAt })
+	ability("C", "Kira", "Meteor", "hit", { Position = meteorAt })
 	notifyDamage:FireAllClients(actors.C, actors.A, 30, "finisher")
 	if not wait_(1.2, myToken) then
 		return
 	end
-	ability("A", "Brawler", "Rampage", "start")
+	ability("A", "Jotaro", "Rampage", "start")
 	task.delay(0.5, function()
-		ability("A", "Brawler", "Rampage", "hit")
+		ability("A", "Jotaro", "Rampage", "hit")
 	end)
 	if not wait_(2.4, myToken) then
 		return
@@ -487,7 +487,7 @@ local function run(myToken: number)
 	local cut = CombatConfig.Awakening.Cutscene
 	shot({ orbit = "TrailerActor_A", radius = 12, height = 4, from = 30, to = 120, t = cut.BurstAt, fov = 55 })
 	title("DESPERTAR", 3)
-	ability("A", "Brawler", "Awakening", "start", { Duration = CombatConfig.Awakening.Duration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
+	ability("A", "Jotaro", "Awakening", "start", { Duration = CombatConfig.Awakening.Duration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
 	if not wait_(cut.BurstAt - 0.05, myToken) then
 		return
 	end
@@ -516,7 +516,7 @@ local function run(myToken: number)
 			arrow.Parent = e
 		end
 	end
-	makeActor("F", "Guardian", CFrame.lookAt(ALTAR + Vector3.new(18, -4.3, -22), ALTAR), GREY, true) -- curioso reverenciando, atrás
+	makeActor("F", "Dio", CFrame.lookAt(ALTAR + Vector3.new(18, -4.3, -22), ALTAR), GREY, true) -- curioso reverenciando, atrás
 	emoteLoop("F", "bow", 2.6, myToken)
 	if not wait_(6, myToken) then
 		return
@@ -609,8 +609,8 @@ local function run(myToken: number)
 		table.insert(extras, clone)
 		local floorY = ARENA_ANTIGA_AT.Y - 56
 		local center = Vector3.new(ARENA_ANTIGA_AT.X, floorY + 4, ARENA_ANTIGA_AT.Z + 42)
-		makeActor("G", "Brawler", CFrame.new(center + Vector3.new(-3, 4, 0)) * CFrame.Angles(0, -math.pi / 2, 0), Color3.fromRGB(110, 170, 255))
-		makeActor("H", "Guardian", CFrame.new(center + Vector3.new(3, 4, 0)) * CFrame.Angles(0, math.pi / 2, 0), Color3.fromRGB(255, 140, 110))
+		makeActor("G", "Jotaro", CFrame.new(center + Vector3.new(-3, 4, 0)) * CFrame.Angles(0, -math.pi / 2, 0), Color3.fromRGB(110, 170, 255))
+		makeActor("H", "Dio", CFrame.new(center + Vector3.new(3, 4, 0)) * CFrame.Angles(0, math.pi / 2, 0), Color3.fromRGB(255, 140, 110))
 		sparLoop("G", "H", myToken)
 		EnvironmentService.SetClockOverride(17.5)
 		shot({ from = CFrame.lookAt(ARENA_ANTIGA_AT + Vector3.new(-260, 110, 40), center), to = CFrame.lookAt(ARENA_ANTIGA_AT + Vector3.new(-60, 40, 42), center), t = 7, fov = 60, ease = "Sine" })

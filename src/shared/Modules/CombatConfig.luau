@@ -185,7 +185,7 @@ CombatConfig.Awakening = {
 		-- "O tempo para" (dono, 2026-09-17): NÃO é global. Só os personagens em FreezeByCharacter congelam
 		-- quem está a Radius studs por Seconds no estouro (WalkSpeed 0 + sem agir; o cliente trava animação).
 		FreezeByCharacter = {
-			Guardian = { Seconds = 1.3, Radius = 18 },
+			Dio = { Seconds = 1.3, Radius = 18 },
 		},
 	},
 }

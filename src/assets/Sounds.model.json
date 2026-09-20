@@ -355,7 +355,7 @@
    ]
   },
   {
-   "name": "Brawler",
+   "name": "Jotaro",
    "className": "Folder",
    "children": [
     {
@@ -513,7 +513,7 @@
    ]
   },
   {
-   "name": "Mystic",
+   "name": "Kira",
    "className": "Folder",
    "children": [
     {
@@ -569,7 +569,7 @@
    ]
   },
   {
-   "name": "Guardian",
+   "name": "Dio",
    "className": "Folder",
    "children": [
     {

@@ -37,8 +37,8 @@ ShopConfig.Products = ({
 
 ShopConfig.Passes = ({
 	{ key = "double_coins", gamepassId = 0, name = "Pontos x2", desc = "Dobra os pontos de kills, duelos, boss e missões" },
-	{ key = "all_characters", gamepassId = 0, name = "Todos os personagens", desc = "Desbloqueia todos os personagens (inclui o Guardian VIP)" },
-	{ key = "vip", gamepassId = 0, name = "VIP", desc = "Personagem Guardian, tag VIP no nome e +25% de XP" },
+	{ key = "all_characters", gamepassId = 0, name = "Todos os personagens", desc = "Desbloqueia todos os personagens (inclui o Dio VIP)" },
+	{ key = "vip", gamepassId = 0, name = "VIP", desc = "Personagem Dio, tag VIP no nome e +25% de XP" },
 	{ key = "private_plus", gamepassId = 0, name = "Servidor privado+", desc = "No SEU servidor privado: sem cooldowns e bonecos à vontade (treino)" },
 }) :: { Pass }
 

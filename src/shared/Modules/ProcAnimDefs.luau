@@ -128,6 +128,33 @@ C["Shared/Parry"] = { -- desvio: braço esquerdo varre a frente, corpo gira
 		P(0.32, GUARD, "inout"),
 	},
 }
+C["Shared/Parried"] = { -- LEVOU parry: o braço que socava é jogado para fora, o corpo abre e cambaleia para trás
+	duration = 0.5,
+	frames = {
+		P(0, { RA = { rot = V(88, 0, -4) }, LA = { rot = V(40, 0, -16) }, Root = { rot = V(-7, -16, 0), off = V(0, -0.1, -0.25) } }),
+		P(0.08, { RA = { rot = V(40, 0, 95) }, LA = { rot = V(30, 0, -60) }, Root = { rot = V(18, 30, -6), off = V(0, 0.1, 0.5) }, Neck = { rot = V(22, 18, 0) }, RL = { rot = V(-22, 0, 8) }, LL = { rot = V(14, 0, -6) } }, "out"),
+		P(0.3, { RA = { rot = V(20, 0, 70) }, LA = { rot = V(20, 0, -50) }, Root = { rot = V(12, 18, -4), off = V(0, -0.15, 0.4) }, Neck = { rot = V(12, 10, 0) }, RL = { rot = V(-16, 0, 8) }, LL = { rot = V(10, 0, -6) } }),
+		P(0.5, GUARD, "inout"),
+	},
+}
+C["Shared/CritPunch"] = { -- CRÍTICO (depois do parry): recua o braço atrás da cabeça e desce um direto com o corpo inteiro (impacto em 0,15)
+	duration = 0.5,
+	frames = {
+		P(0, { RA = { rot = V(150, 0, 30) }, LA = { rot = V(50, 0, -20) }, Root = { rot = V(8, 34, 0), off = V(0, 0.15, 0.3) }, Neck = { rot = V(6, -10, 0) }, RL = { rot = V(18, 0, 4) }, LL = { rot = V(-14, 0, -4) } }),
+		P(0.15, { RA = { rot = V(96, 0, -10) }, LA = { rot = V(24, 0, -22) }, Root = { rot = V(-20, -34, 0), off = V(0, -0.35, -0.8) }, Neck = { rot = V(-10, 0, 0) }, RL = { rot = V(-22, 0, 4) }, LL = { rot = V(30, 0, -4) } }, "in"),
+		P(0.3, { RA = { rot = V(92, 0, -8) }, LA = { rot = V(24, 0, -22) }, Root = { rot = V(-18, -30, 0), off = V(0, -0.35, -0.8) }, Neck = { rot = V(-8, 0, 0) }, RL = { rot = V(-22, 0, 4) }, LL = { rot = V(30, 0, -4) } }),
+		P(0.5, GUARD, "inout"),
+	},
+}
+C["Shared/CritHit"] = { -- LEVOU crítico: a cabeça chicoteia, o tronco gira e vai para trás, braços abertos
+	duration = 0.55,
+	frames = {
+		P(0, {}),
+		P(0.07, { Root = { rot = V(26, 40, 8), off = V(0, 0.1, 0.7) }, Neck = { rot = V(30, 28, 0) }, RA = { rot = V(-40, 0, 60) }, LA = { rot = V(-30, 0, -70) }, RL = { rot = V(-26, 0, 10) }, LL = { rot = V(18, 0, -8) } }, "out"),
+		P(0.3, { Root = { rot = V(16, 26, 4), off = V(0, -0.2, 0.5) }, Neck = { rot = V(16, 16, 0) }, RA = { rot = V(-20, 0, 40) }, LA = { rot = V(-14, 0, -50) }, RL = { rot = V(-16, 0, 8) }, LL = { rot = V(10, 0, -6) } }),
+		P(0.55, {}, "inout"),
+	},
+}
 C["Shared/Block"] = { -- guarda fechada (loop): antebraços cruzados na frente do rosto, meio agachado
 	duration = 1.2,
 	loop = true,
@@ -188,8 +215,8 @@ C["Shared/RagdollCancel"] = { -- levantou no Q: explode do chão com os braços 
 -- ---------------------------------------------------------------------------
 -- HABILIDADES (Leva 3) — duração = CastTime da habilidade (+ o que a ação dura de fato)
 -- ---------------------------------------------------------------------------
--- Brawler
-C["Brawler/ShoulderBash"] = { -- investida de ombro (0,25 s) — o resto é o Carry
+-- Jotaro
+C["Jotaro/ShoulderBash"] = { -- investida de ombro (0,25 s) — o resto é o Carry
 	duration = 0.45,
 	frames = {
 		P(0, { Root = { rot = V(-10, 25, 0) }, RA = { rot = V(-30, 0, 20) }, LA = { rot = V(40, 0, -10) } }),
@@ -197,7 +224,7 @@ C["Brawler/ShoulderBash"] = { -- investida de ombro (0,25 s) — o resto é o Ca
 		P(0.45, { Root = { rot = V(-20, 30, 0), off = V(0, -0.3, -0.3) }, RA = { rot = V(-40, 0, 26) }, LA = { rot = V(55, 0, -10) } }, "inout"),
 	},
 }
-C["Brawler/ShoulderBash_Carry"] = { -- segurando o alvo no ombro e arremessando (0,8 s)
+C["Jotaro/ShoulderBash_Carry"] = { -- segurando o alvo no ombro e arremessando (0,8 s)
 	duration = 0.8,
 	frames = {
 		P(0, { Root = { rot = V(-12, 0, 0), off = V(0, -0.2, 0) }, RA = { rot = V(120, 0, 30) }, LA = { rot = V(120, 0, -30) } }),
@@ -205,7 +232,7 @@ C["Brawler/ShoulderBash_Carry"] = { -- segurando o alvo no ombro e arremessando 
 		P(0.8, { Root = { rot = V(-26, 0, 0), off = V(0, -0.3, -0.5) }, RA = { rot = V(60, 0, 20) }, LA = { rot = V(60, 0, -20) }, Neck = { rot = V(-8, 0, 0) }, RL = { rot = V(-20, 0, 6) }, LL = { rot = V(26, 0, -6) } }, "out"),
 	},
 }
-C["Brawler/GroundSlam"] = { -- pancada no chão: os dois punhos de cima (0,6 s, impacto em 0,4)
+C["Jotaro/GroundSlam"] = { -- pancada no chão: os dois punhos de cima (0,6 s, impacto em 0,4)
 	duration = 0.9,
 	frames = {
 		P(0, GUARD),
@@ -215,7 +242,7 @@ C["Brawler/GroundSlam"] = { -- pancada no chão: os dois punhos de cima (0,6 s, 
 		P(0.9, GUARD, "inout"),
 	},
 }
-C["Brawler/Rampage"] = { -- FÚRIA: gira os braços e desce o golpe devastador (0,6 s, impacto em 0,5)
+C["Jotaro/Rampage"] = { -- FÚRIA: gira os braços e desce o golpe devastador (0,6 s, impacto em 0,5)
 	duration = 1.0,
 	frames = {
 		P(0, { Root = { rot = V(8, -30, 0) }, RA = { rot = V(150, 0, 70) }, LA = { rot = V(20, 0, -30) } }),
@@ -254,8 +281,8 @@ C["Swift/TimeDome"] = { -- domínio: estala os dedos com o braço erguido (0,8 s
 	},
 }
 
--- Mystic
-C["Mystic/ArcaneBolt"] = { -- empurra a mão para a frente (0,3 s)
+-- Kira
+C["Kira/ArcaneBolt"] = { -- empurra a mão para a frente (0,3 s)
 	duration = 0.4,
 	frames = {
 		P(0, { RA = { rot = V(40, 0, 20) }, LA = { rot = V(30, 0, -10) }, Root = { rot = V(0, 20, 0) } }),
@@ -263,7 +290,7 @@ C["Mystic/ArcaneBolt"] = { -- empurra a mão para a frente (0,3 s)
 		P(0.4, {}, "inout"),
 	},
 }
-C["Mystic/Mend"] = { -- cura: mãos ao peito e abre (0,6 s)
+C["Kira/Mend"] = { -- cura: mãos ao peito e abre (0,6 s)
 	duration = 0.8,
 	frames = {
 		P(0, { RA = { rot = V(70, -50, -30) }, LA = { rot = V(70, 50, 30) }, Neck = { rot = V(-14, 0, 0) }, Root = { rot = V(-6, 0, 0) } }),
@@ -272,7 +299,7 @@ C["Mystic/Mend"] = { -- cura: mãos ao peito e abre (0,6 s)
 		P(0.8, {}, "inout"),
 	},
 }
-C["Mystic/Meteor"] = { -- meteoro: ergue os dois braços ao céu e baixa apontando (0,8 s)
+C["Kira/Meteor"] = { -- meteoro: ergue os dois braços ao céu e baixa apontando (0,8 s)
 	duration = 1.2,
 	frames = {
 		P(0, { RA = { rot = V(60, 0, 20) }, LA = { rot = V(60, 0, -20) } }),
@@ -282,8 +309,8 @@ C["Mystic/Meteor"] = { -- meteoro: ergue os dois braços ao céu e baixa apontan
 	},
 }
 
--- Guardian
-C["Guardian/ShieldBash"] = { -- investida com o escudo à frente (0,22 s)
+-- Dio
+C["Dio/ShieldBash"] = { -- investida com o escudo à frente (0,22 s)
 	duration = 0.4,
 	frames = {
 		P(0, { LA = { rot = V(80, 0, -10) }, RA = { rot = V(20, 0, 20) }, Root = { rot = V(-8, -20, 0) } }),
@@ -291,7 +318,7 @@ C["Guardian/ShieldBash"] = { -- investida com o escudo à frente (0,22 s)
 		P(0.4, { LA = { rot = V(90, 0, 0) }, RA = { rot = V(10, 0, 26) }, Root = { rot = V(-18, -24, 0), off = V(0, -0.25, -0.3) } }, "inout"),
 	},
 }
-C["Guardian/ShieldBash_Carry"] = { -- ergue o alvo no escudo e esmaga (0,8 s)
+C["Dio/ShieldBash_Carry"] = { -- ergue o alvo no escudo e esmaga (0,8 s)
 	duration = 0.8,
 	frames = {
 		P(0, { LA = { rot = V(120, 0, -10) }, RA = { rot = V(40, 0, 20) }, Root = { rot = V(4, 0, 0) } }),
@@ -299,7 +326,7 @@ C["Guardian/ShieldBash_Carry"] = { -- ergue o alvo no escudo e esmaga (0,8 s)
 		P(0.8, { LA = { rot = V(30, 0, -10) }, RA = { rot = V(20, 0, 30) }, Root = { rot = V(-30, 0, 0), off = V(0, -0.7, -0.4) }, Neck = { rot = V(-14, 0, 0) }, RL = { rot = V(45, 0, 10) }, LL = { rot = V(45, 0, -10) } }, "in"),
 	},
 }
-C["Guardian/Fortify"] = { -- fortificar: bate no peito e fecha a guarda (0,3 s)
+C["Dio/Fortify"] = { -- fortificar: bate no peito e fecha a guarda (0,3 s)
 	duration = 0.5,
 	frames = {
 		P(0, { RA = { rot = V(80, -40, -30) }, Root = { rot = V(6, 0, 0) } }),
@@ -307,7 +334,7 @@ C["Guardian/Fortify"] = { -- fortificar: bate no peito e fecha a guarda (0,3 s)
 		P(0.5, GUARD, "inout"),
 	},
 }
-C["Guardian/Quake"] = { -- terremoto: pula e crava os punhos, três batidas (1,2 s = 3 × 0,4)
+C["Dio/Quake"] = { -- terremoto: pula e crava os punhos, três batidas (1,2 s = 3 × 0,4)
 	duration = 1.4,
 	frames = {
 		P(0, { RA = { rot = V(170, 0, 20) }, LA = { rot = V(170, 0, -20) }, Root = { rot = V(12, 0, 0), off = V(0, 0.3, 0) }, Neck = { rot = V(14, 0, 0) } }),
@@ -353,9 +380,9 @@ C["Sahur/Ritmo"] = { -- ritmo final: batidas alternadas rápidas (1,5 s = 6 × 0
 }
 
 -- Overlord (admin) — reaproveita
-C["Overlord/Smite"] = C["Brawler/GroundSlam"]
+C["Overlord/Smite"] = C["Jotaro/GroundSlam"]
 C["Overlord/Warp"] = C["Swift/Blink"]
-C["Overlord/Clutch"] = C["Guardian/ShieldBash"]
+C["Overlord/Clutch"] = C["Dio/ShieldBash"]
 C["Overlord/Clutch_Carry"] = { -- giro: braços abertos rodando (1,6 s)
 	duration = 1.6,
 	loop = true,
@@ -365,7 +392,7 @@ C["Overlord/Clutch_Carry"] = { -- giro: braços abertos rodando (1,6 s)
 		P(1.6, { RA = { rot = V(90, 0, 60) }, LA = { rot = V(90, 0, -60) }, Root = { rot = V(-6, 0, 0), off = V(0, -0.2, 0) } }, "inout"),
 	},
 }
-C["Overlord/Cataclysm"] = C["Brawler/Rampage"]
+C["Overlord/Cataclysm"] = C["Jotaro/Rampage"]
 
 -- ---------------------------------------------------------------------------
 -- EMOTES / CENAS (Leva 4) — roda B. Andar cancela (CosmeticsController)
@@ -595,8 +622,8 @@ local LOCO_DEFS: { [string]: Loco } = {
 		walkCycle = 1.0, walkLeg = 26, walkArm = 22, walkArmOut = 6, walkLean = -6, walkBob = 0.12, walkSway = 2, walkTwist = 5,
 		runCycle = 0.66, runLeg = 42, runArm = 46, runLean = -14, runBob = 0.2, runTwist = 9,
 	},
-	-- Brawler: pesado, ombros largos, gingado de boxeador; corre socando o ar
-	Brawler = {
+	-- Jotaro: pesado, ombros largos, gingado de boxeador; corre socando o ar
+	Jotaro = {
 		idleCycle = 3.0, breath = 0.14, idleLean = -5, idleSway = 2.4,
 		idleArm = V(14, 0, 16), idleHead = V(-3, 0, 0), idleLegOut = 6,
 		idleAccentR = V(10, 0, 4), idleAccentL = V(8, 0, -4), -- ergue a guarda de vez em quando
@@ -611,16 +638,16 @@ local LOCO_DEFS: { [string]: Loco } = {
 		walkCycle = 0.8, walkLeg = 30, walkArm = 26, walkArmOut = 4, walkLean = -10, walkBob = 0.1, walkSway = 2, walkTwist = 4,
 		runCycle = 0.46, runLeg = 52, runArm = 30, runLean = -26, runBob = 0.14, runTwist = 6,
 	},
-	-- Mystic: quase flutuando, braços à frente como se segurasse algo; passo curto e suave
-	Mystic = {
+	-- Kira: quase flutuando, braços à frente como se segurasse algo; passo curto e suave
+	Kira = {
 		idleCycle = 4.4, breath = 0.12, idleLean = 2, idleSway = 1.0,
 		idleArm = V(28, 0, 10), idleHead = V(3, 0, 0), idleLegOut = 2,
 		idleAccentR = V(14, -10, -6), idleAccentL = V(6, 8, 6), -- desenha algo no ar
 		walkCycle = 1.15, walkLeg = 20, walkArm = 10, walkArmOut = 10, walkLean = -3, walkBob = 0.08, walkSway = 1, walkTwist = 3,
 		runCycle = 0.72, runLeg = 34, runArm = 22, runLean = -12, runBob = 0.16, runTwist = 6,
 	},
-	-- Guardian: firme, pés fincados, escudo (braço esquerdo) sempre erguido; passo militar
-	Guardian = {
+	-- Dio: firme, pés fincados, escudo (braço esquerdo) sempre erguido; passo militar
+	Dio = {
 		idleCycle = 3.8, breath = 0.1, idleLean = -3, idleSway = 0.8,
 		idleArm = V(10, 0, 12), idleHead = V(-2, 0, 0), idleLegOut = 7,
 		idleAccentR = V(4, 0, 6), idleAccentL = V(34, 0, -6), -- ajeita o escudo
@@ -665,10 +692,10 @@ export type Style = {
 	accentL: Vector3?,
 }
 ProcAnimDefs.Styles = {
-	Brawler = { amp = 1.15, off = 1.2, lean = -4, twist = 4, head = -3, accentR = V(0, 0, 8), accentL = V(0, 0, -8) },
+	Jotaro = { amp = 1.15, off = 1.2, lean = -4, twist = 4, head = -3, accentR = V(0, 0, 8), accentL = V(0, 0, -8) },
 	Swift = { amp = 0.88, off = 0.9, lean = -7, twist = 8, head = 4, accentR = V(-6, 0, 0), accentL = V(-6, 0, 0) },
-	Mystic = { amp = 0.92, off = 0.85, lean = 3, twist = -5, head = 3, accentR = V(10, -8, 0), accentL = V(6, 8, 0) },
-	Guardian = { amp = 1.08, off = 0.8, lean = -2, twist = -3, head = -2, accentR = V(0, 0, 6), accentL = V(16, 0, -4) },
+	Kira = { amp = 0.92, off = 0.85, lean = 3, twist = -5, head = 3, accentR = V(10, -8, 0), accentL = V(6, 8, 0) },
+	Dio = { amp = 1.08, off = 0.8, lean = -2, twist = -3, head = -2, accentR = V(0, 0, 6), accentL = V(16, 0, -4) },
 	Sahur = { amp = 1.05, off = 1.1, lean = -1, twist = 10, head = 2, accentR = V(8, 0, 4), accentL = V(-8, 0, -4) },
 	Overlord = { amp = 1.2, off = 1.05, lean = 4, twist = -6, head = -5, accentR = V(-6, 0, 10), accentL = V(-6, 0, -10) },
 } :: { [string]: Style }
@@ -730,7 +757,7 @@ local function pose(p: { [string]: JointPose }): Pose
 	return P(0, p).pose
 end
 ProcAnimDefs.AwakeningPoses = {
-	Brawler = { -- punhos cerrados para baixo, tremendo; estoura de braços abertos
+	Jotaro = { -- punhos cerrados para baixo, tremendo; estoura de braços abertos
 		charge1 = pose({ Root = { rot = V(-10, 0, 0), off = V(0, -0.3, 0) }, Neck = { rot = V(-16, 0, 0) }, RA = { rot = V(-20, 0, 18) }, LA = { rot = V(-20, 0, -18) }, RL = { rot = V(0, 0, 14) }, LL = { rot = V(0, 0, -14) } }),
 		charge2 = pose({ Root = { rot = V(-18, 0, 0), off = V(0, -0.5, 0) }, Neck = { rot = V(-26, 0, 0) }, RA = { rot = V(-35, 0, 26) }, LA = { rot = V(-35, 0, -26) }, RL = { rot = V(0, 0, 20) }, LL = { rot = V(0, 0, -20) } }),
 		charge3 = pose({ Root = { rot = V(-8, 0, 0), off = V(0, -0.35, 0) }, Neck = { rot = V(8, 0, 0) }, RA = { rot = V(-10, 0, 40) }, LA = { rot = V(-10, 0, -40) }, RL = { rot = V(0, 0, 18) }, LL = { rot = V(0, 0, -18) } }),
@@ -744,14 +771,14 @@ ProcAnimDefs.AwakeningPoses = {
 		burst = pose({ Root = { rot = V(10, 0, 0), off = V(0, 0.6, 0) }, Neck = { rot = V(20, 0, 0) }, RA = { rot = V(170, 0, 40) }, LA = { rot = V(170, 0, -40) }, RL = { rot = V(-10, 0, 8) }, LL = { rot = V(10, 0, -8) } }),
 		stance = pose({ Root = { rot = V(-10, 20, 0), off = V(0, -0.2, 0) }, RA = { rot = V(30, 0, 30) }, LA = { rot = V(80, 0, -20) }, RL = { rot = V(12, 0, 8) }, LL = { rot = V(-12, 0, -8) } }),
 	},
-	Mystic = { -- braços erguidos conjurando; estoura de braços em cruz
+	Kira = { -- braços erguidos conjurando; estoura de braços em cruz
 		charge1 = pose({ Root = { rot = V(-4, 0, 0) }, Neck = { rot = V(10, 0, 0) }, RA = { rot = V(120, 0, 30) }, LA = { rot = V(120, 0, -30) } }),
 		charge2 = pose({ Root = { rot = V(-8, 0, 0), off = V(0, -0.2, 0) }, Neck = { rot = V(18, 0, 0) }, RA = { rot = V(150, 0, 40) }, LA = { rot = V(150, 0, -40) } }),
 		charge3 = pose({ Root = { rot = V(-12, 0, 0), off = V(0, -0.35, 0) }, Neck = { rot = V(-10, 0, 0) }, RA = { rot = V(90, -40, -20) }, LA = { rot = V(90, 40, 20) } }),
 		burst = pose({ Root = { rot = V(12, 0, 0), off = V(0, 0.5, 0) }, Neck = { rot = V(26, 0, 0) }, RA = { rot = V(185, 0, 45) }, LA = { rot = V(185, 0, -45) } }),
 		stance = pose({ Root = { rot = V(-4, 0, 0) }, RA = { rot = V(70, -30, -10) }, LA = { rot = V(50, 0, -40) } }),
 	},
-	Guardian = { -- postura de escudo, pés fincados; estoura batendo no chão
+	Dio = { -- postura de escudo, pés fincados; estoura batendo no chão
 		charge1 = pose({ Root = { rot = V(-10, 0, 0), off = V(0, -0.35, 0) }, LA = { rot = V(90, 0, -10) }, RA = { rot = V(-20, 0, 24) }, RL = { rot = V(0, 0, 22) }, LL = { rot = V(0, 0, -22) } }),
 		charge2 = pose({ Root = { rot = V(-16, 0, 0), off = V(0, -0.55, 0) }, LA = { rot = V(100, 0, -10) }, RA = { rot = V(-30, 0, 30) }, RL = { rot = V(0, 0, 26) }, LL = { rot = V(0, 0, -26) }, Neck = { rot = V(-10, 0, 0) } }),
 		charge3 = pose({ Root = { rot = V(10, 0, 0), off = V(0, 0.2, 0) }, LA = { rot = V(120, 0, -10) }, RA = { rot = V(175, 0, 30) }, Neck = { rot = V(14, 0, 0) } }),

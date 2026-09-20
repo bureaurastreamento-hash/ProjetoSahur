@@ -361,6 +361,21 @@ E["Shared/WallSplat"] = {
 		light(WHITE, 4, 16, 0.3),
 	},
 }
+-- Cenário destrutível (DestructionService): tijolo quebrando / árvore tombando (no ponto, sem seguir ninguém)
+E["Shared/BrickBreak"] = {
+	lifetime = 1.1,
+	layers = {
+		emit("Debris", Color3.fromRGB(150, 118, 84), 8, { size = { 0.3, 0.8 }, life = { 0.5, 0.9 }, speed = { 10, 24 }, spread = { 50, 50 }, direction = "up", light = 0, accel = Vector3.new(-0, -60, 0) }),
+		emit("Dust", Color3.fromRGB(190, 165, 125), 6, { size = { 1.5, 4 }, life = { 0.5, 0.9 }, speed = { 3, 8 }, spread = { 70, 70 }, light = 0.1, drag = 3, rot = { 0, 360 } }),
+	},
+}
+E["Shared/TreeFall"] = {
+	lifetime = 1.6,
+	layers = {
+		emit("Dust", Color3.fromRGB(150, 140, 110), 16, { size = { 3, 8 }, life = { 0.8, 1.3 }, speed = { 6, 14 }, spread = { 80, 80 }, light = 0.1, drag = 3, rot = { 0, 360 }, ground = true }),
+		emit("Debris", Color3.fromRGB(70, 120, 60), 14, { size = { 0.4, 0.9 }, life = { 0.8, 1.4 }, speed = { 8, 18 }, spread = { 80, 80 }, direction = "up", light = 0, accel = Vector3.new(0, -30, 0) }),
+	},
+}
 E["Shared/Block"] = {
 	lifetime = 0.6,
 	layers = {
@@ -480,8 +495,8 @@ E["Shared/Transform"] = { -- virando o boss (2,5 s)
 	},
 }
 
--- ---- Brawler --------------------------------------------------------------------------
-E["Brawler/ShoulderBash"] = {
+-- ---- Jotaro --------------------------------------------------------------------------
+E["Jotaro/ShoulderBash"] = {
 	lifetime = 0.9,
 	layers = {
 		mesh("WindGrow", ORANGE, 3, 10, 0.4, { offset = CFrame.new(0, 0, 1.5) * CFrame.Angles(math.rad(90), 0, 0), spin = Vector3.new(0, 0, 700), tr0 = 0.4 }),
@@ -489,7 +504,7 @@ E["Brawler/ShoulderBash"] = {
 		smokePuff(6, { ground = true }),
 	},
 }
-E["Brawler/ShoulderBash_Hit"] = {
+E["Jotaro/ShoulderBash_Hit"] = {
 	lifetime = 1.4,
 	layers = {
 		impactStar(ORANGE, 9, 0.3),
@@ -545,7 +560,7 @@ E["Shared/GrabSpin"] = { -- soltou do giro: redemoinho
 	},
 }
 
-E["Brawler/GroundSlam"] = {
+E["Jotaro/GroundSlam"] = {
 	lifetime = 1.6,
 	layers = {
 		groundWave(ORANGE, 4, 26, 0.6),
@@ -558,8 +573,8 @@ E["Brawler/GroundSlam"] = {
 		light(ORANGE, 6, 26, 0.5),
 	},
 }
-E["Brawler/GroundSlam_Hit"] = E["Shared/FinisherHit"]
-E["Brawler/Rampage"] = {
+E["Jotaro/GroundSlam_Hit"] = E["Shared/FinisherHit"]
+E["Jotaro/Rampage"] = {
 	lifetime = 2.0,
 	layers = {
 		mesh("Sphere", ORANGE, 2, 22, 0.5, { tr0 = 0.3, ease = "Quart" }),
@@ -572,7 +587,7 @@ E["Brawler/Rampage"] = {
 		light(ORANGE, 8, 32, 0.7),
 	},
 }
-E["Brawler/Rampage_Hit"] = E["Shared/FinisherHit"]
+E["Jotaro/Rampage_Hit"] = E["Shared/FinisherHit"]
 
 -- ---- Swift ----------------------------------------------------------------------------
 E["Swift/Blink"] = {
@@ -628,9 +643,9 @@ E["Swift/Tempest"] = {
 }
 E["Swift/Tempest_Hit"] = E["Shared/Hit"]
 
--- ---- Mystic ---------------------------------------------------------------------------
+-- ---- Kira ---------------------------------------------------------------------------
 local PURPLE = Color3.fromRGB(170, 110, 255)
-E["Mystic/ArcaneBolt"] = {
+E["Kira/ArcaneBolt"] = {
 	lifetime = 0.8,
 	layers = {
 		mesh("SphereHD", PURPLE, 1, 5, 0.25, { offset = CFrame.new(0, 0.5, -3), tr0 = 0.2 }),
@@ -639,7 +654,7 @@ E["Mystic/ArcaneBolt"] = {
 		light(PURPLE, 3, 12, 0.3, { offset = Vector3.new(0, 0.5, -3) }),
 	},
 }
-E["Mystic/ArcaneBolt_Hit"] = {
+E["Kira/ArcaneBolt_Hit"] = {
 	lifetime = 1.0,
 	layers = {
 		mesh("Explosion", PURPLE, 2, 10, 0.35, { spin = Vector3.new(200, 300, 0), tr0 = 0.2 }),
@@ -650,7 +665,7 @@ E["Mystic/ArcaneBolt_Hit"] = {
 		light(PURPLE, 5, 16, 0.4),
 	},
 }
-E["Mystic/Mend"] = {
+E["Kira/Mend"] = {
 	lifetime = 1.6,
 	layers = {
 		mesh("ShockRing", Color3.fromRGB(120, 255, 180), 8, 2, 0.6, { ground = true, up = true, tr0 = 0.2, ease = "Sine" }),
@@ -660,7 +675,7 @@ E["Mystic/Mend"] = {
 		light(Color3.fromRGB(120, 255, 180), 4, 16, 1.2),
 	},
 }
-E["Mystic/Meteor"] = { -- aviso no chão (no ponto)
+E["Kira/Meteor"] = { -- aviso no chão (no ponto)
 	lifetime = 1.4,
 	layers = {
 		ringFlat(PURPLE, 14, 12, 1.2, { tr0 = 0.3, tr1 = 0.3, ease = "Sine", spin = Vector3.new(0, 120, 0) }),
@@ -669,7 +684,7 @@ E["Mystic/Meteor"] = { -- aviso no chão (no ponto)
 		light(PURPLE, 3, 20, 1.2),
 	},
 }
-E["Mystic/Meteor_Hit"] = {
+E["Kira/Meteor_Hit"] = {
 	lifetime = 2.4,
 	layers = {
 		mesh("Explosion2", PURPLE, 4, 24, 0.5, { spin = Vector3.new(100, 200, 0), tr0 = 0.2 }),
@@ -686,8 +701,8 @@ E["Mystic/Meteor_Hit"] = {
 	},
 }
 
--- ---- Guardian -------------------------------------------------------------------------
-E["Guardian/ShieldBash"] = {
+-- ---- Dio -------------------------------------------------------------------------
+E["Dio/ShieldBash"] = {
 	lifetime = 0.9,
 	layers = {
 		mesh("ShockMid", GOLD, 4, 12, 0.35, { offset = CFrame.new(0, 0, -2) * CFrame.Angles(0, 0, 0), tr0 = 0.3, spin = Vector3.new(0, 0, 300) }),
@@ -695,8 +710,8 @@ E["Guardian/ShieldBash"] = {
 		emit("Lines", GOLD, 12, { size = { 0.8, 1.8 }, life = { 0.2, 0.35 }, speed = { 30, 55 }, spread = { 12, 12 }, orient = "VelocityParallel", offset = Vector3.new(0, 0, -2), direction = "forward" }),
 	},
 }
-E["Guardian/ShieldBash_Hit"] = E["Shared/FinisherHit"]
-E["Guardian/Fortify"] = {
+E["Dio/ShieldBash_Hit"] = E["Shared/FinisherHit"]
+E["Dio/Fortify"] = {
 	lifetime = 6.2,
 	layers = {
 		mesh("SphereFancy", GOLD, 1, 9, 0.5, { tr0 = 0.55, tr1 = 0.55, ease = "Back", follow = true }),
@@ -706,7 +721,7 @@ E["Guardian/Fortify"] = {
 		light(GOLD, 2.5, 14, 5.8),
 	},
 }
-E["Guardian/Quake"] = {
+E["Dio/Quake"] = {
 	lifetime = 2.0,
 	layers = {
 		groundWave(GOLD, 4, 34, 0.75),
@@ -720,11 +735,11 @@ E["Guardian/Quake"] = {
 		light(GOLD, 7, 30, 0.6),
 	},
 }
-E["Guardian/Quake_Hit"] = E["Shared/FinisherHit"]
+E["Dio/Quake_Hit"] = E["Shared/FinisherHit"]
 
 -- ---- Sahur ----------------------------------------------------------------------------
 local GREEN = Color3.fromRGB(120, 255, 160)
-E["Sahur/Bombo"] = E["Brawler/GroundSlam"]
+E["Sahur/Bombo"] = E["Jotaro/GroundSlam"]
 E["Sahur/Bombo_Hit"] = E["Shared/FinisherHit"]
 E["Sahur/Toque"] = {
 	lifetime = 6.2,

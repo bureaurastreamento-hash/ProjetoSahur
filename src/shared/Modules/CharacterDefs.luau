@@ -89,7 +89,7 @@ CharacterDefs.Energy = {
 	GainOnHitTaken = 2,
 }
 
-CharacterDefs.DefaultCharacter = "Brawler"
+CharacterDefs.DefaultCharacter = "Jotaro"
 
 --- Afinação global de dash (dash universal do Q e Effect.Type = "Dash"). Duration × escala conforme a
 --- direção. O cliente move; o servidor amostra a hitbox por Duration × ForwardScale (o maior).
@@ -104,12 +104,14 @@ CharacterDefs.DashTuning = {
 CharacterDefs.SwapOutOfCombatSeconds = 10
 
 CharacterDefs.Characters = {
-	Brawler = {
-		Id = "Brawler",
-		DisplayName = "Brawler",
+	-- 2026-09-21 (dono): os personagens antigos SAÍRAM; Brawler→JOTARO, Mystic→KIRA, Guardian→DIO herdam os kits
+	-- (provisórios até cada um ganhar moveset/ult/efeitos próprios). Perfis antigos migram no DataService.
+	Jotaro = {
+		Id = "Jotaro",
+		DisplayName = "Jotaro",
 		UnlockCost = 0,
-		Tagline = "Força bruta e pressão",
-		Color = Color3.fromRGB(255, 150, 60),
+		Tagline = "Desperta com o Stand no máximo · punhos",
+		Color = Color3.fromRGB(120, 90, 255),
 		Image = "",
 		Abilities = {
 			{
@@ -187,11 +189,11 @@ CharacterDefs.Characters = {
 		},
 	} :: CharacterDef,
 
-	Mystic = {
-		Id = "Mystic",
-		DisplayName = "Mystic",
+	Kira = {
+		Id = "Kira",
+		DisplayName = "Yoshikage Kira",
 		UnlockCost = 250,
-		Tagline = "Distância, cura e meteoro",
+		Tagline = "Desperta com o Stand no máximo · distância",
 		Color = Color3.fromRGB(170, 110, 255),
 		Image = "",
 		Abilities = {
@@ -224,12 +226,12 @@ CharacterDefs.Characters = {
 		},
 	} :: CharacterDef,
 
-	Guardian = {
-		Id = "Guardian",
-		DisplayName = "Guardian",
+	Dio = {
+		Id = "Dio",
+		DisplayName = "Dio",
 		UnlockCost = 0,
 		Access = "vip", -- exclusivo do passe VIP (ou "Todos os personagens")
-		Tagline = "Tanque: escudo e terremoto",
+		Tagline = "Desperta com o Stand no máximo · tanque",
 		Color = Color3.fromRGB(255, 205, 80),
 		Image = "",
 		Abilities = {
@@ -406,8 +408,9 @@ CharacterDefs.Characters = {
 -- ROSTER DECIDIDO PELO DONO (2026-09-20). Nome da esquerda = forma normal; direita (depois do "-") = forma
 -- da ULT (o Despertar vira ele): Bruno Gollini - poder máx. (= o "Swift": id interno mantido, cúpula do
 -- tempo reaproveitada) | Jotaro - Stand máx. | Dio - Stand máx. | Rick - Rick Prime | Yoshikage Kira - Stand
--- máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios; os 3 "early" usam kits emprestados (só devs
--- testam). O Rick já tem a ult de verdade (PrimeDive).
+-- máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios. 2026-09-21: os antigos Brawler/Mystic/Guardian
+-- SAÍRAM e Jotaro/Kira/Dio ficaram com os kits deles (blocos acima); Jotaro é o inicial de todo mundo. O Rick já
+-- tem a ult de verdade (PrimeDive) e pega o resto do kit do Kira (provisório).
 -- ---------------------------------------------------------------------------
 local function borrowed(fromId: string, keepUlt: boolean): { AbilityDef }
 	local list = {}
@@ -434,8 +437,8 @@ local rickAbilities: { AbilityDef } = {
 		OncePerAwakening = true,
 	},
 }
-for _, a in borrowed("Mystic", false) do
-	table.insert(rickAbilities, a) -- PROVISÓRIO: 2/3/4 do Mystic até o kit próprio
+for _, a in borrowed("Kira", false) do
+	table.insert(rickAbilities, a) -- PROVISÓRIO: 2/3/4 do Kira até o kit próprio
 end
 CharacterDefs.Characters.Rick = {
 	Id = "Rick",
@@ -448,23 +451,7 @@ CharacterDefs.Characters.Rick = {
 	Abilities = rickAbilities,
 } :: CharacterDef
 
-CharacterDefs.Characters.Jotaro = {
-	Id = "Jotaro", DisplayName = "Jotaro", UnlockCost = 0, Access = "early",
-	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(120, 90, 255), Image = "",
-	Abilities = borrowed("Swift", true), -- PROVISÓRIO
-} :: CharacterDef
-CharacterDefs.Characters.Dio = {
-	Id = "Dio", DisplayName = "Dio", UnlockCost = 0, Access = "early",
-	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(240, 200, 60), Image = "",
-	Abilities = borrowed("Guardian", true), -- PROVISÓRIO
-} :: CharacterDef
-CharacterDefs.Characters.Kira = {
-	Id = "Kira", DisplayName = "Yoshikage Kira", UnlockCost = 0, Access = "early",
-	Tagline = "Desperta com o Stand no máximo", Color = Color3.fromRGB(230, 120, 200), Image = "",
-	Abilities = borrowed("Mystic", true), -- PROVISÓRIO
-} :: CharacterDef
-
-CharacterDefs.Order = { "Brawler", "Swift", "Mystic", "Guardian", "Rick", "Jotaro", "Dio", "Kira", "Sahur", "Overlord" }
+CharacterDefs.Order = { "Jotaro", "Swift", "Dio", "Kira", "Rick", "Sahur", "Overlord" }
 
 --- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string

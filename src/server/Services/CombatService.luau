@@ -724,7 +724,8 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 		state.nextAttackAt = now + (state.nextAttackAt - now) / timeSlow
 	end
 
-	notifyAttack:FireAllClients(character, attackId, comboIndex)
+	-- 4º arg: golpe CRÍTICO armado (parryou antes) — os clientes tocam a animação de crítico no lugar do M1
+	notifyAttack:FireAllClients(character, attackId, comboIndex, attackId == "M1" and now < state.critUntil)
 
 	do
 		local blocked = false

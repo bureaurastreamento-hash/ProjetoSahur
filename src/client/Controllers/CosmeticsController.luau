@@ -291,7 +291,7 @@ local function onNotifyEmote(character: Model?, emoteId: string, active: boolean
 		FX.StopAnimation(character, EMOTES, emote.Id)
 		return
 	end
-	local track = FX.PlayAnimation(character, EMOTES, emote.Id, emote.Loop == true, Enum.AnimationPriority.Action4)
+	local track = FX.PlayAnimation(character, EMOTES, emote.Id, emote.Loop == true, Enum.AnimationPriority.Action4, if emote.Loop then nil else tonumber(emote.Duration))
 	if emote.Loop and track then
 		track.Looped = true -- a animação da equipe pode ter vindo sem loop: a pose fica até o servidor mandar parar
 		loopTracks[character] = track

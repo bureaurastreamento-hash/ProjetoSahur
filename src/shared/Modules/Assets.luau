@@ -14,7 +14,7 @@
 	│   ├── Shared         (Animation) M1_1..M1_4, Downslam, Uppercut, Block, BlockHit, Parry, Hit, Idle, Walk, Run, Dash, DashBack
 	│   ├── Emotes         (Animation) wave, taunt, dance, bow, flex, scene_* (CosmeticsConfig.Emotes)
 	│   ├── <Personagem>   (Animation) <AbilityId>, <AbilityId>_Carry (agarrão), Awakening
-	│   └── <CharacterId>  (Animation) <AbilityId>   ex: Brawler/ShoulderBash
+	│   └── <CharacterId>  (Animation) <AbilityId>   ex: Jotaro/ShoulderBash
 	├── VFX
 	│   ├── Shared         Hit, Block, Parry, Placeholder
 	│   └── <CharacterId>  (Model|BasePart|Attachment) <AbilityId>, <AbilityId>_Hit
@@ -97,26 +97,26 @@ end
 -- Um VFX com o nome exato na pasta do personagem sempre tem prioridade sobre o alias.
 local PACK = { "Packs", "ParticlePack", "[Shiro Dev Patreon] - Particle Set" }
 Assets.VFXAliases = {
-	["Brawler/ShoulderBash"] = "Wind",
-	["Brawler/ShoulderBash_Hit"] = "Slashes",
-	["Brawler/GroundSlam"] = "Smoke V.2",
-	["Brawler/GroundSlam_Hit"] = "Stripes",
-	["Brawler/Rampage"] = "Fire V.2",
+	["Jotaro/ShoulderBash"] = "Wind",
+	["Jotaro/ShoulderBash_Hit"] = "Slashes",
+	["Jotaro/GroundSlam"] = "Smoke V.2",
+	["Jotaro/GroundSlam_Hit"] = "Stripes",
+	["Jotaro/Rampage"] = "Fire V.2",
 	["Swift/Blink"] = "Flare",
 	["Swift/SweepKick"] = "Wind",
 	["Swift/SweepKick_Hit"] = "Slashes",
 	["Swift/Tempest"] = "Stripes",
 	["Swift/Tempest_Hit"] = "Slashes",
-	["Mystic/ArcaneBolt"] = "Flare",
-	["Mystic/ArcaneBolt_Hit"] = "Yellow Plasma",
-	["Mystic/Mend"] = "Sphere",
-	["Mystic/Meteor"] = "Sun Portal",
-	["Mystic/Meteor_Hit"] = "Fire V.1",
-	["Guardian/ShieldBash"] = "Wind",
-	["Guardian/ShieldBash_Hit"] = "Slashes",
-	["Guardian/Fortify"] = "Sphere",
-	["Guardian/Quake"] = "Smoke V.2",
-	["Guardian/Quake_Hit"] = "Stripes",
+	["Kira/ArcaneBolt"] = "Flare",
+	["Kira/ArcaneBolt_Hit"] = "Yellow Plasma",
+	["Kira/Mend"] = "Sphere",
+	["Kira/Meteor"] = "Sun Portal",
+	["Kira/Meteor_Hit"] = "Fire V.1",
+	["Dio/ShieldBash"] = "Wind",
+	["Dio/ShieldBash_Hit"] = "Slashes",
+	["Dio/Fortify"] = "Sphere",
+	["Dio/Quake"] = "Smoke V.2",
+	["Dio/Quake_Hit"] = "Stripes",
 }
 
 local function findPackVFX(name: string): Instance?
@@ -151,27 +151,27 @@ Assets.VFXPack = {
 	["Shared/Awakening_Charge"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 2.4 }, -- carga da cutscene
 	["Shared/Awakening_Burst"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2 }, -- estouro da cutscene (onda no chão)
 	["Shared/RagdollCancel"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact", -- Q caído: levantou
-	["Brawler/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
-	["Brawler/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
-	["Brawler/GroundSlam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
-	["Brawler/GroundSlam_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
-	["Brawler/Rampage"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
-	["Brawler/Rampage_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	["Jotaro/ShoulderBash"] = "Packs/OfficialJJS/Mahito/CrushingRushdown/Dash",
+	["Jotaro/ShoulderBash_Hit"] = "Packs/OfficialJJS/Misc/M/DashHit",
+	["Jotaro/GroundSlam"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Jotaro/GroundSlam_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
+	["Jotaro/Rampage"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
+	["Jotaro/Rampage_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
 	["Swift/Blink"] = "Packs/OfficialJJS/Gojo/Teleport",
 	["Swift/SweepKick"] = "Packs/ShadowBattlegroundsfull/ShadowFist/Skick1",
 	["Swift/SweepKick_Hit"] = "Packs/ShadowBattlegroundsfull/Garou/punchhit",
 	["Swift/Tempest"] = { Path = "Packs/ShadowBattlegroundsfull/Garou/Spin", Lifetime = 2.5 },
 	["Swift/Tempest_Hit"] = "Packs/OfficialJJS/Misc/M/Hit",
-	["Mystic/ArcaneBolt"] = "Packs/OfficialJJS/Misc/S/Orb",
-	["Mystic/ArcaneBolt_Hit"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact",
-	["Mystic/Mend"] = "Packs/OfficialJJS/Yuta/SecondWind",
-	-- Mystic/Meteor (aviso no chão) continua o gerado: precisa do anel no ponto certo
-	["Mystic/Meteor_Hit"] = { Path = "Packs/ShadowBattlegroundsfull/MeteoricCombination/FinalImpact2", Lifetime = 3 },
-	["Guardian/ShieldBash"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
-	["Guardian/ShieldBash_Hit"] = "Packs/OfficialJJS/Todo/HeavyHit",
-	["Guardian/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
-	["Guardian/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
-	["Guardian/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
+	["Kira/ArcaneBolt"] = "Packs/OfficialJJS/Misc/S/Orb",
+	["Kira/ArcaneBolt_Hit"] = "Packs/OfficialJJS/Yuta/Veilstep/CEImpact",
+	["Kira/Mend"] = "Packs/OfficialJJS/Yuta/SecondWind",
+	-- Kira/Meteor (aviso no chão) continua o gerado: precisa do anel no ponto certo
+	["Kira/Meteor_Hit"] = { Path = "Packs/ShadowBattlegroundsfull/MeteoricCombination/FinalImpact2", Lifetime = 3 },
+	["Dio/ShieldBash"] = "Packs/OfficialJJS/Mechamaru/BoostOnVFX/BoostDash",
+	["Dio/ShieldBash_Hit"] = "Packs/OfficialJJS/Todo/HeavyHit",
+	["Dio/Fortify"] = { Path = "Packs/OfficialJJS/Mechamaru/Offload/Aura", Follow = true, Lifetime = 6 },
+	["Dio/Quake"] = { Path = "Packs/OfficialJJS/Locust/Slam", Lifetime = 2.5 },
+	["Dio/Quake_Hit"] = "Packs/OfficialJJS/Hakari/RoughSlam",
 	["Sahur/Bombo"] = "Packs/ShadowBattlegroundsfull/Brute/slam",
 	["Sahur/Bombo_Hit"] = "Packs/OfficialJJS/Hakari/RoughImpact",
 	["Sahur/Toque"] = { Path = "Packs/OfficialJJS/Todo/Awakening/Aura", Follow = true, Lifetime = 6 },

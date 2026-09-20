@@ -15,9 +15,18 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
-## PRÓXIMO PASSO (2026-09-20, ao sair) — ver PROGRESSO.md "RETOMAR AQUI" / "PRÓXIMA TAREFA"
-- Boss x3 (invocado pela flecha, F no altar) nasce no centro do mapa entre os spawns e ANDA LIVRE (sem
-  `BossArena`/leash, sem voltar ao spawn). Só planejado; o boss automático de 2 h continua no santuário.
+## Estado 2026-09-21 — ver PROGRESSO.md "RETOMAR AQUI" (FALTA o dono testar)
+- **Santuário do boss DENTRO da muralha sul** (`tools/arena_santuario.py` via `gerar_arena.py` → ArenaExtras;
+  muralha aberta por `tools/escavar_muralha.luau` no `Arena.rbxm`). Fora só a cachoeira + jardim mesopotâmico.
+  Altar antigo saiu; `AltarGruta` velho está em `ServerStorage.Backup_AltarGruta_antigo`.
+- **Cenário destrutível estilo JJS**: `ArenaExtras.Destructible` (tijolo a tijolo, `tools/arena_construcoes.py`)
+  + árvores da arte tombam — `DestructionService` via `Hitbox.DestructibleHook` (toda consulta de ataque).
+- **Roster**: Brawler/Mystic/Guardian SAÍRAM → Jotaro (inicial), Kira, Dio (VIP) herdaram os kits; Bruno=Swift,
+  Rick=drop. Perfis antigos migram por `DataService.RENAMED_CHARACTERS`.
+- `FX.PlayAnimation(..., fitSeconds)` casa a animação com a duração real da ação; `Shared/Parried`,
+  `CritPunch`, `CritHit` novos.
+- **Dono moveu peça do `Workspace.Sahur.Arena` no Studio?** → `tools/sincronizar_arena.luau` grava no rbxm.
+- Ainda planejado: boss x3 da flecha nasce no centro do mapa e anda livre (sem leash).
 
 ## Estado do design (2026-09-20) — lojas divididas (ver PROGRESSO.md "RETOMAR AQUI")
 - **Loja (L)** = só Robux. **Vendedor** (E no NPC da Lojinha, `VendorGui`) = tudo por PONTOS e por PONTOS DE

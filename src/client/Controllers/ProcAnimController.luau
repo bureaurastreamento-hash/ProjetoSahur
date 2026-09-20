@@ -175,8 +175,9 @@ local function startActive(s: CharState, key: string, clip: ProcAnimDefs.Clip, l
 	return { key = key, clip = clip, startedAt = os.clock(), from = s.last, blendIn = 0.08, loop = loop, speed = 1 }
 end
 
---- Toca o clipe `key` no personagem. Loops ficam "guardados" por trás das ações.
-function ProcAnimController.Play(character: Model, key: string, looped: boolean?): boolean
+--- Toca o clipe `key` no personagem. Loops ficam "guardados" por trás das ações. `fitSeconds` = duração
+--- real da ação: o clipe é escalado no tempo para acabar junto (FX.PlayAnimation).
+function ProcAnimController.Play(character: Model, key: string, looped: boolean?, fitSeconds: number?): boolean
 	local clip = clipFor(character, key)
 	if not clip then
 		return false
@@ -187,6 +188,9 @@ function ProcAnimController.Play(character: Model, key: string, looped: boolean?
 	end
 	local loop = looped == true or clip.loop == true
 	local active = startActive(s, key, clip, loop)
+	if not loop and fitSeconds and fitSeconds > 0 and clip.duration > 0 then
+		active.speed = math.clamp(clip.duration / fitSeconds, 0.5, 4)
+	end
 	s.blendOutFrom = nil
 	if loop then
 		s.held = active

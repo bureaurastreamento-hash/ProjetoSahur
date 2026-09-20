@@ -576,7 +576,7 @@ THEMES.rock = {
 		end, 7, 6)
 	end,
 	burst = function(ctx)
-		FX.SpawnVFX(ctx.character, "Brawler", "Rampage", true)
+		FX.SpawnVFX(ctx.character, "Jotaro", "Rampage", true)
 	end,
 }
 THEMES.stone = {
@@ -610,7 +610,7 @@ THEMES.stone = {
 		end
 	end,
 	burst = function(ctx)
-		FX.SpawnVFX(ctx.character, "Guardian", "Quake", true)
+		FX.SpawnVFX(ctx.character, "Dio", "Quake", true)
 	end,
 }
 THEMES.flesh = {
@@ -677,7 +677,7 @@ THEMES.arcane = {
 		end
 	end,
 	burst = function(ctx)
-		FX.SpawnVFX(ctx.character, "Mystic", "Meteor", true)
+		FX.SpawnVFX(ctx.character, "Kira", "Meteor", true)
 	end,
 }
 THEMES.lightning = {
@@ -1118,7 +1118,7 @@ function CutsceneController.PlayAwakening(character: Model, characterId: string,
 				cameraShot({ offset = Vector3.new(1.5, 3, -13), look = Vector3.new(0, 1, 0), fov = 64 }, 0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 			end
 		elseif near() then
-			-- quem está perto: flash na cor + nome pequeno da ult; se foi congelado (Guardian, raio pequeno),
+			-- quem está perto: flash na cor + nome pequeno da ult; se foi congelado (Dio, raio pequeno),
 			-- também perde a cor e ouve o "tempo parou"
 			FX.Shake(0.8, 0.4)
 			screenFlash(color, 0.55, 0.45)

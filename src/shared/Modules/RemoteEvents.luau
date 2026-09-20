@@ -91,6 +91,7 @@ RemoteEvents.Events = ({
 	NotifyAchievement = "NotifyAchievement", -- dono: (event: "done"|"list"|"granted", data: table) — AchievementService
 	NotifyCosmetics = "NotifyCosmetics", -- dono: (event: "rolled"|"equipped"|"pick_pending"|"denied", data: table)
 	NotifyEmote = "NotifyEmote", -- all: (character: Model, emoteId: string, active: boolean)
+	NotifyDestruction = "NotifyDestruction", -- all: (attacker: Model?, positions: { Vector3 }, kind: "brick"|"tree") — DestructionService: FX de tijolo voando/árvore caindo
 	NotifyShop = "NotifyShop", -- dono: (event: "purchased"|"denied"|"owned", data: table)
 	NotifyWar = "NotifyWar", -- envolvidos: (event: "queue"|"start"|"state"|"end"|"denied"|"info", data: table); "queue" vai para os membros do clã
 	NotifyClan = "NotifyClan", -- dono: (event: "state"|"invite"|"denied"|"info", data: table) — state = { clan: ClanConfig.Clan? , role: string? }

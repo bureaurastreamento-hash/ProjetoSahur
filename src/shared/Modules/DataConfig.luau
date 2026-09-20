@@ -60,7 +60,7 @@ function DataConfig.DefaultProfile(): Profile
 		schemaVersion = DataConfig.SchemaVersion,
 		coins = 0,
 		eventPoints = 0,
-		unlockedCharacters = { "Brawler" },
+		unlockedCharacters = { "Jotaro" },
 		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0 },
 		xp = 0,
 		level = 1,
