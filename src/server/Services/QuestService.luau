@@ -11,7 +11,9 @@
 	Recompensa ao entregar: pontos de evento, pontos, XP, cosmético/emote (AchievementService.GrantReward).
 	Mural das quests: peça Workspace.QuestBoards.QuestBoard na Taberna (parede sul); o CONTEÚDO é por jogador,
 	então o QuestController desenha a SurfaceGui no PlayerGui. Servidor autoritativo em tudo.
-	Servidor privado: funciona, mas o DataService não salva nada (decisão do dono).
+	Capítulo com `DeliverNpcUserId`: aceita-se com o NpcUserId e entrega-se com o outro (final: o traidor dá o
+	capítulo, o Humanoider_20 recebe). `QuestService.OnTalk(fn)` avisa quem quiser (TraitorService invoca o
+	NPC hostil ao aceitar/voltar no capítulo final). Servidor privado: funciona, mas nada salva (dono).
 ]]
 
 local Players = game:GetService("Players")
@@ -39,6 +41,18 @@ QuestService.BoardSize = Vector3.new(16, 9, 0.4)
 local notifyQuest: RemoteEvent
 local npcs: { [number]: Model } = {} -- userId -> modelo
 local visitSpots: { [string]: QuestConfig.Spot } = {}
+local talkHooks: { (Player, QuestConfig.Chapter, string) -> () } = {} -- (jogador, capítulo, "accept"|"progress"|"done")
+
+--- Outro service quer saber quando alguém aceita/volta/entrega um capítulo (phase = accept|progress|done).
+function QuestService.OnTalk(fn: (Player, QuestConfig.Chapter, string) -> ())
+	table.insert(talkHooks, fn)
+end
+
+local function fireTalk(player: Player, ch: QuestConfig.Chapter, phase: string)
+	for _, fn in talkHooks do
+		task.spawn(fn, player, ch, phase)
+	end
+end
 
 -- ---------------------------------------------------------------------------
 -- Estado por jogador
@@ -71,6 +85,22 @@ local function npcNameOf(ch: QuestConfig.Chapter?): string
 	return if m then m.DisplayName else "?"
 end
 
+--- Quem recebe a entrega e onde fica (DeliverNpcUserId, senão o próprio NPC do capítulo).
+local function delivererOf(ch: QuestConfig.Chapter): (string, string)
+	local userId = ch.DeliverNpcUserId or ch.NpcUserId
+	local m = userId and TeamConfig.ByUserId(userId)
+	local spot = QuestConfig.Spots[ch.Spot]
+	if ch.DeliverNpcUserId then
+		for _, c in QuestConfig.Chapters do
+			if c.NpcUserId == ch.DeliverNpcUserId then
+				spot = QuestConfig.Spots[c.Spot]
+				break
+			end
+		end
+	end
+	return if m then m.DisplayName else "?", if spot then spot.Label else ""
+end
+
 local function statePayload(player: Player): { [string]: any }?
 	local _, q = questsOf(player)
 	if not q then
@@ -84,6 +114,11 @@ local function statePayload(player: Player): { [string]: any }?
 		end
 	end
 	local spot = ch and QuestConfig.Spots[ch.Spot]
+	local npcName, where = npcNameOf(ch), if spot then spot.Label else ""
+	if ch and q.active and allDone(q, ch) then
+		-- objetivos prontos: o chip aponta para quem RECEBE a entrega (final: Humanoider_20 na Taberna)
+		npcName, where = delivererOf(ch)
+	end
 	return {
 		chapter = q.chapter,
 		total = #QuestConfig.Chapters,
@@ -92,8 +127,8 @@ local function statePayload(player: Player): { [string]: any }?
 		locked = ch ~= nil and ch.Locked == true,
 		id = ch and ch.Id,
 		title = if ch then ch.Title else "Fim (por enquanto)",
-		npc = npcNameOf(ch),
-		where = if spot then spot.Label else "",
+		npc = npcName,
+		where = where,
 		objectives = objectives,
 		complete = ch ~= nil and q.active and allDone(q, ch),
 		done = q.done,
@@ -140,14 +175,25 @@ function QuestService.Progress(player: Player, kind: string, amount: number, max
 	DataService.MarkDirty(player)
 	if value >= wanted.Goal then
 		local complete = allDone(q, ch)
+		local npcName, where = delivererOf(ch)
 		notifyQuest:FireClient(player, "progress", {
 			text = wanted.Desc:format(wanted.Goal) .. " ✔",
 			complete = complete,
-			npc = npcNameOf(ch),
-			where = (QuestConfig.Spots[ch.Spot] or { Label = "" }).Label,
+			npc = npcName,
+			where = where,
 		})
 	end
 	pushState(player)
+end
+
+--- O jogador está com ESTE capítulo aceito e ainda não entregue?
+function QuestService.IsActiveOn(player: Player, chapterId: string): boolean
+	local _, q = questsOf(player)
+	if not q or not q.active then
+		return false
+	end
+	local ch = chapterOf(q)
+	return ch ~= nil and ch.Id == chapterId
 end
 
 -- ---------------------------------------------------------------------------
@@ -214,7 +260,10 @@ local function onTalk(player: Player, npcId: any)
 		dialog(player, userId, "O capítulo final ainda está sendo escrito... Alguém da equipe não é quem diz ser. Em breve.", "locked")
 		return
 	end
-	if ch.NpcUserId ~= userId then
+	local deliverTo = ch.DeliverNpcUserId or ch.NpcUserId
+	local isGiver = ch.NpcUserId == userId
+	local isDeliverer = deliverTo == userId
+	if not isGiver and not isDeliverer then
 		-- não é o NPC do capítulo atual: aponta para o certo
 		local target = npcNameOf(ch)
 		local spot = QuestConfig.Spots[ch.Spot]
@@ -232,14 +281,26 @@ local function onTalk(player: Player, npcId: any)
 		return
 	end
 	if not q.active then
+		if not isGiver then
+			local spot = QuestConfig.Spots[ch.Spot]
+			dialog(player, userId, ("Antes fale com %s, %s."):format(npcNameOf(ch), if spot then "em " .. spot.Label else ""), "idle")
+			return
+		end
 		q.active = true
 		q.counters = {}
 		DataService.MarkDirty(player)
 		dialog(player, userId, ch.Intro, "accept", { title = ch.Title })
 		pushState(player)
+		fireTalk(player, ch, "accept")
 		return
 	end
 	if allDone(q, ch) then
+		if not isDeliverer then
+			-- o capítulo é entregue com OUTRO NPC (final): o traidor não recebe nada
+			local who = if deliverTo then TeamConfig.ByUserId(deliverTo) else nil
+			dialog(player, userId, ("...Já acabou? Vai contar para %s. Ele vai adorar saber."):format(if who then who.DisplayName else "?"), "progress")
+			return
+		end
 		local what = grantReward(player, ch.Reward)
 		q.done[ch.Id] = true
 		q.chapter += 1
@@ -254,9 +315,36 @@ local function onTalk(player: Player, npcId: any)
 			next = if nextCh and not nextCh.Locked then ("Próximo: %s com %s, em %s"):format(nextCh.Title, npcNameOf(nextCh), (QuestConfig.Spots[nextCh.Spot] or { Label = "" }).Label) else nil,
 		})
 		pushState(player)
+		fireTalk(player, ch, "done")
 		return
 	end
+	if not isGiver then
+		local spot = QuestConfig.Spots[ch.Spot]
+		dialog(player, userId, ("Ainda não terminou? %s está te esperando, %s."):format(npcNameOf(ch), if spot then "em " .. spot.Label else ""), "idle")
+		return
+	end
+	fireTalk(player, ch, "progress")
 	dialog(player, userId, ch.Progress, "progress", { title = ch.Title })
+end
+
+--- [DEV/testes] Pula para o capítulo `index` (1..#Chapters+1) sem recompensa; marca os anteriores como feitos.
+function QuestService.SetChapter(player: Player, index: number): (boolean, string)
+	local _, q = questsOf(player)
+	if not q then
+		return false, "sem perfil"
+	end
+	index = math.clamp(math.floor(index), 1, #QuestConfig.Chapters + 1)
+	q.chapter = index
+	q.active = false
+	q.counters = {}
+	q.done = {}
+	for i = 1, index - 1 do
+		q.done[QuestConfig.Chapters[i].Id] = true
+	end
+	DataService.MarkDirty(player)
+	pushState(player)
+	local ch = chapterOf(q)
+	return true, if ch then ("capítulo %d: %s (fale com %s em %s)"):format(index, ch.Title, npcNameOf(ch), (QuestConfig.Spots[ch.Spot] or { Label = "" }).Label) else "história zerada"
 end
 
 --- [DEV/testes] Mesma coisa que apertar E no NPC (sem a checagem de distância).
@@ -323,9 +411,16 @@ local function buildNpc(member: TeamConfig.Member, spot: QuestConfig.Spot, folde
 	end
 	model:SetAttribute("QuestNpc", member.UserId)
 	local ground = groundAt(spot.Pos)
-	local hip = if humanoid then humanoid.HipHeight else 2
 	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart?
-	local lift = hip + (if root then root.Size.Y / 2 else 1)
+	-- Apoia a parte MAIS BAIXA do rig no chão (HipHeight mente: R6 vem com 0 e avatar R15 escalado com 3+)
+	model:PivotTo(CFrame.new(ground) * CFrame.Angles(0, math.rad(spot.Yaw), 0))
+	local lowest = math.huge
+	for _, d in model:GetChildren() do
+		if d:IsA("BasePart") then
+			lowest = math.min(lowest, d.Position.Y - d.Size.Y / 2)
+		end
+	end
+	local lift = if lowest < math.huge then ground.Y - lowest + 0.05 else 3
 	model:PivotTo(CFrame.new(ground + Vector3.new(0, lift, 0)) * CFrame.Angles(0, math.rad(spot.Yaw), 0))
 	model.Parent = folder
 
@@ -412,10 +507,17 @@ function QuestService.Init()
 end
 
 function QuestService.Start()
-	-- Lojinha: NPC ao lado do vendedor
-	local shopPos = ShopNpcService.GetPosition()
+	-- Lojinha: NPC no tapete ao lado do vendedor, olhando para onde ele olha
+	local lojinha = Workspace:FindFirstChild("Lojinha")
+	local spotPart = lojinha and lojinha:FindFirstChild("VendedorSpot") :: BasePart?
+	local shopPos = if spotPart then spotPart.Position else ShopNpcService.GetPosition()
 	if shopPos then
-		QuestConfig.Spots.Lojinha.Pos = shopPos + Vector3.new(8, 0, 0)
+		-- pé no chão (o root do vendedor fica a ~3 studs; começar o raycast alto pega o toldo da barraca)
+		QuestConfig.Spots.Lojinha.Pos = Vector3.new(shopPos.X - 6, if spotPart then shopPos.Y else shopPos.Y - 3, shopPos.Z + 6)
+		if spotPart then
+			local look = spotPart.CFrame.LookVector
+			QuestConfig.Spots.Lojinha.Yaw = math.deg(math.atan2(-look.X, -look.Z))
+		end
 	end
 	local folder = Workspace:FindFirstChild(QuestService.NpcFolderName) or Instance.new("Folder")
 	folder.Name = QuestService.NpcFolderName
@@ -424,11 +526,12 @@ function QuestService.Start()
 	RAY.FilterDescendantsInstances = { folder }
 	buildBoard()
 	local built = 0
+	local planned: { [number]: boolean } = {} -- um NPC por membro (cap. 4 e final usam o mesmo adryan_keep)
 	for _, ch in QuestConfig.Chapters do
 		local member = ch.NpcUserId and TeamConfig.ByUserId(ch.NpcUserId)
 		local spot = QuestConfig.Spots[ch.Spot]
-		if member and spot and not npcs[member.UserId] then
-			npcs[member.UserId] = nil
+		if member and spot and not planned[member.UserId] then
+			planned[member.UserId] = true
 			task.spawn(function()
 				buildNpc(member, spot, folder)
 			end)

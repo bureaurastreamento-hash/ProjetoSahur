@@ -242,6 +242,8 @@ function QuestController.Start()
 			onState(data)
 		elseif event == "dialog" then
 			showDialog(data)
+		elseif event == "toast" then
+			HUDController.ShowToast(tostring(data.title), tostring(data.text), COLOR_TITLE)
 		elseif event == "progress" then
 			if data.complete then
 				HUDController.ShowToast("Objetivos completos", ("Volte em %s (%s)"):format(tostring(data.npc), tostring(data.where)), COLOR_OK)

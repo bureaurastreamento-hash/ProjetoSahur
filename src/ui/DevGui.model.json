@@ -3199,7 +3199,7 @@
         ],
         [
          0,
-         346
+         434
         ]
        ]
       },
@@ -3734,6 +3734,393 @@
        ]
       },
       {
+       "name": "QuestSection",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "QuestSection",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -24
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           88
+          ]
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "HIST\u00d3RIA / TRAIDOR  (cap\u00edtulo \u00e9 por ALVO)",
+        "TextSize": 11,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          0.35,
+          0.65,
+          1.0
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextTruncate": "AtEnd"
+       },
+       "children": []
+      },
+      {
+       "name": "QuestChapter",
+       "className": "TextBox",
+       "properties": {
+        "Name": "QuestChapter",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           294
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           106
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "",
+        "PlaceholderText": "cap\u00edtulo (1 = in\u00edcio \u00b7 8 = final \u00b7 9 = zerada)",
+        "PlaceholderColor3": {
+         "Color3": [
+          0.5,
+          0.5,
+          0.55
+         ]
+        },
+        "TextSize": 13,
+        "Font": "Gotham",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "ClearTextOnFocus": false,
+        "BorderSizePixel": 0
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SetQuestChapter",
+       "className": "TextButton",
+       "properties": {
+        "Name": "SetQuestChapter",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           106
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Pular p/ cap\u00edtulo",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SummonTraitor",
+       "className": "TextButton",
+       "properties": {
+        "Name": "SummonTraitor",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           465
+          ],
+          [
+           0,
+           106
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.25,
+          0.55,
+          0.35
+         ]
+        },
+        "Text": "Invocar traidor",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "KillTraitor",
+       "className": "TextButton",
+       "properties": {
+        "Name": "KillTraitor",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           138
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.75,
+          0.25,
+          0.25
+         ]
+        },
+        "Text": "Matar traidor",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "DespawnTraitor",
+       "className": "TextButton",
+       "properties": {
+        "Name": "DespawnTraitor",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           163
+          ],
+          [
+           0,
+           138
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.75,
+          0.25,
+          0.25
+         ]
+        },
+        "Text": "Remover traidor",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
        "name": "ArrowSection",
        "className": "TextLabel",
        "properties": {
@@ -3758,7 +4145,7 @@
           ],
           [
            0,
-           88
+           176
           ]
          ]
         },
@@ -3803,7 +4190,7 @@
           ],
           [
            0,
-           106
+           194
           ]
          ]
         },
@@ -3870,7 +4257,7 @@
           ],
           [
            0,
-           106
+           194
           ]
          ]
         },
@@ -3937,7 +4324,7 @@
           ],
           [
            0,
-           106
+           194
           ]
          ]
         },
@@ -4004,7 +4391,7 @@
           ],
           [
            0,
-           144
+           232
           ]
          ]
         },
@@ -4049,7 +4436,7 @@
           ],
           [
            0,
-           162
+           250
           ]
          ]
         },
@@ -4123,7 +4510,7 @@
           ],
           [
            0,
-           162
+           250
           ]
          ]
         },
@@ -4190,7 +4577,7 @@
           ],
           [
            0,
-           162
+           250
           ]
          ]
         },
@@ -4257,7 +4644,7 @@
           ],
           [
            0,
-           162
+           250
           ]
          ]
         },
@@ -4324,7 +4711,7 @@
           ],
           [
            0,
-           194
+           282
           ]
          ]
         },
@@ -4391,7 +4778,7 @@
           ],
           [
            0,
-           232
+           320
           ]
          ]
         },
@@ -4436,7 +4823,7 @@
           ],
           [
            0,
-           250
+           338
           ]
          ]
         },
@@ -4503,7 +4890,7 @@
           ],
           [
            0,
-           250
+           338
           ]
          ]
         },
@@ -4570,7 +4957,7 @@
           ],
           [
            0,
-           250
+           338
           ]
          ]
         },
@@ -4637,7 +5024,7 @@
           ],
           [
            0,
-           282
+           370
           ]
          ]
         },
@@ -4704,7 +5091,7 @@
           ],
           [
            0,
-           282
+           370
           ]
          ]
         },
@@ -4771,7 +5158,7 @@
           ],
           [
            0,
-           282
+           370
           ]
          ]
         },
@@ -4838,7 +5225,7 @@
           ],
           [
            0,
-           282
+           370
           ]
          ]
         },
@@ -4905,7 +5292,7 @@
           ],
           [
            0,
-           314
+           402
           ]
          ]
         },
@@ -4972,7 +5359,7 @@
           ],
           [
            0,
-           314
+           402
           ]
          ]
         },
@@ -5039,7 +5426,7 @@
           ],
           [
            0,
-           314
+           402
           ]
          ]
         },

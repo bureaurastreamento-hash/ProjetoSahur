@@ -2,11 +2,14 @@
 --[[
 	QuestConfig — a HISTÓRIA em capítulos (dono, 2026-09-22): uma linha só; cada capítulo = falar com o NPC
 	(um desenvolvedor do grupo, TeamConfig) → cumprir objetivos de battlegrounds → voltar no NPC → recompensa.
-	Capítulo final (a ser escolhido): lutar contra um desenvolvedor TRAIDOR — por enquanto `Locked`.
+	Capítulo final (dono, 2026-09-23): o TRAIDOR é o adryan_keep — aceita-se com ele na cachoeira, ele vira um
+	NPC hostil no santuário (TraitorService) e a entrega é com o Humanoider_20 na Taberna (`DeliverNpcUserId`).
 	Contadores (`Kind`) vêm do AchievementService (kills, parries, duel_wins, boss_kills, bricks, playtime...) e
 	do próprio QuestService (visit_<spot>, streak = maior kill streak). `Max = true` = vale o maior valor.
 	Textos/recompensas são PROVISÓRIOS — o dono ajusta depois.
 ]]
+
+local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
 
 local QuestConfig = {}
 
@@ -16,7 +19,8 @@ export type Spot = { Pos: Vector3, Yaw: number, Label: string }
 export type Chapter = {
 	Id: string,
 	Title: string,
-	NpcUserId: number?, -- membro da equipe (TeamConfig) que dá o capítulo; nil = sem NPC (final trancado)
+	NpcUserId: number?, -- membro da equipe (TeamConfig) que dá o capítulo; nil = sem NPC
+	DeliverNpcUserId: number?, -- quem recebe a entrega quando NÃO é o mesmo NPC (final: o traidor não entrega)
 	Spot: string, -- QuestConfig.Spots
 	Intro: string, -- ao aceitar
 	Progress: string, -- voltou sem terminar
@@ -36,6 +40,26 @@ QuestConfig.Spots = {
 	MercadoNW = { Pos = Vector3.new(-110, -0.87, -190), Yaw = 0, Label = "Mercado coberto (noroeste)" },
 	Santuario = { Pos = Vector3.new(98, 0.5, 396), Yaw = 180, Label = "Santuário do boss" },
 } :: { [string]: Spot }
+
+-- Capítulo final: o traidor vira um NPC hostil (rig R6 com o avatar dele) no santuário do boss. Números de
+-- balanceamento aqui; a IA está no TraitorService. Outros jogadores podem ajudar; crédito = deu dano E está
+-- no capítulo final ativo.
+QuestConfig.Traitor = {
+	UserId = 7521923542, -- adryan_keep
+	Title = "TRAIDOR",
+	HealthMult = 3, -- × CombatConfig.MaxHealth
+	WalkSpeed = 20,
+	ChaseSpeed = 24, -- fase 2 (metade da vida)
+	PhaseTwoAt = 0.5,
+	ArenaRadius = 45, -- studs a partir de BossArena (santuário): fora disso ele volta/ignora
+	SpawnPartName = "BossSpawn", -- Workspace.Sahur.ArenaExtras (Props)
+	ArenaPartName = "BossArena",
+	AbandonSeconds = 60, -- sem ninguém vivo na arena por esse tempo = some (fala de novo com o NPC para voltar)
+	Punch = { Damage = 6, Range = 7 }, -- combo de 4 no ritmo do M1 (ResolveNpcHit respeita block)
+	Dash = { MinDist = 12, MaxDist = 40, Seconds = 0.4, Cooldown = 3.5 }, -- pulo até o alvo quando está longe
+	Burst = { Radius = 10, Damage = 14, Windup = 0.9, Cooldown = 9, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } :: CombatConfig.Knockback }, -- rajada com aviso no chão
+	Regen = { Delay = 8, PerSecond = 6 }, -- fora de combate
+}
 
 QuestConfig.TalkDistance = 14 -- studs (E no NPC)
 QuestConfig.VisitRadius = 18 -- studs para contar "visitou o lugar"
@@ -111,7 +135,7 @@ QuestConfig.Chapters = {
 		Id = "cap7", Title = "O ritual", NpcUserId = 3352486957, Spot = "Santuario",
 		Intro = "Você chegou longe. Antes do final, prova que domina o combate: streak de 5, muitos parries, muitos corpos.",
 		Progress = "Ainda falta. O final não espera qualquer um.",
-		Done = "...Tem algo errado com a equipe. Alguém está traindo a gente. Volte quando o capítulo final abrir.",
+		Done = "...Tem algo errado com a equipe. Alguém está traindo a gente. O adryan anda sumindo perto da cachoeira. Vai lá — e toma cuidado.",
 		Objectives = {
 			{ Kind = "streak", Goal = 5, Desc = "Faça um kill streak de %d", Max = true },
 			{ Kind = "parries", Goal = 10, Desc = "Faça %d parries" },
@@ -120,10 +144,12 @@ QuestConfig.Chapters = {
 		Reward = { EventPoints = 400, Coins = 500, XP = 600, Emote = "flex" },
 	},
 	{
-		Id = "final", Title = "O traidor", NpcUserId = nil, Spot = "Taberna", Locked = true,
-		Intro = "", Progress = "", Done = "",
-		Objectives = { { Kind = "final", Goal = 1, Desc = "EM BREVE: derrote o desenvolvedor traidor" } },
-		Reward = { EventPoints = 1000 },
+		Id = "final", Title = "O traidor", NpcUserId = 7521923542, DeliverNpcUserId = 3792294725, Spot = "Cachoeira",
+		Intro = "...Então você chegou até aqui. Sim, fui eu: a flecha, o altar, o monstro — tudo. Ninguém ia descobrir. Me encontra atrás da cachoeira, no santuário. Vamos ver se você é tão bom quanto dizem.",
+		Progress = "Ainda de pé? Estou te esperando no santuário. Atravessa a água.",
+		Done = "...O adryan? Nunca imaginei. Você salvou a equipe — e o Sahur. Obrigado, de verdade. Você zerou a história.",
+		Objectives = { { Kind = "traitor_kill", Goal = 1, Desc = "Derrote o traidor no santuário" } },
+		Reward = { EventPoints = 1000, Coins = 1000, XP = 1500 },
 	},
 } :: { Chapter }
 

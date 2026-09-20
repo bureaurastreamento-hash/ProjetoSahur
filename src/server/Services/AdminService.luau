@@ -21,7 +21,8 @@
 	  na hora), SetStreak {amount}, GrantCosmetics/ResetCosmetics, Ragdoll {amount}, ClearAntiExploit
 	Globais: GetState {target} (devolve data), ListPlayers, RespawnDummies, ToggleDummies,
 	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
-	  DespawnBoss, RestoreDestructibles, TakeArrow
+	  DespawnBoss, RestoreDestructibles, TakeArrow, SummonTraitor/KillTraitor/DespawnTraitor (capítulo final),
+	  SetQuestChapter {amount} (por alvo)
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
@@ -56,6 +57,8 @@ local ReportConfig = require(Modules:WaitForChild("ReportConfig"))
 local TeleportService = game:GetService("TeleportService")
 -- RitualService/BossFormService dependem do AbilityService, que depende deste módulo: carregados no Start
 local RitualService: any = nil
+local QuestService: any = nil -- carregado no Start (mesmo motivo)
+local TraitorService: any = nil
 local BossFormService: any = nil
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
@@ -303,6 +306,14 @@ perTarget.SetStreak = function(_, target, args)
 	end
 	target:SetAttribute("KillStreak", math.floor(amount))
 	return true, ("%s: kill streak = %d"):format(target.Name, math.floor(amount))
+end
+
+perTarget.SetQuestChapter = function(_, target, args)
+	local n = number(args.amount)
+	if not QuestService or not n then
+		return false, "capítulo inválido (1 = início; 8 = final; 9 = zerada)"
+	end
+	return QuestService.SetChapter(target, n)
 end
 
 perTarget.GrantCosmetics = function(_, target)
@@ -605,6 +616,23 @@ end
 global.KillBoss = function()
 	local ok = BossService.Kill()
 	return ok, if ok then "boss morto (loot distribuído)" else "não havia boss NPC"
+end
+
+global.SummonTraitor = function(admin)
+	if not TraitorService then
+		return false, "TraitorService não carregou"
+	end
+	return TraitorService.Summon(admin)
+end
+
+global.KillTraitor = function()
+	local ok = TraitorService and TraitorService.Kill()
+	return ok == true, if ok then "traidor morto (crédito para quem está no capítulo final)" else "não havia traidor"
+end
+
+global.DespawnTraitor = function()
+	local ok = TraitorService and TraitorService.Despawn()
+	return true, if ok then "traidor removido" else "não havia traidor"
 end
 
 global.RestoreDestructibles = function()
@@ -1075,6 +1103,14 @@ function AdminService.Start()
 	local okF, f = pcall(require, script.Parent:WaitForChild("BossFormService"))
 	if okF then
 		BossFormService = f
+	end
+	local okQ, qs = pcall(require, script.Parent:WaitForChild("QuestService"))
+	if okQ then
+		QuestService = qs
+	end
+	local okT, ts = pcall(require, script.Parent:WaitForChild("TraitorService"))
+	if okT then
+		TraitorService = ts
 	end
 	-- anúncios globais (outros servidores) e ban na entrada
 	pcall(function()

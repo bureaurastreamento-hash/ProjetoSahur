@@ -48,6 +48,7 @@ local NUMBER_COMMANDS: { [string]: string } = {
 	AddXP = "XP",
 	SetTime = "Time",
 	SetStreak = "Streak",
+	SetQuestChapter = "QuestChapter",
 }
 local SIMPLE_COMMANDS = {
 	"InfiniteEnergy", "NoCooldown", "God", "ClearFlags", "ResetCooldowns", "Heal", "Respawn", "Kill", "CompleteAchievements",
@@ -57,9 +58,10 @@ local SIMPLE_COMMANDS = {
 	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerStop",
 	"TeleportArena", "Spectate", "GetReports", "StartEvent", "EndEvent",
 	"SummonBossStrong", "KillBoss", "RestoreDestructibles", "TakeArrow",
+	"SummonTraitor", "KillTraitor", "DespawnTraitor",
 }
 -- Ações perigosas: 1º clique arma ("Confirmar?"), 2º clique em CONFIRM_SECONDS envia
-local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true }
+local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true }
 local CONFIRM_SECONDS = 3
 local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
