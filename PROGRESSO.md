@@ -250,9 +250,28 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ### PRÓXIMA SESSÃO — por onde começar
 1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
    à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
-2. Blocos que faltam dos PLANOS (2026-09-21): C construções JJS maiores/enteráveis — PRÓXIMO; E workshop de
-   mods + quests. (B jardim v2, D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22, sem o dono ver.)
+2. Bloco que falta dos PLANOS (2026-09-21): E workshop de mods + quests (design grande — fechar escopo com o
+   dono antes). (B jardim v2, C construções v2, D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22, sem o dono ver.)
 3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-22 — BLOCO C FEITO: construções JJS MAIORES e enteráveis + desabamento + golpe pesado
+- `tools/arena_construcoes.py` v2: tijolo **6×3×3** (dobro do volume); **casas de 2 andares** (pé-direito 11,
+  porta 6×9, janelas largas 7×6 em cada andar, laje do 1º andar em chunks de tábua destrutíveis com vão, escada
+  interna de tábuas, mesa + bancos + jarros no térreo, terraço com mureta e escada externa de degraus); **2 pátios
+  murados** por bairro (`courtyard`: muro de 2 fiadas com portão e pilaretes); **mercado coberto** (`covered_market`:
+  colunas + cumeeira + telhado de junco em chunks) com 2 barracas dentro + 4 barracas soltas; **zigurate 44 studs**
+  com **câmara interna** no 1º degrau (piso de lápis, 4 pilares, portas nas 4 faces, teto em chunks) e **rampa de
+  tábuas em espiral** (um lance por degrau) até o santuário no topo (arena em altura). 7 casas por bairro (eram 9).
+  Total **2760 destrutíveis** (v1: 2414) com o dobro de tamanho.
+- `DestructionService`: **golpe pesado** = `MaxPerHit × HeavyMultiplier (2)` quando o atacante tem
+  `HeavyHitUntil` (CombatService põe no 4º M1, 0,5 s) ou `AwakenedUntil` (despertar) no futuro;
+  **desabamento** (`collapseAbove`, `CollapseMaxPerHit` 10, `CollapseDelay` 0,25 s): tijolo logo acima dos removidos
+  que ficou SEM apoio embaixo cai também (só 1 nível; nada de dominó). `RestoreAll` continua repondo tudo.
+- Teste MCP (run_server, Hitbox.AroundPoint com boneco): golpe normal raio 5 → 6 tijolos + 1 desabou; pesado
+  raio 9 → 18; somem em 4,5 s; RestoreAll → 0 soltos.
+- **FALTA o dono testar**: entrar numa casa pela porta, subir a escada interna até o 1º andar e a externa até o
+  terraço (degraus de 1,5 — subida por pulo/escada), entrar na câmara do zigurate e subir a rampa até o topo,
+  socar parede (6–10 tijolos) × 4º M1/ult (o dobro), ver o desabamento, FPS com 2760 peças + jardim.
 
 ### Sessão 2026-09-22 — BLOCO B FEITO: cachoeira + jardim v2 "Amazônia antiga + templos astecas" (só via MCP)
 - `tools/arena_santuario.py` (parte FORA reescrita; câmara interna igual): **cachoeira em 3 patamares** de rocha

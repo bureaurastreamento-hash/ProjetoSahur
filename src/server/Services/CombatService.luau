@@ -786,6 +786,10 @@ local function onRequestAttack(player: Player, attackId: any, claimed: any)
 	if isM1 and lift and comboIndex == lift.Index then
 		knockback = lift.Knockback
 	end
+	-- 4º golpe é PESADO para o cenário: DestructionService solta o dobro de tijolos (HeavyHitUntil)
+	if isM1 and isFinisher then
+		character:SetAttribute("HeavyHitUntil", Workspace:GetServerTimeNow() + 0.5)
+	end
 
 	-- O cliente já esperou o wind-up (HitDelay) antes de pedir, animando na hora do clique: o cooldown
 	-- conta a partir do clique, e a hitbox é resolvida agora (vítimas vistas pelo cliente × caixa tolerante).
