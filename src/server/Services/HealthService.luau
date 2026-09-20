@@ -4,6 +4,8 @@
 	Autoridade sobre vida: vida máxima, dano, cura, morte, respawn.
 	Usa o Humanoid como armazenamento (replica de graça pro cliente), mas
 	TODA alteração passa por aqui. Nenhum outro script deve mexer em Humanoid.Health.
+	Lutadores = Players e BOTS (Combatant.Fighter): bots entram por HealthService.SetupBot(model) — mesma
+	vida/regen/morte, sem HUD, sem crédito de kill/pontos (Died só dispara para vítima Player; killer bot = nil).
 ]]
 
 local Players = game:GetService("Players")
@@ -15,12 +17,15 @@ local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local RagdollRig = require(Modules:WaitForChild("RagdollRig"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 
 local respawnLimiter = RateLimiter.new(1, 1)
 local timeLimiter = RateLimiter.new(2, 1)
 
 local HealthService = {}
+
+type Fighter = Combatant.Fighter
 
 local ATTR_LAST_ATTACKER = "LastAttackerUserId"
 local ATTR_LAST_ATTACK_TIME = "LastAttackTime"
@@ -36,16 +41,20 @@ local notifyHealth: RemoteEvent
 local notifyKill: RemoteEvent
 local notifyKnockback: RemoteEvent
 
---- Disparado no servidor quando um jogador morre: (victim: Player, killer: Player?)
+--- Disparado no servidor quando um JOGADOR morre: (victim: Player, killer: Player?) — killer bot = nil.
 HealthService.Died = Instance.new("BindableEvent")
---- Disparado a cada dano aplicado (victim: Model, amount: number, attacker: Player?). BossService usa para crédito.
+--- Disparado quando QUALQUER lutador (jogador ou bot) morre: (victim: Fighter, killer: Fighter?). BotService usa.
+HealthService.FighterDied = Instance.new("BindableEvent")
+--- Disparado a cada dano aplicado (victim: Model, amount: number, attacker: Fighter?). BossService usa para crédito.
 HealthService.Damaged = Instance.new("BindableEvent")
+
+local bots: { [Model]: boolean } = {} -- bots registrados (regen/queda no vazio)
 
 local ATTR_LAST_COMBAT_TIME = "LastCombatTime" -- deu OU levou dano (troca de personagem espera isto)
 
 --- Marca que o jogador está em combate (deu dano). CombatService chama; a troca de personagem espera.
-function HealthService.MarkInCombat(player: Player)
-	local character = player.Character
+function HealthService.MarkInCombat(player: Fighter)
+	local character = Combatant.CharacterOf(player)
 	if character then
 		character:SetAttribute(ATTR_LAST_COMBAT_TIME, os.clock())
 	end
@@ -53,8 +62,8 @@ end
 
 --- Segundos desde a última vez que o jogador LEVOU ou DEU dano (math.huge se nunca / sem personagem).
 --- Dono (2026-09-21): quem ataca também não pode trocar de personagem.
-function HealthService.SecondsSinceDamaged(player: Player): number
-	local character = player.Character
+function HealthService.SecondsSinceDamaged(player: Fighter): number
+	local character = Combatant.CharacterOf(player)
 	if not character then
 		return math.huge
 	end
@@ -68,7 +77,7 @@ function HealthService.SecondsSinceDamaged(player: Player): number
 end
 
 --- Jogadores com atributo CanFight == false não dão nem recebem dano (ex.: lobby).
-function HealthService.CanFight(player: Player?): boolean
+function HealthService.CanFight(player: Fighter?): boolean
 	return player == nil or player:GetAttribute("CanFight") ~= false
 end
 
@@ -90,7 +99,7 @@ end
 
 --- Morte com peso: solta as juntas (RagdollRig, permanente até o respawn) e empurra o corpo para
 --- longe do último atacante. O empurrão vai pelo NotifyKnockback (o cliente é dono da física).
-local function ragdoll(player: Player, character: Model, attacker: Player?)
+local function ragdoll(player: Fighter, character: Model, attacker: Fighter?)
 	if character:GetAttribute("BossRig") ~= nil then
 		-- forma de boss (rig por peças): morto NÃO ragdolla (dono, 2026-09-21: o corpo batia no cenário e
 		-- saía voando). Congela no lugar.
@@ -105,23 +114,34 @@ local function ragdoll(player: Player, character: Model, attacker: Player?)
 	end
 	RagdollRig.Apply(character) -- no-op se já estava em ragdoll de combate
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
-	local attackerRoot = attacker and attacker.Character and attacker.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local attackerChar = Combatant.CharacterOf(attacker)
+	local attackerRoot = attackerChar and attackerChar:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if root then
 		local away = if attackerRoot then root.Position - attackerRoot.Position else -root.CFrame.LookVector
 		away = Vector3.new(away.X, 0, away.Z)
 		local direction = if away.Magnitude > 0.1 then away.Unit else -root.CFrame.LookVector
-		notifyKnockback:FireClient(player, direction, CombatConfig.Ragdoll.PushSpeed, 0.25)
+		if Combatant.IsPlayer(player) then
+			notifyKnockback:FireClient(player :: Player, direction, CombatConfig.Ragdoll.PushSpeed, 0.25)
+		else
+			-- bot: o servidor é dono da física
+			for _, part in character:GetDescendants() do
+				if part:IsA("BasePart") and not part.Anchored then
+					part.AssemblyLinearVelocity = direction * CombatConfig.Ragdoll.PushSpeed + Vector3.new(0, 8, 0)
+				end
+			end
+		end
 	end
 end
 
-local function setupCharacter(player: Player, character: Model)
+local function setupCharacter(player: Fighter, character: Model)
 	local humanoid = character:WaitForChild("Humanoid", 5) :: Humanoid?
 	if not humanoid then
 		warn(("[HealthService] %s spawnou sem Humanoid"):format(player.Name))
 		return
 	end
+	local isPlayer = Combatant.IsPlayer(player)
 
-	if humanoid.RigType ~= Enum.HumanoidRigType.R6 and not warnedRig then
+	if isPlayer and humanoid.RigType ~= Enum.HumanoidRigType.R6 and not warnedRig then
 		warnedRig = true
 		local StarterPlayer = game:GetService("StarterPlayer")
 		local starterChar = StarterPlayer:FindFirstChild("StarterCharacter")
@@ -144,22 +164,38 @@ local function setupCharacter(player: Player, character: Model)
 	character:SetAttribute(ATTR_LAST_ATTACK_TIME, nil)
 
 	humanoid.Died:Once(function()
-		local killer: Player? = nil
+		local killer: Fighter? = nil
 		local lastId = character:GetAttribute(ATTR_LAST_ATTACKER)
 		local lastTime = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
 		if typeof(lastId) == "number" and typeof(lastTime) == "number" and (os.clock() - lastTime) <= KILL_CREDIT_WINDOW then
-			killer = Players:GetPlayerByUserId(lastId)
+			killer = Combatant.ByUserId(lastId)
 		end
 		if CombatConfig.Ragdoll.Enabled then
-			ragdoll(player, character, if typeof(lastId) == "number" then Players:GetPlayerByUserId(lastId) else nil)
+			ragdoll(player, character, if typeof(lastId) == "number" then Combatant.ByUserId(lastId) else nil)
 		end
-		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, killer and killer.Name or "nenhum"))
-		notifyKill:FireAllClients(killer, player)
-		HealthService.Died:Fire(player, killer)
+		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, Combatant.Name(killer)))
+		HealthService.FighterDied:Fire(player, killer)
+		if isPlayer then
+			-- crédito/kill feed/progressão só entre jogadores: bot que mata não pontua, bot que morre não conta
+			local killerPlayer = Combatant.PlayerOf(killer)
+			notifyKill:FireAllClients(killerPlayer, player)
+			HealthService.Died:Fire(player, killerPlayer)
+		end
 	end)
 
-	notifyHealth:FireClient(player, humanoid.Health, humanoid.MaxHealth)
+	Combatant.Notify(player, notifyHealth, humanoid.Health, humanoid.MaxHealth)
 	Log.debug(("[HealthService] %s pronto: %d HP"):format(player.Name, humanoid.MaxHealth))
+end
+
+--- Registra um BOT (BotService): vida/regen/morte iguais às do jogador; sem HUD nem crédito.
+function HealthService.SetupBot(model: Model)
+	bots[model] = true
+	setupCharacter(model, model)
+	model.AncestryChanged:Connect(function()
+		if not model.Parent then
+			bots[model] = nil
+		end
+	end)
 end
 
 -- ---------------------------------------------------------------------------
@@ -169,9 +205,9 @@ end
 --- Prioridade: quem NÃO pode levar golpe de `attacker` agora. Vale i-frames (ragdoll cancel, levantar,
 --- cutscene do despertar, agarrão em curso), modo deus e a trava do agarrão (só o agarrador acerta a
 --- vítima presa). Habilidades que "pegam" alguém (agarrão) devem checar antes de agarrar.
-function HealthService.IsInvulnerable(victim: Model, attacker: Player?): boolean
-	local victimPlayer = Players:GetPlayerFromCharacter(victim)
-	if victimPlayer and victimPlayer:GetAttribute("Invulnerable") == true then
+function HealthService.IsInvulnerable(victim: Model, attacker: Fighter?): boolean
+	local victimFighter = Combatant.Of(victim)
+	if victimFighter and victimFighter:GetAttribute("Invulnerable") == true then
 		return true -- modo deus (AdminService)
 	end
 	local iframes = victim:GetAttribute(ATTR_IFRAMES)
@@ -181,7 +217,7 @@ function HealthService.IsInvulnerable(victim: Model, attacker: Player?): boolean
 	local lockedUntil = victim:GetAttribute(ATTR_LOCKED_UNTIL)
 	if typeof(lockedUntil) == "number" and os.clock() < lockedUntil then
 		local owner = victim:GetAttribute(ATTR_LOCKED_TO)
-		if not attacker or attacker.UserId ~= owner then
+		if not attacker or Combatant.UserId(attacker) ~= owner then
 			return true -- preso num agarrão: só o agarrador acerta
 		end
 	end
@@ -189,9 +225,9 @@ function HealthService.IsInvulnerable(victim: Model, attacker: Player?): boolean
 end
 
 --- Trava a vítima a um atacante por `seconds` (agarrão): só ele consegue acertá-la. `attacker` nil = solta.
-function HealthService.LockTo(victim: Model, attacker: Player?, seconds: number?)
+function HealthService.LockTo(victim: Model, attacker: Fighter?, seconds: number?)
 	if attacker and seconds and seconds > 0 then
-		victim:SetAttribute(ATTR_LOCKED_TO, attacker.UserId)
+		victim:SetAttribute(ATTR_LOCKED_TO, Combatant.UserId(attacker))
 		victim:SetAttribute(ATTR_LOCKED_UNTIL, os.clock() + seconds)
 	else
 		victim:SetAttribute(ATTR_LOCKED_TO, nil)
@@ -200,21 +236,22 @@ function HealthService.LockTo(victim: Model, attacker: Player?, seconds: number?
 end
 
 --- Aplica dano. Retorna o dano efetivamente aplicado (0 se alvo inválido/morto).
-function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Player?): number
+function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Fighter?): number
 	local humanoid = getHumanoid(victim)
 	if not humanoid or humanoid.Health <= 0 or amount <= 0 then
 		return 0
 	end
-	local victimPlayer = Players:GetPlayerFromCharacter(victim)
-	if not HealthService.CanFight(attacker) or not HealthService.CanFight(victimPlayer) then
+	local victimFighter = Combatant.Of(victim)
+	local victimPlayer = Combatant.PlayerOf(victimFighter)
+	if not HealthService.CanFight(attacker) or not HealthService.CanFight(victimFighter) then
 		return 0
 	end
 	if HealthService.IsInvulnerable(victim, attacker) then
 		return 0
 	end
-	if attacker and victimPlayer and attacker ~= victimPlayer then
+	if attacker and victimFighter and attacker ~= victimFighter then
 		-- mesmo time (Teams/duelo 2v2): sem fogo amigo
-		local teamA, teamB = attacker:GetAttribute("TeamId"), victimPlayer:GetAttribute("TeamId")
+		local teamA, teamB = attacker:GetAttribute("TeamId"), victimFighter:GetAttribute("TeamId")
 		if teamA ~= nil and teamA == teamB then
 			return 0
 		end
@@ -225,7 +262,7 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Play
 	local dealt = before - humanoid.Health
 
 	if attacker then
-		victim:SetAttribute(ATTR_LAST_ATTACKER, attacker.UserId)
+		victim:SetAttribute(ATTR_LAST_ATTACKER, Combatant.UserId(attacker))
 		victim:SetAttribute(ATTR_LAST_ATTACK_TIME, os.clock())
 		victim:SetAttribute(ATTR_LAST_COMBAT_TIME, os.clock())
 	end
@@ -296,8 +333,8 @@ function HealthService.Start()
 		while true do
 			task.wait(1)
 			local now = os.clock()
-			for _, player in Players:GetPlayers() do
-				local character = player.Character
+			for _, fighter in Combatant.All() do
+				local character = Combatant.CharacterOf(fighter)
 				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 				-- Caiu do mapa: mata (respawn normal) em vez de cair para sempre
 				local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?

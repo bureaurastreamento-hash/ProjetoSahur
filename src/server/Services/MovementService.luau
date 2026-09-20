@@ -10,6 +10,8 @@
 	DashingUntil bloqueia soco/habilidade. Ragdollado = RAGDOLL CANCEL: levanta na hora com i-frames
 	curtos e cooldown próprio (CombatConfig.CombatRagdoll).
 	Cooldowns vão por NotifyDashCooldown(kind, readyAtServerTime, total).
+	Lutador = Combatant.Fighter (Player ou bot). Bot: o SERVIDOR move o dash (LinearVelocity, mesma receita
+	do cliente) — MovementService.Dash(bot, direction) / Sprint(bot, on) são a API que o BotService usa.
 ]]
 
 local Players = game:GetService("Players")
@@ -23,12 +25,15 @@ local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 
 local MovementService = {}
+
+type Fighter = Combatant.Fighter
 
 local sprintLimiter = RateLimiter.new(10, 1)
 local dashLimiter = RateLimiter.new(6, 1)
@@ -38,7 +43,7 @@ local ATTR_NO_COOLDOWN = "DevNoCooldown"
 type DashState = { forwardReadyAt: number, sideReadyAt: number, cancelReadyAt: number }
 local ATTR_DASHING_UNTIL = "DashingUntil" -- os.clock(); CombatService/AbilityService recusam ações até aqui
 local ATTR_DASH_KIND = "DashKind" -- "side" | "forward": o soco no fim do dash LATERAL é permitido (CombatService)
-local dashStates: { [Player]: DashState } = {}
+local dashStates: { [Instance]: DashState } = {}
 local PhysicsService = game:GetService("PhysicsService")
 local CollectionService = game:GetService("CollectionService")
 local DASH_GROUP = "Dashing" -- durante o dash o corpo não colide com jogadores (CombatConfig.Dash.NoPlayerCollision)
@@ -48,7 +53,7 @@ local notifyDash: RemoteEvent
 local notifyDashCooldown: RemoteEvent
 local notifyAbility: RemoteEvent -- DashOverride (Blink) avisa como habilidade para o FX de teleporte
 
-local function dashState(player: Player): DashState
+local function dashState(player: Fighter): DashState
 	local s = dashStates[player]
 	if not s then
 		s = { forwardReadyAt = 0, sideReadyAt = 0, cancelReadyAt = 0 }
@@ -94,7 +99,7 @@ local function characterFilter(exclude: Model): { Instance }
 	return list
 end
 
-function MovementService.Teleport(player: Player, character: Model, direction: Vector3, distance: number): boolean
+function MovementService.Teleport(player: Fighter, character: Model, direction: Vector3, distance: number): boolean
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
 		return false
@@ -134,7 +139,10 @@ function MovementService.Teleport(player: Player, character: Model, direction: V
 	if not target then
 		return false
 	end
-	AntiExploitService.Grace(player, 1)
+	local asPlayer = Combatant.PlayerOf(player)
+	if asPlayer then
+		AntiExploitService.Grace(asPlayer, 1)
+	end
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.CFrame = CFrame.new(target) * (root.CFrame - root.CFrame.Position)
 	return true
@@ -154,9 +162,9 @@ end
 
 --- Hit de chegada do dash para a frente / Piscar (CombatConfig.Dash.ArrivalHit): dano fixo sem combo;
 --- vítima bem de frente = empurrão longe em vez do hit.
-local function arrivalHit(player: Player, character: Model, direction: Vector3)
+local function arrivalHit(player: Fighter, character: Model, direction: Vector3)
 	local cfg = CombatConfig.Dash.ArrivalHit
-	if not cfg or not HealthService.IsAlive(character) or player.Character ~= character then
+	if not cfg or not HealthService.IsAlive(character) or Combatant.CharacterOf(player) ~= character then
 		return
 	end
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -179,7 +187,7 @@ end
 
 --- Q de um personagem com DashOverride (Swift = Piscar): teleporta em vez de dar dash; um cooldown só
 --- (mostrado nos dois "kinds" do HUD). Usa a mesma trava DashingUntil por CastTime.
-local function doDashOverride(player: Player, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean, sideways: boolean)
+local function doDashOverride(player: Fighter, character: Model, ability: any, direction: Vector3, state: DashState, noCooldown: boolean, sideways: boolean)
 	local now = os.clock()
 	local kind = if sideways then "side" else "forward"
 	if now < (if sideways then state.sideReadyAt else state.forwardReadyAt) and not noCooldown then
@@ -207,7 +215,7 @@ local function doDashOverride(player: Player, character: Model, ability: any, di
 		else
 			state.forwardReadyAt = now + cd
 		end
-		notifyDashCooldown:FireClient(player, kind, serverNow + cd, cd)
+		Combatant.Notify(player, notifyDashCooldown, kind, serverNow + cd, cd)
 	end
 	player:SetAttribute(ATTR_DASH_KIND, kind)
 	player:SetAttribute(ATTR_DASHING_UNTIL, now + (ability.CastTime or 0))
@@ -223,11 +231,53 @@ local function doDashOverride(player: Player, character: Model, ability: any, di
 	end
 end
 
-local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
+--- Bot: o servidor é dono da física — LinearVelocity no plano por `duration` s (o cliente faz igual para
+--- o próprio jogador em MovementController.SteerableDash). Sem componente vertical (gravidade normal).
+function MovementService.ServerDash(character: Model, direction: Vector3, facing: Vector3, speed: number, duration: number)
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if not root then
+		return
+	end
+	local old = root:FindFirstChild("BotDash")
+	if old then
+		old:Destroy()
+	end
+	if humanoid and facing.Magnitude > 0.01 then
+		humanoid.AutoRotate = false
+		root.CFrame = CFrame.lookAt(root.Position, root.Position + facing)
+	end
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "BotDash"
+	attachment.Parent = root
+	local lv = Instance.new("LinearVelocity")
+	lv.Attachment0 = attachment
+	lv.RelativeTo = Enum.ActuatorRelativeTo.World
+	lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Plane
+	lv.PrimaryTangentAxis = Vector3.xAxis
+	lv.SecondaryTangentAxis = Vector3.zAxis
+	lv.MaxForce = math.huge
+	lv.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
+	lv.Parent = attachment
+	task.delay(duration, function()
+		attachment:Destroy()
+		if humanoid then
+			humanoid.AutoRotate = true
+		end
+		if root.Parent then
+			local v = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = Vector3.new(0, math.min(v.Y, 0), 0)
+		end
+	end)
+end
+
+local function onRequestDash(player: Fighter, rawDirection: any, rawLook: any)
 	if not dashLimiter:Allow(player) then
 		return
 	end
-	local character = player.Character
+	local isBot = Combatant.IsBot(player)
+	local asPlayer = Combatant.PlayerOf(player)
+	local character = Combatant.CharacterOf(player)
 	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	CombatService.NotifyAction(player) -- dash cancela emote em loop
 	if not character or not root or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
@@ -255,11 +305,16 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 		end
 		if not noCooldown then
 			state.cancelReadyAt = now + rc.CancelCooldown
-			notifyDashCooldown:FireClient(player, "cancel", serverNow + rc.CancelCooldown, rc.CancelCooldown)
+			Combatant.Notify(player, notifyDashCooldown, "cancel", serverNow + rc.CancelCooldown, rc.CancelCooldown)
 		end
-		AntiExploitService.Grace(player, cfg.Duration * 2 + 1)
+		if asPlayer then
+			AntiExploitService.Grace(asPlayer, cfg.Duration * 2 + 1)
+		end
 		player:SetAttribute(ATTR_DASHING_UNTIL, now + cfg.Duration * 1.4)
 		notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind, Cancel = true })
+		if isBot then
+			MovementService.ServerDash(character, direction, facing, cfg.Speed, cfg.Duration * CharacterDefs.DashTuning.ForwardScale)
+		end
 		Log.debug(("[MovementService] %s ragdoll cancel"):format(player.Name))
 		return
 	end
@@ -294,9 +349,11 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 		else
 			state.forwardReadyAt = now + cooldown
 		end
-		notifyDashCooldown:FireClient(player, kind, serverNow + cooldown, cooldown)
+		Combatant.Notify(player, notifyDashCooldown, kind, serverNow + cooldown, cooldown)
 	end
-	AntiExploitService.Grace(player, cfg.Duration * 2 + 1)
+	if asPlayer then
+		AntiExploitService.Grace(asPlayer, cfg.Duration * 2 + 1)
+	end
 	-- durante o dash não dá para socar/usar habilidade (lateral é mais curto: SideScale)
 	local scale = if sideways then CharacterDefs.DashTuning.SideScale else CharacterDefs.DashTuning.ForwardScale
 	local dashUntil = now + cfg.Duration * scale
@@ -305,11 +362,14 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	-- corpo não empurra ninguém durante o dash
 	setDashCollision(character, true)
 	task.delay(cfg.Duration * scale + 0.05, function()
-		if player.Character == character then
+		if Combatant.CharacterOf(player) == character then
 			setDashCollision(character, false)
 		end
 	end)
 	notifyDash:FireAllClients(character, { Direction = direction, Facing = facing, Speed = cfg.Speed, Duration = cfg.Duration, Kind = kind })
+	if isBot then
+		MovementService.ServerDash(character, direction, if sideways then facing else Vector3.zero, cfg.Speed, cfg.Duration * scale)
+	end
 	-- dash para a FRENTE (não lateral, não para trás): hit de chegada no fim do deslocamento
 	if not sideways and direction:Dot(facing) > 0 then
 		task.delay(cfg.Duration * scale, function()
@@ -318,14 +378,20 @@ local function onRequestDash(player: Player, rawDirection: any, rawLook: any)
 	end
 end
 
+--- Bot/DEV: mesmo caminho do Q do jogador (validações, cooldowns, hit de chegada). `look` = frente
+--- (decide lateral × frente/trás); sem ela, a direção pedida.
+function MovementService.Dash(fighter: Fighter, direction: Vector3, look: Vector3?)
+	onRequestDash(fighter, direction, look or direction)
+end
+
 --- Está no meio de um dash (Q)?
-function MovementService.IsDashing(player: Player): boolean
+function MovementService.IsDashing(player: Fighter): boolean
 	local untilT = player:GetAttribute(ATTR_DASHING_UNTIL)
 	return typeof(untilT) == "number" and os.clock() < untilT
 end
 
-local function setSprint(player: Player, active: boolean)
-	local character = player.Character
+local function setSprint(player: Fighter, active: boolean)
+	local character = Combatant.CharacterOf(player)
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	if not humanoid then
 		return
@@ -346,6 +412,11 @@ local function onRequestSprint(player: Player, active: any)
 		return
 	end
 	setSprint(player, active)
+end
+
+--- Bot/DEV: liga/desliga a corrida.
+function MovementService.Sprint(fighter: Fighter, active: boolean)
+	setSprint(fighter, active)
 end
 
 function MovementService.Init()

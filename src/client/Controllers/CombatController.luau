@@ -85,7 +85,7 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
 	end
 	local attackerPlayer = Players:GetPlayerFromCharacter(attackerChar)
-	local awakenedUntil = attackerPlayer and attackerPlayer:GetAttribute("AwakenedUntil")
+	local awakenedUntil = if attackerPlayer then attackerPlayer:GetAttribute("AwakenedUntil") else attackerChar:GetAttribute("AwakenedUntil") -- bot: no Model
 	if typeof(awakenedUntil) == "number" and awakenedUntil > Workspace:GetServerTimeNow() then
 		FX.SpawnVFX(attackerChar, SHARED, "AwakenedSwing", true) -- modo despertado: faíscas na cor
 	end

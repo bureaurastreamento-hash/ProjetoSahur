@@ -60,7 +60,7 @@
       ],
       [
        0,
-       768
+       862
       ]
      ]
     },
@@ -3199,7 +3199,7 @@
         ],
         [
          0,
-         434
+         554
         ]
        ]
       },
@@ -4121,6 +4121,661 @@
        ]
       },
       {
+       "name": "BotSection",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "BotSection",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -24
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           176
+          ]
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "BOTS  (combate REAL: M1, dash, habilidades, ult \u00b7 nascem na sua frente)",
+        "TextSize": 11,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          0.35,
+          0.65,
+          1.0
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextTruncate": "AtEnd"
+       },
+       "children": []
+      },
+      {
+       "name": "BotCharacter",
+       "className": "TextBox",
+       "properties": {
+        "Name": "BotCharacter",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           294
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           194
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "",
+        "PlaceholderText": "personagem do bot (vazio = roda a lista: Jotaro, Swift, Dio, Kira...)",
+        "PlaceholderColor3": {
+         "Color3": [
+          0.5,
+          0.5,
+          0.55
+         ]
+        },
+        "TextSize": 13,
+        "Font": "Gotham",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "ClearTextOnFocus": false,
+        "BorderSizePixel": 0
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SpawnBotPassive",
+       "className": "TextButton",
+       "properties": {
+        "Name": "SpawnBotPassive",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           194
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.25,
+          0.55,
+          0.35
+         ]
+        },
+        "Text": "Bot: s\u00f3 revida",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SpawnBotAggressive",
+       "className": "TextButton",
+       "properties": {
+        "Name": "SpawnBotAggressive",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           465
+          ],
+          [
+           0,
+           194
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.25,
+          0.55,
+          0.35
+         ]
+        },
+        "Text": "Bot: agressivo",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SpawnBotIdle",
+       "className": "TextButton",
+       "properties": {
+        "Name": "SpawnBotIdle",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           226
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Bot: parado (alvo)",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "BotsFill",
+       "className": "TextButton",
+       "properties": {
+        "Name": "BotsFill",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           163
+          ],
+          [
+           0,
+           226
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Encher ult dos bots",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "BotsPassive",
+       "className": "TextButton",
+       "properties": {
+        "Name": "BotsPassive",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           226
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Todos: s\u00f3 revidam",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "BotsAggressive",
+       "className": "TextButton",
+       "properties": {
+        "Name": "BotsAggressive",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           465
+          ],
+          [
+           0,
+           226
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Todos: agressivos",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "BotsIdle",
+       "className": "TextButton",
+       "properties": {
+        "Name": "BotsIdle",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           258
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Todos: parados",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "ClearBots",
+       "className": "TextButton",
+       "properties": {
+        "Name": "ClearBots",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           163
+          ],
+          [
+           0,
+           258
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.75,
+          0.25,
+          0.25
+         ]
+        },
+        "Text": "Remover bots",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
        "name": "ArrowSection",
        "className": "TextLabel",
        "properties": {
@@ -4145,7 +4800,7 @@
           ],
           [
            0,
-           176
+           296
           ]
          ]
         },
@@ -4190,7 +4845,7 @@
           ],
           [
            0,
-           194
+           314
           ]
          ]
         },
@@ -4257,7 +4912,7 @@
           ],
           [
            0,
-           194
+           314
           ]
          ]
         },
@@ -4324,7 +4979,7 @@
           ],
           [
            0,
-           194
+           314
           ]
          ]
         },
@@ -4391,7 +5046,7 @@
           ],
           [
            0,
-           232
+           352
           ]
          ]
         },
@@ -4436,7 +5091,7 @@
           ],
           [
            0,
-           250
+           370
           ]
          ]
         },
@@ -4510,7 +5165,7 @@
           ],
           [
            0,
-           250
+           370
           ]
          ]
         },
@@ -4577,7 +5232,7 @@
           ],
           [
            0,
-           250
+           370
           ]
          ]
         },
@@ -4644,7 +5299,7 @@
           ],
           [
            0,
-           250
+           370
           ]
          ]
         },
@@ -4711,7 +5366,7 @@
           ],
           [
            0,
-           282
+           402
           ]
          ]
         },
@@ -4778,7 +5433,7 @@
           ],
           [
            0,
-           320
+           440
           ]
          ]
         },
@@ -4823,7 +5478,7 @@
           ],
           [
            0,
-           338
+           458
           ]
          ]
         },
@@ -4890,7 +5545,7 @@
           ],
           [
            0,
-           338
+           458
           ]
          ]
         },
@@ -4957,7 +5612,7 @@
           ],
           [
            0,
-           338
+           458
           ]
          ]
         },
@@ -5024,7 +5679,7 @@
           ],
           [
            0,
-           370
+           490
           ]
          ]
         },
@@ -5091,7 +5746,7 @@
           ],
           [
            0,
-           370
+           490
           ]
          ]
         },
@@ -5158,7 +5813,7 @@
           ],
           [
            0,
-           370
+           490
           ]
          ]
         },
@@ -5225,7 +5880,7 @@
           ],
           [
            0,
-           370
+           490
           ]
          ]
         },
@@ -5292,7 +5947,7 @@
           ],
           [
            0,
-           402
+           522
           ]
          ]
         },
@@ -5359,7 +6014,7 @@
           ],
           [
            0,
-           402
+           522
           ]
          ]
         },
@@ -5426,7 +6081,7 @@
           ],
           [
            0,
-           402
+           522
           ]
          ]
         },
@@ -7464,7 +8119,7 @@
         ],
         [
          0,
-         628
+         722
         ]
        ]
       },
@@ -7509,7 +8164,7 @@
         ],
         [
          0,
-         646
+         740
         ]
        ]
       },

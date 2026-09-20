@@ -396,7 +396,7 @@ end
 
 local function characterColor(character: Model): Color3
 	local player = Players:GetPlayerFromCharacter(character)
-	local id = player and player:GetAttribute("CharacterId")
+	local id = if player then player:GetAttribute("CharacterId") else character:GetAttribute("CharacterId") -- bot: no Model
 	local def = if typeof(id) == "string" then CharacterDefs.Get(id) else nil
 	return if def and def.Color then def.Color else TRAIL_DEFAULT
 end

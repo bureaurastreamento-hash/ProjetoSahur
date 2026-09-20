@@ -15,7 +15,7 @@ RateLimiter.__index = RateLimiter
 export type RateLimiter = typeof(setmetatable({} :: {
 	capacity: number,
 	refillPerSecond: number,
-	buckets: { [Player]: { tokens: number, last: number } },
+	buckets: { [Instance]: { tokens: number, last: number } },
 	dropped: number,
 }, RateLimiter))
 
@@ -32,7 +32,7 @@ function RateLimiter.new(maxCalls: number, perSeconds: number): RateLimiter
 	return self
 end
 
-function RateLimiter.Allow(self: RateLimiter, player: Player): boolean
+function RateLimiter.Allow(self: RateLimiter, player: Instance): boolean
 	local now = os.clock()
 	local bucket = self.buckets[player]
 	if not bucket then

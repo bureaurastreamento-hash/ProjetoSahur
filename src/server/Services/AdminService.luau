@@ -22,7 +22,8 @@
 	Globais: GetState {target} (devolve data), ListPlayers, RespawnDummies, ToggleDummies,
 	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
 	  DespawnBoss, RestoreDestructibles, TakeArrow, SummonTraitor/KillTraitor/DespawnTraitor (capítulo final),
-	  SetQuestChapter {amount} (por alvo)
+	  SetQuestChapter {amount} (por alvo), SpawnBotPassive/Aggressive/Idle {id}, BotsPassive/Aggressive/Idle,
+	  BotsFill, ClearBots (BotService: bots com o combate real)
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
@@ -59,6 +60,7 @@ local TeleportService = game:GetService("TeleportService")
 local RitualService: any = nil
 local QuestService: any = nil -- carregado no Start (mesmo motivo)
 local TraitorService: any = nil
+local BotService: any = nil
 local BossFormService: any = nil
 local CosmeticsConfig = require(Modules:WaitForChild("CosmeticsConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
@@ -618,6 +620,74 @@ global.KillBoss = function()
 	return ok, if ok then "boss morto (loot distribuído)" else "não havia boss NPC"
 end
 
+-- BOTS (combate real; ver BotService). `args.id` = personagem (vazio = roda a lista).
+local function spawnBot(admin: Player, args: any, behavior: string): (boolean, string)
+	if not BotService then
+		return false, "BotService não carregou"
+	end
+	local id = if typeof(args) == "table" and typeof(args.id) == "string" and args.id ~= "" then args.id else nil
+	local root = admin.Character and admin.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local cf = nil
+	if root then
+		local look = root.CFrame.LookVector
+		local flat = Vector3.new(look.X, 0, look.Z)
+		flat = if flat.Magnitude > 0.1 then flat.Unit else Vector3.zAxis
+		local n = BotService.Count()
+		local pos = root.Position + flat * 12 + Vector3.new(-flat.Z, 0, flat.X) * ((n % 5) - 2) * 5
+		cf = CFrame.lookAt(pos, Vector3.new(root.Position.X, pos.Y, root.Position.Z))
+	end
+	local model = BotService.Spawn({ CharacterId = id, Behavior = behavior, CFrame = cf })
+	if not model then
+		return false, ("não criou o bot (personagem '%s'?)"):format(tostring(id))
+	end
+	return true, ("%s criado (%s, %s) — %d bot(s)"):format(model.Name, tostring(model:GetAttribute("CharacterId")), behavior, BotService.Count())
+end
+
+global.SpawnBotPassive = function(admin, args)
+	return spawnBot(admin, args, "passive")
+end
+
+global.SpawnBotAggressive = function(admin, args)
+	return spawnBot(admin, args, "aggressive")
+end
+
+global.SpawnBotIdle = function(admin, args)
+	return spawnBot(admin, args, "idle")
+end
+
+global.BotsPassive = function()
+	if BotService then
+		BotService.SetBehavior(nil, "passive")
+	end
+	return true, "bots: só revidam quando apanham"
+end
+
+global.BotsAggressive = function()
+	if BotService then
+		BotService.SetBehavior(nil, "aggressive")
+	end
+	return true, "bots: caçam o lutador mais perto"
+end
+
+global.BotsIdle = function()
+	if BotService then
+		BotService.SetBehavior(nil, "idle")
+	end
+	return true, "bots: parados (só alvo)"
+end
+
+global.BotsFill = function()
+	if BotService then
+		BotService.Fill(nil)
+	end
+	return true, "bots com a ult carregada (despertam na próxima chance)"
+end
+
+global.ClearBots = function()
+	local n = if BotService then BotService.Clear() else 0
+	return true, ("%d bot(s) removido(s)"):format(n)
+end
+
 global.SummonTraitor = function(admin)
 	if not TraitorService then
 		return false, "TraitorService não carregou"
@@ -1111,6 +1181,10 @@ function AdminService.Start()
 	local okT, ts = pcall(require, script.Parent:WaitForChild("TraitorService"))
 	if okT then
 		TraitorService = ts
+	end
+	local okB, bs = pcall(require, script.Parent:WaitForChild("BotService"))
+	if okB then
+		BotService = bs
 	end
 	-- anúncios globais (outros servidores) e ban na entrada
 	pcall(function()

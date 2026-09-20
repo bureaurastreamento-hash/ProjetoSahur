@@ -31,6 +31,7 @@ local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local AdminService = require(script.Parent:WaitForChild("AdminService"))
@@ -51,7 +52,16 @@ type PlayerState = {
 	ultUsedAwakenedUntil: number, -- despertar em que a ult OncePerAwakening já saiu
 }
 
-local states: { [Player]: PlayerState } = {}
+type Fighter = Combatant.Fighter
+local states: { [Instance]: PlayerState } = {} -- por lutador (Player ou Model de bot)
+
+--- AntiExploit só existe para Player (bot é do servidor).
+local function grace(fighter: Fighter, seconds: number)
+	local asPlayer = Combatant.PlayerOf(fighter)
+	if asPlayer then
+		AntiExploitService.Grace(asPlayer, seconds)
+	end
+end
 
 local notifyAbility: RemoteEvent
 local notifyAbilityCooldown: RemoteEvent
@@ -82,12 +92,14 @@ local function newState(characterId: string?): PlayerState
 	}
 end
 
-local function getState(player: Player): PlayerState
+local function getState(player: Fighter): PlayerState
 	local existing = states[player]
 	if existing then
 		return existing
 	end
-	local s = newState()
+	-- bot: o BotService escolhe o personagem pelo atributo antes de lutar
+	local preset = if player:IsA("Model") then player:GetAttribute("CharacterId") else nil
+	local s = newState(if typeof(preset) == "string" then preset else nil)
 	states[player] = s
 	player:SetAttribute("CharacterId", s.characterId)
 	player:SetAttribute("Energy", s.energy)
@@ -98,7 +110,7 @@ end
 local ATTR_INFINITE_ENERGY = "DevInfiniteEnergy"
 local ATTR_NO_COOLDOWN = "DevNoCooldown"
 
-local function setEnergy(player: Player, value: number)
+local function setEnergy(player: Fighter, value: number)
 	local state = getState(player)
 	if player:GetAttribute(ATTR_INFINITE_ENERGY) == true then
 		value = CharacterDefs.Energy.Max
@@ -108,7 +120,7 @@ local function setEnergy(player: Player, value: number)
 end
 
 --- Chamado por CombatService quando um acerto causou dano.
-function AbilityService.OnHitDealt(attacker: Player, victim: Player?)
+function AbilityService.OnHitDealt(attacker: Fighter, victim: Fighter?)
 	setEnergy(attacker, getState(attacker).energy + CharacterDefs.Energy.GainOnHitDealt)
 	if victim then
 		setEnergy(victim, getState(victim).energy + CharacterDefs.Energy.GainOnHitTaken)
@@ -116,21 +128,21 @@ function AbilityService.OnHitDealt(attacker: Player, victim: Player?)
 end
 
 --- Energia por golpe recebido de um NPC (boss); o atacante não é Player.
-function AbilityService.OnHitTaken(victim: Player)
+function AbilityService.OnHitTaken(victim: Fighter)
 	setEnergy(victim, getState(victim).energy + CharacterDefs.Energy.GainOnHitTaken)
 end
 
 --- Carga extra por parry.
-function AbilityService.OnParry(player: Player)
+function AbilityService.OnParry(player: Fighter)
 	setEnergy(player, getState(player).energy + CombatConfig.Awakening.ChargeOnParry)
 end
 
-function AbilityService.IsAwakened(player: Player): boolean
+function AbilityService.IsAwakened(player: Fighter): boolean
 	local state = states[player]
 	return state ~= nil and os.clock() < state.awakenedUntil
 end
 
-function AbilityService.GetDamageMultiplier(player: Player): number
+function AbilityService.GetDamageMultiplier(player: Fighter): number
 	local state = states[player]
 	if not state then
 		return 1
@@ -143,12 +155,12 @@ function AbilityService.GetDamageMultiplier(player: Player): number
 end
 
 --- Multiplicador de WalkSpeed (Awakening). CombatService.RestoreWalkSpeed aplica.
-function AbilityService.GetSpeedMultiplier(player: Player): number
+function AbilityService.GetSpeedMultiplier(player: Fighter): number
 	return if AbilityService.IsAwakened(player) then CombatConfig.Awakening.SpeedMultiplier else 1
 end
 
 --- Multiplicador de dano RECEBIDO (escudo). 1 = normal.
-function AbilityService.GetIncomingMultiplier(player: Player): number
+function AbilityService.GetIncomingMultiplier(player: Fighter): number
 	local state = states[player]
 	if not state or os.clock() > state.incomingMultiplierUntil then
 		return 1
@@ -174,7 +186,7 @@ local function areaCenter(character: Model, effect: CharacterDefs.Effect): Vecto
 	return root.Position
 end
 
-local function areaHit(player: Player, character: Model, effect: CharacterDefs.Effect, damage: number, center: Vector3?)
+local function areaHit(player: Fighter, character: Model, effect: CharacterDefs.Effect, damage: number, center: Vector3?)
 	local victims: { Model }
 	if center then
 		victims = Hitbox.AroundPoint(character, center, effect.Radius, MAX_AREA_TARGETS)
@@ -185,7 +197,7 @@ local function areaHit(player: Player, character: Model, effect: CharacterDefs.E
 		CombatService.ResolveHit(player, character, victim, damage, false, effect.Knockback)
 		local stunSeconds = effect.StunSeconds
 		if typeof(stunSeconds) == "number" then
-			local victimPlayer = Players:GetPlayerFromCharacter(victim)
+			local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 			if victimPlayer then
 				CombatService.Stun(victimPlayer, stunSeconds, "stunned")
 			end
@@ -193,12 +205,12 @@ local function areaHit(player: Player, character: Model, effect: CharacterDefs.E
 	end
 end
 
-local function stillValid(player: Player, character: Model): boolean
-	return player.Parent == Players and player.Character == character and HealthService.IsAlive(character)
+local function stillValid(player: Fighter, character: Model): boolean
+	return Combatant.IsPresent(player) and Combatant.CharacterOf(player) == character and HealthService.IsAlive(character)
 end
 
 -- direction = horizontal unitária pedida pelo cliente (WASD), já validada; frente do HRP se não veio
-local effects: { [string]: (Player, Model, CharacterDefs.AbilityDef, Vector3) -> () } = {}
+local effects: { [string]: (Fighter, Model, CharacterDefs.AbilityDef, Vector3) -> () } = {}
 
 local function facing(character: Model): Vector3
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -228,12 +240,15 @@ local DASH_SAMPLE_INTERVAL = 0.05
 effects.Dash = function(player, character, ability, direction)
 	local e = ability.Effect
 	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
-	AntiExploitService.Grace(player, maxDuration + 1.0)
+	grace(player, maxDuration + 1.0)
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", {
 		Speed = e.Speed,
 		Duration = e.Duration,
 		Direction = direction,
 	})
+	if Combatant.IsBot(player) then
+		MovementService.ServerDash(character, direction, direction, e.Speed, maxDuration) -- bot: o servidor move
+	end
 	task.spawn(function()
 		local hitAlready: { [Model]: boolean } = {}
 		local endsAt = os.clock() + maxDuration + DASH_SAMPLE_INTERVAL
@@ -249,7 +264,7 @@ effects.Dash = function(player, character, ability, direction)
 				if not hitAlready[victim] then
 					hitAlready[victim] = true
 					CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback, { KnockbackDirection = dir })
-					local victimPlayer = Players:GetPlayerFromCharacter(victim)
+					local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 					if victimPlayer and typeof(e.StunSeconds) == "number" then
 						CombatService.Stun(victimPlayer, e.StunSeconds, "stunned")
 					end
@@ -293,13 +308,13 @@ local function spinAngle(e: any, elapsed: number): number
 end
 --- Solda a vítima na frente do atacante (Weld HRP→HRP no servidor: todo mundo vê a mesma posição, sem
 --- atraso). A física da vítima passa para o cliente do atacante durante o Carry. Retorna a função que solta.
-local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Model, offset: number, lift: number?, spin: number?, e: any): () -> ()
+local function attachVictim(attacker: Fighter, attackerRoot: BasePart, victim: Model, offset: number, lift: number?, spin: number?, e: any): () -> ()
 	local vRoot = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local vHum = victim:FindFirstChildOfClass("Humanoid")
 	if not vRoot then
 		return function() end
 	end
-	local victimPlayer = Players:GetPlayerFromCharacter(victim)
+	local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 	local weld = Instance.new("Weld")
 	weld.Name = "GrabWeld"
 	weld.Part0 = attackerRoot
@@ -328,7 +343,7 @@ local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Mo
 	vRoot.AssemblyAngularVelocity = Vector3.zero
 	weld.Parent = vRoot
 	pcall(function()
-		vRoot:SetNetworkOwner(attacker)
+		vRoot:SetNetworkOwner(Combatant.PlayerOf(attacker)) -- bot agarrando: o servidor
 	end)
 	local released = false
 	if spin then
@@ -350,8 +365,11 @@ local function attachVictim(attacker: Player, attackerRoot: BasePart, victim: Mo
 			vHum.PlatformStand = false
 		end
 		pcall(function()
-			if victimPlayer then
-				vRoot:SetNetworkOwner(victimPlayer)
+			local asPlayer = Combatant.PlayerOf(victimPlayer)
+			if asPlayer then
+				vRoot:SetNetworkOwner(asPlayer)
+			elseif Combatant.IsBot(victimPlayer) then
+				vRoot:SetNetworkOwner(nil)
 			else
 				vRoot:SetNetworkOwnershipAuto()
 			end
@@ -371,7 +389,7 @@ effects.Grab = function(player, character, ability, direction)
 	local characterId = getState(player).characterId
 	local finish = if typeof(e.Finish) == "string" then e.Finish else "Slam"
 	local maxDuration = e.Duration * CharacterDefs.DashTuning.ForwardScale
-	AntiExploitService.Grace(player, maxDuration + e.Carry + 1.0)
+	grace(player, maxDuration + e.Carry + 1.0)
 	CombatService.SetSuperArmor(player, maxDuration + e.Carry + 0.2)
 	-- Prioridade (dono, 2026-09-16): executando um agarrão não se leva golpe, do início ao release.
 	-- Se a investida não pegar ninguém, a invencibilidade acaba junto com ela.
@@ -381,6 +399,9 @@ effects.Grab = function(player, character, ability, direction)
 		Duration = e.Duration,
 		Direction = direction,
 	})
+	if Combatant.IsBot(player) then
+		MovementService.ServerDash(character, direction, direction, e.Speed, maxDuration) -- bot: o servidor move
+	end
 	task.spawn(function()
 		local endsAt = os.clock() + maxDuration + DASH_SAMPLE_INTERVAL
 		local caught: Model? = nil
@@ -417,13 +438,13 @@ effects.Grab = function(player, character, ability, direction)
 			return
 		end
 		local victim = caught :: Model
-		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 		RagdollService.GrantIFrames(character, e.Carry + 0.3)
 		HealthService.LockTo(victim, player, e.Carry + 0.5) -- terceiro não tira a vítima do agarrão
 		if victimPlayer then
 			CombatService.CancelBlock(victimPlayer)
 			CombatService.Stun(victimPlayer, e.Carry + 0.3, "grabbed")
-			AntiExploitService.Grace(victimPlayer, e.Carry + 1.5)
+			grace(victimPlayer, e.Carry + 1.5)
 		end
 		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", {
 			Victim = victim,
@@ -509,10 +530,31 @@ effects.FlyGrab = function(player, character, ability, direction)
 	local riseTime = tonumber(e.RiseTime) or 1.4
 	local riseHeight = tonumber(e.RiseHeight) or 20
 	local diveSpeed = tonumber(e.DiveSpeed) or 100
-	AntiExploitService.Grace(player, flyTime + riseTime + 4)
+	grace(player, flyTime + riseTime + 4)
 	CombatService.SetSuperArmor(player, flyTime + riseTime + 2)
 	RagdollService.GrantIFrames(character, flyTime + 0.1)
 	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Fly = true, Speed = e.FlySpeed, Duration = flyTime })
+	-- bot: o servidor voa reto na direção pedida (o jogador dirige pela câmera no cliente)
+	local botFly: LinearVelocity? = nil
+	if Combatant.IsBot(player) then
+		local root0 = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if root0 then
+			local att = Instance.new("Attachment")
+			att.Name = "BotFly"
+			att.Parent = root0
+			local lv = Instance.new("LinearVelocity")
+			lv.Attachment0 = att
+			lv.RelativeTo = Enum.ActuatorRelativeTo.World
+			lv.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+			lv.MaxForce = math.huge
+			lv.VectorVelocity = (direction + Vector3.new(0, 0.15, 0)).Unit * (tonumber(e.FlySpeed) or 60)
+			lv.Parent = att
+			botFly = lv
+			task.delay(flyTime, function()
+				att:Destroy()
+			end)
+		end
+	end
 	task.spawn(function()
 		local endsAt = os.clock() + flyTime
 		local caught: Model? = nil
@@ -535,13 +577,19 @@ effects.FlyGrab = function(player, character, ability, direction)
 			end
 		end
 		local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		if botFly then
+			local att = botFly.Parent
+			if att then
+				att:Destroy()
+			end
+		end
 		if not caught or not root then
 			RagdollService.ClearIFrames(character)
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "end", {})
 			return
 		end
 		local victim = caught :: Model
-		local victimPlayer = Players:GetPlayerFromCharacter(victim)
+		local victimPlayer = Combatant.Of(victim) -- Player ou bot; nil = NPC
 		-- tempo total da cena: subida + mergulho (estimado pela altura + margem)
 		local carry = riseTime + (riseHeight + 30) / diveSpeed + 0.4
 		RagdollService.GrantIFrames(character, carry + 0.3)
@@ -549,7 +597,7 @@ effects.FlyGrab = function(player, character, ability, direction)
 		if victimPlayer then
 			CombatService.CancelBlock(victimPlayer)
 			CombatService.Stun(victimPlayer, carry + 0.3, "grabbed")
-			AntiExploitService.Grace(victimPlayer, carry + 1.5)
+			grace(victimPlayer, carry + 1.5)
 		end
 		CombatService.HoldStill(player, carry, "grab")
 		notifyAbility:FireAllClients(character, characterId, ability.Id, "grab", { Victim = victim, Carry = carry, Offset = GRAB_OFFSET, Lift = 1 })
@@ -762,7 +810,7 @@ end
 -- o cliente desacelera as animações e tinge a tela). O lançador recebe SelfMultiplier enquanto está dentro;
 -- se SAIR, a cúpula quebra (todos liberados) e ele fica a BreakMultiplier até Duration acabar.
 local ATTR_TIME_SLOW = "TimeSlow"
-local activeDomes: { [Player]: boolean } = {}
+local activeDomes: { [Instance]: boolean } = {}
 effects.TimeDome = function(player, character, ability)
 	local e = ability.Effect
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -781,19 +829,19 @@ effects.TimeDome = function(player, character, ability)
 	local breakMult = tonumber(e.BreakMultiplier) or 2.2
 	local characterId = getState(player).characterId
 	local endsAt = os.clock() + duration
-	local slowed: { [Player]: boolean } = {}
+	local slowed: { [Instance]: boolean } = {}
 	local broken = false
-	local function setSlow(target: Player, value: number?)
+	local function setSlow(target: Fighter, value: number?)
 		if target:GetAttribute(ATTR_TIME_SLOW) ~= value then
 			target:SetAttribute(ATTR_TIME_SLOW, value)
 			CombatService.RestoreWalkSpeed(target)
 		end
 	end
 	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Position = center, Radius = radius, Duration = duration })
-	AntiExploitService.Grace(player, duration + 1)
+	grace(player, duration + 1)
 	task.spawn(function()
 		while os.clock() < endsAt do
-			if player.Parent ~= Players or player.Character ~= character or not HealthService.IsAlive(character) then
+			if not stillValid(player, character) then
 				break
 			end
 			local myRoot = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -813,11 +861,11 @@ effects.TimeDome = function(player, character, ability)
 					Log.debug(("[AbilityService] %s saiu do Domínio do Tempo: cúpula quebrada"):format(player.Name))
 				end
 				if not broken then
-					for _, other in Players:GetPlayers() do
+					for _, other in Combatant.All() do
 						if other == player then
 							continue
 						end
-						local oc = other.Character
+						local oc = Combatant.CharacterOf(other)
 						local oroot = oc and oc:FindFirstChild("HumanoidRootPart") :: BasePart?
 						local oin = oroot ~= nil and HealthService.IsAlive(oc :: Model) and (oroot.Position - center).Magnitude <= radius
 						if oin then
@@ -856,12 +904,12 @@ end
 -- Requests
 -- ---------------------------------------------------------------------------
 
-local function deny(player: Player, slot: number, reason: string)
+local function deny(player: Fighter, slot: number, reason: string)
 	Log.debug(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
-	notifyAbilityDenied:FireClient(player, slot, reason)
+	Combatant.Notify(player, notifyAbilityDenied, slot, reason)
 end
 
-local function onRequestAbility(player: Player, slot: any, rawDirection: any)
+local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	if not abilityLimiter:Allow(player) then
 		return
 	end
@@ -879,7 +927,7 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	if not ability then
 		return deny(player, slot, "no_ability")
 	end
-	local character = player.Character
+	local character = Combatant.CharacterOf(player)
 	if not character or not HealthService.IsAlive(character) then
 		return deny(player, slot, "dead")
 	end
@@ -928,7 +976,7 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 		local slowDiv = if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then timeSlow else 1
 		state.cooldownReadyAt[ability.Id] = now + ability.Cooldown / slowDiv
 		state.busyUntil = now + ability.CastTime / slowDiv
-		notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
+		Combatant.Notify(player, notifyAbilityCooldown, slot, ability.Id, Workspace:GetServerTimeNow() + ability.Cooldown)
 	end
 
 	if ability.OncePerAwakening then
@@ -953,7 +1001,7 @@ local function onRequestAbility(player: Player, slot: any, rawDirection: any)
 	end
 end
 
-local function onRequestAwaken(player: Player)
+local function onRequestAwaken(player: Fighter)
 	if not awakenLimiter:Allow(player) then
 		return
 	end
@@ -961,7 +1009,7 @@ local function onRequestAwaken(player: Player)
 		return -- mod "só na mão": sem ult
 	end
 	local state = getState(player)
-	local character = player.Character
+	local character = Combatant.CharacterOf(player)
 	if not character or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
 		return
 	end
@@ -987,7 +1035,7 @@ local function onRequestAwaken(player: Player)
 	RagdollService.GrantIFrames(character, cut.Duration + cfg.IFrames)
 	CombatService.Stun(player, cut.Duration, "awakening")
 	CombatService.RestoreWalkSpeed(player)
-	AntiExploitService.Grace(player, cut.Duration + 1)
+	grace(player, cut.Duration + 1)
 	-- Preso no lugar (vale no ar: ativou pulando fica flutuando até o fim da cutscene). Âncora no servidor
 	-- replica e trava a física do cliente; a câmera da cutscene segue o root de qualquer jeito.
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -1010,7 +1058,7 @@ local function onRequestAwaken(player: Player)
 	Log.debug(("[AbilityService] %s DESPERTOU (cutscene %.1fs + %ds)"):format(player.Name, cut.Duration, cfg.Duration))
 	-- Estouro: quem estiver perto leva dano + empurrão (o único "ataque" da transformação)
 	task.delay(cut.BurstAt, function()
-		if states[player] ~= state or player.Character ~= character or not HealthService.IsAlive(character) then
+		if states[player] ~= state or Combatant.CharacterOf(player) ~= character or not HealthService.IsAlive(character) then
 			return
 		end
 		for _, victim in Hitbox.Around(character, cut.BurstRadius, 8) do
@@ -1023,8 +1071,8 @@ local function onRequestAwaken(player: Player)
 			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local radius = tonumber(freezeCfg.Radius) or 0
 			local untilT = Workspace:GetServerTimeNow() + freeze
-			for _, other in Players:GetPlayers() do
-				local oc = other.Character
+			for _, other in Combatant.All() do
+				local oc = Combatant.CharacterOf(other)
 				local oroot = oc and oc:FindFirstChild("HumanoidRootPart") :: BasePart?
 				if other == player or not oc or not oroot or not HealthService.IsAlive(oc) then
 					continue
@@ -1039,7 +1087,7 @@ local function onRequestAwaken(player: Player)
 				CombatService.Stun(other, freeze, "frozen")
 				CombatService.RestoreWalkSpeed(other)
 				task.delay(freeze + 0.05, function()
-					if other.Parent == Players and other.Character == oc then
+					if Combatant.IsPresent(other) and Combatant.CharacterOf(other) == oc then
 						CombatService.RestoreWalkSpeed(other)
 					end
 				end)
@@ -1048,13 +1096,13 @@ local function onRequestAwaken(player: Player)
 	end)
 	task.delay(cut.Duration, function()
 		release()
-		if states[player] == state and player.Character == character then
+		if states[player] == state and Combatant.CharacterOf(player) == character then
 			player:SetAttribute("CutsceneUntil", 0)
 			CombatService.RestoreWalkSpeed(player) -- agora com o SpeedMultiplier do modo
 		end
 	end)
 	task.delay(cut.Duration + cfg.Duration, function()
-		if states[player] == state and player.Character == character and os.clock() >= state.awakenedUntil then
+		if states[player] == state and Combatant.CharacterOf(player) == character and os.clock() >= state.awakenedUntil then
 			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
 			CombatService.RestoreWalkSpeed(player)
 			notifyAbility:FireAllClients(character, state.characterId, "Awakening", "end")
@@ -1064,13 +1112,35 @@ end
 
 --- Forma temporária (BossFormService): troca o personagem SEM respawn (o Model já foi trocado por quem
 --- chamou). `characterId` nil = volta ao personagem escolhido antes. Zera cooldowns/carga.
-local formPrevious: { [Player]: string } = {}
---- [Admin/testes] usa a habilidade do slot como se o jogador tivesse pedido.
-function AbilityService.Use(player: Player, slot: number, direction: Vector3?)
+local formPrevious: { [Instance]: string } = {}
+--- [Admin/testes/bots] usa a habilidade do slot como se o jogador tivesse pedido.
+function AbilityService.Use(player: Fighter, slot: number, direction: Vector3?)
 	onRequestAbility(player, slot, direction)
 end
 
-function AbilityService.SetForm(player: Player, characterId: string?)
+--- [Bots/DEV] G: despertar (precisa de carga cheia, como o jogador).
+function AbilityService.Awaken(player: Fighter)
+	onRequestAwaken(player)
+end
+
+--- [Bots/DEV] define a carga da ult.
+function AbilityService.SetEnergy(player: Fighter, value: number)
+	setEnergy(player, value)
+end
+
+--- Está no CastTime de uma habilidade (busy)?
+function AbilityService.IsBusy(player: Fighter): boolean
+	local state = states[player]
+	return state ~= nil and os.clock() < state.busyUntil
+end
+
+--- Carga atual da ult (0..Max).
+function AbilityService.GetEnergy(player: Fighter): number
+	local state = states[player]
+	return if state then state.energy else 0
+end
+
+function AbilityService.SetForm(player: Fighter, characterId: string?)
 	local state = getState(player)
 	if characterId then
 		if not formPrevious[player] then
@@ -1104,11 +1174,11 @@ function AbilityService.ForceCharacter(player: Player, characterId: string)
 	state.damageMultiplierUntil = 0
 	state.incomingMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
-	AntiExploitService.Grace(player, 3)
+	grace(player, 3)
 	CharacterService.Load(player)
 end
 
-function AbilityService.IsInForm(player: Player): boolean
+function AbilityService.IsInForm(player: Fighter): boolean
 	return formPrevious[player] ~= nil
 end
 
@@ -1143,7 +1213,7 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	state.incomingMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
 	Log.debug(("[AbilityService] %s agora é %s (respawn)"):format(player.Name, characterId))
-	AntiExploitService.Grace(player, 3)
+	grace(player, 3)
 	CharacterService.Load(player)
 end
 
@@ -1158,7 +1228,7 @@ function AbilityService.Init()
 end
 
 --- [Admin] Troca o personagem sem checar desbloqueio/round.
-local function forceCharacter(player: Player, characterId: string)
+local function forceCharacter(player: Fighter, characterId: string)
 	if not CharacterDefs.Get(characterId) then
 		return
 	end
@@ -1170,14 +1240,14 @@ local function forceCharacter(player: Player, characterId: string)
 end
 
 --- [Admin] Zera cooldowns/busy.
-local function resetCooldowns(player: Player)
+local function resetCooldowns(player: Fighter)
 	local state = getState(player)
 	state.cooldownReadyAt = {}
 	state.busyUntil = 0
 	for slot = 1, 3 do
 		local ability = CharacterDefs.GetAbility(state.characterId, slot)
 		if ability then
-			notifyAbilityCooldown:FireClient(player, slot, ability.Id, Workspace:GetServerTimeNow())
+			Combatant.Notify(player, notifyAbilityCooldown, slot, ability.Id, Workspace:GetServerTimeNow())
 		end
 	end
 end
@@ -1210,6 +1280,11 @@ function AbilityService.Start()
 	end
 	Players.PlayerRemoving:Connect(function(player)
 		states[player] = nil
+	end)
+	-- bots: estado por Model (respawn = Model novo)
+	game:GetService("CollectionService"):GetInstanceRemovedSignal(Combatant.BotTag):Connect(function(model)
+		states[model] = nil
+		activeDomes[model] = nil
 	end)
 end
 

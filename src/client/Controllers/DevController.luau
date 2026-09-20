@@ -59,9 +59,10 @@ local SIMPLE_COMMANDS = {
 	"TeleportArena", "Spectate", "GetReports", "StartEvent", "EndEvent",
 	"SummonBossStrong", "KillBoss", "RestoreDestructibles", "TakeArrow",
 	"SummonTraitor", "KillTraitor", "DespawnTraitor",
+	"BotsPassive", "BotsAggressive", "BotsIdle", "BotsFill", "ClearBots",
 }
 -- Ações perigosas: 1º clique arma ("Confirmar?"), 2º clique em CONFIRM_SECONDS envia
-local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true }
+local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, ClearBots = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true }
 local CONFIRM_SECONDS = 3
 local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
@@ -528,6 +529,12 @@ function DevController.Start()
 	bindButton("GrantItem", function()
 		send("GrantItem", { id = itemBox.Text })
 	end)
+	local botBox = get(panel, "BotCharacter") :: TextBox
+	for _, command in { "SpawnBotPassive", "SpawnBotAggressive", "SpawnBotIdle" } do
+		bindButton(command, function()
+			send(command, { id = botBox.Text })
+		end)
+	end
 	for _, tab in TABS do
 		(get(panel, "Tab" .. tab) :: TextButton).MouseButton1Click:Connect(function()
 			showTab(tab)

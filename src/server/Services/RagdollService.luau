@@ -7,7 +7,9 @@
 	Knockback.Ragdoll). Morte usa o ragdoll permanente do HealthService (mesmo RagdollRig).
 
 	I-frames: atributo "IFramesUntil" (os.clock) no personagem; HealthService.ApplyDamage respeita.
-	Replicação: atributo "Ragdolled" (boolean) no Player + NotifyRagdoll(character, active, seconds).
+	Replicação: atributo "Ragdolled" (boolean) no lutador (Player ou Model de bot) + NotifyRagdoll(character,
+	active, seconds). Lutador = Combatant.Fighter (Player ou bot); NPCs sem lutador (boneco, boss, traidor)
+	usam RagdollModel/IsModelRagdolled (mesmo mecanismo, estado pelo Model).
 ]]
 
 local Players = game:GetService("Players")
@@ -18,6 +20,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local RagdollRig = require(Modules:WaitForChild("RagdollRig"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 
 local RagdollService = {}
@@ -25,14 +28,15 @@ local RagdollService = {}
 local ATTR_RAGDOLLED = "Ragdolled"
 local ATTR_IFRAMES = "IFramesUntil"
 
+type Fighter = Combatant.Fighter
 type State = { until_: number, token: number, character: Model }
-local states: { [Player]: State } = {}
+local states: { [Instance]: State } = {} -- por lutador (Player/bot) ou por Model de NPC
 
 local notifyRagdoll: RemoteEvent
 
-function RagdollService.IsRagdolled(player: Player): boolean
+function RagdollService.IsRagdolled(player: Fighter): boolean
 	local s = states[player]
-	return s ~= nil and player.Character == s.character and os.clock() < s.until_
+	return s ~= nil and Combatant.CharacterOf(player) == s.character and os.clock() < s.until_
 end
 
 --- Concede invulnerabilidade curta (ragdoll cancel, levantar).
@@ -51,7 +55,7 @@ function RagdollService.ClearIFrames(character: Model)
 end
 
 --- Levanta o jogador agora (se estiver ragdollado). Retorna true se levantou.
-function RagdollService.Recover(player: Player, iframes: number?): boolean
+function RagdollService.Recover(player: Instance, iframes: number?): boolean
 	local s = states[player]
 	if not s then
 		return false
@@ -69,9 +73,9 @@ function RagdollService.Recover(player: Player, iframes: number?): boolean
 	return true
 end
 
---- Derruba o jogador por `seconds` (renova se já estiver caído). Não derruba morto/CanFight=false.
-function RagdollService.Ragdoll(player: Player, seconds: number)
-	local character = player.Character
+--- Derruba o lutador por `seconds` (renova se já estiver caído). Não derruba morto/CanFight=false.
+function RagdollService.Ragdoll(player: Fighter, seconds: number)
+	local character = Combatant.CharacterOf(player)
 	if not character or not HealthService.IsAlive(character) or not HealthService.CanFight(player) then
 		return
 	end
@@ -98,39 +102,37 @@ function RagdollService.Ragdoll(player: Player, seconds: number)
 	end)
 end
 
--- Ragdoll de NPC (bonecos de treino): mesmo rig/constraints, estado por Model, levanta sozinho.
-local npcStates: { [Model]: { until_: number, token: number } } = {}
-
+-- Ragdoll de NPC sem lutador (boneco de treino, boss, traidor): mesmo mecanismo, estado pelo Model.
+-- Para personagem de jogador/bot, redireciona ao lutador.
 function RagdollService.IsModelRagdolled(model: Model): boolean
-	local s = npcStates[model]
-	return s ~= nil and os.clock() < s.until_
+	local fighter = Combatant.Of(model)
+	return RagdollService.IsRagdolled(fighter or model)
 end
 
 function RagdollService.RagdollModel(model: Model, seconds: number)
+	local fighter = Combatant.Of(model)
+	if fighter then
+		RagdollService.Ragdoll(fighter, seconds)
+		return
+	end
 	if not HealthService.IsAlive(model) or model:GetAttribute("BossRig") ~= nil then
 		return
 	end
 	seconds = math.clamp(seconds, 0.1, CombatConfig.CombatRagdoll.MaxSeconds)
 	local now = os.clock()
-	local existing = npcStates[model]
+	local existing = states[model]
 	local token = (existing and existing.token or 0) + 1
 	local until_ = math.max(now + seconds, existing and existing.until_ or 0)
-	npcStates[model] = { until_ = until_, token = token }
+	states[model] = { until_ = until_, token = token, character = model }
 	if not existing then
 		RagdollRig.Apply(model)
 		model:SetAttribute(ATTR_RAGDOLLED, true)
 	end
 	notifyRagdoll:FireAllClients(model, true, until_ - now)
 	task.delay(until_ - now + 0.02, function()
-		local s = npcStates[model]
+		local s = states[model]
 		if s and s.token == token and os.clock() >= s.until_ then
-			npcStates[model] = nil
-			if model.Parent and HealthService.IsAlive(model) then
-				RagdollRig.Release(model)
-				RagdollService.GrantIFrames(model, CombatConfig.CombatRagdoll.GetUpIFrames)
-			end
-			model:SetAttribute(ATTR_RAGDOLLED, false)
-			notifyRagdoll:FireAllClients(model, false)
+			RagdollService.Recover(model, CombatConfig.CombatRagdoll.GetUpIFrames)
 		end
 	end)
 end
@@ -154,8 +156,8 @@ function RagdollService.Start()
 	Players.PlayerRemoving:Connect(function(player)
 		states[player] = nil
 	end)
-	-- Morreu ragdollado: o HealthService aplica o ragdoll permanente; só limpa o estado
-	HealthService.Died.Event:Connect(function(victim: Player)
+	-- Morreu ragdollado: o HealthService aplica o ragdoll permanente; só limpa o estado (jogadores e bots)
+	HealthService.FighterDied.Event:Connect(function(victim: Instance)
 		states[victim] = nil
 		victim:SetAttribute(ATTR_RAGDOLLED, false)
 	end)
