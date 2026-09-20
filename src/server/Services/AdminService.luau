@@ -20,7 +20,8 @@
 	  Fly (toggle: atributo DevFly; o cliente voa, AntiExploit ignora), Awaken (carga cheia + ultimate
 	  na hora), SetStreak {amount}, GrantCosmetics/ResetCosmetics, Ragdoll {amount}, ClearAntiExploit
 	Globais: GetState {target} (devolve data), ListPlayers, RespawnDummies, ToggleDummies,
-	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, DespawnBoss
+	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
+	  DespawnBoss, RestoreDestructibles, TakeArrow
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
 ]]
@@ -45,6 +46,7 @@ local DummyService = require(script.Parent:WaitForChild("DummyService"))
 local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
 local BossService = require(script.Parent:WaitForChild("BossService"))
+local DestructionService = require(script.Parent:WaitForChild("DestructionService"))
 local EnvironmentService = require(script.Parent:WaitForChild("EnvironmentService"))
 local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 local BossConfig = require(Modules:WaitForChild("BossConfig"))
@@ -592,6 +594,32 @@ end
 global.SummonBoss = function(admin)
 	local ok, msg = BossService.Summon(admin)
 	return ok, if ok then "boss invocado" else ("não invocou: %s"):format(tostring(msg))
+end
+
+--- Boss x3 da flecha (nasce no centro do mapa e anda livre), sem precisar da flecha.
+global.SummonBossStrong = function(admin)
+	local ok, msg = BossService.SummonStrong(admin, BossConfig.StrongPower)
+	return ok, if ok then ("boss x%d à solta no centro do mapa"):format(BossConfig.StrongPower) else ("não invocou: %s"):format(tostring(msg))
+end
+
+global.KillBoss = function()
+	local ok = BossService.Kill()
+	return ok, if ok then "boss morto (loot distribuído)" else "não havia boss NPC"
+end
+
+global.RestoreDestructibles = function()
+	DestructionService.RestoreAll()
+	local bricks, trees = DestructionService.Count()
+	return true, ("cenário restaurado (%d tijolos, %d árvores)"):format(bricks, trees)
+end
+
+global.TakeArrow = function()
+	if not RitualService then
+		return false, "RitualService não carregou"
+	end
+	local carrier = RitualService.GetCarrier()
+	RitualService.GiveArrow(nil)
+	return true, if carrier then ("flecha tirada de %s e devolvida ao mapa"):format(carrier.Name) else "flecha sorteada de novo no mapa"
 end
 
 global.InspectBoss = function()

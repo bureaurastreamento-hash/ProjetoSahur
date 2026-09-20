@@ -633,6 +633,16 @@ function BossService.Despawn(): boolean
 	return true
 end
 
+--- [Admin] Mata o boss atual (com recompensas, como uma derrota normal).
+function BossService.Kill(): boolean
+	local f = fight
+	if not f or f.finished then
+		return false
+	end
+	f.humanoid.Health = 0
+	return true
+end
+
 --- Altar com a flecha: boss x`power` (vida, dano e recompensas). Não tem custo: a flecha é o preço.
 function BossService.SummonStrong(player: Player, power: number): (boolean, string)
 	if state == "Cooldown" then

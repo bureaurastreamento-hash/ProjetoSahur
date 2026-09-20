@@ -250,10 +250,32 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ### PRÓXIMA SESSÃO — por onde começar
 1. O dono volta com os testes do BLOCO A (combate), da leva da muralha/destruição/roster e do BLOCO F (boss x3
    à solta) — listas "FALTA o dono testar" abaixo; corrigir o que ele reportar.
-2. Blocos que faltam dos PLANOS (2026-09-21): D menu DEV (ADM primeiro) — PRÓXIMO; B cachoeira/jardim v2
-   (Amazônia antiga + templos astecas; trocar o som `9120386436` que faz barulho de BUZINA), C construções JJS
-   maiores/enteráveis, E workshop de mods + quests.
+2. Blocos que faltam dos PLANOS (2026-09-21): B cachoeira/jardim v2 (Amazônia antiga + templos astecas;
+   trocar o som `9120386436` que faz barulho de BUZINA) — PRÓXIMO; C construções JJS maiores/enteráveis;
+   E workshop de mods + quests. (D menu DEV e F boss x3 à solta: FEITOS em 2026-09-22.)
 3. O dono precisa SALVAR o place (backup do AltarGruta em ServerStorage + sync do Rojo).
+
+### Sessão 2026-09-22 — BLOCO D FEITO: menu DEV em abas ADM / MAPA / TESTE (boot testado via MCP)
+- `tools/gerar_devgui.py` reescrito: cabeçalho + ALVO (caixa `PlayerSearch` filtra a lista por nick/display;
+  1 resultado = seleciona sozinho) + estado + 3 abas (`TabAdm/TabMapa/TabTeste` → `PageAdm/PageMapa/PageTeste`)
+  + RESULTADO. Painel 620×768. Nomes dos botões = comando do AdminService (nada mudou no protocolo).
+  ADM: ir até/trazer/assistir/arena, mensagem ao alvo/servidor/global, entrar no servidor, kick, zerar dados, ban
+  (dias) / desbanir, denúncias (alvo / por nick), DAR: pontos, pontos de evento, XP, conquistas, **item por id**
+  (`GrantItem`, caixa `ItemId` — botão novo para um comando que já existia), todos cosméticos, personagens.
+  MAPA: boss (invocar no santuário / **x3 À SOLTA** / **matar com loot** / remover / virar / encerrar / inspecionar),
+  flecha (dar / **tirar e devolver ao mapa** / sortear), hora (congelar / dia / noite / automático), **restaurar
+  cenário destrutível**, evento, bonecos, placar, info, listar, estado. TESTE: god/energia ∞/sem CD/voar, curar,
+  ULT, zerar CDs, flags, respawn, ragdoll, anti-exploit, matar, energia/vida/speed/dano/streak, zerar cosméticos,
+  F7, sons dos packs, trailer.
+- `DevController`: `get` recursivo, abas, busca, `CONFIRM` (Kill, Kick, Ban, ResetData, ResetCosmetics, RevokeAll,
+  KillBoss, DespawnBoss, EndEvent, EndBossForm, AnnounceGlobal) = 1º clique vira "Confirmar? (…)" por 3 s, 2º envia.
+- `AdminService` globais novos: `SummonBossStrong` (BossService.SummonStrong x StrongPower), `KillBoss`
+  (`BossService.Kill()` novo: vida 0 → derrota normal com loot), `RestoreDestructibles` (DestructionService.RestoreAll
+  + Count), `TakeArrow` (RitualService.GiveArrow(nil)).
+- **FALTA o dono testar**: F8 → abas, digitar parte de um nick na busca, botão vermelho pedindo 2º clique, "Invocar
+  x3 À SOLTA" na aba MAPA, "Restaurar cenário" depois de quebrar casas, "Dar item" com um id de cosmético.
+- Ainda NÃO feito do plano D: ban temporário já existia (dias); "entrar no servidor de um jogador" já existia.
+  Denúncias em DataStore já existiam (`ReportService`). Nada ficou de fora.
 
 ### Sessão 2026-09-22 — BLOCO F FEITO: boss x3 da flecha nasce no CENTRO e anda LIVRE (testado via MCP)
 - `BossConfig.Roam` (Radius 300, StepMin/Max 30/60, IdleSeconds 6, MinDistFromPlayers 15, AbandonSeconds 180).

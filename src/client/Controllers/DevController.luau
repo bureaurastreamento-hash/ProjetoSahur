@@ -8,6 +8,8 @@
 	redesenha os toggles com o estado real do alvo.
 
 	Abrir: ícone "Dev" no topbar (TopbarPlus) ou F8.
+	Abas ADM / MAPA / TESTE (dono, 2026-09-21); busca de jogador na caixa PlayerSearch; ações em CONFIRM
+	pedem um 2º clique em até CONFIRM_SECONDS (o botão vira "Confirmar?").
 ]]
 
 local Players = game:GetService("Players")
@@ -54,7 +56,12 @@ local SIMPLE_COMMANDS = {
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
 	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerStop",
 	"TeleportArena", "Spectate", "GetReports", "StartEvent", "EndEvent",
+	"SummonBossStrong", "KillBoss", "RestoreDestructibles", "TakeArrow",
 }
+-- Ações perigosas: 1º clique arma ("Confirmar?"), 2º clique em CONFIRM_SECONDS envia
+local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, EndEvent = true, EndBossForm = true, AnnounceGlobal = true }
+local CONFIRM_SECONDS = 3
+local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
 local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName" }
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
@@ -76,8 +83,11 @@ local logLines: { string } = {}
 local requestCommand: RemoteEvent
 local devIcon: any = nil
 
+local searchBox: TextBox
+local COLOR_TAB_ON = Color3.fromRGB(89, 166, 255)
+
 local function get(parent: Instance, name: string): Instance
-	local inst = parent:FindFirstChild(name)
+	local inst = parent:FindFirstChild(name, true)
 	assert(inst, ("[DevController] faltando %s em %s"):format(name, parent:GetFullName()))
 	return inst
 end
@@ -162,17 +172,73 @@ local function refreshTargets()
 		end)
 		b.Parent = targetsList
 	end
-	add("Eu (" .. localPlayer.Name .. ")", nil, 0)
-	add("TODOS", ALL, 1)
+	local filter = string.lower(searchBox.Text)
+	if filter == "" then
+		add("Eu (" .. localPlayer.Name .. ")", nil, 0)
+		add("TODOS", ALL, 1)
+	end
 	local list = Players:GetPlayers()
 	table.sort(list, function(a, b)
 		return a.Name < b.Name
 	end)
+	local shown = 0
 	for i, p in list do
-		if p ~= localPlayer then
+		if p ~= localPlayer and (filter == "" or string.find(string.lower(p.Name), filter, 1, true) or string.find(string.lower(p.DisplayName), filter, 1, true)) then
 			add(p.Name, p.Name, i + 1)
+			shown += 1
 		end
 	end
+	-- busca com 1 resultado = já seleciona
+	if filter ~= "" and shown == 1 then
+		for _, child in targetsList:GetChildren() do
+			if child:IsA("TextButton") and child ~= targetTemplate and child.Name ~= selectedTarget then
+				selectedTarget = child.Name
+				child.BackgroundColor3 = COLOR_SELECTED
+				requestState()
+			end
+		end
+	end
+end
+
+local function showTab(key: string)
+	for _, tab in TABS do
+		local page = panel:FindFirstChild("Page" .. tab, true) :: Frame?
+		if page then
+			page.Visible = tab == key
+		end
+		local b = panel:FindFirstChild("Tab" .. tab, true) :: TextButton?
+		if b then
+			b.BackgroundColor3 = if tab == key then COLOR_TAB_ON else COLOR_OFF
+		end
+	end
+end
+
+-- Liga o clique de um botão de comando; os de CONFIRM pedem 2º clique.
+local armed: { [TextButton]: number } = {}
+local function bindButton(name: string, fire: () -> ())
+	local b = get(panel, name) :: TextButton
+	if not CONFIRM[name] then
+		b.MouseButton1Click:Connect(fire)
+		return
+	end
+	local originalText = b.Text
+	b.MouseButton1Click:Connect(function()
+		local token = (armed[b] or 0) + 1
+		if armed[b] then
+			armed[b] = nil
+			b.Text = originalText
+			fire()
+			return
+		end
+		armed[b] = token
+		b.Text = "Confirmar? (" .. originalText .. ")"
+		task.delay(CONFIRM_SECONDS, function()
+			if armed[b] == token then
+				armed[b] = nil
+				b.Text = originalText
+			end
+		end)
+	end)
 end
 
 local function buildCharacters()
@@ -403,6 +469,7 @@ function DevController.Init()
 	charTemplate = get(charactersList, "Template") :: TextButton
 	stateLabel = get(panel, "State") :: TextLabel
 	logLabel = get(panel, "Log") :: TextLabel
+	searchBox = get(panel, "PlayerSearch") :: TextBox
 end
 
 function DevController.Start()
@@ -439,22 +506,33 @@ function DevController.Start()
 	end)
 	for command, boxName in NUMBER_COMMANDS do
 		local box = get(panel, boxName) :: TextBox
-		;(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
+		bindButton(command, function()
 			send(command, { amount = tonumber(box.Text) })
 		end)
 	end
 	for _, command in SIMPLE_COMMANDS do
-		(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
+		bindButton(command, function()
 			send(command)
 		end)
 	end
 	local messageBox = get(panel, "Message") :: TextBox
 	local banDaysBox = get(panel, "BanDays") :: TextBox
 	for _, command in TEXT_COMMANDS do
-		(get(panel, command) :: TextButton).MouseButton1Click:Connect(function()
+		bindButton(command, function()
 			send(command, { text = messageBox.Text, amount = tonumber(banDaysBox.Text) })
 		end)
 	end
+	local itemBox = get(panel, "ItemId") :: TextBox
+	bindButton("GrantItem", function()
+		send("GrantItem", { id = itemBox.Text })
+	end)
+	for _, tab in TABS do
+		(get(panel, "Tab" .. tab) :: TextButton).MouseButton1Click:Connect(function()
+			showTab(tab)
+		end)
+	end
+	showTab(TABS[1])
+	searchBox:GetPropertyChangedSignal("Text"):Connect(refreshTargets)
 	buildCharacters()
 
 	-- voo: segue o atributo replicado (o servidor liga/desliga pelo comando Fly)
