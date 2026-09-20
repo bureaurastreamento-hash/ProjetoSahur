@@ -235,6 +235,10 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
+	-- log de atualização (schema 4): versão já vista; perfil antigo = "" (vê a publicada na próxima entrada)
+	if typeof(raw.lastUpdateSeen) == "string" then
+		profile.lastUpdateSeen = raw.lastUpdateSeen:sub(1, 16)
+	end
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
 end

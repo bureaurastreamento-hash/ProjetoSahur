@@ -248,6 +248,14 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 + B1–B4 FEITOS sem teste; próximo = dono testa o redesign)
 
 ### ONDE PARAMOS (ler primeiro)
+**D4 FEITO (25/09, sem teste)** — LOG DE ATUALIZAÇÃO: `UpdateLogConfig` (versões 1.0/1.1 de exemplo, `Current`),
+`UpdateLogService` (versão publicada em DataStore `UpdateLog_v1` + MessagingService `SahurUpdateLog`; ao carregar o
+perfil, se publicada ≠ `profile.lastUpdateSeen` (schema 4) manda `NotifyUpdateLog`; `RequestUpdateSeen` grava;
+`FetchUpdateLog` lista), `UpdateLogController` + `UpdateLogGui` (tela "Novidades" centrada, tween curto, sem som,
+botão "versões anteriores"), item **Config → Novidades** na topbar, botão DEV (aba ADM) "PUBLICAR novidades" (pede 2º
+clique). TESTAR: (1) DEV → PUBLICAR novidades → a tela abre para todos online (~2 s); fechar e reentrar = não abre de
+novo (em Studio/servidor privado o perfil não salva, então pode reabrir — esperado); (2) Config → Novidades reabre e
+"versões anteriores" alterna 1.1/1.0; (3) subir `Current` para "1.2" com uma entrada nova e publicar de novo.
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
 (`Combatant.Fighter`), `BotService` (bots com combate real), `TrailerService` v2 (cenas), e as correções A1–A5 da
 lista do dono (DEV com ON/OFF, cenas predefinidas, agarrão trava quem está preso, boss/traidor à solta, trailer com
