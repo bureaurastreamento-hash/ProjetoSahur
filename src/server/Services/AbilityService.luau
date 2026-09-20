@@ -717,13 +717,19 @@ end
 effects.MultiHitArea = function(player, character, ability)
 	local e = ability.Effect
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start")
+	-- Os golpes do meio só seguram o alvo (hitstun, sem empurrão); o empurrão/ragdoll fica para o ÚLTIMO,
+	-- senão o 1º tick já joga o alvo para fora do alcance e a rajada acerta 2 de 12 (teste 2026-09-25).
+	local holdEffect = table.clone(e)
+	holdEffect.Knockback = nil
 	task.spawn(function()
 		for i = 1, e.Hits do
 			task.wait(e.Interval)
 			if not stillValid(player, character) or CombatService.IsStunned(player) then
 				return
 			end
-			areaHit(player, character, e, e.Damage)
+			-- Com Offset a rajada é à frente do rig (ORA/MUDA): o centro segue a frente atual a cada golpe
+			local center = if typeof(e.Offset) == "number" then areaCenter(character, e) else nil
+			areaHit(player, character, if i < e.Hits then holdEffect else e, e.Damage, center)
 			notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "hit", { Index = i })
 		end
 		notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "end")

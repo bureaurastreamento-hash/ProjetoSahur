@@ -281,7 +281,15 @@ nome da ult do `AwakeningDefs`; tecla R / D-pad ← / botão R no celular; bots 
 translúcidas com a cor do personagem flutuando atrás do ombro; `AwakeningDefs.Stand = true` (Jotaro/Dio/Kira);
 aparece do estouro da cutscene até 1,5 s depois dela e, nas rajadas (MultiHitArea com Offset = ORA/MUDA), com os
 braços socando pelo tempo da rajada.
-PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo; item 8 = silhueta) → C/D (anti-2v1, variantes, último de pé, log).
+**25/09 — TESTE VIA MCP DOS KITS (bots, servidor)**: Jotaro/Bruno/Dio/Kira/Rick usaram 1–4, R, despertar (cutscene
+7 s + duração por personagem) e os 4 despertos SEM erro de servidor. Corrigido: (1) `MultiHitArea` ignorava o `Offset`
+(ORA/MUDA acertava só em volta do corpo — alvo a 8 studs não levava nada); (2) rajada empurrava no 1º tick e acertava
+2 de 12 → agora hitstun segura o alvo e o empurrão/ragdoll fica só no ÚLTIMO golpe (6/6 e 12/12 no teste).
+Falta o dono ver VISUAL/HUD/silhueta (lista abaixo). Bug do mouse no Studio RESOLVIDO: era `Workspace.Camera`
+com `CameraType = Scriptable` deixado pelo Play (não Wine/plugin) — se o botão direito travar de novo, Command Bar:
+`workspace.CurrentCamera.CameraType = Enum.CameraType.Fixed`. O erro `cloud_122070500639295.Script:3596 Out of local
+registers` é de um plugin instalado, não do jogo.
+PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = silhueta) → C/D (anti-2v1, variantes, último de pé, log).
 
 **TESTES DO REDESIGN (dono, com o Studio aberto)**
 1. Jotaro: 1 Rajada ORA (cone à frente), 2 Arremesso, 3 Soco Estrela (dash com hit), 4 Pancada; R = Postura
@@ -305,7 +313,7 @@ PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo; item 8 = silhueta) → C/D 
 Dono avisou (24/09): vai editar o mapa (Taberna/construções) no Studio; ao voltar, SINCRONIZAR antes de qualquer
 Play/fechar (`tools/sincronizar_arena.luau` para peças da arena; Taberna = ler pelo MCP e gravar em
 `tools/montar_taberna.luau`). Bug do botão direito da câmera no Studio (edição) = ambiente Wine/XWayland,
-provável pós-Play com shift lock; passos em ordem: reiniciar o Studio → `MouseWarpOverride=force` → sessão X11. Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
+RESOLVIDO 25/09: era a `Workspace.Camera` em `Scriptable` deixada pelo Play — ver bloco "TESTE VIA MCP". Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
 golpe estilo Jujutsu Shenanigans, evento de admin "último de pé", log de atualização no jogo — ver "D" abaixo.
 
 **D — Ideias novas do dono (2026-09-23 noite) — anotadas, ordenar junto com B**
