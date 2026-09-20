@@ -9,7 +9,12 @@
 	redondas + banquinhos, mesa longa + bancos, lareira na parede leste, tochas nas paredes, barris,
 	tapete, piano (clone), castiçais, louça, quadros, placa na entrada. Nada do kit original é movido ou
 	apagado. O dono precisa SALVAR o place depois (não passa pelo Rojo).
+
+	!!! TRAVADO desde 2026-09-25: o dono EDITOU a Taberna e o entorno À MÃO no Studio. Rodar isto de novo
+	APAGA o trabalho dele. Só roda se `_G.RECRIAR_TABERNA = true` for setado antes (e com o dono pedindo).
+	Backup do estado dele: backups/workspace_dono_2026-09-25.{jsonl,rbxm} (tools/restaurar_workspace.luau).
 ]]
+assert(_G.RECRIAR_TABERNA == true, "montar_taberna: travado — a Taberna é editada à mão pelo dono (ver cabeçalho)")
 
 local Workspace = game:GetService("Workspace")
 

@@ -248,6 +248,15 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**25/09 (dono fora do PC, editando o mapa em levas)**: o dono editou a TABERNA e o entorno à mão no Studio. Salvo:
+(1) 6 rochas da muralha leste (`Sahur.Arena.Walls.Rocks`) redimensionadas → gravadas no `Arena.rbxm` via
+`sincronizar_arena.luau`; (2) `ArenaExtras` conferido com `tools/comparar_extras.py` (novo): nada criado/apagado,
+só desvios de ±0,1 stud em tijolos/plantas geradas (física do modo Run) — NÃO gravar no JSON gerado; (3) tudo fora de
+`Workspace.Sahur` (Taberna, Moveis taverna, cav, Lojinha, casas, árvores; 1469 instâncias) tem BACKUP em
+`backups/workspace_dono_2026-09-25.{jsonl,rbxm}` (`tools/restaurar_workspace.luau`; 36 uniões viram placeholder);
+(4) `tools/montar_taberna.luau` TRAVADO (`_G.RECRIAR_TABERNA`) para nunca apagar a edição dele. O dono vai
+continuar editando: AO VOLTAR, repetir (1)–(3) antes de qualquer Play/regeneração (dump da Arena pelo trecho do
+`sincronizar_arena.luau`; dump do Workspace pelo trecho JSONL — ambos rodam pelo MCP e caem em arquivo).
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
 (`Combatant.Fighter`), `BotService` (bots com combate real), `TrailerService` v2 (cenas), e as correções A1–A5 da
 lista do dono (DEV com ON/OFF, cenas predefinidas, agarrão trava quem está preso, boss/traidor à solta, trailer com
