@@ -22,7 +22,10 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   D4 log de atualização (`UpdateLogConfig`/`UpdateLogService`, Config → Novidades, DEV "PUBLICAR novidades").
   Servidor testado via MCP; VISUAL/cliente ainda sem o dono ver. **Mapa do dono**: ele edita a Taberna/entorno à mão no
   Studio — ao voltar, sincronizar (`sincronizar_arena.luau`, `comparar_extras.py`, backup JSONL) ANTES de Play/regenerar;
-  `montar_taberna.luau` está travado. PRÓXIMO: lista de testes do dono (tudo acima) → C2 place de criação → C3 mural.
+  `montar_taberna.luau` está travado. **Hall de entrada da Taberna FEITO** (`tools/montar_hall.luau` + `SaloonDoorService`,
+  portas de saloon testadas no Play; 50 móveis da pilha reaproveitados; ver PROGRESSO). Se o Studio abrir com o Hall
+  faltando (crash antes de salvar), rodar `montar_hall.luau` via MCP de novo. PRÓXIMO: C2 place de criação → C3 mural
+  → C4 textos/quotes → C5 salvar place; testes com player e artes = "amanhã" (dono).
 - A1–A6 da lista do dono FEITOS (DEV com ON/OFF, cenas predefinidas, agarrão trava, boss/traidor à solta, trailer
   com órbita de grupo, NPC nunca deita "duro", **traidor = bot especial OP** via `BotService.Spawn` com
   `Attributes`/`Tuning`, atributo `DamageMult`) + intocável no agarrão/ult. Nada disso foi testado pelo dono ainda.

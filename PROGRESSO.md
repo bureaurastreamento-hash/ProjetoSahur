@@ -245,7 +245,7 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 FEITOS em leva autônoma; próximo = dono testa TUDO → C2/C3)
+## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 + HALL da Taberna FEITOS; Studio travou no fim (Hall pode não ter salvo: rerodar montar_hall); próximo = C2 → C5, depois testes do dono)
 
 ### ONDE PARAMOS (ler primeiro)
 **25/09 (noite, dono de volta) — HALL DE ENTRADA da Taberna FEITO**: `tools/montar_hall.luau` (roda via MCP; idempotente;
