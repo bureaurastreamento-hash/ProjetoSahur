@@ -10,3 +10,4 @@ sourcemap.json
 # Packs de assets (arquivos grandes / conteúdo de terceiros); só o que for usado vai para src/assets
 /AssetsPacks/
 /scratch/
+.claude/worktrees/

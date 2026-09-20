@@ -67,6 +67,30 @@ local function chapterOf(q): QuestConfig.Chapter?
 	return QuestConfig.Chapters[q.chapter]
 end
 
+--- O progresso é salvo por ÍNDICE (`chapter`) mas os capítulos entregues ficam por Id (`done`): quando a história
+--- ganha capítulo no meio (C0, 2026-09-25: cap2b/cap4b), o índice salvo apontaria para o capítulo errado. Aqui o
+--- capítulo atual vira o PRIMEIRO ainda não entregue; se mudou, o capítulo em andamento recomeça (fala de novo com o NPC).
+local function migrateChapter(player: Player)
+	local _, q = questsOf(player)
+	if not q then
+		return
+	end
+	local first = #QuestConfig.Chapters + 1
+	for i, ch in QuestConfig.Chapters do
+		if not q.done[ch.Id] then
+			first = i
+			break
+		end
+	end
+	if q.chapter ~= first then
+		Log.debug(("[QuestService] %s: capítulo %d -> %d (história mudou)"):format(player.Name, q.chapter, first))
+		q.chapter = first
+		q.active = false
+		q.counters = {}
+		DataService.MarkDirty(player)
+	end
+end
+
 local function objectiveDone(q, obj: QuestConfig.Objective): boolean
 	return (q.counters[obj.Kind] or 0) >= obj.Goal
 end
@@ -267,13 +291,18 @@ local function onTalk(player: Player, npcId: any)
 		-- não é o NPC do capítulo atual: aponta para o certo
 		local target = npcNameOf(ch)
 		local spot = QuestConfig.Spots[ch.Spot]
-		local mine = nil
+		-- um NPC pode ter vários capítulos (adryan: cap2b/cap4/final): "já me ajudou" só se nenhum deles está por vir
+		local helped, pending = false, false
 		for i, c in QuestConfig.Chapters do
 			if c.NpcUserId == userId then
-				mine = i
+				if q.done[c.Id] then
+					helped = true
+				elseif i > q.chapter then
+					pending = true
+				end
 			end
 		end
-		if mine and q.done[QuestConfig.Chapters[mine].Id] then
+		if helped and not pending then
 			dialog(player, userId, ("Você já me ajudou. Agora é com %s, %s."):format(target, if spot then "em " .. spot.Label else ""), "idle")
 		else
 			dialog(player, userId, ("Ainda não é comigo. Procure %s %s."):format(target, if spot then "em " .. spot.Label else ""), "idle")
@@ -377,8 +406,14 @@ local function groundAt(pos: Vector3): Vector3
 end
 
 local function buildNpc(member: TeamConfig.Member, spot: QuestConfig.Spot, folder: Folder)
+	-- C0 (2026-09-25): sempre rig R6 com a HumanoidDescription do membro (o jogo é R6). CreateHumanoidModelFromUserId
+	-- vinha com o rig do avatar (R15 + escalas + roupas em camadas): altura variava (marcador "!" fora da cabeça),
+	-- roupa 3D sumia e a pose ficava estranha. Roupa clássica (Shirt/Pants) e acessórios rígidos vêm na description.
 	local ok, model = pcall(function()
-		return Players:CreateHumanoidModelFromUserId(member.UserId)
+		local desc = Players:GetHumanoidDescriptionFromUserId(member.UserId)
+		-- escalas do avatar não valem em R6; zera para todos os devs terem o mesmo tamanho dos jogadores
+		desc.HeightScale, desc.WidthScale, desc.DepthScale, desc.HeadScale, desc.BodyTypeScale, desc.ProportionScale = 1, 1, 1, 1, 0, 0
+		return Players:CreateHumanoidModelFromDescription(desc, Enum.HumanoidRigType.R6)
 	end)
 	if not ok or not model then
 		warn(("[QuestService] avatar de %s não carregou (%s); usando rig padrão"):format(member.DisplayName, tostring(model)))
@@ -440,9 +475,9 @@ local function buildNpc(member: TeamConfig.Member, spot: QuestConfig.Spot, folde
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "QuestMarker"
 	gui.Size = UDim2.fromOffset(40, 40)
-	gui.StudsOffset = Vector3.new(0, 3.6, 0)
+	gui.StudsOffset = Vector3.new(0, 2.4, 0) -- R6: cabeça 1,2 de altura → "!" logo acima, sem ficar longe
 	gui.MaxDistance = 120
-	gui.AlwaysOnTop = false
+	gui.AlwaysOnTop = true
 	gui.Adornee = model:FindFirstChild("Head") or root
 	local label = Instance.new("TextLabel")
 	label.Size = UDim2.fromScale(1, 1)
@@ -547,6 +582,7 @@ function QuestService.Start()
 	end)()))
 
 	DataService.ProfileLoaded.Event:Connect(function(player: Player)
+		migrateChapter(player)
 		pushState(player)
 	end)
 	local function hookStreak(player: Player)

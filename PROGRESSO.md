@@ -248,6 +248,13 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**C0 FEITO (25/09, sem teste)** — história com arco do adryan: 10 capítulos (`cap2b` "Um favor para o adryan" — ele paga
+demais para você manter o mapa ocupado longe da cachoeira; `cap4b` "Pegadas na lama" com o Toduro; falas de LRY/Ravy/
+approx_verde/RIP_ACE plantando a desconfiança; final referencia o favor). Progresso migra por Id (`migrateChapter`
+no ProfileLoaded: capítulo atual = 1º não entregue); NPC com vários capítulos responde certo. NPCs dos devs agora
+SEMPRE R6 pela HumanoidDescription do membro (roupa clássica + acessórios rígidos; escalas zeradas) e marcador "!"
+a 2,4 studs da cabeça, AlwaysOnTop. TESTAR: falar com cada NPC na ordem (Taberna → Praça → Cachoeira → Lojinha →
+Cachoeira → Praça → Zigurate → Mercado → Santuário → Cachoeira), roupas/posição/"!" de cada um; DEV `SetQuestChapter`.
 **25/09 (dono fora do PC, editando o mapa em levas)**: o dono editou a TABERNA e o entorno à mão no Studio. Salvo:
 (1) 6 rochas da muralha leste (`Sahur.Arena.Walls.Rocks`) redimensionadas → gravadas no `Arena.rbxm` via
 `sincronizar_arena.luau`; (2) `ArenaExtras` conferido com `tools/comparar_extras.py` (novo): nada criado/apagado,
