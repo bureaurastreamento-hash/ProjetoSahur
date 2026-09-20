@@ -38,6 +38,10 @@ local MovementController = require(script.Parent:WaitForChild("MovementControlle
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
 local StandSilhouette = require(Modules:WaitForChild("StandSilhouette"))
+
+-- D2: texto curto da variação de golpe (fase "variant")
+local VARIANT_LABELS: { [string]: string } = { Air = "AÉREO", Falling = "MERGULHO", Sprint = "EM CORRIDA", OnDowned = "NO CHÃO", Chain = "COMBO" }
+local Assets = require(Modules:WaitForChild("Assets"))
 local VFXLibrary = require(Modules:WaitForChild("VFXLibrary"))
 local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 
@@ -309,6 +313,19 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		else
 			FX.SetOutline(character, nil)
 			FX.PlaySoundAt(character, "Shared", "Awakening_End")
+		end
+		return
+	end
+	if phase == "variant" then
+		-- D2: o servidor escolheu uma VARIAÇÃO pelo contexto (aéreo/mergulho/corrida/no chão/combo): etiqueta curta
+		-- acima do personagem e, se a arte tiver "<Habilidade>_<Variante>", o VFX por cima do base
+		local variant = if typeof(data) == "table" then tostring(data.Variant) else ""
+		local label = VARIANT_LABELS[variant]
+		if label then
+			FX.DamageNumber(character, label, Color3.fromRGB(255, 226, 120))
+		end
+		if Assets.HasVFX(characterId, abilityId .. "_" .. variant) then
+			FX.SpawnVFX(character, characterId, abilityId .. "_" .. variant, false)
 		end
 		return
 	end

@@ -53,6 +53,8 @@ type PlayerState = {
 	speedMultiplierUntil: number,
 	awakenedUntil: number, -- os.clock()
 	onceUsed: { [string]: number }, -- abilityId -> awakenedUntil em que a habilidade OncePerAwakening já saiu
+	lastAbilityId: string?, -- D2: última habilidade usada (para Variants.Chain)
+	lastAbilityAt: number,
 }
 
 type Fighter = Combatant.Fighter
@@ -94,6 +96,7 @@ local function newState(characterId: string?): PlayerState
 		speedMultiplierUntil = 0,
 		awakenedUntil = 0,
 		onceUsed = {},
+		lastAbilityAt = -math.huge,
 	}
 end
 
@@ -1231,6 +1234,59 @@ function runEffect(player: Fighter, character: Model, ability: CharacterDefs.Abi
 	end
 end
 
+-- ---------------------------------------------------------------------------
+-- D2 (dono, 2026-09-23): VARIAÇÕES DE GOLPE por contexto (estilo Jujutsu Shenanigans). A habilidade declara
+-- `Variants = { Air | Falling | Sprint | OnDowned | Chain = Effect }` e o SERVIDOR escolhe pelo estado no momento:
+--   OnDowned  alvo ragdollado/caído na frente (até CHAIN_DOWNED_RANGE studs)
+--   Chain     emendada logo depois de outra habilidade (Variants.Chain[<IdAnterior>] ou Chain["*"], ≤ CHAIN_WINDOW s)
+--   Falling   no ar caindo   ·   Air   no ar subindo/pulando   ·   Sprint   correndo (atributo Sprinting)
+-- Prioridade nessa ordem. O Id continua o mesmo (cooldown/animação/VFX base); o cliente recebe a fase "variant"
+-- e, se existir VFX "<Id>_<Variante>", toca por cima.
+-- ---------------------------------------------------------------------------
+local CHAIN_WINDOW = 2.0
+local CHAIN_DOWNED_RANGE = 9
+
+local function pickVariant(player: Fighter, character: Model, ability: CharacterDefs.AbilityDef, state: PlayerState): (CharacterDefs.AbilityDef, string?)
+	local variants = ability.Variants
+	if typeof(variants) ~= "table" then
+		return ability, nil
+	end
+	local chosen: any, name: string? = nil, nil
+	if variants.OnDowned then
+		for _, victim in Hitbox.InFront(character, CHAIN_DOWNED_RANGE, 8, 6, 3) do
+			if RagdollService.IsModelRagdolled(victim) or victim:GetAttribute("Downed") == true then
+				chosen, name = variants.OnDowned, "OnDowned"
+				break
+			end
+		end
+	end
+	if not chosen and typeof(variants.Chain) == "table" and state.lastAbilityId and os.clock() - state.lastAbilityAt <= CHAIN_WINDOW then
+		local chain: any = variants.Chain
+		local byId = chain[state.lastAbilityId] or chain["*"]
+		if typeof(byId) == "table" and typeof(byId.Type) == "string" then
+			chosen, name = byId, "Chain"
+		elseif typeof(chain.Type) == "string" then
+			chosen, name = chain, "Chain" -- Chain = Effect direto: vale depois de qualquer habilidade
+		end
+	end
+	if not chosen then
+		local air = CombatService.AirState(character)
+		if air == "falling" and variants.Falling then
+			chosen, name = variants.Falling, "Falling"
+		elseif air ~= "ground" and variants.Air then
+			chosen, name = variants.Air, "Air"
+		elseif air == "ground" and variants.Sprint and player:GetAttribute("Sprinting") == true then
+			chosen, name = variants.Sprint, "Sprint"
+		end
+	end
+	if not chosen or typeof(chosen.Type) ~= "string" or not effects[chosen.Type] then
+		return ability, nil
+	end
+	local variant: CharacterDefs.AbilityDef = table.clone(ability)
+	variant.Effect = chosen
+	return variant, name
+end
+
 local function deny(player: Fighter, slot: number, reason: string)
 	Log.debug(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
 	Combatant.Notify(player, notifyAbilityDenied, slot, reason)
@@ -1307,8 +1363,14 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 		state.onceUsed[ability.Id] = state.awakenedUntil
 	end
 	CombatService.NotifyAction(player) -- habilidade cancela emote em loop
-	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
-	runEffect(player, character, ability, sanitizeDirection(character, rawDirection))
+	local chosen, variantName = pickVariant(player, character, ability, state)
+	state.lastAbilityId = ability.Id
+	state.lastAbilityAt = now
+	if variantName then
+		notifyAbility:FireAllClients(character, state.characterId, ability.Id, "variant", { Variant = variantName })
+	end
+	Log.debug(("[AbilityService] %s usou %s.%s%s (carga %d)"):format(player.Name, state.characterId, ability.Id, if variantName then " [" .. variantName .. "]" else "", state.energy))
+	runEffect(player, character, chosen, sanitizeDirection(character, rawDirection))
 end
 
 local function onRequestAwaken(player: Fighter)

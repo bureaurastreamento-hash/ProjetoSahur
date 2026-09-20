@@ -706,6 +706,12 @@ local function airState(character: Model, humanoid: Humanoid): string
 	return (if vy > CombatConfig.AirRisingSpeed then "rising" else "falling") :: string
 end
 
+--- "ground" | "rising" | "falling" para outros services (D2: variantes de habilidade por contexto).
+function CombatService.AirState(character: Model): string
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	return if humanoid then airState(character, humanoid) else "ground"
+end
+
 --- Vítimas aceitas: as que o cliente do atacante viu (claimed) E que estão na caixa tolerante do servidor.
 --- Sem lista do cliente (client antigo/mobile sem hitbox local) cai na hitbox estrita do servidor.
 local function resolveVictims(character: Model, attackCfg: any, claimed: any): { Model }

@@ -16,8 +16,10 @@
 	                     (cooldown próprio, por Id); ao acabar, os 4 normais voltam com o cooldown que tinham.
 	  DashOverride       substitui o dash universal (Q) — só o Bruno (Piscar). Único lugar onde ainda existe
 	                     AwakenedEffect (pisca mais longe desperto).
-	  Variants           (preparado para D2, ainda NÃO lido pelo servidor) variações por contexto:
-	                     { Air?, Falling?, Sprint?, OnDowned?, Chain? } = Effect alternativo.
+	  Variants           D2 (lido pelo AbilityService.pickVariant): variações por CONTEXTO, o servidor escolhe
+	                     { OnDowned?, Chain?, Falling?, Air?, Sprint? } = Effect alternativo (nessa prioridade).
+	                     Chain = Effect (depois de qualquer habilidade) ou { [IdAnterior] = Effect, ["*"] = Effect }.
+	                     Mesmo Id/cooldown; o cliente mostra etiqueta e VFX "<Id>_<Variante>" se existir.
 
 	A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano e parryando.
 
@@ -73,7 +75,7 @@ export type AbilityDef = {
 	CastTime: number, -- tempo em que o jogador fica "ocupado" (não pode usar outra habilidade)
 	Effect: Effect,
 	OncePerAwakening: boolean?, -- só nos despertos: sai UMA vez por despertar (Parada do Tempo)
-	Variants: { [string]: Effect }?, -- D2 (preparado, não lido ainda): Air | Falling | Sprint | OnDowned | Chain
+	Variants: { [string]: any }?, -- D2: OnDowned | Chain | Falling | Air | Sprint = Effect (ver cabeçalho)
 	AwakenedEffect: Effect?, -- SÓ DashOverride: versão desperta do Piscar
 	SideCooldown: number?, -- SÓ DashOverride: cooldown do teleporte LATERAL (frente/trás usa Cooldown)
 }
@@ -143,9 +145,19 @@ CharacterDefs.Characters = {
 				-- agarra, carrega 0,8 s e arremessa
 				Effect = { Type = "Grab", Finish = "Throw", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 1.8, Up = 25 } } },
 			{ Id = "StarFinger", DisplayName = "Soco Estrela", Cooldown = 9, CastTime = 0.3,
-				Effect = { Type = "Dash", Speed = 70, Duration = 0.3, Damage = 18, Range = 7, Width = 6, Height = 6, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } } },
+				Effect = { Type = "Dash", Speed = 70, Duration = 0.3, Damage = 18, Range = 7, Width = 6, Height = 6, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } },
+				-- D2: correndo = soco mais longo e forte; emendado depois do Arremesso = persegue quem voou
+				Variants = {
+					Sprint = { Type = "Dash", Speed = 95, Duration = 0.35, Damage = 24, Range = 9, Width = 6, Height = 6, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.6 } },
+					Chain = { ShoulderBash = { Type = "Dash", Speed = 110, Duration = 0.4, Damage = 22, Range = 8, Width = 7, Height = 7, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.5 } } },
+				} },
 			{ Id = "GroundSlam", DisplayName = "Pancada no Chão", Cooldown = 10, CastTime = 0.6,
-				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } } },
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } },
+				-- D2: caindo de altura = meteoro (área maior, impacto na chegada); alvo no chão = esmaga sem empurrar longe
+				Variants = {
+					Falling = { Type = "AreaDamage", Radius = 15, Damage = 28, Delay = 0.15, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } },
+					OnDowned = { Type = "AreaDamage", Radius = 8, Offset = 4, Damage = 30, Delay = 0.3, Knockback = { Speed = 15, Duration = 0.15, Ragdoll = 1.2 } },
+				} },
 		},
 		Passive = { Id = "StandGuard", DisplayName = "Postura do Stand", Cooldown = 20, CastTime = 0.3,
 			-- aguenta e avança: metade do dano recebido por 4 s + um pouco mais rápido
@@ -185,9 +197,13 @@ CharacterDefs.Characters = {
 		},
 		Abilities = {
 			{ Id = "SweepKick", DisplayName = "Rasteira", Cooldown = 8, CastTime = 0.4,
-				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 } },
+				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 },
+				-- D2: correndo = rasteira deslizante (avança e derruba)
+				Variants = { Sprint = { Type = "Dash", Speed = 75, Duration = 0.3, Damage = 14, Range = 8, Width = 6, Height = 4, Knockback = { Speed = 30, Duration = 0.2, Ragdoll = 1.2 } } } },
 			{ Id = "WindBlade", DisplayName = "Lâmina de Vento", Cooldown = 6, CastTime = 0.25,
-				Effect = { Type = "Projectile", Speed = 120, Range = 60, Radius = 2.5, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } } },
+				Effect = { Type = "Projectile", Speed = 120, Range = 60, Radius = 2.5, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } },
+				-- D2: no ar = duas lâminas cruzadas
+				Variants = { Air = { Type = "Projectile", Count = 2, Spread = 10, Speed = 120, Range = 60, Radius = 2.5, Damage = 12, Knockback = { Speed = 25, Duration = 0.15 } } } },
 			{ Id = "CrossCut", DisplayName = "Corte Cruzado", Cooldown = 10, CastTime = 0.4,
 				-- pisca 10 studs à frente (atravessa o alvo) e corta em volta
 				Effect = { Type = "Teleport", Distance = 10, Then = { Type = "AreaDamage", Radius = 6, Damage = 16, Delay = 0.15, Knockback = { Speed = 30, Duration = 0.2 } }, ThenDelay = 0.05 } },
@@ -225,9 +241,16 @@ CharacterDefs.Characters = {
 			{ Id = "MudaRush", DisplayName = "Rajada MUDA", Cooldown = 7, CastTime = 0.3,
 				Effect = { Type = "MultiHitArea", Radius = 6, Offset = 4, Damage = 4, Hits = 6, Interval = 0.12, Knockback = { Speed = 30, Duration = 0.2 } } },
 			{ Id = "Knives", DisplayName = "Facas", Cooldown = 7, CastTime = 0.3,
-				Effect = { Type = "Projectile", Count = 3, Spread = 12, Speed = 110, Range = 55, Radius = 2, Damage = 8, Knockback = { Speed = 15, Duration = 0.1 } } },
+				Effect = { Type = "Projectile", Count = 3, Spread = 12, Speed = 110, Range = 55, Radius = 2, Damage = 8, Knockback = { Speed = 15, Duration = 0.1 } },
+				-- D2: no ar = leque de 5 facas; emendado depois da rajada MUDA = facas mais fortes em quem ficou preso
+				Variants = {
+					Air = { Type = "Projectile", Count = 5, Spread = 22, Speed = 110, Range = 55, Radius = 2, Damage = 8, Knockback = { Speed = 15, Duration = 0.1 } },
+					Chain = { MudaRush = { Type = "Projectile", Count = 3, Spread = 6, Speed = 130, Range = 40, Radius = 2.5, Damage = 12, Knockback = { Speed = 30, Duration = 0.2 } } },
+				} },
 			{ Id = "VampiricStrike", DisplayName = "Golpe Vampírico", Cooldown = 10, CastTime = 0.3,
-				Effect = { Type = "Dash", Speed = 65, Duration = 0.3, Damage = 16, Range = 7, Width = 6, Height = 6, HealPerHit = 12, Knockback = { Speed = 35, Duration = 0.2 } } },
+				Effect = { Type = "Dash", Speed = 65, Duration = 0.3, Damage = 16, Range = 7, Width = 6, Height = 6, HealPerHit = 12, Knockback = { Speed = 35, Duration = 0.2 } },
+				-- D2: alvo caído = bebe mais sangue (cura dobrada)
+				Variants = { OnDowned = { Type = "Dash", Speed = 65, Duration = 0.3, Damage = 20, Range = 8, Width = 6, Height = 6, HealPerHit = 24, Knockback = { Speed = 20, Duration = 0.15 } } } },
 			{ Id = "RoyalKnee", DisplayName = "Joelhada Real", Cooldown = 9, CastTime = 0.4,
 				-- ergue 0,8 s e esmaga; quem está perto do impacto toma área
 				Effect = { Type = "Grab", Finish = "Chokeslam", Lift = 5, Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.8, Damage = 14, Knockback = { Speed = 10, Duration = 0.15, Ragdoll = 1.5 }, SlamRadius = 8, SlamDamage = 10, SlamKnockback = { Speed = 35, Duration = 0.2 } } },
@@ -263,11 +286,15 @@ CharacterDefs.Characters = {
 				-- toque curto à frente marca; o próximo M1 no marcado explode (ou sozinho em 4 s)
 				Effect = { Type = "Mark", Radius = 4, Offset = 3, Damage = 8, ExplodeRadius = 6, ExplodeDamage = 16, AutoDelay = 4, ExplodeKnockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.2 } } },
 			{ Id = "CoinBomb", DisplayName = "Moeda Bomba", Cooldown = 9, CastTime = 0.3,
-				Effect = { Type = "Projectile", Speed = 60, Range = 45, Radius = 2, Damage = 18, AreaRadius = 6, AreaDamage = 12, Knockback = { Speed = 35, Duration = 0.2 } } },
+				Effect = { Type = "Projectile", Speed = 60, Range = 45, Radius = 2, Damage = 18, AreaRadius = 6, AreaDamage = 12, Knockback = { Speed = 35, Duration = 0.2 } },
+				-- D2: no ar = 3 moedas em leque
+				Variants = { Air = { Type = "Projectile", Count = 3, Spread = 18, Speed = 60, Range = 45, Radius = 2, Damage = 14, AreaRadius = 5, AreaDamage = 10, Knockback = { Speed = 30, Duration = 0.2 } } } },
 			{ Id = "SheerHeartAttack", DisplayName = "Sheer Heart Attack", Cooldown = 16, CastTime = 0.5,
 				Effect = { Type = "Homing", Duration = 6, Speed = 22, Radius = 7, Damage = 22, SeekRadius = 40, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } } },
 			{ Id = "ChainDetonation", DisplayName = "Detonação em Cadeia", Cooldown = 12, CastTime = 0.5,
-				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.5, Knockback = { Speed = 40, Duration = 0.25 } } },
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.5, Knockback = { Speed = 40, Duration = 0.25 } },
+				-- D2: emendada logo depois do Toque da Bomba = explosão maior e que derruba
+				Variants = { Chain = { BombTouch = { Type = "AreaDamage", Radius = 14, Damage = 26, Delay = 0.35, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 1.5 } } } } },
 		},
 		Passive = { Id = "CleanHands", DisplayName = "Mãos Limpas", Cooldown = 18, CastTime = 0.2,
 			-- fuga: pisca 12 para TRÁS (direção negativa) e cura um pouco
@@ -306,7 +333,12 @@ CharacterDefs.Characters = {
 			{ Id = "SentryDrone", DisplayName = "Drone Sentinela", Cooldown = 12, CastTime = 0.4,
 				Effect = { Type = "Homing", Duration = 5, Speed = 26, Radius = 5, Damage = 16, StunSeconds = 0.8, SeekRadius = 40, Knockback = { Speed = 20, Duration = 0.15 } } },
 			{ Id = "NeutrinoBomb", DisplayName = "Bomba de Neutrinos", Cooldown = 12, CastTime = 0.5,
-				Effect = { Type = "AreaDamage", Radius = 10, Offset = 12, Damage = 24, Delay = 0.8, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } } },
+				Effect = { Type = "AreaDamage", Radius = 10, Offset = 12, Damage = 24, Delay = 0.8, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } },
+				-- D2: caindo = solta a bomba embaixo de si (impacto rápido); correndo = joga mais longe
+				Variants = {
+					Falling = { Type = "AreaDamage", Radius = 12, Damage = 26, Delay = 0.3, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 1.5 } },
+					Sprint = { Type = "AreaDamage", Radius = 10, Offset = 20, Damage = 24, Delay = 0.8, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } },
+				} },
 		},
 		Passive = { Id = "MedKit", DisplayName = "Kit Médico", Cooldown = 22, CastTime = 0.3,
 			Effect = { Type = "Heal", Amount = 25, Cleanse = true } },

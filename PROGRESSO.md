@@ -248,6 +248,15 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
+**D2 FEITO (25/09, servidor testado via MCP)** — VARIAÇÕES DE GOLPE por contexto: `Ability.Variants = { OnDowned | Chain |
+Falling | Air | Sprint = Effect }` (Chain = Effect ou `{ [IdAnterior] = Effect, ["*"] = Effect }`, janela 2 s); o
+`AbilityService.pickVariant` escolhe nessa prioridade (caído na frente ≤ 9 studs → emendado → caindo → no ar → correndo),
+mesmo Id/cooldown; fase `variant` no cliente = etiqueta (AÉREO/MERGULHO/EM CORRIDA/NO CHÃO/COMBO) + VFX
+`<Id>_<Variante>` se a arte fizer. Variantes nos kits: Jotaro Soco Estrela (Sprint, Chain após Arremesso) e Pancada
+(Falling = meteoro, OnDowned = esmaga); Dio Facas (Air = 5 em leque, Chain após MUDA) e Golpe Vampírico (OnDowned = cura
+dobrada); Kira Moeda Bomba (Air ×3) e Detonação (Chain após Toque); Bruno Rasteira (Sprint = deslizante) e Lâmina (Air ×2);
+Rick Bomba de Neutrinos (Falling = embaixo de si, Sprint = mais longe). TESTAR: sentir cada variação e ver a etiqueta;
+ajustar números; pedir à arte VFX "<Id>_<Variante>" onde valer a pena.
 **D1 FEITO (25/09, SEM teste no Studio)** — ANTI 2v1 "Revide": `CounterService` (novo) escuta `HealthService.Damaged`;
 2+ lutadores distintos acertando o mesmo alvo em 6 s = "desvantagem" → barra carrega 2,5×dano (cheia em 100). Atributos
 replicados `CounterCharge`/`CounterReadyAt`; HUD = barra vermelha fina sob a da ult (só aparece com carga; cheia pulsa
