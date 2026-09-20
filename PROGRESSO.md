@@ -245,15 +245,21 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-23 noite — A1–A5 FEITOS; parar antes do A6; tudo commitado e no GitHub)
+## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 FEITOS; próximo = B1 pesquisa dos kits; tudo commitado)
 
 ### ONDE PARAMOS (ler primeiro)
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
 (`Combatant.Fighter`), `BotService` (bots com combate real), `TrailerService` v2 (cenas), e as correções A1–A5 da
 lista do dono (DEV com ON/OFF, cenas predefinidas, agarrão trava quem está preso, boss/traidor à solta, trailer com
 órbita de grupo + bug do "deitado duro"). **Intocável** no agarrão/ult (pedido do dono). O dono ainda NÃO testou
-A1–A5 nem o "intocável". PRÓXIMO PASSO = **A6** (traidor = bot especial OP) e depois **B** (redesign das habilidades,
-começando pela PESQUISA para o dono aprovar). Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
+A1–A5 nem o "intocável".
+**24/09: A6 FEITO** — traidor v2 = BOT ESPECIAL (`TraitorService` só monta o bot via `BotService.Spawn` e cuida de
+fase 2/ult/abandono/crédito): kit completo do `QuestConfig.Traitor.CharacterId` (Dio) com M1, dash, block, 1–3,
+despertar + ULT; vida ×4 (400), dano ×1,5 (atributo `DamageMult` no Model, lido no `CombatService.ResolveHit`),
+walk 26 (> sprint), ult cheia na entrada e a cada 40 s, fase 2 = walk 30 e dano ×1,8; `SpawnOptions.Attributes`/
+`Tuning` e `BotService.Remove` novos. Testado via MCP (Play): despertou, usou Quake/ShieldBash, ragdollou o
+jogador, crédito e limpeza OK. Conta como bot no DEV (BOTS → limpar também some com ele).
+PRÓXIMO PASSO = **B1** (PESQUISA dos kits por personagem para o dono aprovar antes de codar). Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
 golpe estilo Jujutsu Shenanigans, evento de admin "último de pé", log de atualização no jogo — ver "D" abaixo.
 
 **D — Ideias novas do dono (2026-09-23 noite) — anotadas, ordenar junto com B**
@@ -284,7 +290,7 @@ acabar; tirar ults/animações/ataques sem sentido; pesquisar kits coerentes por
 de JoJo aparecem na animação da ult.
 
 **A — Correções do que foi entregue (curtas, uma por commit)** — A1..A5 FEITOS em 23/09 (commits bcc2c8a, fd8a5ea,
-cd0af36, f8d5f7a, b00ca5c + 810695d "intocável"); falta o dono testar. A6 = PRÓXIMO.
+cd0af36, f8d5f7a, b00ca5c + 810695d "intocável"); A6 FEITO em 24/09. Falta o dono testar tudo.
 A1. DEV: todo botão de toggle mostra ON/OFF (cor + contorno) pelo `GetState`; botões de ação dão "flash" ao
     clicar; bots/traidor/trailer com estado (ex.: "TRAILER rodando", "N bots"). Hoje só God/Energia/Cooldown/Voar.
 A2. DEV: "CENA" vira PREDEFINIÇÕES (aba Teste → TRAILER): botões Combo · Parry · Dash · Habilidades (por

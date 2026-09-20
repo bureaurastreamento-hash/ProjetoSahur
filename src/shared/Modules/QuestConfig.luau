@@ -9,7 +9,6 @@
 	Textos/recompensas são PROVISÓRIOS — o dono ajusta depois.
 ]]
 
-local CombatConfig = require(script.Parent:WaitForChild("CombatConfig"))
 
 local QuestConfig = {}
 
@@ -42,24 +41,28 @@ QuestConfig.Spots = {
 } :: { [string]: Spot }
 
 -- Capítulo final: o traidor vira um NPC hostil (rig R6 com o avatar dele) no santuário do boss. Números de
--- balanceamento aqui; a IA está no TraitorService. Outros jogadores podem ajudar; crédito = deu dano E está
+-- balanceamento aqui; a IA é a do BotService (TraitorService só monta o bot e cuida do crédito). Outros jogadores podem ajudar; crédito = deu dano E está
 -- no capítulo final ativo.
 QuestConfig.Traitor = {
 	UserId = 7521923542, -- adryan_keep
 	Title = "TRAIDOR",
-	HealthMult = 3, -- × CombatConfig.MaxHealth
-	WalkSpeed = 20,
-	ChaseSpeed = 24, -- fase 2 (metade da vida)
+	-- v2 (dono, 2026-09-23): o traidor é um BOT ESPECIAL (BotService) com o combate real do personagem abaixo —
+	-- combo de M1, dash, block/parry, habilidades 1–3, despertar + ULT — e números de chefe. Mais OP que o Big C.H.O.P.
+	CharacterId = "Dio", -- kit que ele usa (após o redesign B: kit próprio)
+	HealthMult = 4, -- × CombatConfig.MaxHealth
+	DamageMult = 1.5, -- × dano de soco e habilidade (atributo DamageMult no Model)
+	WalkSpeed = 26, -- base (acima do sprint do jogador, 24)
+	ChaseSpeed = 30, -- fase 2 (metade da vida)
 	PhaseTwoAt = 0.5,
+	PhaseTwoDamageMult = 1.8, -- fase 2: bate ainda mais forte
+	UltEvery = 40, -- s: recarrega a ult (entra com ela cheia)
 	ArenaRadius = 45, -- (legado) raio do santuário onde nasce
 	ChaseRadius = 300, -- à solta: enxerga/persegue lutadores até aqui a partir de onde ESTÁ (mapa inteiro)
 	SpawnPartName = "BossSpawn", -- Workspace.Sahur.ArenaExtras (Props)
 	ArenaPartName = "BossArena",
 	AbandonSeconds = 120, -- sem ninguém vivo por perto por esse tempo = some (fala de novo com o NPC para voltar)
-	Punch = { Damage = 6, Range = 7 }, -- combo de 4 no ritmo do M1 (ResolveNpcHit respeita block)
-	Dash = { MinDist = 12, MaxDist = 40, Seconds = 0.4, Cooldown = 3.5 }, -- pulo até o alvo quando está longe
-	Burst = { Radius = 10, Damage = 14, Windup = 0.9, Cooldown = 9, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } :: CombatConfig.Knockback }, -- rajada com aviso no chão
-	Regen = { Delay = 8, PerSecond = 6 }, -- fora de combate
+	-- IA (override de BotService.Config): mais habilidade, mais dash, guarda melhor, ult de mais longe
+	Tuning = { AbilityChancePerTick = 0.3, DashChancePerTick = 0.4, BlockChancePerTick = 0.35, UltRange = 16, CancelChancePerTick = 0.6 },
 }
 
 QuestConfig.TalkDistance = 14 -- studs (E no NPC)

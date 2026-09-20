@@ -13,7 +13,9 @@
 	IA (tick 0,1 s): perto = combo de M1; meio = habilidade 1–3 pronta (chance por tick); longe = dash/andar até
 	o alvo; carga cheia = despertar (G) e depois a ULT quando estiver perto; bloqueia por instantes quando o
 	alvo está atacando; caído = ragdoll cancel às vezes. Morreu = renasce no ponto de origem após RespawnTime.
-	API: Spawn(opts), Clear(), SetBehavior(model?, behavior), Fill(model?) (carga da ult cheia), List().
+	Bots ESPECIAIS (traidor, TraitorService): SpawnOptions.Attributes (MaxHealth/WalkSpeed/DamageMult no Model)
+	e SpawnOptions.Tuning (override por bot dos números de BotService.Config: SeekRadius, chances, UltRange).
+	API: Spawn(opts), Remove(model), Clear(), SetBehavior(model?, behavior), Fill(model?) (carga da ult cheia), List().
 ]]
 
 local CollectionService = game:GetService("CollectionService")
@@ -59,6 +61,8 @@ export type SpawnOptions = {
 	Behavior: string?, -- passive | aggressive | idle
 	Respawn: boolean?, -- padrão true
 	Team: string?, -- TeamId (bots do mesmo time não se batem)
+	Attributes: { [string]: any }?, -- atributos extras no Model ANTES do SetupBot (MaxHealth, WalkSpeed, DamageMult, Traitor…)
+	Tuning: { [string]: number }?, -- override por bot de BotService.Config (SeekRadius, AbilityChancePerTick, UltRange…)
 }
 
 type Bot = {
@@ -66,6 +70,7 @@ type Bot = {
 	humanoid: Humanoid,
 	root: BasePart,
 	opts: SpawnOptions,
+	cfg: typeof(BotService.Config), -- Config com o Tuning do bot por cima
 	home: CFrame,
 	index: number,
 	target: Instance?, -- Fighter (Player/bot) ou NPC de chefe (boss/traidor: Model com BossRig/Traitor)
@@ -179,6 +184,11 @@ local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, 
 	if opts.Team then
 		model:SetAttribute("TeamId", opts.Team)
 	end
+	if opts.Attributes then
+		for k, v in opts.Attributes do
+			model:SetAttribute(k, v)
+		end
+	end
 	CollectionService:AddTag(model, Combatant.BotTag)
 	CollectionService:AddTag(model, "Combatant")
 	return model, humanoid, root
@@ -193,9 +203,11 @@ local function rootOf(fighter: Instance?): BasePart?
 	return character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 end
 
---- Chefe NPC que o bot pode caçar (boss por peças, traidor) — não é lutador, mas leva golpe.
+--- Chefe NPC que o bot pode caçar (boss por peças) — não é lutador, mas leva golpe. O traidor v2 é um BOT
+--- (Combatant) e entra pelo caminho normal.
 local function isBossNpc(inst: Instance?): boolean
-	return inst ~= nil and inst:IsA("Model") and (inst:GetAttribute("BossRig") ~= nil or inst:GetAttribute("Traitor") == true)
+	return inst ~= nil and inst:IsA("Model") and inst:GetAttribute(Combatant.ATTR_BOT) ~= true
+		and (inst:GetAttribute("BossRig") ~= nil or inst:GetAttribute("Traitor") == true)
 end
 
 local function validTarget(b: Bot, fighter: Instance?): boolean
@@ -247,9 +259,9 @@ local function nearestFighter(b: Bot, radius: number): Instance?
 	return best
 end
 
-local function abilityRangeOk(effect: any, dist: number): boolean
+local function abilityRangeOk(b: Bot, effect: any, dist: number): boolean
 	local t = effect.Type
-	local C = BotService.Config
+	local C = b.cfg
 	if t == "Dash" or t == "Grab" or t == "Projectile" or t == "FlyGrab" then
 		return dist >= 5 and dist <= C.AbilityRange
 	elseif t == "AreaDamage" or t == "MultiHitArea" or t == "TimeDome" then
@@ -262,7 +274,7 @@ local function abilityRangeOk(effect: any, dist: number): boolean
 end
 
 local function think(b: Bot)
-	local C = BotService.Config
+	local C = b.cfg
 	local now = os.clock()
 	local behavior = b.model:GetAttribute("Behavior")
 	if behavior == "idle" then
@@ -352,7 +364,7 @@ local function think(b: Bot)
 	if def and not MovementService.IsDashing(b.model) and not CombatService.IsAttacking(b.model) and math.random() < C.AbilityChancePerTick then
 		local candidates = {}
 		for slot, ability in def.Abilities do
-			if ability.EnergyCost < CharacterDefs.Energy.Max and abilityRangeOk(ability.Effect, dist) then
+			if ability.EnergyCost < CharacterDefs.Energy.Max and abilityRangeOk(b, ability.Effect, dist) then
 				table.insert(candidates, slot)
 			end
 		end
@@ -395,7 +407,7 @@ local function aiLoop(b: Bot)
 		if not ok then
 			warn("[BotService] IA: " .. tostring(err))
 		end
-		task.wait(BotService.Config.Tick)
+		task.wait(b.cfg.Tick)
 	end
 end
 
@@ -442,11 +454,18 @@ spawnAt = function(opts: SpawnOptions, home: CFrame, index: number): Model?
 		r:SetNetworkOwner(nil) -- o servidor simula (dash/knockback/ragdoll)
 	end)
 	HealthService.SetupBot(m)
+	local cfg = table.clone(BotService.Config)
+	if opts.Tuning then
+		for k, v in opts.Tuning do
+			(cfg :: any)[k] = v
+		end
+	end
 	local b: Bot = {
 		model = m,
 		humanoid = h,
 		root = r,
 		opts = opts,
+		cfg = cfg,
 		home = home,
 		index = index,
 		target = nil,
@@ -484,6 +503,19 @@ function BotService.Spawn(options: SpawnOptions?): Model?
 		Log.debug(("[BotService] bot %d: %s (%s, %s)"):format(nextIndex, model.Name, tostring(opts.CharacterId), tostring(opts.Behavior or "passive")))
 	end
 	return model
+end
+
+--- Remove UM bot (sem respawn nem morte). true se era um bot vivo.
+function BotService.Remove(model: Model): boolean
+	local b = bots[model]
+	if not b then
+		return false
+	end
+	b.alive = false
+	b.opts.Respawn = false
+	bots[model] = nil
+	model:Destroy()
+	return true
 end
 
 --- Remove todos os bots (sem respawn).

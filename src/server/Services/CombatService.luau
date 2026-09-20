@@ -452,6 +452,10 @@ function CombatService.ResolveHit(attacker: Fighter, attackerChar: Model, victim
 	if typeof(devMult) == "number" then
 		damage *= devMult -- menu de desenvolvedor
 	end
+	local npcMult = attacker:GetAttribute("DamageMult")
+	if typeof(npcMult) == "number" then
+		damage *= npcMult -- bot especial (traidor: TraitorService) — vale para soco e habilidade
+	end
 	local formMult = attacker:GetAttribute("FormDamageMult")
 	if typeof(formMult) == "number" and opts.IsM1 then
 		damage *= formMult -- forma de boss (BossFormService): socos pesados
