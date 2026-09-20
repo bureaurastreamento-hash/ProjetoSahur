@@ -21,7 +21,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   SÓ para Player. Ao escrever código novo nesses services, nunca assuma `player.Character`/`Players:GetPlayerFromCharacter`.
 - **`BotService`**: bots com o combate REAL (M1, dash, block, habilidades, despertar + ult). Padrão do dono: só
   revidam quando apanham. DEV: Mapa → BOTS. **`TrailerService` v2**: cenas com bots (`TrailerScene <cena> [id] [me]`).
-- Ficou para o dono testar visualmente (animações/VFX dos bots, câmera do trailer).
+- Dono testou (noite): ver PROGRESSO "SEQUÊNCIA NOVA" — A1..A6 correções (DEV toggles, cenas predefinidas, agarrão
+  trava NPC, boss/traidor à solta, trailer menos caótico, traidor = bot OP) → B redesign das habilidades (1–4 ataques,
+  R passiva, G ult troca os 4, Stands na ult; PESQUISA aprovada pelo dono antes de codar) → C backlog antigo.
 
 ## Estado 2026-09-23 — bloco E fechado (ver PROGRESSO.md "RETOMAR AQUI")
 - **Capítulo final**: traidor = adryan_keep (`QuestConfig.Traitor`, `TraitorService` = NPC hostil R6 com o avatar

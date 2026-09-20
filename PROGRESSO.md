@@ -247,9 +247,55 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 
 ## RETOMAR AQUI (última sessão: 2026-09-23 — pendências do bloco E FEITAS; tudo commitado)
 
-### PRÓXIMA SESSÃO — por onde começar
-0. **Bots + trailer v2 (2026-09-23 tarde)**: o dono grava o trailer e testa os bots (ver "FALTA o dono testar" da
-   seção da tarde). Qualquer regressão no combate do JOGADOR (refatoração do núcleo) tem prioridade máxima.
+### SEQUÊNCIA NOVA (dono, 2026-09-23 noite — depois de testar bots/trailer) — seguir NESTA ORDEM
+Relato do dono: botões do DEV sem feedback de ativo/inativo; traidor fraco (sem ult, não comba) — tem que ser mais
+OP que o Big C.H.O.P.; boss e traidor presos na cachoeira (voltam quando não há player, não perseguem para fora);
+bots e traidor batem enquanto estão presos no agarrão; "CENA" digitada na aba Adm é ruim → predefinições;
+trailer caótico (muita gente no início, saem do quadro, golpes derrubam sem ragdoll e o boneco "buga duro");
+REDESIGN das habilidades: 1/2/3/4 = 4 ataques sem ult, R = 1 passiva/suporte, G = ult troca os 4 por outros 4 até
+acabar; tirar ults/animações/ataques sem sentido; pesquisar kits coerentes por personagem; STANDS dos personagens
+de JoJo aparecem na animação da ult.
+
+**A — Correções do que foi entregue (curtas, uma por commit)**
+A1. DEV: todo botão de toggle mostra ON/OFF (cor + contorno) pelo `GetState`; botões de ação dão "flash" ao
+    clicar; bots/traidor/trailer com estado (ex.: "TRAILER rodando", "N bots"). Hoje só God/Energia/Cooldown/Voar.
+A2. DEV: "CENA" vira PREDEFINIÇÕES (aba Teste → TRAILER): botões Combo · Parry · Dash · Habilidades (por
+    personagem) · Ult (por personagem) · Boss · Briga · Completo, + toggle "comigo na cena". Some a caixa de texto.
+A3. AGARRÃO: quem está preso (bot, traidor, boss, jogador) NÃO age até soltar — `Stun("grabbed")` também para NPC
+    (atributo `Grabbed` no Model; `NpcPunch`/IA do traidor/boss respeitam), e bot cancela o soco em curso ao ser
+    agarrado. Conferir também o block/parry durante o agarrão.
+A4. BOSS e TRAIDOR à solta: perseguem pelo mapa inteiro (raio 300 como o `Roam`), sem voltar ao centro enquanto
+    houver alvo; só somem/voltam após X s sem ninguém. `Traitor.ArenaRadius`/`BossConfig.ArenaRadius` viram só o
+    raio inicial. Boss automático continua nascendo no santuário mas sai atrás de quem bater nele.
+A5. TRAILER: `brawl` com 3–4 bots (não 6) e câmera que enquadra o grupo (orbit do centro dos bots, ou "follow" do
+    ator principal); palco longe de obstáculos; cenas mais curtas; investigar "derrubado sem ragdoll fica travado"
+    (ComboLift/Knockback sem Ragdoll em bot → checar PlatformStand/estado do Humanoid) e corrigir no núcleo.
+A6. TRAIDOR v2 = BOT ESPECIAL: `TraitorService` passa a usar `BotService.Spawn` (aggressive, sem respawn) com
+    vida ×4, dano ×1,5, velocidade +, kit completo + ULT (usa o kit do personagem escolhido para ele; após o
+    redesign B, kit próprio), aura/luz vermelha, crédito de `traitor_kill` igual. Mais OP que o Big C.H.O.P.
+
+**B — REDESIGN das habilidades (grande; pesquisa → aprovação do dono → implementação)**
+B1. PESQUISA (entregar lista para o dono aprovar antes de codar): para Jotaro, Bruno Gollini (Swift), Dio, Kira,
+    Rick (+ Sahur/Overlord se ficarem): 4 ataques normais, 1 passiva/suporte (R), ult (nome, Stand que aparece,
+    o que muda) e os 4 ataques da forma desperta — tudo reproduzível com os tipos de efeito que existem
+    (Dash/Grab/Teleport/AreaDamage/MultiHitArea/Projectile/DamageBuff/Heal/Shield/FlyGrab/TimeDome) ou com no
+    máximo 1–2 tipos novos por personagem; animações: quais dos packs servem, quais a arte precisa fazer.
+B2. Esquema: `CharacterDefs` → `Abilities` (4, sem ult), `Passive` (R: efeito de suporte com cooldown),
+    `Ultimate` (G: nome + Stand + duração) e `AwakenedAbilities` (4; substituem 1–4 enquanto desperto).
+    Remover kits/ults/animações sem sentido; migrar mods/exemplo_mod e o kit (MODS_KIT/templates).
+B3. Servidor: `AbilityService` (troca de kit ao despertar e volta ao fim; R com cooldown próprio; ult não ocupa
+    slot), HUD (5 slots: 1–4 + R; visual de troca na ult), `AbilityController` (tecla R, Controls), IA dos bots
+    (usa R e o kit desperto), trailer (cena `abilities` mostra 1–4 + R; `ult` mostra o kit desperto).
+B4. STANDS: modelo do Stand (arte ou peças) aparece atrás do personagem só na animação da ult (cutscene +
+    golpes despertos); `AwakeningDefs` por personagem; VFX/sons.
+
+**C — Backlog anterior (continua valendo, depois de A e B)**
+C1. Lista de testes do dono (blocos A–F de 21/22-09 + capítulo final + mods de asset + bots/trailer).
+C2. Place de criação da comunidade (item 2 abaixo). C3. Mural de votação de mods (item 3). C4. Textos/recompensas
+das quests, `Function`/`Quote` do TeamConfig. C5. Salvar o place (AltarGruta backup, exemplo_mod).
+
+### PRÓXIMA SESSÃO — por onde começar (lista antiga; a ordem nova está acima)
+0. **Bots + trailer v2 (2026-09-23 tarde)**: o dono já testou → ver "SEQUÊNCIA NOVA" acima.
 1. **O dono testa TUDO** e traz a lista do que mudar/adicionar/corrigir/tirar. Corrigir isso primeiro.
    O que está sem teste dele (listas "FALTA o dono testar" nas seções abaixo): BLOCO A combate (2026-09-21),
    muralha/destruição/roster (2026-09-21), os blocos de 2026-09-22 (F boss x3 à solta, D menu DEV em abas,
