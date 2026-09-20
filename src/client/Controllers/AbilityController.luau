@@ -21,6 +21,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
@@ -32,6 +33,7 @@ local Controls = require(Modules:WaitForChild("Controls"))
 local Log = require(Modules:WaitForChild("Log"))
 local FX = require(Modules:WaitForChild("FX"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 local CutsceneController = require(script.Parent:WaitForChild("CutsceneController"))
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
@@ -52,6 +54,8 @@ end
 
 local requestAbility: RemoteEvent
 local requestAwaken: RemoteEvent
+local requestCounter: RemoteEvent
+local promptShown = 0 -- ProximityPrompts na tela (E é deles primeiro: o Revide só sai sem prompt)
 local grabConn: RBXScriptConnection? = nil -- eu estou sendo carregado por um agarrão
 
 local grabbedTrackRef: { track: AnimationTrack? } = { track = nil }
@@ -333,6 +337,15 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		FX.PlayAnimation(character, characterId, abilityId, false, nil, actionSeconds(characterId, abilityId, data))
 		FX.SpawnVFX(character, characterId, abilityId, false, at)
 		FX.PlaySoundAt(character, characterId, abilityId)
+		if characterId == "Shared" and abilityId == "Counter" then
+			-- Revide (anti-2v1, CounterService): giro 360° — quem está perto sente o tranco
+			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+			local mine = localPlayer.Character
+			local myRoot = mine and mine:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if root and myRoot and (myRoot.Position - root.Position).Magnitude <= (if typeof(data) == "table" then tonumber(data.Radius) or 12 else 12) + 4 then
+				FX.Shake(0.5, 0.35)
+			end
+		end
 		-- (o estouro genérico Awakening_Burst por cima das ults saiu — dono: cada ult tem o próprio som)
 		if typeof(data) == "table" and typeof(data.Healed) == "number" and data.Healed > 0 then
 			FX.DamageNumber(character, "+" .. math.floor(data.Healed), Color3.fromRGB(120, 255, 140))
@@ -452,7 +465,24 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 		AbilityController.Use(slot)
 	elseif action == "Awaken" then
 		AbilityController.Awaken()
+	elseif action == "Counter" then
+		AbilityController.Counter()
 	end
+end
+
+--- Barra "Revide" (anti-2v1) cheia? (atributo replicado pelo CounterService)
+function AbilityController.CounterReady(): boolean
+	local charge = localPlayer:GetAttribute("CounterCharge")
+	return typeof(charge) == "number" and charge >= CombatConfig.Counter.Threshold
+end
+
+--- Pede o contra-ataque anti-2v1 (E / L3 / botão de toque). Só quando a barra está cheia e não há
+--- ProximityPrompt na tela (E é a tecla dos prompts: NPC de quest, vendedor, altar).
+function AbilityController.Counter()
+	if promptShown > 0 or not AbilityController.CounterReady() then
+		return
+	end
+	requestCounter:FireServer()
 end
 
 --- Pede o Awakening (G / botão de toque). O servidor confere a carga.
@@ -482,6 +512,7 @@ end
 function AbilityController.Init()
 	requestAbility = Remotes.GetEvent(Remotes.Events.RequestAbility)
 	requestAwaken = Remotes.GetEvent(Remotes.Events.RequestAwaken)
+	requestCounter = Remotes.GetEvent(Remotes.Events.RequestCounter)
 end
 
 function AbilityController.Start()
@@ -495,6 +526,12 @@ function AbilityController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityCooldown).OnClientEvent:Connect(onNotifyAbilityCooldown)
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityDenied).OnClientEvent:Connect(onNotifyAbilityDenied)
 	UserInputService.InputBegan:Connect(onInputBegan)
+	ProximityPromptService.PromptShown:Connect(function()
+		promptShown += 1
+	end)
+	ProximityPromptService.PromptHidden:Connect(function()
+		promptShown = math.max(0, promptShown - 1)
+	end)
 
 	local function onCharacter(character: Model)
 		table.clear(cooldowns)

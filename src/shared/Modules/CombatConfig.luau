@@ -230,6 +230,26 @@ CombatConfig.Ragdoll = {
 	PushSpeed = 40,
 }
 
+-- ANTI 2v1 — "Revide" (D1, dono 2026-09-23; CounterService): quando MinAttackers+ lutadores DISTINTOS acertam o
+-- mesmo alvo dentro de Window s, o alvo em desvantagem carrega uma barra própria com o dano que recebe
+-- (ChargePerDamage × dano). Cheia (Threshold), a tecla E (Controls.Counter) dispara um contra-ataque 360°:
+-- i-frames por Invuln s, tira o hitstun, e Delay s depois acerta TODO MUNDO a Radius studs (quebra block —
+-- é a punição do 2v1) com Damage + Knockback. Barra zera ao morrer, ao usar, ou Window s depois de a
+-- desvantagem acabar. Cooldown entre usos. Atributos replicados: CounterCharge (0..Threshold), CounterReadyAt.
+CombatConfig.Counter = {
+	Window = 6, -- s: agressores contam enquanto acertaram há menos que isto
+	MinAttackers = 2, -- agressores distintos para estar "em desvantagem"
+	ChargePerDamage = 2.5, -- pontos de barra por ponto de dano recebido em desvantagem (100 = ~40 de dano)
+	Threshold = 100,
+	Radius = 12,
+	Damage = 25,
+	Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.5 } :: Knockback,
+	Invuln = 0.6, -- s de i-frames a partir do E
+	Delay = 0.18, -- s até o giro acertar (o clipe Shared/Counter abre os braços aí)
+	Cooldown = 20,
+	MaxTargets = 8,
+}
+
 -- Movimento (MovementService/MovementController). Dash universal em CombatConfig.Dash.
 CombatConfig.Sprint = {
 	Speed = 24, -- WalkSpeed correndo (Shift segurado); AntiExploit tolera WalkSpeed * 1.6

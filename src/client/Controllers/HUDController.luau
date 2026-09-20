@@ -68,6 +68,9 @@ local healthFill: Frame
 local healthText: TextLabel
 local energyFill: Frame
 local energyText: TextLabel
+local counterBar: Frame -- barra "Revide" (anti-2v1): só aparece em desvantagem (CounterService)
+local counterFill: Frame
+local counterText: TextLabel
 local characterNameLabel: TextLabel
 local slots: { Frame } = {}
 local dashSlot: Frame -- Q frente/trás (caído: ragdoll cancel)
@@ -615,6 +618,9 @@ function HUDController.Init()
 	local energy = get(vitals, "Energy")
 	energyFill = get(energy, "Fill") :: Frame
 	energyText = get(energy, "Text") :: TextLabel
+	counterBar = get(vitals, "Counter") :: Frame
+	counterFill = get(counterBar, "Fill") :: Frame
+	counterText = get(counterBar, "Text") :: TextLabel
 	characterNameLabel = get(vitals, "CharacterName") :: TextLabel
 
 	local abilities = get(hud, "Abilities")
@@ -869,6 +875,38 @@ function HUDController.Start()
 		wasFull = full
 	end
 	localPlayer:GetAttributeChangedSignal("Energy"):Connect(refreshEnergy)
+
+	-- Revide (anti-2v1): barra vermelha discreta sob a da ult; some sem carga, pulsa e mostra a tecla quando cheia
+	local counterPulse: Tween? = nil
+	local counterWasFull = false
+	local function refreshCounter()
+		local cfg = CombatConfig.Counter
+		local c = localPlayer:GetAttribute("CounterCharge")
+		local charge = if typeof(c) == "number" then c else 0
+		local full = charge >= cfg.Threshold
+		counterBar.Visible = charge > 0
+		TweenService:Create(counterFill, TweenInfo.new(0.15), { Size = UDim2.fromScale(math.clamp(charge / cfg.Threshold, 0, 1), 1) }):Play()
+		if full then
+			local device: Controls.Device = Controls.DeviceOf(UserInputService:GetLastInputType())
+			counterText.Text = if device == "touch" then "REVIDE" else ("REVIDE — %s"):format(Controls.Label("Counter", device))
+		else
+			counterText.Text = if charge > 0 then "em desvantagem" else ""
+		end
+		if full and not counterWasFull then
+			local pulse = TweenService:Create(counterFill, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.5 })
+			pulse:Play()
+			counterPulse = pulse
+		elseif not full and counterWasFull then
+			if counterPulse then
+				counterPulse:Cancel()
+				counterPulse = nil
+			end
+			counterFill.BackgroundTransparency = 0
+		end
+		counterWasFull = full
+	end
+	localPlayer:GetAttributeChangedSignal("CounterCharge"):Connect(refreshCounter)
+	refreshCounter()
 	localPlayer:GetAttributeChangedSignal("AwakenedUntil"):Connect(function()
 		local untilT = localPlayer:GetAttribute("AwakenedUntil")
 		refreshSlots() -- acende/apaga o slot da ultimate

@@ -135,6 +135,16 @@ function MobileController.Start()
 	awaken.MouseButton1Down:Connect(function()
 		AbilityController.Awaken()
 	end)
+	-- REVIDE (anti-2v1): o botão só existe na tela enquanto a barra está cheia
+	local counter = get(root, "Counter") :: TextButton
+	counter.MouseButton1Down:Connect(function()
+		AbilityController.Counter()
+	end)
+	local function refreshCounter()
+		counter.Visible = AbilityController.CounterReady()
+	end
+	localPlayer:GetAttributeChangedSignal("CounterCharge"):Connect(refreshCounter)
+	refreshCounter()
 	for slot = 1, 5 do -- 1–4 ataques, 5 = R (suporte)
 		local b = get(root, "Slot" .. slot) :: TextButton
 		b.MouseButton1Down:Connect(function()
