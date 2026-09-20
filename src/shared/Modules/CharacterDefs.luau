@@ -1,54 +1,64 @@
 --!strict
 --[[
 	CharacterDefs
-	Definição de cada personagem/estilo de luta e suas habilidades ativas.
-	Lido pelo servidor (autoridade: cooldown, energia, efeito) e pelo cliente
-	(só teclas, nomes e feedback).
+	Definição de cada personagem e do seu KIT. Lido pelo servidor (autoridade: cooldown, carga, efeito) e
+	pelo cliente (só teclas, nomes e feedback).
 
-	Decisão do dono (2026-09-15): NÃO existe "energia" para habilidades — teclas 1/2/3/4 são só
-	cooldown (EnergyCost = 0). A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano
-	e parryando; cheia, G dispara a ULTIMATE (a Ability com EnergyCost = Max, última da lista) e ativa o
-	AWAKENING (CombatConfig.Awakening: 20 s com +dano/+velocidade). HUD mostra "ULT".
+	ESQUEMA (redesign B, dono 2026-09-23/24 — PESQUISA_KITS.md):
+	  Abilities          4 ataques normais (teclas 1–4). Sem custo de energia: só cooldown.
+	  Passive            1 habilidade de SUPORTE (tecla R): cura/escudo/velocidade/fuga, com cooldown próprio.
+	                     Não muda ao despertar.
+	  Ultimate           G com a barra cheia = DESPERTAR (cutscene, CombatConfig.Awakening.Cutscene) e, por
+	                     Duration s, o kit desperto no lugar dos 4 normais; Effect (opcional) dispara sozinho
+	                     no fim da cutscene (ex.: Bruno abre a cúpula do tempo). Nome/tema da cutscene ficam
+	                     em AwakeningDefs.
+	  AwakenedAbilities  4 golpes da forma desperta (teclas 1–4 enquanto Ultimate durar). Entram PRONTOS
+	                     (cooldown próprio, por Id); ao acabar, os 4 normais voltam com o cooldown que tinham.
+	  DashOverride       substitui o dash universal (Q) — só o Bruno (Piscar). Único lugar onde ainda existe
+	                     AwakenedEffect (pisca mais longe desperto).
+	  Variants           (preparado para D2, ainda NÃO lido pelo servidor) variações por contexto:
+	                     { Air?, Falling?, Sprint?, OnDowned?, Chain? } = Effect alternativo.
+
+	A barra "Energy" é a CARGA DA ULT (0..Max): enche dando/recebendo dano e parryando.
 
 	Assets esperados (por nome, ver Assets.luau):
-	  Animations.<CharacterId>.<AbilityId>
-	  VFX.<CharacterId>.<AbilityId>
-
-	Slots: índice = tecla (1..4); a ultimate (EnergyCost = Max) fica por último e sai pelo G. O dash
-	universal fica no Q e é de TODOS os personagens (CombatConfig.Dash, MovementService).
+	  Animations.<CharacterId>.<AbilityId>   VFX.<CharacterId>.<AbilityId>   (também para os despertos e o R)
 
 	Tipos de efeito (implementados em AbilityService):
 	  Dash        { Speed, Duration, Damage, Range, Width, Height, HealPerHit?, StunSeconds?, Knockback? }
 	                                                                 -> investida COM dano (movimento no cliente, hitbox no servidor);
-	                                                                    HealPerHit = cura o lançador por alvo atingido (Devorar)
+	                                                                    HealPerHit = cura o lançador por alvo atingido
 	  Grab        { Speed, Duration, Range, Width, Height, Carry, Damage, Knockback?, StunSeconds?, Finish? }
-	                                                                 -> investida; ao encostar SEGURA o alvo por Carry s (ele vai junto,
-	                                                                    sem poder agir; o atacante não é interrompido) e solta com o golpe.
-	                                                                    Finish: "Slam" (padrão) | "Throw" (arremessa para onde olha; Knockback.Up)
-	                                                                    | "Chokeslam" (Lift studs erguido; esmaga + área SlamRadius/SlamDamage/SlamKnockback?)
-	                                                                    | "Spin" (gira Spin voltas/s; SpinRadius/SpinDamage/SpinInterval/SpinKnockback? em
-	                                                                      quem chega perto; solta na tangente)
-	  Teleport    { Distance }                                       -> servidor move o HRP Distance studs para frente ATRAVESSANDO o que
-	                                                                    estiver no caminho e encaixando no chão (MovementService.Teleport)
+	                                                                 -> investida; ao encostar SEGURA o alvo por Carry s e solta com o golpe.
+	                                                                    Finish: "Slam" (padrão) | "Throw" (arremessa; Knockback.Up)
+	                                                                    | "Chokeslam" (Lift; esmaga + área SlamRadius/SlamDamage/SlamKnockback?)
+	                                                                    | "Spin" (gira Spin voltas/s; SpinRadius/SpinDamage/SpinInterval/SpinKnockback?)
+	  Teleport    { Distance }                                       -> move o HRP Distance studs para frente atravessando obstáculos
 	  AreaDamage  { Radius, Damage, Delay, StunSeconds?, Knockback?, Offset? }
 	                                                                 -> dano em esfera após Delay; Offset = studs à frente do lançador
-	                                                                    Knockback = { Speed, Duration, Ragdoll? } (Ragdoll = segundos caído)
-	  MultiHitArea{ Radius, Damage, Hits, Interval }                 -> vários ticks de AreaDamage
-	  DamageBuff  { Multiplier, Duration }                           -> multiplica dano dos socos/habilidades
-	  Projectile  { Speed, Range, Radius, Damage, Knockback? }       -> esfera simulada no servidor, acerta o 1º alvo
-	  Heal        { Amount }                                         -> cura o próprio lançador
+	  MultiHitArea{ Radius, Damage, Hits, Interval, Offset?, StunSeconds?, Knockback? } -> vários ticks de AreaDamage (Offset = cone à frente)
+	  Projectile  { Speed, Range, Radius, Damage, Knockback?, Count?, Spread?, Interval?, AreaRadius?, AreaDamage? }
+	                                                                 -> esfera simulada no servidor; Count > 1 = várias (Spread graus em leque
+	                                                                    ou Interval s em sequência); AreaRadius = explode em área ao acertar
+	  Heal        { Amount, Cleanse? }                               -> cura o lançador; Cleanse = tira stun/ragdoll
 	  Shield      { Multiplier, Duration }                           -> multiplica dano RECEBIDO (0.5 = metade)
+	  Buff        { Damage?, Speed?, Duration, DashCooldownMult? }   -> ×dano causado / ×velocidade por Duration s (DamageBuff = alias)
+	  Mark        { Radius, Offset?, Damage, Delay?, ExplodeRadius, ExplodeDamage, ExplodeKnockback?, AutoDelay? }
+	                                                                 -> toca quem está na área e MARCA: o próximo M1 do lançador no marcado
+	                                                                    (ou AutoDelay s depois) explode ExplodeRadius em volta dele
+	  Homing      { Count?, Duration, Speed, Radius, Damage, Knockback?, StunSeconds?, SeekRadius? }
+	                                                                 -> "Sheer Heart Attack": bomba no chão persegue o inimigo mais perto
+	                                                                    por Duration s e explode ao encostar (Radius)
+	  Rewind      { Delay, Radius?, Damage?, Knockback? }            -> guarda vida/posição; Delay s depois volta para lá (e explode
+	                                                                    Radius/Damage em volta, se houver) — Bites the Dust
 	  FlyGrab     { FlySpeed, Duration, Range, Width, Height, RiseTime, RiseHeight, DiveSpeed, Damage, Knockback?,
-	                SlamRadius?, SlamDamage?, SlamKnockback? }
-	                                                                 -> ULT DO RICK (PRIME): voa na direção da câmera com a mão esticada
-	                                                                    por Duration s; ao encostar num inimigo SEGURA, sobe RiseHeight em
-	                                                                    RiseTime s e mergulha até o chão a DiveSpeed esmagando ele (Damage +
-	                                                                    área SlamRadius/SlamDamage). Sem alvo = só o voo.
-	  TimeDome    { Radius, Duration, SlowMultiplier, SelfMultiplier, BreakMultiplier }
-	                                                                 -> DOMÍNIO DO TEMPO (Swift): cúpula fixa no ponto do cast; quem está
-	                                                                    dentro anda/ataca/recarrega a SlowMultiplier (0.25 = 4× mais lento),
-	                                                                    o lançador a SelfMultiplier. Se o lançador SAI, a cúpula quebra e ele
-	                                                                    fica a BreakMultiplier até Duration acabar. Atributo Player.TimeSlow.
+	                SlamRadius?, SlamDamage?, SlamKnockback? }       -> voa na direção da câmera; pegou alguém, sobe e mergulha esmagando
+	  TimeDome    { Radius, Duration, SlowMultiplier, SelfMultiplier, BreakMultiplier, NoBreak?, Cinematic? }
+	                                                                 -> cúpula fixa no ponto do cast; quem está dentro fica a SlowMultiplier
+	                                                                    (0.02 = "tempo parado"), o lançador a SelfMultiplier; sair quebra a
+	                                                                    cúpula (salvo NoBreak) e ele fica a BreakMultiplier até o fim
+	  Qualquer efeito aceita `Then = { <outro Effect> }` + `ThenDelay?` (s): encadeia um segundo efeito
+	  (ex.: Teleport e depois AreaDamage; Heal e depois Shield).
 ]]
 
 export type Effect = {
@@ -60,12 +70,19 @@ export type AbilityDef = {
 	Id: string,
 	DisplayName: string,
 	Cooldown: number,
-	EnergyCost: number,
 	CastTime: number, -- tempo em que o jogador fica "ocupado" (não pode usar outra habilidade)
 	Effect: Effect,
-	AwakenedEffect: Effect?, -- versão DESPERTA (durante o Awakening); sem ela, só o buff de dano/velocidade
-	OncePerAwakening: boolean?, -- ultimate que só sai UMA vez por despertar (Domínio do Tempo)
-	SideCooldown: number?, -- só DashOverride: cooldown do teleporte LATERAL (frente/trás usa Cooldown)
+	OncePerAwakening: boolean?, -- só nos despertos: sai UMA vez por despertar (Parada do Tempo)
+	Variants: { [string]: Effect }?, -- D2 (preparado, não lido ainda): Air | Falling | Sprint | OnDowned | Chain
+	AwakenedEffect: Effect?, -- SÓ DashOverride: versão desperta do Piscar
+	SideCooldown: number?, -- SÓ DashOverride: cooldown do teleporte LATERAL (frente/trás usa Cooldown)
+}
+
+export type UltimateDef = {
+	Duration: number, -- s de forma desperta (depois da cutscene)
+	DamageMultiplier: number?, -- padrão CombatConfig.Awakening.DamageMultiplier
+	SpeedMultiplier: number?, -- padrão CombatConfig.Awakening.SpeedMultiplier
+	Effect: Effect?, -- dispara sozinho no fim da cutscene (Bruno: cúpula do tempo)
 }
 
 export type CharacterDef = {
@@ -77,8 +94,11 @@ export type CharacterDef = {
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
 	Image: string?, -- rbxassetid:// do retrato no cartão (vazio = placeholder com a inicial)
-	Abilities: { AbilityDef }, -- índice = tecla (1..4); a última com EnergyCost = Max é a ultimate (G)
-	DashOverride: AbilityDef?, -- substitui o dash universal (Q) por esta habilidade (Swift: Piscar); só Effect Teleport hoje. Campo extra `SideCooldown` = cooldown do lateral (sem ele, usa Cooldown)
+	Abilities: { AbilityDef }, -- 4 ataques (teclas 1..4)
+	Passive: AbilityDef?, -- suporte (tecla R)
+	Ultimate: UltimateDef, -- G: despertar + kit desperto
+	AwakenedAbilities: { AbilityDef }, -- 4 golpes despertos (teclas 1..4 enquanto desperto)
+	DashOverride: AbilityDef?, -- substitui o dash universal (Q) por esta habilidade (Bruno: Piscar)
 }
 
 local CharacterDefs = {}
@@ -105,170 +125,209 @@ CharacterDefs.DashTuning = {
 CharacterDefs.SwapOutOfCombatSeconds = 10
 
 CharacterDefs.Characters = {
-	-- 2026-09-21 (dono): os personagens antigos SAÍRAM; Brawler→JOTARO, Mystic→KIRA, Guardian→DIO herdam os kits
-	-- (provisórios até cada um ganhar moveset/ult/efeitos próprios). Perfis antigos migram no DataService.
+	-- =====================================================================================================
+	-- JOTARO — Star Platinum (inicial): soco, agarrão e pressão de perto
+	-- =====================================================================================================
 	Jotaro = {
 		Id = "Jotaro",
 		DisplayName = "Jotaro",
 		UnlockCost = 0,
-		Tagline = "Desperta com o Stand no máximo · punhos",
+		Tagline = "Star Platinum · punhos e pressão",
 		Color = Color3.fromRGB(120, 90, 255),
 		Image = "",
 		Abilities = {
-			{
-				Id = "ShoulderBash",
-				DisplayName = "Arremesso",
-				Cooldown = 8,
-				EnergyCost = 0,
-				CastTime = 0.4,
-				-- agarra, carrega 0,8 s e esmaga no chão
-				Effect = { Type = "Grab", Finish = "Throw", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 1.8, Up = 25 } },
-				-- desperto: investida mais longa e larga, arremesso mais forte
-				AwakenedEffect = { Type = "Grab", Finish = "Throw", Speed = 85, Duration = 0.3, Range = 8, Width = 8, Height = 7, Carry = 0.7, Damage = 22, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.4, Up = 35 } },
-			},
-			{
-				Id = "GroundSlam",
-				DisplayName = "Pancada no Chão",
-				Cooldown = 10,
-				EnergyCost = 0,
-				CastTime = 0.6,
-				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 18, Damage = 26, Delay = 0.3, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } },
-			},
-			{
-				Id = "Rampage",
-				DisplayName = "Fúria",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 0.6,
-				-- ultimate = golpe (o buff de dano já é do Awakening): pancada devastadora em área
-				Effect = { Type = "AreaDamage", Radius = 10, Damage = 30, Delay = 0.5, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 2 } },
-			},
+			{ Id = "OraRush", DisplayName = "Rajada ORA", Cooldown = 7, CastTime = 0.3,
+				-- cone à frente: 6 socos rápidos do Stand, empurrão só no último
+				Effect = { Type = "MultiHitArea", Radius = 6, Offset = 4, Damage = 4, Hits = 6, Interval = 0.12, Knockback = { Speed = 30, Duration = 0.2 } } },
+			{ Id = "ShoulderBash", DisplayName = "Arremesso", Cooldown = 8, CastTime = 0.4,
+				-- agarra, carrega 0,8 s e arremessa
+				Effect = { Type = "Grab", Finish = "Throw", Speed = 70, Duration = 0.25, Range = 6, Width = 6, Height = 6, Carry = 0.8, Damage = 16, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 1.8, Up = 25 } } },
+			{ Id = "StarFinger", DisplayName = "Soco Estrela", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "Dash", Speed = 70, Duration = 0.3, Damage = 18, Range = 7, Width = 6, Height = 6, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } } },
+			{ Id = "GroundSlam", DisplayName = "Pancada no Chão", Cooldown = 10, CastTime = 0.6,
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.4, Knockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.5 } } },
+		},
+		Passive = { Id = "StandGuard", DisplayName = "Postura do Stand", Cooldown = 20, CastTime = 0.3,
+			-- aguenta e avança: metade do dano recebido por 4 s + um pouco mais rápido
+			Effect = { Type = "Shield", Multiplier = 0.5, Duration = 4, Then = { Type = "Buff", Speed = 1.15, Duration = 4 } } },
+		Ultimate = { Duration = 20 }, -- STAR PLATINUM: THE WORLD (AwakeningDefs)
+		AwakenedAbilities = {
+			{ Id = "OraOraOra", DisplayName = "ORA ORA ORA", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "MultiHitArea", Radius = 7, Offset = 4, Damage = 4, Hits = 12, Interval = 0.08, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 1.5 } } },
+			{ Id = "TimeStopShort", DisplayName = "Parada do Tempo", Cooldown = 15, CastTime = 0.5, OncePerAwakening = true,
+				-- 2,5 s: todo mundo perto congela; o Jotaro segue normal (sem cinemática, sem quebrar ao sair)
+				Effect = { Type = "TimeDome", Radius = 18, Duration = 2.5, SlowMultiplier = 0.02, SelfMultiplier = 1, BreakMultiplier = 1, NoBreak = true } },
+			{ Id = "StarFingerMax", DisplayName = "Soco Estrela Máximo", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "Dash", Speed = 85, Duration = 0.35, Damage = 28, Range = 8, Width = 7, Height = 7, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } } },
+			{ Id = "StarImpact", DisplayName = "Impacto Estelar", Cooldown = 14, CastTime = 0.6,
+				Effect = { Type = "AreaDamage", Radius = 16, Damage = 34, Delay = 0.5, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } } },
 		},
 	} :: CharacterDef,
 
+	-- =====================================================================================================
+	-- BRUNO GOLLINI (id "Swift") — velocidade, tempo, pisca. Q = Piscar (DashOverride)
+	-- =====================================================================================================
 	Swift = {
 		Id = "Swift", -- id interno continua "Swift" (perfis salvos, pastas de animação/som/VFX); na tela é o Bruno
-		DisplayName = "Bruno Gollini", -- dono (2026-09-20): o Bruno (MHA, cúpula que para o tempo) fica no lugar do Swift
+		DisplayName = "Bruno Gollini",
 		UnlockCost = 100,
-		Tagline = "Velocidade e teleporte",
+		Tagline = "Velocidade e domínio do tempo",
 		Color = Color3.fromRGB(110, 230, 255),
 		Image = "",
-		-- Swift não tem dash: o Q é o Piscar (teleport curto, decisão do dono 2026-09-16)
 		DashOverride = {
 			Id = "Blink",
 			DisplayName = "Piscar",
 			Cooldown = 5, -- frente/trás
-			SideCooldown = 2.5, -- lateral (dono, 2026-09-21: o Bruno precisa da divisão lateral × frente/trás)
-			EnergyCost = 0,
+			SideCooldown = 2.5, -- lateral
 			CastTime = 0.15,
 			Effect = { Type = "Teleport", Distance = 18 },
-			AwakenedEffect = { Type = "Teleport", Distance = 28 }, -- desperto: pisca mais longe
+			AwakenedEffect = { Type = "Teleport", Distance = 28 },
 		},
 		Abilities = {
-			{
-				Id = "SweepKick",
-				DisplayName = "Rasteira",
-				Cooldown = 8,
-				EnergyCost = 0,
-				CastTime = 0.4,
-				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 11, Damage = 16, Delay = 0.15, StunSeconds = 1.2, Knockback = { Speed = 30, Duration = 0.2, Ragdoll = 1.2 } },
-			},
-			{
-				Id = "TimeDome",
-				DisplayName = "Domínio do Tempo",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 0.8,
-				-- dono (2026-09-17): cúpula onde tudo fica MUITO lento e o Swift um pouco mais rápido; sair
-				-- quebra a cúpula e o Swift fica muito rápido até o fim
-				-- Cinematic: câmera/efeitos de quem usa (CutsceneController.PlayUltimate); Charge = s até a cúpula
-				-- estourar (casar com a animação 99664142798158), Total = s até a câmera voltar
-				Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0, Cinematic = { Charge = 1.6, Total = 3.8 } },
-				OncePerAwakening = true,
-			},
+			{ Id = "SweepKick", DisplayName = "Rasteira", Cooldown = 8, CastTime = 0.4,
+				Effect = { Type = "AreaDamage", Radius = 8, Damage = 12, Delay = 0.2, StunSeconds = 0.8 } },
+			{ Id = "WindBlade", DisplayName = "Lâmina de Vento", Cooldown = 6, CastTime = 0.25,
+				Effect = { Type = "Projectile", Speed = 120, Range = 60, Radius = 2.5, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } } },
+			{ Id = "CrossCut", DisplayName = "Corte Cruzado", Cooldown = 10, CastTime = 0.4,
+				-- pisca 10 studs à frente (atravessa o alvo) e corta em volta
+				Effect = { Type = "Teleport", Distance = 10, Then = { Type = "AreaDamage", Radius = 6, Damage = 16, Delay = 0.15, Knockback = { Speed = 30, Duration = 0.2 } }, ThenDelay = 0.05 } },
+			{ Id = "Tempest", DisplayName = "Tempestade", Cooldown = 14, CastTime = 0.5,
+				Effect = { Type = "MultiHitArea", Radius = 9, Damage = 5, Hits = 4, Interval = 0.2, Knockback = { Speed = 25, Duration = 0.15 } } },
+		},
+		Passive = { Id = "Haste", DisplayName = "Aceleração", Cooldown = 18, CastTime = 0.2,
+			Effect = { Type = "Buff", Speed = 1.3, Duration = 5, DashCooldownMult = 0.5 } },
+		-- DOMÍNIO DO TEMPO: a cúpula abre sozinha no fim da cutscene e dura o mesmo que a forma (14 s)
+		Ultimate = { Duration = 14, Effect = { Type = "TimeDome", Radius = 30, Duration = 14, SlowMultiplier = 0.08, SelfMultiplier = 1.25, BreakMultiplier = 3.0 } },
+		AwakenedAbilities = {
+			{ Id = "ThousandCuts", DisplayName = "Mil Cortes", Cooldown = 8, CastTime = 0.3,
+				Effect = { Type = "MultiHitArea", Radius = 8, Damage = 4, Hits = 8, Interval = 0.1, Knockback = { Speed = 30, Duration = 0.2 } } },
+			{ Id = "TwinBlades", DisplayName = "Lâminas Gêmeas", Cooldown = 6, CastTime = 0.25,
+				Effect = { Type = "Projectile", Count = 2, Spread = 10, Speed = 120, Range = 60, Radius = 2.5, Damage = 14, Knockback = { Speed = 30, Duration = 0.15 } } },
+			{ Id = "PhantomCut", DisplayName = "Corte Fantasma", Cooldown = 9, CastTime = 0.4,
+				Effect = { Type = "Teleport", Distance = 12, Then = { Type = "AreaDamage", Radius = 8, Damage = 24, Delay = 0.15, StunSeconds = 1, Knockback = { Speed = 35, Duration = 0.2 } }, ThenDelay = 0.05 } },
+			{ Id = "TimeBreak", DisplayName = "Quebra do Tempo", Cooldown = 14, CastTime = 0.6,
+				Effect = { Type = "AreaDamage", Radius = 14, Damage = 34, Delay = 0.6, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } } },
 		},
 	} :: CharacterDef,
 
-	Kira = {
-		Id = "Kira",
-		DisplayName = "Yoshikage Kira",
-		UnlockCost = 250,
-		Tagline = "Desperta com o Stand no máximo · distância",
-		Color = Color3.fromRGB(170, 110, 255),
-		Image = "",
-		Abilities = {
-			{
-				Id = "ArcaneBolt",
-				DisplayName = "Projétil Arcano",
-				Cooldown = 4,
-				EnergyCost = 0,
-				CastTime = 0.3,
-				Effect = { Type = "Projectile", Speed = 90, Range = 70, Radius = 3, Damage = 14, Knockback = { Speed = 25, Duration = 0.15 } },
-				AwakenedEffect = { Type = "Projectile", Speed = 110, Range = 90, Radius = 5, Damage = 22, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } },
-			},
-			{
-				Id = "Mend",
-				DisplayName = "Restaurar",
-				Cooldown = 16,
-				EnergyCost = 0,
-				CastTime = 0.6,
-				Effect = { Type = "Heal", Amount = 30 },
-				AwakenedEffect = { Type = "Heal", Amount = 50 },
-			},
-			{
-				Id = "Meteor",
-				DisplayName = "Meteoro",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 0.8,
-				Effect = { Type = "AreaDamage", Radius = 14, Damage = 45, Delay = 1.2, Offset = 16, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 2 } },
-			},
-		},
-	} :: CharacterDef,
-
+	-- =====================================================================================================
+	-- DIO — The World (VIP): tempo parado, facas, rolo compressor, vampiro
+	-- =====================================================================================================
 	Dio = {
 		Id = "Dio",
 		DisplayName = "Dio",
 		UnlockCost = 0,
-		Access = "vip", -- exclusivo do passe VIP (ou "Todos os personagens")
-		Tagline = "Desperta com o Stand no máximo · tanque",
+		Access = "vip",
+		Tagline = "The World · o tempo é dele",
 		Color = Color3.fromRGB(255, 205, 80),
 		Image = "",
 		Abilities = {
-			{
-				Id = "ShieldBash",
-				DisplayName = "Esmagar",
-				Cooldown = 8,
-				EnergyCost = 0,
-				CastTime = 0.4,
-				-- chokeslam: ergue no escudo 0,8 s e esmaga no chão; quem está perto do impacto toma área
-				Effect = { Type = "Grab", Finish = "Chokeslam", Lift = 5, Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.8, Damage = 14, Knockback = { Speed = 10, Duration = 0.15, Ragdoll = 1.5 }, SlamRadius = 8, SlamDamage = 10, SlamKnockback = { Speed = 35, Duration = 0.2 } },
-				-- desperto: ergue mais alto e o impacto no chão pega uma área bem maior
-				AwakenedEffect = { Type = "Grab", Finish = "Chokeslam", Lift = 7, Speed = 65, Duration = 0.25, Range = 7, Width = 8, Height = 7, Carry = 0.8, Damage = 20, Knockback = { Speed = 15, Duration = 0.2, Ragdoll = 2 }, SlamRadius = 13, SlamDamage = 16, SlamKnockback = { Speed = 50, Duration = 0.25, Ragdoll = 1.2 } },
-			},
-			{
-				Id = "Fortify",
-				DisplayName = "Fortificar",
-				Cooldown = 18,
-				EnergyCost = 0,
-				CastTime = 0.3,
-				Effect = { Type = "Shield", Multiplier = 0.4, Duration = 6 },
-				AwakenedEffect = { Type = "Shield", Multiplier = 0.2, Duration = 8 },
-			},
-			{
-				Id = "Quake",
-				DisplayName = "Terremoto",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 1.2,
-				Effect = { Type = "MultiHitArea", Radius = 16, Damage = 12, Hits = 3, Interval = 0.4, Knockback = { Speed = 35, Duration = 0.2 } },
-			},
+			{ Id = "MudaRush", DisplayName = "Rajada MUDA", Cooldown = 7, CastTime = 0.3,
+				Effect = { Type = "MultiHitArea", Radius = 6, Offset = 4, Damage = 4, Hits = 6, Interval = 0.12, Knockback = { Speed = 30, Duration = 0.2 } } },
+			{ Id = "Knives", DisplayName = "Facas", Cooldown = 7, CastTime = 0.3,
+				Effect = { Type = "Projectile", Count = 3, Spread = 12, Speed = 110, Range = 55, Radius = 2, Damage = 8, Knockback = { Speed = 15, Duration = 0.1 } } },
+			{ Id = "VampiricStrike", DisplayName = "Golpe Vampírico", Cooldown = 10, CastTime = 0.3,
+				Effect = { Type = "Dash", Speed = 65, Duration = 0.3, Damage = 16, Range = 7, Width = 6, Height = 6, HealPerHit = 12, Knockback = { Speed = 35, Duration = 0.2 } } },
+			{ Id = "RoyalKnee", DisplayName = "Joelhada Real", Cooldown = 9, CastTime = 0.4,
+				-- ergue 0,8 s e esmaga; quem está perto do impacto toma área
+				Effect = { Type = "Grab", Finish = "Chokeslam", Lift = 5, Speed = 55, Duration = 0.22, Range = 6, Width = 7, Height = 6, Carry = 0.8, Damage = 14, Knockback = { Speed = 10, Duration = 0.15, Ragdoll = 1.5 }, SlamRadius = 8, SlamDamage = 10, SlamKnockback = { Speed = 35, Duration = 0.2 } } },
+		},
+		Passive = { Id = "ColdBlood", DisplayName = "Sangue Frio", Cooldown = 22, CastTime = 0.3,
+			Effect = { Type = "Heal", Amount = 20, Then = { Type = "Shield", Multiplier = 0.6, Duration = 3 } } },
+		Ultimate = { Duration = 20 }, -- THE WORLD
+		AwakenedAbilities = {
+			{ Id = "MudaMudaMuda", DisplayName = "MUDA MUDA MUDA", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "MultiHitArea", Radius = 7, Offset = 4, Damage = 4, Hits = 12, Interval = 0.08, Knockback = { Speed = 50, Duration = 0.3, Ragdoll = 1.5 } } },
+			{ Id = "TimeStop", DisplayName = "Parada do Tempo", Cooldown = 15, CastTime = 0.6, OncePerAwakening = true,
+				-- 5 s: "ZA WARUDO" — todo mundo perto congela; o Dio segue normal
+				Effect = { Type = "TimeDome", Radius = 22, Duration = 5, SlowMultiplier = 0.02, SelfMultiplier = 1, BreakMultiplier = 1, NoBreak = true } },
+			{ Id = "KnifeRain", DisplayName = "Chuva de Facas", Cooldown = 8, CastTime = 0.3,
+				Effect = { Type = "Projectile", Count = 6, Spread = 24, Speed = 110, Range = 55, Radius = 2, Damage = 8, Knockback = { Speed = 20, Duration = 0.1 } } },
+			{ Id = "RoadRoller", DisplayName = "ROLO COMPRESSOR", Cooldown = 16, CastTime = 0.8,
+				Effect = { Type = "AreaDamage", Radius = 12, Offset = 10, Damage = 40, Delay = 0.9, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2.5 } } },
 		},
 	} :: CharacterDef,
 
-	-- Acesso antecipado: aparece bloqueado na lista; só devs (IsDeveloper) conseguem usar para testar.
+	-- =====================================================================================================
+	-- YOSHIKAGE KIRA — Killer Queen: bombas, marcar e detonar, Sheer Heart Attack, Bites the Dust
+	-- =====================================================================================================
+	Kira = {
+		Id = "Kira",
+		DisplayName = "Yoshikage Kira",
+		UnlockCost = 250,
+		Tagline = "Killer Queen · tudo que ele toca vira bomba",
+		Color = Color3.fromRGB(170, 110, 255),
+		Image = "",
+		Abilities = {
+			{ Id = "BombTouch", DisplayName = "Toque da Bomba", Cooldown = 8, CastTime = 0.3,
+				-- toque curto à frente marca; o próximo M1 no marcado explode (ou sozinho em 4 s)
+				Effect = { Type = "Mark", Radius = 4, Offset = 3, Damage = 8, ExplodeRadius = 6, ExplodeDamage = 16, AutoDelay = 4, ExplodeKnockback = { Speed = 40, Duration = 0.25, Ragdoll = 1.2 } } },
+			{ Id = "CoinBomb", DisplayName = "Moeda Bomba", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "Projectile", Speed = 60, Range = 45, Radius = 2, Damage = 18, AreaRadius = 6, AreaDamage = 12, Knockback = { Speed = 35, Duration = 0.2 } } },
+			{ Id = "SheerHeartAttack", DisplayName = "Sheer Heart Attack", Cooldown = 16, CastTime = 0.5,
+				Effect = { Type = "Homing", Duration = 6, Speed = 22, Radius = 7, Damage = 22, SeekRadius = 40, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } } },
+			{ Id = "ChainDetonation", DisplayName = "Detonação em Cadeia", Cooldown = 12, CastTime = 0.5,
+				Effect = { Type = "AreaDamage", Radius = 12, Damage = 20, Delay = 0.5, Knockback = { Speed = 40, Duration = 0.25 } } },
+		},
+		Passive = { Id = "CleanHands", DisplayName = "Mãos Limpas", Cooldown = 18, CastTime = 0.2,
+			-- fuga: pisca 12 para TRÁS (direção negativa) e cura um pouco
+			Effect = { Type = "Teleport", Distance = 12, Backward = true, Then = { Type = "Heal", Amount = 10 } } },
+		Ultimate = { Duration = 20 }, -- KILLER QUEEN
+		AwakenedAbilities = {
+			{ Id = "FirstBomb", DisplayName = "Primeira Bomba", Cooldown = 9, CastTime = 0.3,
+				-- marca todo mundo em volta; detona sozinha em 1,5 s
+				Effect = { Type = "Mark", Radius = 8, Damage = 6, ExplodeRadius = 7, ExplodeDamage = 26, AutoDelay = 1.5, ExplodeKnockback = { Speed = 50, Duration = 0.3, Ragdoll = 1.5 } } },
+			{ Id = "CoinRain", DisplayName = "Chuva de Moedas", Cooldown = 9, CastTime = 0.3,
+				Effect = { Type = "Projectile", Count = 4, Spread = 20, Speed = 60, Range = 45, Radius = 2, Damage = 12, AreaRadius = 5, AreaDamage = 8, Knockback = { Speed = 35, Duration = 0.2 } } },
+			{ Id = "SheerHeartAttackX2", DisplayName = "Sheer Heart Attack ×2", Cooldown = 16, CastTime = 0.5,
+				Effect = { Type = "Homing", Count = 2, Duration = 8, Speed = 24, Radius = 7, Damage = 22, SeekRadius = 45, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } } },
+			{ Id = "BitesTheDust", DisplayName = "BITES THE DUST", Cooldown = 20, CastTime = 0.4, OncePerAwakening = true,
+				-- marca o instante; 4 s depois volta com a vida/posição de antes e explode em volta
+				Effect = { Type = "Rewind", Delay = 4, Radius = 14, Damage = 38, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } } },
+		},
+	} :: CharacterDef,
+
+	-- =====================================================================================================
+	-- RICK → RICK PRIME: exclusivo do boss (Access "drop")
+	-- =====================================================================================================
+	Rick = {
+		Id = "Rick",
+		DisplayName = "Rick",
+		UnlockCost = 0,
+		Access = "drop",
+		Tagline = "Exclusivo do boss · desperta como Rick Prime",
+		Color = Color3.fromRGB(120, 220, 160),
+		Image = "",
+		Abilities = {
+			{ Id = "LaserPistol", DisplayName = "Pistola Laser", Cooldown = 4, CastTime = 0.2,
+				Effect = { Type = "Projectile", Speed = 140, Range = 70, Radius = 2, Damage = 12, Knockback = { Speed = 20, Duration = 0.1 } } },
+			{ Id = "Portal", DisplayName = "Portal", Cooldown = 8, CastTime = 0.2,
+				Effect = { Type = "Teleport", Distance = 22 } },
+			{ Id = "SentryDrone", DisplayName = "Drone Sentinela", Cooldown = 12, CastTime = 0.4,
+				Effect = { Type = "Homing", Duration = 5, Speed = 26, Radius = 5, Damage = 16, StunSeconds = 0.8, SeekRadius = 40, Knockback = { Speed = 20, Duration = 0.15 } } },
+			{ Id = "NeutrinoBomb", DisplayName = "Bomba de Neutrinos", Cooldown = 12, CastTime = 0.5,
+				Effect = { Type = "AreaDamage", Radius = 10, Offset = 12, Damage = 24, Delay = 0.8, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.2 } } },
+		},
+		Passive = { Id = "MedKit", DisplayName = "Kit Médico", Cooldown = 22, CastTime = 0.3,
+			Effect = { Type = "Heal", Amount = 25, Cleanse = true } },
+		Ultimate = { Duration = 18 }, -- RICK PRIME
+		AwakenedAbilities = {
+			{ Id = "PrimeLaser", DisplayName = "Laser Prime", Cooldown = 5, CastTime = 0.2,
+				Effect = { Type = "Projectile", Count = 3, Interval = 0.12, Speed = 140, Range = 70, Radius = 2, Damage = 12, Knockback = { Speed = 25, Duration = 0.1 } } },
+			{ Id = "DoublePortal", DisplayName = "Portal Duplo", Cooldown = 8, CastTime = 0.2,
+				Effect = { Type = "Teleport", Distance = 30, Then = { Type = "AreaDamage", Radius = 6, Damage = 14, Delay = 0.1, Knockback = { Speed = 30, Duration = 0.2 } }, ThenDelay = 0.05 } },
+			-- voa 7 s com a mão esticada (anim 71127142596119); pegou alguém, sobe e mergulha (PrimeDive_Carry)
+			{ Id = "PrimeDive", DisplayName = "Mergulho Prime", Cooldown = 25, CastTime = 0.4, OncePerAwakening = true,
+				Effect = { Type = "FlyGrab", FlySpeed = 55, Duration = 7, Range = 6, Width = 7, Height = 7, RiseTime = 1.4, RiseHeight = 22, DiveSpeed = 110, Damage = 45,
+					Knockback = { Speed = 30, Duration = 0.25, Ragdoll = 2.5 }, SlamRadius = 12, SlamDamage = 18, SlamKnockback = { Speed = 55, Duration = 0.25, Ragdoll = 1.2, Up = 20 } } },
+			{ Id = "OmegaDevice", DisplayName = "Omega Device", Cooldown = 18, CastTime = 0.7,
+				Effect = { Type = "AreaDamage", Radius = 20, Damage = 44, Delay = 1.2, Knockback = { Speed = 65, Duration = 0.35, Ragdoll = 3 } } },
+		},
+	} :: CharacterDef,
+
+	-- =====================================================================================================
+	-- SAHUR (acesso antecipado, fora da seleção — dono 2026-09-24): kit de ritmo, baixa prioridade
+	-- =====================================================================================================
 	Sahur = {
 		Id = "Sahur",
 		DisplayName = "Sahur",
@@ -278,32 +337,27 @@ CharacterDefs.Characters = {
 		Color = Color3.fromRGB(120, 255, 160),
 		Image = "",
 		Abilities = {
-			{
-				Id = "Bombo",
-				DisplayName = "Bombo",
-				Cooldown = 9,
-				EnergyCost = 0,
-				CastTime = 0.5,
-				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 15, Damage = 24, Delay = 0.25, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } },
-			},
-			{
-				Id = "Toque",
-				DisplayName = "Toque de Guerra",
-				Cooldown = 18,
-				EnergyCost = 0,
-				CastTime = 0.6,
-				Effect = { Type = "DamageBuff", Multiplier = 1.5, Duration = 6 },
-				AwakenedEffect = { Type = "DamageBuff", Multiplier = 1.8, Duration = 8 }, -- soma com o buff do Awakening
-			},
-			{
-				Id = "Ritmo",
-				DisplayName = "Ritmo Final",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 1.5,
-				Effect = { Type = "MultiHitArea", Radius = 12, Damage = 9, Hits = 6, Interval = 0.25, Knockback = { Speed = 30, Duration = 0.15 } },
-			},
+			{ Id = "Bombo", DisplayName = "Bombo", Cooldown = 9, CastTime = 0.5,
+				Effect = { Type = "AreaDamage", Radius = 10, Damage = 18, Delay = 0.35, Knockback = { Speed = 45, Duration = 0.25, Ragdoll = 1.5 } } },
+			{ Id = "Compasso", DisplayName = "Compasso", Cooldown = 8, CastTime = 0.3,
+				Effect = { Type = "Dash", Speed = 65, Duration = 0.3, Damage = 14, Range = 7, Width = 6, Height = 6, Knockback = { Speed = 35, Duration = 0.2 } } },
+			{ Id = "Baqueta", DisplayName = "Baqueta", Cooldown = 6, CastTime = 0.25,
+				Effect = { Type = "Projectile", Speed = 100, Range = 50, Radius = 2.5, Damage = 12, Knockback = { Speed = 20, Duration = 0.1 } } },
+			{ Id = "Ritmo", DisplayName = "Ritmo", Cooldown = 14, CastTime = 0.5,
+				Effect = { Type = "MultiHitArea", Radius = 10, Damage = 6, Hits = 4, Interval = 0.25, Knockback = { Speed = 25, Duration = 0.15 } } },
+		},
+		Passive = { Id = "Toque", DisplayName = "Toque de Guerra", Cooldown = 18, CastTime = 0.6,
+			Effect = { Type = "Buff", Damage = 1.5, Duration = 6 } },
+		Ultimate = { Duration = 20 }, -- RITMO FINAL
+		AwakenedAbilities = {
+			{ Id = "BomboFinal", DisplayName = "Bombo Final", Cooldown = 9, CastTime = 0.5,
+				Effect = { Type = "AreaDamage", Radius = 15, Damage = 24, Delay = 0.25, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } } },
+			{ Id = "CompassoFinal", DisplayName = "Compasso Final", Cooldown = 8, CastTime = 0.3,
+				Effect = { Type = "Dash", Speed = 80, Duration = 0.35, Damage = 22, Range = 8, Width = 7, Height = 7, Knockback = { Speed = 50, Duration = 0.25, Ragdoll = 1.5 } } },
+			{ Id = "BaquetaFinal", DisplayName = "Baquetas", Cooldown = 6, CastTime = 0.25,
+				Effect = { Type = "Projectile", Count = 3, Spread = 15, Speed = 100, Range = 50, Radius = 2.5, Damage = 12, Knockback = { Speed = 25, Duration = 0.1 } } },
+			{ Id = "RitmoFinal", DisplayName = "Ritmo Final", Cooldown = 16, CastTime = 1.5,
+				Effect = { Type = "MultiHitArea", Radius = 12, Damage = 9, Hits = 6, Interval = 0.25, Knockback = { Speed = 30, Duration = 0.15 } } },
 		},
 	} :: CharacterDef,
 
@@ -317,40 +371,30 @@ CharacterDefs.Characters = {
 		Color = Color3.fromRGB(255, 80, 200),
 		Image = "",
 		Abilities = {
-			{
-				Id = "Smite",
-				DisplayName = "Golpe Divino",
-				Cooldown = 1,
-				EnergyCost = 0,
-				CastTime = 0.1,
-				Effect = { Type = "AreaDamage", Radius = 20, Damage = 60, Delay = 0.1, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } },
-			},
-			{
-				Id = "Warp",
-				DisplayName = "Teleporte Longo",
-				Cooldown = 1,
-				EnergyCost = 0,
-				CastTime = 0.1,
-				Effect = { Type = "Teleport", Distance = 60 },
-			},
-			{
-				Id = "Clutch",
-				DisplayName = "Giro Devastador",
-				Cooldown = 2,
-				EnergyCost = 0,
-				CastTime = 0.2,
-				Effect = { Type = "Grab", Finish = "Spin", Spin = 1.25, Speed = 90, Duration = 0.4, Range = 10, Width = 10, Height = 8, Carry = 1.6, Damage = 30, Knockback = { Speed = 80, Duration = 0.35, Ragdoll = 2.5, Up = 15 }, SpinRadius = 9, SpinDamage = 6, SpinInterval = 0.3, SpinKnockback = { Speed = 30, Duration = 0.15 } },
-			},
-			{
-				Id = "Cataclysm",
-				DisplayName = "Cataclismo",
-				Cooldown = 5,
-				EnergyCost = 100,
-				CastTime = 0.5,
-				Effect = { Type = "MultiHitArea", Radius = 30, Damage = 25, Hits = 4, Interval = 0.3, Knockback = { Speed = 70, Duration = 0.3, Ragdoll = 2 } },
-			},
+			{ Id = "Smite", DisplayName = "Golpe Divino", Cooldown = 1, CastTime = 0.1,
+				Effect = { Type = "AreaDamage", Radius = 20, Damage = 60, Delay = 0.1, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 2 } } },
+			{ Id = "Warp", DisplayName = "Teleporte Longo", Cooldown = 1, CastTime = 0.1,
+				Effect = { Type = "Teleport", Distance = 60 } },
+			{ Id = "Clutch", DisplayName = "Giro Devastador", Cooldown = 2, CastTime = 0.2,
+				Effect = { Type = "Grab", Finish = "Spin", Spin = 1.25, Speed = 90, Duration = 0.4, Range = 10, Width = 10, Height = 8, Carry = 1.6, Damage = 30, Knockback = { Speed = 80, Duration = 0.35, Ragdoll = 2.5, Up = 15 }, SpinRadius = 9, SpinDamage = 6, SpinInterval = 0.3, SpinKnockback = { Speed = 30, Duration = 0.15 } } },
+			{ Id = "Cataclysm", DisplayName = "Cataclismo", Cooldown = 5, CastTime = 0.5,
+				Effect = { Type = "MultiHitArea", Radius = 30, Damage = 25, Hits = 4, Interval = 0.3, Knockback = { Speed = 70, Duration = 0.3, Ragdoll = 2 } } },
+		},
+		Passive = { Id = "FullHeal", DisplayName = "Cura Total", Cooldown = 2, CastTime = 0.1,
+			Effect = { Type = "Heal", Amount = 1000, Cleanse = true } },
+		Ultimate = { Duration = 30, DamageMultiplier = 2 },
+		AwakenedAbilities = {
+			{ Id = "SmiteMax", DisplayName = "Golpe Divino ×2", Cooldown = 1, CastTime = 0.1,
+				Effect = { Type = "AreaDamage", Radius = 30, Damage = 120, Delay = 0.1, Knockback = { Speed = 80, Duration = 0.3, Ragdoll = 2 } } },
+			{ Id = "WarpMax", DisplayName = "Teleporte Máximo", Cooldown = 1, CastTime = 0.1,
+				Effect = { Type = "Teleport", Distance = 120 } },
+			{ Id = "ClutchMax", DisplayName = "Giro Devastador ×2", Cooldown = 2, CastTime = 0.2,
+				Effect = { Type = "Grab", Finish = "Spin", Spin = 1.5, Speed = 90, Duration = 0.4, Range = 12, Width = 12, Height = 8, Carry = 2, Damage = 60, Knockback = { Speed = 100, Duration = 0.35, Ragdoll = 3, Up = 20 }, SpinRadius = 12, SpinDamage = 12, SpinInterval = 0.25, SpinKnockback = { Speed = 40, Duration = 0.15 } } },
+			{ Id = "CataclysmMax", DisplayName = "Cataclismo ×2", Cooldown = 5, CastTime = 0.5,
+				Effect = { Type = "MultiHitArea", Radius = 40, Damage = 50, Hits = 4, Interval = 0.3, Knockback = { Speed = 90, Duration = 0.3, Ragdoll = 2 } } },
 		},
 	} :: CharacterDef,
+
 	-- FORMA DE BOSS (ritual da flecha, BossFormService): não aparece na seleção (fora de Order, Access "form").
 	-- O jogador vira o Big C.H.O.P. (rig por peças, BossRigs) com muita vida; todo mundo caça ele.
 	BigChop = {
@@ -362,98 +406,38 @@ CharacterDefs.Characters = {
 		Color = Color3.fromRGB(196, 66, 108),
 		Image = "",
 		Abilities = {
-			{
-				Id = "Devour",
-				DisplayName = "Devorar",
-				Cooldown = 6,
-				EnergyCost = 0,
-				CastTime = 0.5,
-				-- investida pesada: quem está na frente é atropelado e cai; cada alvo devorado CURA o boss
-				-- ("não morre, só cresce" — é a única fonte de vida da forma)
-				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, HealPerHit = 60, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } },
-				AwakenedEffect = { Type = "Dash", Speed = 75, Duration = 0.55, Damage = 32, Range = 12, Width = 14, Height = 11, HealPerHit = 90, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 2 } },
-			},
-			{
-				Id = "Crush",
-				DisplayName = "Esmagar",
-				Cooldown = 9,
-				EnergyCost = 0,
-				CastTime = 0.7,
-				-- empina e desaba: quem sobreviver ainda fica tonto (stun) para o Devorar emendar
-				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.55, StunSeconds = 0.6, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 22, Damage = 40, Delay = 0.45, StunSeconds = 0.8, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 } },
-			},
-			{
-				Id = "FleshWave",
-				DisplayName = "Onda de Carne",
-				Cooldown = 12,
-				EnergyCost = 0,
-				CastTime = 0.8,
-				-- anel de choque: expulsa quem fica colado batendo (defensivo: dano baixo, empurrão enorme)
-				Effect = { Type = "AreaDamage", Radius = 22, Damage = 22, Delay = 0.7, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2 } },
-				AwakenedEffect = { Type = "AreaDamage", Radius = 30, Damage = 30, Delay = 0.6, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.5 } },
-			},
-			{
-				Id = "Frenzy",
-				DisplayName = "Frenesi",
-				Cooldown = 30,
-				EnergyCost = 100,
-				CastTime = 0.6,
-				-- ultimate: mordidas em sequência em volta (8 × 8 = 64 num alvo parado; o boss trava no lugar 1,8 s)
-				Effect = { Type = "MultiHitArea", Radius = 14, Damage = 8, Hits = 8, Interval = 0.22, Knockback = { Speed = 12, Duration = 0.1 } },
-			},
+			-- investida pesada: cada alvo devorado CURA o boss ("não morre, só cresce")
+			{ Id = "Devour", DisplayName = "Devorar", Cooldown = 6, CastTime = 0.5,
+				Effect = { Type = "Dash", Speed = 62, Duration = 0.45, Damage = 24, Range = 10, Width = 12, Height = 10, HealPerHit = 60, Knockback = { Speed = 55, Duration = 0.3, Ragdoll = 1.6 } } },
+			-- empina e desaba: quem sobreviver fica tonto para o Devorar emendar
+			{ Id = "Crush", DisplayName = "Esmagar", Cooldown = 9, CastTime = 0.7,
+				Effect = { Type = "AreaDamage", Radius = 16, Damage = 30, Delay = 0.55, StunSeconds = 0.6, Knockback = { Speed = 60, Duration = 0.3, Ragdoll = 1.8 } } },
+			-- anel de choque: expulsa quem fica colado (dano baixo, empurrão enorme)
+			{ Id = "FleshWave", DisplayName = "Onda de Carne", Cooldown = 12, CastTime = 0.8,
+				Effect = { Type = "AreaDamage", Radius = 22, Damage = 22, Delay = 0.7, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2 } } },
+			-- mordidas em sequência em volta (8 × 8 = 64 num alvo parado)
+			{ Id = "Frenzy", DisplayName = "Frenesi", Cooldown = 20, CastTime = 0.6,
+				Effect = { Type = "MultiHitArea", Radius = 14, Damage = 8, Hits = 8, Interval = 0.22, Knockback = { Speed = 12, Duration = 0.1 } } },
+		},
+		Passive = { Id = "Regrow", DisplayName = "Regenerar", Cooldown = 25, CastTime = 0.5,
+			Effect = { Type = "Heal", Amount = 150 } },
+		Ultimate = { Duration = 20 }, -- FRENESI
+		AwakenedAbilities = {
+			{ Id = "DevourMax", DisplayName = "Devorar Tudo", Cooldown = 6, CastTime = 0.5,
+				Effect = { Type = "Dash", Speed = 75, Duration = 0.55, Damage = 32, Range = 12, Width = 14, Height = 11, HealPerHit = 90, Knockback = { Speed = 70, Duration = 0.35, Ragdoll = 2 } } },
+			{ Id = "CrushMax", DisplayName = "Esmagar Tudo", Cooldown = 9, CastTime = 0.7,
+				Effect = { Type = "AreaDamage", Radius = 22, Damage = 40, Delay = 0.45, StunSeconds = 0.8, Knockback = { Speed = 75, Duration = 0.35, Ragdoll = 2.2 } } },
+			{ Id = "FleshWaveMax", DisplayName = "Maré de Carne", Cooldown = 12, CastTime = 0.8,
+				Effect = { Type = "AreaDamage", Radius = 30, Damage = 30, Delay = 0.6, Knockback = { Speed = 95, Duration = 0.4, Ragdoll = 2.5 } } },
+			{ Id = "FrenzyMax", DisplayName = "Frenesi Total", Cooldown = 20, CastTime = 0.6,
+				Effect = { Type = "MultiHitArea", Radius = 18, Damage = 10, Hits = 10, Interval = 0.2, Knockback = { Speed = 15, Duration = 0.1 } } },
 		},
 	} :: CharacterDef,
 }
 
--- ---------------------------------------------------------------------------
--- ROSTER DECIDIDO PELO DONO (2026-09-20). Nome da esquerda = forma normal; direita (depois do "-") = forma
--- da ULT (o Despertar vira ele): Bruno Gollini - poder máx. (= o "Swift": id interno mantido, cúpula do
--- tempo reaproveitada) | Jotaro - Stand máx. | Dio - Stand máx. | Rick - Rick Prime | Yoshikage Kira - Stand
--- máx. Cada um ainda vai ganhar ataques/ult/efeitos próprios. 2026-09-21: os antigos Brawler/Mystic/Guardian
--- SAÍRAM e Jotaro/Kira/Dio ficaram com os kits deles (blocos acima); Jotaro é o inicial de todo mundo. O Rick já
--- tem a ult de verdade (PrimeDive) e pega o resto do kit do Kira (provisório).
--- ---------------------------------------------------------------------------
-local function borrowed(fromId: string, keepUlt: boolean): { AbilityDef }
-	local list = {}
-	for _, a in CharacterDefs.Characters[fromId].Abilities do
-		if keepUlt or a.EnergyCost < CharacterDefs.Energy.Max then
-			table.insert(list, a)
-		end
-	end
-	return list
-end
-
--- RICK (normal) -> RICK PRIME (ult). Exclusivo: só cai do loot do boss (Access "drop").
--- Ult = tecla 1 com o modo desperto: voa 7 s com a mão esticada (anim 71127142596119); pegou alguém, sobe e
--- mergulha esmagando no chão (anim 110066675368334, PrimeDive_Carry). RiseTime/DiveSpeed casam com a animação.
-local rickAbilities: { AbilityDef } = {
-	{
-		Id = "PrimeDive",
-		DisplayName = "Mergulho Prime",
-		Cooldown = 25,
-		EnergyCost = 100,
-		CastTime = 0.4,
-		Effect = { Type = "FlyGrab", FlySpeed = 55, Duration = 7, Range = 6, Width = 7, Height = 7, RiseTime = 1.4, RiseHeight = 22, DiveSpeed = 110, Damage = 45,
-			Knockback = { Speed = 30, Duration = 0.25, Ragdoll = 2.5 }, SlamRadius = 12, SlamDamage = 18, SlamKnockback = { Speed = 55, Duration = 0.25, Ragdoll = 1.2, Up = 20 } },
-		OncePerAwakening = true,
-	},
-}
-for _, a in borrowed("Kira", false) do
-	table.insert(rickAbilities, a) -- PROVISÓRIO: 2/3/4 do Kira até o kit próprio
-end
-CharacterDefs.Characters.Rick = {
-	Id = "Rick",
-	DisplayName = "Rick",
-	UnlockCost = 0,
-	Access = "drop",
-	Tagline = "Exclusivo do boss · desperta como Rick Prime",
-	Color = Color3.fromRGB(120, 220, 160),
-	Image = "",
-	Abilities = rickAbilities,
-} :: CharacterDef
-
-CharacterDefs.Order = { "Jotaro", "Swift", "Dio", "Kira", "Rick", "Sahur", "Overlord" }
+-- Roster na seleção (dono, 2026-09-24): Sahur sai da lista (fica só como acesso antecipado no código);
+-- Overlord continua só admin.
+CharacterDefs.Order = { "Jotaro", "Swift", "Dio", "Kira", "Rick", "Overlord" }
 
 --- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string
@@ -470,22 +454,81 @@ function CharacterDefs.GetDashOverride(characterId: string): AbilityDef?
 	return def and def.DashOverride
 end
 
-function CharacterDefs.GetAbility(characterId: string, slot: number): AbilityDef?
+CharacterDefs.PASSIVE_SLOT = 5 -- tecla R (RequestAbility com slot 5)
+
+--- Habilidade do slot: 1..4 = ataques (despertos se `awakened`), 5 = passiva (R).
+function CharacterDefs.GetAbility(characterId: string, slot: number, awakened: boolean?): AbilityDef?
 	local def = CharacterDefs.Characters[characterId]
 	if not def then
 		return nil
 	end
+	if slot == CharacterDefs.PASSIVE_SLOT then
+		return def.Passive
+	end
+	if awakened then
+		return def.AwakenedAbilities[slot] or def.Abilities[slot]
+	end
 	return def.Abilities[slot]
 end
 
---- Habilidade pelo Id (ex.: "TimeDome") dentro de um personagem.
+--- Kit ativo (4 ataques) conforme o estado.
+function CharacterDefs.ActiveAbilities(def: CharacterDef, awakened: boolean?): { AbilityDef }
+	return if awakened and #def.AwakenedAbilities > 0 then def.AwakenedAbilities else def.Abilities
+end
+
+--- Habilidade pelo Id em qualquer lista do personagem (ataques, despertos, R, Piscar).
 function CharacterDefs.FindAbility(def: CharacterDef, abilityId: string): AbilityDef?
 	for _, ability in def.Abilities do
 		if ability.Id == abilityId then
 			return ability
 		end
 	end
+	for _, ability in def.AwakenedAbilities do
+		if ability.Id == abilityId then
+			return ability
+		end
+	end
+	if def.Passive and def.Passive.Id == abilityId then
+		return def.Passive
+	end
+	if def.DashOverride and def.DashOverride.Id == abilityId then
+		return def.DashOverride
+	end
+	if abilityId == CharacterDefs.ULTIMATE_ABILITY_ID then
+		return CharacterDefs.UltimateAbility(def.Id)
+	end
+	-- efeito encadeado (<Id>_Then): devolve a habilidade-mãe com o Effect do Then
+	local baseId = abilityId:match("^(.-)_Then$")
+	if baseId then
+		local base = CharacterDefs.FindAbility(def, baseId)
+		local nextEffect = base and base.Effect.Then
+		if base and typeof(nextEffect) == "table" then
+			local chained = table.clone(base)
+			chained.Id = abilityId
+			chained.Effect = nextEffect
+			return chained
+		end
+	end
 	return nil
+end
+
+CharacterDefs.ULTIMATE_ABILITY_ID = "Ultimate" -- Id do efeito automático da ult (animação/VFX <Char>/Ultimate)
+
+--- Ultimate.Effect embrulhado como AbilityDef (servidor executa; cliente acha por FindAbility).
+function CharacterDefs.UltimateAbility(characterId: string): AbilityDef?
+	local def = CharacterDefs.Characters[characterId]
+	local effect = def and def.Ultimate and def.Ultimate.Effect
+	if not effect then
+		return nil
+	end
+	return { Id = CharacterDefs.ULTIMATE_ABILITY_ID, DisplayName = def.DisplayName, Cooldown = 0, CastTime = 0, Effect = effect }
+end
+
+--- Duração da forma desperta (Ultimate.Duration, senão CombatConfig.Awakening.Duration — quem chama passa o padrão).
+function CharacterDefs.UltimateDuration(characterId: string, default: number): number
+	local def = CharacterDefs.Characters[characterId]
+	local d = def and def.Ultimate and def.Ultimate.Duration
+	return if typeof(d) == "number" and d > 0 then d else default
 end
 
 return CharacterDefs

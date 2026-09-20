@@ -1,14 +1,15 @@
 --!strict
 --[[
 	AbilityService (servidor)
-	Autoridade sobre personagem escolhido, carga da ult, cooldowns e efeito de cada
-	habilidade (slots 1..4 = teclas 1/2/3/4; G = ultimate). O dash universal (Q) é do MovementService.
-	O cliente só envia RequestAbility(slot, direção) e RequestSelectCharacter(id).
+	Autoridade sobre personagem escolhido, carga da ult, cooldowns e efeito de cada habilidade.
+	Slots (RequestAbility(slot, direção)): 1..4 = ataques (CharacterDef.Abilities; enquanto DESPERTO, os
+	AwakenedAbilities no lugar), 5 = R (CharacterDef.Passive, suporte). O dash universal (Q) é do MovementService.
 
-	Ultimate (G, CombatConfig.Awakening): com a carga cheia, RequestAwaken zera a carga, liga o modo
-	Awakening por Duration s (+dano, +velocidade, aura por NotifyAbility "Awakening") e dispara na hora a
-	ultimate do personagem (a Ability com EnergyCost = Max, sempre a última da lista). Slots 1..4 = só
-	habilidades normais.
+	Ultimate (G = RequestAwaken, redesign B 2026-09-24): com a carga cheia, zera a carga, roda a cutscene de
+	transformação (CombatConfig.Awakening.Cutscene) e liga a forma desperta por CharacterDef.Ultimate.Duration s
+	(+dano/+velocidade por personagem; o kit desperto entra PRONTO — cooldown por Id). Ultimate.Effect, se
+	houver, dispara sozinho no fim da cutscene (Bruno: cúpula do tempo). Ao acabar, os 4 normais voltam com o
+	cooldown que tinham. Qualquer Effect pode ter `Then` (segundo efeito encadeado após ThenDelay).
 
 	Replicação de estado (para HUD): atributos no Player
 	  "CharacterId" (string), "Energy" (number), "AwakenedUntil" (number, GetServerTimeNow; 0 = fora)
@@ -48,8 +49,10 @@ type PlayerState = {
 	damageMultiplierUntil: number,
 	incomingMultiplier: number,
 	incomingMultiplierUntil: number,
+	speedMultiplier: number, -- Buff.Speed
+	speedMultiplierUntil: number,
 	awakenedUntil: number, -- os.clock()
-	ultUsedAwakenedUntil: number, -- despertar em que a ult OncePerAwakening já saiu
+	onceUsed: { [string]: number }, -- abilityId -> awakenedUntil em que a habilidade OncePerAwakening já saiu
 }
 
 type Fighter = Combatant.Fighter
@@ -87,8 +90,10 @@ local function newState(characterId: string?): PlayerState
 		damageMultiplierUntil = 0,
 		incomingMultiplier = 1,
 		incomingMultiplierUntil = 0,
+		speedMultiplier = 1,
+		speedMultiplierUntil = 0,
 		awakenedUntil = 0,
-		ultUsedAwakenedUntil = -1,
+		onceUsed = {},
 	}
 end
 
@@ -119,11 +124,16 @@ local function setEnergy(player: Fighter, value: number)
 	player:SetAttribute("Energy", state.energy)
 end
 
---- Chamado por CombatService quando um acerto causou dano.
-function AbilityService.OnHitDealt(attacker: Fighter, victim: Fighter?)
+local detonateMark: (victimModel: Model, byAttacker: Fighter?) -> () -- Mark (Kira): definido junto do handler
+
+--- Chamado por CombatService quando um acerto causou dano. `victimModel`/`isM1` servem para o Mark (Kira).
+function AbilityService.OnHitDealt(attacker: Fighter, victim: Fighter?, victimModel: Model?, isM1: boolean?)
 	setEnergy(attacker, getState(attacker).energy + CharacterDefs.Energy.GainOnHitDealt)
 	if victim then
 		setEnergy(victim, getState(victim).energy + CharacterDefs.Energy.GainOnHitTaken)
+	end
+	if isM1 and victimModel then
+		detonateMark(victimModel, attacker)
 	end
 end
 
@@ -149,14 +159,26 @@ function AbilityService.GetDamageMultiplier(player: Fighter): number
 	end
 	local mult = if os.clock() > state.damageMultiplierUntil then 1 else state.damageMultiplier
 	if os.clock() < state.awakenedUntil then
-		mult *= CombatConfig.Awakening.DamageMultiplier
+		local def = CharacterDefs.Get(state.characterId)
+		local ultMult = def and def.Ultimate and def.Ultimate.DamageMultiplier
+		mult *= if typeof(ultMult) == "number" then ultMult else CombatConfig.Awakening.DamageMultiplier
 	end
 	return mult
 end
 
---- Multiplicador de WalkSpeed (Awakening). CombatService.RestoreWalkSpeed aplica.
+--- Multiplicador de WalkSpeed (forma desperta por personagem × Buff.Speed). CombatService.RestoreWalkSpeed aplica.
 function AbilityService.GetSpeedMultiplier(player: Fighter): number
-	return if AbilityService.IsAwakened(player) then CombatConfig.Awakening.SpeedMultiplier else 1
+	local state = states[player]
+	if not state then
+		return 1
+	end
+	local mult = if os.clock() > state.speedMultiplierUntil then 1 else state.speedMultiplier
+	if os.clock() < state.awakenedUntil then
+		local def = CharacterDefs.Get(state.characterId)
+		local ultMult = def and def.Ultimate and def.Ultimate.SpeedMultiplier
+		mult *= if typeof(ultMult) == "number" then ultMult else CombatConfig.Awakening.SpeedMultiplier
+	end
+	return mult
 end
 
 --- Multiplicador de dano RECEBIDO (escudo). 1 = normal.
@@ -211,6 +233,7 @@ end
 
 -- direction = horizontal unitária pedida pelo cliente (WASD), já validada; frente do HRP se não veio
 local effects: { [string]: (Fighter, Model, CharacterDefs.AbilityDef, Vector3) -> () } = {}
+local runEffect: (player: Fighter, character: Model, ability: CharacterDefs.AbilityDef, direction: Vector3) -> ()
 
 local function facing(character: Model): Vector3
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
@@ -669,8 +692,9 @@ end
 
 effects.Teleport = function(player, character, ability, direction)
 	local e = ability.Effect
-	-- teleporte real (atravessa obstáculos, encaixa no chão) — mesmo do Q do Swift
-	if not MovementService.Teleport(player, character, direction, e.Distance) then
+	-- teleporte real (atravessa obstáculos, encaixa no chão) — mesmo do Q do Swift; Backward = fuga
+	local dir = if e.Backward == true then -facing(character) else direction
+	if not MovementService.Teleport(player, character, dir, e.Distance) then
 		return
 	end
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Teleported = true })
@@ -709,6 +733,12 @@ end
 effects.Heal = function(player, character, ability)
 	local e = ability.Effect
 	local healed = HealthService.Heal(character, e.Amount)
+	if e.Cleanse == true then
+		CombatService.ClearStun(player)
+		if RagdollService.IsRagdolled(player) then
+			RagdollService.Recover(player, 0.3)
+		end
+	end
 	notifyAbility:FireAllClients(character, getState(player).characterId, ability.Id, "start", { Healed = healed })
 end
 
@@ -727,14 +757,13 @@ local function projectileFolder(): Folder
 	return folder
 end
 
-effects.Projectile = function(player, character, ability)
+local function fireProjectile(player: Fighter, character: Model, ability: CharacterDefs.AbilityDef, direction: Vector3)
 	local e = ability.Effect
 	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	if not root then
 		return
 	end
 	local characterId = getState(player).characterId
-	local direction = root.CFrame.LookVector
 	local origin = root.Position + direction * 3 + Vector3.new(0, 0.5, 0)
 
 	local bolt = Instance.new("Part")
@@ -771,6 +800,15 @@ effects.Projectile = function(player, character, ability)
 			if victim and stillValid(player, character) then
 				CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback)
 			end
+			-- AreaRadius: explode em área ao acertar (Moeda Bomba): o alvo direto já tomou Damage, os outros AreaDamage
+			local areaRadius = tonumber(e.AreaRadius)
+			if areaRadius and areaRadius > 0 and stillValid(player, character) then
+				for _, other in Hitbox.AroundPoint(character, hitPosition, areaRadius, MAX_AREA_TARGETS) do
+					if other ~= victim then
+						CombatService.ResolveHit(player, character, other, tonumber(e.AreaDamage) or e.Damage, false, e.Knockback)
+					end
+				end
+			end
 			notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Position = hitPosition })
 		end
 		while travelled < e.Range do
@@ -798,6 +836,32 @@ effects.Projectile = function(player, character, ability)
 			bolt.CFrame = CFrame.new(position, position + direction)
 		end
 		finish(position, nil)
+	end)
+end
+
+--- Projectile: Count > 1 = leque (Spread graus totais) ou rajada (Interval s entre cada)
+effects.Projectile = function(player, character, ability)
+	local e = ability.Effect
+	local count = math.clamp(math.floor(tonumber(e.Count) or 1), 1, 8)
+	local base = facing(character)
+	if count == 1 then
+		fireProjectile(player, character, ability, base)
+		return
+	end
+	local spread = tonumber(e.Spread) or 0
+	local interval = tonumber(e.Interval) or 0
+	task.spawn(function()
+		for i = 1, count do
+			if not stillValid(player, character) then
+				return
+			end
+			local angle = if spread > 0 then math.rad(-spread / 2 + spread * (i - 1) / (count - 1)) else 0
+			local dir = (CFrame.fromAxisAngle(Vector3.yAxis, angle) * base)
+			fireProjectile(player, character, ability, dir)
+			if interval > 0 then
+				task.wait(interval)
+			end
+		end
 	end)
 end
 
@@ -831,6 +895,7 @@ effects.TimeDome = function(player, character, ability)
 	local slowMult = tonumber(e.SlowMultiplier) or 0.25
 	local selfMult = tonumber(e.SelfMultiplier) or 1.25
 	local breakMult = tonumber(e.BreakMultiplier) or 2.2
+	local noBreak = e.NoBreak == true -- Parada do Tempo: o lançador pode sair sem quebrar a cúpula
 	local characterId = getState(player).characterId
 	local endsAt = os.clock() + duration
 	local slowed: { [Instance]: boolean } = {}
@@ -851,8 +916,8 @@ effects.TimeDome = function(player, character, ability)
 			local myRoot = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local inside = myRoot ~= nil and (myRoot.Position - center).Magnitude <= radius
 			if not broken then
-				if inside then
-					setSlow(player, selfMult)
+				if inside or noBreak then
+					setSlow(player, if selfMult ~= 1 then selfMult else nil)
 				else
 					-- saiu: a cúpula quebra, todo mundo é liberado, o Swift fica MUITO rápido até o fim
 					broken = true
@@ -896,17 +961,269 @@ effects.TimeDome = function(player, character, ability)
 	end)
 end
 
-effects.DamageBuff = function(player, character, ability)
+--- Buff { Damage?, Speed?, Duration, DashCooldownMult? } (DamageBuff { Multiplier, Duration } = alias antigo)
+effects.Buff = function(player, character, ability)
 	local e = ability.Effect
 	local state = getState(player)
-	state.damageMultiplier = e.Multiplier
-	state.damageMultiplierUntil = os.clock() + e.Duration
-	notifyAbility:FireAllClients(character, state.characterId, ability.Id, "start", { Duration = e.Duration })
+	local duration = tonumber(e.Duration) or 5
+	local dmg = tonumber(e.Damage) or tonumber(e.Multiplier)
+	if dmg then
+		state.damageMultiplier = dmg
+		state.damageMultiplierUntil = os.clock() + duration
+	end
+	local spd = tonumber(e.Speed)
+	if spd then
+		state.speedMultiplier = spd
+		state.speedMultiplierUntil = os.clock() + duration
+		CombatService.RestoreWalkSpeed(player)
+		task.delay(duration + 0.05, function()
+			if states[player] == state then
+				CombatService.RestoreWalkSpeed(player)
+			end
+		end)
+	end
+	local dashMult = tonumber(e.DashCooldownMult)
+	if dashMult then
+		player:SetAttribute("DashCooldownMult", dashMult) -- MovementService lê ao cobrar o cooldown do Q
+		task.delay(duration, function()
+			if states[player] == state and player:GetAttribute("DashCooldownMult") == dashMult then
+				player:SetAttribute("DashCooldownMult", nil)
+			end
+		end)
+	end
+	notifyAbility:FireAllClients(character, state.characterId, ability.Id, "start", { Duration = duration })
+end
+effects.DamageBuff = effects.Buff
+
+-- MARK (Kira): toca quem está na área e marca; o próximo M1 do lançador no marcado (ou AutoDelay s) explode
+-- ExplodeRadius em volta da vítima. Uma marca por vítima (a mais nova vence).
+type Mark = { by: Fighter, character: Model, effect: CharacterDefs.Effect, abilityId: string, expiresAt: number }
+local marks: { [Model]: Mark } = {}
+local function explodeMark(victim: Model, mark: Mark)
+	marks[victim] = nil
+	victim:SetAttribute("Marked", nil)
+	if not stillValid(mark.by, mark.character) then
+		return
+	end
+	local root = victim:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local center = if root then root.Position else nil
+	local e = mark.effect
+	local knock = e.ExplodeKnockback
+	-- a vítima marcada leva o dano cheio; quem está em volta também
+	CombatService.ResolveHit(mark.by, mark.character, victim, e.ExplodeDamage, false, knock)
+	if center then
+		for _, other in Hitbox.AroundPoint(mark.character, center, e.ExplodeRadius, MAX_AREA_TARGETS) do
+			if other ~= victim then
+				CombatService.ResolveHit(mark.by, mark.character, other, e.ExplodeDamage, false, knock)
+			end
+		end
+	end
+	notifyAbility:FireAllClients(mark.character, getState(mark.by).characterId, mark.abilityId, "hit", { Position = center, Victim = victim })
+end
+detonateMark = function(victim: Model, by: Fighter?)
+	local mark = marks[victim]
+	if mark and (by == nil or by == mark.by) and os.clock() < mark.expiresAt then
+		explodeMark(victim, mark)
+	end
+end
+effects.Mark = function(player, character, ability)
+	local e = ability.Effect
+	local characterId = getState(player).characterId
+	local center = if typeof(e.Offset) == "number" then areaCenter(character, e) else nil
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Position = center })
+	local victims: { Model }
+	if center then
+		victims = Hitbox.AroundPoint(character, center, e.Radius, MAX_AREA_TARGETS)
+	else
+		victims = Hitbox.Around(character, e.Radius, MAX_AREA_TARGETS)
+	end
+	local autoDelay = tonumber(e.AutoDelay) or 4
+	for _, victim in victims do
+		local kind = CombatService.ResolveHit(player, character, victim, tonumber(e.Damage) or 0, false)
+		if kind == "immune" or kind == "parry" then
+			continue
+		end
+		local mark: Mark = { by = player, character = character, effect = e, abilityId = ability.Id, expiresAt = os.clock() + autoDelay }
+		marks[victim] = mark
+		victim:SetAttribute("Marked", true) -- o cliente mostra a marca (VFX <Char>/<Ability>_Mark)
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "mark", { Victim = victim, Duration = autoDelay })
+		task.delay(autoDelay, function()
+			if marks[victim] == mark then
+				explodeMark(victim, mark)
+			end
+		end)
+	end
+end
+
+-- HOMING (Sheer Heart Attack / drone): bomba no chão que persegue o lutador mais perto por Duration s e explode
+-- (Radius) ao encostar. Servidor simula a peça (anchored, Heartbeat). Count > 1 = várias, com um atraso entre elas.
+local function launchHoming(player: Fighter, character: Model, ability: CharacterDefs.AbilityDef, index: number)
+	local e = ability.Effect
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not root then
+		return
+	end
+	local characterId = getState(player).characterId
+	local speed = tonumber(e.Speed) or 22
+	local radius = tonumber(e.Radius) or 6
+	local seek = tonumber(e.SeekRadius) or 40
+	local duration = tonumber(e.Duration) or 6
+	local side = if index % 2 == 0 then 2 else -2
+	local position = root.Position + root.CFrame.LookVector * 3 + root.CFrame.RightVector * side * (math.ceil(index / 2) - (if index == 1 then 1 else 0)) - Vector3.new(0, 2, 0)
+	local part = Instance.new("Part")
+	part.Name = ability.Id
+	part.Size = Vector3.new(2, 1.5, 2.5)
+	part.Material = Enum.Material.Metal
+	part.Color = Color3.fromRGB(60, 60, 70)
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanQuery = false
+	part.CanTouch = false
+	part.CFrame = CFrame.new(position, position + root.CFrame.LookVector)
+	local folder = projectileFolder()
+	part.Parent = folder
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	rayParams.FilterDescendantsInstances = { character, folder }
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Position = position, Part = part })
+	task.spawn(function()
+		local endsAt = os.clock() + duration
+		local target: Model? = nil
+		local heading = root.CFrame.LookVector
+		while os.clock() < endsAt do
+			local dt = task.wait()
+			if not stillValid(player, character) or not part.Parent then
+				break
+			end
+			-- alvo: o lutador vivo mais perto (jogador, bot, boneco ou boss) até SeekRadius
+			if not target or not target.Parent or not HealthService.IsAlive(target) then
+				target = nil
+				local best = seek
+				for _, m in Hitbox.AroundPoint(character, position, seek, 12) do
+					local r = m:FindFirstChild("HumanoidRootPart") :: BasePart?
+					local d = if r then (r.Position - position).Magnitude else math.huge
+					if d < best then
+						best, target = d, m
+					end
+				end
+			end
+			local tRoot = target and target:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if tRoot then
+				local to = tRoot.Position - position
+				local flat = Vector3.new(to.X, 0, to.Z)
+				if flat.Magnitude > 0.1 then
+					heading = heading:Lerp(flat.Unit, math.min(1, dt * 6)).Unit
+				end
+				if to.Magnitude <= radius * 0.6 then
+					break -- encostou: explode
+				end
+			end
+			position += heading * speed * dt
+			-- cola no chão
+			local ground = Workspace:Raycast(position + Vector3.new(0, 4, 0), Vector3.new(0, -12, 0), rayParams)
+			if ground then
+				position = Vector3.new(position.X, ground.Position.Y + 0.9, position.Z)
+			end
+			part.CFrame = CFrame.new(position, position + heading)
+		end
+		part:Destroy()
+		if stillValid(player, character) then
+			for _, victim in Hitbox.AroundPoint(character, position, radius, MAX_AREA_TARGETS) do
+				local kind = CombatService.ResolveHit(player, character, victim, e.Damage, false, e.Knockback)
+				local stun = tonumber(e.StunSeconds)
+				local vf = Combatant.Of(victim)
+				if stun and vf and kind ~= "immune" then
+					CombatService.Stun(vf, stun, "stunned")
+				end
+			end
+		end
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Position = position })
+	end)
+end
+effects.Homing = function(player, character, ability)
+	local count = math.clamp(math.floor(tonumber(ability.Effect.Count) or 1), 1, 4)
+	task.spawn(function()
+		for i = 1, count do
+			launchHoming(player, character, ability, i)
+			if i < count then
+				task.wait(0.35)
+			end
+		end
+	end)
+end
+
+-- REWIND (Bites the Dust): guarda vida e posição; Delay s depois volta para lá (vida nunca desce) e, se houver
+-- Radius/Damage, explode em volta ao voltar.
+effects.Rewind = function(player, character, ability)
+	local e = ability.Effect
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if not root or not humanoid then
+		return
+	end
+	local characterId = getState(player).characterId
+	local savedHealth = humanoid.Health
+	local savedCFrame = root.CFrame
+	local delay = tonumber(e.Delay) or 4
+	notifyAbility:FireAllClients(character, characterId, ability.Id, "start", { Position = root.Position, Duration = delay })
+	task.delay(delay, function()
+		if not stillValid(player, character) then
+			return
+		end
+		local r = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+		local h = character:FindFirstChildOfClass("Humanoid")
+		if not r or not h then
+			return
+		end
+		grace(player, 2)
+		if RagdollService.IsRagdolled(player) then
+			RagdollService.Recover(player, 0.3)
+		end
+		CombatService.ClearStun(player)
+		r.AssemblyLinearVelocity = Vector3.zero
+		character:PivotTo(savedCFrame)
+		if h.Health < savedHealth then
+			HealthService.Heal(character, savedHealth - h.Health)
+		end
+		RagdollService.GrantIFrames(character, 0.5)
+		local radius = tonumber(e.Radius)
+		if radius and radius > 0 then
+			for _, victim in Hitbox.AroundPoint(character, savedCFrame.Position, radius, MAX_AREA_TARGETS) do
+				CombatService.ResolveHit(player, character, victim, tonumber(e.Damage) or 0, false, e.Knockback)
+			end
+		end
+		notifyAbility:FireAllClients(character, characterId, ability.Id, "hit", { Position = savedCFrame.Position, Teleported = true })
+	end)
 end
 
 -- ---------------------------------------------------------------------------
 -- Requests
 -- ---------------------------------------------------------------------------
+
+--- Executa o efeito da habilidade e, se houver, o `Then` encadeado (Id <abilityId>_Then para animação/VFX próprios).
+function runEffect(player: Fighter, character: Model, ability: CharacterDefs.AbilityDef, direction: Vector3)
+	local handler = effects[ability.Effect.Type]
+	if not handler then
+		warn(("[AbilityService] efeito '%s' sem handler (habilidade %s)"):format(tostring(ability.Effect.Type), ability.Id))
+		return
+	end
+	local ok, err = pcall(handler :: any, player, character, ability, direction)
+	if not ok then
+		warn(("[AbilityService] erro em %s: %s"):format(ability.Id, tostring(err)))
+	end
+	local nextEffect = ability.Effect.Then
+	if typeof(nextEffect) == "table" and typeof(nextEffect.Type) == "string" then
+		local chained: CharacterDefs.AbilityDef = table.clone(ability)
+		chained.Id = ability.Id .. "_Then"
+		chained.Effect = nextEffect
+		local delay = tonumber(ability.Effect.ThenDelay) or 0
+		task.delay(delay, function()
+			if stillValid(player, character) then
+				runEffect(player, character, chained, direction)
+			end
+		end)
+	end
+end
 
 local function deny(player: Fighter, slot: number, reason: string)
 	Log.debug(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
@@ -923,11 +1240,12 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	local state = getState(player)
 	local now = os.clock()
 
-	if typeof(slot) ~= "number" or slot ~= math.floor(slot) or slot < 1 or slot > 8 then
+	if typeof(slot) ~= "number" or slot ~= math.floor(slot) or slot < 1 or slot > CharacterDefs.PASSIVE_SLOT then
 		return
 	end
 
-	local ability = CharacterDefs.GetAbility(state.characterId, slot)
+	-- 1..4 = ataques (despertos enquanto a forma durar); 5 = R (suporte)
+	local ability = CharacterDefs.GetAbility(state.characterId, slot, AbilityService.IsAwakened(player))
 	if not ability then
 		return deny(player, slot, "no_ability")
 	end
@@ -962,14 +1280,10 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	if now < readyAt and not noCooldown then
 		return deny(player, slot, "cooldown")
 	end
-	if ability.EnergyCost >= CharacterDefs.Energy.Max and not AbilityService.IsAwakened(player) then
-		return deny(player, slot, "use_g") -- ultimate: só no modo despertado (G = cutscene de transformação)
+	if ability.OncePerAwakening and state.onceUsed[ability.Id] == state.awakenedUntil then
+		return deny(player, slot, "once") -- Parada do Tempo / Bites the Dust: uma vez por despertar
 	end
-	if ability.OncePerAwakening and state.ultUsedAwakenedUntil == state.awakenedUntil then
-		return deny(player, slot, "once") -- Domínio do Tempo: uma vez por despertar
-	end
-	local handler = effects[ability.Effect.Type]
-	if not handler then
+	if not effects[ability.Effect.Type] then
 		warn(("[AbilityService] efeito '%s' sem handler (habilidade %s)"):format(ability.Effect.Type, ability.Id))
 		return deny(player, slot, "no_handler")
 	end
@@ -984,29 +1298,11 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	end
 
 	if ability.OncePerAwakening then
-		state.ultUsedAwakenedUntil = state.awakenedUntil
+		state.onceUsed[ability.Id] = state.awakenedUntil
 	end
 	CombatService.NotifyAction(player) -- habilidade cancela emote em loop
-	if ability.EnergyCost >= CharacterDefs.Energy.Max then
-		-- dono (2026-09-23): ativando a ULT o jogador é intocável (sem dano/hitstun/knockback/ragdoll/agarrão)
-		RagdollService.GrantIFrames(character, ability.CastTime + 0.3)
-	end
 	Log.debug(("[AbilityService] %s usou %s.%s (carga %d)"):format(player.Name, state.characterId, ability.Id, state.energy))
-
-	-- Despertou: usa a versão desperta da habilidade se existir (mesmo Id: animação/VFX iguais)
-	local used = ability
-	if ability.AwakenedEffect and AbilityService.IsAwakened(player) then
-		used = table.clone(ability)
-		used.Effect = ability.AwakenedEffect :: CharacterDefs.Effect
-		local awakenedHandler = effects[used.Effect.Type]
-		if awakenedHandler then
-			handler = awakenedHandler
-		end
-	end
-	local ok, err = pcall(handler :: any, player, character, used, sanitizeDirection(character, rawDirection))
-	if not ok then
-		warn(("[AbilityService] erro em %s: %s"):format(ability.Id, tostring(err)))
-	end
+	runEffect(player, character, ability, sanitizeDirection(character, rawDirection))
 end
 
 local function onRequestAwaken(player: Fighter)
@@ -1034,12 +1330,15 @@ local function onRequestAwaken(player: Fighter)
 	local cut = cfg.Cutscene
 	local now = os.clock()
 	local serverNow = Workspace:GetServerTimeNow()
+	local def = CharacterDefs.Get(state.characterId)
+	local ultDuration = CharacterDefs.UltimateDuration(state.characterId, cfg.Duration)
 	setEnergy(player, 0)
 	-- Cutscene: parado (CutsceneUntil → WalkSpeed 0), sem agir (Stun), invencível; o modo só começa depois
-	state.awakenedUntil = now + cut.Duration + cfg.Duration
+	state.awakenedUntil = now + cut.Duration + ultDuration
 	state.busyUntil = now + cut.Duration
 	player:SetAttribute("CutsceneUntil", serverNow + cut.Duration)
-	player:SetAttribute(ATTR_AWAKENED_UNTIL, serverNow + cut.Duration + cfg.Duration)
+	player:SetAttribute(ATTR_AWAKENED_UNTIL, serverNow + cut.Duration + ultDuration)
+	player:SetAttribute("AwakenedDuration", ultDuration) -- HUD: contagem regressiva proporcional
 	RagdollService.GrantIFrames(character, cut.Duration + cfg.IFrames)
 	CombatService.Stun(player, cut.Duration, "awakening")
 	CombatService.RestoreWalkSpeed(player)
@@ -1062,8 +1361,8 @@ local function onRequestAwaken(player: Fighter)
 		end
 		character.AncestryChanged:Once(release)
 	end
-	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = cfg.Duration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
-	Log.debug(("[AbilityService] %s DESPERTOU (cutscene %.1fs + %ds)"):format(player.Name, cut.Duration, cfg.Duration))
+	notifyAbility:FireAllClients(character, state.characterId, "Awakening", "start", { Duration = ultDuration, Cutscene = cut.Duration, BurstAt = cut.BurstAt })
+	Log.debug(("[AbilityService] %s DESPERTOU (cutscene %.1fs + %ds)"):format(player.Name, cut.Duration, ultDuration))
 	-- Estouro: quem estiver perto leva dano + empurrão (o único "ataque" da transformação)
 	task.delay(cut.BurstAt, function()
 		if states[player] ~= state or Combatant.CharacterOf(player) ~= character or not HealthService.IsAlive(character) then
@@ -1107,13 +1406,37 @@ local function onRequestAwaken(player: Fighter)
 		if states[player] == state and Combatant.CharacterOf(player) == character then
 			player:SetAttribute("CutsceneUntil", 0)
 			CombatService.RestoreWalkSpeed(player) -- agora com o SpeedMultiplier do modo
+			-- kit desperto entra pronto: avisa a HUD que os 4 slots estão livres
+			for slot = 1, 4 do
+				local a = CharacterDefs.GetAbility(state.characterId, slot, true)
+				if a then
+					state.cooldownReadyAt[a.Id] = nil
+					Combatant.Notify(player, notifyAbilityCooldown, slot, a.Id, Workspace:GetServerTimeNow())
+				end
+			end
+			-- Ultimate.Effect: dispara sozinho no fim da cutscene (Bruno: cúpula do tempo)
+			local ultEffect = def and def.Ultimate and def.Ultimate.Effect
+			if ultEffect and HealthService.IsAlive(character) then
+				local synthetic = CharacterDefs.UltimateAbility(state.characterId)
+				if synthetic then
+					runEffect(player, character, synthetic, facing(character))
+				end
+			end
 		end
 	end)
-	task.delay(cut.Duration + cfg.Duration, function()
+	task.delay(cut.Duration + ultDuration, function()
 		if states[player] == state and Combatant.CharacterOf(player) == character and os.clock() >= state.awakenedUntil then
 			player:SetAttribute(ATTR_AWAKENED_UNTIL, 0)
 			CombatService.RestoreWalkSpeed(player)
 			notifyAbility:FireAllClients(character, state.characterId, "Awakening", "end")
+			-- os 4 normais voltam com o cooldown que tinham
+			for slot = 1, 4 do
+				local a = CharacterDefs.GetAbility(state.characterId, slot, false)
+				if a then
+					local readyIn = math.max(0, (state.cooldownReadyAt[a.Id] or 0) - os.clock())
+					Combatant.Notify(player, notifyAbilityCooldown, slot, a.Id, Workspace:GetServerTimeNow() + readyIn)
+				end
+			end
 		end
 	end)
 end
@@ -1252,8 +1575,8 @@ local function resetCooldowns(player: Fighter)
 	local state = getState(player)
 	state.cooldownReadyAt = {}
 	state.busyUntil = 0
-	for slot = 1, 3 do
-		local ability = CharacterDefs.GetAbility(state.characterId, slot)
+	for slot = 1, CharacterDefs.PASSIVE_SLOT do
+		local ability = CharacterDefs.GetAbility(state.characterId, slot, AbilityService.IsAwakened(player))
 		if ability then
 			Combatant.Notify(player, notifyAbilityCooldown, slot, ability.Id, Workspace:GetServerTimeNow())
 		end

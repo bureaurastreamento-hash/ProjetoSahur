@@ -495,6 +495,75 @@ C["Emotes/scene_storm"] = { -- cena: tempestade (braços ao céu, gira o tronco,
 }
 
 -- ---------------------------------------------------------------------------
+-- REDESIGN B (2026-09-24): habilidades novas reaproveitam clipes parecidos até ganharem os próprios
+-- (defina C["<Char>/<Id>"] acima para substituir; a arte manda sobre tudo isso pelo Animations.model.json).
+-- ---------------------------------------------------------------------------
+local CLIP_ALIASES: { [string]: string } = {
+	["Jotaro/OraRush"] = "Sahur/Ritmo",
+	["Jotaro/OraOraOra"] = "Sahur/Ritmo",
+	["Jotaro/StarFinger"] = "Shared/Dash",
+	["Jotaro/StarFingerMax"] = "Shared/Dash",
+	["Jotaro/StarImpact"] = "Jotaro/Rampage",
+	["Jotaro/TimeStopShort"] = "Swift/TimeDome",
+	["Jotaro/StandGuard"] = "Dio/Fortify",
+	["Swift/WindBlade"] = "Kira/ArcaneBolt",
+	["Swift/TwinBlades"] = "Kira/ArcaneBolt",
+	["Swift/CrossCut"] = "Swift/Blink",
+	["Swift/CrossCut_Then"] = "Swift/SweepKick",
+	["Swift/PhantomCut"] = "Swift/Blink",
+	["Swift/PhantomCut_Then"] = "Swift/SweepKick",
+	["Swift/Tempest"] = "Sahur/Ritmo",
+	["Swift/Haste"] = "Sahur/Toque",
+	["Swift/ThousandCuts"] = "Sahur/Ritmo",
+	["Swift/TimeBreak"] = "Jotaro/GroundSlam",
+	["Swift/Ultimate"] = "Swift/TimeDome",
+	["Dio/MudaRush"] = "Sahur/Ritmo",
+	["Dio/MudaMudaMuda"] = "Sahur/Ritmo",
+	["Dio/Knives"] = "Kira/ArcaneBolt",
+	["Dio/KnifeRain"] = "Kira/ArcaneBolt",
+	["Dio/VampiricStrike"] = "Shared/Dash",
+	["Dio/RoyalKnee"] = "Dio/ShieldBash",
+	["Dio/RoyalKnee_Carry"] = "Dio/ShieldBash_Carry",
+	["Dio/ColdBlood"] = "Kira/Mend",
+	["Dio/TimeStop"] = "Swift/TimeDome",
+	["Dio/RoadRoller"] = "Kira/Meteor",
+	["Kira/BombTouch"] = "Kira/ArcaneBolt",
+	["Kira/CoinBomb"] = "Kira/ArcaneBolt",
+	["Kira/SheerHeartAttack"] = "Kira/Mend",
+	["Kira/ChainDetonation"] = "Dio/Quake",
+	["Kira/CleanHands"] = "Swift/Blink",
+	["Kira/FirstBomb"] = "Dio/Quake",
+	["Kira/CoinRain"] = "Kira/ArcaneBolt",
+	["Kira/SheerHeartAttackX2"] = "Kira/Mend",
+	["Kira/BitesTheDust"] = "Kira/Meteor",
+	["Rick/LaserPistol"] = "Kira/ArcaneBolt",
+	["Rick/PrimeLaser"] = "Kira/ArcaneBolt",
+	["Rick/Portal"] = "Swift/Blink",
+	["Rick/DoublePortal"] = "Swift/Blink",
+	["Rick/SentryDrone"] = "Kira/Mend",
+	["Rick/NeutrinoBomb"] = "Kira/Meteor",
+	["Rick/MedKit"] = "Kira/Mend",
+	["Rick/OmegaDevice"] = "Kira/Meteor",
+	["Sahur/Compasso"] = "Shared/Dash",
+	["Sahur/Baqueta"] = "Kira/ArcaneBolt",
+	["Sahur/BomboFinal"] = "Sahur/Bombo",
+	["Sahur/CompassoFinal"] = "Shared/Dash",
+	["Sahur/BaquetaFinal"] = "Kira/ArcaneBolt",
+	["Sahur/RitmoFinal"] = "Sahur/Ritmo",
+	["Overlord/FullHeal"] = "Kira/Mend",
+	["Overlord/SmiteMax"] = "Overlord/Smite",
+	["Overlord/WarpMax"] = "Overlord/Warp",
+	["Overlord/ClutchMax"] = "Overlord/Clutch",
+	["Overlord/ClutchMax_Carry"] = "Overlord/Clutch_Carry",
+	["Overlord/CataclysmMax"] = "Overlord/Cataclysm",
+}
+for newKey, baseKey in CLIP_ALIASES do
+	if C[newKey] == nil and C[baseKey] ~= nil then
+		C[newKey] = C[baseKey]
+	end
+end
+
+-- ---------------------------------------------------------------------------
 -- LOCOMOÇÃO (Leva 8): Idle/Walk/Run PROCEDURAIS, um jeito por personagem.
 -- O ProcAnimController mantém isso como camada de BASE (por baixo dos socos/habilidades) em todo
 -- personagem que o cliente vê, escolhendo Idle/Walk/Run pela velocidade e acelerando o ciclo junto.

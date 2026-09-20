@@ -19,7 +19,10 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
 - A1–A6 da lista do dono FEITOS (DEV com ON/OFF, cenas predefinidas, agarrão trava, boss/traidor à solta, trailer
   com órbita de grupo, NPC nunca deita "duro", **traidor = bot especial OP** via `BotService.Spawn` com
   `Attributes`/`Tuning`, atributo `DamageMult`) + intocável no agarrão/ult. Nada disso foi testado pelo dono ainda.
-  **PRÓXIMO: B1** — PESQUISA dos kits (redesign: 1–4 ataques, R passiva, G ult troca o kit, Stands) para o dono aprovar.
+  **B1 aprovado + B2/B3 FEITOS (24/09, sem teste)**: esquema `Abilities`(4)/`Passive`(R, slot 5)/`Ultimate`/
+  `AwakenedAbilities`(4) em `CharacterDefs`; tipos novos `Buff`/`Mark`/`Homing`/`Rewind`, `Then` encadeado; kits de
+  `PESQUISA_KITS.md`. Stands = só aura/silhueta (dono). **PRÓXIMO: dono testa (lista no PROGRESSO) → B4 silhueta.**
+  Regras: `CharacterDefs.GetAbility(id, slot, awakened)`; nunca usar `EnergyCost`/`AwakenedEffect` (só no DashOverride).
   Ideias novas anotadas em "D": anti-2v1 (tecla E), variações de golpe (JJS), evento "último de pé", log de
   atualização no jogo. Nunca escrever "Discord" em texto do jogo.
 

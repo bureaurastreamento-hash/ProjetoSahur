@@ -135,7 +135,7 @@ function MobileController.Start()
 	awaken.MouseButton1Down:Connect(function()
 		AbilityController.Awaken()
 	end)
-	for slot = 1, 4 do
+	for slot = 1, 5 do -- 1–4 ataques, 5 = R (suporte)
 		local b = get(root, "Slot" .. slot) :: TextButton
 		b.MouseButton1Down:Connect(function()
 			AbilityController.Use(slot)

@@ -763,6 +763,97 @@
      ]
     },
     {
+     "name": "Slot5",
+     "className": "TextButton",
+     "properties": {
+      "Name": "Slot5",
+      "Size": {
+       "UDim2": [
+        [
+         0,
+         48
+        ],
+        [
+         0,
+         48
+        ]
+       ]
+      },
+      "Position": {
+       "UDim2": [
+        [
+         1,
+         -258
+        ],
+        [
+         1,
+         -148
+        ]
+       ]
+      },
+      "AnchorPoint": {
+       "Vector2": [
+        1,
+        1
+       ]
+      },
+      "BackgroundColor3": {
+       "Color3": [
+        0.25,
+        0.4,
+        0.3
+       ]
+      },
+      "BackgroundTransparency": 0.35,
+      "Text": "R",
+      "TextSize": 16,
+      "Font": "GothamBold",
+      "TextColor3": {
+       "Color3": [
+        1,
+        1,
+        1
+       ]
+      },
+      "AutoButtonColor": true,
+      "BorderSizePixel": 0
+     },
+     "attributes": {
+      "BaseX": 258,
+      "BaseY": 148,
+      "Side": "right"
+     },
+     "children": [
+      {
+       "name": "UICorner",
+       "className": "UICorner",
+       "properties": {
+        "CornerRadius": {
+         "UDim": [
+          1,
+          0
+         ]
+        }
+       }
+      },
+      {
+       "name": "UIStroke",
+       "className": "UIStroke",
+       "properties": {
+        "Thickness": 2,
+        "Color": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "Transparency": 0.6
+       }
+      }
+     ]
+    },
+    {
      "name": "Emote",
      "className": "TextButton",
      "properties": {

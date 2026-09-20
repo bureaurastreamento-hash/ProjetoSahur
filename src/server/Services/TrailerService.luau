@@ -136,8 +136,8 @@ local function clearBots()
 	table.clear(bots)
 end
 
-local function abilityName(characterId: string, slot: number): string
-	local ability = CharacterDefs.GetAbility(characterId, slot)
+local function abilityName(characterId: string, slot: number, awakened: boolean?): string
+	local ability = CharacterDefs.GetAbility(characterId, slot, awakened)
 	return if ability then ability.DisplayName else "?"
 end
 
@@ -349,16 +349,16 @@ scenes.abilities = function(myToken, arg)
 			return false
 		end
 		shot({ orbit = { "A", "B" }, radius = 14, height = 5, from = 210, to = 300, t = 9, fov = 56 })
-		local def = CharacterDefs.Get(id)
-		for slot = 1, 3 do
-			local ability = def and def.Abilities[slot]
-			if not ability or ability.EnergyCost >= CharacterDefs.Energy.Max then
+		-- 1–4 + R (kit normal)
+		for slot = 1, CharacterDefs.PASSIVE_SLOT do
+			local ability = CharacterDefs.GetAbility(id, slot, false)
+			if not ability then
 				continue
 			end
 			if not a.Parent or not HealthService.IsAlive(a) then
 				break
 			end
-			title(displayName(id), 2.4, abilityName(id, slot))
+			title(displayName(id), 2.4, (if slot == CharacterDefs.PASSIVE_SLOT then "R · " else "") .. abilityName(id, slot, false))
 			if b.Parent and HealthService.IsAlive(b) then
 				put(b, S + Vector3.new(5, 0, 0), S + Vector3.new(-9, 0, 0))
 			end
@@ -404,26 +404,25 @@ scenes.ult = function(myToken, arg)
 	if not wait_(cut.Duration - cut.BurstAt + 0.6, myToken) then
 		return false
 	end
-	-- ULT: B de volta na frente; A usa a ultimate (o slot com EnergyCost = Max)
-	if b.Parent and HealthService.IsAlive(b) then
-		put(b, S + Vector3.new(6, 0, 0), S + Vector3.new(-2, 0, 0))
-	end
-	put(a, S + Vector3.new(-2, 0, 0), S + Vector3.new(6, 0, 0))
-	shot({ orbit = { "A", "B" }, radius = 13, height = 4.5, from = 220, to = 300, t = 5, fov = 56 })
-	local def = CharacterDefs.Get(id)
-	local abilities: { CharacterDefs.AbilityDef } = if def then def.Abilities else {}
-	for slot, ability in abilities do
-		if ability.EnergyCost >= CharacterDefs.Energy.Max then
-			title("ULTIMATE", 2.5, ability.DisplayName)
-			if not wait_(0.4, myToken) then
-				return false
-			end
-			AbilityService.Use(a, slot, Vector3.new(1, 0, 0))
+	-- FORMA DESPERTA: B de volta na frente; A mostra os 4 golpes despertos (kit trocado pela ult)
+	shot({ orbit = { "A", "B" }, radius = 13, height = 4.5, from = 220, to = 340, t = 14, fov = 56 })
+	for slot = 1, 4 do
+		local ability = CharacterDefs.GetAbility(id, slot, true)
+		if not ability or not a.Parent or not HealthService.IsAlive(a) then
 			break
 		end
-	end
-	if not wait_(4.5, myToken) then
-		return false
+		title("DESPERTO", 2.4, ability.DisplayName)
+		if b.Parent and HealthService.IsAlive(b) then
+			put(b, S + Vector3.new(6, 0, 0), S + Vector3.new(-2, 0, 0))
+		end
+		put(a, S + Vector3.new(-2, 0, 0), S + Vector3.new(6, 0, 0))
+		if not wait_(0.4, myToken) then
+			return false
+		end
+		AbilityService.Use(a, slot, Vector3.new(1, 0, 0))
+		if not wait_(2.8, myToken) then
+			return false
+		end
 	end
 	clearBots()
 	return true

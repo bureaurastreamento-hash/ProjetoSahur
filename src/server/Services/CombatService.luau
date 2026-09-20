@@ -259,6 +259,16 @@ function CombatService.Stun(player: Fighter, seconds: number, reason: string)
 	Combatant.Notify(player, notifyCooldown, reason, seconds)
 end
 
+--- Tira o stun/hitstun agora (Heal com Cleanse, Rewind).
+function CombatService.ClearStun(player: Fighter)
+	local state = getState(player)
+	local now = os.clock()
+	state.stunnedUntil = math.min(state.stunnedUntil, now)
+	state.hardStunUntil = math.min(state.hardStunUntil, now)
+	state.hitStunUntil = math.min(state.hitStunUntil, now)
+	restoreWalkSpeed(player)
+end
+
 --- Solta o block (e a intenção) — usado ao cair em ragdoll.
 function CombatService.CancelBlock(player: Fighter)
 	local state = getState(player)
@@ -539,7 +549,7 @@ function CombatService.ResolveHit(attacker: Fighter, attackerChar: Model, victim
 			HealthService.MarkInCombat(attacker) -- quem ATACA também não troca de personagem (dono, 2026-09-21)
 		end
 		if dealt > 0 and AbilityService then
-			AbilityService.OnHitDealt(attacker, victimFighter)
+			AbilityService.OnHitDealt(attacker, victimFighter, victim, opts.IsM1 == true)
 		end
 		if dealt == 0 and HealthService.IsInvulnerable(victim, attacker) and HealthService.IsAlive(victim) then
 			-- Invencível (cutscene, i-frames, agarrando/preso em agarrão): nem dano, nem hitstun, nem empurrão.

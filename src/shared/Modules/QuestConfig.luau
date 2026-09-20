@@ -62,7 +62,7 @@ QuestConfig.Traitor = {
 	ArenaPartName = "BossArena",
 	AbandonSeconds = 120, -- sem ninguém vivo por perto por esse tempo = some (fala de novo com o NPC para voltar)
 	-- IA (override de BotService.Config): mais habilidade, mais dash, guarda melhor, ult de mais longe
-	Tuning = { AbilityChancePerTick = 0.3, DashChancePerTick = 0.4, BlockChancePerTick = 0.35, UltRange = 16, CancelChancePerTick = 0.6 },
+	Tuning = { AbilityChancePerTick = 0.3, DashChancePerTick = 0.4, BlockChancePerTick = 0.35, CancelChancePerTick = 0.6 },
 }
 
 QuestConfig.TalkDistance = 14 -- studs (E no NPC)

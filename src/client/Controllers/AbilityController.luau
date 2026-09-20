@@ -1,7 +1,7 @@
 --!strict
 --[[
 	AbilityController (cliente)
-	  - Slot1..4 / Awaken (teclas em Controls.luau: 1-4 / G; gamepad LB/LT/RT/RB / D-pad cima) -> RequestAbility / RequestAwaken
+	  - Slot1..5 / Awaken (teclas em Controls.luau: 1-4, R / G; gamepad LB/LT/RT/RB, D-pad esq. / D-pad cima) -> RequestAbility / RequestAwaken
 	  (Q é o dash universal: MovementController.)
 	Não decide nada: cooldown mostrado é o que o servidor informou.
 	Direção: a do WASD/analógico no momento (ou a frente do personagem se parado). Serve para
@@ -92,6 +92,7 @@ local function startGrabbed(attacker: Model, seconds: number)
 	task.delay(seconds + 0.5, stopGrabbed)
 end
 local cooldowns: { [number]: { abilityId: string, readyAt: number } } = {}
+local cooldownsById: { [string]: { abilityId: string, readyAt: number } } = {} -- o kit desperto troca os slots: a HUD olha por Id
 
 AbilityController.CooldownChanged = Instance.new("BindableEvent")
 
@@ -248,13 +249,16 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		return
 	end
 	local at: Vector3? = if typeof(data) == "table" and typeof(data.Position) == "Vector3" then data.Position else nil
-	if abilityId == "TimeDome" then
+	local defForType = CharacterDefs.Get(characterId)
+	local abilityForType = defForType and CharacterDefs.FindAbility(defForType, abilityId)
+	local effectType = if abilityForType then (abilityForType.Effect :: any).Type else nil
+	if effectType == "TimeDome" then
 		local radius = if typeof(data) == "table" then tonumber(data.Radius) or 22 else 22
 		if phase == "start" then
 			local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
 			local center = at or (if root then root.Position else Vector3.zero)
-			local def = CharacterDefs.Get(characterId)
-			local ability = def and CharacterDefs.FindAbility(def, abilityId)
+			local def = defForType
+			local ability = abilityForType
 			local cine = ability and (ability.Effect :: any).Cinematic
 			local charge = if cine then tonumber(cine.Charge) or 1 else 0.35
 			createDome(character, center, radius, if typeof(data) == "table" then tonumber(data.Duration) or 8 else 8, if cine then charge else nil)
@@ -300,6 +304,15 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		else
 			FX.SetOutline(character, nil)
 			FX.PlaySoundAt(character, "Shared", "Awakening_End")
+		end
+		return
+	end
+	if phase == "mark" then
+		-- Mark (Kira): a vítima fica com a marca até explodir (VFX <Char>/<Ability>_Mark ou contorno)
+		local victim = if typeof(data) == "table" then data.Victim else nil
+		if typeof(victim) == "Instance" and victim:IsA("Model") then
+			FX.SpawnVFX(victim, characterId, abilityId .. "_Mark", true)
+			FX.PlaySoundAt(victim, characterId, abilityId .. "_Mark")
 		end
 		return
 	end
@@ -407,6 +420,7 @@ end
 
 local function onNotifyAbilityCooldown(slot: number, abilityId: string, readyAt: number)
 	cooldowns[slot] = { abilityId = abilityId, readyAt = readyAt }
+	cooldownsById[abilityId] = cooldowns[slot]
 	AbilityController.CooldownChanged:Fire(slot, abilityId, readyAt)
 end
 
@@ -445,6 +459,10 @@ end
 
 function AbilityController.GetCooldowns()
 	return cooldowns
+end
+
+function AbilityController.GetCooldownsById()
+	return cooldownsById
 end
 
 -- ---------------------------------------------------------------------------

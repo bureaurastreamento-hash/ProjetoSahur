@@ -252,6 +252,20 @@
       "Name": "M1_4",
       "AnimationId": "rbxassetid://94626745758797"
      }
+    },
+    {
+     "name": "StarImpact",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://120293502970268"
+     }
+    },
+    {
+     "name": "TimeStopShort",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://99664142798158"
+     }
     }
    ]
   },
@@ -294,6 +308,13 @@
      "className": "Animation",
      "properties": {
       "Name": "TimeDome",
+      "AnimationId": "rbxassetid://99664142798158"
+     }
+    },
+    {
+     "name": "Ultimate",
+     "className": "Animation",
+     "properties": {
       "AnimationId": "rbxassetid://99664142798158"
      }
     }
@@ -367,6 +388,20 @@
      },
      "attributes": {
       "R15Id": ""
+     }
+    },
+    {
+     "name": "RoyalKnee",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://120293502970268"
+     }
+    },
+    {
+     "name": "TimeStop",
+     "className": "Animation",
+     "properties": {
+      "AnimationId": "rbxassetid://99664142798158"
      }
     }
    ]

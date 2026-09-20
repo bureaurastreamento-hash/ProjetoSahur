@@ -10,11 +10,11 @@
 	  passive    (padrão, dono) — parado até APANHAR; aí revida contra quem bateu por AggroSeconds e volta a ficar quieto
 	  aggressive — caça o lutador mais perto dentro de SeekRadius
 	  idle       — nunca ataca (só serve de alvo; leva hitstun/ragdoll normalmente)
-	IA (tick 0,1 s): perto = combo de M1; meio = habilidade 1–3 pronta (chance por tick); longe = dash/andar até
-	o alvo; carga cheia = despertar (G) e depois a ULT quando estiver perto; bloqueia por instantes quando o
-	alvo está atacando; caído = ragdoll cancel às vezes. Morreu = renasce no ponto de origem após RespawnTime.
+	IA (tick 0,1 s): perto = combo de M1; meio = habilidade 1–4 pronta (chance por tick; desperto usa o kit
+	desperto e o dobro da chance); R quando está com menos de metade da vida; longe = dash/andar até o alvo;
+	carga cheia = despertar (G); bloqueia por instantes quando o alvo está atacando; caído = ragdoll cancel. Morreu = renasce no ponto de origem após RespawnTime.
 	Bots ESPECIAIS (traidor, TraitorService): SpawnOptions.Attributes (MaxHealth/WalkSpeed/DamageMult no Model)
-	e SpawnOptions.Tuning (override por bot dos números de BotService.Config: SeekRadius, chances, UltRange).
+	e SpawnOptions.Tuning (override por bot dos números de BotService.Config: SeekRadius, chances).
 	API: Spawn(opts), Remove(model), Clear(), SetBehavior(model?, behavior), Fill(model?) (carga da ult cheia), List().
 ]]
 
@@ -49,7 +49,6 @@ BotService.Config = {
 	BlockChancePerTick = 0.2, -- alvo atacando a menos de 9 studs: chance de levantar a guarda por BlockSeconds
 	BlockSeconds = 0.5,
 	CancelChancePerTick = 0.35, -- caído: chance por tick de ragdoll cancel
-	UltRange = 12, -- despertado: usa a ult quando o alvo está até aqui
 	RespawnTime = CombatConfig.RespawnTime,
 }
 
@@ -62,7 +61,7 @@ export type SpawnOptions = {
 	Respawn: boolean?, -- padrão true
 	Team: string?, -- TeamId (bots do mesmo time não se batem)
 	Attributes: { [string]: any }?, -- atributos extras no Model ANTES do SetupBot (MaxHealth, WalkSpeed, DamageMult, Traitor…)
-	Tuning: { [string]: number }?, -- override por bot de BotService.Config (SeekRadius, AbilityChancePerTick, UltRange…)
+	Tuning: { [string]: number }?, -- override por bot de BotService.Config (SeekRadius, AbilityChancePerTick…)
 }
 
 type Bot = {
@@ -77,7 +76,6 @@ type Bot = {
 	aggroUntil: number,
 	blockUntil: number,
 	holdUntil: number, -- usou habilidade: não emenda soco/dash até aqui (CastTime + folga)
-	nextUltTryAt: number, -- não fica pedindo a ult a cada tick (OncePerAwakening nega)
 	alive: boolean,
 }
 
@@ -345,26 +343,21 @@ local function think(b: Bot)
 	end
 	local characterId = b.model:GetAttribute("CharacterId")
 	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
-	if def and awakened and dist <= C.UltRange and now >= b.nextUltTryAt then
-		for slot, ability in def.Abilities do
-			if ability.EnergyCost >= CharacterDefs.Energy.Max then
-				b.root.CFrame = CFrame.lookAt(b.root.Position, b.root.Position + dir)
-				b.humanoid:MoveTo(b.root.Position)
-				AbilityService.Use(b.model, slot, dir)
-				b.nextUltTryAt = now + 4
-				if AbilityService.IsBusy(b.model) then
-					b.holdUntil = now + ability.CastTime + 0.6
-					return
-				end
-				break
-			end
+	-- R (suporte): com menos de metade da vida, usa quando estiver pronto
+	if def and def.Passive and b.humanoid.Health < b.humanoid.MaxHealth * 0.5 and math.random() < C.AbilityChancePerTick then
+		AbilityService.Use(b.model, CharacterDefs.PASSIVE_SLOT, dir)
+		if AbilityService.IsBusy(b.model) then
+			b.holdUntil = now + def.Passive.CastTime + 0.2
+			return
 		end
 	end
-	-- habilidade comum pronta e no alcance
-	if def and not MovementService.IsDashing(b.model) and not CombatService.IsAttacking(b.model) and math.random() < C.AbilityChancePerTick then
+	-- habilidade pronta e no alcance (kit desperto enquanto a forma durar; desperto usa mais)
+	local chance = if awakened then math.min(1, C.AbilityChancePerTick * 2) else C.AbilityChancePerTick
+	if def and not MovementService.IsDashing(b.model) and not CombatService.IsAttacking(b.model) and math.random() < chance then
+		local kit = CharacterDefs.ActiveAbilities(def, awakened)
 		local candidates = {}
-		for slot, ability in def.Abilities do
-			if ability.EnergyCost < CharacterDefs.Energy.Max and abilityRangeOk(b, ability.Effect, dist) then
+		for slot, ability in kit do
+			if slot <= 4 and abilityRangeOk(b, ability.Effect, dist) then
 				table.insert(candidates, slot)
 			end
 		end
@@ -374,7 +367,7 @@ local function think(b: Bot)
 			b.humanoid:MoveTo(b.root.Position)
 			AbilityService.Use(b.model, slot, dir)
 			-- se estava em cooldown o servidor nega em silêncio e o tick segue; se saiu, espera o cast
-			local ability = def.Abilities[slot]
+			local ability = kit[slot]
 			if ability and CombatService.IsAttacking(b.model) == false and AbilityService.IsBusy(b.model) then
 				b.holdUntil = now + ability.CastTime + 0.4
 				return
@@ -472,7 +465,6 @@ spawnAt = function(opts: SpawnOptions, home: CFrame, index: number): Model?
 		aggroUntil = 0,
 		blockUntil = 0,
 		holdUntil = 0,
-		nextUltTryAt = 0,
 		alive = true,
 	}
 	bots[m] = b

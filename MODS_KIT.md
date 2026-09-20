@@ -28,7 +28,8 @@ ServerStorage
 └── Mods
     └── <IdDoMod>            (só letras minúsculas, números e _ — ex.: meteoros_do_ravy)
         ├── ModConfig        (ModuleScript) → { Id, Name, Author, AuthorUserId, Version, Kind, Desc, Rules?, Exclusive? }
-        ├── CharacterDef     (ModuleScript) → CharacterDef (Id NOVO, Abilities 1..3 + ult com EnergyCost 100)
+        ├── CharacterDef     (ModuleScript) → CharacterDef (Id NOVO; Abilities 1–4, Passive (R), Ultimate { Duration },
+        │                      AwakenedAbilities 1–4 — ver o template; o formato antigo com EnergyCost = 100 ainda carrega)
         ├── Cosmetics        (ModuleScript) → { Items = { {Id, Name, Category cape|aura, Color, Style?} }, Emotes = { {Id, Name, Kind} } }
         ├── VFX              (ModuleScript) → { Meshes?, Textures?, Effects = { ["<CharacterId>/<AbilityId>"] = { lifetime, layers } } }
         ├── Animations       (Folder) <CharacterId>/<AbilityId> (Animation; id publicado pelo GRUPO) · Emotes/<EmoteId>

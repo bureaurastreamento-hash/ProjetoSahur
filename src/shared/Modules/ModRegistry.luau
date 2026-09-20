@@ -109,16 +109,52 @@ local function loadCharacter(id: string, folder: Instance, rec: Loaded)
 		warn(("[ModRegistry] %s: CharacterDef.Abilities vazio"):format(id))
 		return
 	end
+	local function checkList(list: any, label: string): boolean
+		if typeof(list) ~= "table" then
+			return true
+		end
+		for _, ability in list do
+			if typeof(ability) ~= "table" or not validId(ability.Id) then
+				warn(("[ModRegistry] %s: %s sem Id"):format(id, label))
+				return false
+			end
+			ability.Cooldown = math.max(0, tonumber(ability.Cooldown) or 0)
+			ability.CastTime = math.max(0, tonumber(ability.CastTime) or 0)
+			clampEffect(ability.Effect)
+			clampEffect(ability.Effect and ability.Effect.Then)
+			clampEffect(ability.AwakenedEffect)
+		end
+		return true
+	end
+	-- kit ANTIGO (EnergyCost = 100 na última = ult): a ult vira o 1º golpe desperto e sai da lista normal
+	local normal = {}
+	local awakenedFromOld = {}
 	for _, ability in def.Abilities do
-		if typeof(ability) ~= "table" or not validId(ability.Id) then
-			warn(("[ModRegistry] %s: habilidade sem Id"):format(id))
+		if typeof(ability) == "table" and tonumber(ability.EnergyCost) and tonumber(ability.EnergyCost) >= 100 then
+			table.insert(awakenedFromOld, ability)
+		else
+			table.insert(normal, ability)
+		end
+	end
+	def.Abilities = normal
+	if typeof(def.AwakenedAbilities) ~= "table" or #def.AwakenedAbilities == 0 then
+		def.AwakenedAbilities = if #awakenedFromOld > 0 then awakenedFromOld else {}
+	end
+	if typeof(def.Ultimate) ~= "table" then
+		def.Ultimate = { Duration = 20 }
+	end
+	def.Ultimate.Duration = math.clamp(tonumber(def.Ultimate.Duration) or 20, 5, 40)
+	if typeof(def.Ultimate.DamageMultiplier) == "number" then
+		def.Ultimate.DamageMultiplier = math.clamp(def.Ultimate.DamageMultiplier, 1, ModRegistry.Limits.Damage)
+	end
+	clampEffect(def.Ultimate.Effect)
+	if not checkList(def.Abilities, "habilidade") or not checkList(def.AwakenedAbilities, "golpe desperto") then
+		return
+	end
+	if def.Passive then
+		if not checkList({ def.Passive }, "passiva (R)") then
 			return
 		end
-		ability.Cooldown = math.max(0, tonumber(ability.Cooldown) or 0)
-		ability.EnergyCost = tonumber(ability.EnergyCost) or 0
-		ability.CastTime = math.max(0, tonumber(ability.CastTime) or 0)
-		clampEffect(ability.Effect)
-		clampEffect(ability.AwakenedEffect)
 	end
 	if def.DashOverride then
 		clampEffect(def.DashOverride.Effect)

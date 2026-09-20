@@ -29,16 +29,16 @@ export type Def = {
 local AwakeningDefs = {}
 
 local characters: { [string]: Def } = {
-	Swift = { UltName = "PODER MÁXIMO", Subtitle = "Bruno Gollini", Theme = "lightning" }, -- Swift = Bruno Gollini (dono, 2026-09-20)
+	Swift = { UltName = "DOMÍNIO DO TEMPO", Subtitle = "Bruno Gollini", Theme = "lightning" }, -- Swift = Bruno Gollini (dono, 2026-09-20)
 	Sahur = { UltName = "RITMO FINAL", Subtitle = "o ritmo que esmaga", Theme = "drums" },
 	Overlord = { UltName = "CATACLISMO", Subtitle = "só admin", Theme = "void" },
 	BigChop = { UltName = "FRENESI", Subtitle = "não morre, só cresce", Theme = "flesh" },
 	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
 	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
 	-- (2026-09-21: os antigos Brawler/Mystic/Guardian viraram Jotaro/Kira/Dio — kits mantidos até os movesets próprios)
-	Jotaro = { UltName = "STAR PLATINUM", Subtitle = "Stand no máximo", Theme = "rock" },
-	Dio = { UltName = "THE WORLD", Subtitle = "Stand no máximo", Theme = "stone" },
-	Kira = { UltName = "KILLER QUEEN", Subtitle = "Stand no máximo", Theme = "arcane" },
+	Jotaro = { UltName = "STAR PLATINUM: THE WORLD", Subtitle = "o tempo é meu", Theme = "rock" },
+	Dio = { UltName = "THE WORLD", Subtitle = "ZA WARUDO", Theme = "stone" },
+	Kira = { UltName = "KILLER QUEEN", Subtitle = "já tocou", Theme = "arcane" },
 }
 
 local default: Def = { UltName = "DESPERTAR", Theme = "rock" }

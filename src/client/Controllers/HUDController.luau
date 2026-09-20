@@ -26,6 +26,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
 local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
@@ -45,7 +46,7 @@ HUDController.CharactersChanged = Instance.new("BindableEvent")
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
-local SLOT_KEYS = { "1", "2", "3", "4" } -- slots de habilidade; Q = dash universal (frames "Dash"/"DashSide"); G = ultimate (frame "Ult")
+local SLOT_KEYS = { "1", "2", "3", "4", "R" } -- 4 ataques + R (suporte); Q = dash universal (frames "Dash"/"DashSide"); G = ultimate (frame "Ult")
 local KILLFEED_MAX = 5
 local KILLFEED_LIFETIME = 6
 
@@ -211,7 +212,6 @@ end
 --- senão ninguém descobre que existe (dono, 2026-09-17). O G é o DESPERTAR (a transformação).
 local ULT_SLOT_COLOR = Color3.fromRGB(255, 200, 70)
 local slotBaseColor: Color3? = nil
-local ultSlotIndex: number? = nil
 
 local function refreshSlots()
 	local characterId = localPlayer:GetAttribute("CharacterId")
@@ -224,32 +224,23 @@ local function refreshSlots()
 		slotBaseColor = slots[1].BackgroundColor3
 	end
 	local base = slotBaseColor or Color3.fromRGB(30, 30, 30)
-	ultSlotIndex = nil
-	local ultDef: CharacterDefs.AbilityDef? = nil
+	-- 1–4 = kit ativo (desperto troca os 4 e pinta com a cor do personagem); 5 = R (suporte, não muda)
 	for i, slot in slots do
-		local ability = def and def.Abilities[i]
+		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i, awakened) else nil
 		local nameLabel = slot:FindFirstChild("Name") :: TextLabel
-		local isUlt = ability ~= nil and ability.EnergyCost >= CharacterDefs.Energy.Max
 		if ability then
 			slot.Visible = true
-			if isUlt then
-				ultDef = ability
-				ultSlotIndex = i
-				nameLabel.Text = if awakened then ability.DisplayName else ability.DisplayName .. " (desperto)"
-				slot.BackgroundColor3 = if awakened then ULT_SLOT_COLOR else base
-				slot.BackgroundTransparency = if awakened then 0.1 else 0.55
-				nameLabel.TextTransparency = if awakened then 0 else 0.35
-			else
-				nameLabel.Text = ability.DisplayName
-				slot.BackgroundColor3 = base
-				slot.BackgroundTransparency = 0.1
-				nameLabel.TextTransparency = 0
-			end
+			nameLabel.Text = ability.DisplayName
+			local isAwakenedSlot = awakened and i <= 4 and def ~= nil and #def.AwakenedAbilities > 0
+			slot.BackgroundColor3 = if isAwakenedSlot then (def and def.Color or ULT_SLOT_COLOR):Lerp(base, 0.6) else base
+			slot.BackgroundTransparency = 0.1
+			nameLabel.TextTransparency = 0
 		else
 			slot.Visible = false
 		end
 	end
-	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if ultDef then "Despertar" else "Ultimate"
+	local awDef = if typeof(characterId) == "string" then AwakeningDefs.Get(characterId) else nil
+	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if awDef and awDef.UltName then awDef.UltName else "Despertar"
 end
 
 local function setCooldownOverlay(slot: Frame, remaining: number, total: number)
@@ -270,10 +261,11 @@ local function updateCooldowns()
 	local characterId = localPlayer:GetAttribute("CharacterId")
 	local awakenedUntil = localPlayer:GetAttribute("AwakenedUntil")
 	local awakened = typeof(awakenedUntil) == "number" and awakenedUntil > now
+	local byId = AbilityController.GetCooldownsById()
 	for i, slot in slots do
-		local cd = cooldowns[i]
+		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i, awakened) else nil
+		local cd = if ability then byId[ability.Id] else cooldowns[i]
 		local remaining = if cd then cd.readyAt - now else 0
-		local ability = if typeof(characterId) == "string" then CharacterDefs.GetAbility(characterId, i) else nil
 		setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
 	end
 	-- Ultimate (G): trancada até a carga encher; no Awakening mostra o tempo restante do modo
@@ -281,8 +273,9 @@ local function updateCooldowns()
 	local charged = typeof(e) == "number" and e >= CharacterDefs.Energy.Max
 	local ultOverlay = ultSlot:FindFirstChild("Cooldown") :: Frame
 	local ultText = ultSlot:FindFirstChild("CooldownText") :: TextLabel
+	local awakenedDuration = tonumber(localPlayer:GetAttribute("AwakenedDuration")) or CombatConfig.Awakening.Duration
 	if awakened then
-		ultOverlay.Size = UDim2.fromScale(1, math.clamp((awakenedUntil - now) / CombatConfig.Awakening.Duration, 0, 1))
+		ultOverlay.Size = UDim2.fromScale(1, math.clamp((awakenedUntil - now) / awakenedDuration, 0, 1))
 		ultText.Text = ("%d"):format(math.ceil(awakenedUntil - now))
 	elseif charged then
 		ultOverlay.Size = UDim2.fromScale(1, 0)
@@ -293,7 +286,7 @@ local function updateCooldowns()
 	end
 	-- Awakening: a barra da ult vira contagem regressiva dourada
 	if awakened then
-		energyFill.Size = UDim2.fromScale(math.clamp((awakenedUntil - now) / CombatConfig.Awakening.Duration, 0, 1), 1)
+		energyFill.Size = UDim2.fromScale(math.clamp((awakenedUntil - now) / awakenedDuration, 0, 1), 1)
 		energyText.Text = ("DESPERTO %ds"):format(math.ceil(awakenedUntil - now))
 	end
 	-- Dash universal (Q): frente/trás e lateral têm cooldowns próprios; caído, o 1º mostra o ragdoll cancel
@@ -713,9 +706,13 @@ function HUDController.Start()
 		local lines = {}
 		if def then
 			for slot, ability in def.Abilities do
-				local key = if ability.EnergyCost >= CharacterDefs.Energy.Max then "G" else (SLOT_KEYS[slot] or "?")
-				table.insert(lines, ("%s  %s"):format(key, ability.DisplayName))
+				table.insert(lines, ("%s  %s"):format(SLOT_KEYS[slot] or "?", ability.DisplayName))
 			end
+			if def.Passive then
+				table.insert(lines, ("R  %s"):format(def.Passive.DisplayName))
+			end
+			local awDef = AwakeningDefs.Get(id)
+			table.insert(lines, ("G  %s"):format(awDef.UltName or "Despertar"))
 		end
 		local function renderAbilities()
 			local xp = if profile and typeof(profile.mastery) == "table" then (tonumber(profile.mastery[id]) or 0) else 0
@@ -877,8 +874,10 @@ function HUDController.Start()
 		refreshSlots() -- acende/apaga o slot da ultimate
 		if typeof(untilT) == "number" and untilT > Workspace:GetServerTimeNow() then
 			energyFill.BackgroundColor3 = ULT_COLOR
-			local ultName = ultSlotIndex and ("%d = %s"):format(ultSlotIndex, ((slots[ultSlotIndex]:FindFirstChild("Name") :: TextLabel).Text)) or "ultimate liberada"
-			showBanner(("DESPERTAR! %ds de +dano/+velocidade · %s"):format(CombatConfig.Awakening.Duration, ultName), 2.5)
+			local characterId = localPlayer:GetAttribute("CharacterId")
+			local awDef = if typeof(characterId) == "string" then AwakeningDefs.Get(characterId) else nil
+			local dur = tonumber(localPlayer:GetAttribute("AwakenedDuration")) or CombatConfig.Awakening.Duration
+			showBanner(("%s! %ds — 1/2/3/4 viraram os golpes despertos"):format(if awDef and awDef.UltName then awDef.UltName else "DESPERTAR", dur), 2.5)
 		else
 			energyFill.BackgroundColor3 = ENERGY_COLOR
 			refreshEnergy()

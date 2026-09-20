@@ -45,6 +45,7 @@ root = {"name": "Root", "className": "Frame", "properties": {
     button("Slot2", "2", 52, 214, 84, SKILL),
     button("Slot3", "3", 52, 196, 148, SKILL),
     button("Slot4", "4", 52, 128, 172, SKILL),
+    button("Slot5", "R", 48, 258, 148, [0.25, 0.4, 0.3]),  # suporte (R)
     button("Emote", "EMOTE", 44, 28, 194, [0.45, 0.3, 0.6], 11),
     button("Lock", "LOCK", 44, 80, 232, [0.3, 0.3, 0.38], 11),
     # grupo da esquerda (acima do joystick): correr

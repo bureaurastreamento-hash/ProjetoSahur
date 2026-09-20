@@ -245,7 +245,7 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 FEITOS; próximo = B1 pesquisa dos kits; tudo commitado)
+## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 + B1–B3 FEITOS sem teste; próximo = testes do redesign → B4 silhueta)
 
 ### ONDE PARAMOS (ler primeiro)
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
@@ -261,8 +261,41 @@ walk 26 (> sprint), ult cheia na entrada e a cada 40 s, fase 2 = walk 30 e dano 
 jogador, crédito e limpeza OK. Conta como bot no DEV (BOTS → limpar também some com ele).
 **B1 ENTREGUE (24/09)**: `PESQUISA_KITS.md` — kits 4+R+4 para Jotaro/Bruno/Dio/Kira/Rick (+Sahur/Overlord), só 4 tipos
 novos no total (`Buff`, `Mark`, `Homing`, `Rewind`), animações PROC/PACK/ARTE marcadas, 4 perguntas no fim para o
-dono. PRÓXIMO PASSO = dono aprova/edita o arquivo → **B2** (esquema `Abilities`/`Passive`/`Ultimate`/
-`AwakenedAbilities`) → B3 → B4 (Stands).
+dono. **DECISÕES DO DONO (24/09, no chat)**: kits da pesquisa APROVADOS como estão; Parada do Tempo no Dio (5 s) E no
+Jotaro (2,5 s), só despertos; Stands = NUNCA modelo, só aura/silhueta de luz atrás do jogador (na cutscene e nas
+rajadas ORA/MUDA); roster = Jotaro, Bruno, Dio, Kira, Rick (Sahur sai da seleção, Overlord só admin); kit desperto
+entra PRONTO e os normais voltam com o cooldown que tinham; duração/buffs da ult POR PERSONAGEM
+(`Ultimate.Duration/DamageMultiplier/SpeedMultiplier`); variantes D2 só preparadas no esquema (`Variants`).
+**B2+B3 FEITOS (24/09, SEM teste no Studio — estava fechado)**: `CharacterDefs` novo (`Abilities` 4 / `Passive` R /
+`Ultimate` / `AwakenedAbilities` 4; `GetAbility(id, slot, awakened)`, slot 5 = R, `FindAbility` acha despertos,
+R, Piscar, "Ultimate" e "<Id>_Then"); `AbilityService`: R, kit desperto por Id, `Ultimate.Effect` sozinho no fim da
+cutscene (Bruno = cúpula), `Then` encadeado, tipos novos `Buff` (DamageBuff = alias, Speed, DashCooldownMult), `Mark`
+(detona no M1 do dono ou sozinho), `Homing` (bomba que persegue), `Rewind` (Bites the Dust), `Projectile`
+Count/Spread/Interval/AreaRadius, `Heal.Cleanse`, `Teleport.Backward`, `TimeDome.NoBreak` (Parada do Tempo =
+SlowMultiplier 0,02); HUD com 5 slots (1–4 + R; desperto pinta os 4 com a cor do personagem; cooldown por Id), G =
+nome da ult do `AwakeningDefs`; tecla R / D-pad ← / botão R no celular; bots usam R e o kit desperto; trailer
+`abilities` mostra 1–4+R e `ult` os 4 despertos; `ModRegistry` valida o esquema novo e migra o antigo (EnergyCost
+100 → 1º golpe desperto); aliases de VFX (`VFXLibrary`) e clipes (`ProcAnimDefs`) para todos os ids novos;
+`Animations.model.json` copia os ids publicados equivalentes (Swift/Ultimate, Jotaro/StarImpact, Dio/RoyalKnee…).
+PRÓXIMO PASSO = **TESTAR no Studio** (lista abaixo) → **B4** silhueta do Stand (cutscene + ORA/MUDA) → C/D.
+
+**TESTES DO REDESIGN (dono, com o Studio aberto)**
+1. Jotaro: 1 Rajada ORA (cone à frente), 2 Arremesso, 3 Soco Estrela (dash com hit), 4 Pancada; R = Postura
+   (escudo + veloc.). G com a barra cheia → cutscene → slots viram ORA ORA ORA / Parada do Tempo / Soco Máximo /
+   Impacto; 2 congela quem está perto por 2,5 s (1× por despertar).
+2. Bruno: Q Piscar; 3 Corte Cruzado = pisca e corta; R Aceleração (Piscar recarrega 2× mais rápido). G → a cúpula
+   do tempo abre SOZINHA no fim da cutscene (14 s) e os 4 viram Mil Cortes / Lâminas Gêmeas / Corte Fantasma /
+   Quebra do Tempo.
+3. Dio: 2 Facas ×3 em leque; 3 Golpe Vampírico cura; 4 Joelhada; R Sangue Frio. Desperto: 2 Parada do Tempo 5 s,
+   3 Chuva de Facas ×6, 4 ROLO COMPRESSOR (área à frente com atraso).
+4. Kira: 1 Toque da Bomba marca (VFX na vítima) → seu próximo M1 nela explode (ou sozinho em 4 s); 3 Sheer Heart
+   Attack (peça no chão persegue e explode); R Mãos Limpas (pisca para trás + cura). Desperto: 4 BITES THE DUST =
+   4 s depois você volta para onde estava com a vida de antes e explode.
+5. Rick: 1 laser, 2 portal, 3 drone (persegue + stun), 4 bomba; R Kit Médico tira stun/ragdoll. Desperto: 3 =
+   Mergulho Prime (a ult antiga).
+6. HUD: 5 slots (R no 5º), cooldowns certos ao despertar/voltar; celular tem botão R; cartão da seleção mostra
+   1–4, R e G. Bots (DEV → BOTS) usam R e despertam; trailer `abilities`/`ult`.
+7. Mods: o mod [TESTE] antigo (EnergyCost 100) ainda carrega (ult vira 1º golpe desperto).
 Dono avisou (24/09): vai editar o mapa (Taberna/construções) no Studio; ao voltar, SINCRONIZAR antes de qualquer
 Play/fechar (`tools/sincronizar_arena.luau` para peças da arena; Taberna = ler pelo MCP e gravar em
 `tools/montar_taberna.luau`). Bug do botão direito da câmera no Studio (edição) = ambiente Wine/XWayland,

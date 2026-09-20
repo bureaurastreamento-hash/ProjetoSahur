@@ -210,6 +210,10 @@ local function doDashOverride(player: Fighter, character: Model, ability: any, d
 		-- dois cooldowns como o dash universal (dono, 2026-09-21): lateral = SideCooldown (ou Cooldown)
 		local serverNow = Workspace:GetServerTimeNow()
 		local cd = if sideways then (tonumber(ability.SideCooldown) or ability.Cooldown) else ability.Cooldown
+		local dashMult = player:GetAttribute("DashCooldownMult")
+		if typeof(dashMult) == "number" and dashMult > 0 then
+			cd *= dashMult
+		end
 		if sideways then
 			state.sideReadyAt = now + cd
 		else
@@ -342,6 +346,10 @@ local function onRequestDash(player: Fighter, rawDirection: any, rawLook: any)
 	local timeSlow = player:GetAttribute("TimeSlow")
 	if typeof(timeSlow) == "number" and timeSlow > 0 and timeSlow < 1 then
 		cooldown /= timeSlow -- Domínio do Tempo
+	end
+	local dashMult = player:GetAttribute("DashCooldownMult") -- Buff.DashCooldownMult (Aceleração do Bruno)
+	if typeof(dashMult) == "number" and dashMult > 0 then
+		cooldown *= dashMult
 	end
 	if not noCooldown then
 		if sideways then

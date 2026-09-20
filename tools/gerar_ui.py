@@ -152,7 +152,7 @@ def write(fname, data):
 # HUD
 # =============================================================================
 SLOT = 64
-SLOT_KEYS = ["1", "2", "3", "4"]  # habilidades; Q = dash universal (frames Dash/DashSide); G = ultimate (frame Ult)
+SLOT_KEYS = ["1", "2", "3", "4", "R"]  # 4 ataques + R (suporte); Q = dash universal (frames Dash/DashSide); G = ultimate (frame Ult)
 
 
 def slot(i, name=None, key=None, ult=False):
@@ -222,9 +222,9 @@ hud = screen("HUD", [
         ]),
     ]),
     # Habilidades (o dash não fica aqui: chips em Vitals.DashChips, pedido do dono 2026-09-19)
-    frame("Abilities", ud(0, SLOT * 5 + 8 * 4, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
+    frame("Abilities", ud(0, SLOT * 6 + 8 * 5, 0, SLOT), ud(0.5, 0, 1, -32), anchor=(0.5, 1), t=1, children=[
         listlayout("Horizontal", 8, "Center", "Center"),
-        slot(1), slot(2), slot(3), slot(4), slot(5, name="Ult", key="G", ult=True),
+        slot(1), slot(2), slot(3), slot(4), slot(5), slot(6, name="Ult", key="G", ult=True),
     ]),
     # Placar (Tab)
     frame("Scoreboard", ud(0, 240, 0, 260), ud(1, -16, 0.5, 0), anchor=(1, 0.5), visible=False, children=[
@@ -454,15 +454,15 @@ HELP = "\n".join([
     "SHIFT LOCK — Shift",
     "DASH — Q + WASD (A/D lateral 2 s · W/S frente/trás 4 s, recargas separadas; não sai apanhando)",
     "CAIU (ragdoll: 4º golpe, finisher, golpes pesados) — Q levanta na hora (20 s de recarga)",
-    "HABILIDADES — 1 / 2 / 3 / 4 por cooldown (direção pelo WASD) · agarrões: Brawler ARREMESSA (mire com a câmera), Guardian ESMAGA (área), Overlord GIRA (acerta quem chega perto)",
-    "G = ULTIMATE com a carga cheia: golpe final + DESPERTAR (20 s: +30% dano, +10% vel.) · Bruno Gollini: DOMÍNIO DO TEMPO (cúpula: todos lentos, você rápido; sair quebra e te deixa MUITO rápido; 1× por despertar)",
+    "HABILIDADES — 1 / 2 / 3 / 4 = ataques por cooldown (direção pelo WASD) · R = SUPORTE (cura/escudo/velocidade/fuga, cooldown próprio)",
+    "G = ULTIMATE com a carga cheia: DESPERTAR (cutscene) e por alguns segundos os 4 ataques VIRAM os 4 golpes despertos (+dano/+vel.) · Bruno Gollini: a cúpula do DOMÍNIO DO TEMPO abre sozinha (todos lentos, você rápido; sair quebra)",
     "DASH PRA FRENTE / PISCAR = hit ao chegar; bem de frente = empurra longe",
     "CARGA — dar golpe +4, receber +2, parry +7",
     "VIDA — regenera após 6 s sem dano",
     "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C",
     "BOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã (C) > GUERRA: dominação A/B/C, 2 clãs, 5 min",
-    "CONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo",
-    "CELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
+    "CONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ← suporte (R) · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo",
+    "CELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, R, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
 ])
 setting_row = button("Template", "", ud(1, 0, 0, 26), ud(0, 0, 0, 0), bg=CARD, t=0.2, ts=12, extra={"Visible": False, "TextXAlignment": "Left"},
                      children=[padding(10, 0),
