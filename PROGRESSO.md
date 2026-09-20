@@ -259,7 +259,14 @@ despertar + ULT; vida ×4 (400), dano ×1,5 (atributo `DamageMult` no Model, lid
 walk 26 (> sprint), ult cheia na entrada e a cada 40 s, fase 2 = walk 30 e dano ×1,8; `SpawnOptions.Attributes`/
 `Tuning` e `BotService.Remove` novos. Testado via MCP (Play): despertou, usou Quake/ShieldBash, ragdollou o
 jogador, crédito e limpeza OK. Conta como bot no DEV (BOTS → limpar também some com ele).
-PRÓXIMO PASSO = **B1** (PESQUISA dos kits por personagem para o dono aprovar antes de codar). Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
+**B1 ENTREGUE (24/09)**: `PESQUISA_KITS.md` — kits 4+R+4 para Jotaro/Bruno/Dio/Kira/Rick (+Sahur/Overlord), só 4 tipos
+novos no total (`Buff`, `Mark`, `Homing`, `Rewind`), animações PROC/PACK/ARTE marcadas, 4 perguntas no fim para o
+dono. PRÓXIMO PASSO = dono aprova/edita o arquivo → **B2** (esquema `Abilities`/`Passive`/`Ultimate`/
+`AwakenedAbilities`) → B3 → B4 (Stands).
+Dono avisou (24/09): vai editar o mapa (Taberna/construções) no Studio; ao voltar, SINCRONIZAR antes de qualquer
+Play/fechar (`tools/sincronizar_arena.luau` para peças da arena; Taberna = ler pelo MCP e gravar em
+`tools/montar_taberna.luau`). Bug do botão direito da câmera no Studio (edição) = ambiente Wine/XWayland,
+provável pós-Play com shift lock; passos em ordem: reiniciar o Studio → `MouseWarpOverride=force` → sessão X11. Novas anotações do dono (noite): anti-2v1 na tecla E, variações de
 golpe estilo Jujutsu Shenanigans, evento de admin "último de pé", log de atualização no jogo — ver "D" abaixo.
 
 **D — Ideias novas do dono (2026-09-23 noite) — anotadas, ordenar junto com B**
