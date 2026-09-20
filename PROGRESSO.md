@@ -245,7 +245,7 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
-## RETOMAR AQUI (última sessão: 2026-09-24 — A1–A6 + B1–B4 FEITOS sem teste; próximo = dono testa o redesign)
+## RETOMAR AQUI (última sessão: 2026-09-25 — A1–A6 + B1–B5 FEITOS; próximo = dono testa o redesign + Stand animado)
 
 ### ONDE PARAMOS (ler primeiro)
 Feito hoje (23/09): bloco E fechado (traidor + mods de asset), REFATORAÇÃO do combate para lutadores não-Player
@@ -305,7 +305,18 @@ registers` é de um plugin instalado, não do jogo.
   destrava; (2) se sim, procurar no cliente quem mexe em `workspace.CurrentCamera` sem restaurar ao parar o Play
   (`CutsceneController`, `TrailerController`, seleção de personagem, `CharacterSelect`); (3) se não, testar com os
   plugins desligados (RigEdit/Moon Animator/Kojo) e por fim sessão X11.
-PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = silhueta) → B5 (Stand animado) → C/D.
+**B5 FEITO (sessão seguinte, testado só a geometria via MCP em modo edição)**: `StandSilhouette` virou rig PROCEDURAL —
+cinemática direta R6 (mesmas convenções do `RigPose`) em cima dos clipes novos `Stand/Idle` (flutua respirando,
+braços cruzados, pernas soltas), `Stand/Enter` (surge encolhido de trás do ombro: escala Back.Out + fade),
+`Stand/Punch` (2 socos por volta, velocidade casada com o `Interval` da rajada, tronco inclinado e girando, pernas
+para trás) e `Stand/Exit` (dissolve subindo) em `ProcAnimDefs` (+ `ProcAnimDefs.Sample(clip, t)` exportado). Segue
+o jogador com suavização (posição 9/s, rotação 6/s) e inclina na direção do movimento. Na RAJADA a âncora muda para
+o LADO DIREITO um pouco à frente (`PUNCH_ANCHOR`), senão o Stand socava as costas do jogador. Proporção por
+personagem em `AwakeningDefs.Stand` (agora tabela `StandStyle`: Scale/Torso/Arms/Legs/Head/Ears/Anchor): Star
+Platinum parrudo (1.35, tronco 1.25, braços 1.3), The World alto (1.4, pernas 1.1), Killer Queen esguio com orelhas.
+Screenshots no Studio (dummy R6 + `run_code`) conferiram cabeça/tronco/braços/pernas e a saída. FALTA o dono ver em
+jogo (cutscene + rajada com o personagem andando).
+PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = Stand animado) → C/D.
 
 **TESTES DO REDESIGN (dono, com o Studio aberto)**
 1. Jotaro: 1 Rajada ORA (cone à frente), 2 Arremesso, 3 Soco Estrela (dash com hit), 4 Pancada; R = Postura
@@ -324,8 +335,10 @@ PRÓXIMO PASSO = **dono testa o visual no Studio** (lista abaixo; item 8 = silhu
 6. HUD: 5 slots (R no 5º), cooldowns certos ao despertar/voltar; celular tem botão R; cartão da seleção mostra
    1–4, R e G. Bots (DEV → BOTS) usam R e despertam; trailer `abilities`/`ult`.
 7. Mods: o mod [TESTE] antigo (EnergyCost 100) ainda carrega (ult vira 1º golpe desperto).
-8. Silhueta do Stand (Jotaro/Dio/Kira): aparece atrás no estouro da cutscene e socando nas rajadas ORA/MUDA;
-   tamanho/posição/cor (`StandSilhouette.ANCHOR`, `scale`) para o dono ajustar a gosto.
+8. Stand ANIMADO (Jotaro/Dio/Kira): entra de trás do ombro no estouro da cutscene, flutua respirando de braços
+   cruzados e SEGUE o jogador (andar/dash: deve ficar levemente atrasado, sem tremer); nas rajadas ORA/MUDA vai para
+   o lado direito à frente e soca no ritmo dos hits; some dissolvendo. Ajustes: proporção/cor em
+   `AwakeningDefs.Stand`, âncoras `DEFAULT_ANCHOR`/`PUNCH_ANCHOR`, poses em `ProcAnimDefs` "Stand/*".
 Dono avisou (24/09): vai editar o mapa (Taberna/construções) no Studio; ao voltar, SINCRONIZAR antes de qualquer
 Play/fechar (`tools/sincronizar_arena.luau` para peças da arena; Taberna = ler pelo MCP e gravar em
 `tools/montar_taberna.luau`). Bug do botão direito da câmera no Studio (edição) = ambiente Wine/XWayland,

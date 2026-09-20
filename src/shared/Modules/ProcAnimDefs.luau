@@ -864,6 +864,106 @@ ProcAnimDefs.AwakeningPoses = {
 }
 
 -- ---------------------------------------------------------------------------
+-- STAND (B5, dono 2026-09-25): clipes da silhueta de luz (StandSilhouette faz a cinemática direta com
+-- as MESMAS convenções do RigPose). O rig do Stand flutua: RL/LL negativos = pernas soltas para trás.
+-- ---------------------------------------------------------------------------
+local STAND_IDLE: { [string]: JointPose } = { -- braços cruzados, peito estufado, pernas soltas
+	Root = { rot = V(4, 0, 0) },
+	Neck = { rot = V(-6, 0, 0) },
+	RA = { rot = V(78, 0, -46) },
+	LA = { rot = V(70, 0, 52) },
+	RL = { rot = V(-18, 0, 6) },
+	LL = { rot = V(-24, 0, -6) },
+}
+C["Stand/Idle"] = { -- respiração: 3,2 s de ciclo
+	duration = 3.2,
+	loop = true,
+	frames = {
+		P(0, STAND_IDLE),
+		P(1.6, { Root = { rot = V(7, 0, 0), off = V(0, 0.12, 0) }, Neck = { rot = V(-9, 0, 0) }, RA = { rot = V(84, 0, -44) }, LA = { rot = V(76, 0, 50) }, RL = { rot = V(-14, 0, 8) }, LL = { rot = V(-28, 0, -8) } }, "inout"),
+		P(3.2, STAND_IDLE, "inout"),
+	},
+}
+C["Stand/Enter"] = { -- surge encolhido de trás do ombro e abre
+	duration = 0.32,
+	frames = {
+		P(0, { Root = { rot = V(-30, 0, 0), off = V(0, -0.8, 0.6) }, Neck = { rot = V(-30, 0, 0) }, RA = { rot = V(120, 0, -60) }, LA = { rot = V(120, 0, 60) }, RL = { rot = V(40, 0, 10) }, LL = { rot = V(40, 0, -10) } }),
+		P(0.22, { Root = { rot = V(10, 0, 0), off = V(0, 0.2, 0) }, Neck = { rot = V(6, 0, 0) }, RA = { rot = V(60, 0, -30) }, LA = { rot = V(55, 0, 36) }, RL = { rot = V(-30, 0, 8) }, LL = { rot = V(-36, 0, -8) } }, "out"),
+		P(0.32, STAND_IDLE, "inout"),
+	},
+}
+C["Stand/Exit"] = { -- dissolve subindo, braços abrindo
+	duration = 0.35,
+	frames = {
+		P(0, STAND_IDLE),
+		P(0.35, { Root = { rot = V(12, 0, 0), off = V(0, 1.2, 0.3) }, Neck = { rot = V(14, 0, 0) }, RA = { rot = V(40, 0, 30) }, LA = { rot = V(40, 0, -30) }, RL = { rot = V(-40, 0, 10) }, LL = { rot = V(-44, 0, -10) } }, "in"),
+	},
+}
+C["Stand/Punch"] = { -- ORA ORA / MUDA MUDA: 2 socos por volta (direito, esquerdo); StandSilhouette casa a velocidade com o Interval
+	duration = 0.24,
+	loop = true,
+	frames = {
+		P(0, { Root = { rot = V(-16, -14, 0), off = V(0, 0, -0.3) }, Neck = { rot = V(8, 10, 0) }, RA = { rot = V(100, 0, -8) }, LA = { rot = V(10, 0, -16) }, RL = { rot = V(-30, 0, 8) }, LL = { rot = V(-38, 0, -8) } }),
+		P(0.12, { Root = { rot = V(-16, 14, 0), off = V(0, 0, -0.3) }, Neck = { rot = V(8, -10, 0) }, RA = { rot = V(10, 0, 16) }, LA = { rot = V(100, 0, 8) }, RL = { rot = V(-38, 0, 8) }, LL = { rot = V(-30, 0, -8) } }, "linear"),
+		P(0.24, { Root = { rot = V(-16, -14, 0), off = V(0, 0, -0.3) }, Neck = { rot = V(8, 10, 0) }, RA = { rot = V(100, 0, -8) }, LA = { rot = V(10, 0, -16) }, RL = { rot = V(-30, 0, 8) }, LL = { rot = V(-38, 0, -8) } }, "linear"),
+	},
+}
+
+local EASES: { [string]: (number) -> number } = {
+	linear = function(x)
+		return x
+	end,
+	out = function(x)
+		return 1 - (1 - x) * (1 - x)
+	end,
+	["in"] = function(x)
+		return x * x
+	end,
+	inout = function(x)
+		return x * x * (3 - 2 * x)
+	end,
+}
+
+--- Pose do clipe no instante `t` (loop repete; fora do fim = último frame). Devolve também se acabou.
+function ProcAnimDefs.Sample(clip: Clip, t: number): (Pose, boolean)
+	local frames = clip.frames
+	local finished = false
+	if clip.loop then
+		t = t % clip.duration
+	elseif t >= clip.duration then
+		t = clip.duration
+		finished = true
+	end
+	local prev = frames[1]
+	local nextF = frames[#frames]
+	for i = 1, #frames do
+		local f = frames[i]
+		if f.t <= t then
+			prev = f
+			nextF = frames[i + 1] or f
+		else
+			break
+		end
+	end
+	if prev == nextF or nextF.t <= prev.t then
+		return prev.pose, finished
+	end
+	local alpha = (t - prev.t) / (nextF.t - prev.t)
+	local easeFn = EASES[nextF.ease or "out"] or EASES.out
+	local out: Pose = {}
+	for name, ja in prev.pose do
+		local jb = nextF.pose[name]
+		out[name] = { rot = (ja.rot or Vector3.zero):Lerp((jb and jb.rot) or Vector3.zero, easeFn(alpha)), off = (ja.off or Vector3.zero):Lerp((jb and jb.off) or Vector3.zero, easeFn(alpha)) }
+	end
+	for name, jb in nextF.pose do
+		if not out[name] then
+			out[name] = { rot = Vector3.zero:Lerp(jb.rot or Vector3.zero, easeFn(alpha)), off = Vector3.zero:Lerp(jb.off or Vector3.zero, easeFn(alpha)) }
+		end
+	end
+	return out, finished
+end
+
+-- ---------------------------------------------------------------------------
 -- CUTSCENE do despertar: poses padrão continuam no CutsceneController
 -- ---------------------------------------------------------------------------
 

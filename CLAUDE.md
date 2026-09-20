@@ -25,8 +25,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   (servidor OK; rajada com Offset + empurrão só no último golpe). PRÓXIMO: dono testa o VISUAL (lista no PROGRESSO) → C/D.**
   Botão direito da câmera travado no Studio (volta após todo Play nesta place): tentar toggle `CameraType`
   `Scriptable → Fixed` via MCP; investigação em aberto (ver PROGRESSO "Pedidos do dono 25/09").
-  **Pedidos 25/09 (antes de C/D)**: B5 = Stand ANIMADO de verdade (rig procedural idle/entrada/rajada/saída, segue o
-  jogador suavizado, proporção por personagem) — aura parada ficou estranha; skin por personagem já existe
+  **B5 FEITO (25/09, sem o dono ver em jogo)**: `StandSilhouette` = rig procedural (FK R6 sobre clipes `Stand/Idle|
+  Enter|Punch|Exit` do `ProcAnimDefs`, `ProcAnimDefs.Sample`), segue suavizado, `PUNCH_ANCHOR` à frente na rajada;
+  `AwakeningDefs.Stand` = tabela `StandStyle` (proporção por personagem). Skin por personagem já existe
   (setting `CharacterModel` + `ServerStorage.CharacterModels.<Id>`), falta a arte entregar os modelos.
   Regras: `CharacterDefs.GetAbility(id, slot, awakened)`; nunca usar `EnergyCost`/`AwakenedEffect` (só no DashOverride).
   Ideias novas anotadas em "D": anti-2v1 (tecla E), variações de golpe (JJS), evento "último de pé", log de

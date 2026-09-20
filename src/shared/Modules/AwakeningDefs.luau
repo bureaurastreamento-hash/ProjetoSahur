@@ -24,7 +24,18 @@ export type Def = {
 	Theme: string,
 	Color: Color3?, -- sobrescreve CharacterDefs.Color na cena
 	VoiceAt: number?, -- segundos DEPOIS do estouro para o grito (padrão 0.05)
-	Stand: boolean?, -- tem Stand: silhueta de luz atrás (StandSilhouette) na cutscene e nas rajadas ORA/MUDA
+	Stand: StandStyle?, -- tem Stand: silhueta de luz ANIMADA atrás (StandSilhouette) na cutscene e nas rajadas ORA/MUDA
+}
+
+--- Proporção da silhueta (B5): multiplicadores em cima do R6 (1 = igual ao jogador). Sem modelo externo (dono).
+export type StandStyle = {
+	Scale: number?, -- tamanho geral (padrão 1.3)
+	Torso: number?, -- largura do tronco
+	Arms: number?, -- grossura dos braços
+	Legs: number?, -- comprimento das pernas
+	Head: number?, -- tamanho da cabeça
+	Ears: boolean?, -- orelhas de gato (Killer Queen)
+	Anchor: Vector3?, -- posição relativa ao jogador (x = lado, y = altura, z = atrás)
 }
 
 local AwakeningDefs = {}
@@ -37,9 +48,10 @@ local characters: { [string]: Def } = {
 	-- roster decidido (2026-09-20): a forma da ult é o nome da direita
 	Rick = { UltName = "RICK PRIME", Subtitle = "o Rick mais inteligente do multiverso", Theme = "void", Color = Color3.fromRGB(120, 255, 180) },
 	-- (2026-09-21: os antigos Brawler/Mystic/Guardian viraram Jotaro/Kira/Dio — kits mantidos até os movesets próprios)
-	Jotaro = { UltName = "STAR PLATINUM: THE WORLD", Subtitle = "o tempo é meu", Theme = "rock", Stand = true },
-	Dio = { UltName = "THE WORLD", Subtitle = "ZA WARUDO", Theme = "stone", Stand = true },
-	Kira = { UltName = "KILLER QUEEN", Subtitle = "já tocou", Theme = "arcane", Stand = true },
+	-- Stands (B5): Star Platinum = parrudo; The World = alto e reto; Killer Queen = esguio com orelhas
+	Jotaro = { UltName = "STAR PLATINUM: THE WORLD", Subtitle = "o tempo é meu", Theme = "rock", Stand = { Scale = 1.35, Torso = 1.25, Arms = 1.3, Legs = 1, Head = 1 } },
+	Dio = { UltName = "THE WORLD", Subtitle = "ZA WARUDO", Theme = "stone", Stand = { Scale = 1.4, Torso = 1.1, Arms = 1.1, Legs = 1.1, Head = 0.95 } },
+	Kira = { UltName = "KILLER QUEEN", Subtitle = "já tocou", Theme = "arcane", Stand = { Scale = 1.25, Torso = 0.95, Arms = 0.9, Legs = 1.05, Head = 1, Ears = true } },
 }
 
 local default: Def = { UltName = "DESPERTAR", Theme = "rock" }

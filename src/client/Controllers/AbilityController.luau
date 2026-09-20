@@ -323,7 +323,7 @@ local function onNotifyAbility(character: Model?, characterId: string, abilityId
 		if awDef.Stand then
 			local e: any = abilityForType.Effect
 			local seconds = (tonumber(e.Hits) or 6) * (tonumber(e.Interval) or 0.12) + 0.5
-			StandSilhouette.Show(character, awDef.Color or (defForType and defForType.Color) or Color3.fromRGB(200, 200, 255), seconds, { punch = true })
+			StandSilhouette.Show(character, awDef.Color or (defForType and defForType.Color) or Color3.fromRGB(200, 200, 255), seconds, { punch = true, rate = tonumber(e.Interval) or 0.12, style = awDef.Stand })
 		end
 	end
 	if phase == "start" then
