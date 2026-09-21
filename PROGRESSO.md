@@ -248,6 +248,13 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 ## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 + HALL da Taberna FEITOS; Studio travou no fim (Hall pode não ter salvo: rerodar montar_hall); próximo = C2 → C5, depois testes do dono)
 
 ### ONDE PARAMOS (ler primeiro)
+**21/09 (sessão seguinte) — BUG DO HALL RESOLVIDO ("textura gigante atravessando a caverna, não dá para clicar")**: os 50
+móveis restaurados do backup JSONL vieram com `MeshSize = 0` (MeshPart recriada por `Instance.new` + `MeshId` não
+carrega a geometria) → colisão certa, render deformado/fora do lugar. Diagnóstico por bissecção com screenshots
+(scratchpad `shot.sh` = KWin ativa a janela "Wine Desktop" + `spectacle -f`; `diff.py` compara pixels). Conserto:
+`tools/consertar_meshparts.luau` via MCP (CreateMeshPartAsync + ApplyMesh; 134 MeshParts, 0 falhas) — **o dono
+precisa SALVAR o place**. Regra nova: toda vez que algo entrar pelo `restaurar_workspace.luau`, rodar o
+`consertar_meshparts` em seguida. Pendente de olhar: "riscos" brancos diagonais nas tochas clonadas do Hall (partículas?).
 **25/09 (noite, dono de volta) — HALL DE ENTRADA da Taberna FEITO**: `tools/montar_hall.luau` (roda via MCP; idempotente;
 DEVOLVE os móveis à pilha antes de recriar — nunca apagar `Taberna.Hall` à mão sem tirar `Hall.Moveis` de dentro) monta
 `Workspace.Taberna.Hall` na sala do `cav` a oeste do salão (x 274..325, z 78..110): piso/tapete/vigas, batentes + placa

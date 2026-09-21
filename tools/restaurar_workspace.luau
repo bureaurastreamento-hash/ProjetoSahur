@@ -10,6 +10,9 @@
 	    atributo `UnionPerdida = true` (mesmo tamanho/posição) — se precisar restaurar, pegar a união do
 	    histórico de versões do place (Team Create).
 	Para restaurar no Studio: Insert from File do .rbxm gerado (não passa pelo Rojo).
+	ATENÇÃO (bug de 25/09): MeshPart recriada assim fica com `MeshSize = 0` → render deformado e fora do lugar
+	("textura gigante" que não dá para clicar). Depois de inserir, rodar `tools/consertar_meshparts.luau`
+	via MCP no Studio (CreateMeshPartAsync + ApplyMesh) para recarregar a geometria de cada mesh.
 ]]
 local fs = require("@lune/fs")
 local process = require("@lune/process")
