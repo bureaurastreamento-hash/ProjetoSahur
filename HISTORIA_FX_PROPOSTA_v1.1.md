@@ -1,3 +1,7 @@
+> **2026-09-28: o dono gostou, mas já tinha a lore dele → `LORE_FX_CANONE.md` é a fonte principal.** Esta proposta
+> só COMPLEMENTA onde não conflita (ver o fim do cânone). Rejeitado por conflito: Toduro sobreviver; o player
+> "Desfiado" como razão definitiva (a razão da escolha segue em aberto no cânone §52).
+
 # F/X — Proposta de história v1.1 (AGUARDANDO APROVAÇÃO DO DONO)
 
 Preenche as "Questões em aberto" da `BIBLIA_HISTORIA_FX_v1.0.md` com uma cosmologia concreta. Nada aqui é cânone

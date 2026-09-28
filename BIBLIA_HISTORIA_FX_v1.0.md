@@ -1,3 +1,7 @@
+> **2026-09-28: a FONTE PRINCIPAL da história agora é `LORE_FX_CANONE.md` (documento do dono).** Esta Bíblia
+> foi escrita antes dele; em conflito, vale o cânone (ex.: Toduro MORRE; o cientista abriu a fusão, Adryan já mexia
+> nas linhas antes; F/X = a junção dos universos).
+
 # F/X — Bíblia da História v1.0
 
 Documento-base canônico do RPG. Consolida as decisões aprovadas até 2026-09-28. Elementos marcados como “a definir” não devem ser inventados silenciosamente durante a implementação.

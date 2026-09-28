@@ -33,6 +33,13 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## ONDE PARAMOS (fim de 2026-09-28) — ler PROGRESSO "RETOMAR AQUI (fim da sessão 2026-09-28, noite)"
+- História CANÔNICA = `LORE_FX_CANONE.md` (doc do dono). Não decidir sozinho o que está em §52 dele.
+- Próximo: (1) chão das ilhas com PEÇAS simples bem feitas, não Terrain realista; (2) Stands/raças do zero (nasce
+  humano, Flecha no fim do tutorial, raridade sem pity, troca perde o anterior mas guarda maestria, inventário);
+  (3) HUD estilo Blox Fruits + menus na tela; depois conteúdo, places por capítulo, Server Authority.
+- O dono ainda precisa PUBLICAR pelo Studio o que foi feito em 28/09.
+
 ## ONDE PARAMOS (2026-09-28, noite) — ARQUIPÉLAGO (ler PROGRESSO "ARQUIPÉLAGO" + MAPA_CAPITULO_1 "Layout do mundo")
 - A arena fechada foi DESMONTADA em ilhas por Parte de JoJo (Alvorecer P1, Pilares P2 + Coliseu, Sol Partido P3, ilhota
   Kame). Chão = Terrain gerado por `tools/studio/MontarMundo.luau` (ModuleScript sincronizado; o terreno NÃO está no git).

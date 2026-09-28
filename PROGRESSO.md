@@ -260,6 +260,45 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## RETOMAR AQUI (fim da sessão 2026-09-28, noite) — ler isto primeiro
+**Direção**: Bizarre Showdown F/X = RPG open world (estrutura Blox Fruits) com o combate do Battlegrounds. História
+CANÔNICA = `LORE_FX_CANONE.md` (doc do dono; `HISTORIA_FX_PROPOSTA_v1.1.md` só complementa). Mapa = `MAPA_CAPITULO_1.md`.
+
+**Feito hoje (28/09)**:
+1. Incidente do ChatGPT (publicou `rojo build` por API e apagou o mapa): dono restaurou a v421; regra "nunca publicar
+   por API" no CLAUDE/AGENTS; lixo do Codex removido.
+2. Iluminação cartoon (valores do dono) → depois menos saturada (0.15), céu padrão da Roblox + nuvens volumétricas.
+3. **Arquipélago do Capítulo 1**: arena fechada desmontada; Ilha 1 Alvorecer (Parte 1, com a Taberna), Ilha 2 Pilares
+   (Parte 2: selva asteca, santuário na montanha da cachoeira, Coliseu PvP), Ilha 3 Sol Partido (Parte 3), ilhota
+   Kame (easter egg). Terreno por `tools/studio/MontarMundo.luau`. Testado no Play via MCP.
+4. Lore canônica do dono salva; proposta de história do Claude registrada como complemento.
+5. Nome público decidido: **"Bizarre Showdown F/X"** (o dono troca no dashboard; a chave da API não tem `universe:write`).
+
+**⚠️ PENDENTE DO DONO**: **publicar pelo Studio** (File > Publish). Terreno, ilhota, iluminação e o código de hoje só
+estão no Team Create. Trocar o nome no dashboard.
+
+**PRÓXIMAS LEVAS (ordem combinada)** — decisões do dono já tomadas:
+1. **Terreno de PEÇAS, não Terrain realista** (dono: "players gostam de simplicidade com coisas bem feitas"): refazer o
+   chão das ilhas com Parts/models simples e quadrados (bem feitos, leves, fáceis de texturizar e modelar), no lugar do
+   Terrain do `MontarMundo` (a água do mar pode continuar a decidir). Manter os mesmos centros/raios (`WorldConfig.Islands`).
+2. **Stands e raças** (tudo do ZERO: wipe de todos os perfis, ninguém comprou VIP; passe VIP do Dio sai):
+   - Todo mundo nasce **HUMANO**; existem outras **raças**. No começo, sorteio de stand/raça de "padrão": quase sempre
+     comum; só com sorte absurda o player vem "abençoado". Os melhores/mais raros têm chance "menor que o sol explodir".
+   - Fim do tutorial: Humanoider_20 dá uma **Flecha** → sorteio de Stand por **raridade** (todos os kits atuais entram).
+   - **Chance fixa por uso, SEM pity/acúmulo.** Flechas: achadas no mapa, trocas, missões, bosses. **Raças: só missões
+     especiais.** Tudo **guardável no inventário** (flechas, stands, raças).
+   - Trocar de stand/raça = **perde o anterior** (precisa achar de novo ou ter no inventário e usar), mas a
+     **maestria/progresso de cada stand/raça fica salva**. Habilidades liberam por **maestria** (usar `profile.mastery`).
+3. **HUD estilo Blox Fruits** (vida, energia, cooldowns na tela) e **menus na tela**; o dropdown do topbar fica só para
+   menus "sérios" (Denúncia, Config...).
+4. Conteúdo: Sol Partido (Parte 3: porto, mansão do vilão), ilhas das Partes 4–6 (Parque B na reserva para a Parte 4).
+   **Missões com mais de um final** (caminhos diferentes, mesmo final da história).
+5. **Cada capítulo = outra place** (como os Seas do Blox Fruits) — planejar a divisão quando o Cap. 1 fechar.
+6. Locomoção entre ilhas/cidades grandes que não seja só barco (propostas: trem, cavalo, portais do cientista).
+7. **Server Authority** (dono aceitou refazer dash/corrida em simulação prevista + compensação de lag).
+Pontas soltas técnicas: flecha do ritual só nasce perto da origem (`RitualService` SpawnRadius); boss à solta pode ir
+para o mar; `StoryConfig` ainda tem os atos antigos do ChatGPT (reescrever com o cânone).
+
 ## ⚠️ INCIDENTE 2026-09-28 — place oficial sobrescrito (ler antes de tudo)
 - O ChatGPT/Codex publicou um `rojo build` puro pela Open Cloud → **versão 422** do place 85844807133499
   (21:49 UTC = 18:49 BRT) só tem o que está em `src/`: sumiram Taberna, Hall, Lojinha, santuário/altar,
