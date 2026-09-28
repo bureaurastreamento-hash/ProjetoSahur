@@ -1,0 +1,11087 @@
+{
+ "className": "Model",
+ "ignoreUnknownInstances": true,
+ "children": [
+  {
+   "name": "Coliseu",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "AreiaAnel0",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel0",
+      "Anchored": true,
+      "Position": [
+       984.0,
+       0.15,
+       -340.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel1",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel1",
+      "Anchored": true,
+      "Position": [
+       982.724,
+       0.15,
+       -325.414
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       80,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel2",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel2",
+      "Anchored": true,
+      "Position": [
+       978.934,
+       0.15,
+       -311.27
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       70,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel3",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel3",
+      "Anchored": true,
+      "Position": [
+       972.746,
+       0.15,
+       -298.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       60,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel4",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel4",
+      "Anchored": true,
+      "Position": [
+       964.348,
+       0.15,
+       -286.006
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       50,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel5",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel5",
+      "Anchored": true,
+      "Position": [
+       953.994,
+       0.15,
+       -275.652
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       40,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel6",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel6",
+      "Anchored": true,
+      "Position": [
+       942.0,
+       0.15,
+       -267.254
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       30,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel7",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel7",
+      "Anchored": true,
+      "Position": [
+       928.73,
+       0.15,
+       -261.066
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       20,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel8",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel8",
+      "Anchored": true,
+      "Position": [
+       914.586,
+       0.15,
+       -257.276
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       10,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel9",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel9",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       0.15,
+       -256.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel10",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel10",
+      "Anchored": true,
+      "Position": [
+       885.414,
+       0.15,
+       -257.276
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -10,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel11",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel11",
+      "Anchored": true,
+      "Position": [
+       871.27,
+       0.15,
+       -261.066
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -20,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel12",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel12",
+      "Anchored": true,
+      "Position": [
+       858.0,
+       0.15,
+       -267.254
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -30,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel13",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel13",
+      "Anchored": true,
+      "Position": [
+       846.006,
+       0.15,
+       -275.652
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -40,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel14",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel14",
+      "Anchored": true,
+      "Position": [
+       835.652,
+       0.15,
+       -286.006
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -50,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel15",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel15",
+      "Anchored": true,
+      "Position": [
+       827.254,
+       0.15,
+       -298.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -60,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel16",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel16",
+      "Anchored": true,
+      "Position": [
+       821.066,
+       0.15,
+       -311.27
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -70,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel17",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel17",
+      "Anchored": true,
+      "Position": [
+       817.276,
+       0.15,
+       -325.414
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -80,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel18",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel18",
+      "Anchored": true,
+      "Position": [
+       816.0,
+       0.15,
+       -340.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel19",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel19",
+      "Anchored": true,
+      "Position": [
+       817.276,
+       0.15,
+       -354.586
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -100,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel20",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel20",
+      "Anchored": true,
+      "Position": [
+       821.066,
+       0.15,
+       -368.73
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -110,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel21",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel21",
+      "Anchored": true,
+      "Position": [
+       827.254,
+       0.15,
+       -382.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -120,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel22",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel22",
+      "Anchored": true,
+      "Position": [
+       835.652,
+       0.15,
+       -393.994
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -130,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel23",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel23",
+      "Anchored": true,
+      "Position": [
+       846.006,
+       0.15,
+       -404.348
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -140,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel24",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel24",
+      "Anchored": true,
+      "Position": [
+       858.0,
+       0.15,
+       -412.746
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -150,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel25",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel25",
+      "Anchored": true,
+      "Position": [
+       871.27,
+       0.15,
+       -418.934
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -160,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel26",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel26",
+      "Anchored": true,
+      "Position": [
+       885.414,
+       0.15,
+       -422.724
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -170,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel27",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel27",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       0.15,
+       -424.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel28",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel28",
+      "Anchored": true,
+      "Position": [
+       914.586,
+       0.15,
+       -422.724
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -190,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel29",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel29",
+      "Anchored": true,
+      "Position": [
+       928.73,
+       0.15,
+       -418.934
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -200,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel30",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel30",
+      "Anchored": true,
+      "Position": [
+       942.0,
+       0.15,
+       -412.746
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -210,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel31",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel31",
+      "Anchored": true,
+      "Position": [
+       953.994,
+       0.15,
+       -404.348
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -220,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel32",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel32",
+      "Anchored": true,
+      "Position": [
+       964.348,
+       0.15,
+       -393.994
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -230,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel33",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel33",
+      "Anchored": true,
+      "Position": [
+       972.746,
+       0.15,
+       -382.0
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -240,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel34",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel34",
+      "Anchored": true,
+      "Position": [
+       978.934,
+       0.15,
+       -368.73
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -250,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAnel35",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAnel35",
+      "Anchored": true,
+      "Position": [
+       982.724,
+       0.15,
+       -354.586
+      ],
+      "Size": [
+       15.5,
+       0.3,
+       24
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -260,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio0",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio0",
+      "Anchored": true,
+      "Position": [
+       996.0,
+       3.5,
+       -340.0
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio1",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio1",
+      "Anchored": true,
+      "Position": [
+       994.155,
+       3.5,
+       -321.271
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       78.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio2",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio2",
+      "Anchored": true,
+      "Position": [
+       988.692,
+       3.5,
+       -303.262
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio3",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio3",
+      "Anchored": true,
+      "Position": [
+       979.821,
+       3.5,
+       -286.665
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       56.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio4",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio4",
+      "Anchored": true,
+      "Position": [
+       967.882,
+       3.5,
+       -272.118
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio5",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio5",
+      "Anchored": true,
+      "Position": [
+       953.335,
+       3.5,
+       -260.179
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       33.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio6",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio6",
+      "Anchored": true,
+      "Position": [
+       936.738,
+       3.5,
+       -251.308
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio7",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio7",
+      "Anchored": true,
+      "Position": [
+       918.729,
+       3.5,
+       -245.845
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       11.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio8",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio8",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       3.5,
+       -244.0
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio9",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio9",
+      "Anchored": true,
+      "Position": [
+       881.271,
+       3.5,
+       -245.845
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -11.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio10",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio10",
+      "Anchored": true,
+      "Position": [
+       863.262,
+       3.5,
+       -251.308
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio11",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio11",
+      "Anchored": true,
+      "Position": [
+       846.665,
+       3.5,
+       -260.179
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -33.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio12",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio12",
+      "Anchored": true,
+      "Position": [
+       832.118,
+       3.5,
+       -272.118
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio13",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio13",
+      "Anchored": true,
+      "Position": [
+       820.179,
+       3.5,
+       -286.665
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -56.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio14",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio14",
+      "Anchored": true,
+      "Position": [
+       811.308,
+       3.5,
+       -303.262
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio15",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio15",
+      "Anchored": true,
+      "Position": [
+       805.845,
+       3.5,
+       -321.271
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -78.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio17",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio17",
+      "Anchored": true,
+      "Position": [
+       805.845,
+       3.5,
+       -358.729
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -101.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio18",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio18",
+      "Anchored": true,
+      "Position": [
+       811.308,
+       3.5,
+       -376.738
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -112.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio19",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio19",
+      "Anchored": true,
+      "Position": [
+       820.179,
+       3.5,
+       -393.335
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -123.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio20",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio20",
+      "Anchored": true,
+      "Position": [
+       832.118,
+       3.5,
+       -407.882
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio21",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio21",
+      "Anchored": true,
+      "Position": [
+       846.665,
+       3.5,
+       -419.821
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -146.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio22",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio22",
+      "Anchored": true,
+      "Position": [
+       863.262,
+       3.5,
+       -428.692
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -157.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio23",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio23",
+      "Anchored": true,
+      "Position": [
+       881.271,
+       3.5,
+       -434.155
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -168.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio25",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio25",
+      "Anchored": true,
+      "Position": [
+       918.729,
+       3.5,
+       -434.155
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -191.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio26",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio26",
+      "Anchored": true,
+      "Position": [
+       936.738,
+       3.5,
+       -428.692
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -202.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio27",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio27",
+      "Anchored": true,
+      "Position": [
+       953.335,
+       3.5,
+       -419.821
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -213.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio28",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio28",
+      "Anchored": true,
+      "Position": [
+       967.882,
+       3.5,
+       -407.882
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio29",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio29",
+      "Anchored": true,
+      "Position": [
+       979.821,
+       3.5,
+       -393.335
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -236.25,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio30",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio30",
+      "Anchored": true,
+      "Position": [
+       988.692,
+       3.5,
+       -376.738
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -247.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Podio31",
+     "className": "Part",
+     "properties": {
+      "Name": "Podio31",
+      "Anchored": true,
+      "Position": [
+       994.155,
+       3.5,
+       -358.729
+      ],
+      "Size": [
+       19.5,
+       7,
+       3
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -258.75,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_0",
+      "Anchored": true,
+      "Position": [
+       1001.0,
+       3.5,
+       -340.0
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_1",
+      "Anchored": true,
+      "Position": [
+       999.757,
+       3.5,
+       -324.2
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_2",
+      "Anchored": true,
+      "Position": [
+       996.057,
+       3.5,
+       -308.789
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_3",
+      "Anchored": true,
+      "Position": [
+       989.992,
+       3.5,
+       -294.147
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_4",
+      "Anchored": true,
+      "Position": [
+       981.711,
+       3.5,
+       -280.634
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_5",
+      "Anchored": true,
+      "Position": [
+       971.418,
+       3.5,
+       -268.582
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_6",
+      "Anchored": true,
+      "Position": [
+       959.366,
+       3.5,
+       -258.289
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_7",
+      "Anchored": true,
+      "Position": [
+       945.853,
+       3.5,
+       -250.008
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_8",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_8",
+      "Anchored": true,
+      "Position": [
+       931.211,
+       3.5,
+       -243.943
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_9",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_9",
+      "Anchored": true,
+      "Position": [
+       915.8,
+       3.5,
+       -240.243
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_10",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_10",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       3.5,
+       -239.0
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_11",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_11",
+      "Anchored": true,
+      "Position": [
+       884.2,
+       3.5,
+       -240.243
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_12",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_12",
+      "Anchored": true,
+      "Position": [
+       868.789,
+       3.5,
+       -243.943
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_13",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_13",
+      "Anchored": true,
+      "Position": [
+       854.147,
+       3.5,
+       -250.008
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_14",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_14",
+      "Anchored": true,
+      "Position": [
+       840.634,
+       3.5,
+       -258.289
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_15",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_15",
+      "Anchored": true,
+      "Position": [
+       828.582,
+       3.5,
+       -268.582
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_16",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_16",
+      "Anchored": true,
+      "Position": [
+       818.289,
+       3.5,
+       -280.634
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_17",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_17",
+      "Anchored": true,
+      "Position": [
+       810.008,
+       3.5,
+       -294.147
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_18",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_18",
+      "Anchored": true,
+      "Position": [
+       803.943,
+       3.5,
+       -308.789
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_19",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_19",
+      "Anchored": true,
+      "Position": [
+       800.243,
+       3.5,
+       -324.2
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_21",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_21",
+      "Anchored": true,
+      "Position": [
+       800.243,
+       3.5,
+       -355.8
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -99.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_22",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_22",
+      "Anchored": true,
+      "Position": [
+       803.943,
+       3.5,
+       -371.211
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -108.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_23",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_23",
+      "Anchored": true,
+      "Position": [
+       810.008,
+       3.5,
+       -385.853
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -117.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_24",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_24",
+      "Anchored": true,
+      "Position": [
+       818.289,
+       3.5,
+       -399.366
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_25",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_25",
+      "Anchored": true,
+      "Position": [
+       828.582,
+       3.5,
+       -411.418
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_26",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_26",
+      "Anchored": true,
+      "Position": [
+       840.634,
+       3.5,
+       -421.711
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -144.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_27",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_27",
+      "Anchored": true,
+      "Position": [
+       854.147,
+       3.5,
+       -429.992
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -153.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_28",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_28",
+      "Anchored": true,
+      "Position": [
+       868.789,
+       3.5,
+       -436.057
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_29",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_29",
+      "Anchored": true,
+      "Position": [
+       884.2,
+       3.5,
+       -439.757
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -171.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_31",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_31",
+      "Anchored": true,
+      "Position": [
+       915.8,
+       3.5,
+       -439.757
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -189.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_32",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_32",
+      "Anchored": true,
+      "Position": [
+       931.211,
+       3.5,
+       -436.057
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_33",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_33",
+      "Anchored": true,
+      "Position": [
+       945.853,
+       3.5,
+       -429.992
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -207.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_34",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_34",
+      "Anchored": true,
+      "Position": [
+       959.366,
+       3.5,
+       -421.711
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -216.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_35",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_35",
+      "Anchored": true,
+      "Position": [
+       971.418,
+       3.5,
+       -411.418
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_36",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_36",
+      "Anchored": true,
+      "Position": [
+       981.711,
+       3.5,
+       -399.366
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_37",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_37",
+      "Anchored": true,
+      "Position": [
+       989.992,
+       3.5,
+       -385.853
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -243.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_38",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_38",
+      "Anchored": true,
+      "Position": [
+       996.057,
+       3.5,
+       -371.211
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -252.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau0_39",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau0_39",
+      "Anchored": true,
+      "Position": [
+       999.757,
+       3.5,
+       -355.8
+      ],
+      "Size": [
+       16.465,
+       7,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -261.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_0",
+      "Anchored": true,
+      "Position": [
+       1006.0,
+       5.5,
+       -340.0
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_1",
+      "Anchored": true,
+      "Position": [
+       1004.695,
+       5.5,
+       -323.418
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_2",
+      "Anchored": true,
+      "Position": [
+       1000.812,
+       5.5,
+       -307.244
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_3",
+      "Anchored": true,
+      "Position": [
+       994.447,
+       5.5,
+       -291.877
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_4",
+      "Anchored": true,
+      "Position": [
+       985.756,
+       5.5,
+       -277.695
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_5",
+      "Anchored": true,
+      "Position": [
+       974.953,
+       5.5,
+       -265.047
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_6",
+      "Anchored": true,
+      "Position": [
+       962.305,
+       5.5,
+       -254.244
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_7",
+      "Anchored": true,
+      "Position": [
+       948.123,
+       5.5,
+       -245.553
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_8",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_8",
+      "Anchored": true,
+      "Position": [
+       932.756,
+       5.5,
+       -239.188
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_9",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_9",
+      "Anchored": true,
+      "Position": [
+       916.582,
+       5.5,
+       -235.305
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_10",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_10",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       5.5,
+       -234.0
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_11",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_11",
+      "Anchored": true,
+      "Position": [
+       883.418,
+       5.5,
+       -235.305
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_12",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_12",
+      "Anchored": true,
+      "Position": [
+       867.244,
+       5.5,
+       -239.188
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_13",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_13",
+      "Anchored": true,
+      "Position": [
+       851.877,
+       5.5,
+       -245.553
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_14",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_14",
+      "Anchored": true,
+      "Position": [
+       837.695,
+       5.5,
+       -254.244
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_15",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_15",
+      "Anchored": true,
+      "Position": [
+       825.047,
+       5.5,
+       -265.047
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_16",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_16",
+      "Anchored": true,
+      "Position": [
+       814.244,
+       5.5,
+       -277.695
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_17",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_17",
+      "Anchored": true,
+      "Position": [
+       805.553,
+       5.5,
+       -291.877
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_18",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_18",
+      "Anchored": true,
+      "Position": [
+       799.188,
+       5.5,
+       -307.244
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_19",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_19",
+      "Anchored": true,
+      "Position": [
+       795.305,
+       5.5,
+       -323.418
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_21",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_21",
+      "Anchored": true,
+      "Position": [
+       795.305,
+       5.5,
+       -356.582
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -99.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_22",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_22",
+      "Anchored": true,
+      "Position": [
+       799.188,
+       5.5,
+       -372.756
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -108.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_23",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_23",
+      "Anchored": true,
+      "Position": [
+       805.553,
+       5.5,
+       -388.123
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -117.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_24",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_24",
+      "Anchored": true,
+      "Position": [
+       814.244,
+       5.5,
+       -402.305
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_25",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_25",
+      "Anchored": true,
+      "Position": [
+       825.047,
+       5.5,
+       -414.953
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_26",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_26",
+      "Anchored": true,
+      "Position": [
+       837.695,
+       5.5,
+       -425.756
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -144.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_27",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_27",
+      "Anchored": true,
+      "Position": [
+       851.877,
+       5.5,
+       -434.447
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -153.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_28",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_28",
+      "Anchored": true,
+      "Position": [
+       867.244,
+       5.5,
+       -440.812
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_29",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_29",
+      "Anchored": true,
+      "Position": [
+       883.418,
+       5.5,
+       -444.695
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -171.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_31",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_31",
+      "Anchored": true,
+      "Position": [
+       916.582,
+       5.5,
+       -444.695
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -189.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_32",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_32",
+      "Anchored": true,
+      "Position": [
+       932.756,
+       5.5,
+       -440.812
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_33",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_33",
+      "Anchored": true,
+      "Position": [
+       948.123,
+       5.5,
+       -434.447
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -207.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_34",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_34",
+      "Anchored": true,
+      "Position": [
+       962.305,
+       5.5,
+       -425.756
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -216.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_35",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_35",
+      "Anchored": true,
+      "Position": [
+       974.953,
+       5.5,
+       -414.953
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_36",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_36",
+      "Anchored": true,
+      "Position": [
+       985.756,
+       5.5,
+       -402.305
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_37",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_37",
+      "Anchored": true,
+      "Position": [
+       994.447,
+       5.5,
+       -388.123
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -243.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_38",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_38",
+      "Anchored": true,
+      "Position": [
+       1000.812,
+       5.5,
+       -372.756
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -252.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau1_39",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau1_39",
+      "Anchored": true,
+      "Position": [
+       1004.695,
+       5.5,
+       -356.582
+      ],
+      "Size": [
+       17.25,
+       11,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -261.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_0",
+      "Anchored": true,
+      "Position": [
+       1011.0,
+       7.5,
+       -340.0
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_1",
+      "Anchored": true,
+      "Position": [
+       1009.633,
+       7.5,
+       -322.636
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_2",
+      "Anchored": true,
+      "Position": [
+       1005.567,
+       7.5,
+       -305.699
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_3",
+      "Anchored": true,
+      "Position": [
+       998.902,
+       7.5,
+       -289.607
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_4",
+      "Anchored": true,
+      "Position": [
+       989.801,
+       7.5,
+       -274.756
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_5",
+      "Anchored": true,
+      "Position": [
+       978.489,
+       7.5,
+       -261.511
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_6",
+      "Anchored": true,
+      "Position": [
+       965.244,
+       7.5,
+       -250.199
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_7",
+      "Anchored": true,
+      "Position": [
+       950.393,
+       7.5,
+       -241.098
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_8",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_8",
+      "Anchored": true,
+      "Position": [
+       934.301,
+       7.5,
+       -234.433
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_9",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_9",
+      "Anchored": true,
+      "Position": [
+       917.364,
+       7.5,
+       -230.367
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_10",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_10",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       7.5,
+       -229.0
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_11",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_11",
+      "Anchored": true,
+      "Position": [
+       882.636,
+       7.5,
+       -230.367
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_12",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_12",
+      "Anchored": true,
+      "Position": [
+       865.699,
+       7.5,
+       -234.433
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_13",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_13",
+      "Anchored": true,
+      "Position": [
+       849.607,
+       7.5,
+       -241.098
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_14",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_14",
+      "Anchored": true,
+      "Position": [
+       834.756,
+       7.5,
+       -250.199
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_15",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_15",
+      "Anchored": true,
+      "Position": [
+       821.511,
+       7.5,
+       -261.511
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_16",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_16",
+      "Anchored": true,
+      "Position": [
+       810.199,
+       7.5,
+       -274.756
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_17",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_17",
+      "Anchored": true,
+      "Position": [
+       801.098,
+       7.5,
+       -289.607
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_18",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_18",
+      "Anchored": true,
+      "Position": [
+       794.433,
+       7.5,
+       -305.699
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_19",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_19",
+      "Anchored": true,
+      "Position": [
+       790.367,
+       7.5,
+       -322.636
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_21",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_21",
+      "Anchored": true,
+      "Position": [
+       790.367,
+       7.5,
+       -357.364
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -99.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_22",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_22",
+      "Anchored": true,
+      "Position": [
+       794.433,
+       7.5,
+       -374.301
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -108.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_23",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_23",
+      "Anchored": true,
+      "Position": [
+       801.098,
+       7.5,
+       -390.393
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -117.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_24",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_24",
+      "Anchored": true,
+      "Position": [
+       810.199,
+       7.5,
+       -405.244
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_25",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_25",
+      "Anchored": true,
+      "Position": [
+       821.511,
+       7.5,
+       -418.489
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_26",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_26",
+      "Anchored": true,
+      "Position": [
+       834.756,
+       7.5,
+       -429.801
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -144.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_27",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_27",
+      "Anchored": true,
+      "Position": [
+       849.607,
+       7.5,
+       -438.902
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -153.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_28",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_28",
+      "Anchored": true,
+      "Position": [
+       865.699,
+       7.5,
+       -445.567
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_29",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_29",
+      "Anchored": true,
+      "Position": [
+       882.636,
+       7.5,
+       -449.633
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -171.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_31",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_31",
+      "Anchored": true,
+      "Position": [
+       917.364,
+       7.5,
+       -449.633
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -189.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_32",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_32",
+      "Anchored": true,
+      "Position": [
+       934.301,
+       7.5,
+       -445.567
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_33",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_33",
+      "Anchored": true,
+      "Position": [
+       950.393,
+       7.5,
+       -438.902
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -207.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_34",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_34",
+      "Anchored": true,
+      "Position": [
+       965.244,
+       7.5,
+       -429.801
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -216.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_35",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_35",
+      "Anchored": true,
+      "Position": [
+       978.489,
+       7.5,
+       -418.489
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_36",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_36",
+      "Anchored": true,
+      "Position": [
+       989.801,
+       7.5,
+       -405.244
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_37",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_37",
+      "Anchored": true,
+      "Position": [
+       998.902,
+       7.5,
+       -390.393
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -243.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_38",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_38",
+      "Anchored": true,
+      "Position": [
+       1005.567,
+       7.5,
+       -374.301
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -252.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau2_39",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau2_39",
+      "Anchored": true,
+      "Position": [
+       1009.633,
+       7.5,
+       -357.364
+      ],
+      "Size": [
+       18.036,
+       15,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -261.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_0",
+      "Anchored": true,
+      "Position": [
+       1016.0,
+       9.5,
+       -340.0
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_1",
+      "Anchored": true,
+      "Position": [
+       1014.572,
+       9.5,
+       -321.854
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_2",
+      "Anchored": true,
+      "Position": [
+       1010.323,
+       9.5,
+       -304.154
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_3",
+      "Anchored": true,
+      "Position": [
+       1003.357,
+       9.5,
+       -287.337
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_4",
+      "Anchored": true,
+      "Position": [
+       993.846,
+       9.5,
+       -271.817
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_5",
+      "Anchored": true,
+      "Position": [
+       982.024,
+       9.5,
+       -257.976
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_6",
+      "Anchored": true,
+      "Position": [
+       968.183,
+       9.5,
+       -246.154
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_7",
+      "Anchored": true,
+      "Position": [
+       952.663,
+       9.5,
+       -236.643
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_8",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_8",
+      "Anchored": true,
+      "Position": [
+       935.846,
+       9.5,
+       -229.677
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_9",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_9",
+      "Anchored": true,
+      "Position": [
+       918.146,
+       9.5,
+       -225.428
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_10",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_10",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       9.5,
+       -224.0
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_11",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_11",
+      "Anchored": true,
+      "Position": [
+       881.854,
+       9.5,
+       -225.428
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_12",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_12",
+      "Anchored": true,
+      "Position": [
+       864.154,
+       9.5,
+       -229.677
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_13",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_13",
+      "Anchored": true,
+      "Position": [
+       847.337,
+       9.5,
+       -236.643
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_14",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_14",
+      "Anchored": true,
+      "Position": [
+       831.817,
+       9.5,
+       -246.154
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_15",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_15",
+      "Anchored": true,
+      "Position": [
+       817.976,
+       9.5,
+       -257.976
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_16",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_16",
+      "Anchored": true,
+      "Position": [
+       806.154,
+       9.5,
+       -271.817
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_17",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_17",
+      "Anchored": true,
+      "Position": [
+       796.643,
+       9.5,
+       -287.337
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_18",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_18",
+      "Anchored": true,
+      "Position": [
+       789.677,
+       9.5,
+       -304.154
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_19",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_19",
+      "Anchored": true,
+      "Position": [
+       785.428,
+       9.5,
+       -321.854
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_21",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_21",
+      "Anchored": true,
+      "Position": [
+       785.428,
+       9.5,
+       -358.146
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -99.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_22",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_22",
+      "Anchored": true,
+      "Position": [
+       789.677,
+       9.5,
+       -375.846
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -108.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_23",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_23",
+      "Anchored": true,
+      "Position": [
+       796.643,
+       9.5,
+       -392.663
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -117.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_24",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_24",
+      "Anchored": true,
+      "Position": [
+       806.154,
+       9.5,
+       -408.183
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_25",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_25",
+      "Anchored": true,
+      "Position": [
+       817.976,
+       9.5,
+       -422.024
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_26",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_26",
+      "Anchored": true,
+      "Position": [
+       831.817,
+       9.5,
+       -433.846
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -144.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_27",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_27",
+      "Anchored": true,
+      "Position": [
+       847.337,
+       9.5,
+       -443.357
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -153.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_28",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_28",
+      "Anchored": true,
+      "Position": [
+       864.154,
+       9.5,
+       -450.323
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_29",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_29",
+      "Anchored": true,
+      "Position": [
+       881.854,
+       9.5,
+       -454.572
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -171.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_31",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_31",
+      "Anchored": true,
+      "Position": [
+       918.146,
+       9.5,
+       -454.572
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -189.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_32",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_32",
+      "Anchored": true,
+      "Position": [
+       935.846,
+       9.5,
+       -450.323
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_33",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_33",
+      "Anchored": true,
+      "Position": [
+       952.663,
+       9.5,
+       -443.357
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -207.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_34",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_34",
+      "Anchored": true,
+      "Position": [
+       968.183,
+       9.5,
+       -433.846
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -216.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_35",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_35",
+      "Anchored": true,
+      "Position": [
+       982.024,
+       9.5,
+       -422.024
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_36",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_36",
+      "Anchored": true,
+      "Position": [
+       993.846,
+       9.5,
+       -408.183
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_37",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_37",
+      "Anchored": true,
+      "Position": [
+       1003.357,
+       9.5,
+       -392.663
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -243.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_38",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_38",
+      "Anchored": true,
+      "Position": [
+       1010.323,
+       9.5,
+       -375.846
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -252.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Degrau3_39",
+     "className": "Part",
+     "properties": {
+      "Name": "Degrau3_39",
+      "Anchored": true,
+      "Position": [
+       1014.572,
+       9.5,
+       -358.146
+      ],
+      "Size": [
+       18.821,
+       19,
+       5
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -261.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar0",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar0",
+      "Anchored": true,
+      "Position": [
+       1024.0,
+       17,
+       -340.0
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga0",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga0",
+      "Anchored": true,
+      "Position": [
+       1023.618,
+       15,
+       -330.271
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       85.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo0",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo0",
+      "Anchored": true,
+      "Position": [
+       1023.618,
+       33,
+       -330.271
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       85.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar1",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar1",
+      "Anchored": true,
+      "Position": [
+       1022.473,
+       17,
+       -320.602
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga1",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga1",
+      "Anchored": true,
+      "Position": [
+       1020.574,
+       15,
+       -311.053
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       76.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo1",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo1",
+      "Anchored": true,
+      "Position": [
+       1020.574,
+       33,
+       -311.053
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       76.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar2",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar2",
+      "Anchored": true,
+      "Position": [
+       1017.931,
+       17,
+       -301.682
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga2",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga2",
+      "Anchored": true,
+      "Position": [
+       1014.561,
+       15,
+       -292.547
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo2",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo2",
+      "Anchored": true,
+      "Position": [
+       1014.561,
+       33,
+       -292.547
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar3",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar3",
+      "Anchored": true,
+      "Position": [
+       1010.485,
+       17,
+       -283.705
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga3",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga3",
+      "Anchored": true,
+      "Position": [
+       1005.727,
+       15,
+       -275.21
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       58.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo3",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo3",
+      "Anchored": true,
+      "Position": [
+       1005.727,
+       33,
+       -275.21
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       58.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar4",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar4",
+      "Anchored": true,
+      "Position": [
+       1000.318,
+       17,
+       -267.115
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga4",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga4",
+      "Anchored": true,
+      "Position": [
+       994.29,
+       15,
+       -259.468
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       49.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo4",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo4",
+      "Anchored": true,
+      "Position": [
+       994.29,
+       33,
+       -259.468
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       49.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar5",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar5",
+      "Anchored": true,
+      "Position": [
+       987.681,
+       17,
+       -252.319
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga5",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga5",
+      "Anchored": true,
+      "Position": [
+       980.532,
+       15,
+       -245.71
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       40.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo5",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo5",
+      "Anchored": true,
+      "Position": [
+       980.532,
+       33,
+       -245.71
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       40.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar6",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar6",
+      "Anchored": true,
+      "Position": [
+       972.885,
+       17,
+       -239.682
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga6",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga6",
+      "Anchored": true,
+      "Position": [
+       964.79,
+       15,
+       -234.273
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       31.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo6",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo6",
+      "Anchored": true,
+      "Position": [
+       964.79,
+       33,
+       -234.273
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       31.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar7",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar7",
+      "Anchored": true,
+      "Position": [
+       956.295,
+       17,
+       -229.515
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga7",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga7",
+      "Anchored": true,
+      "Position": [
+       947.453,
+       15,
+       -225.439
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo7",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo7",
+      "Anchored": true,
+      "Position": [
+       947.453,
+       33,
+       -225.439
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar8",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar8",
+      "Anchored": true,
+      "Position": [
+       938.318,
+       17,
+       -222.069
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga8",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga8",
+      "Anchored": true,
+      "Position": [
+       928.947,
+       15,
+       -219.426
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       13.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo8",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo8",
+      "Anchored": true,
+      "Position": [
+       928.947,
+       33,
+       -219.426
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       13.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar9",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar9",
+      "Anchored": true,
+      "Position": [
+       919.398,
+       17,
+       -217.527
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga9",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga9",
+      "Anchored": true,
+      "Position": [
+       909.729,
+       15,
+       -216.382
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       4.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo9",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo9",
+      "Anchored": true,
+      "Position": [
+       909.729,
+       33,
+       -216.382
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       4.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar10",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar10",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       17,
+       -216.0
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga10",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga10",
+      "Anchored": true,
+      "Position": [
+       890.271,
+       15,
+       -216.382
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -4.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo10",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo10",
+      "Anchored": true,
+      "Position": [
+       890.271,
+       33,
+       -216.382
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -4.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar11",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar11",
+      "Anchored": true,
+      "Position": [
+       880.602,
+       17,
+       -217.527
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -9.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga11",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga11",
+      "Anchored": true,
+      "Position": [
+       871.053,
+       15,
+       -219.426
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -13.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo11",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo11",
+      "Anchored": true,
+      "Position": [
+       871.053,
+       33,
+       -219.426
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -13.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar12",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar12",
+      "Anchored": true,
+      "Position": [
+       861.682,
+       17,
+       -222.069
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga12",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga12",
+      "Anchored": true,
+      "Position": [
+       852.547,
+       15,
+       -225.439
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo12",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo12",
+      "Anchored": true,
+      "Position": [
+       852.547,
+       33,
+       -225.439
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -22.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar13",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar13",
+      "Anchored": true,
+      "Position": [
+       843.705,
+       17,
+       -229.515
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -27.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga13",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga13",
+      "Anchored": true,
+      "Position": [
+       835.21,
+       15,
+       -234.273
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -31.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo13",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo13",
+      "Anchored": true,
+      "Position": [
+       835.21,
+       33,
+       -234.273
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -31.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar14",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar14",
+      "Anchored": true,
+      "Position": [
+       827.115,
+       17,
+       -239.682
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -36.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga14",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga14",
+      "Anchored": true,
+      "Position": [
+       819.468,
+       15,
+       -245.71
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -40.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo14",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo14",
+      "Anchored": true,
+      "Position": [
+       819.468,
+       33,
+       -245.71
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -40.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar15",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar15",
+      "Anchored": true,
+      "Position": [
+       812.319,
+       17,
+       -252.319
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -45.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga15",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga15",
+      "Anchored": true,
+      "Position": [
+       805.71,
+       15,
+       -259.468
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -49.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo15",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo15",
+      "Anchored": true,
+      "Position": [
+       805.71,
+       33,
+       -259.468
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -49.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar16",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar16",
+      "Anchored": true,
+      "Position": [
+       799.682,
+       17,
+       -267.115
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga16",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga16",
+      "Anchored": true,
+      "Position": [
+       794.273,
+       15,
+       -275.21
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -58.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo16",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo16",
+      "Anchored": true,
+      "Position": [
+       794.273,
+       33,
+       -275.21
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -58.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar17",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar17",
+      "Anchored": true,
+      "Position": [
+       789.515,
+       17,
+       -283.705
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -63.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga17",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga17",
+      "Anchored": true,
+      "Position": [
+       785.439,
+       15,
+       -292.547
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo17",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo17",
+      "Anchored": true,
+      "Position": [
+       785.439,
+       33,
+       -292.547
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -67.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar18",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar18",
+      "Anchored": true,
+      "Position": [
+       782.069,
+       17,
+       -301.682
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -72.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga18",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga18",
+      "Anchored": true,
+      "Position": [
+       779.426,
+       15,
+       -311.053
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -76.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo18",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo18",
+      "Anchored": true,
+      "Position": [
+       779.426,
+       33,
+       -311.053
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -76.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar19",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar19",
+      "Anchored": true,
+      "Position": [
+       777.527,
+       17,
+       -320.602
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -81.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga19",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga19",
+      "Anchored": true,
+      "Position": [
+       776.382,
+       15,
+       -330.271
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -85.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo19",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo19",
+      "Anchored": true,
+      "Position": [
+       776.382,
+       33,
+       -330.271
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -85.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar21",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar21",
+      "Anchored": true,
+      "Position": [
+       777.527,
+       17,
+       -359.398
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -99.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga21",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga21",
+      "Anchored": true,
+      "Position": [
+       779.426,
+       15,
+       -368.947
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -103.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo21",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo21",
+      "Anchored": true,
+      "Position": [
+       779.426,
+       33,
+       -368.947
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -103.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar22",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar22",
+      "Anchored": true,
+      "Position": [
+       782.069,
+       17,
+       -378.318
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -108.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga22",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga22",
+      "Anchored": true,
+      "Position": [
+       785.439,
+       15,
+       -387.453
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -112.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo22",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo22",
+      "Anchored": true,
+      "Position": [
+       785.439,
+       33,
+       -387.453
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -112.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar23",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar23",
+      "Anchored": true,
+      "Position": [
+       789.515,
+       17,
+       -396.295
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -117.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga23",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga23",
+      "Anchored": true,
+      "Position": [
+       794.273,
+       15,
+       -404.79
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -121.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo23",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo23",
+      "Anchored": true,
+      "Position": [
+       794.273,
+       33,
+       -404.79
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -121.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar24",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar24",
+      "Anchored": true,
+      "Position": [
+       799.682,
+       17,
+       -412.885
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga24",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga24",
+      "Anchored": true,
+      "Position": [
+       805.71,
+       15,
+       -420.532
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -130.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo24",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo24",
+      "Anchored": true,
+      "Position": [
+       805.71,
+       33,
+       -420.532
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -130.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar25",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar25",
+      "Anchored": true,
+      "Position": [
+       812.319,
+       17,
+       -427.681
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -135.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga25",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga25",
+      "Anchored": true,
+      "Position": [
+       819.468,
+       15,
+       -434.29
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -139.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo25",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo25",
+      "Anchored": true,
+      "Position": [
+       819.468,
+       33,
+       -434.29
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -139.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar26",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar26",
+      "Anchored": true,
+      "Position": [
+       827.115,
+       17,
+       -440.318
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -144.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga26",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga26",
+      "Anchored": true,
+      "Position": [
+       835.21,
+       15,
+       -445.727
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -148.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo26",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo26",
+      "Anchored": true,
+      "Position": [
+       835.21,
+       33,
+       -445.727
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -148.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar27",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar27",
+      "Anchored": true,
+      "Position": [
+       843.705,
+       17,
+       -450.485
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -153.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga27",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga27",
+      "Anchored": true,
+      "Position": [
+       852.547,
+       15,
+       -454.561
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -157.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo27",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo27",
+      "Anchored": true,
+      "Position": [
+       852.547,
+       33,
+       -454.561
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -157.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar28",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar28",
+      "Anchored": true,
+      "Position": [
+       861.682,
+       17,
+       -457.931
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga28",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga28",
+      "Anchored": true,
+      "Position": [
+       871.053,
+       15,
+       -460.574
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -166.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo28",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo28",
+      "Anchored": true,
+      "Position": [
+       871.053,
+       33,
+       -460.574
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -166.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar29",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar29",
+      "Anchored": true,
+      "Position": [
+       880.602,
+       17,
+       -462.473
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -171.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga29",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga29",
+      "Anchored": true,
+      "Position": [
+       890.271,
+       15,
+       -463.618
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -175.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo29",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo29",
+      "Anchored": true,
+      "Position": [
+       890.271,
+       33,
+       -463.618
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -175.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar31",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar31",
+      "Anchored": true,
+      "Position": [
+       919.398,
+       17,
+       -462.473
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -189.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga31",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga31",
+      "Anchored": true,
+      "Position": [
+       928.947,
+       15,
+       -460.574
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -193.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo31",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo31",
+      "Anchored": true,
+      "Position": [
+       928.947,
+       33,
+       -460.574
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -193.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar32",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar32",
+      "Anchored": true,
+      "Position": [
+       938.318,
+       17,
+       -457.931
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga32",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga32",
+      "Anchored": true,
+      "Position": [
+       947.453,
+       15,
+       -454.561
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -202.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo32",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo32",
+      "Anchored": true,
+      "Position": [
+       947.453,
+       33,
+       -454.561
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -202.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar33",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar33",
+      "Anchored": true,
+      "Position": [
+       956.295,
+       17,
+       -450.485
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -207.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga33",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga33",
+      "Anchored": true,
+      "Position": [
+       964.79,
+       15,
+       -445.727
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -211.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo33",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo33",
+      "Anchored": true,
+      "Position": [
+       964.79,
+       33,
+       -445.727
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -211.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar34",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar34",
+      "Anchored": true,
+      "Position": [
+       972.885,
+       17,
+       -440.318
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -216.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga34",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga34",
+      "Anchored": true,
+      "Position": [
+       980.532,
+       15,
+       -434.29
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -220.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo34",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo34",
+      "Anchored": true,
+      "Position": [
+       980.532,
+       33,
+       -434.29
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -220.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar35",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar35",
+      "Anchored": true,
+      "Position": [
+       987.681,
+       17,
+       -427.681
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -225.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga35",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga35",
+      "Anchored": true,
+      "Position": [
+       994.29,
+       15,
+       -420.532
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -229.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo35",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo35",
+      "Anchored": true,
+      "Position": [
+       994.29,
+       33,
+       -420.532
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -229.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar36",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar36",
+      "Anchored": true,
+      "Position": [
+       1000.318,
+       17,
+       -412.885
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga36",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga36",
+      "Anchored": true,
+      "Position": [
+       1005.727,
+       15,
+       -404.79
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -238.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo36",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo36",
+      "Anchored": true,
+      "Position": [
+       1005.727,
+       33,
+       -404.79
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -238.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar37",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar37",
+      "Anchored": true,
+      "Position": [
+       1010.485,
+       17,
+       -396.295
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -243.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga37",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga37",
+      "Anchored": true,
+      "Position": [
+       1014.561,
+       15,
+       -387.453
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -247.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo37",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo37",
+      "Anchored": true,
+      "Position": [
+       1014.561,
+       33,
+       -387.453
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -247.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar38",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar38",
+      "Anchored": true,
+      "Position": [
+       1017.931,
+       17,
+       -378.318
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -252.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga38",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga38",
+      "Anchored": true,
+      "Position": [
+       1020.574,
+       15,
+       -368.947
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -256.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo38",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo38",
+      "Anchored": true,
+      "Position": [
+       1020.574,
+       33,
+       -368.947
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -256.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaPilar39",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaPilar39",
+      "Anchored": true,
+      "Position": [
+       1022.473,
+       17,
+       -359.398
+      ],
+      "Size": [
+       4,
+       34,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -261.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaVerga39",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaVerga39",
+      "Anchored": true,
+      "Position": [
+       1023.618,
+       15,
+       -349.729
+      ],
+      "Size": [
+       20.478,
+       3,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -265.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "FachadaTopo39",
+     "className": "Part",
+     "properties": {
+      "Name": "FachadaTopo39",
+      "Anchored": true,
+      "Position": [
+       1023.618,
+       33,
+       -349.729
+      ],
+      "Size": [
+       20.478,
+       4,
+       5
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -265.5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao180Pilar-1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao180Pilar-1",
+      "Anchored": true,
+      "Position": [
+       776.0,
+       15,
+       -329.0
+      ],
+      "Size": [
+       6,
+       30,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao180Tocha-1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao180Tocha-1",
+      "Anchored": true,
+      "Position": [
+       772.0,
+       20,
+       -329.0
+      ],
+      "Size": [
+       4,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.55,
+       0.38,
+       0.2
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Portao180Pilar1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao180Pilar1",
+      "Anchored": true,
+      "Position": [
+       776.0,
+       15,
+       -351.0
+      ],
+      "Size": [
+       6,
+       30,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao180Tocha1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao180Tocha1",
+      "Anchored": true,
+      "Position": [
+       772.0,
+       20,
+       -351.0
+      ],
+      "Size": [
+       4,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.55,
+       0.38,
+       0.2
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Portao180Verga",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao180Verga",
+      "Anchored": true,
+      "Position": [
+       776.0,
+       32.5,
+       -340.0
+      ],
+      "Size": [
+       28,
+       5,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao270Pilar-1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao270Pilar-1",
+      "Anchored": true,
+      "Position": [
+       889.0,
+       15,
+       -464.0
+      ],
+      "Size": [
+       6,
+       30,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao270Tocha-1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao270Tocha-1",
+      "Anchored": true,
+      "Position": [
+       889.0,
+       20,
+       -468.0
+      ],
+      "Size": [
+       4,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.55,
+       0.38,
+       0.2
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Portao270Pilar1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao270Pilar1",
+      "Anchored": true,
+      "Position": [
+       911.0,
+       15,
+       -464.0
+      ],
+      "Size": [
+       6,
+       30,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Portao270Tocha1",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao270Tocha1",
+      "Anchored": true,
+      "Position": [
+       911.0,
+       20,
+       -468.0
+      ],
+      "Size": [
+       4,
+       1.6,
+       1.6
+      ],
+      "Color": [
+       0.55,
+       0.38,
+       0.2
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Portao270Verga",
+     "className": "Part",
+     "properties": {
+      "Name": "Portao270Verga",
+      "Anchored": true,
+      "Position": [
+       900.0,
+       32.5,
+       -464.0
+      ],
+      "Size": [
+       28,
+       5,
+       6
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       -180,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Chegada",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Praca",
+     "className": "Part",
+     "properties": {
+      "Name": "Praca",
+      "Anchored": true,
+      "Position": [
+       690,
+       0.25,
+       -420
+      ],
+      "Size": [
+       0.5,
+       48,
+       48
+      ],
+      "Color": [
+       0.52,
+       0.5,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna0",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna0",
+      "Anchored": true,
+      "Position": [
+       711.0,
+       6,
+       -420.0
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna1",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna1",
+      "Anchored": true,
+      "Position": [
+       704.849,
+       6,
+       -405.151
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna2",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna2",
+      "Anchored": true,
+      "Position": [
+       690.0,
+       6,
+       -399.0
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna3",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna3",
+      "Anchored": true,
+      "Position": [
+       675.151,
+       6,
+       -405.151
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna4",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna4",
+      "Anchored": true,
+      "Position": [
+       669.0,
+       6,
+       -420.0
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna5",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna5",
+      "Anchored": true,
+      "Position": [
+       675.151,
+       6,
+       -434.849
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna6",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna6",
+      "Anchored": true,
+      "Position": [
+       690.0,
+       6,
+       -441.0
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna7",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna7",
+      "Anchored": true,
+      "Position": [
+       704.849,
+       6,
+       -434.849
+      ],
+      "Size": [
+       12,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.8,
+       0.74,
+       0.62
+      ],
+      "Material": "Limestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Portais",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "PilaresToTutorial",
+     "className": "Part",
+     "properties": {
+      "Name": "PilaresToTutorial",
+      "Anchored": true,
+      "Position": [
+       668,
+       8,
+       -450
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "PilaresToTutorialCore",
+     "className": "Part",
+     "properties": {
+      "Name": "PilaresToTutorialCore",
+      "Anchored": true,
+      "Position": [
+       668,
+       8,
+       -450
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "PilaresToSolPartido",
+     "className": "Part",
+     "properties": {
+      "Name": "PilaresToSolPartido",
+      "Anchored": true,
+      "Position": [
+       668,
+       8,
+       -390
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "PilaresToSolPartidoCore",
+     "className": "Part",
+     "properties": {
+      "Name": "PilaresToSolPartidoCore",
+      "Anchored": true,
+      "Position": [
+       668,
+       8,
+       -390
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       90,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Spawns",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "PilaresSpawn",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "PilaresSpawn",
+      "Anchored": true,
+      "Position": [
+       690,
+       1,
+       -420
+      ],
+      "Size": [
+       10,
+       1,
+       10
+      ],
+      "Color": [
+       0.8,
+       0.7,
+       0.4
+      ],
+      "Material": "Plastic",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "Enabled": false,
+      "Neutral": true
+     }
+    }
+   ]
+  }
+ ]
+}

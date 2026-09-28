@@ -95,7 +95,7 @@ local function bossArena(): Vector3
 	local sahur = Workspace:FindFirstChild("Sahur")
 	local extras = sahur and sahur:FindFirstChild("ArenaExtras")
 	local part = extras and extras:FindFirstChild("BossArena", true)
-	return if part and part:IsA("BasePart") then part.Position else Vector3.new(98, 1.5, 422)
+	return if part and part:IsA("BasePart") then part.Position else Vector3.new(900, 1.5, -581)
 end
 
 --- Bot da cena: nasce virado para `lookAt`. Registrado para a limpeza.

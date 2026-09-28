@@ -272,6 +272,26 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
   ilhas nascem; sem erro novo. Mar da ilha tutorial encolhido para não passar por baixo da arena (x ≥ 300).
 - `src/shared/CentralProjectMarker.luau` (lixo do Codex) apagado.
 
+## 2026-09-28 (noite) — ARQUIPÉLAGO: arena desmontada em ilhas por Parte de JoJo (dono autorizou tudo)
+Ver `MAPA_CAPITULO_1.md` "Layout do mundo". Resumo:
+- `tools/desmontar_arena.luau` (Lune) dividiu o `Arena.rbxm` (apagado; original em `backups/`) em `Coliseu.rbxm`,
+  `PecasArena.rbxm` (montanha da Taberna recolorida p/ rocha, Parque Vitoriano, árvores) e `src/reserva/ArenaReserva.rbxm`
+  (→ `ServerStorage.ArenaReserva`). `gerar_arena.py` translada os extras por grupo (santuário/jardim → Ilha 2, vilas
+  mesopotâmicas → Ilhas 2/3, placares/bonecos/spawns → Ilha 1). Geradores novos/refeitos: `gerar_ilha_tutorial_fx.py`
+  (vila vitoriana), `gerar_ilha_pilares_fx.py` (coliseu + chegada), `gerar_ilha_sol_partido_fx.py` (movida).
+- **Terreno** (`tools/studio/MontarMundo.luau`, ModuleScript em `ServerStorage.FerramentasStudio`): mar de água de verdade até
+  o horizonte, ilhas com praia, montanha do santuário (cachoeira ~92 studs), escavações (Taberna, santuário, riacho).
+  Rodar: `require(game.ServerStorage.FerramentasStudio.MontarMundo:Clone())`. ATENÇÃO: o terreno suave desenha o chão
+  ~2 studs acima da ocupação — o script compensa (`SOLID_OFFSET`).
+- Via MCP (só no place): Lojinha +50 z; ilhota Kame (CasasKame/House Trink/LocalInicial; SpawnLocation desligado);
+  pedras/árvores do dono perto do farol; estátua `humanoider_20` no porto (ancorada, estava tombando); muro longo do `cav`
+  encurtado. Backup de tudo em `ServerStorage.Backup_Mapa_2026-09-28`.
+- Código: `WorldConfig` (ilha_pilares, `Islands`, `IslandAt`), portais novos, `QuestConfig.Spots` nas ilhas,
+  `DestructionService` acha árvores em todo o `Sahur`, tutorial usa `VagantePad`/`GuardiaoSpawn` (não colidir com
+  `DummyPad`/`BossSpawn`). Testado no Play via MCP: 49 services, bots/NPCs nas ilhas, chão em todos os checkpoints.
+- **Falta**: o dono PUBLICAR pelo Studio; Sol Partido ainda vazio (conteúdo da Parte 3); Partes 4–6; flecha só nasce perto
+  da origem (RitualService `SpawnRadius`); boss à solta pode andar para o mar; barco/viagem sem portal.
+
 ## 2026-09-28 (noite) — iluminação cartoon + decisões do dono
 - **Nome público decidido: "Bizarre Showdown F/X"** (a chave da API não tem `universe:write`; o dono troca no dashboard).
 - **Iluminação "cartoon e animada"** (pedido do dono, ref. TikTok): `EnvironmentService` CONFIG do dia = Ambient 124,155,184;

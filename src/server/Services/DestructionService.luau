@@ -428,13 +428,11 @@ function DestructionService.Start()
 			end
 		end
 	end
-	local arena = sahur:FindFirstChild("Arena")
-	if arena then
-		for _, d in arena:GetDescendants() do
-			-- árvores da arte: Trees.Model.<Oak|Pine> e Corners.Model.Trees.<Oak|Pine>
-			if d:IsA("Model") and (d.Name == "Oak" or d.Name == "Pine") then
-				registerTree(d)
-			end
+	-- árvores da arte (<Oak|Pine>): desde o arquipélago (2026-09-28) espalhadas pelas ilhas
+	-- (PecasArena.Arvores, PecasArena.ParqueVitoriano.Trees, ...)
+	for _, d in sahur:GetDescendants() do
+		if d:IsA("Model") and (d.Name == "Oak" or d.Name == "Pine") then
+			registerTree(d)
 		end
 	end
 	-- Os personagens ficam no grupo Default, então o entulho ainda bate neles (como no JJS). Entulho x entulho

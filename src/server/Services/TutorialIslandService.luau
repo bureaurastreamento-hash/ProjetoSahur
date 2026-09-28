@@ -76,12 +76,12 @@ local function populate(island: Model)
 	local training = island:FindFirstChild("Treino")
 	if training then
 		for _, pad in training:GetChildren() do
-			if pad:IsA("BasePart") and pad.Name:match("^DummyPad") then
+			if pad:IsA("BasePart") and pad.Name:match("^VagantePad") then
 				BotService.Spawn({ CharacterId = "Swift", Name = "Vagante da Fratura", CFrame = pad.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_tutorial", Attributes = { FXEnemy = true, StoryKillKind = "fx_tutorial_enemy" }, Tuning = { SeekRadius = 32 } })
 			end
 		end
 	end
-	local bossSpot = island:FindFirstChild("BossSpawn", true)
+	local bossSpot = island:FindFirstChild("GuardiaoSpawn", true)
 	if bossSpot and bossSpot:IsA("BasePart") then
 		BotService.Spawn({ CharacterId = "Swift", Name = "Guardião Fraturado", CFrame = bossSpot.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_guardian", Attributes = { FXEnemy = true, StoryKillKind = "fx_cap1_boss", MaxHealth = 300, DamageMult = 1.25 }, Tuning = { SeekRadius = 55, AbilityChancePerTick = .18 } })
 	end

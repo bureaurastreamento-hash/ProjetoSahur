@@ -1,5 +1,5 @@
 --!strict
---[[ Portais entre a ilha tutorial e a arena PvP legada. ]]
+--[[ Portais entre as ilhas do Capítulo 1 (ligados pelo NOME da peça; gerados em tools/gerar_ilha_*_fx.py). ]]
 
 local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -9,17 +9,17 @@ local Remotes = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("M
 
 local WorldPortalService = {}
 local PORTALS = {
-	TutorialToArena = { Region = "arena_pvp", Checkpoint = "praca" },
-	ArenaToTutorial = { Region = "ilha_tutorial", Checkpoint = "porto" },
-	TutorialToSolPartido = { Region = "ilha_sol_partido", Checkpoint = "oasis", RequiredFlag = "ilha_sol_partido_unlocked" },
-	SolPartidoToTutorial = { Region = "ilha_tutorial", Checkpoint = "porto" },
+	TutorialToPilares = { Region = "ilha_pilares", Checkpoint = "praia" },
+	PilaresToTutorial = { Region = "ilha_tutorial", Checkpoint = "porto" },
+	PilaresToSolPartido = { Region = "ilha_sol_partido", Checkpoint = "oasis", RequiredFlag = "ilha_sol_partido_unlocked" },
+	SolPartidoToPilares = { Region = "ilha_pilares", Checkpoint = "praia" },
 }
 
 local function bind(part: BasePart, destination)
 	if part:FindFirstChildOfClass("ProximityPrompt") then return end
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.ActionText = "Atravessar"
-	prompt.ObjectText = if destination.Region == "arena_pvp" then "Ilha da Convergência · PvP"
+	prompt.ObjectText = if destination.Region == "ilha_pilares" then "Ilha dos Pilares · Coliseu"
 		elseif destination.Region == "ilha_sol_partido" then "Ilha do Sol Partido" else "Ilha do Alvorecer"
 	prompt.HoldDuration = .5
 	prompt.MaxActivationDistance = 12

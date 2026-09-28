@@ -24,6 +24,13 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## ONDE PARAMOS (2026-09-28, noite) — ARQUIPÉLAGO (ler PROGRESSO "ARQUIPÉLAGO" + MAPA_CAPITULO_1 "Layout do mundo")
+- A arena fechada foi DESMONTADA em ilhas por Parte de JoJo (Alvorecer P1, Pilares P2 + Coliseu, Sol Partido P3, ilhota
+  Kame). Chão = Terrain gerado por `tools/studio/MontarMundo.luau` (ModuleScript sincronizado; o terreno NÃO está no git).
+  `Workspace.Sahur.Arena` não existe mais; peças em `PecasArena`/`Coliseu`/`ServerStorage.ArenaReserva`.
+- Próximas levas combinadas com o dono: conteúdo das Partes 3–6 → depois **Server Authority** (dono aceitou refazer
+  dash/corrida no esquema de simulação prevista + compensação de lag; `Workspace.AuthorityMode` só pelo painel).
+
 ## ONDE PARAMOS (2026-09-25, noite) — ler PROGRESSO.md "RETOMAR AQUI" → "ONDE PARAMOS"
 - **Leva autônoma de 25/09 (dono fora do PC, autorizou)**: B5 Stand animado; C0 história com arco do adryan (10 capítulos,
   migração por Id, NPCs sempre R6); D1 anti-2v1 (`CounterService`, barra Revide + E, funciona no ragdoll); D2 variações

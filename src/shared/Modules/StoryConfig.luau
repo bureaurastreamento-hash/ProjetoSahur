@@ -28,7 +28,7 @@ StoryConfig.Chapters = {
 		{ Id = "guardiao_da_era", Title = "Guardião da primeira era", Objectives = {
 			{ Kind = "fx_cap1_boss", Goal = 1, Text = "Derrote o guardião da região" },
 		} },
-		{ Id = "rota_sol_partido", Title = "Rumo ao Sol Partido", Objectives = {}, Hint = "Use o portal no lado oeste da Ilha do Alvorecer." },
+		{ Id = "rota_sol_partido", Title = "Rumo ao Sol Partido", Objectives = {}, Hint = "Portal a nordeste do Alvorecer → Ilha dos Pilares → portal para o Sol Partido." },
 		{ Id = "prova_do_oasis", Title = "A prova do oásis", Objectives = {
 			{ Kind = "fx_sol_enemy", Goal = 5, Text = "Derrote 5 Saqueadores Solares" },
 			{ Kind = "parries", Goal = 2, Text = "Execute 2 parries" },

@@ -531,6 +531,43 @@ for i in range(12):
 # RitualService cai no sorteio de novo em vez de desativar.
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# ARQUIPÉLAGO (dono, 2026-09-28): a arena fechada foi desmontada (tools/desmontar_arena.luau) e os extras
+# vão para as ilhas do Capítulo 1 (MAPA_CAPITULO_1.md "Layout do mundo"). Tudo é gerado nas coordenadas
+# antigas e TRANSLADADO aqui por grupo, para os módulos (santuário/construções) continuarem iguais.
+#   placares -> Ilha 1 (praça do porto) | DummyPad -> Ilha 1 (treino) | jardim/cachoeira/santuário -> Ilha 2
+#   vila NW (z<0) -> Ilha 2 (ruínas) | vila SE (z>0, zigurate + mercado) -> Ilha 3 (bazar) | spawns -> Ilha 1
+# ---------------------------------------------------------------------------
+OFF_PLACARES = (200, 0, 200)
+OFF_DUMMIES = (-80, 0, 20)
+OFF_SANTUARIO = (802, 0, -1003)
+OFF_VILA_NW = (1220, 0, -242)
+OFF_VILA_SE = (1470, 0, -288)
+SPAWN_CENTER, SPAWN_RADIUS = (40, 110), 22
+
+
+def _move(node, off):
+    p = node["properties"]["Position"]
+    node["properties"]["Position"] = [round(p[0] + off[0], 3), round(p[1] + off[1], 3), round(p[2] + off[2], 3)]
+
+
+for node in parts:
+    name = node["name"]
+    if name.startswith(("Leaderboard", "Rating", "Clan")):
+        _move(node, OFF_PLACARES)
+    elif name.startswith("DummyPad"):
+        _move(node, OFF_DUMMIES)
+    elif node["properties"]["Position"][2] > 285:
+        _move(node, OFF_SANTUARIO)
+    else:
+        raise SystemExit(f"peça sem destino no arquipélago: {name} {node['properties']['Position']}")
+for node in destructible_parts:
+    _move(node, OFF_VILA_NW if node["properties"]["Position"][2] < 0 else OFF_VILA_SE)
+for i, s in enumerate(extra_spawns):
+    a = i / len(extra_spawns) * math.tau
+    s["properties"]["Position"] = [round(SPAWN_CENTER[0] + math.cos(a) * SPAWN_RADIUS, 2), 1,
+                                   round(SPAWN_CENTER[1] + math.sin(a) * SPAWN_RADIUS, 2)]
+
 props = folder("Props", list(parts))
 props["ignoreUnknownInstances"] = True  # o que o dono move/cria em Props no Studio fica como está
 destr = folder("Destructible", destructible_parts)

@@ -32,12 +32,12 @@ export type Chapter = {
 -- Onde cada NPC fica (o QuestService acha o chão por raycast; Yaw = para onde olha, graus)
 QuestConfig.Spots = {
 	Taberna = { Pos = Vector3.new(352, -1, 62), Yaw = 180, Label = "Taberna" },
-	Praca = { Pos = Vector3.new(124, 0, 96), Yaw = -135, Label = "Praça dos spawns" },
+	Praca = { Pos = Vector3.new(18, 0.5, 128), Yaw = -50, Label = "Praça da vila" },
 	Lojinha = { Pos = Vector3.new(0, 0, 0), Yaw = 0, Label = "Lojinha" }, -- Pos preenchida pelo ShopNpcService (VendedorSpot + 8 studs)
-	Cachoeira = { Pos = Vector3.new(112, -0.87, 322), Yaw = 200, Label = "Cachoeira" },
-	ZigurateSE = { Pos = Vector3.new(110, 15.4, 232), Yaw = 180, Label = "Topo do zigurate (sudeste)" },
-	MercadoNW = { Pos = Vector3.new(-110, -0.87, -190), Yaw = 0, Label = "Mercado coberto (noroeste)" },
-	Santuario = { Pos = Vector3.new(98, 0.5, 396), Yaw = 180, Label = "Santuário do boss" },
+	Cachoeira = { Pos = Vector3.new(914, -0.87, -681), Yaw = 200, Label = "Cachoeira (Ilha dos Pilares)" },
+	ZigurateSE = { Pos = Vector3.new(1580, 15.4, -56), Yaw = 180, Label = "Topo do zigurate (Sol Partido)" },
+	MercadoNW = { Pos = Vector3.new(1110, -0.87, -432), Yaw = 0, Label = "Mercado coberto (Ilha dos Pilares)" },
+	Santuario = { Pos = Vector3.new(900, 0.5, -607), Yaw = 180, Label = "Santuário do boss (Ilha dos Pilares)" },
 } :: { [string]: Spot }
 
 -- Capítulo final: o traidor vira um NPC hostil (rig R6 com o avatar dele) no santuário do boss. Números de

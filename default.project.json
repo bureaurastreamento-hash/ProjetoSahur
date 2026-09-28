@@ -49,7 +49,15 @@
         "$path": "src/maps",
         "$ignoreUnknownInstances": true
       },
-      "$ignoreUnknownInstances": true
+      "$ignoreUnknownInstances": true,
+      "ArenaReserva": {
+        "$path": "src/reserva/ArenaReserva.rbxm",
+        "$ignoreUnknownInstances": true
+      },
+      "FerramentasStudio": {
+        "$path": "tools/studio",
+        "$ignoreUnknownInstances": true
+      }
     },
     "$ignoreUnknownInstances": true,
     "StarterGui": {
