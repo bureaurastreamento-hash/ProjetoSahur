@@ -1,4 +1,6 @@
-# Projeto: Sahur (nome provisório, repo ProjetoSahur) — Battlegrounds Roblox
+# Projeto: Bizarre Showdown (repo legado ProjetoSahur) — Battlegrounds Roblox
+
+Direção aprovada: ler `BIZARRE_DIRECAO.md` antes de planejar novos sistemas; para mods/place de criação, ler `MODS_KIT.md` e `tools/place_criacao/LEIA-ME.md`. `PROGRESSO.md` e o código atual prevalecem para estado de implementação. Não refazer sistemas existentes por causa da mudança de nome/visão.
 
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código

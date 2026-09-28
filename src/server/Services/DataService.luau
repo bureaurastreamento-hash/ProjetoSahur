@@ -84,6 +84,13 @@ local function renameCharacter(id: any): any
 	return if typeof(id) == "string" then (RENAMED_CHARACTERS[id] or id) else id
 end
 
+local function copyTrueFlags(incoming: any, target: { [string]: boolean })
+	if typeof(incoming) ~= "table" then return end
+	for id, value in incoming do
+		if typeof(id) == "string" and value == true then target[id] = true end
+	end
+end
+
 local function migrate(raw: any): DataConfig.Profile
 	local profile = DataConfig.DefaultProfile()
 	if typeof(raw) ~= "table" then
@@ -234,6 +241,30 @@ local function migrate(raw: any): DataConfig.Profile
 				end
 			end
 		end
+	end
+	-- Fundação F/X (2026-09-28). Mantida no mesmo DataStore v4 para não abandonar os saves existentes.
+	if typeof(raw.world) == "table" then
+		local w = raw.world :: any
+		if typeof(w.region) == "string" then profile.world.region = w.region end
+		if typeof(w.checkpoint) == "string" then profile.world.checkpoint = w.checkpoint end
+		if typeof(w.discovered) == "table" then
+			for id, discovered in w.discovered do
+				if typeof(id) == "string" and discovered == true then profile.world.discovered[id] = true end
+			end
+		end
+	end
+	if typeof(raw.story) == "table" then
+		local s = raw.story :: any
+		if typeof(s.chapter) == "string" then profile.story.chapter = s.chapter end
+		if typeof(s.act) == "number" and s.act >= 1 then profile.story.act = math.floor(s.act) end
+		if typeof(s.counters) == "table" then
+			for id, value in s.counters do
+				if typeof(id) == "string" and typeof(value) == "number" and value >= 0 then profile.story.counters[id] = math.floor(value) end
+			end
+		end
+		copyTrueFlags(s.flags, profile.story.flags)
+		copyTrueFlags(s.traces, profile.story.traces)
+		copyTrueFlags(s.completed, profile.story.completed)
 	end
 	-- log de atualização (schema 4): versão já vista; perfil antigo = "" (vê a publicada na próxima entrada)
 	if typeof(raw.lastUpdateSeen) == "string" then

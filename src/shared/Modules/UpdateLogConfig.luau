@@ -21,6 +21,18 @@ export type Entry = {
 
 UpdateLogConfig.Versions = ({
 	{
+		Version = "2.0",
+		Title = "F/X: o mundo se abriu",
+		Date = "2026-09-28",
+		Items = {
+			"A campanha F/X começou: explore ilhas, avance por atos e encontre os Rastros de Carlos.",
+			"Ilha do Alvorecer: porto, vila, treino, bosque, ruínas, Humanoider_20 e Guardião Fraturado.",
+			"Ilha do Sol Partido: cânion, oásis, templo vertical, Saqueadores e Sentinela Solar.",
+			"A arena original continua inteira como Ilha da Convergência, dedicada ao PvP battlegrounds.",
+			"Regiões, checkpoints, descobertas e progresso da história agora ficam salvos.",
+		},
+	},
+	{
 		Version = "1.1",
 		Title = "Stands, novo esquema de golpes e bots",
 		Date = "2026-09-25",
@@ -48,7 +60,7 @@ UpdateLogConfig.Versions = ({
 } :: { Entry })
 
 -- versão que "Publicar novidades" publica
-UpdateLogConfig.Current = "1.1"
+UpdateLogConfig.Current = "2.0"
 
 function UpdateLogConfig.Get(version: string): Entry?
 	for _, entry in UpdateLogConfig.Versions do

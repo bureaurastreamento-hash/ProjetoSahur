@@ -2,6 +2,21 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Direção atual — 2026-09-28
+
+- O projeto migra incrementalmente de Bizarre Showdown/battlegrounds para **F/X**, RPG open-world por regiões e sete capítulos. Combate e sistemas funcionais serão preservados; PvP vira atividade opt-in.
+- Auditoria registrada em `AUDITORIA_RPG_2026-09-28.md`; plano em `PLANO_MIGRACAO_RPG.md`; cânone em `BIBLIA_HISTORIA_FX_v1.0.md`.
+- Nenhum gameplay ou asset foi alterado nesta etapa. Próximo passo recomendado: documento de design e implementação do vertical slice do Capítulo 1.
+- Fundação implementada: `WorldConfig`/`WorldService` (região, checkpoint, descoberta e respawn) e `StoryConfig`/`StoryService` (sete capítulos, atos, flags e Rastros de Carlos). Perfil ganhou `world` e `story` com migração tolerante no DataStore v4; quests antigas continuam intactas durante a transição.
+- `StoryConfig` já contém o primeiro recorte orientado por dados do Capítulo 1: chegada, tutorial de combate, primeiro Rastro de Carlos e guardião da região. Ainda não foi ligado automaticamente às kills para impedir que jogadores avancem a campanha nova dentro da arena legada antes de existir o mapa/NPC correto.
+- Mapa: `tools/gerar_ilha_tutorial_fx.py` produz `FXTutorialIsland.model.json` com mar, ilha aberta em camadas, porto, vila, campo de treino, bosque, ruínas, Rastro de Carlos, boss spot e portais. O mapa battlegrounds atual foi preservado como **Ilha da Convergência** e ligado à **Ilha do Alvorecer** pelo `WorldPortalService`.
+- `TutorialIslandService` popula a ilha no servidor: Humanoider_20 como guia conversável, três Vagantes da Fratura com a IA/combate reais, Guardião Fraturado mais forte e primeiro Rastro de Carlos persistente.
+- Loop F/X ligado: conversar inicia a campanha; kills dos Vagantes + parry avançam o tutorial; o Rastro abre o ato do Guardião; derrotá-lo libera a rota `ilha_sol_partido_unlocked`. `StoryController` exibe capítulo, ato, objetivos e avisos.
+- Segunda ilha gerada por `tools/gerar_ilha_sol_partido_fx.py`: mesa desértica, cânion, oásis, trilha e templo solar vertical. O portal só atravessa após o Guardião da primeira ilha.
+- Ilha do Sol Partido populada: cinco Saqueadores Solares, objetivo de parry, altar no topo e Sentinela Solar. Chegar pela primeira vez avança o ato; vencer a Sentinela libera a futura rota do Mar de Cinzas.
+- Release F/X 2.0 preparado para publicação por Open Cloud: duas ilhas, arena legada como Ilha da Convergência, campanha/HUD/save/checkpoints/portais e changelog 2.0.
+- Direção das seis ilhas do Capítulo 1 registrada em `MAPA_CAPITULO_1.md`; cada era deve variar geografia, paleta, verticalidade e loop, mantendo identidade original.
+
 ## Feito
 - 2026-09-14 — Auditoria inicial (`AUDITORIA.md`): repo era template puro do `rojo init`.
 - 2026-09-14 — Estrutura base: `src/server/Services`, `src/client/Controllers`, `src/shared/Modules`.
@@ -2405,3 +2420,10 @@ Encaixar sons por nome a partir dos packs; anims restantes quando vierem ids; ba
    golpes de área, fases por vida), recompensa em moedas para quem participou; placar próprio.
 9. **Lançamento**: `AllowLobbyCombat = false`, `Log.Verbose` automático, publicar privado,
    rodar `CHECKLIST_PUBLICACAO.md` completo.
+
+## 2026-09-23 — Preparação da Central IA (sem alteração de gameplay)
+
+- PlaceId `85844807133499` confirmado pelo dono e associado ao `default.project.json` na Central IA.
+- Adicionado `src/shared/CentralProjectMarker.luau` para identificar este projeto na futura verificação de alvo. `rojo build` e `rojo sourcemap` passaram; o marcador aparece em `ReplicatedStorage.Shared`.
+- A cópia local recente `copia/Copia2.rbxl` foi duplicada no backup privado da Central com hash idêntico. A pasta `copia/` passou a ser ignorada pelo Git, sem mover ou excluir as cópias originais.
+- `rojo serve` foi iniciado pela Central em porta local dinâmica. **Pendente:** abrir a cópia no Studio, verificar restauração e alvo ao vivo, conectar o plugin Rojo e testar duas janelas. Escrita direta MCP/Open Cloud e publicação permanecem desligadas para este projeto.

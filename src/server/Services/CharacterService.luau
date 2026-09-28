@@ -77,9 +77,15 @@ function CharacterService.PickSpawn(player: Player): CFrame
 	return pickSpawn(player)
 end
 pickSpawn = function(player: Player): CFrame
+	-- F/X: WorldService replica o checkpoint salvo em atributos do servidor. Arenas temporárias
+	-- continuam usando RespawnLocation e têm prioridade para não quebrar duelo/torneio.
 	local respawn = player.RespawnLocation
 	if respawn and respawn.Parent and respawn.Enabled then
 		return respawn.CFrame + Vector3.new(0, respawn.Size.Y / 2, 0)
+	end
+	local x, y, z, yaw = player:GetAttribute("WorldSpawnX"), player:GetAttribute("WorldSpawnY"), player:GetAttribute("WorldSpawnZ"), player:GetAttribute("WorldSpawnYaw")
+	if typeof(x) == "number" and typeof(y) == "number" and typeof(z) == "number" and typeof(yaw) == "number" then
+		return CFrame.new(x, y, z) * CFrame.Angles(0, math.rad(yaw), 0)
 	end
 	local duels = Workspace:FindFirstChild("Duels")
 	local candidates: { SpawnLocation } = {}

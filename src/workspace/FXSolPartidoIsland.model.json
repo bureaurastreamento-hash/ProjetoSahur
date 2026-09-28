@@ -1,0 +1,3294 @@
+{
+ "className": "Model",
+ "ignoreUnknownInstances": true,
+ "children": [
+  {
+   "name": "Terrain",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "MesaBase",
+     "className": "Part",
+     "properties": {
+      "Name": "MesaBase",
+      "Anchored": true,
+      "Position": [
+       1450,
+       -2,
+       0
+      ],
+      "Size": [
+       300,
+       12,
+       230
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "AreiaAlta",
+     "className": "Part",
+     "properties": {
+      "Name": "AreiaAlta",
+      "Anchored": true,
+      "Position": [
+       1450,
+       6,
+       0
+      ],
+      "Size": [
+       270,
+       3,
+       200
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Canion",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Rocha0",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha0",
+      "Anchored": true,
+      "Position": [
+       1363.187344010678,
+       25.672766328499414,
+       -27.07713184706133
+      ],
+      "Size": [
+       14.040364095674805,
+       37.34553265699883,
+       17.655175394631243
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -2.4989715346198693,
+       74.78890704629859,
+       5.686305555612808
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha1",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha1",
+      "Anchored": true,
+      "Position": [
+       1528.1914500033336,
+       16.372113496408712,
+       59.66037108049418
+      ],
+      "Size": [
+       14.893931904414968,
+       18.744226992817424,
+       24.981101657959442
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -2.7312165597135714,
+       109.40000144845457,
+       -0.9645975676703422
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha2",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha2",
+      "Anchored": true,
+      "Position": [
+       1437.928285436638,
+       15.556536818233972,
+       -97.79834573089346
+      ],
+      "Size": [
+       16.07477769984189,
+       17.113073636467945,
+       16.120901853696292
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.683481417153562,
+       101.26916106216481,
+       -3.643184643063231
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha3",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha3",
+      "Anchored": true,
+      "Position": [
+       1409.7673039442882,
+       20.678362177739388,
+       -77.5646332713463
+      ],
+      "Size": [
+       13.077987651992622,
+       27.35672435547877,
+       16.16131741091156
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.577810224592273,
+       92.82668907837827,
+       3.02787452701501
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha4",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha4",
+      "Anchored": true,
+      "Position": [
+       1454.6156684435884,
+       22.677405037515044,
+       -108.93426801107921
+      ],
+      "Size": [
+       15.562014486591984,
+       31.35481007503009,
+       19.2692801559468
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.435814606579708,
+       17.853061792187678,
+       5.251558621792704
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha5",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha5",
+      "Anchored": true,
+      "Position": [
+       1399.3244971033866,
+       15.25000329560424,
+       55.876555414047445
+      ],
+      "Size": [
+       14.76946338435524,
+       16.50000659120848,
+       11.038988592338585
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -1.634239058099622,
+       74.71594506899183,
+       1.864158012807568
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha6",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha6",
+      "Anchored": true,
+      "Position": [
+       1317.820770574375,
+       22.890623184557462,
+       28.164029263906567
+      ],
+      "Size": [
+       14.494286644732375,
+       31.78124636911492,
+       23.123443966110216
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       3.1848008600844793,
+       174.1172056965886,
+       2.812121873869767
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha7",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha7",
+      "Anchored": true,
+      "Position": [
+       1528.5234570217083,
+       17.175395110459853,
+       -17.228963894456623
+      ],
+      "Size": [
+       23.612300221403174,
+       20.35079022091971,
+       10.328147195114754
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       6.780089070123484,
+       163.8719168211381,
+       -4.369193455299659
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha8",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha8",
+      "Anchored": true,
+      "Position": [
+       1528.057428027945,
+       27.395679742683086,
+       108.5435882859825
+      ],
+      "Size": [
+       22.175158192787077,
+       40.79135948536617,
+       20.867583048283294
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.156535344841057,
+       55.41344465086654,
+       -5.91123721531505
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha9",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha9",
+      "Anchored": true,
+      "Position": [
+       1358.946574487869,
+       27.23415702267259,
+       -94.41384965926646
+      ],
+      "Size": [
+       17.207428162606625,
+       40.46831404534518,
+       10.12541664592755
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -5.21025816013735,
+       80.83849181627559,
+       -3.2327303529572946
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha10",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha10",
+      "Anchored": true,
+      "Position": [
+       1528.253370464412,
+       20.49811843287108,
+       13.748906621128521
+      ],
+      "Size": [
+       11.776232575844952,
+       26.996236865742162,
+       11.691430591997882
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -5.352655667782262,
+       6.063594345669012,
+       3.4022768478101373
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha11",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha11",
+      "Anchored": true,
+      "Position": [
+       1503.2281652067895,
+       22.509853631444486,
+       -59.89928718932228
+      ],
+      "Size": [
+       22.267669330924075,
+       31.01970726288897,
+       13.654213280600574
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -2.665299865370777,
+       158.654443981973,
+       3.142763525345204
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha12",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha12",
+      "Anchored": true,
+      "Position": [
+       1359.8388023065895,
+       21.594893953096566,
+       -85.91835335139916
+      ],
+      "Size": [
+       14.4079185220467,
+       29.189787906193132,
+       20.278276176913547
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.54262780810558,
+       9.985700404143849,
+       -2.1348749030773506
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha13",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha13",
+      "Anchored": true,
+      "Position": [
+       1413.8573300725648,
+       17.321743854230697,
+       126.41400370477264
+      ],
+      "Size": [
+       19.431606483655635,
+       20.643487708461393,
+       16.522903224746337
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -1.9470617281536544,
+       89.99327943947074,
+       4.73975962642572
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha14",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha14",
+      "Anchored": true,
+      "Position": [
+       1398.6106939640592,
+       15.256263513531184,
+       -78.95214091059317
+      ],
+      "Size": [
+       14.82189780990225,
+       16.51252702706237,
+       17.06295252633724
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       2.336714209745848,
+       179.73770689594122,
+       -2.10115588917743
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha15",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha15",
+      "Anchored": true,
+      "Position": [
+       1573.9765010510166,
+       19.644069645166155,
+       -48.995352487919384
+      ],
+      "Size": [
+       13.110216440557501,
+       25.28813929033231,
+       13.51084617707969
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       6.7406508261751,
+       31.256885202894633,
+       1.7792625289475144
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha16",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha16",
+      "Anchored": true,
+      "Position": [
+       1405.368029298187,
+       13.470355743826968,
+       -63.40901984854179
+      ],
+      "Size": [
+       18.9355154959908,
+       12.940711487653935,
+       10.794064920097433
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       0.7797998096341754,
+       174.85705160156022,
+       -0.4356774069535376
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha17",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha17",
+      "Anchored": true,
+      "Position": [
+       1422.2689015332699,
+       17.528472971058793,
+       67.489270140209
+      ],
+      "Size": [
+       14.483533986398633,
+       21.056945942117586,
+       11.756561159055536
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       3.239986283230145,
+       108.42275954508375,
+       2.6143211604840353
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha18",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha18",
+      "Anchored": true,
+      "Position": [
+       1515.504449616653,
+       26.87601431770563,
+       52.23735780932725
+      ],
+      "Size": [
+       10.123380989530098,
+       39.75202863541126,
+       15.547432548048677
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       5.08687851695853,
+       41.19174925914454,
+       -3.3591411768584014
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha19",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha19",
+      "Anchored": true,
+      "Position": [
+       1395.4955860669002,
+       18.04111822541241,
+       -63.7612879962367
+      ],
+      "Size": [
+       15.482595700489917,
+       22.082236450824823,
+       14.480450921829977
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       2.54515124724775,
+       132.23017013977238,
+       3.1332175957606943
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha20",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha20",
+      "Anchored": true,
+      "Position": [
+       1519.9274573675834,
+       16.850127205947583,
+       -8.647649359987044
+      ],
+      "Size": [
+       23.81107469887118,
+       19.700254411895166,
+       21.97049622648109
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.16694937830545,
+       40.01574513885375,
+       -4.4599746429210185
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha21",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha21",
+      "Anchored": true,
+      "Position": [
+       1429.085530963367,
+       24.257339840174406,
+       130.29711493493252
+      ],
+      "Size": [
+       15.137468403143098,
+       34.51467968034881,
+       19.880002884426666
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       3.7638584455968793,
+       51.58990676704293,
+       -4.723229559769502
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha22",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha22",
+      "Anchored": true,
+      "Position": [
+       1494.2432866617262,
+       25.1076358558447,
+       -109.48864688653494
+      ],
+      "Size": [
+       20.398419364575005,
+       36.2152717116894,
+       15.48152071871139
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       2.470902524546382,
+       66.02719271126165,
+       4.842443243921082
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha23",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha23",
+      "Anchored": true,
+      "Position": [
+       1533.4789017721025,
+       18.19626555575323,
+       82.32468113539313
+      ],
+      "Size": [
+       22.73471283454769,
+       22.392531111506457,
+       22.05771916019065
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -5.200685797972762,
+       2.813761230353875,
+       -3.1948709502884975
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha24",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha24",
+      "Anchored": true,
+      "Position": [
+       1569.0155317294675,
+       23.59069534039925,
+       -29.540423781909297
+      ],
+      "Size": [
+       12.931201090787741,
+       33.1813906807985,
+       13.183863729296261
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -0.8772106913037092,
+       95.88733548266633,
+       1.3957781936786722
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha25",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha25",
+      "Anchored": true,
+      "Position": [
+       1569.2692153904322,
+       16.66968823082548,
+       47.13546972136287
+      ],
+      "Size": [
+       19.998502619515435,
+       19.33937646165096,
+       14.759676289635168
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -3.256662663087951,
+       156.73442587400328,
+       -3.3970353972123615
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha26",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha26",
+      "Anchored": true,
+      "Position": [
+       1319.397511036686,
+       25.420652273593614,
+       -3.172884925014256
+      ],
+      "Size": [
+       20.05823100311017,
+       36.84130454718723,
+       13.644354073021203
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       2.0373678452358206,
+       85.21807146027551,
+       -2.3444689217510746
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha27",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha27",
+      "Anchored": true,
+      "Position": [
+       1465.9641658866576,
+       26.406100848466153,
+       -114.5065078183437
+      ],
+      "Size": [
+       15.946816554201286,
+       38.812201696932306,
+       12.157897279844212
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -3.6635791153545263,
+       133.19241318243195,
+       2.4314704482432585
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha28",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha28",
+      "Anchored": true,
+      "Position": [
+       1390.9214704028818,
+       21.67799360027002,
+       -74.10443508842556
+      ],
+      "Size": [
+       10.961671214413574,
+       29.35598720054004,
+       11.359751635448887
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       4.889829163528173,
+       20.02366119319869,
+       1.475100247353014
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha29",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha29",
+      "Anchored": true,
+      "Position": [
+       1426.3288942300178,
+       24.768675037811875,
+       74.18779294278791
+      ],
+      "Size": [
+       22.370888507823437,
+       35.53735007562375,
+       14.751191722799344
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -5.575188452921166,
+       82.97465912304871,
+       -4.647852537001802
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha30",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha30",
+      "Anchored": true,
+      "Position": [
+       1514.7083417154593,
+       20.637982935098535,
+       -16.498383499682724
+      ],
+      "Size": [
+       12.282978592580427,
+       27.275965870197073,
+       10.035300339275139
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       7.949605048950561,
+       122.42533796681111,
+       2.471825786797771
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rocha31",
+     "className": "Part",
+     "properties": {
+      "Name": "Rocha31",
+      "Anchored": true,
+      "Position": [
+       1465.3344686096586,
+       22.13414417961465,
+       -123.0590971924596
+      ],
+      "Size": [
+       19.294906571183425,
+       30.2682883592293,
+       14.735431320649996
+      ],
+      "Color": [
+       0.39,
+       0.23,
+       0.15
+      ],
+      "Material": "Rock",
+      "Orientation": [
+       -6.350812081219939,
+       130.72444248977388,
+       2.820799047416134
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha0",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha0",
+      "Anchored": true,
+      "Position": [
+       1395.0,
+       8.1,
+       92
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       4.761272373268747,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha1",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha1",
+      "Anchored": true,
+      "Position": [
+       1401.7119575404588,
+       8.1,
+       82
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       2.9368140643571667,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha2",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha2",
+      "Anchored": true,
+      "Position": [
+       1406.7805937873106,
+       8.1,
+       72
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -8.311127969940674,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha3",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha3",
+      "Anchored": true,
+      "Position": [
+       1408.9649298124568,
+       8.1,
+       62
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       2.938026976562851,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha4",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha4",
+      "Anchored": true,
+      "Position": [
+       1407.7301639755594,
+       8.1,
+       52
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -8.282094038983196,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha5",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha5",
+      "Anchored": true,
+      "Position": [
+       1403.3786100174555,
+       8.1,
+       42
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       7.411820246117841,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha6",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha6",
+      "Anchored": true,
+      "Position": [
+       1396.975680112838,
+       8.1,
+       32
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -9.821164821297302,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha7",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha7",
+      "Anchored": true,
+      "Position": [
+       1390.0890348123453,
+       8.1,
+       22
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -4.712619101808508,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha8",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha8",
+      "Anchored": true,
+      "Position": [
+       1384.404765065689,
+       8.1,
+       12
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0.6728371297248543,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha9",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha9",
+      "Anchored": true,
+      "Position": [
+       1381.3145783526886,
+       8.1,
+       2
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       7.38364827328434,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha10",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha10",
+      "Anchored": true,
+      "Position": [
+       1381.575060154716,
+       8.1,
+       -8
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       3.148526667220409,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha11",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha11",
+      "Anchored": true,
+      "Position": [
+       1385.1224354420144,
+       8.1,
+       -18
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -7.384519062728458,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha12",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha12",
+      "Anchored": true,
+      "Position": [
+       1391.0881830252151,
+       8.1,
+       -28
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       4.49953968346396,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha13",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha13",
+      "Anchored": true,
+      "Position": [
+       1398.0116798332294,
+       8.1,
+       -38
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -5.844350613596072,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha14",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha14",
+      "Anchored": true,
+      "Position": [
+       1404.1978123820631,
+       8.1,
+       -48
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -3.29199582794955,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha15",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha15",
+      "Anchored": true,
+      "Position": [
+       1408.1319996748464,
+       8.1,
+       -58
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -2.7983253175016065,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha16",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha16",
+      "Anchored": true,
+      "Position": [
+       1408.8510154527273,
+       8.1,
+       -68
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       5.967305486914681,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Trilha17",
+     "className": "Part",
+     "properties": {
+      "Name": "Trilha17",
+      "Anchored": true,
+      "Position": [
+       1406.1788195767288,
+       8.1,
+       -78
+      ],
+      "Size": [
+       12,
+       0.3,
+       14
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -5.8207452641290525,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Oasis",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Agua",
+     "className": "Part",
+     "properties": {
+      "Name": "Agua",
+      "Anchored": true,
+      "Position": [
+       1517,
+       8,
+       48
+      ],
+      "Size": [
+       0.5,
+       56,
+       56
+      ],
+      "Color": [
+       0.08,
+       0.48,
+       0.62
+      ],
+      "Material": "Glass",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "Palmeira0",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira0",
+      "Anchored": true,
+      "Position": [
+       1551.0,
+       14,
+       48.0
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa0",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa0",
+      "Anchored": true,
+      "Position": [
+       1551.0,
+       21,
+       48.0
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira1",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira1",
+      "Anchored": true,
+      "Position": [
+       1544.5065778087483,
+       14,
+       67.98469857794409
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa1",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa1",
+      "Anchored": true,
+      "Position": [
+       1544.5065778087483,
+       21,
+       67.98469857794409
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       37,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira2",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira2",
+      "Anchored": true,
+      "Position": [
+       1527.5065778087483,
+       14,
+       80.33592155403522
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa2",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa2",
+      "Anchored": true,
+      "Position": [
+       1527.5065778087483,
+       21,
+       80.33592155403522
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       74,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira3",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira3",
+      "Anchored": true,
+      "Position": [
+       1506.4934221912517,
+       14,
+       80.33592155403522
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa3",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa3",
+      "Anchored": true,
+      "Position": [
+       1506.4934221912517,
+       21,
+       80.33592155403522
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       111,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira4",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira4",
+      "Anchored": true,
+      "Position": [
+       1489.4934221912517,
+       14,
+       67.98469857794409
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa4",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa4",
+      "Anchored": true,
+      "Position": [
+       1489.4934221912517,
+       21,
+       67.98469857794409
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       148,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira5",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira5",
+      "Anchored": true,
+      "Position": [
+       1483.0,
+       14,
+       48.00000000000001
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa5",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa5",
+      "Anchored": true,
+      "Position": [
+       1483.0,
+       21,
+       48.00000000000001
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       185,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira6",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira6",
+      "Anchored": true,
+      "Position": [
+       1489.4934221912517,
+       14,
+       28.015301422055916
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa6",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa6",
+      "Anchored": true,
+      "Position": [
+       1489.4934221912517,
+       21,
+       28.015301422055916
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       222,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira7",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira7",
+      "Anchored": true,
+      "Position": [
+       1506.4934221912517,
+       14,
+       15.664078445964783
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa7",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa7",
+      "Anchored": true,
+      "Position": [
+       1506.4934221912517,
+       21,
+       15.664078445964783
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       259,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira8",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira8",
+      "Anchored": true,
+      "Position": [
+       1527.5065778087483,
+       14,
+       15.664078445964776
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa8",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa8",
+      "Anchored": true,
+      "Position": [
+       1527.5065778087483,
+       21,
+       15.664078445964776
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       296,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Palmeira9",
+     "className": "Part",
+     "properties": {
+      "Name": "Palmeira9",
+      "Anchored": true,
+      "Position": [
+       1544.5065778087483,
+       14,
+       28.015301422055906
+      ],
+      "Size": [
+       11,
+       2,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa9",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa9",
+      "Anchored": true,
+      "Position": [
+       1544.5065778087483,
+       21,
+       28.015301422055906
+      ],
+      "Size": [
+       9,
+       3,
+       9
+      ],
+      "Color": [
+       0.22,
+       0.46,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       333,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Inimigos",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "EnemyPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "EnemyPad0",
+      "Anchored": true,
+      "Position": [
+       1380,
+       8.3,
+       55
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EnemyPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "EnemyPad1",
+      "Anchored": true,
+      "Position": [
+       1405,
+       8.3,
+       20
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EnemyPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "EnemyPad2",
+      "Anchored": true,
+      "Position": [
+       1378,
+       8.3,
+       -18
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EnemyPad3",
+     "className": "Part",
+     "properties": {
+      "Name": "EnemyPad3",
+      "Anchored": true,
+      "Position": [
+       1415,
+       8.3,
+       -48
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EnemyPad4",
+     "className": "Part",
+     "properties": {
+      "Name": "EnemyPad4",
+      "Anchored": true,
+      "Position": [
+       1475,
+       8.3,
+       -34
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Templo",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Nivel0",
+     "className": "Part",
+     "properties": {
+      "Name": "Nivel0",
+      "Anchored": true,
+      "Position": [
+       1450,
+       10,
+       -78
+      ],
+      "Size": [
+       86,
+       6,
+       34
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rampa0",
+     "className": "Part",
+     "properties": {
+      "Name": "Rampa0",
+      "Anchored": true,
+      "Position": [
+       1450,
+       14,
+       -53
+      ],
+      "Size": [
+       16,
+       2,
+       18
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       18,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Nivel1",
+     "className": "Part",
+     "properties": {
+      "Name": "Nivel1",
+      "Anchored": true,
+      "Position": [
+       1450,
+       17,
+       -88
+      ],
+      "Size": [
+       73,
+       6,
+       34
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rampa1",
+     "className": "Part",
+     "properties": {
+      "Name": "Rampa1",
+      "Anchored": true,
+      "Position": [
+       1450,
+       21,
+       -63
+      ],
+      "Size": [
+       16,
+       2,
+       18
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       18,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Nivel2",
+     "className": "Part",
+     "properties": {
+      "Name": "Nivel2",
+      "Anchored": true,
+      "Position": [
+       1450,
+       24,
+       -98
+      ],
+      "Size": [
+       60,
+       6,
+       34
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rampa2",
+     "className": "Part",
+     "properties": {
+      "Name": "Rampa2",
+      "Anchored": true,
+      "Position": [
+       1450,
+       28,
+       -73
+      ],
+      "Size": [
+       16,
+       2,
+       18
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       18,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Nivel3",
+     "className": "Part",
+     "properties": {
+      "Name": "Nivel3",
+      "Anchored": true,
+      "Position": [
+       1450,
+       31,
+       -108
+      ],
+      "Size": [
+       47,
+       6,
+       34
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rampa3",
+     "className": "Part",
+     "properties": {
+      "Name": "Rampa3",
+      "Anchored": true,
+      "Position": [
+       1450,
+       35,
+       -83
+      ],
+      "Size": [
+       16,
+       2,
+       18
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       18,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Nivel4",
+     "className": "Part",
+     "properties": {
+      "Name": "Nivel4",
+      "Anchored": true,
+      "Position": [
+       1450,
+       38,
+       -118
+      ],
+      "Size": [
+       34,
+       6,
+       34
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Rampa4",
+     "className": "Part",
+     "properties": {
+      "Name": "Rampa4",
+      "Anchored": true,
+      "Position": [
+       1450,
+       42,
+       -93
+      ],
+      "Size": [
+       16,
+       2,
+       18
+      ],
+      "Color": [
+       0.72,
+       0.49,
+       0.24
+      ],
+      "Material": "Sandstone",
+      "Orientation": [
+       18,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Coluna-28_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna-28_0",
+      "Anchored": true,
+      "Position": [
+       1422,
+       24,
+       -86
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna-28_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna-28_1",
+      "Anchored": true,
+      "Position": [
+       1422,
+       24,
+       -98
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna-28_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna-28_2",
+      "Anchored": true,
+      "Position": [
+       1422,
+       24,
+       -110
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna-28_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna-28_3",
+      "Anchored": true,
+      "Position": [
+       1422,
+       24,
+       -122
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna28_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna28_0",
+      "Anchored": true,
+      "Position": [
+       1478,
+       24,
+       -86
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna28_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna28_1",
+      "Anchored": true,
+      "Position": [
+       1478,
+       24,
+       -98
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna28_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna28_2",
+      "Anchored": true,
+      "Position": [
+       1478,
+       24,
+       -110
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna28_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna28_3",
+      "Anchored": true,
+      "Position": [
+       1478,
+       24,
+       -122
+      ],
+      "Size": [
+       16,
+       4,
+       4
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "AltarSolar",
+     "className": "Part",
+     "properties": {
+      "Name": "AltarSolar",
+      "Anchored": true,
+      "Position": [
+       1450,
+       47,
+       -123
+      ],
+      "Size": [
+       14,
+       4,
+       14
+      ],
+      "Color": [
+       0.75,
+       0.52,
+       0.16
+      ],
+      "Material": "Metal",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SolFraturado",
+     "className": "Part",
+     "properties": {
+      "Name": "SolFraturado",
+      "Anchored": true,
+      "Position": [
+       1450,
+       58,
+       -130
+      ],
+      "Size": [
+       10,
+       10,
+       2
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "TempleMarker",
+     "className": "Part",
+     "properties": {
+      "Name": "TempleMarker",
+      "Anchored": true,
+      "Position": [
+       1450,
+       49,
+       -123
+      ],
+      "Size": [
+       8,
+       1,
+       8
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.55,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "SolarBossSpawn",
+     "className": "Part",
+     "properties": {
+      "Name": "SolarBossSpawn",
+      "Anchored": true,
+      "Position": [
+       1450,
+       49,
+       -105
+      ],
+      "Size": [
+       9,
+       1,
+       9
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.5,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Portais",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "SolPartidoToTutorial",
+     "className": "Part",
+     "properties": {
+      "Name": "SolPartidoToTutorial",
+      "Anchored": true,
+      "Position": [
+       1345,
+       11,
+       78
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.18,
+       0.14,
+       0.13
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "SolPartidoToTutorialCore",
+     "className": "Part",
+     "properties": {
+      "Name": "SolPartidoToTutorialCore",
+      "Anchored": true,
+      "Position": [
+       1345,
+       11,
+       78
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       1,
+       0.55,
+       0.12
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Spawns",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "SolPartidoSpawn",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "SolPartidoSpawn",
+      "Anchored": true,
+      "Position": [
+       1360,
+       9,
+       70
+      ],
+      "Size": [
+       10,
+       1,
+       10
+      ],
+      "Color": [
+       0.9,
+       0.6,
+       0.2
+      ],
+      "Material": "Plastic",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "Enabled": false,
+      "Neutral": true
+     }
+    }
+   ]
+  }
+ ]
+}

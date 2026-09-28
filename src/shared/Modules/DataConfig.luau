@@ -40,6 +40,19 @@ export type Quests = {
 	counters: { [string]: number }, -- progresso dos objetivos do capítulo ATUAL (zera ao avançar)
 	done: { [string]: boolean }, -- capítulos concluídos (Id)
 }
+export type WorldProgress = {
+	region: string,
+	checkpoint: string,
+	discovered: { [string]: boolean },
+}
+export type StoryProgress = {
+	chapter: string,
+	act: number,
+	counters: { [string]: number },
+	flags: { [string]: boolean },
+	traces: { [string]: boolean },
+	completed: { [string]: boolean },
+}
 
 export type Profile = {
 	schemaVersion: number,
@@ -54,6 +67,8 @@ export type Profile = {
 	missions: { day: number, list: { Mission } }, -- legado: fica no save, ninguém mais usa
 	achievements: Achievements,
 	quests: Quests, -- história em capítulos (QuestService, 2026-09-22)
+	world: WorldProgress, -- F/X: região/checkpoint/descobertas (WorldService)
+	story: StoryProgress, -- F/X: capítulo, ato, flags e Rastros de Carlos (StoryService)
 	-- cosméticos (CosmeticsService): ids de CosmeticsConfig
 	cosmetics: { owned: { string }, equipped: { [string]: string } }, -- equipped[categoria] = id
 	emotes: { string }, -- ids comprados (os de custo 0 são de todos)
@@ -77,6 +92,8 @@ function DataConfig.DefaultProfile(): Profile
 		missions = { day = 0, list = {} },
 		achievements = { counters = {}, done = {}, season = { id = "", counters = {} } },
 		quests = { chapter = 1, active = false, counters = {}, done = {} }, -- QuestService (história em capítulos)
+		world = { region = "ilha_tutorial", checkpoint = "porto", discovered = { ilha_tutorial = true } },
+		story = { chapter = "cap1", act = 1, counters = {}, flags = {}, traces = {}, completed = {} },
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},

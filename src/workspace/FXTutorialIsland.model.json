@@ -1,0 +1,5425 @@
+{
+ "className": "Model",
+ "ignoreUnknownInstances": true,
+ "children": [
+  {
+   "name": "Terrain",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Mar",
+     "className": "Part",
+     "properties": {
+      "Name": "Mar",
+      "Anchored": true,
+      "Position": [
+       850,
+       -7,
+       0
+      ],
+      "Size": [
+       1800,
+       4,
+       1000
+      ],
+      "Color": [
+       0.12,
+       0.4,
+       0.57
+      ],
+      "Material": "Glass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.32,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "IlhaCamada0",
+     "className": "Part",
+     "properties": {
+      "Name": "IlhaCamada0",
+      "Anchored": true,
+      "Position": [
+       850,
+       -3,
+       0
+      ],
+      "Size": [
+       2,
+       310,
+       230
+      ],
+      "Color": [
+       0.25,
+       0.27,
+       0.29
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "IlhaCamada1",
+     "className": "Part",
+     "properties": {
+      "Name": "IlhaCamada1",
+      "Anchored": true,
+      "Position": [
+       850,
+       -1,
+       0
+      ],
+      "Size": [
+       2,
+       285,
+       210
+      ],
+      "Color": [
+       0.25,
+       0.27,
+       0.29
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "IlhaCamada2",
+     "className": "Part",
+     "properties": {
+      "Name": "IlhaCamada2",
+      "Anchored": true,
+      "Position": [
+       850,
+       1,
+       0
+      ],
+      "Size": [
+       2,
+       255,
+       185
+      ],
+      "Color": [
+       0.24,
+       0.42,
+       0.22
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Praia0",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia0",
+      "Anchored": true,
+      "Position": [
+       971.0498435947563,
+       2.2,
+       0.0
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia1",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia1",
+      "Anchored": true,
+      "Position": [
+       965.5847596849591,
+       2.2,
+       37.55576500599038
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia2",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia2",
+      "Anchored": true,
+      "Position": [
+       958.5102490139286,
+       2.2,
+       78.83731063307091
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia3",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia3",
+      "Anchored": true,
+      "Position": [
+       922.184276573548,
+       2.2,
+       99.35313321812244
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia4",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia4",
+      "Anchored": true,
+      "Position": [
+       887.5694862616099,
+       2.2,
+       115.62698936748852
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia5",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia5",
+      "Anchored": true,
+      "Position": [
+       850.0,
+       2.2,
+       130.5306610138621
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia6",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia6",
+      "Anchored": true,
+      "Position": [
+       810.0520334902671,
+       2.2,
+       122.94719887063317
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia7",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia7",
+      "Anchored": true,
+      "Position": [
+       777.2557636476066,
+       2.2,
+       100.12385173391621
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia8",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia8",
+      "Anchored": true,
+      "Position": [
+       745.9804096572058,
+       2.2,
+       75.57465612973573
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia9",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia9",
+      "Anchored": true,
+      "Position": [
+       716.1472347312765,
+       2.2,
+       43.49139983104814
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia10",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia10",
+      "Anchored": true,
+      "Position": [
+       728.4602393554683,
+       2.2,
+       1.4884327884246122e-14
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia11",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia11",
+      "Anchored": true,
+      "Position": [
+       732.958393853372,
+       2.2,
+       -38.0291231157739
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia12",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia12",
+      "Anchored": true,
+      "Position": [
+       753.9288246962835,
+       2.2,
+       -69.7997945736083
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia13",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia13",
+      "Anchored": true,
+      "Position": [
+       776.834283595869,
+       2.2,
+       -100.70396925696711
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia14",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia14",
+      "Anchored": true,
+      "Position": [
+       812.7434898247502,
+       2.2,
+       -114.66374801896868
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia15",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia15",
+      "Anchored": true,
+      "Position": [
+       850.0,
+       2.2,
+       -144.5879800859303
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia16",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia16",
+      "Anchored": true,
+      "Position": [
+       889.0884832939912,
+       2.2,
+       -120.30198152706673
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia17",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia17",
+      "Anchored": true,
+      "Position": [
+       935.0544548818727,
+       2.2,
+       -117.06741395494079
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia18",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia18",
+      "Anchored": true,
+      "Position": [
+       948.2913861071194,
+       2.2,
+       -71.41287214341756
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Praia19",
+     "className": "Part",
+     "properties": {
+      "Name": "Praia19",
+      "Anchored": true,
+      "Position": [
+       985.4380574862087,
+       2.2,
+       -44.006492496793854
+      ],
+      "Size": [
+       0.4,
+       20,
+       20
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Caminho0",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho0",
+      "Anchored": true,
+      "Position": [
+       850.0258140122809,
+       3.2,
+       112
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       1.5245901181033226,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho1",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho1",
+      "Anchored": true,
+      "Position": [
+       850.6488702534834,
+       3.2,
+       97
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -1.834499739862319,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho2",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho2",
+      "Anchored": true,
+      "Position": [
+       848.9302146112192,
+       3.2,
+       82
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       1.4356752901641965,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho3",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho3",
+      "Anchored": true,
+      "Position": [
+       848.5257020056264,
+       3.2,
+       67
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -3.8941295185933082,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho4",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho4",
+      "Anchored": true,
+      "Position": [
+       851.0842098380417,
+       3.2,
+       52
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       1.064315120910675,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho5",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho5",
+      "Anchored": true,
+      "Position": [
+       849.0404529892999,
+       3.2,
+       37
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0.1627297123442215,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho6",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho6",
+      "Anchored": true,
+      "Position": [
+       851.6396536801158,
+       3.2,
+       22
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -1.7687249347180378,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho7",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho7",
+      "Anchored": true,
+      "Position": [
+       848.4952764086692,
+       3.2,
+       7
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -0.6621012159510196,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho8",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho8",
+      "Anchored": true,
+      "Position": [
+       848.670157736603,
+       3.2,
+       -8
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -1.0551378685699957,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho9",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho9",
+      "Anchored": true,
+      "Position": [
+       848.1304864117301,
+       3.2,
+       -23
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       2.1099301478711077,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho10",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho10",
+      "Anchored": true,
+      "Position": [
+       851.2258976843406,
+       3.2,
+       -38
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -1.0108081007296361,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho11",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho11",
+      "Anchored": true,
+      "Position": [
+       849.51012399189,
+       3.2,
+       -53
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -1.9399725296159334,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho12",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho12",
+      "Anchored": true,
+      "Position": [
+       851.8155210431283,
+       3.2,
+       -68
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       3.021914750597218,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho13",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho13",
+      "Anchored": true,
+      "Position": [
+       850.6495786807193,
+       3.2,
+       -83
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       -2.600377247913891,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Caminho14",
+     "className": "Part",
+     "properties": {
+      "Name": "Caminho14",
+      "Anchored": true,
+      "Position": [
+       848.6894570681059,
+       3.2,
+       -98
+      ],
+      "Size": [
+       13,
+       0.25,
+       18
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       2.1384177557927924,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Porto",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Cais0",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais0",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       145
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais1",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais1",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       157
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais2",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais2",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       169
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais3",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais3",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       181
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais4",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais4",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       193
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais5",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais5",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       205
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Cais6",
+     "className": "Part",
+     "properties": {
+      "Name": "Cais6",
+      "Anchored": true,
+      "Position": [
+       850,
+       3,
+       217
+      ],
+      "Size": [
+       18,
+       1,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Estaca-8_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_0",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       145
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_1",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       157
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_2",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       169
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_3",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       181
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_4",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       193
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_5",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       205
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_6",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       217
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca-8_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca-8_7",
+      "Anchored": true,
+      "Position": [
+       842,
+       -1,
+       229
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_0",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_0",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       145
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_1",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_1",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       157
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_2",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_2",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       169
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_3",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_3",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       181
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_4",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_4",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       193
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_5",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_5",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       205
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_6",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_6",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       217
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Estaca8_7",
+     "className": "Part",
+     "properties": {
+      "Name": "Estaca8_7",
+      "Anchored": true,
+      "Position": [
+       858,
+       -1,
+       229
+      ],
+      "Size": [
+       9,
+       1.4,
+       1.4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "FarolTorre",
+     "className": "Part",
+     "properties": {
+      "Name": "FarolTorre",
+      "Anchored": true,
+      "Position": [
+       805,
+       15,
+       120
+      ],
+      "Size": [
+       27,
+       14,
+       14
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "FarolLuz",
+     "className": "Part",
+     "properties": {
+      "Name": "FarolLuz",
+      "Anchored": true,
+      "Position": [
+       805,
+       30,
+       120
+      ],
+      "Size": [
+       6,
+       5,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball",
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Vila",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Praca",
+     "className": "Part",
+     "properties": {
+      "Name": "Praca",
+      "Anchored": true,
+      "Position": [
+       850,
+       3.3,
+       38
+      ],
+      "Size": [
+       0.5,
+       68,
+       68
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Casa0",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa0",
+      "Anchored": true,
+      "Position": [
+       895.3153893518324,
+       10,
+       59.13091308703497
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       65,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado0",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado0",
+      "Anchored": true,
+      "Position": [
+       895.3153893518324,
+       18,
+       59.13091308703497
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       65,
+       -8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Casa1",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa1",
+      "Anchored": true,
+      "Position": [
+       845.642212862617,
+       10,
+       87.80973490458729
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       -5,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado1",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado1",
+      "Anchored": true,
+      "Position": [
+       845.642212862617,
+       18,
+       87.80973490458729
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       -5,
+       8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Casa2",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa2",
+      "Anchored": true,
+      "Position": [
+       804.6846106481676,
+       10,
+       59.130913087034976
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       -65,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado2",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado2",
+      "Anchored": true,
+      "Position": [
+       804.6846106481676,
+       18,
+       59.130913087034976
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       -65,
+       -8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Casa3",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa3",
+      "Anchored": true,
+      "Position": [
+       804.6846106481674,
+       10,
+       16.869086912965038
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       -115,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado3",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado3",
+      "Anchored": true,
+      "Position": [
+       804.6846106481674,
+       18,
+       16.869086912965038
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       -115,
+       8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Casa4",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa4",
+      "Anchored": true,
+      "Position": [
+       854.3577871373828,
+       10,
+       -11.80973490458728
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       -185,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado4",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado4",
+      "Anchored": true,
+      "Position": [
+       854.3577871373828,
+       18,
+       -11.80973490458728
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       -185,
+       -8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Casa5",
+     "className": "Part",
+     "properties": {
+      "Name": "Casa5",
+      "Anchored": true,
+      "Position": [
+       895.3153893518326,
+       10,
+       16.869086912965038
+      ],
+      "Size": [
+       24,
+       14,
+       20
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       -245,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Telhado5",
+     "className": "Part",
+     "properties": {
+      "Name": "Telhado5",
+      "Anchored": true,
+      "Position": [
+       895.3153893518326,
+       18,
+       16.869086912965038
+      ],
+      "Size": [
+       27,
+       3,
+       23
+      ],
+      "Color": [
+       0.22,
+       0.12,
+       0.13
+      ],
+      "Material": "Slate",
+      "Orientation": [
+       0,
+       -245,
+       8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "HumanoiderSpot",
+     "className": "Part",
+     "properties": {
+      "Name": "HumanoiderSpot",
+      "Anchored": true,
+      "Position": [
+       850,
+       3.7,
+       38
+      ],
+      "Size": [
+       8,
+       0.4,
+       8
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.65,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Treino",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "ArenaTreino",
+     "className": "Part",
+     "properties": {
+      "Name": "ArenaTreino",
+      "Anchored": true,
+      "Position": [
+       788,
+       3.3,
+       -42
+      ],
+      "Size": [
+       0.4,
+       84,
+       84
+      ],
+      "Color": [
+       0.78,
+       0.69,
+       0.48
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino0",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino0",
+      "Anchored": true,
+      "Position": [
+       823.0,
+       7.5,
+       -42.0
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino1",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino1",
+      "Anchored": true,
+      "Position": [
+       812.7487373415291,
+       7.5,
+       -17.25126265847084
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino2",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino2",
+      "Anchored": true,
+      "Position": [
+       788.0,
+       7.5,
+       -7.0
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino3",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino3",
+      "Anchored": true,
+      "Position": [
+       763.2512626584709,
+       7.5,
+       -17.251262658470836
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino4",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino4",
+      "Anchored": true,
+      "Position": [
+       753.0,
+       7.5,
+       -41.99999999999999
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino5",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino5",
+      "Anchored": true,
+      "Position": [
+       763.2512626584709,
+       7.5,
+       -66.74873734152916
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino6",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino6",
+      "Anchored": true,
+      "Position": [
+       788.0,
+       7.5,
+       -77.0
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "PilarTreino7",
+     "className": "Part",
+     "properties": {
+      "Name": "PilarTreino7",
+      "Anchored": true,
+      "Position": [
+       812.7487373415291,
+       7.5,
+       -66.74873734152916
+      ],
+      "Size": [
+       8,
+       3.2,
+       3.2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "DummyPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad0",
+      "Anchored": true,
+      "Position": [
+       772,
+       3.7,
+       -42
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "DummyPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad1",
+      "Anchored": true,
+      "Position": [
+       788,
+       3.7,
+       -42
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "DummyPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "DummyPad2",
+      "Anchored": true,
+      "Position": [
+       804,
+       3.7,
+       -42
+      ],
+      "Size": [
+       0.3,
+       6,
+       6
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Bosque",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Tronco0",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco0",
+      "Anchored": true,
+      "Position": [
+       926.3313192995942,
+       4.697333793158652,
+       42.910340799985136
+      ],
+      "Size": [
+       8.455200827685575,
+       2.4426135724424993,
+       2.4426135724424993
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa0",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa0",
+      "Anchored": true,
+      "Position": [
+       926.3313192995942,
+       10.334134344949035,
+       42.910340799985136
+      ],
+      "Size": [
+       7.515734069053844,
+       6.576267310422113,
+       7.515734069053844
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco1",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco1",
+      "Anchored": true,
+      "Position": [
+       937.8812760823288,
+       5.805020083978835,
+       -18.914558046335927
+      ],
+      "Size": [
+       10.449036151161904,
+       3.0186104436689947,
+       3.0186104436689947
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa1",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa1",
+      "Anchored": true,
+      "Position": [
+       937.8812760823288,
+       12.771044184753439,
+       -18.914558046335927
+      ],
+      "Size": [
+       9.288032134366137,
+       8.12702811757037,
+       9.288032134366137
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco2",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco2",
+      "Anchored": true,
+      "Position": [
+       886.4535600596809,
+       5.463654738042183,
+       39.80988378597185
+      ],
+      "Size": [
+       9.83457852847593,
+       2.841100463781935,
+       2.841100463781935
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa2",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa2",
+      "Anchored": true,
+      "Position": [
+       886.4535600596809,
+       12.020040423692802,
+       39.80988378597185
+      ],
+      "Size": [
+       8.741847580867493,
+       7.649116633259056,
+       8.741847580867493
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco3",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco3",
+      "Anchored": true,
+      "Position": [
+       874.0693440508129,
+       5.685401863122063,
+       10.642436220362072
+      ],
+      "Size": [
+       10.233723353619714,
+       2.956408968823473,
+       2.956408968823473
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa3",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa3",
+      "Anchored": true,
+      "Position": [
+       874.0693440508129,
+       12.50788409886854,
+       10.642436220362072
+      ],
+      "Size": [
+       9.096642980995302,
+       7.95956260837089,
+       9.096642980995302
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco4",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco4",
+      "Anchored": true,
+      "Position": [
+       901.8023057396766,
+       4.975490298336078,
+       -93.56757599481006
+      ],
+      "Size": [
+       8.95588253700494,
+       2.587254955134761,
+       2.587254955134761
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa4",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa4",
+      "Anchored": true,
+      "Position": [
+       901.8023057396766,
+       10.946078656339372,
+       -93.56757599481006
+      ],
+      "Size": [
+       7.960784477337725,
+       6.96568641767051,
+       7.960784477337725
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco5",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco5",
+      "Anchored": true,
+      "Position": [
+       870.679601781816,
+       5.2598188477660734,
+       -8.641426913608882
+      ],
+      "Size": [
+       9.467673925978932,
+       2.735105800838358,
+       2.735105800838358
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa5",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa5",
+      "Anchored": true,
+      "Position": [
+       870.679601781816,
+       11.571601465085362,
+       -8.641426913608882
+      ],
+      "Size": [
+       8.415710156425718,
+       7.363746386872503,
+       8.415710156425718
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco6",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco6",
+      "Anchored": true,
+      "Position": [
+       910.2664531498865,
+       4.412306983412107,
+       58.86019711824268
+      ],
+      "Size": [
+       7.9421525701417925,
+       2.294399631374296,
+       2.294399631374296
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa6",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa6",
+      "Anchored": true,
+      "Position": [
+       910.2664531498865,
+       9.707075363506636,
+       58.86019711824268
+      ],
+      "Size": [
+       7.059691173459371,
+       6.17722977677695,
+       7.059691173459371
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco7",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco7",
+      "Anchored": true,
+      "Position": [
+       915.0633662971502,
+       3.7839993367335003,
+       64.18292435316535
+      ],
+      "Size": [
+       6.8111988061203,
+       1.9676796551014202,
+       1.9676796551014202
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa7",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa7",
+      "Anchored": true,
+      "Position": [
+       915.0633662971502,
+       8.3247985408137,
+       64.18292435316535
+      ],
+      "Size": [
+       6.0543989387736,
+       5.2975990714269,
+       6.0543989387736
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco8",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco8",
+      "Anchored": true,
+      "Position": [
+       871.0332128611182,
+       4.739672599803422,
+       9.557658018121828
+      ],
+      "Size": [
+       8.531410679646159,
+       2.4646297518977796,
+       2.4646297518977796
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa8",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa8",
+      "Anchored": true,
+      "Position": [
+       871.0332128611182,
+       10.427279719567528,
+       9.557658018121828
+      ],
+      "Size": [
+       7.583476159685475,
+       6.63554163972479,
+       7.583476159685475
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco9",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco9",
+      "Anchored": true,
+      "Position": [
+       931.4806227641665,
+       4.884590102908848,
+       -94.19632034142583
+      ],
+      "Size": [
+       8.792262185235927,
+       2.539986853512601,
+       2.539986853512601
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa9",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa9",
+      "Anchored": true,
+      "Position": [
+       931.4806227641665,
+       10.746098226399464,
+       -94.19632034142583
+      ],
+      "Size": [
+       7.815344164654157,
+       6.838426144072387,
+       7.815344164654157
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco10",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco10",
+      "Anchored": true,
+      "Position": [
+       969.1360801016684,
+       4.572331097103945,
+       -25.897363818809197
+      ],
+      "Size": [
+       8.2301959747871,
+       2.377612170494051,
+       2.377612170494051
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa10",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa10",
+      "Anchored": true,
+      "Position": [
+       969.1360801016684,
+       10.059128413628677,
+       -25.897363818809197
+      ],
+      "Size": [
+       7.315729755366311,
+       6.401263535945522,
+       7.315729755366311
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco11",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco11",
+      "Anchored": true,
+      "Position": [
+       888.0666011177693,
+       4.192014845106341,
+       9.153928185930134
+      ],
+      "Size": [
+       7.545626721191414,
+       2.179847719455297,
+       2.179847719455297
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa11",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa11",
+      "Anchored": true,
+      "Position": [
+       888.0666011177693,
+       9.22243265923395,
+       9.153928185930134
+      ],
+      "Size": [
+       6.707223752170146,
+       5.868820783148878,
+       6.707223752170146
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco12",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco12",
+      "Anchored": true,
+      "Position": [
+       930.2765467323363,
+       5.263122645775475,
+       -2.2257393913429873
+      ],
+      "Size": [
+       9.473620762395855,
+       2.736823775803247,
+       2.736823775803247
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa12",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa12",
+      "Anchored": true,
+      "Position": [
+       930.2765467323363,
+       11.578869820706046,
+       -2.2257393913429873
+      ],
+      "Size": [
+       8.42099623324076,
+       7.368371704085666,
+       8.42099623324076
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco13",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco13",
+      "Anchored": true,
+      "Position": [
+       895.7683663657924,
+       5.2183088642057385,
+       34.896446298180955
+      ],
+      "Size": [
+       9.39295595557033,
+       2.713520609386984,
+       2.713520609386984
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa13",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa13",
+      "Anchored": true,
+      "Position": [
+       895.7683663657924,
+       11.480279501252625,
+       34.896446298180955
+      ],
+      "Size": [
+       8.349294182729182,
+       7.305632409888034,
+       8.349294182729182
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco14",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco14",
+      "Anchored": true,
+      "Position": [
+       955.1052366613633,
+       4.18704953331104,
+       7.279443534740857
+      ],
+      "Size": [
+       7.536689159959872,
+       2.177265757321741,
+       2.177265757321741
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa14",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa14",
+      "Anchored": true,
+      "Position": [
+       955.1052366613633,
+       9.211508973284289,
+       7.279443534740857
+      ],
+      "Size": [
+       6.699279253297664,
+       5.861869346635457,
+       6.699279253297664
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco15",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco15",
+      "Anchored": true,
+      "Position": [
+       927.38159340602,
+       4.764858531872513,
+       -111.08447998596725
+      ],
+      "Size": [
+       8.576745357370523,
+       2.477726436573707,
+       2.477726436573707
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa15",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa15",
+      "Anchored": true,
+      "Position": [
+       927.38159340602,
+       10.48268877011953,
+       -111.08447998596725
+      ],
+      "Size": [
+       7.6237736509960214,
+       6.670801944621519,
+       7.6237736509960214
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco16",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco16",
+      "Anchored": true,
+      "Position": [
+       890.0305314426015,
+       5.775188618592432,
+       31.221325332880312
+      ],
+      "Size": [
+       10.395339513466379,
+       3.0030980816680652,
+       3.0030980816680652
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa16",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa16",
+      "Anchored": true,
+      "Position": [
+       890.0305314426015,
+       12.705414960903353,
+       31.221325332880312
+      ],
+      "Size": [
+       9.240301789747893,
+       8.085264066029406,
+       9.240301789747893
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco17",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco17",
+      "Anchored": true,
+      "Position": [
+       958.2177067794973,
+       4.652037583077323,
+       -38.414015399329195
+      ],
+      "Size": [
+       8.373667649539183,
+       2.419059543200208,
+       2.419059543200208
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa17",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa17",
+      "Anchored": true,
+      "Position": [
+       958.2177067794973,
+       10.234482682770112,
+       -38.414015399329195
+      ],
+      "Size": [
+       7.443260132923718,
+       6.512852616308253,
+       7.443260132923718
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco18",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco18",
+      "Anchored": true,
+      "Position": [
+       867.5763304657702,
+       4.4922471347655994,
+       17.104786553392024
+      ],
+      "Size": [
+       8.08604484257808,
+       2.335968510078112,
+       2.335968510078112
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa18",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa18",
+      "Anchored": true,
+      "Position": [
+       867.5763304657702,
+       9.882943696484318,
+       17.104786553392024
+      ],
+      "Size": [
+       7.187595415624959,
+       6.289145988671839,
+       7.187595415624959
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco19",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco19",
+      "Anchored": true,
+      "Position": [
+       916.8327802627515,
+       5.0456633593779685,
+       -81.83261946324141
+      ],
+      "Size": [
+       9.082194046880344,
+       2.6237449468765437,
+       2.6237449468765437
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa19",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa19",
+      "Anchored": true,
+      "Position": [
+       916.8327802627515,
+       11.100459390631531,
+       -81.83261946324141
+      ],
+      "Size": [
+       8.07306137500475,
+       7.063928703129156,
+       8.07306137500475
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco20",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco20",
+      "Anchored": true,
+      "Position": [
+       865.1026467008388,
+       5.643576353786106,
+       -36.33253467959658
+      ],
+      "Size": [
+       10.15843743681499,
+       2.934659703968775,
+       2.934659703968775
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa20",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa20",
+      "Anchored": true,
+      "Position": [
+       865.1026467008388,
+       12.415867978329434,
+       -36.33253467959658
+      ],
+      "Size": [
+       9.02972216605777,
+       7.901006895300549,
+       9.02972216605777
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco21",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco21",
+      "Anchored": true,
+      "Position": [
+       949.0770801261683,
+       5.199163110823697,
+       -80.01419970279352
+      ],
+      "Size": [
+       9.358493599482655,
+       2.7035648176283225,
+       2.7035648176283225
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa21",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa21",
+      "Anchored": true,
+      "Position": [
+       949.0770801261683,
+       11.438158843812133,
+       -80.01419970279352
+      ],
+      "Size": [
+       8.318660977317915,
+       7.278828355153175,
+       8.318660977317915
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco22",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco22",
+      "Anchored": true,
+      "Position": [
+       877.7024175046207,
+       4.787152859614067,
+       7.378681872849619
+      ],
+      "Size": [
+       8.61687514730532,
+       2.4893194869993147,
+       2.4893194869993147
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa22",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa22",
+      "Anchored": true,
+      "Position": [
+       877.7024175046207,
+       10.531736291150947,
+       7.378681872849619
+      ],
+      "Size": [
+       7.659444575382507,
+       6.702014003459693,
+       7.659444575382507
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco23",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco23",
+      "Anchored": true,
+      "Position": [
+       938.0885663419979,
+       3.954887381946446,
+       -92.19476287175617
+      ],
+      "Size": [
+       7.118797287503602,
+       2.056541438612152,
+       2.056541438612152
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa23",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa23",
+      "Anchored": true,
+      "Position": [
+       938.0885663419979,
+       8.700752240282181,
+       -92.19476287175617
+      ],
+      "Size": [
+       6.327819811114313,
+       5.536842334725025,
+       6.327819811114313
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco24",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco24",
+      "Anchored": true,
+      "Position": [
+       908.9950611461055,
+       4.434445249539971,
+       10.68240044673935
+      ],
+      "Size": [
+       7.982001449171948,
+       2.305911529760785,
+       2.305911529760785
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa24",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa24",
+      "Anchored": true,
+      "Position": [
+       908.9950611461055,
+       9.755779548987936,
+       10.68240044673935
+      ],
+      "Size": [
+       7.095112399263954,
+       6.2082233493559595,
+       7.095112399263954
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco25",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco25",
+      "Anchored": true,
+      "Position": [
+       930.0571913688586,
+       3.799333982293413,
+       -92.1761893246942
+      ],
+      "Size": [
+       6.8388011681281435,
+       1.975653670792575,
+       1.975653670792575
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa25",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa25",
+      "Anchored": true,
+      "Position": [
+       930.0571913688586,
+       8.358534761045508,
+       -92.1761893246942
+      ],
+      "Size": [
+       6.078934371669461,
+       5.319067575210778,
+       6.078934371669461
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco26",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco26",
+      "Anchored": true,
+      "Position": [
+       908.0359628918735,
+       4.821358334064174,
+       -99.99456901233326
+      ],
+      "Size": [
+       8.678445001315513,
+       2.5071063337133705,
+       2.5071063337133705
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa26",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa26",
+      "Anchored": true,
+      "Position": [
+       908.0359628918735,
+       10.606988334941184,
+       -99.99456901233326
+      ],
+      "Size": [
+       7.714173334502679,
+       6.749901667689844,
+       7.714173334502679
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    },
+    {
+     "name": "Tronco27",
+     "className": "Part",
+     "properties": {
+      "Name": "Tronco27",
+      "Anchored": true,
+      "Position": [
+       930.966629956258,
+       3.9100418483932624,
+       -21.0666180954672
+      ],
+      "Size": [
+       7.038075327107872,
+       2.0332217611644965,
+       2.0332217611644965
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Copa27",
+     "className": "Part",
+     "properties": {
+      "Name": "Copa27",
+      "Anchored": true,
+      "Position": [
+       930.966629956258,
+       8.602092066465177,
+       -21.0666180954672
+      ],
+      "Size": [
+       6.25606695742922,
+       5.474058587750568,
+       6.25606695742922
+      ],
+      "Color": [
+       0.18,
+       0.38,
+       0.18
+      ],
+      "Material": "LeafyGrass",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Ball"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Ruinas",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "PatioRuinas",
+     "className": "Part",
+     "properties": {
+      "Name": "PatioRuinas",
+      "Anchored": true,
+      "Position": [
+       850,
+       3.5,
+       -118
+      ],
+      "Size": [
+       0.6,
+       90,
+       90
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna0",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna0",
+      "Anchored": true,
+      "Position": [
+       886.0,
+       13.5,
+       -118.0
+      ],
+      "Size": [
+       19,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna1",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna1",
+      "Anchored": true,
+      "Position": [
+       881.1769145362398,
+       7.5,
+       -100.0
+      ],
+      "Size": [
+       7,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna2",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna2",
+      "Anchored": true,
+      "Position": [
+       868.0,
+       7.5,
+       -86.82308546376021
+      ],
+      "Size": [
+       7,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna3",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna3",
+      "Anchored": true,
+      "Position": [
+       850.0,
+       11.5,
+       -82.0
+      ],
+      "Size": [
+       15,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna4",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna4",
+      "Anchored": true,
+      "Position": [
+       832.0,
+       13.5,
+       -86.82308546376021
+      ],
+      "Size": [
+       19,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna5",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna5",
+      "Anchored": true,
+      "Position": [
+       818.8230854637602,
+       11.5,
+       -100.0
+      ],
+      "Size": [
+       15,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna6",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna6",
+      "Anchored": true,
+      "Position": [
+       814.0,
+       11.5,
+       -118.0
+      ],
+      "Size": [
+       15,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna7",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna7",
+      "Anchored": true,
+      "Position": [
+       818.8230854637602,
+       13.5,
+       -136.0
+      ],
+      "Size": [
+       19,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna8",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna8",
+      "Anchored": true,
+      "Position": [
+       832.0,
+       11.5,
+       -149.1769145362398
+      ],
+      "Size": [
+       15,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna9",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna9",
+      "Anchored": true,
+      "Position": [
+       850.0,
+       9.5,
+       -154.0
+      ],
+      "Size": [
+       11,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna10",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna10",
+      "Anchored": true,
+      "Position": [
+       868.0,
+       7.5,
+       -149.1769145362398
+      ],
+      "Size": [
+       7,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "Coluna11",
+     "className": "Part",
+     "properties": {
+      "Name": "Coluna11",
+      "Anchored": true,
+      "Position": [
+       881.1769145362398,
+       11.5,
+       -136.0
+      ],
+      "Size": [
+       15,
+       4,
+       4
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder"
+     }
+    },
+    {
+     "name": "RastroCarlos01",
+     "className": "Part",
+     "properties": {
+      "Name": "RastroCarlos01",
+      "Anchored": true,
+      "Position": [
+       850,
+       4.3,
+       -118
+      ],
+      "Size": [
+       5,
+       1,
+       5
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "BossSpawn",
+     "className": "Part",
+     "properties": {
+      "Name": "BossSpawn",
+      "Anchored": true,
+      "Position": [
+       850,
+       3.9,
+       -145
+      ],
+      "Size": [
+       8,
+       0.4,
+       8
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.45,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Portais",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "TutorialToArena",
+     "className": "Part",
+     "properties": {
+      "Name": "TutorialToArena",
+      "Anchored": true,
+      "Position": [
+       955,
+       11,
+       72
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "TutorialToArenaCore",
+     "className": "Part",
+     "properties": {
+      "Name": "TutorialToArenaCore",
+      "Anchored": true,
+      "Position": [
+       955,
+       11,
+       72
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "ArenaToTutorial",
+     "className": "Part",
+     "properties": {
+      "Name": "ArenaToTutorial",
+      "Anchored": true,
+      "Position": [
+       85,
+       11,
+       0
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "ArenaToTutorialCore",
+     "className": "Part",
+     "properties": {
+      "Name": "ArenaToTutorialCore",
+      "Anchored": true,
+      "Position": [
+       85,
+       11,
+       0
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "TutorialToSolPartido",
+     "className": "Part",
+     "properties": {
+      "Name": "TutorialToSolPartido",
+      "Anchored": true,
+      "Position": [
+       745,
+       11,
+       72
+      ],
+      "Size": [
+       10,
+       16,
+       2
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "TutorialToSolPartidoCore",
+     "className": "Part",
+     "properties": {
+      "Name": "TutorialToSolPartidoCore",
+      "Anchored": true,
+      "Position": [
+       745,
+       11,
+       72
+      ],
+      "Size": [
+       7,
+       12,
+       1
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.25,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Spawns",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "TutorialSpawn",
+     "className": "SpawnLocation",
+     "properties": {
+      "Name": "TutorialSpawn",
+      "Anchored": true,
+      "Position": [
+       850,
+       4,
+       130
+      ],
+      "Size": [
+       10,
+       1,
+       10
+      ],
+      "Color": [
+       0.2,
+       0.7,
+       0.4
+      ],
+      "Material": "Plastic",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false,
+      "Enabled": false,
+      "Neutral": true
+     }
+    }
+   ]
+  }
+ ]
+}
