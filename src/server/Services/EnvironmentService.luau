@@ -23,8 +23,9 @@ EnvironmentService.Enabled = true
 
 type EffectDef = { Name: string, ClassName: string, Properties: { [string]: any } }
 
--- Dia "cartoon e animado" (dono, 2026-09-28): ambiente azulado claro, sombra macia, bloom largo,
--- cor saturada/contrastada com tinta lilás. A noite (DayNight.Night) continua interpolando a partir daqui.
+-- Dia "cartoon e animado" (dono, 2026-09-28): ambiente azulado claro, sombra macia, bloom largo, céu padrão
+-- da Roblox (azul com nuvens fofas) + nuvens volumétricas. 2ª rodada do dono: "saturado demais" -> cor
+-- correction suave (0.5 -> 0.15). A noite (DayNight.Night) continua interpolando a partir daqui.
 local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 	Lighting = {
 		ClockTime = 15.6,
@@ -49,12 +50,12 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 			Name = "SahurAtmosphere",
 			ClassName = "Atmosphere",
 			Properties = {
-				Density = 0.32,
-				Offset = 0.15,
-				Color = Color3.fromRGB(205, 200, 190),
-				Decay = Color3.fromRGB(110, 120, 140),
-				Glare = 0.35,
-				Haze = 1.6,
+				Density = 0.24,
+				Offset = 0.1,
+				Color = Color3.fromRGB(199, 222, 255),
+				Decay = Color3.fromRGB(120, 165, 220),
+				Glare = 0.1,
+				Haze = 0.6,
 			},
 		},
 		{
@@ -66,14 +67,23 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 			Name = "SahurColor",
 			ClassName = "ColorCorrectionEffect",
 			Properties = {
-				Saturation = 0.5,
-				Contrast = 0.5,
+				Saturation = 0.15,
+				Contrast = 0.15,
 				Brightness = 0.02,
-				TintColor = Color3.fromRGB(243, 234, 255),
+				TintColor = Color3.fromRGB(250, 246, 255),
 			},
 		},
 	},
 }
+
+-- Céu: skybox padrão da Roblox (embutido no cliente, rbxasset://) — o antigo (rbxassetid://6412503613) ficou
+-- nos atributos Skybox* do Sky do place. Nuvens volumétricas em Workspace.Terrain (Clouds), cor por dia/noite.
+local SKY = {
+	Skybox = "rbxasset://textures/sky/sky512_%s.tex", -- bk/dn/ft/lf/rt/up
+	SunAngularSize = 18,
+	MoonAngularSize = 14,
+}
+local CLOUDS = { Cover = 0.62, Density = 0.42, Day = Color3.fromRGB(255, 255, 255), Night = Color3.fromRGB(70, 80, 115) }
 
 -- ---------------------------------------------------------------------------
 -- Ciclo dia/noite (servidor manda). O boss só pode ser invocado à NOITE (BossService/RitualService).
@@ -163,6 +173,10 @@ local function applyClock(hour: number)
 			end
 		end
 	end
+	local clouds = Workspace.Terrain:FindFirstChildOfClass("Clouds")
+	if clouds then
+		clouds.Color = CLOUDS.Day:Lerp(CLOUDS.Night, a)
+	end
 	local night = clock >= dn.NightStart or clock < dn.NightEnd
 	if night ~= isNight then
 		isNight = night
@@ -235,6 +249,18 @@ function EnvironmentService.Start()
 		applyProperties(inst, def.Properties)
 		inst.Parent = Lighting
 	end
+	local sky = Lighting:FindFirstChildOfClass("Sky") or Instance.new("Sky")
+	for _, face in { "Bk", "Dn", "Ft", "Lf", "Rt", "Up" } do
+		(sky :: any)["Skybox" .. face] = SKY.Skybox:format(face:lower())
+	end
+	sky.SunAngularSize = SKY.SunAngularSize
+	sky.MoonAngularSize = SKY.MoonAngularSize
+	sky.Parent = Lighting
+	local clouds = Workspace.Terrain:FindFirstChildOfClass("Clouds") or Instance.new("Clouds")
+	clouds.Cover = CLOUDS.Cover
+	clouds.Density = CLOUDS.Density
+	clouds.Color = CLOUDS.Day
+	clouds.Parent = Workspace.Terrain
 	Log.debug("[EnvironmentService] iluminação aplicada (Technology precisa ser Future/ShadowMap no Studio)")
 	EnvironmentService.OptimizeShadows()
 	task.spawn(dayNightLoop)

@@ -272,6 +272,21 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
   ilhas nascem; sem erro novo. Mar da ilha tutorial encolhido para não passar por baixo da arena (x ≥ 300).
 - `src/shared/CentralProjectMarker.luau` (lixo do Codex) apagado.
 
+## 2026-09-28 (noite, 3) — cores menos saturadas, céu cartoon, novas direções do dono
+- `EnvironmentService`: ColorCorrection 0.5 → 0.15 (dono: "saturado demais"), Atmosphere leve azulada, skybox PADRÃO da
+  Roblox (`rbxasset://textures/sky/sky512_*.tex`; o antigo 6412503613 ficou nos atributos do Sky), sol/lua maiores,
+  nuvens volumétricas (`Terrain.Clouds`, cor segue o dia/noite). Testado no Play.
+- **Proposta de história** em `HISTORIA_FX_PROPOSTA_v1.1.md` (Tear das Linhas, F/X = Fio/Fratura/Cruzamento, cientista
+  com a Agulha de Fratura, player "Desfiado", motivo do Adryan, Carlos Arquivista) — AGUARDA o dono aprovar.
+- **Direções novas do dono (a fazer, em levas)**:
+  1. **Stands**: nasce HUMANO (sem Stand; só M1/dash/block). No fim do tutorial o Humanoider_20 entrega uma **Flecha** →
+     sorteio de Stand por **raridade**. Habilidades do Stand liberam por **maestria** (reusar `profile.mastery`).
+  2. **HUD de verdade estilo Blox Fruits**: vida, energia, cooldowns, tudo na tela. **Menus na tela**; o dropdown do
+     topbar fica só para menus "sérios" (Denúncia, Config...).
+  3. **Locomoção** entre ilhas/cidades grandes que não seja só barco (proposta: trem nas pontes, cavalo, Costuras).
+  4. Depois: Server Authority (já combinado).
+- Ajustes manuais do dono no Studio: ver "Regra: edição manual x Rojo" no CLAUDE.md.
+
 ## 2026-09-28 (noite) — ARQUIPÉLAGO: arena desmontada em ilhas por Parte de JoJo (dono autorizou tudo)
 Ver `MAPA_CAPITULO_1.md` "Layout do mundo". Resumo:
 - `tools/desmontar_arena.luau` (Lune) dividiu o `Arena.rbxm` (apagado; original em `backups/`) em `Coliseu.rbxm`,

@@ -9,6 +9,15 @@ terreno etc. existem SÓ no place (montados via MCP/Studio), não em `src/`. Um 
 na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com o Rojo sincronizado, e só com o dono.
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
+## Regra: edição manual do dono x Rojo (2026-09-28)
+O Rojo só sobrescreve o que vem de `src/` e `tools/studio/` (scripts, UI em StarterGui, `Workspace.Sahur.*`,
+`ServerStorage.Maps/ArenaReserva/FerramentasStudio`). Tudo fora disso (`Workspace.Taberna`, `cav`, Lojinha, ilhota Kame,
+peças soltas no Workspace, Terrain) é do place e o Rojo NÃO mexe. Quando o dono quiser editar à mão algo gerado
+(ex.: uma ilha em `Workspace.Sahur`): "entregar" a pasta ANTES — com o Rojo DESCONECTADO, tirar o arquivo de `src/`
+(a instância fica no place e passa a ser dele) e mover para fora de `Workspace.Sahur`. Nunca rodar
+`MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
+a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
+
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código
 e pela parte de IA do projeto). Outras pessoas da equipe cuidam de modelagem 3D e animação,
