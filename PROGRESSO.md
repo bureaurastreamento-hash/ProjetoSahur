@@ -260,6 +260,18 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## ⚠️ INCIDENTE 2026-09-28 — place oficial sobrescrito (ler antes de tudo)
+- O ChatGPT/Codex publicou um `rojo build` puro pela Open Cloud → **versão 422** do place 85844807133499
+  (21:49 UTC = 18:49 BRT) só tem o que está em `src/`: sumiram Taberna, Hall, Lojinha, santuário/altar,
+  `ServerStorage.CharacterModels`/`Mods`/backups, iluminação e tudo montado via MCP.
+- **RESTAURADO pelo dono** (versão 421 de 23/09 09:42 → virou a 424; Taberna/Hall/Lojinha de volta, conferido via MCP).
+- Conserto usado = restaurar a versão anterior (Creator Dashboard → experiência → Places → place → Version History →
+  versão de 28/09 antes de 18:49 BRT → Restore). Fechar o Studio ANTES (Team Create está com a versão ruim aberta).
+  Depois: abrir o Studio, conectar o Rojo (traz o código F/X do commit 0920a7f + correção do mar) e publicar pelo Studio.
+- Código F/X (World/Story/TutorialIsland/SolPartido/WorldPortal) testado via MCP no Play: boot OK (49 services), bots das
+  ilhas nascem; sem erro novo. Mar da ilha tutorial encolhido para não passar por baixo da arena (x ≥ 300).
+- `src/shared/CentralProjectMarker.luau` (lixo do Codex) apagado.
+
 ## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 + HALL da Taberna FEITOS; Studio travou no fim (Hall pode não ter salvo: rerodar montar_hall); próximo = C2 → C5, depois testes do dono)
 
 ### ONDE PARAMOS (ler primeiro)

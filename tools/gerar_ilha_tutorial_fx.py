@@ -35,8 +35,9 @@ def tree(i, x, z, scale=1):
     cylinder("Bosque", f"Tronco{i}", 1.3*scale, 9*scale, (x, 5*scale, z), WOOD)
     part("Bosque", f"Copa{i}", (8*scale, 7*scale, 8*scale), (x, 11*scale, z), LEAF, Shape="Ball")
 
-# Mar dá limite natural e deixa o arquipélago visível.
-part("Terrain", "Mar", (1800, 4, 1000), (CX, -7, CZ), WATER, Transparency=.32, CanCollide=False, CastShadow=False)
+# Mar dá limite natural e deixa o arquipélago visível. Começa em x=300 para NÃO passar por baixo
+# da arena/santuário/cachoeira (x -185..212); antes ia de x=-50 e aparecia dentro do mapa antigo.
+part("Terrain", "Mar", (1450, 4, 1000), (1025, -7, CZ), WATER, Transparency=.32, CanCollide=False, CastShadow=False)
 # Falésias em camadas: silhueta irregular, sem parede de arena.
 for i, (sx, sz, y) in enumerate(((310,230,-3),(285,210,-1),(255,185,1))):
     cylinder("Terrain", f"IlhaCamada{i}", 1, sx, (CX, y, CZ), CLIFF if i < 2 else GRASS)

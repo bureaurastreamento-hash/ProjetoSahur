@@ -2,6 +2,13 @@
 
 Direção aprovada: ler `BIZARRE_DIRECAO.md` antes de planejar novos sistemas; para mods/place de criação, ler `MODS_KIT.md` e `tools/place_criacao/LEIA-ME.md`. `PROGRESSO.md` e o código atual prevalecem para estado de implementação. Não refazer sistemas existentes por causa da mudança de nome/visão.
 
+## ⚠️ NUNCA PUBLICAR O PLACE A PARTIR DOS ARQUIVOS (incidente 2026-09-28)
+O projeto Rojo é ADITIVO: Taberna, Hall, Lojinha, santuário, `ServerStorage.CharacterModels`/`Mods`, iluminação,
+terreno etc. existem SÓ no place (montados via MCP/Studio), não em `src/`. Um `rojo build` publicado pela Open Cloud
+(Place Publishing API) SUBSTITUI o place inteiro por esse build incompleto e apaga o mapa — foi o que aconteceu
+na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com o Rojo sincronizado, e só com o dono.
+Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
+
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código
 e pela parte de IA do projeto). Outras pessoas da equipe cuidam de modelagem 3D e animação,
