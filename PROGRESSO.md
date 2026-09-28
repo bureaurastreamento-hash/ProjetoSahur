@@ -272,6 +272,16 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
   ilhas nascem; sem erro novo. Mar da ilha tutorial encolhido para não passar por baixo da arena (x ≥ 300).
 - `src/shared/CentralProjectMarker.luau` (lixo do Codex) apagado.
 
+## 2026-09-28 (noite) — iluminação cartoon + decisões do dono
+- **Nome público decidido: "Bizarre Showdown F/X"** (a chave da API não tem `universe:write`; o dono troca no dashboard).
+- **Iluminação "cartoon e animada"** (pedido do dono, ref. TikTok): `EnvironmentService` CONFIG do dia = Ambient 124,155,184;
+  Brightness 4; OutdoorAmbient 157,178,255; ShadowSoftness 1; Bloom Size 56; ColorCorrection Contrast/Saturation 0.5,
+  Tint 243,234,255. `LightingStyle = Realistic` gravado no place via MCP (script não escreve). Testado no Play.
+- **Server Authority (`Workspace.AuthorityMode = Server`) NÃO ligado**: só dá para setar no painel do Studio, e o dash/corrida
+  são `LinearVelocity`/`AssemblyLinearVelocity` no cliente (`MovementController`) — com autoridade do servidor isso é
+  desfeito. Precisa de leva própria: mover dash/corrida para simulação prevista (`RunService:BindToSimulation` + InputActions)
+  e testar knockback/ragdoll/agarrão antes de ligar.
+
 ## RETOMAR AQUI (última sessão: 2026-09-25 noite — B5, C0, D1–D4 + HALL da Taberna FEITOS; Studio travou no fim (Hall pode não ter salvo: rerodar montar_hall); próximo = C2 → C5, depois testes do dono)
 
 ### ONDE PARAMOS (ler primeiro)

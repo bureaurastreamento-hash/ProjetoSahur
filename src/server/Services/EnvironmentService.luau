@@ -5,8 +5,9 @@
 	todos os clientes). Aditivo: só cria efeitos que ainda não existem em Lighting
 	(por nome) e só mexe nas propriedades listadas em CONFIG.
 
-	Lighting.Technology (Future/ShadowMap) NÃO é ajustável por script: configurar
-	manualmente em Lighting > Technology no Studio.
+	Lighting.Technology (Future/ShadowMap) e Lighting.LightingStyle (Realistic, desde 2026-09-28) NÃO
+	são ajustáveis por script (só plugin/Studio): ficam gravados no place (Lighting > propriedades).
+	Workspace.AuthorityMode idem (e NÃO ligar "Server" sem refazer o dash do MovementController).
 
 	Desligar tudo: Enabled = false.
 ]]
@@ -22,18 +23,19 @@ EnvironmentService.Enabled = true
 
 type EffectDef = { Name: string, ClassName: string, Properties: { [string]: any } }
 
--- Fim de tarde quente: sombras longas dão volume nas Parts lisas do mapa.
+-- Dia "cartoon e animado" (dono, 2026-09-28): ambiente azulado claro, sombra macia, bloom largo,
+-- cor saturada/contrastada com tinta lilás. A noite (DayNight.Night) continua interpolando a partir daqui.
 local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 	Lighting = {
 		ClockTime = 15.6,
-		Brightness = 2.6,
-		Ambient = Color3.fromRGB(70, 74, 82),
-		OutdoorAmbient = Color3.fromRGB(118, 122, 128),
+		Brightness = 4,
+		Ambient = Color3.fromRGB(124, 155, 184),
+		OutdoorAmbient = Color3.fromRGB(157, 178, 255),
 		ColorShift_Top = Color3.fromRGB(255, 232, 205),
 		ColorShift_Bottom = Color3.fromRGB(180, 190, 210),
 		EnvironmentDiffuseScale = 0.55,
 		EnvironmentSpecularScale = 0.6,
-		ShadowSoftness = 0.15,
+		ShadowSoftness = 1,
 		GlobalShadows = true,
 		ExposureCompensation = 0.1,
 		-- fog clássico desligado (a Atmosphere faz a névoa); um plugin de iluminação já deixou 10–120 preto no place
@@ -58,16 +60,16 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 		{
 			Name = "SahurBloom",
 			ClassName = "BloomEffect",
-			Properties = { Intensity = 0.25, Size = 16, Threshold = 1.8 },
+			Properties = { Intensity = 0.25, Size = 56, Threshold = 1.8 },
 		},
 		{
 			Name = "SahurColor",
 			ClassName = "ColorCorrectionEffect",
 			Properties = {
-				Saturation = 0.12,
-				Contrast = 0.08,
+				Saturation = 0.5,
+				Contrast = 0.5,
 				Brightness = 0.02,
-				TintColor = Color3.fromRGB(255, 250, 240),
+				TintColor = Color3.fromRGB(243, 234, 255),
 			},
 		},
 	},
