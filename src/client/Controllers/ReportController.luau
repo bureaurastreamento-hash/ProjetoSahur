@@ -132,7 +132,7 @@ function ReportController.Start()
 	icon.toggled:Connect(function(isSelected: boolean)
 		setOpen(isSelected)
 	end)
-	TopbarController.AddToProfile(icon)
+	TopbarController.AddToSettings(icon) -- menu "sério": fica no topbar, dentro do Config (dono, 28/09)
 
 	submitButton.MouseButton1Click:Connect(submit)
 

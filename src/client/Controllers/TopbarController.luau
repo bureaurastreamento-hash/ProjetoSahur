@@ -11,7 +11,10 @@
 	  Config          -> Configurações (SettingsGui), Controles (HelpGui), Dev (DevController via AddToSettings)
 	Abrir um dos 5 fecha os outros (TopbarPlus desliga o autoDeselect de quem tem dropdown; a gente
 	refaz isso à mão em closeParents). As teclas continuam abrindo os painéis direto.
-	API: TopbarController.AddToSettings(icon) / AddToProfile(icon).
+	API: TopbarController.AddToSettings(icon) / AddToProfile(icon, nome?) / Toggle(nome).
+	HUD estilo Blox Fruits (2026-09-29): no TOPO só fica o Config (menus "sérios": configurações, controles,
+	novidades, denúncia, dev). Personagens/Jogar/Loja/Perfil continuam existindo (teclas e painéis), mas ESCONDIDOS:
+	quem abre é o menu lateral na tela (MenuController → TopbarController.Toggle).
 	Só reflete estado do servidor; não decide nada.
 ]]
 
@@ -56,6 +59,7 @@ local settingsIcon: any -- pai do dropdown de Config (engrenagem)
 local pendingSettings: { any } = {} -- ícones pedidos antes do pai existir (DevController)
 local settingsChildren: { any } = {}
 local notifiedAffordable = false
+local menuIcons: { [string]: any } = {} -- nome do menu lateral -> ícone (Toggle)
 
 local STAT_LABELS = {
 	{ "wins", "Vitórias" },
@@ -210,8 +214,30 @@ function TopbarController.CloseAll()
 	closeParents(nil)
 end
 
---- Pendura um ícone no dropdown de Perfil (AchievementsController: "Conquistas").
-function TopbarController.AddToProfile(icon: any)
+--- Abre/fecha um painel pelo nome (menu lateral): "Loja", "Visual", "Perfil", "Conquistas", "Duelo", "Clã", "Placar".
+function TopbarController.Toggle(name: string)
+	local icon = menuIcons[name]
+	if not icon then
+		return
+	end
+	if icon.isSelected then
+		icon:deselect()
+	else
+		icon:select()
+	end
+	-- garantia: o pai está escondido no topo; o painel segue o estado do ícone
+	for item in icon.toggleItems do
+		if item:IsA("GuiObject") then
+			item.Visible = icon.isSelected
+		end
+	end
+end
+
+--- Pendura um ícone no dropdown de Perfil (AchievementsController: "Conquistas"). `name` = entra no menu lateral.
+function TopbarController.AddToProfile(icon: any, name: string?)
+	if name then
+		menuIcons[name] = icon
+	end
 	registerItem(icon)
 	if not profileIcon then
 		table.insert(pendingProfile, icon)
@@ -365,6 +391,12 @@ function TopbarController.Start()
 	-- aberto não fechava quando outro pai abria. Aqui: abriu um dos 5, os outros fecham (e os
 	-- filhos deles também, para não sobrar painel aberto de um menu recolhido).
 	parents = { charactersIcon, playIcon, shopIcon, profileIcon, settingsIcon }
+	-- HUD estilo Blox Fruits: no topo só o Config; o resto abre pelo menu lateral (MenuController)
+	menuIcons.Loja, menuIcons.Visual, menuIcons.Perfil = shopIcon, cosmeticsItem, profileItem
+	menuIcons.Duelo, menuIcons["Clã"], menuIcons.Placar = duelItem, clanItem, scoreItem
+	for _, hidden in { charactersIcon, playIcon, shopIcon, profileIcon } do
+		hidden:setEnabled(false)
+	end
 	for _, parent in parents do
 		parent.selected:Connect(function()
 			closeParents(parent)

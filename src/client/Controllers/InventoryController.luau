@@ -1,6 +1,6 @@
 --!strict
 --[[
-	InventoryController — MOCHILA (tecla M ou botão na tela): Stand ativo + maestria, raça e itens
+	InventoryController — MOCHILA (tecla M ou menu lateral, MenuController): Stand ativo + maestria, raça e itens
 	(Flechas, Discos de Stand, Essências). Mostra o sorteio da Flecha e, se já havia um Stand, a escolha
 	"usar agora (perde o atual)" / "guardar". Tudo decidido no StandService; aqui só desenha e pede.
 	Dados: NotifyProfile (profile.power/race/inventory/mastery) e NotifyStand (eventos).
@@ -183,12 +183,6 @@ local function build()
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "InventoryGui", false, 9
 	gui.Parent = localPlayer:WaitForChild("PlayerGui")
 
-	local open = button(gui, "Mochila (M)", Color3.fromRGB(28, 40, 52))
-	open.TextColor3 = TEXT
-	open.Position, open.Size = UDim2.new(0, 16, 0, 192), UDim2.fromOffset(120, 30)
-	stroke(open, ACCENT, 0.55)
-	open.Activated:Connect(function() toggle() end)
-
 	panel = Instance.new("Frame")
 	panel.Visible = false
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -225,6 +219,11 @@ local function build()
 	rollFrame.Parent = gui
 	corner(rollFrame, 10)
 	stroke(rollFrame, ACCENT, 0.2)
+end
+
+--- Abre/fecha a mochila (tecla M e menu lateral, MenuController).
+function InventoryController.Toggle()
+	toggle()
 end
 
 function InventoryController.Init()

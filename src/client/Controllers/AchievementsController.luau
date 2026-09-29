@@ -187,7 +187,7 @@ function AchievementsController.Start()
 			AchievementsController.Refresh()
 		end
 	end)
-	TopbarController.AddToProfile(icon)
+	TopbarController.AddToProfile(icon, "Conquistas") -- também no menu lateral (MenuController)
 
 	-- abriu o Perfil: atualiza a coluna de conquistas dele
 	local pp = profilePanel

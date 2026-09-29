@@ -92,6 +92,8 @@ local selectTemplate: TextButton
 local selectHint: TextLabel
 local queueButton: TextButton
 local coinsLabel: TextLabel
+local levelValue: TextLabel -- selo de nível (HUD estilo Blox Fruits, 29/09)
+local xpFill: Frame
 local selectCoinsLabel: TextLabel
 local characterButtons: { [string]: TextButton } = {}
 local profile: any = nil
@@ -661,6 +663,15 @@ function HUDController.Init()
 	counterFill = get(counterBar, "Fill") :: Frame
 	counterText = get(counterBar, "Text") :: TextLabel
 	characterNameLabel = get(vitals, "CharacterName") :: TextLabel
+	levelValue = get(get(vitals, "LevelBadge"), "Value") :: TextLabel
+	-- toque: o canto inferior esquerdo é do analógico virtual → status sobe (embaixo do painel da missão)
+	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+		(vitals :: Frame).AnchorPoint = Vector2.new(0, 0);
+		(vitals :: Frame).Position = UDim2.new(0, 16, 0, 196)
+		coinsLabel.AnchorPoint = Vector2.new(0, 0)
+		coinsLabel.Position = UDim2.new(0, 16, 0, 270)
+	end
+	xpFill = get(get(vitals, "XP"), "Fill") :: Frame
 
 	local abilities = get(hud, "Abilities")
 	local dashChips = get(vitals, "DashChips")
@@ -834,6 +845,11 @@ function HUDController.Start()
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)
 		profile = data
+		if typeof(data) == "table" and typeof(data.level) == "number" then
+			levelValue.Text = tostring(data.level)
+			local need = ProgressionConfig.XPForLevel(data.level)
+			xpFill.Size = UDim2.fromScale(math.clamp((tonumber(data.xp) or 0) / need, 0, 1), 1)
+		end
 		if sessionOnly then
 			showBanner("Sem conexão com os dados: progresso desta sessão não será salvo", 6)
 		end

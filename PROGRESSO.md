@@ -260,6 +260,19 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (noite, 3) — HUD ESTILO BLOX FRUITS + MENU LATERAL (leva 3)
+- **Topbar**: só o Config (Configurações, Controles, Novidades, **Denunciar**, Dev/Mods). Personagens/Jogar/Loja/Perfil
+  continuam existindo (teclas V/J/C/Tab/L/K/P e painéis), mas escondidos (`setEnabled(false)`).
+- **Menu lateral** (`MenuController`, esquerda no meio): Mochila (M), Loja (L), Visual (K), Perfil (P), Conquistas,
+  Duelo (J), Clã (C), Placar (Tab) → `InventoryController.Toggle` / `TopbarController.Toggle(nome)`.
+- **Status no canto inferior esquerdo** (`HUD.Vitals`): selo de NÍVEL, vida, energia/ult, barra de XP; pontos logo acima.
+  Missão da história segue no canto superior esquerdo; habilidades embaixo no centro. Toque: status sobe (abaixo da
+  missão) e o menu lateral encolhe (o canto inferior esquerdo é do analógico).
+- Conferido pelo LOG DO CLIENTE (`scratchpad/clientlog.sh <ts>` no log do Studio): pegou um bug (cópia do nó Energy no
+  `HUD.model.json` herdou `properties.Name = "Energy"` → HUDController.Init quebrava); consertado, cliente sobe limpo.
+  **Nesses .model.json o nome vem de `properties.Name` também — ao copiar nó, trocar os dois.**
+- **Falta o dono ver**: layout, clique em cada botão do menu lateral abre/fecha o painel certo, celular.
+
 ## 2026-09-29 (noite, 2) — PESCADOR salva o spawn (pedido do dono)
 - `FisherService`: um **Pescador** por ilha (`WorldConfig.Regions[*].Fisher`), perto da chegada e visível (nome
   "Pescador · salvar spawn", camisa azul, vara). Conversar = `WorldService.SetCheckpoint` naquela ilha + fala dele.
