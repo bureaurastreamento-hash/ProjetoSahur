@@ -1,7 +1,9 @@
 --!strict
 --[[
 	Campanha F/X: atos orientados por dados (StoryConfig), progresso, Rastros de Carlos e falas do Humanoider_20.
-	Ao entrar num ato novo, a fala `Guide` dele chega como diálogo (funciona em qualquer ilha, "pelo comunicador").
+	Ao entrar num ato novo, a fala `Intro` (ou o `Guide`) chega como diálogo (qualquer ilha, "pelo comunicador").
+	ECOS (escolhas): ato com `Choice` abre a escolha na tela (NotifyStory "choice"); RequestStoryChoice responde,
+	grava as flags da opção e conclui o ato. Objetivos "reach_<lugar>" são conferidos pela posição (StoryConfig.Places).
 ]]
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -15,8 +17,11 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
 local StandService = require(script.Parent:WaitForChild("StandService"))
 
+local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
+
 local StoryService = {}
 local notifyStory: RemoteEvent
+local choiceLimiter = RateLimiter.new(3, 1)
 local notifyQuest: RemoteEvent
 
 StoryService.GuideUserId = 3792294725 -- Humanoider_20
@@ -38,6 +43,13 @@ local function migrate(profile: any)
 			story.flags.ilha_pilares_unlocked = true
 		end
 		story.flags.ilha_mar_cinzas_unlocked = nil
+		story.rev = 2
+	end
+	-- rev 2 → 3 (29/09): Ilha 1 ganhou Missões 0, 2, 4 e os dois Ecos na frente/no meio dos atos antigos.
+	if story.chapter == "cap1" and story.rev < 3 then
+		local map = { [1] = 2, [2] = 4, [3] = 8, [4] = 9 }
+		story.act = map[story.act] or (story.act + 6)
+		story.counters = {}
 	end
 	story.rev = StoryConfig.Revision
 end
@@ -93,7 +105,31 @@ local function apply(player: Player)
 	push(player)
 end
 
--- Conclui o ato atual: grava a flag dele, passa para o próximo e manda a fala do guia do ato novo.
+-- Abre a escolha (Eco) do ato na tela. Opção com RequiresFlag vai desligada se o jogador não explorou antes.
+local function offerChoice(player: Player, act: StoryConfig.Act?)
+	local choice = act and act.Choice
+	if not choice or player.Parent ~= Players then return end
+	local options = {}
+	for _, option in choice.Options do
+		table.insert(options, { id = option.Id, label = option.Label, desc = option.Desc,
+			enabled = option.RequiresFlag == nil or StoryService.HasFlag(player, option.RequiresFlag) })
+	end
+	notifyStory:FireClient(player, "choice", { id = choice.Id, title = choice.Title, text = choice.Text, options = options })
+end
+
+-- Fala de entrada do ato (Intro com IntroNpc, senão o Guide) — ou a escolha, se o ato for um Eco.
+local function introduce(player: Player, act: StoryConfig.Act?)
+	if not act then return end
+	if act.Choice then
+		offerChoice(player, act)
+	elseif act.Intro then
+		StoryService.Say(player, act.Intro, act.IntroNpc)
+	elseif act.Guide then
+		StoryService.Say(player, act.Guide, act.GuideNpc)
+	end
+end
+
+-- Conclui o ato atual: grava a flag dele, passa para o próximo e apresenta o ato novo.
 local function finishAct(player: Player, profile: any, act: StoryConfig.Act, silent: boolean?)
 	if act.UnlockFlag then profile.story.flags[act.UnlockFlag] = true end
 	if act.Reward and not profile.story.completed[act.Id] then StandService.Give(player, act.Reward, "story") end
@@ -102,7 +138,36 @@ local function finishAct(player: Player, profile: any, act: StoryConfig.Act, sil
 	profile.story.counters = {}
 	DataService.MarkDirty(player); apply(player); push(player, "act")
 	local _p, _c, nextAct = current(player)
-	if not silent and nextAct and nextAct.Guide then StoryService.Say(player, nextAct.Guide) end
+	if not silent then introduce(player, nextAct) end
+end
+
+--- Resposta do Eco: valida (ato atual, opção existe, flag exigida), grava as flags e conclui o ato.
+function StoryService.Choose(player: Player, choiceId: any, optionId: any): boolean
+	local profile, _chapter, act = current(player)
+	local choice = act and act.Choice
+	if not profile or not act or not choice or choice.Id ~= choiceId then return false end
+	for _, option in choice.Options do
+		if option.Id == optionId then
+			if option.RequiresFlag and not StoryService.HasFlag(player, option.RequiresFlag) then return false end
+			for _, flag in option.Flags do profile.story.flags[flag] = true end
+			profile.story.flags[choice.Id .. "_" .. option.Id] = true
+			StoryService.Say(player, option.Say)
+			finishAct(player, profile, act, true)
+			-- a fala do ato seguinte vem depois da reação à escolha (duas caixas ao mesmo tempo se atropelam)
+			local _p, _c, nextAct = current(player)
+			task.delay(5, function() introduce(player, nextAct) end)
+			return true
+		end
+	end
+	return false
+end
+
+--- Pistas escondidas que liberam opções dos Ecos (fenda_saida, passagem_capela...).
+function StoryService.SetFlag(player: Player, flag: string)
+	local profile = DataService.GetProfile(player)
+	if not profile or profile.story.flags[flag] then return end
+	profile.story.flags[flag] = true
+	DataService.MarkDirty(player)
 end
 
 --- Conversar com o Humanoider_20: começa a campanha ("chegada") ou repete a fala do ato atual.
@@ -112,10 +177,17 @@ function StoryService.TalkToGuide(player: Player)
 	if act and act.Id == "chegada" then
 		profile.story.flags.fx_campaign_started = true
 		StoryService.Say(player, act.Guide or "")
-		finishAct(player, profile, act, true) -- a fala da chegada já explica o próximo passo
+		finishAct(player, profile, act, true)
+		local _p, _c, nextAct = current(player)
+		task.delay(6, function() introduce(player, nextAct) end)
 		return
 	end
-	StoryService.Say(player, if act and act.Guide then act.Guide else "Por enquanto, explore. Eu aviso quando a próxima ruptura estabilizar.")
+	if act and act.Choice then
+		offerChoice(player, act) -- escolha pendente (fechou a tela / reconectou)
+		return
+	end
+	StoryService.Say(player, if act and act.Guide then act.Guide else "Por enquanto, explore. Eu aviso quando a próxima ruptura estabilizar.",
+		act and act.GuideNpc)
 end
 
 function StoryService.Begin(player: Player): boolean
@@ -196,10 +268,37 @@ function StoryService.Init()
 	notifyStory = Remotes.GetEvent(Remotes.Events.NotifyStory)
 	notifyQuest = Remotes.GetEvent(Remotes.Events.NotifyQuest)
 	Remotes.GetEvent(Remotes.Events.RequestStoryState).OnServerEvent:Connect(function(player) push(player) end)
+	Remotes.GetEvent(Remotes.Events.RequestStoryChoice).OnServerEvent:Connect(function(player, choiceId, optionId)
+		if choiceLimiter:Allow(player) then StoryService.Choose(player, choiceId, optionId) end
+	end)
 end
 
 function StoryService.Start()
-	DataService.ProfileLoaded.Event:Connect(function(player: Player) apply(player) end)
+	DataService.ProfileLoaded.Event:Connect(function(player: Player)
+		apply(player)
+		local _p, _c, act = current(player)
+		if act and act.Choice then task.delay(4, function() offerChoice(player, act) end) end -- Eco pendente
+	end)
+	-- objetivos "reach_<lugar>": confere a posição a cada meio segundo
+	task.spawn(function()
+		while true do
+			task.wait(0.5)
+			for _, player in Players:GetPlayers() do
+				local _p, _c, act = current(player)
+				local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+				if act and root and root:IsA("BasePart") then
+					for _, objective in act.Objectives do
+						local placeId = objective.Kind:match("^reach_(.+)$")
+						local place = placeId and StoryConfig.Places[placeId]
+						if place and (root.Position - place.Position).Magnitude <= place.Radius then
+							StoryService.Progress(player, objective.Kind, 1)
+							break
+						end
+					end
+				end
+			end
+		end
+	end)
 	AchievementService.OnProgress(function(player, kind, amount)
 		-- contadores genéricos (kills/parries) só valem na ilha do ato atual (nunca no Coliseu/arena)
 		local _profile, _chapter, act = current(player)

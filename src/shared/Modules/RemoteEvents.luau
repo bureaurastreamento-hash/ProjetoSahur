@@ -68,6 +68,7 @@ RemoteEvents.Events = ({
 	RequestTournament = "RequestTournament", -- (action: "join"|"leave"|"refresh") — torneio "Último de pé" (TournamentService)
 	RequestTrade = "RequestTrade", -- (action: "invite"|"accept"|"decline"|"cancel"|"add"|"remove"|"points"|"event_points"|"ready"|"confirm", a: any?, b: any?) — trocas no vendedor (TradeConfig)
 	RequestStoryState = "RequestStoryState", -- () — pede novamente o estado da campanha F/X
+	RequestStoryChoice = "RequestStoryChoice", -- (choiceId: string, optionId: string) — resposta de um Eco da campanha (StoryService)
 	RequestUseItem = "RequestUseItem", -- (itemId: string) — usar item do inventário: Flecha, Disco de Stand, Essência (StandService)
 	RequestArrowChoice = "RequestArrowChoice", -- (choice: "usar"|"guardar") — Stand sorteado quando já se tem um (StandService)
 
@@ -111,7 +112,7 @@ RemoteEvents.Events = ({
 	NotifyUpdateLog = "NotifyUpdateLog", -- dono: (entry: UpdateLogConfig.Entry) — versão publicada que ele ainda não viu (abre a tela sozinha)
 	NotifyTournament = "NotifyTournament", -- todos: (event: "state"|"start"|"eliminated"|"end"|"denied", data: table) — state = { phase, mode, modeLabel, endsAt, players, alive, teamsAlive, joined, reward }
 	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
-	NotifyStory = "NotifyStory", -- dono: (event: "state"|"act"|"trace"|"chapter", data: table)
+	NotifyStory = "NotifyStory", -- dono: (event: "state"|"act"|"trace"|"chapter"|"choice"|"distort"|"locked", data: table)
 	NotifyStand = "NotifyStand", -- dono: (event: "roll"|"equip"|"race"|"item"|"denied", data: table) (StandService)
 }) :: { [string]: string }
 

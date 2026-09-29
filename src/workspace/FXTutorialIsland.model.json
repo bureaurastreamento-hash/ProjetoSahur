@@ -5260,6 +5260,728 @@
    ]
   },
   {
+   "name": "Historia",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "DestrocoTabua0",
+     "className": "Part",
+     "properties": {
+      "Name": "DestrocoTabua0",
+      "Anchored": true,
+      "Position": [
+       72,
+       0.1,
+       212
+      ],
+      "Size": [
+       5,
+       0.4,
+       1.2
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       4,
+       20,
+       8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "DestrocoTabua1",
+     "className": "Part",
+     "properties": {
+      "Name": "DestrocoTabua1",
+      "Anchored": true,
+      "Position": [
+       75,
+       0.1,
+       214.5
+      ],
+      "Size": [
+       5,
+       0.4,
+       1.2
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       4,
+       -35,
+       4
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "DestrocoTabua2",
+     "className": "Part",
+     "properties": {
+      "Name": "DestrocoTabua2",
+      "Anchored": true,
+      "Position": [
+       69.5,
+       0.1,
+       215
+      ],
+      "Size": [
+       5,
+       0.4,
+       1.2
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       4,
+       70,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "DestrocoTabua3",
+     "className": "Part",
+     "properties": {
+      "Name": "DestrocoTabua3",
+      "Anchored": true,
+      "Position": [
+       73,
+       0.1,
+       209
+      ],
+      "Size": [
+       5,
+       0.4,
+       1.2
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       4,
+       5,
+       -4
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "M0_Destrocos",
+     "className": "Part",
+     "properties": {
+      "Name": "M0_Destrocos",
+      "Anchored": true,
+      "Position": [
+       72,
+       0.6,
+       213
+      ],
+      "Size": [
+       7,
+       1.5,
+       7
+      ],
+      "Color": [
+       0.43,
+       0.29,
+       0.17
+      ],
+      "Material": "WoodPlanks",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "M0_Pertence",
+     "className": "Part",
+     "properties": {
+      "Name": "M0_Pertence",
+      "Anchored": true,
+      "Position": [
+       58,
+       0.45,
+       198
+      ],
+      "Size": [
+       1.6,
+       1.2,
+       1.1
+      ],
+      "Color": [
+       0.45,
+       0.3,
+       0.2
+      ],
+      "Material": "SmoothPlastic",
+      "Orientation": [
+       0,
+       30,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "M0_Estrutura",
+     "className": "Part",
+     "properties": {
+      "Name": "M0_Estrutura",
+      "Anchored": true,
+      "Position": [
+       96,
+       1.5,
+       206
+      ],
+      "Size": [
+       5,
+       7,
+       4
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       18,
+       25,
+       -12
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "M0_EstruturaRacha",
+     "className": "Part",
+     "properties": {
+      "Name": "M0_EstruturaRacha",
+      "Anchored": true,
+      "Position": [
+       96.2,
+       1.8,
+       206
+      ],
+      "Size": [
+       0.3,
+       5.5,
+       2.2
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       18,
+       25,
+       -12
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaInstavel",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaInstavel",
+      "Anchored": true,
+      "Position": [
+       -115,
+       0.02,
+       -20
+      ],
+      "Size": [
+       0.12,
+       14,
+       14
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       90
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Shape": "Cylinder",
+      "Transparency": 0.35,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco0",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco0",
+      "Anchored": true,
+      "Position": [
+       -107.0,
+       1.5,
+       -20.0
+      ],
+      "Size": [
+       0.5,
+       3,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       0,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco1",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco1",
+      "Anchored": true,
+      "Position": [
+       -111.0,
+       1.5,
+       -13.072
+      ],
+      "Size": [
+       0.5,
+       4,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       60,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco2",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco2",
+      "Anchored": true,
+      "Position": [
+       -119.0,
+       1.5,
+       -13.072
+      ],
+      "Size": [
+       0.5,
+       5,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       120,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco3",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco3",
+      "Anchored": true,
+      "Position": [
+       -123.0,
+       1.5,
+       -20.0
+      ],
+      "Size": [
+       0.5,
+       3,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       180,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco4",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco4",
+      "Anchored": true,
+      "Position": [
+       -119.0,
+       1.5,
+       -26.928
+      ],
+      "Size": [
+       0.5,
+       4,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       240,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "FendaCaco5",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaCaco5",
+      "Anchored": true,
+      "Position": [
+       -111.0,
+       1.5,
+       -26.928
+      ],
+      "Size": [
+       0.5,
+       5,
+       1.4
+      ],
+      "Color": [
+       0.55,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       15,
+       300,
+       10
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.2,
+      "CanCollide": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "SobreviventeFeridoSpot",
+     "className": "Part",
+     "properties": {
+      "Name": "SobreviventeFeridoSpot",
+      "Anchored": true,
+      "Position": [
+       -122,
+       0.05,
+       -14
+      ],
+      "Size": [
+       3,
+       0.2,
+       3
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "SobreviventeSpot",
+     "className": "Part",
+     "properties": {
+      "Name": "SobreviventeSpot",
+      "Anchored": true,
+      "Position": [
+       -108,
+       0.05,
+       -26
+      ],
+      "Size": [
+       3,
+       0.2,
+       3
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "FendaSaida",
+     "className": "Part",
+     "properties": {
+      "Name": "FendaSaida",
+      "Anchored": true,
+      "Position": [
+       -138,
+       2,
+       3
+      ],
+      "Size": [
+       1.4,
+       4,
+       0.4
+      ],
+      "Color": [
+       0.3,
+       0.5,
+       0.7
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       35,
+       8
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.3,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "AltarMascara",
+     "className": "Part",
+     "properties": {
+      "Name": "AltarMascara",
+      "Anchored": true,
+      "Position": [
+       180,
+       0.85,
+       -156
+      ],
+      "Size": [
+       8,
+       2,
+       5
+      ],
+      "Color": [
+       0.43,
+       0.44,
+       0.46
+      ],
+      "Material": "Cobblestone",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "MascaraAntiga",
+     "className": "Part",
+     "properties": {
+      "Name": "MascaraAntiga",
+      "Anchored": true,
+      "Position": [
+       180,
+       2.9,
+       -156
+      ],
+      "Size": [
+       1.6,
+       2,
+       0.5
+      ],
+      "Color": [
+       0.85,
+       0.82,
+       0.72
+      ],
+      "Material": "SmoothPlastic",
+      "Orientation": [
+       -10,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "MascaraSpawn",
+     "className": "Part",
+     "properties": {
+      "Name": "MascaraSpawn",
+      "Anchored": true,
+      "Position": [
+       180,
+       0.1,
+       -146
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.16,
+       0.18,
+       0.21
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "RachaduraCapela",
+     "className": "Part",
+     "properties": {
+      "Name": "RachaduraCapela",
+      "Anchored": true,
+      "Position": [
+       -34,
+       3,
+       -236
+      ],
+      "Size": [
+       0.4,
+       5,
+       1.6
+      ],
+      "Color": [
+       0.7,
+       0.25,
+       0.3
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       6
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
    "name": "Portais",
    "className": "Folder",
    "children": [

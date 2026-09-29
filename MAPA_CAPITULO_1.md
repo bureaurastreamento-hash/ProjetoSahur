@@ -27,9 +27,12 @@ ruínas astecas** e um oásis em volta da cachoeira, diferente do deserto claro 
 
 ## Implementado (atos em `StoryConfig`, 2026-09-29)
 
-- **Porto da Névoa**: Humanoider_20 (missões 0–1), 3 Vagantes da Fratura + parry (3), Rastro "o objeto impossível" nas
-  ruínas (5), Herdeiro da Névoa (final). Falta: Missão 0 "Acorde" (praia, 3 objetos, estrutura enterrada),
-  Missão 2 (vila + escolha de rota), primeiro Eco (3), Portador da Máscara (4), escolha final (prisioneiros × arquivos).
+- **Porto da Névoa** (completa pela bíblia, 29/09): Missão 0 "Acorde" (praia ao lado do spawn: destroços, bolsa,
+  estrutura enterrada que distorce a tela → "???: Interessante."), 1 (Humanoider na praça), 2 (chegar na Taberna),
+  3 (3 Vagantes + parry, depois a fenda instável a oeste do treino com 2 sobreviventes) → **Eco 1** (carregar / levar
+  quem anda / passagem estreita — esta só se achou a "Fenda estreita"), 4 (Portador da Máscara no altar das colinas
+  a leste), 5 (Rastro nas ruínas), Herdeiro da Névoa → **Eco final** na capela (prisioneiros / arquivos / passagem —
+  esta só se achou a "Rachadura na parede" antes) → Flecha + portal. Falta: escolha de rota (espera armas/estilos).
 - **Deserto do Sol**: chegada (6), 4 Homens de Pedra na escavação a leste (7), Mestre da Respiração + discípulo, 2
   parries (8), símbolo na Câmara (9), Sacerdote do Sol Negro (10). Falta: Eco final (selar/destruir/transferir),
   alternância de épocas na luta do boss.

@@ -19,7 +19,7 @@ STONE = ("Cobblestone", (.43, .44, .46)); WOOD = ("WoodPlanks", (.43, .29, .17))
 BRICK = ("Brick", (.42, .22, .18)); PLASTER = ("SmoothPlastic", (.78, .74, .66)); ROOF = ("Slate", (.22, .12, .13))
 GLASS = ("Glass", (.95, .8, .45)); NEON = ("Neon", (.35, .85, 1)); IRON = ("Metal", (.12, .12, .13))
 
-folders = {name: [] for name in ("Porto", "Vila", "Treino", "Ruinas", "Portais", "Spawns")}
+folders = {name: [] for name in ("Porto", "Vila", "Treino", "Ruinas", "Historia", "Portais", "Spawns")}
 
 
 def part(folder, name, size, pos, mat, rot=(0, 0, 0), cls="Part", **extra):
@@ -134,6 +134,33 @@ for name, x, z in (("TutorialToPilares", 380, -190),):
 
 part("Spawns", "TutorialSpawn", (10, 1, 10), (PX, 1, PZ - 15), ("Plastic", (.2, .7, .4)), cls="SpawnLocation",
      Transparency=1, CanCollide=False, Enabled=False, Neutral=True)
+
+# ---------------------------------------------------------------------------
+# Campanha (BIBLIA_CAMPANHA_CAP1_v0.1.md; TutorialIslandService liga pelo NOME). Chão conferido por raycast (29/09).
+SAND_WET = ("SmoothPlastic", (.62, .55, .42))
+CRACK = ("Neon", (.55, .85, 1))
+# Missão 0 "Acorde": destroços, o seu pertence e a estrutura enterrada, na praia ao lado do spawn.
+for i, (dx, dz, ry) in enumerate(((0, 0, 20), (3, 2.5, -35), (-2.5, 3, 70), (1, -3, 5))):
+    part("Historia", f"DestrocoTabua{i}", (5, .4, 1.2), (72 + dx, .1, 212 + dz), WOOD, (4, ry, 8 - i * 4))
+part("Historia", "M0_Destrocos", (7, 1.5, 7), (72, .6, 213), WOOD, Transparency=1, CanCollide=False)
+part("Historia", "M0_Pertence", (1.6, 1.2, 1.1), (58, .45, 198), ("SmoothPlastic", (.45, .3, .2)), (0, 30, 0))
+part("Historia", "M0_Estrutura", (5, 7, 4), (96, 1.5, 206), DARK, (18, 25, -12))
+part("Historia", "M0_EstruturaRacha", (.3, 5.5, 2.2), (96.2, 1.8, 206), CRACK, (18, 25, -12), CastShadow=False)
+# Missão 3: a fenda instável (oeste do treino) + sobreviventes + a passagem estreita escondida (libera a opção C do Eco).
+cylinder("Historia", "FendaInstavel", 7, .12, (-115, .02, -20), CRACK, Transparency=.35, CanCollide=False, CastShadow=False)
+for i in range(6):
+    a = i / 6 * math.tau
+    part("Historia", f"FendaCaco{i}", (.5, 3 + (i % 3), 1.4), (-115 + math.cos(a) * 8, 1.5, -20 + math.sin(a) * 8), CRACK,
+         (15, i * 60, 10), Transparency=.2, CanCollide=False, CastShadow=False)
+part("Historia", "SobreviventeFeridoSpot", (3, .2, 3), (-122, .05, -14), DARK, Transparency=1, CanCollide=False)
+part("Historia", "SobreviventeSpot", (3, .2, 3), (-108, .05, -26), DARK, Transparency=1, CanCollide=False)
+part("Historia", "FendaSaida", (1.4, 4, .4), (-138, 2, 3), ("Neon", (.3, .5, .7)), (0, 35, 8), Transparency=.3, CastShadow=False)
+# Missão 4: o altar da máscara nas colinas a leste (Portador da Máscara).
+part("Historia", "AltarMascara", (8, 2, 5), (180, .85, -156), STONE)
+part("Historia", "MascaraAntiga", (1.6, 2, .5), (180, 2.9, -156), ("SmoothPlastic", (.85, .82, .72)), (-10, 0, 0))
+part("Historia", "MascaraSpawn", (6, .3, 6), (180, .1, -146), DARK, Transparency=1, CanCollide=False)
+# Escolha final: rachadura na parede oeste da capela (a passagem que salva todo mundo, se achada antes).
+part("Historia", "RachaduraCapela", (.4, 5, 1.6), (-34, 3, -236), ("Neon", (.7, .25, .3)), (0, 0, 6), CastShadow=False)
 
 children = [{"name": name, "className": "Folder", "children": nodes} for name, nodes in folders.items()]
 OUT.write_text(json.dumps({"className": "Model", "ignoreUnknownInstances": True, "children": children}, indent=1) + "\n")

@@ -260,6 +260,19 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (noite, 5) — ILHA 1 COMPLETA + ECOS (conteúdo, leva 4)
+- `StoryConfig` **rev 3** (migração 1→2, 2→4, 3→8, 4→9, ≥5 → +6): Missões 0 "Acorde", 2 "Porto da Névoa", 3 com a fenda
+  instável, 4 "A Máscara", **Eco 1** (sobreviventes) e **Eco final da Ilha 1** (capela). Flecha + portal só DEPOIS do Eco.
+- Motor novo: `Choice` (Eco na tela, `RequestStoryChoice` → `StoryService.Choose`: grava flags `eco_*` e `<choice>_<opção>`),
+  opção com `RequiresFlag` (pista achada explorando: `fenda_saida`, `passagem_capela` via `StoryService.SetFlag`),
+  objetivo `reach_<lugar>` (`StoryConfig.Places`, conferido a cada 0,5 s), `Intro/IntroNpc/GuideNpc` (o "???" antes do
+  nome do Humanoider). Eco pendente reabre ao conversar com o Humanoider ou ao entrar no jogo.
+- Mapa (`gerar_ilha_tutorial_fx.py`, pasta Historia): destroços/bolsa/estrutura na praia, fenda com cacos + 2
+  sobreviventes + fenda estreita escondida, altar da máscara + Portador da Máscara (bot), rachadura na capela.
+- Cliente: tela de escolha (opção trancada = "???") e distorção da Missão 0 (`StoryController`).
+- Testado no Play (servidor, fluxo inteiro + opção trancada recusada + migração) e log do cliente limpo. **Falta o dono
+  jogar**: textos, posição dos objetos, a tela de escolha, a distorção.
+
 ## 2026-09-29 (noite, 4) — GRÁFICO menos claro (dono: "tá muito claro a tela")
 - `EnvironmentService` CONFIG do dia: Brightness 4→2.6, ExposureCompensation +0.1→−0.3, Ambient/OutdoorAmbient mais
   escuros e frios, EnvironmentDiffuse/Specular 0.55/0.6→0.35/0.35, ShadowSoftness 1→0.35 (sombra de anime), Atmosphere

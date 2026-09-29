@@ -15,11 +15,16 @@
 	  Guide       — fala do Humanoider_20 quando o player conversa com ele durante este ato.
 	  Trace       — Rastro de Carlos ligado ao ato (texto em StoryConfig.Traces).
 	  Reward      — itens entregues ao CONCLUIR o ato ({ [itemId] = n }, StandService.Give; ex.: a Flecha).
+	  Intro/IntroNpc — fala automática ao ENTRAR no ato (padrão: Guide do Humanoider). IntroNpc "???" = sem foto.
+	  GuideNpc    — quem fala o Guide (padrão Humanoider_20).
+	  Choice      — ECO (BIBLIA_CAMPANHA_CAP1 "Ecos"): escolha na tela ao entrar no ato; escolher conclui o ato e grava
+	                as flags da opção. Opção com RequiresFlag só aparece liberada se o jogador explorou antes.
+	Objetivo "reach_<lugar>": chegar perto de StoryConfig.Places[<lugar>] (StoryService confere a posição).
 ]]
 
 local StoryConfig = {}
 
-StoryConfig.Revision = 2
+StoryConfig.Revision = 3 -- 3 = Ilha 1 completa pela bíblia (Missões 0, 2, 4 e os Ecos), 29/09
 
 export type Chapter = {
 	Id: string,
@@ -43,7 +48,19 @@ export type Act = {
 	Trace: string?,
 	Hint: string?,
 	Reward: { [string]: number }?,
+	Intro: string?,
+	IntroNpc: string?,
+	GuideNpc: string?,
+	Choice: Choice?,
 }
+export type ChoiceOption = { Id: string, Label: string, Desc: string, Flags: { string }, Say: string, RequiresFlag: string? }
+export type Choice = { Id: string, Title: string, Text: string, Options: { ChoiceOption } }
+
+-- Lugares dos objetivos "reach_<id>" (alturas conferidas no place).
+StoryConfig.Places = {
+	taberna = { Position = Vector3.new(352, 0, 62), Radius = 34 },
+	fenda = { Position = Vector3.new(-115, 0, -20), Radius = 16 },
+} :: { [string]: { Position: Vector3, Radius: number } }
 
 -- Rastros de Carlos: o que o player vê ao investigar. Nunca revelar mais do que a bíblia permite no ponto.
 StoryConfig.Traces = {
@@ -60,20 +77,59 @@ StoryConfig.Traces = {
 StoryConfig.Chapters = {
 	{ Id = "cap1", Order = 1, Elder = "Humanoider_20", World = "Mundo das Eras", Inspiration = "JoJo", Title = "Primeira Fratura", Acts = {
 		-- ILHA 1 — PORTO DA NÉVOA (Parte 1)
-		{ Id = "chegada", Mission = "0–1", Region = "ilha_tutorial", Title = "Você não deveria estar inteiro", Objectives = {},
-			Hint = "Alguém observa você no porto. Fale com Humanoider_20.",
-			Guide = "Você caiu de uma ruptura ativa... e ainda parece você. Isso é novo. Vá ao campo de treino a oeste da vila: sobreviva a três Vagantes e aprenda a aparar um golpe." },
+		{ Id = "acorde", Mission = "0", Region = "ilha_tutorial", Title = "Acorde", Objectives = {
+			{ Kind = "fx_m0_destrocos", Goal = 1, Text = "Examine os destroços na praia" },
+			{ Kind = "fx_m0_pertence", Goal = 1, Text = "Recupere o que é seu" },
+			{ Kind = "fx_m0_estrutura", Goal = 1, Text = "Toque a estrutura enterrada" },
+		}, Guide = "(Ele observa você em silêncio. Talvez seja melhor olhar a praia primeiro.)", GuideNpc = "???" },
+		{ Id = "chegada", Mission = "1", Region = "ilha_tutorial", Title = "Você não deveria estar inteiro", Objectives = {},
+			Intro = "Interessante.", IntroNpc = "???",
+			Hint = "A voz veio da vila, ao norte do porto. Fale com quem estava olhando.",
+			Guide = "Você caiu de uma ruptura ativa... e ainda parece você. (Ele passa um aparelho em você. Falha. Tenta de novo. Falha.) Isso é novo. Me chamo Humanoider. Venha, você precisa ver onde está." },
+		{ Id = "porto_da_nevoa", Mission = "2", Region = "ilha_tutorial", Title = "Porto da Névoa", Objectives = {
+			{ Kind = "reach_taberna", Goal = 1, Text = "Conheça a Taberna (leste da vila): contratos e gente" },
+		}, Guide = "Isto é o Porto da Névoa. Comerciantes, curandeiro, porto, e a Taberna a leste com o quadro de contratos. Uma coisa chamada F/X está fazendo as realidades se misturarem. É só o que você precisa saber por enquanto." },
 		{ Id = "primeiros_golpes", Mission = "3", Region = "ilha_tutorial", Title = "Prove que consegue sobreviver", Objectives = {
-			{ Kind = "kills", Goal = 3, Text = "Derrote 3 Vagantes da Fratura" },
+			{ Kind = "kills", Goal = 3, Text = "Derrote 3 Vagantes da Fratura (campo de treino, oeste)" },
 			{ Kind = "parries", Goal = 1, Text = "Apare 1 golpe (F na hora certa)" },
-		}, Guide = "Você aprende melhor quando existe alguma possibilidade real de morrer. Campo de treino, a oeste." },
+		}, Guide = "Você aprende melhor quando existe alguma possibilidade real de morrer. Campo de treino, a oeste da vila." },
+		{ Id = "fenda_instavel", Mission = "3", Region = "ilha_tutorial", Title = "A zona instável", Objectives = {
+			{ Kind = "reach_fenda", Goal = 1, Text = "Entre na fenda instável a oeste do treino" },
+		}, Guide = "Tem uma zona instável a oeste do campo de treino. Os outros precisam de proteção para entrar lá. Quero ver o que acontece com você." },
+		{ Id = "eco_sobreviventes", Mission = "3 · Eco", Region = "ilha_tutorial", Title = "A fenda está fechando", Objectives = {},
+			Hint = "Escolha o que fazer com os sobreviventes.",
+			Choice = { Id = "eco_m3", Title = "A FENDA ESTÁ FECHANDO",
+				Text = "Dois sobreviventes lá dentro. Um está muito ferido; o outro ainda consegue andar. Não dá tempo de pensar muito.",
+				Options = {
+					{ Id = "carregar", Label = "Carregar o ferido", Desc = "Mais lento, mais arriscado. Os dois saem.", Flags = { "eco_m3_carregou" },
+						Say = "Você carregou alguém que nem conhecia por uma fenda fechando. Anotado." },
+					{ Id = "andar", Label = "Levar só quem anda", Desc = "Seguro. O ferido fica para trás.", Flags = { "eco_m3_deixou" },
+						Say = "Um saiu. O outro... a fenda levou. Às vezes é isso." },
+					{ Id = "saida", Label = "Usar a passagem estreita", Desc = "Só se você achou outra saída lá dentro.", Flags = { "eco_m3_saida" },
+						RequiresFlag = "fenda_saida", Say = "Outra saída? Ninguém tinha visto aquilo. Os dois vivos, sem carregar ninguém." },
+				} } },
+		{ Id = "a_mascara", Mission = "4", Region = "ilha_tutorial", Title = "A Máscara", Objectives = {
+			{ Kind = "fx_mascara_boss", Goal = 1, Text = "Derrote o Portador da Máscara (colinas a leste)" },
+		}, Guide = "Gente anda sumindo nas colinas a leste. Um grupo está usando um artefato antigo por lá, e ele reage à F/X de um jeito que não devia." },
 		{ Id = "rastro_carlos_01", Mission = "5", Region = "ilha_tutorial", Title = "O objeto impossível", Objectives = {
 			{ Kind = "trace_carlos_era01", Goal = 1, Text = "Investigue o brilho nas ruínas ao norte" },
-		}, Trace = "carlos_era01", Guide = "Tem uma energia estranha nas ruínas ao norte. Vá ver o que é. Com cuidado." },
+		}, Trace = "carlos_era01", Guide = "A máscara pertence a esta realidade. Mas aquela energia não. Tem outro brilho nas ruínas ao norte. Vá ver." },
 		{ Id = "herdeiro_da_nevoa", Mission = "Final da Ilha 1", Region = "ilha_tutorial", Title = "O Herdeiro da Névoa", Objectives = {
 			{ Kind = "fx_cap1_boss", Goal = 1, Text = "Derrote o Herdeiro da Névoa nas ruínas" },
-		}, UnlockFlag = "ilha_pilares_unlocked", Reward = { flecha = 1 }, -- fim do tutorial: a Flecha (StandConfig)
-			Guide = "Aquela peça... é de alguém que morreu. Esqueça isso por agora. Quem está usando a energia da máscara nas ruínas sabe que existem outros mundos. Pare ele." },
+		}, Guide = "Aquela peça... é de alguém que morreu. Esqueça isso por agora. Quem está usando a energia da máscara nas ruínas sabe que existem outros mundos. Pare ele." },
+		{ Id = "eco_capela", Mission = "Escolha da Ilha 1", Region = "ilha_tutorial", Title = "A capela está desabando", Objectives = {},
+			UnlockFlag = "ilha_pilares_unlocked", Reward = { flecha = 1 }, -- fim do tutorial: a Flecha (StandConfig)
+			Hint = "Escolha o que salvar na capela.",
+			Choice = { Id = "eco_ilha1", Title = "A CAPELA ESTÁ DESABANDO",
+				Text = "O Herdeiro caiu, mas a capela vem abaixo. De um lado, prisioneiros acorrentados. Do outro, o arquivo dos experimentos dele. Não dá para garantir os dois.",
+				Options = {
+					{ Id = "prisioneiros", Label = "Salvar os prisioneiros", Desc = "Mais gente sai viva. Parte dos dados se perde.", Flags = { "eco_ilha1_prisioneiros" },
+						Say = "Mais gente viva. Perdemos parte dos papéis. Eu teria escolhido igual... acho." },
+					{ Id = "arquivos", Label = "Recuperar os arquivos", Desc = "Mais informação sobre a F/X. Nem todos saem.", Flags = { "eco_ilha1_arquivos" },
+						Say = "Com isso eu entendo melhor a F/X. Nem todo mundo saiu. Vou lembrar disso." },
+					{ Id = "passagem", Label = "Usar a passagem pela rachadura", Desc = "Só se você achou a passagem antes.", Flags = { "eco_ilha1_prisioneiros", "eco_ilha1_arquivos", "eco_ilha1_passagem" },
+						RequiresFlag = "passagem_capela", Say = "Você já conhecia a passagem. Todo mundo saiu, e ainda trouxe parte dos arquivos." },
+				} } },
 		-- ILHA 2 — DESERTO DO SOL (Parte 2)
 		{ Id = "calor", Mission = "6", Region = "ilha_pilares", Title = "Calor", Objectives = {}, Arrive = "ilha_pilares",
 			Hint = "Atravesse o portal a nordeste do Porto da Névoa até o Deserto do Sol.",

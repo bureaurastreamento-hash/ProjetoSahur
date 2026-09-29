@@ -43,6 +43,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
 - **Stands (29/09)**: schema 5 (wipe = `PlayerData_v5`); `StandConfig` + `StandService` + mochila (M). Kit padrão =
   `Humano`; Stand = kit com `Access = "stand"`, só o ATIVO (`profile.power`) é jogável; dar Stand = disco na mochila
   (`DataService.GrantCharacter`/`AddItem`). Teclas do Stand por maestria (`StandConfig.SlotUnlock`).
+- **Ecos (29/09)**: escolha = ato com `Choice` no `StoryConfig` (rev 3); pistas liberam opções (`RequiresFlag` +
+  `StoryService.SetFlag`); "chegar em" = objetivo `reach_<lugar>` + `StoryConfig.Places`. Mudou a ordem dos atos →
+  subir `Revision` + mapa na `migrate` do StoryService.
 - **HUD (29/09)**: topbar só com Config (menus sérios + Denunciar); menus do jogo no **menu lateral** (`MenuController`
   → `TopbarController.Toggle(nome)`); status (nível/vida/energia/XP) no canto inferior esquerdo. Erros do CLIENTE:
   ler o log do Studio depois de um Play (`[Client] FALHA em ...`), o MCP só mostra o servidor.
