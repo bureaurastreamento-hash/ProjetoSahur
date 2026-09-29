@@ -32,20 +32,25 @@ FAIXA = 20  # largura (Z) de cada faixa
 D_TOPO, D_PRAIA, D_MOLHADA = 0.90, 1.0, 1.06
 JITTER = 0.025  # irregularidade da costa (mesma em todas as camadas: os anéis ficam paralelos)
 
+# Material: SEMPRE liso (SmoothPlastic), só cor. Dono (28/09): chão "simples e quadrado, bem feito, leve, fácil de
+# texturizar e modelar" — nada dos materiais realistas do Roblox (Grass/Sand/Sandstone têm textura própria).
+LISO = "SmoothPlastic"
+
+
 # material, cor (0..1)
 def rgb(r, g, b):
     return (round(r / 255, 4), round(g / 255, 4), round(b / 255, 4))
 
-GRAMA_NEVOA = ("Grass", rgb(98, 150, 78))
-AREIA = ("Sand", rgb(226, 204, 146))
-DESERTO = ("Sand", rgb(214, 156, 98))  # Deserto do Sol: areia avermelhada (deserto com ruínas astecas)
-DESERTO_PRAIA = ("Sand", rgb(232, 196, 140))
-ROCHA_DESERTO = ("Sandstone", rgb(178, 110, 74))
-OASIS = ("LeafyGrass", rgb(82, 146, 64))
-AREIA_ARENA = ("Sand", rgb(222, 196, 140))
-ECLIPSE = ("Sand", rgb(234, 212, 156))  # Rota do Eclipse: deserto claro
-DUNA = ("Sand", rgb(226, 194, 128))
-KAME = ("Sand", rgb(236, 214, 160))
+GRAMA_NEVOA = (LISO, rgb(98, 150, 78))
+AREIA = (LISO, rgb(226, 204, 146))
+DESERTO = (LISO, rgb(214, 156, 98))  # Deserto do Sol: areia avermelhada (deserto com ruínas astecas)
+DESERTO_PRAIA = (LISO, rgb(232, 196, 140))
+ROCHA_DESERTO = (LISO, rgb(178, 110, 74))
+OASIS = (LISO, rgb(82, 146, 64))
+AREIA_ARENA = (LISO, rgb(222, 196, 140))
+ECLIPSE = (LISO, rgb(234, 212, 156))  # Rota do Eclipse: deserto claro
+DUNA = (LISO, rgb(226, 194, 128))
+KAME = (LISO, rgb(236, 214, 160))
 
 ILHAS = [  # = WorldConfig.Islands
     {"id": "PortoDaNevoa", "c": (150, -40), "rx": 330, "rz": 290, "topo": GRAMA_NEVOA, "praia": AREIA, "seed": 1},
@@ -207,7 +212,7 @@ for ilha in ILHAS:
         for r in subtrair(f, buracos):
             part(pasta, f"Topo{k}", r[0], r[1], TOP - 1.2, TOP, r[2], r[3], ilha["topo"]); k += 1
     # corpo embaixo do topo (sobreposições inclusas; recortes têm corpo próprio)
-    corpo_mat = ilha["praia"] if ilha["topo"][0] == "Sand" else ("Ground", rgb(110, 92, 66))
+    corpo_mat = (LISO, rgb(110, 92, 66)) if ilha["topo"] is GRAMA_NEVOA else ilha["praia"]  # terra embaixo da grama
     k = 0
     for f in topo:
         for r in subtrair(f, rec_rects):
@@ -255,7 +260,7 @@ for d, (x0, x1, z0, z1, alto) in enumerate(((1860, 1930, -40, 20, 9), (1560, 164
     for n in range(niveis):
         m = (niveis - 1 - n) * 9  # margem: degrau de baixo é o mais largo
         y1 = TOP + alto * (n + 1) / niveis
-        part("Dunas", f"Duna{d}_{n}", x0 - m, x1 + m, TOP - 1, y1, z0 - m, z1 + m, DUNA if n % 2 == 0 else ("Sand", rgb(232, 204, 142)))
+        part("Dunas", f"Duna{d}_{n}", x0 - m, x1 + m, TOP - 1, y1, z0 - m, z1 + m, DUNA if n % 2 == 0 else (LISO, rgb(232, 204, 142)))
 
 # ---------------------------------------------------------------------------
 children = [{"name": nome, "className": "Folder", "children": lista} for nome, lista in parts.items()]

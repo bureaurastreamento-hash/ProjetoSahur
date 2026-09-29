@@ -40,7 +40,8 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   mantidos). `StoryConfig` rev 2 (atos com `Mission`/`Arrive`/`UnlockFlag`/`Guide`); mudou ordem de ato → subir
   `Revision` + migração no `StoryService`. Nunca mostrar o nome "Carlos" antes da Missão 18. Nada de palavrão em texto do jogo.
 - Falta testar no Play (lista no PROGRESSO) e o dono publicar pelo Studio.
-- **Chão das ilhas = PEÇAS** (`tools/gerar_chao_ilhas.py` → `Workspace.Sahur.ChaoIlhas`); Terrain só tem o MAR
+- **Chão das ilhas = PEÇAS LISAS** (SmoothPlastic, só cor — NUNCA os materiais realistas Grass/Sand/Rock do Roblox)
+  (`tools/gerar_chao_ilhas.py` → `Workspace.Sahur.ChaoIlhas`); Terrain só tem o MAR
   (`MontarMundo` = só mar; backup do terreno antigo em `ServerStorage.Backup_Terreno_2026-09-29`). Coisa nova perto da
   costa: conferir se cai no topo (d ≤ 0.90) ou criar lóbulo; beira d'água sempre com rampa (nadador preso em parede).
 
