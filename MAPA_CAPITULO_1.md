@@ -38,9 +38,12 @@ ruínas astecas** e um oásis em volta da cachoeira, diferente do deserto claro 
 
 ## Layout físico (2026-09-28 — arena DESMONTADA, dono autorizou)
 
-A arena fechada não existe mais: as peças dela foram distribuídas pelas ilhas. Chão = Terrain
-(`tools/studio/MontarMundo.luau`, mar de água de verdade), que vai ser trocado por **peças simples bem feitas**
-(próxima leva). Centros/raios em `WorldConfig.Islands`.
+A arena fechada não existe mais: as peças dela foram distribuídas pelas ilhas. **Chão = PEÇAS** (29/09):
+`tools/gerar_chao_ilhas.py` → `Workspace.Sahur.ChaoIlhas` (versionado, ~1200 peças): topo em y -0.15, praia (-0.9),
+areia molhada (-1.7) e **rampas** (WedgePart) no contorno para sair do mar nadando; oásis e areia do Coliseu no
+Deserto; montanha do santuário e dunas em degraus. Mar = Terrain de água (`tools/studio/MontarMundo.luau`, só o mar).
+Terreno antigo guardado em `ServerStorage.Backup_Terreno_2026-09-29`. Centros/raios em `WorldConfig.Islands`
+(Deserto do Sol rz 305 + lóbulos no Coliseu e na vila; Kame 300×140).
 
 | Ilha | Peças reaproveitadas da arena |
 |---|---|

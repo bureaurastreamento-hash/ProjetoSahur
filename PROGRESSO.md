@@ -260,6 +260,22 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (tarde) — CHÃO DAS ILHAS DE PEÇAS (leva 1 aprovada pelo dono)
+- `tools/gerar_chao_ilhas.py` → `src/workspace/ChaoIlhas.model.json` (`Workspace.Sahur.ChaoIlhas`, 1206 peças, no git).
+  Camadas por LINHA numa grade fixa de Z (20 studs): **topo** y -0.15 (d ≤ 0.90 da elipse), **praia** -0.9 (≤ 1.0),
+  **areia molhada** -1.7 (≤ 1.06) e **rampas** WedgePart de -1.7 a -6.5 em todo o contorno. Degraus de ~0.8 (sobe
+  andando). Lóbulos: Deserto do Sol no Coliseu e na vila mesopotâmica. Sobreposições no nível do topo: oásis (jardim/
+  cachoeira) e areia do Coliseu. Recortes mais baixos: Taberna (-0.95), riacho/lago/laje do jardim (-1.1).
+- Biomas: Porto da Névoa grama; **Deserto do Sol = areia avermelhada** + oásis verde; montanha do santuário em 4 degraus
+  de arenito (oeste e norte; leste é paredão por causa da escavação); Rota do Eclipse areia clara + 3 dunas em degraus.
+- `MontarMundo.luau` agora só faz o MAR (Terrain de água). Terreno antigo: `ServerStorage.Backup_Terreno_2026-09-29`
+  (restaurar: `Terrain:PasteRegion(backup, Vector3int16.new(-200, -12, -250), true)`).
+- Testado via MCP: nada do mapa ficou sem chão (exceto o cais, que é sobre a água, e o que está nos recortes); zero
+  z-fighting entre peças do chão; personagem em pé em 14 pontos (porto, vila, ruínas, Taberna, Deserto, Coliseu,
+  escavação, oásis, topo/degrau da montanha, Rota, duna, Kame); NPC **sai do mar nadando** e sobe até o topo em 4 costas.
+- **Falta o dono VER** (não tirei screenshot: a janela ativa era outro jogo seu) — cores, praia, montanha, rampas.
+  Editar o chão à mão = "entregar" a pasta antes (regra do CLAUDE.md), senão o Rojo sobrescreve.
+
 ## RETOMAR AQUI (2026-09-29) — bíblia do Cap. 1 + estrutura do jogo sincronizadas
 **Docs novos do dono**: `BIBLIA_CAMPANHA_CAP1_v0.1.md` (campanha do Cap. 1, missões 0–31, Ecos) e `ESTRUTURA_JOGO.md`
 (4 camadas: campanha / farm-loot / sidequests / PvP com bounty). Renomeados (o nome antigo tinha quebra de linha) e

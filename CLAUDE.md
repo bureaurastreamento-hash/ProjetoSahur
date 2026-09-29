@@ -40,6 +40,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   mantidos). `StoryConfig` rev 2 (atos com `Mission`/`Arrive`/`UnlockFlag`/`Guide`); mudou ordem de ato → subir
   `Revision` + migração no `StoryService`. Nunca mostrar o nome "Carlos" antes da Missão 18. Nada de palavrão em texto do jogo.
 - Falta testar no Play (lista no PROGRESSO) e o dono publicar pelo Studio.
+- **Chão das ilhas = PEÇAS** (`tools/gerar_chao_ilhas.py` → `Workspace.Sahur.ChaoIlhas`); Terrain só tem o MAR
+  (`MontarMundo` = só mar; backup do terreno antigo em `ServerStorage.Backup_Terreno_2026-09-29`). Coisa nova perto da
+  costa: conferir se cai no topo (d ≤ 0.90) ou criar lóbulo; beira d'água sempre com rampa (nadador preso em parede).
 
 ## ONDE PARAMOS (fim de 2026-09-28) — ler PROGRESSO "RETOMAR AQUI (fim da sessão 2026-09-28, noite)"
 - História CANÔNICA = `LORE_FX_CANONE.md` (doc do dono). Não decidir sozinho o que está em §52 dele.
