@@ -286,8 +286,9 @@ revela o nome de Carlos na Missão 18 e Adryan conta a "versão oficial" no Cap.
   (`ilha_sol_partido_unlocked`). Voltar é livre. **O Coliseu agora fica atrás do tutorial.**
 - Log de novidades **2.1** ("Capítulo 1: Primeira Fratura"), `UpdateLogConfig.Current = "2.1"` (o DEV publica).
 
-**FALTA TESTAR no Play** (o Rojo caiu durante a sessão e foi religado; o Studio precisa clicar em Connect no plugin):
-ver a lista em "Como testar (29/09)" logo abaixo.
+**Servidor testado via MCP no Play (29/09)**: boot OK (50 services); todos os bots/NPCs novos nascem no chão; os 14 atos
+avançam em ordem, com as flags e os portais certos; migração rev1→rev2 OK. **Falta o dono ver o VISUAL** (falas, HUD, lutas)
+pela lista abaixo. Obs.: o teste zerou o `story` do perfil do dono no Studio (estava no ato 2).
 
 ### Como testar (29/09)
 1. Conversar com o Humanoider_20 → fala nova; HUD "Prove que consegue sobreviver".
