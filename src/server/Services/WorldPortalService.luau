@@ -4,6 +4,7 @@
 local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local WorldService = require(script.Parent:WaitForChild("WorldService"))
+local AntiExploitService = require(script.Parent:WaitForChild("AntiExploitService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -36,10 +37,13 @@ local function bind(part: BasePart, destination)
 			Remotes.GetEvent(Remotes.Events.NotifyStory):FireClient(player, "locked", { text = destination.Locked or "Rota selada." })
 			return
 		end
-		if not WorldService.SetCheckpoint(player, destination.Region, destination.Checkpoint) then return end
+		-- viajar NÃO salva o spawn: quem salva é o Pescador da ilha (FisherService, dono 29/09)
+		local cf = WorldConfig.CFrameOf(destination.Region, destination.Checkpoint)
+		if not cf or not player.Character then return end
+		WorldService.Discover(player, destination.Region)
+		AntiExploitService.Grace(player, 2)
+		player.Character:PivotTo(cf * CFrame.new(0, 3, 0))
 		StoryService.ArriveRegion(player, destination.Region)
-		local cf = WorldService.SpawnCFrame(player)
-		if player.Character and cf then player.Character:PivotTo(cf * CFrame.new(0, 3, 0)) end
 	end)
 end
 

@@ -34,7 +34,8 @@ local function spawnGuide(spot: BasePart)
 		if descendant:IsA("BasePart") then descendant.CanCollide = false end
 	end
 	root.Anchored = true
-	guide:PivotTo(spot.CFrame * CFrame.new(0, 3, 0))
+	-- pela RAIZ, em pé sobre o topo do marcador (PivotTo deixava 1.7 enterrado: o pivô não é a raiz)
+	root.CFrame = spot.CFrame.Rotation + Vector3.new(spot.Position.X, spot.Position.Y + spot.Size.Y / 2 + 3, spot.Position.Z)
 	guide.Parent = model()
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.ActionText = "Conversar"

@@ -260,6 +260,13 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (noite, 2) — PESCADOR salva o spawn (pedido do dono)
+- `FisherService`: um **Pescador** por ilha (`WorldConfig.Regions[*].Fisher`), perto da chegada e visível (nome
+  "Pescador · salvar spawn", camisa azul, vara). Conversar = `WorldService.SetCheckpoint` naquela ilha + fala dele.
+- **Portal não salva mais o spawn** (só leva; `WorldService.Discover` marca a região e o AntiExploit ganha `Grace`).
+- Conserto: NPCs gerados por `CreateHumanoidModelFromDescription` ficavam 1.5–1.7 enterrados com `PivotTo` (o pivô não é
+  a raiz) → Humanoider_20, Mestre e Pescadores agora posicionados pela RAIZ, sobre o topo do marcador. Testado no Play.
+
 ## 2026-09-29 (noite) — STANDS, RAÇAS, MOCHILA E WIPE (leva 2)
 - **WIPE**: `DataConfig.SchemaVersion` 4 → **5** = DataStore novo `PlayerData_v5` (todo mundo do zero; o `_v4` ficou
   intacto). Perfil ganhou `power` (Stand ativo), `race`, `inventory` e `born`.

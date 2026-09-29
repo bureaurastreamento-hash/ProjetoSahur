@@ -47,6 +47,14 @@ function WorldService.SetCheckpoint(player: Player, regionId: string, checkpoint
 	return true
 end
 
+--- Marca a região como descoberta sem mexer no spawn salvo (portal/viagem).
+function WorldService.Discover(player: Player, regionId: string)
+	local profile = DataService.GetProfile(player)
+	if not profile or not WorldConfig.GetRegion(regionId) or profile.world.discovered[regionId] then return end
+	profile.world.discovered[regionId] = true
+	DataService.MarkDirty(player)
+end
+
 function WorldService.SpawnCFrame(player: Player): CFrame?
 	local profile = DataService.GetProfile(player)
 	return if profile then WorldConfig.CFrameOf(profile.world.region, profile.world.checkpoint) else nil

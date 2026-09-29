@@ -20,6 +20,8 @@ export type Region = {
 	Pvp: boolean,
 	Available: boolean,
 	Checkpoints: { [string]: Checkpoint },
+	-- Pescador (FisherService): NPC perto da chegada; conversar SALVA o spawn neste checkpoint da ilha.
+	Fisher: { Position: Vector3, Checkpoint: string }?,
 }
 
 WorldConfig.DefaultRegion = "ilha_tutorial"
@@ -40,6 +42,7 @@ WorldConfig.Regions = {
 		Id = "ilha_tutorial", Name = "Porto da Névoa", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { porto = { Position = Vector3.new(40, 2, 185), Yaw = 0 } },
+		Fisher = { Position = Vector3.new(52, 0, 178), Checkpoint = "porto" },
 	},
 	arena_pvp = {
 		Id = "arena_pvp", Name = "Coliseu do Deserto", Universe = "mundo_das_eras", Chapter = "cap1",
@@ -50,11 +53,13 @@ WorldConfig.Regions = {
 		Id = "ilha_pilares", Name = "Deserto do Sol", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { praia = { Position = Vector3.new(690, 2, -420), Yaw = -90 } },
+		Fisher = { Position = Vector3.new(702, 0.5, -410), Checkpoint = "praia" },
 	},
 	ilha_sol_partido = {
 		Id = "ilha_sol_partido", Name = "Rota do Eclipse", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { oasis = { Position = Vector3.new(1710, 2, -130), Yaw = -90 } },
+		Fisher = { Position = Vector3.new(1722, 0, -122), Checkpoint = "oasis" },
 	},
 } :: { [string]: Region }
 

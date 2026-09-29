@@ -40,7 +40,7 @@ local function spawnMaster(spot: BasePart, parent: Instance)
 		if d:IsA("BasePart") then d.CanCollide = false end
 	end
 	root.Anchored = true
-	npc:PivotTo(spot.CFrame * CFrame.new(0, 3, 0))
+	root.CFrame = spot.CFrame.Rotation + Vector3.new(spot.Position.X, spot.Position.Y + spot.Size.Y / 2 + 3, spot.Position.Z) -- pela raiz, em pé
 	npc.Parent = parent
 	prompt(root, "Conversar", MASTER, 0).Triggered:Connect(function(player: Player)
 		if StoryService.Wants(player, "fx_mestre") then
