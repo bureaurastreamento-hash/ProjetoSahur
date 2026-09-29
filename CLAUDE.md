@@ -33,6 +33,10 @@ controlável via Rojo). O código foi iniciado do zero em 2026-09-14 (ver AUDITO
 o mapa é novo e a equipe de arte está produzindo as animações dentro do Studio. Nunca
 presuma que uma pasta está vazia ou que um sistema não existe sem verificar antes.
 
+## ONDE PARAMOS (fim de 2026-09-29) — ler PROGRESSO "RETOMAR AQUI (fim da sessão 2026-09-29)" PRIMEIRO
+- Sessão longa: chão de peças lisas, Stands/raças/mochila (wipe schema 5), Pescador, HUD Blox Fruits, gráfico, Ilha 1 +
+  Ecos. Tudo commitado/pushado; o dono publica pelo Studio. Começar pedindo o retorno dele do que testou.
+
 ## ONDE PARAMOS (2026-09-29) — ler PROGRESSO "RETOMAR AQUI (2026-09-29)"
 - Docs do dono: `BIBLIA_CAMPANHA_CAP1_v0.1.md` (campanha Cap. 1) + `ESTRUTURA_JOGO.md` (4 camadas, bounty, raridade).
   **Jogo diverge dos arquivos → muda o jogo; o que der para juntar, junta** (junções em `BIZARRE_DIRECAO.md`).

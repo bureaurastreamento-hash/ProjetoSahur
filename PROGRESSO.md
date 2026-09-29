@@ -260,6 +260,26 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## RETOMAR AQUI (fim da sessão 2026-09-29) — ler isto primeiro
+**Estado**: tudo commitado e no GitHub. O dono vai PUBLICAR pelo Studio (nunca por API). Feito hoje, em ordem
+(detalhes nas seções abaixo): bíblia do Cap. 1 + estrutura do jogo sincronizadas (ilhas Porto da Névoa / Deserto do
+Sol / Rota do Eclipse); chão das ilhas de PEÇAS LISAS (SmoothPlastic, sem material realista); Stands/raças/mochila +
+WIPE (schema 5); Pescador salva o spawn; HUD estilo Blox Fruits (menu lateral, status embaixo à esquerda, topbar só
+Config); gráfico menos claro; Ilha 1 completa com os Ecos (StoryConfig rev 3).
+
+**O dono ainda não viu em jogo** (pedir o retorno dele primeiro): cores do chão/rampas; mochila + sorteio da Flecha +
+cadeados "M<n>"; menu lateral (cada botão abre o painel certo) e layout no celular; Pescador; iluminação nova (ajuste
+fino = só `ExposureCompensation`); Missão 0 (distorção), telas dos Ecos, se a fenda estreita e a rachadura da capela
+são achaveis.
+
+**Próximas levas sugeridas** (dono escolhe): (1) Rota do Eclipse completa (porto, vilas, mansão, Missão 13 "O Viajante");
+(2) Ilhas 4–6 (Cidade Âmbar, Costa Dourada, Fortaleza Maré; Missões 16–31, Avatar da Fratura); (3) efeitos das raças,
+Flechas no mapa/drop de chefe, Echo Bosses, bounty/zonas seguras (ESTRUTURA_JOGO.md); (4) armas/estilos → escolha de
+rota da Missão 2; depois places por capítulo e Server Authority.
+**Ferramentas úteis**: erros do CLIENTE só aparecem no log do Studio (`[Client] FALHA em ...`; script em
+scratchpad/clientlog.sh da sessão — refazer: awk no `*_last.log` mais novo filtrando pelo ts); NPC gerado → posicionar
+pela raiz; `.model.json` de UI: nome também em `properties.Name`.
+
 ## 2026-09-29 (noite, 5) — ILHA 1 COMPLETA + ECOS (conteúdo, leva 4)
 - `StoryConfig` **rev 3** (migração 1→2, 2→4, 3→8, 4→9, ≥5 → +6): Missões 0 "Acorde", 2 "Porto da Névoa", 3 com a fenda
   instável, 4 "A Máscara", **Eco 1** (sobreviventes) e **Eco final da Ilha 1** (capela). Flecha + portal só DEPOIS do Eco.
