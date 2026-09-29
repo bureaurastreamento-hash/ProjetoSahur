@@ -260,6 +260,13 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (noite, 4) — GRÁFICO menos claro (dono: "tá muito claro a tela")
+- `EnvironmentService` CONFIG do dia: Brightness 4→2.6, ExposureCompensation +0.1→−0.3, Ambient/OutdoorAmbient mais
+  escuros e frios, EnvironmentDiffuse/Specular 0.55/0.6→0.35/0.35, ShadowSoftness 1→0.35 (sombra de anime), Atmosphere
+  Haze 0.6→0.15 (horizonte não lava), Bloom curto (limiar 2.2), ColorCorrection contraste 0.14/brilho −0.03, SunRays leve
+  (zera à noite). Base: docs Roblox (superexposto = exposição/brilho/difuso altos) + refs de estilo cartoon/anime.
+  Testado no Play (valores aplicados). **Falta o dono olhar** — se ainda claro/escuro, mexer só em ExposureCompensation.
+
 ## 2026-09-29 (noite, 3) — HUD ESTILO BLOX FRUITS + MENU LATERAL (leva 3)
 - **Topbar**: só o Config (Configurações, Controles, Novidades, **Denunciar**, Dev/Mods). Personagens/Jogar/Loja/Perfil
   continuam existindo (teclas V/J/C/Tab/L/K/P e painéis), mas escondidos (`setEnabled(false)`).

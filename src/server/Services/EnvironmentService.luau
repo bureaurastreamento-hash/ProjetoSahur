@@ -23,22 +23,24 @@ EnvironmentService.Enabled = true
 
 type EffectDef = { Name: string, ClassName: string, Properties: { [string]: any } }
 
--- Dia "cartoon e animado" (dono, 2026-09-28): ambiente azulado claro, sombra macia, bloom largo, céu padrão
--- da Roblox (azul com nuvens fofas) + nuvens volumétricas. 2ª rodada do dono: "saturado demais" -> cor
--- correction suave (0.5 -> 0.15). A noite (DayNight.Night) continua interpolando a partir daqui.
+-- Dia "cartoon e animado" (dono, 2026-09-28) → 3ª rodada (29/09, dono: "tá muito claro a tela"): o lavado vinha de
+-- Brightness 4 + ExposureCompensation positiva + Ambient/OutdoorAmbient claros + EnvironmentDiffuseScale alto + névoa
+-- (Haze) que clareava o horizonte (docs Roblox: exposição/brilho/difuso altos = superexposto). Agora: sol forte mas
+-- exposição negativa, ambiente mais escuro e frio (sombra com volume), sombra mais definida (estilo anime,
+-- ShadowSoftness 0.2–0.5), bloom só no que brilha, contraste leve. A noite (DayNight.Night) interpola daqui.
 local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 	Lighting = {
-		ClockTime = 15.6,
-		Brightness = 4,
-		Ambient = Color3.fromRGB(124, 155, 184),
-		OutdoorAmbient = Color3.fromRGB(157, 178, 255),
-		ColorShift_Top = Color3.fromRGB(255, 232, 205),
-		ColorShift_Bottom = Color3.fromRGB(180, 190, 210),
-		EnvironmentDiffuseScale = 0.55,
-		EnvironmentSpecularScale = 0.6,
-		ShadowSoftness = 1,
+		ClockTime = 14.8,
+		Brightness = 2.6,
+		Ambient = Color3.fromRGB(78, 84, 102),
+		OutdoorAmbient = Color3.fromRGB(116, 124, 148),
+		ColorShift_Top = Color3.fromRGB(255, 226, 190),
+		ColorShift_Bottom = Color3.fromRGB(120, 130, 152),
+		EnvironmentDiffuseScale = 0.35,
+		EnvironmentSpecularScale = 0.35,
+		ShadowSoftness = 0.35,
 		GlobalShadows = true,
-		ExposureCompensation = 0.1,
+		ExposureCompensation = -0.3,
 		-- fog clássico desligado (a Atmosphere faz a névoa); um plugin de iluminação já deixou 10–120 preto no place
 		FogStart = 0,
 		FogEnd = 100000,
@@ -50,28 +52,33 @@ local CONFIG: { Lighting: { [string]: any }, Effects: { EffectDef } } = {
 			Name = "SahurAtmosphere",
 			ClassName = "Atmosphere",
 			Properties = {
-				Density = 0.24,
-				Offset = 0.1,
-				Color = Color3.fromRGB(199, 222, 255),
-				Decay = Color3.fromRGB(120, 165, 220),
-				Glare = 0.1,
-				Haze = 0.6,
+				Density = 0.28,
+				Offset = 0.25,
+				Color = Color3.fromRGB(188, 208, 235),
+				Decay = Color3.fromRGB(96, 126, 170),
+				Glare = 0.05,
+				Haze = 0.15,
 			},
 		},
 		{
 			Name = "SahurBloom",
 			ClassName = "BloomEffect",
-			Properties = { Intensity = 0.25, Size = 56, Threshold = 1.8 },
+			Properties = { Intensity = 0.18, Size = 28, Threshold = 2.2 },
 		},
 		{
 			Name = "SahurColor",
 			ClassName = "ColorCorrectionEffect",
 			Properties = {
-				Saturation = 0.15,
-				Contrast = 0.15,
-				Brightness = 0.02,
-				TintColor = Color3.fromRGB(250, 246, 255),
+				Saturation = 0.12,
+				Contrast = 0.14,
+				Brightness = -0.03,
+				TintColor = Color3.fromRGB(255, 250, 244),
 			},
+		},
+		{
+			Name = "SahurSunRays",
+			ClassName = "SunRaysEffect",
+			Properties = { Intensity = 0.035, Spread = 0.55 },
 		},
 	},
 }
@@ -111,6 +118,7 @@ EnvironmentService.DayNight = {
 		Atmosphere = { Density = 0.34, Offset = 0.1, Color = Color3.fromRGB(135, 145, 180), Decay = Color3.fromRGB(50, 58, 90), Glare = 0.08, Haze = 1.8 },
 		Color = { Saturation = -0.12, Contrast = 0.1, Brightness = 0.02, TintColor = Color3.fromRGB(215, 225, 255) },
 		Bloom = { Intensity = 0.6, Size = 24, Threshold = 1.2 },
+		SunRays = { Intensity = 0 }, -- sem raios na lua
 	},
 }
 
@@ -161,7 +169,7 @@ local function applyClock(hour: number)
 	for _, key in { "Brightness", "Ambient", "OutdoorAmbient", "ExposureCompensation", "ColorShift_Top", "ColorShift_Bottom" } do
 		(Lighting :: any)[key] = mix(day[key], dn.Night[key], a)
 	end
-	local nightEffects: { [string]: { [string]: any } } = { SahurAtmosphere = dn.Night.Atmosphere, SahurColor = dn.Night.Color, SahurBloom = dn.Night.Bloom }
+	local nightEffects: { [string]: { [string]: any } } = { SahurAtmosphere = dn.Night.Atmosphere, SahurColor = dn.Night.Color, SahurBloom = dn.Night.Bloom, SahurSunRays = dn.Night.SunRays }
 	for effectName, nightProps in nightEffects do
 		local inst = Lighting:FindFirstChild(effectName)
 		if inst then
