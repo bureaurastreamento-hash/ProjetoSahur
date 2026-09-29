@@ -133,6 +133,10 @@ end
 -- ---------------------------------------------------------------------------
 
 local function hasItem(player: Player, it: TradeConfig.Item): boolean
+	if it.kind == "item" then
+		local profile = DataService.GetProfile(player)
+		return profile ~= nil and (profile.inventory[it.id] or 0) >= 1
+	end
 	if it.kind == "character" then
 		local profile = DataService.GetProfile(player)
 		return profile ~= nil and table.find(profile.unlockedCharacters, it.id) ~= nil
@@ -141,6 +145,9 @@ local function hasItem(player: Player, it: TradeConfig.Item): boolean
 end
 
 local function receiverHas(player: Player, it: TradeConfig.Item): boolean
+	if it.kind == "item" then
+		return false -- mochila empilha
+	end
 	if it.kind == "character" then
 		return DataService.HasCharacter(player, it.id)
 	end
@@ -180,6 +187,12 @@ end
 -- ---------------------------------------------------------------------------
 
 local function giveItem(from: Player, to: Player, it: TradeConfig.Item)
+	if it.kind == "item" then
+		if DataService.TakeItem(from, it.id, 1) then
+			DataService.AddItem(to, it.id, 1)
+		end
+		return
+	end
 	if it.kind == "character" then
 		local profile = DataService.GetProfile(from)
 		if profile then

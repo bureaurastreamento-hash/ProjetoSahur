@@ -95,7 +95,7 @@ local function offered(side: any, kind: string, id: string): boolean
 	return false
 end
 
-local KIND_LABEL: { [string]: string } = { character = "personagem", cosmetic = "cosmético", emote = "emote" }
+local KIND_LABEL: { [string]: string } = { character = "personagem", cosmetic = "cosmético", emote = "emote", item = "mochila" }
 
 local function render()
 	if not state then

@@ -26,6 +26,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local StandConfig = require(Modules:WaitForChild("StandConfig"))
 local AwakeningDefs = require(Modules:WaitForChild("AwakeningDefs"))
 local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local Controls = require(Modules:WaitForChild("Controls"))
@@ -108,11 +109,16 @@ local function ownsCharacter(id: string): boolean
 	if not def then
 		return false
 	end
+	local access = CharacterDefs.AccessOf(def)
+	local dev = localPlayer:GetAttribute("IsDeveloper") == true
+	if access == "human" then
+		return true
+	elseif access == "stand" then
+		return dev or localPlayer:GetAttribute("AllCharacters") == true or (profile ~= nil and profile.power == id)
+	end
 	if profile ~= nil and table.find(profile.unlockedCharacters or {}, id) ~= nil then
 		return true
 	end
-	local access = CharacterDefs.AccessOf(def)
-	local dev = localPlayer:GetAttribute("IsDeveloper") == true
 	if access == "early" or access == "admin" or access == "drop" then
 		return dev
 	elseif access == "vip" then
@@ -242,8 +248,22 @@ local function refreshSlots()
 			slot.Visible = false
 		end
 	end
+	ultSlot.Visible = def ~= nil and #def.AwakenedAbilities > 0 -- Humano (sem Stand) não desperta
 	local awDef = if typeof(characterId) == "string" then AwakeningDefs.Get(characterId) else nil
 	;(ultSlot:FindFirstChild("Name") :: TextLabel).Text = if awDef and awDef.UltName then awDef.UltName else "Despertar"
+end
+
+--- Stand: nível de maestria que ainda falta para a tecla (nil = liberada). slot 0 = G. Espelha o AbilityService.
+local function masteryLock(characterId: any, slot: number): number?
+	if typeof(characterId) ~= "string" or localPlayer:GetAttribute("DevNoCooldown") == true then
+		return nil
+	end
+	local required = StandConfig.RequiredMastery(characterId, slot)
+	if not required then
+		return nil
+	end
+	local xp = if profile ~= nil and profile.mastery then profile.mastery[characterId] or 0 else 0
+	return if ProgressionConfig.MasteryLevel(xp) < required then required else nil
 end
 
 local function setCooldownOverlay(slot: Frame, remaining: number, total: number)
@@ -270,6 +290,11 @@ local function updateCooldowns()
 		local cd = if ability then byId[ability.Id] else cooldowns[i]
 		local remaining = if cd then cd.readyAt - now else 0
 		setCooldownOverlay(slot, remaining, if ability then ability.Cooldown else remaining)
+		local lock = masteryLock(characterId, i)
+		if lock then -- trancada por maestria do Stand
+			(slot:FindFirstChild("Cooldown") :: Frame).Size = UDim2.fromScale(1, 1);
+			(slot:FindFirstChild("CooldownText") :: TextLabel).Text = ("M%d"):format(lock)
+		end
 	end
 	-- Ultimate (G): trancada até a carga encher; no Awakening mostra o tempo restante do modo
 	local e = localPlayer:GetAttribute("Energy")
@@ -277,9 +302,13 @@ local function updateCooldowns()
 	local ultOverlay = ultSlot:FindFirstChild("Cooldown") :: Frame
 	local ultText = ultSlot:FindFirstChild("CooldownText") :: TextLabel
 	local awakenedDuration = tonumber(localPlayer:GetAttribute("AwakenedDuration")) or CombatConfig.Awakening.Duration
+	local ultLock = masteryLock(characterId, 0)
 	if awakened then
 		ultOverlay.Size = UDim2.fromScale(1, math.clamp((awakenedUntil - now) / awakenedDuration, 0, 1))
 		ultText.Text = ("%d"):format(math.ceil(awakenedUntil - now))
+	elseif ultLock then
+		ultOverlay.Size = UDim2.fromScale(1, 1)
+		ultText.Text = ("M%d"):format(ultLock)
 	elseif charged then
 		ultOverlay.Size = UDim2.fromScale(1, 0)
 		ultText.Text = ""
@@ -383,7 +412,7 @@ local function refreshMatchUI()
 	queueButton.Visible = not MatchConfig.FreeRoam
 	queueButton.Text = if localPlayer:GetAttribute("InQueue") == true then "Sair da fila" else "Entrar na fila"
 	queueButton.BackgroundColor3 = if localPlayer:GetAttribute("InQueue") == true then Color3.fromRGB(160, 60, 60) else Color3.fromRGB(40, 140, 80)
-	selectHint.Text = if MatchConfig.FreeRoam then "Clique para usar ou comprar. Trocar faz respawn (fora de combate)." elseif currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
+	selectHint.Text = if MatchConfig.FreeRoam then "Seu Stand vem da Flecha (mochila, M). Trocar faz respawn (fora de combate)." elseif currentState == "Selecting" then "O round começa em instantes" else "Aguardando jogadores na fila"
 
 	local currentId = localPlayer:GetAttribute("CharacterId")
 	for id, b in characterButtons do
@@ -394,6 +423,9 @@ local function refreshMatchUI()
 		local badge = b:FindFirstChild("Badge") :: TextLabel
 		local stroke = b:FindFirstChildOfClass("UIStroke")
 		local color = if def and def.Color then def.Color else CARD_SELECTED
+		if access == "stand" then
+			b.Visible = owned -- Stand só aparece se for o SEU (a Flecha decide; StandConfig)
+		end
 		if id == currentId then
 			status.Text = "SELECIONADO"
 			status.TextColor3 = color
@@ -415,7 +447,14 @@ local function refreshMatchUI()
 			status.TextColor3 = CARD_LOCKED
 			status.BackgroundTransparency = 0.85
 		end
-		if access == "vip" then
+		local rarity = if access == "stand" then StandConfig.RarityOf(id) else nil
+		if rarity then
+			badge.Text = "STAND " .. string.upper(rarity.Name)
+			badge.TextColor3 = rarity.Color
+		elseif access == "human" then
+			badge.Text = "HUMANO"
+			badge.TextColor3 = CARD_MUTED
+		elseif access == "vip" then
 			badge.Text = "VIP"
 			badge.TextColor3 = CARD_LOCKED
 		elseif access == "early" then
@@ -449,7 +488,7 @@ function HUDController.CharacterStatus(id: string): (string, boolean, boolean)
 	end
 	local access = CharacterDefs.AccessOf(def)
 	local dev = localPlayer:GetAttribute("IsDeveloper") == true
-	local visible = access ~= "admin" or dev
+	local visible = (access ~= "admin" or dev) and (access ~= "stand" or ownsCharacter(id))
 	local current = localPlayer:GetAttribute("CharacterId") == id
 	local suffix
 	if current then

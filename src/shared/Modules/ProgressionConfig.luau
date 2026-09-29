@@ -40,9 +40,11 @@ export type MissionDef = {
 	text: string, -- %d = goal
 }
 
--- Maestria por personagem (ref. HB): usar = ganha; nível = título no cartão. Só cosmético/progresso.
+-- Maestria por personagem/Stand: usar = ganha. Nos Stands ela LIBERA as teclas (StandConfig.SlotUnlock).
 ProgressionConfig.Mastery = {
 	Kill = 25,
+	NpcKill = 12, -- mob da campanha/bot (29/09)
+	NpcBoss = 80, -- chefe da campanha (StoryKillKind com "boss")
 	DuelWin = 30,
 	Boss = 40,
 	PerLevel = 150, -- XP de maestria por nível

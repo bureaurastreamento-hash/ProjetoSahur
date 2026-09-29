@@ -23,6 +23,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local DataConfig = require(Modules:WaitForChild("DataConfig"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
+local Combatant = require(Modules:WaitForChild("Combatant"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
@@ -191,6 +192,16 @@ function ProgressionService.Start()
 			ProgressionService.AddMastery(killer, ProgressionConfig.Mastery.Kill, "kill")
 			ProgressionService.Progress(killer, "kills", 1)
 		end
+	end)
+	-- NPCs (mobs e chefes da campanha) também dão maestria ao Stand em uso
+	HealthService.FighterDied.Event:Connect(function(victim: any, killer: any)
+		local player = Combatant.PlayerOf(killer)
+		if not player or not Combatant.IsBot(victim) then
+			return
+		end
+		local kind = victim:GetAttribute("StoryKillKind")
+		local boss = typeof(kind) == "string" and kind:find("boss") ~= nil
+		ProgressionService.AddMastery(player, if boss then ProgressionConfig.Mastery.NpcBoss else ProgressionConfig.Mastery.NpcKill, "npc")
 	end)
 	-- tempo jogado (minutos) para as conquistas de "playtime"
 	task.spawn(function()

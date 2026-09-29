@@ -25,6 +25,8 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local StandConfig = require(Modules:WaitForChild("StandConfig"))
+local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
@@ -1287,6 +1289,18 @@ local function pickVariant(player: Fighter, character: Model, ability: Character
 	return variant, name
 end
 
+--- Stand: a tecla só libera com maestria suficiente (StandConfig). Bots e modo DEV "sem cooldown" ignoram.
+local function masteryMissing(player: Fighter, characterId: string, slot: number): number?
+	local required = StandConfig.RequiredMastery(characterId, slot)
+	local owner = Combatant.PlayerOf(player)
+	if not required or not owner or player:GetAttribute("DevNoCooldown") == true then
+		return nil
+	end
+	local profile = DataService.GetProfile(owner)
+	local level = ProgressionConfig.MasteryLevel(if profile then profile.mastery[characterId] or 0 else 0)
+	return if level < required then required else nil
+end
+
 local function deny(player: Fighter, slot: number, reason: string)
 	Log.debug(("[AbilityService] %s slot %d negado: %s"):format(player.Name, slot, reason))
 	Combatant.Notify(player, notifyAbilityDenied, slot, reason)
@@ -1310,6 +1324,10 @@ local function onRequestAbility(player: Fighter, slot: any, rawDirection: any)
 	local ability = CharacterDefs.GetAbility(state.characterId, slot, AbilityService.IsAwakened(player))
 	if not ability then
 		return deny(player, slot, "no_ability")
+	end
+	local needMastery = masteryMissing(player, state.characterId, slot)
+	if needMastery then
+		return deny(player, slot, "mastery:" .. needMastery)
 	end
 	local character = Combatant.CharacterOf(player)
 	if not character or not HealthService.IsAlive(character) then
@@ -1390,6 +1408,14 @@ local function onRequestAwaken(player: Fighter)
 	end
 	if AbilityService.IsAwakened(player) then
 		return
+	end
+	local kit = CharacterDefs.Get(state.characterId)
+	if not kit or #kit.AwakenedAbilities == 0 then
+		return deny(player, 0, "no_awaken") -- Humano: sem Stand não desperta
+	end
+	local needMastery = masteryMissing(player, state.characterId, 0)
+	if needMastery then
+		return deny(player, 0, "mastery:" .. needMastery)
 	end
 	if state.energy < CharacterDefs.Energy.Max and player:GetAttribute(ATTR_INFINITE_ENERGY) ~= true then
 		return deny(player, 0, "energy")

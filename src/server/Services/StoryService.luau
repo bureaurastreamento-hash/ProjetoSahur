@@ -13,6 +13,7 @@ local DataService = require(script.Parent:WaitForChild("DataService"))
 local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
+local StandService = require(script.Parent:WaitForChild("StandService"))
 
 local StoryService = {}
 local notifyStory: RemoteEvent
@@ -95,6 +96,7 @@ end
 -- Conclui o ato atual: grava a flag dele, passa para o próximo e manda a fala do guia do ato novo.
 local function finishAct(player: Player, profile: any, act: StoryConfig.Act, silent: boolean?)
 	if act.UnlockFlag then profile.story.flags[act.UnlockFlag] = true end
+	if act.Reward and not profile.story.completed[act.Id] then StandService.Give(player, act.Reward, "story") end
 	profile.story.completed[act.Id] = true
 	profile.story.act += 1
 	profile.story.counters = {}

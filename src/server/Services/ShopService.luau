@@ -53,8 +53,10 @@ local function applyPerk(player: Player, key: string)
 	elseif key == "all_characters" then
 		for _, id in CharacterDefs.Order do
 			local def = CharacterDefs.Get(id)
-			if def and CharacterDefs.AccessOf(def) ~= "early" then
-				DataService.GrantCharacter(player, id) -- moedas e VIP; acesso antecipado continua fechado
+			local access = def and CharacterDefs.AccessOf(def)
+			-- Stands NÃO: só pela Flecha/Disco (StandConfig, 29/09); o passe não dá Stand
+			if def and access ~= "early" and access ~= "stand" and access ~= "human" then
+				DataService.GrantCharacter(player, id)
 			end
 		end
 	end

@@ -124,14 +124,9 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 	row.Text = ("K/D: %.2f"):format(kd)
 	row.Parent = statsList
 
-	local owned = {}
-	for _, id in CharacterDefs.Order do
-		local def = CharacterDefs.Get(id)
-		if def and CharacterDefs.AccessOf(def) ~= "admin" and (def.UnlockCost <= 0 or table.find(profile.unlockedCharacters or {}, id)) then
-			table.insert(owned, def.DisplayName)
-		end
-	end
-	profileCharacters.Text = ("Personagens: %s"):format(table.concat(owned, ", "))
+	-- Stands (29/09): um Stand ativo + raça; o resto está na mochila (M)
+	local standDef = if profile.power and profile.power ~= "" then CharacterDefs.Get(profile.power) else nil
+	profileCharacters.Text = ("Stand: %s · Raça: %s"):format(if standDef then standDef.DisplayName else "nenhum (humano)", tostring(profile.race or "Humano"))
 
 	-- Avisa no ícone quando dá para desbloquear algo novo
 	if not notifiedAffordable then

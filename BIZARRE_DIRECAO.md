@@ -54,7 +54,9 @@ ridiculamente baixo). **Chance fixa por tentativa, sem pity.** O topo (Anômalo)
   - **Técnica**: estilo de luta inicial (energia corporal, inspirada na respiração);
   - **Arma**: arma inicial (espada/lança/outra básica);
   - **Manifestação**: o Humanoider_20 dá a **Flecha** já na Missão 2 (sorteio de Stand por raridade).
-  Quem escolheu Técnica ou Arma ganha a Flecha ao vencer o Herdeiro da Névoa (fim da Ilha 1). No fim da Ilha 1
+  Quem escolheu Técnica ou Arma ganha a Flecha ao vencer o Herdeiro da Névoa (fim da Ilha 1).
+  *Implementado (29/09)*: Flecha/Stands/mochila/maestria; hoje TODOS ganham a Flecha no Herdeiro — a escolha de rota
+  entra junto com o sistema de armas/estilos. No fim da Ilha 1
   todo mundo tem Stand + estilo ou arma. A rota **não prende**: a Missão 8 ("Respira") ensina Técnica para todos,
   armas caem de mobs/bosses, Flechas aparecem no mapa, em missões, bosses e trocas.
 - **Build** = Poder (Stand/raça) + Arma + Estilo de luta, cada um com a sua **maestria** (`profile.mastery`).

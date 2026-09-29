@@ -260,6 +260,28 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## 2026-09-29 (noite) — STANDS, RAÇAS, MOCHILA E WIPE (leva 2)
+- **WIPE**: `DataConfig.SchemaVersion` 4 → **5** = DataStore novo `PlayerData_v5` (todo mundo do zero; o `_v4` ficou
+  intacto). Perfil ganhou `power` (Stand ativo), `race`, `inventory` e `born`.
+- `StandConfig` (compartilhado): 7 raridades (Comum 55% … Anômalo 0,05%), **chance fixa, sem pity**; Stands = kits
+  atuais (Bruno comum, Jotaro incomum, Kira raro, Dio lendário; Rick continua drop do boss); teclas liberadas por
+  **maestria do Stand** (1→M1, 2→M2, R→M3, 3→M4, 4→M6, G→M8); raças (Humano; Vampiro e Homem de Pedra por missão, efeitos
+  ainda não); itens `flecha`, `stand:<id>` (Disco de Stand), `raca:<id>` (Essência); nascer "abençoado" 0,2%/0,1%.
+- Kit **Humano** (M1/dash/block, sem ult) é o padrão (`CharacterDefs.DefaultCharacter`). Os 4 kits viraram
+  `Access = "stand"`: `DataService.HasCharacter` só aceita o Stand ATIVO (dev e mod "todos" usam qualquer um).
+  `GrantCharacter` de Stand (conquista, loot, admin) = **disco na mochila**. VIP não dá mais o Dio; passe "todos" saiu.
+- `StandService`: Flecha sem Stand = equipa; com Stand = disco já vai para a mochila e o jogador escolhe "usar (perde o
+  atual)" ou "guardar"; repetido = disco direto. Disco/Essência: usar troca (o atual é perdido). Maestria fica salva.
+- Maestria agora sobe também matando NPC (12) e chefe da campanha (80). `AbilityService` recusa tecla trancada
+  (`mastery:N`) e o Humano no G (`no_awaken`); HUD mostra "M4" no slot trancado e esconde o G do Humano.
+- **Mochila** (`InventoryController`, tecla **M** + botão na tela): Stand/raridade/maestria/próxima tecla, raça, itens com
+  "Usar"; pop-up do sorteio. **Troca** aceita itens da mochila (1 unidade por entrada). Humanoider dá a **Flecha** ao
+  vencer o Herdeiro da Névoa (`Reward` no ato). DEV: "Dar todos" = discos + 5 Flechas; "Tirar todos" = humano e mochila
+  vazia; toggle "sem cooldown" ignora as travas de maestria.
+- Testado via MCP (servidor): tudo acima. **Falta o dono ver**: mochila, pop-up, cadeados no HUD, trocar Flecha entre 2
+  clientes. **Ainda não feito**: rota inicial Técnica/Arma (espera o sistema de armas/estilos), efeitos das raças,
+  Flechas no mapa/drop de chefe.
+
 ## 2026-09-29 (tarde) — CHÃO DAS ILHAS DE PEÇAS (leva 1 aprovada pelo dono)
 - `tools/gerar_chao_ilhas.py` → `src/workspace/ChaoIlhas.model.json` (`Workspace.Sahur.ChaoIlhas`, 1206 peças, no git).
   Camadas por LINHA numa grade fixa de Z (20 studs): **topo** y -0.15 (d ≤ 0.90 da elipse), **praia** -0.9 (≤ 1.0),

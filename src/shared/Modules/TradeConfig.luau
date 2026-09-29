@@ -11,6 +11,7 @@
 
 local CharacterDefs = require(script.Parent:WaitForChild("CharacterDefs"))
 local CosmeticsConfig = require(script.Parent:WaitForChild("CosmeticsConfig"))
+local StandConfig = require(script.Parent:WaitForChild("StandConfig"))
 
 local TradeConfig = {}
 
@@ -21,7 +22,7 @@ TradeConfig.ConfirmDelay = 2 -- s entre os dois "pronto" e o botão CONFIRMAR li
 TradeConfig.AllowLimited = true -- itens de passe (Limited) podem circular por troca (dono decide)
 TradeConfig.MaxPoints = 100000
 
-export type Item = { kind: string, id: string, name: string, color: Color3? } -- kind: cosmetic | emote | character
+export type Item = { kind: string, id: string, name: string, color: Color3? } -- kind: cosmetic | emote | character | item (mochila: 1 unidade)
 
 --- O que este perfil pode oferecer numa troca (itens; pontos são à parte).
 --- Personagem: só os comprados com pontos (nunca o inicial, VIP, forma de boss ou acesso antecipado).
@@ -43,6 +44,16 @@ function TradeConfig.Tradeable(profile: any): { Item }
 			table.insert(list, { kind = "cosmetic", id = id, name = item.Name, color = item.Color })
 		end
 	end
+	-- mochila (StandConfig): Flechas, Discos de Stand, Essências — 1 unidade por entrada da troca
+	for id, n in (profile.inventory or {}) :: { [string]: number } do
+		local info = StandConfig.ItemInfo(id, function(ref)
+			local def = CharacterDefs.Get(ref)
+			return def and def.DisplayName
+		end)
+		if info and typeof(n) == "number" and n >= 1 then
+			table.insert(list, { kind = "item", id = id, name = info.Name, color = info.Color })
+		end
+	end
 	for _, id in (profile.emotes or {}) :: { string } do
 		local emote = CosmeticsConfig.GetEmote(id)
 		if emote and CosmeticsConfig.IsTradeable(emote) and (TradeConfig.AllowLimited or emote.Limited ~= true) then
@@ -53,6 +64,13 @@ function TradeConfig.Tradeable(profile: any): { Item }
 end
 
 function TradeConfig.NameOf(kind: string, id: string): string
+	if kind == "item" then
+		local info = StandConfig.ItemInfo(id, function(ref)
+			local def = CharacterDefs.Get(ref)
+			return def and def.DisplayName
+		end)
+		return if info then info.Name else id
+	end
 	if kind == "character" then
 		local def = CharacterDefs.Get(id)
 		return if def then def.DisplayName else id

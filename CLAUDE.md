@@ -40,6 +40,9 @@ presuma que uma pasta está vazia ou que um sistema não existe sem verificar an
   mantidos). `StoryConfig` rev 2 (atos com `Mission`/`Arrive`/`UnlockFlag`/`Guide`); mudou ordem de ato → subir
   `Revision` + migração no `StoryService`. Nunca mostrar o nome "Carlos" antes da Missão 18. Nada de palavrão em texto do jogo.
 - Falta testar no Play (lista no PROGRESSO) e o dono publicar pelo Studio.
+- **Stands (29/09)**: schema 5 (wipe = `PlayerData_v5`); `StandConfig` + `StandService` + mochila (M). Kit padrão =
+  `Humano`; Stand = kit com `Access = "stand"`, só o ATIVO (`profile.power`) é jogável; dar Stand = disco na mochila
+  (`DataService.GrantCharacter`/`AddItem`). Teclas do Stand por maestria (`StandConfig.SlotUnlock`).
 - **Chão das ilhas = PEÇAS LISAS** (SmoothPlastic, só cor — NUNCA os materiais realistas Grass/Sand/Rock do Roblox)
   (`tools/gerar_chao_ilhas.py` → `Workspace.Sahur.ChaoIlhas`); Terrain só tem o MAR
   (`MontarMundo` = só mar; backup do terreno antigo em `ServerStorage.Backup_Terreno_2026-09-29`). Coisa nova perto da

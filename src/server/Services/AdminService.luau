@@ -496,11 +496,12 @@ end
 perTarget.GrantAll = function(_, target)
 	local n = 0
 	for _, id in CharacterDefs.Order do
-		if DataService.GrantCharacter(target, id) then
+		if DataService.GrantCharacter(target, id) then -- Stand = disco na mochila (StandConfig)
 			n += 1
 		end
 	end
-	return true, ("%s: +%d personagens"):format(target.Name, n)
+	DataService.AddItem(target, "flecha", 5)
+	return true, ("%s: +%d personagens/discos e +5 Flechas (mochila, M)"):format(target.Name, n)
 end
 
 perTarget.RevokeAll = function(_, target)
@@ -510,8 +511,14 @@ perTarget.RevokeAll = function(_, target)
 			n += 1
 		end
 	end
+	local profile = DataService.GetProfile(target)
+	if profile then -- Stands: volta a humano e esvazia a mochila
+		profile.power = ""
+		table.clear(profile.inventory)
+		DataService.MarkDirty(target)
+	end
 	AdminService.ForceCharacter(target, CharacterDefs.DefaultCharacter)
-	return true, ("%s: -%d personagens"):format(target.Name, n)
+	return true, ("%s: -%d personagens, sem Stand e mochila vazia"):format(target.Name, n)
 end
 
 -- Ações --------------------------------------------------------------------------

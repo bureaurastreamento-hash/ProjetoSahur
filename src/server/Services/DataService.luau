@@ -25,6 +25,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local DataConfig = require(Modules:WaitForChild("DataConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
+local StandConfig = require(Modules:WaitForChild("StandConfig"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
@@ -271,6 +272,21 @@ local function migrate(raw: any): DataConfig.Profile
 	if typeof(raw.lastUpdateSeen) == "string" then
 		profile.lastUpdateSeen = raw.lastUpdateSeen:sub(1, 16)
 	end
+	-- Stands/raças/inventário (schema 5)
+	if typeof(raw.power) == "string" and StandConfig.IsStand(raw.power) then
+		profile.power = raw.power
+	end
+	if typeof(raw.race) == "string" and StandConfig.GetRace(raw.race) then
+		profile.race = raw.race
+	end
+	if typeof(raw.inventory) == "table" then
+		for id, n in raw.inventory do
+			if typeof(id) == "string" and typeof(n) == "number" and n >= 1 and StandConfig.ItemInfo(id) then
+				profile.inventory[id] = math.floor(n)
+			end
+		end
+	end
+	profile.born = raw.born == true
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
 end
@@ -432,10 +448,15 @@ function DataService.SetCoins(player: Player, amount: number)
 	touch(player)
 end
 
---- [Admin] Concede personagem sem cobrar. Retorna false se já tinha/inexistente.
+--- Concede personagem sem cobrar. Retorna false se já tinha/inexistente.
+--- Stand (StandConfig) vira um DISCO no inventário (conquista, loot, admin): quem decide usar é o jogador.
 function DataService.GrantCharacter(player: Player, characterId: string): boolean
 	local profile = DataService.GetProfile(player)
-	if not profile or not CharacterDefs.Get(characterId) or table.find(profile.unlockedCharacters, characterId) then
+	local def = CharacterDefs.Get(characterId)
+	if profile and def and CharacterDefs.AccessOf(def) == "stand" then
+		return DataService.AddItem(player, "stand:" .. characterId, 1)
+	end
+	if not profile or not def or table.find(profile.unlockedCharacters, characterId) then
 		return false
 	end
 	table.insert(profile.unlockedCharacters, characterId)
@@ -459,6 +480,29 @@ function DataService.RevokeCharacter(player: Player, characterId: string): boole
 	return true
 end
 
+--- Inventário (StandService): itens de StandConfig.ItemInfo ("flecha", "stand:<id>", "raca:<id>").
+function DataService.AddItem(player: Player, itemId: string, amount: number): boolean
+	local profile = DataService.GetProfile(player)
+	if not profile or not StandConfig.ItemInfo(itemId) or amount <= 0 then
+		return false
+	end
+	profile.inventory[itemId] = (profile.inventory[itemId] or 0) + math.floor(amount)
+	touch(player)
+	return true
+end
+
+--- Tira `amount` do item; false (e nada muda) se não tinha o suficiente.
+function DataService.TakeItem(player: Player, itemId: string, amount: number): boolean
+	local profile = DataService.GetProfile(player)
+	local have = if profile then profile.inventory[itemId] or 0 else 0
+	if not profile or amount <= 0 or have < amount then
+		return false
+	end
+	profile.inventory[itemId] = if have - amount > 0 then have - amount else nil
+	touch(player)
+	return true
+end
+
 --- [Admin] Volta o perfil ao padrão (salva no próximo autosave/saída).
 function DataService.ResetProfile(player: Player)
 	local session = sessions[player]
@@ -475,6 +519,14 @@ function DataService.HasCharacter(player: Player, characterId: string): boolean
 		return false
 	end
 	local profile = DataService.GetProfile(player)
+	local kind = CharacterDefs.AccessOf(def)
+	if kind == "human" then
+		return true
+	elseif kind == "stand" then
+		-- só o Stand ATIVO (StandService); dev e mod "todos os personagens" usam qualquer um
+		return player:GetAttribute("IsDeveloper") == true or player:GetAttribute("AllCharacters") == true
+			or (profile ~= nil and profile.power == characterId)
+	end
 	if profile ~= nil and table.find(profile.unlockedCharacters, characterId) ~= nil then
 		return true -- concedido (admin GrantAll / passe "Todos os personagens")
 	end

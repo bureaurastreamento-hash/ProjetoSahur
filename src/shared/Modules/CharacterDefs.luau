@@ -91,7 +91,7 @@ export type CharacterDef = {
 	Id: string,
 	DisplayName: string,
 	UnlockCost: number, -- moedas; 0 = todos começam com ele (só vale com Access = "coins"/nil)
-	Access: string?, -- nil/"coins" = pontos | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs) | "admin" = só devs, escondido dos outros | "drop" = só cai do boss (BossConfig.Loot)
+	Access: string?, -- "stand" = só pela Flecha/Disco (StandConfig; o jogador tem UM Stand ativo) | nil/"coins" = pontos | "vip" = passe VIP (ShopConfig) | "early" = acesso antecipado (bloqueado; só devs) | "admin" = só devs, escondido dos outros | "drop" = só cai do boss (BossConfig.Loot)
 	Model: string?, -- nome do rig em ServerStorage.CharacterModels (arte) para "Ser o personagem escolhido"; nil = o Id
 	Tagline: string?, -- subtítulo no cartão da seleção
 	Color: Color3?, -- cor do personagem (cartão, rastro do dash)
@@ -112,7 +112,7 @@ CharacterDefs.Energy = {
 	GainOnHitTaken = 1,
 }
 
-CharacterDefs.DefaultCharacter = "Jotaro"
+CharacterDefs.DefaultCharacter = "Humano" -- todo mundo nasce humano (StandConfig); Stand vem da Flecha
 
 --- Afinação global de dash (dash universal do Q e Effect.Type = "Dash"). Duration × escala conforme a
 --- direção. O cliente move; o servidor amostra a hitbox por Duration × ForwardScale (o maior).
@@ -128,12 +128,29 @@ CharacterDefs.SwapOutOfCombatSeconds = 10
 
 CharacterDefs.Characters = {
 	-- =====================================================================================================
-	-- JOTARO — Star Platinum (inicial): soco, agarrão e pressão de perto
+	-- HUMANO — sem Stand (todo mundo nasce assim): só M1, dash e block. Sem ult.
+	-- =====================================================================================================
+	Humano = {
+		Id = "Humano",
+		DisplayName = "Humano",
+		UnlockCost = 0,
+		Access = "human",
+		Tagline = "Sem Stand · a Flecha decide o resto",
+		Color = Color3.fromRGB(220, 200, 170),
+		Image = "",
+		Abilities = {},
+		Ultimate = { Duration = 0 },
+		AwakenedAbilities = {},
+	} :: CharacterDef,
+
+	-- =====================================================================================================
+	-- JOTARO — Star Platinum (Stand incomum): soco, agarrão e pressão de perto
 	-- =====================================================================================================
 	Jotaro = {
 		Id = "Jotaro",
 		DisplayName = "Jotaro",
 		UnlockCost = 0,
+		Access = "stand",
 		Tagline = "Star Platinum · punhos e pressão",
 		Color = Color3.fromRGB(120, 90, 255),
 		Image = "",
@@ -182,7 +199,8 @@ CharacterDefs.Characters = {
 	Swift = {
 		Id = "Swift", -- id interno continua "Swift" (perfis salvos, pastas de animação/som/VFX); na tela é o Bruno
 		DisplayName = "Bruno Gollini",
-		UnlockCost = 100,
+		UnlockCost = 0,
+		Access = "stand",
 		Tagline = "Velocidade e domínio do tempo",
 		Color = Color3.fromRGB(110, 230, 255),
 		Image = "",
@@ -227,13 +245,13 @@ CharacterDefs.Characters = {
 	} :: CharacterDef,
 
 	-- =====================================================================================================
-	-- DIO — The World (VIP): tempo parado, facas, rolo compressor, vampiro
+	-- DIO — The World (Stand lendário): tempo parado, facas, rolo compressor, vampiro
 	-- =====================================================================================================
 	Dio = {
 		Id = "Dio",
 		DisplayName = "Dio",
 		UnlockCost = 0,
-		Access = "vip",
+		Access = "stand",
 		Tagline = "The World · o tempo é dele",
 		Color = Color3.fromRGB(255, 205, 80),
 		Image = "",
@@ -277,7 +295,8 @@ CharacterDefs.Characters = {
 	Kira = {
 		Id = "Kira",
 		DisplayName = "Yoshikage Kira",
-		UnlockCost = 250,
+		UnlockCost = 0,
+		Access = "stand",
 		Tagline = "Killer Queen · tudo que ele toca vira bomba",
 		Color = Color3.fromRGB(170, 110, 255),
 		Image = "",
@@ -469,9 +488,9 @@ CharacterDefs.Characters = {
 
 -- Roster na seleção (dono, 2026-09-24): Sahur sai da lista (fica só como acesso antecipado no código);
 -- Overlord continua só admin.
-CharacterDefs.Order = { "Jotaro", "Swift", "Dio", "Kira", "Rick", "Overlord" }
+CharacterDefs.Order = { "Humano", "Jotaro", "Swift", "Dio", "Kira", "Rick", "Overlord" }
 
---- "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
+--- "human" | "stand" | "coins" | "vip" | "early" | "admin" | "drop" | "form" (só via ritual, nunca selecionável)
 function CharacterDefs.AccessOf(def: CharacterDef): string
 	return def.Access or "coins"
 end

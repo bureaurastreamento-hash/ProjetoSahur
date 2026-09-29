@@ -258,10 +258,12 @@ local function applyToPlayer(player: Player, rules: { [string]: any })
 	player:SetAttribute("NoAbilities", if rules.NoAbilities == true then true else nil)
 	player:SetAttribute("ModSpeedMult", if rules.WalkSpeedMult and rules.WalkSpeedMult ~= 1 then rules.WalkSpeedMult else nil)
 	if rules.AllCharacters == true then
-		-- só na sessão: em servidor privado nada salva (DataService)
+		-- só na sessão: em servidor privado nada salva (DataService). Stands: atributo (DataService.HasCharacter)
+		player:SetAttribute("AllCharacters", true)
 		for _, id in CharacterDefs.Order do
 			local def = CharacterDefs.Get(id)
-			if def and CharacterDefs.AccessOf(def) ~= "early" then
+			local access = def and CharacterDefs.AccessOf(def)
+			if def and access ~= "early" and access ~= "stand" and access ~= "human" then
 				DataService.GrantCharacter(player, id)
 			end
 		end

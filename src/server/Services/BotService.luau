@@ -95,7 +95,7 @@ local function nextCharacterId(): string
 	for _, id in CharacterDefs.Order do
 		local def = CharacterDefs.Get(id)
 		local access = def and CharacterDefs.AccessOf(def)
-		if def and access ~= "form" and access ~= "admin" and access ~= "early" then
+		if def and access ~= "form" and access ~= "admin" and access ~= "early" and access ~= "human" then
 			table.insert(ids, id)
 		end
 	end

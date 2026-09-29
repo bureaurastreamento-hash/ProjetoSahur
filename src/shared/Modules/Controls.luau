@@ -29,6 +29,7 @@ Controls.Keyboard = ({
 	Awaken = Enum.KeyCode.G,
 	Counter = Enum.KeyCode.E, -- anti-2v1 "Revide" (CounterService); E também é a tecla dos ProximityPrompts: com prompt na tela não dispara
 	Emotes = Enum.KeyCode.B,
+	Inventory = Enum.KeyCode.M, -- mochila: Stand, raça, Flechas e discos (InventoryController)
 	ShiftLock = Enum.KeyCode.LeftShift,
 	Scoreboard = Enum.KeyCode.Tab,
 } :: { [string]: any }) :: { [string]: Enum.KeyCode | Enum.UserInputType }

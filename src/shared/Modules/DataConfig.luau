@@ -8,7 +8,9 @@
 local DataConfig = {}
 
 DataConfig.StoreName = "PlayerData"
-DataConfig.SchemaVersion = 4 -- 3 = eventPoints (pontos de evento, 2026-09-20); 4 = lastUpdateSeen (log de atualização, 2026-09-25)
+DataConfig.SchemaVersion = 5 -- 3 = eventPoints (2026-09-20); 4 = lastUpdateSeen (2026-09-25); 5 = Stands/raças/inventário (2026-09-29)
+-- O DataStore é "<StoreName>_v<SchemaVersion>": subir a versão COMEÇA DO ZERO (o v4 fica intacto). A 5 foi o WIPE
+-- pedido pelo dono para a leva de Stands (todo mundo renasce humano).
 
 DataConfig.AutosaveInterval = 90 -- segundos
 DataConfig.LoadRetries = 3
@@ -78,6 +80,11 @@ export type Profile = {
 	clanTag: string?, -- clã atual (ClanService; a verdade é o registro do clã, isto é cache)
 	settings: { [string]: any }, -- acessibilidade/controles (Controls.Settings; SettingsService valida)
 	lastUpdateSeen: string, -- última versão do log de atualização que o jogador viu ("" = nenhuma; UpdateLogService)
+	-- Stands e raças (StandService/StandConfig, schema 5)
+	power: string, -- Stand ATIVO (CharacterDefs id com Access "stand"); "" = humano sem Stand
+	race: string, -- StandConfig.Races id ("Humano" por padrão)
+	inventory: { [string]: number }, -- itemId -> quantidade ("flecha", "stand:<id>", "raca:<id>")
+	born: boolean, -- já passou pelo sorteio de nascimento ("abençoado")
 }
 
 function DataConfig.DefaultProfile(): Profile
@@ -85,7 +92,7 @@ function DataConfig.DefaultProfile(): Profile
 		schemaVersion = DataConfig.SchemaVersion,
 		coins = 0,
 		eventPoints = 0,
-		unlockedCharacters = { "Jotaro" },
+		unlockedCharacters = { "Humano" },
 		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0, tournamentWins = 0 }, -- tournamentWins: "Último de pé" (D3); perfil antigo começa em 0 (a carga copia só chaves conhecidas)
 		xp = 0,
 		level = 1,
@@ -101,6 +108,10 @@ function DataConfig.DefaultProfile(): Profile
 		rating = 1000,
 		settings = {},
 		lastUpdateSeen = "",
+		power = "",
+		race = "Humano",
+		inventory = {},
+		born = false,
 	}
 end
 

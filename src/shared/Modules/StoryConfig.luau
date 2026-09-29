@@ -14,6 +14,7 @@
 	  UnlockFlag  — flag gravada ao concluir o ato (portais checam em WorldPortalService).
 	  Guide       — fala do Humanoider_20 quando o player conversa com ele durante este ato.
 	  Trace       — Rastro de Carlos ligado ao ato (texto em StoryConfig.Traces).
+	  Reward      — itens entregues ao CONCLUIR o ato ({ [itemId] = n }, StandService.Give; ex.: a Flecha).
 ]]
 
 local StoryConfig = {}
@@ -41,6 +42,7 @@ export type Act = {
 	Guide: string?,
 	Trace: string?,
 	Hint: string?,
+	Reward: { [string]: number }?,
 }
 
 -- Rastros de Carlos: o que o player vê ao investigar. Nunca revelar mais do que a bíblia permite no ponto.
@@ -70,12 +72,12 @@ StoryConfig.Chapters = {
 		}, Trace = "carlos_era01", Guide = "Tem uma energia estranha nas ruínas ao norte. Vá ver o que é. Com cuidado." },
 		{ Id = "herdeiro_da_nevoa", Mission = "Final da Ilha 1", Region = "ilha_tutorial", Title = "O Herdeiro da Névoa", Objectives = {
 			{ Kind = "fx_cap1_boss", Goal = 1, Text = "Derrote o Herdeiro da Névoa nas ruínas" },
-		}, UnlockFlag = "ilha_pilares_unlocked",
+		}, UnlockFlag = "ilha_pilares_unlocked", Reward = { flecha = 1 }, -- fim do tutorial: a Flecha (StandConfig)
 			Guide = "Aquela peça... é de alguém que morreu. Esqueça isso por agora. Quem está usando a energia da máscara nas ruínas sabe que existem outros mundos. Pare ele." },
 		-- ILHA 2 — DESERTO DO SOL (Parte 2)
 		{ Id = "calor", Mission = "6", Region = "ilha_pilares", Title = "Calor", Objectives = {}, Arrive = "ilha_pilares",
 			Hint = "Atravesse o portal a nordeste do Porto da Névoa até o Deserto do Sol.",
-			Guide = "Acho que descobrimos para onde a nossa história foi parar. Há uma ruptura ativa num deserto de outra época. Portal a nordeste." },
+			Guide = "Você sobreviveu. Tome: uma Flecha. Ela desperta o que já existe em você; ninguém escolhe o que sai. Abra a mochila (M) e use quando estiver pronto. Depois: há uma ruptura ativa num deserto de outra época. Portal a nordeste." },
 		{ Id = "homens_de_pedra", Mission = "7", Region = "ilha_pilares", Title = "Os Homens de Pedra", Objectives = {
 			{ Kind = "fx_pedra_enemy", Goal = 4, Text = "Derrote 4 Homens de Pedra na escavação (leste)" },
 		}, Guide = "A escavação a leste acordou coisas que deviam dormir por mais alguns séculos. A F/X adiantou o relógio delas." },
