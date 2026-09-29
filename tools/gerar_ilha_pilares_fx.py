@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Ilha 2 do Capítulo 1 — Ilha dos Pilares (Parte 2: selva asteca, santuário antigo e COLISEU).
+"""Ilha 2 do Capítulo 1 — DESERTO DO SOL (Parte 2 / Battle Tendency; BIBLIA_CAMPANHA_CAP1_v0.1.md).
+Ids/nomes de arquivo continuam "Pilares" (ilha_pilares, FXPilaresIsland) para não quebrar saves e o Rojo.
+Ruínas astecas, santuário na montanha da cachoeira (= "A Câmara", Missão 9) e COLISEU.
 
 O jardim amazônico, a cachoeira e o santuário do boss são a ArenaExtras (tools/gerar_arena.py, translado
 OFF_SANTUARIO); o piso e os 16 pilares do coliseu vieram da arena antiga (src/workspace/Coliseu.rbxm,
@@ -14,7 +16,7 @@ OUT = Path(__file__).resolve().parent.parent / "src/workspace/FXPilaresIsland.mo
 CX, CZ = 900, -340  # centro do coliseu (= COLISEU em desmontar_arena.luau)
 TRAVERTINE = ("Limestone", (.80, .74, .62)); STONE = ("Cobblestone", (.52, .50, .46)); DARK = ("Basalt", (.2, .18, .17))
 SAND = ("Sand", (.74, .66, .5)); NEON = ("Neon", (.35, .85, 1)); BRONZE = ("Metal", (.55, .38, .2))
-folders = {n: [] for n in ("Coliseu", "Chegada", "Portais", "Spawns")}
+folders = {n: [] for n in ("Coliseu", "Chegada", "Historia", "Portais", "Spawns")}
 
 
 def part(f, n, s, p, m, r=(0, 0, 0), cls="Part", **x):
@@ -85,6 +87,25 @@ for i in range(8):
 for name, dz in (("PilaresToTutorial", -30), ("PilaresToSolPartido", 30)):
     part("Portais", name, (10, 16, 2), (AX - 22, 8, AZ + dz), DARK, (0, 90, 0))
     part("Portais", name + "Core", (7, 12, 1), (AX - 22, 8, AZ + dz), NEON, (0, 90, 0), Transparency=.25, CanCollide=False)
+# ---------------------------------------------------------------------------
+# Campanha (DesertoDoSolService liga pelo NOME). Alturas conferidas por raycast no place (2026-09-29).
+# Missão 7 — escavação a leste: os Homens de Pedra despertaram cedo por causa da F/X.
+EX, EZ = 1070, -490
+for i in range(10):
+    a = i / 10 * math.tau
+    part("Historia", f"EscavacaoBorda{i}", (9, 2.5, 3), (EX + math.cos(a) * 34, 1, EZ + math.sin(a) * 34), SAND,
+         (0, 90 - math.degrees(a), 0))
+for i, (x, z, r) in enumerate(((-12, 8, 20), (0, -22, -35), (2, 18, 70))):  # estátuas deitadas meio enterradas
+    part("Historia", f"HomemDePedraDormindo{i}", (4, 3, 11), (EX + x, .9, EZ + z), DARK, (0, r, 0))
+for i, (x, z) in enumerate(((-10, 20), (10, -5), (-30, 10), (30, -20))):
+    part("Historia", f"EscavacaoPad{i}", (6, .3, 6), (EX + x, .3, EZ + z), NEON, Transparency=.75, CanCollide=False)
+# Missão 8 — o mestre da respiração e o discípulo de treino, perto da praça de chegada.
+part("Historia", "MestreSpot", (4, .3, 4), (720, .3, -470), SAND, Transparency=1, CanCollide=False)
+part("Historia", "DiscipuloPad", (6, .3, 6), (735, .3, -485), NEON, Transparency=.75, CanCollide=False)
+# Missões 9–10 — dentro do santuário (entrada pela cachoeira ao sul; altar do ritual antigo fica em z -557).
+part("Historia", "CamaraMarker", (6, 1, 6), (884, .8, -575), NEON, Transparency=.55, CanCollide=False)
+part("Historia", "SacerdoteSpawn", (8, .4, 8), (900, .6, -600), DARK, Transparency=1, CanCollide=False)
+
 part("Spawns", "PilaresSpawn", (10, 1, 10), (AX, 1, AZ), ("Plastic", (.8, .7, .4)), cls="SpawnLocation",
      Transparency=1, CanCollide=False, Enabled=False, Neutral=True)
 

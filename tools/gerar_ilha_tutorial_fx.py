@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ilha 1 do Capítulo 1 — Ilha do Alvorecer (Parte 1: vila vitoriana com névoa, porto e ruínas góticas).
+"""Ilha 1 do Capítulo 1 — PORTO DA NÉVOA (Parte 1; BIBLIA_CAMPANHA_CAP1_v0.1.md): vila vitoriana com névoa, porto e ruínas góticas.
 
 Layout do mundo (2026-09-28): a ilha fica em volta da Taberna (colina de pedra a leste, x 255..410) e do
 Parque Vitoriano (peças da arena antiga). O CHÃO é Terrain (tools/studio/MontarMundo.luau), então aqui só entram
@@ -110,7 +110,7 @@ for i in range(3):
 light(part("Treino", "FogueiraTreino", (4, 1, 4), (TX, .7, TZ + 22), ("Neon", (1, .45, .15)), CastShadow=False), (1, .5, .2), 2, 26)
 
 # ---------------------------------------------------------------------------
-# Ruínas góticas ao norte: primeiro Rastro de Carlos e o Guardião Fraturado.
+# Ruínas góticas ao norte: primeiro Rastro de Carlos e o Herdeiro da Névoa (GuardiaoSpawn).
 RX, RZ = -20, -190
 cylinder("Ruinas", "PatioRuinas", 45, .6, (RX, .3, RZ), STONE)
 for i in range(12):
@@ -127,7 +127,7 @@ part("Ruinas", "RastroCarlos01", (5, 1, 5), (RX, 1.1, RZ), NEON, Transparency=.2
 part("Ruinas", "GuardiaoSpawn", (8, .4, 8), (RX, .8, RZ - 27), DARK, Transparency=.45, CanCollide=False)
 
 # ---------------------------------------------------------------------------
-# Portal para a Ilha dos Pilares (nordeste, na direção dela). O WorldPortalService liga pelo NOME.
+# Portal para o Deserto do Sol (nordeste, na direção dela). O WorldPortalService liga pelo NOME.
 for name, x, z in (("TutorialToPilares", 380, -190),):
     part("Portais", name, (10, 16, 2), (x, 8, z), DARK, (0, 45, 0))
     part("Portais", name + "Core", (7, 12, 1), (x, 8, z), NEON, (0, 45, 0), Transparency=.25, CanCollide=False)

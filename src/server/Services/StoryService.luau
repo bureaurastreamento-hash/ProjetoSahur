@@ -1,10 +1,14 @@
 --!strict
---[[ Campanha F/X: atos orientados por dados, progresso e Rastros de Carlos. ]]
+--[[
+	Campanha F/X: atos orientados por dados (StoryConfig), progresso, Rastros de Carlos e falas do Humanoider_20.
+	Ao entrar num ato novo, a fala `Guide` dele chega como diálogo (funciona em qualquer ilha, "pelo comunicador").
+]]
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local StoryConfig = require(Modules:WaitForChild("StoryConfig"))
+local WorldConfig = require(Modules:WaitForChild("WorldConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AchievementService = require(script.Parent:WaitForChild("AchievementService"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
@@ -12,6 +16,30 @@ local Combatant = require(Modules:WaitForChild("Combatant"))
 
 local StoryService = {}
 local notifyStory: RemoteEvent
+local notifyQuest: RemoteEvent
+
+StoryService.GuideUserId = 3792294725 -- Humanoider_20
+
+--- Caixa de diálogo do QuestController. Sem `npc` = Humanoider_20; NPC sem `userId` = sem foto.
+function StoryService.Say(player: Player, text: string, npc: string?, userId: number?)
+	if player.Parent ~= Players then return end
+	notifyQuest:FireClient(player, "dialog", { npc = npc or "Humanoider_20", userId = if npc then userId else StoryService.GuideUserId, kind = "progress", text = text })
+end
+
+-- Atos da revisão 1 (ChatGPT, 28/09) → revisão 2 (bíblia do Cap. 1). Quem já tinha passado do Guardião volta para
+-- "Calor" (Ilha 2 agora vem antes do conteúdo que ficava no Sol Partido), com as rotas que já tinha abertas.
+local function migrate(profile: any)
+	local story = profile.story
+	if story.rev >= StoryConfig.Revision then return end
+	if story.chapter == "cap1" and story.rev < 2 then
+		if story.act >= 5 then
+			story.act, story.counters = 5, {}
+			story.flags.ilha_pilares_unlocked = true
+		end
+		story.flags.ilha_mar_cinzas_unlocked = nil
+	end
+	story.rev = StoryConfig.Revision
+end
 
 local function current(player: Player)
 	local profile = DataService.GetProfile(player)
@@ -48,6 +76,11 @@ local function objectivesDone(profile, act): boolean
 end
 
 local function apply(player: Player)
+	local base = DataService.GetProfile(player)
+	if base and base.story.rev < StoryConfig.Revision then
+		migrate(base)
+		DataService.MarkDirty(player)
+	end
 	local profile, chapter = current(player)
 	if not profile then return end
 	if not chapter then
@@ -59,12 +92,35 @@ local function apply(player: Player)
 	push(player)
 end
 
+-- Conclui o ato atual: grava a flag dele, passa para o próximo e manda a fala do guia do ato novo.
+local function finishAct(player: Player, profile: any, act: StoryConfig.Act, silent: boolean?)
+	if act.UnlockFlag then profile.story.flags[act.UnlockFlag] = true end
+	profile.story.completed[act.Id] = true
+	profile.story.act += 1
+	profile.story.counters = {}
+	DataService.MarkDirty(player); apply(player); push(player, "act")
+	local _p, _c, nextAct = current(player)
+	if not silent and nextAct and nextAct.Guide then StoryService.Say(player, nextAct.Guide) end
+end
+
+--- Conversar com o Humanoider_20: começa a campanha ("chegada") ou repete a fala do ato atual.
+function StoryService.TalkToGuide(player: Player)
+	local profile, _chapter, act = current(player)
+	if not profile then return end
+	if act and act.Id == "chegada" then
+		profile.story.flags.fx_campaign_started = true
+		StoryService.Say(player, act.Guide or "")
+		finishAct(player, profile, act, true) -- a fala da chegada já explica o próximo passo
+		return
+	end
+	StoryService.Say(player, if act and act.Guide then act.Guide else "Por enquanto, explore. Eu aviso quando a próxima ruptura estabilizar.")
+end
+
 function StoryService.Begin(player: Player): boolean
 	local profile, _chapter, act = current(player)
 	if not profile or not act or act.Id ~= "chegada" then return false end
-	profile.story.act, profile.story.counters = 2, {}
 	profile.story.flags.fx_campaign_started = true
-	DataService.MarkDirty(player); apply(player); push(player, "act")
+	finishAct(player, profile, act)
 	return true
 end
 
@@ -75,22 +131,25 @@ function StoryService.Progress(player: Player, kind: string, amount: number): bo
 	for _, objective in act.Objectives do if objective.Kind == kind then wanted = true; break end end
 	if not wanted then return false end
 	profile.story.counters[kind] = (profile.story.counters[kind] or 0) + amount
-	local advanced = objectivesDone(profile, act)
-	if advanced then
-		profile.story.act += 1
-		profile.story.counters = {}
-		if act.Id == "guardiao_da_era" then profile.story.flags.ilha_sol_partido_unlocked = true end
-		if act.Id == "sentinela_solar" then profile.story.flags.ilha_mar_cinzas_unlocked = true end
+	if objectivesDone(profile, act) then
+		finishAct(player, profile, act)
+	else
+		DataService.MarkDirty(player); push(player, "state")
 	end
-	DataService.MarkDirty(player); apply(player); push(player, if advanced then "act" else "state")
 	return true
 end
 
-function StoryService.ArriveRegion(player: Player, regionId: string)
+--- O ato atual tem objetivo `kind`? (para os services das ilhas darem feedback só quando conta)
+function StoryService.Wants(player: Player, kind: string): boolean
 	local _profile, _chapter, act = current(player)
-	if act and act.Id == "rota_sol_partido" and regionId == "ilha_sol_partido" then
-		StoryService.AdvanceAct(player, 5)
-	end
+	if not act then return false end
+	for _, objective in act.Objectives do if objective.Kind == kind then return true end end
+	return false
+end
+
+function StoryService.ArriveRegion(player: Player, regionId: string)
+	local profile, _chapter, act = current(player)
+	if profile and act and act.Arrive == regionId then finishAct(player, profile, act) end
 end
 
 function StoryService.AdvanceAct(player: Player, expectedAct: number): boolean
@@ -99,6 +158,15 @@ function StoryService.AdvanceAct(player: Player, expectedAct: number): boolean
 	profile.story.act, profile.story.counters = expectedAct + 1, {}
 	DataService.MarkDirty(player); apply(player); push(player, "act")
 	return true
+end
+
+--- Região da ilha onde o personagem ESTÁ (posição real; o atributo WorldRegion é só o checkpoint salvo).
+function StoryService.RegionOf(player: Player): string?
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not root or not root:IsA("BasePart") then return nil end
+	local island = WorldConfig.IslandAt(root.Position)
+	return island and island.Region
 end
 
 function StoryService.HasFlag(player: Player, flag: string): boolean
@@ -116,20 +184,24 @@ function StoryService.DiscoverTrace(player: Player, traceId: string): boolean
 	profile.story.traces[traceId] = true
 	DataService.MarkDirty(player)
 	StoryService.Progress(player, "trace_" .. traceId, 1)
-	notifyStory:FireClient(player, "trace", { id = traceId, title = "Rastro de Carlos", text = "Uma gravação quebrada menciona alguém preparando a F/X por dentro." })
+	local info = StoryConfig.Traces[traceId]
+	notifyStory:FireClient(player, "trace", { id = traceId, title = "Rastro encontrado · " .. (if info then info.Title else "?"), -- o nome "Carlos" só aparece na Missão 18
+		text = if info then info.Text else "Um eco que ninguém soube explicar." })
 	return true
 end
 
 function StoryService.Init()
 	notifyStory = Remotes.GetEvent(Remotes.Events.NotifyStory)
+	notifyQuest = Remotes.GetEvent(Remotes.Events.NotifyQuest)
 	Remotes.GetEvent(Remotes.Events.RequestStoryState).OnServerEvent:Connect(function(player) push(player) end)
 end
 
 function StoryService.Start()
 	DataService.ProfileLoaded.Event:Connect(function(player: Player) apply(player) end)
 	AchievementService.OnProgress(function(player, kind, amount)
-		local region = player:GetAttribute("WorldRegion")
-		if region == "ilha_tutorial" or region == "ilha_sol_partido" then StoryService.Progress(player, kind, amount) end
+		-- contadores genéricos (kills/parries) só valem na ilha do ato atual (nunca no Coliseu/arena)
+		local _profile, _chapter, act = current(player)
+		if act and act.Region and StoryService.RegionOf(player) == act.Region then StoryService.Progress(player, kind, amount) end
 	end)
 	HealthService.FighterDied.Event:Connect(function(victim: Combatant.Fighter, killer: Combatant.Fighter?)
 		if not Combatant.IsBot(victim) then return end

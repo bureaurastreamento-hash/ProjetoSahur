@@ -26,10 +26,10 @@ linhas/conexões com o Universo de Origem e o Ponto Zero; deveriam permanecer se
 Inspiração inicial: Rick (Rick and Morty), mas o personagem final é **original** (copyright). Inspiração: inteligência
 absurda, muito despreocupado, tecnologia muito superior, portais, armas/equipamentos avançadíssimos, imprevisível,
 humor, resolve o impossível com facilidade, zero interesse em parecer herói. **Não é o vilão.** Estudava as linhas e
-o Ponto Zero, achou uma falha, mexeu e fez uma cagada monumental: **os universos começaram a se fundir** — o estado
+o Ponto Zero, achou uma falha, mexeu e fez um erro monumental: **os universos começaram a se fundir** — o estado
 F/X. MAS: **ele causou a grande fusão, não foi quem começou a interferir nas linhas.** Quando achou o Ponto Zero,
 conexões já estavam alteradas; achou que fosse natural. Era **Adryan**. Adryan preparou parte das condições; o
-cientista apertou o botão sem saber. Continua responsável pela cagada, não é o conspirador.
+cientista apertou o botão sem saber. Continua responsável pelo erro, não é o conspirador.
 
 ## 5. Personalidade e papel do cientista
 Não vira mentor nem herói. Depois da F/X: deixa o problema lá, some, segue com as coisas dele, aparece às vezes,
@@ -232,11 +232,11 @@ verdade/convergência/final, arquivo de Carlos, motivação, verdade do cientist
 Player vs Adryan, hambúrguer espacial.
 
 ## 47–48. Truque narrativo e princípio dos Rastros
-Fazer o player acreditar que **Adryan = bom** e **Toduro = suspeito/filho da puta**, depois **inverter** — com a
+Fazer o player acreditar que **Adryan = bom** e **Toduro = suspeito/insuportável**, depois **inverter** — com a
 verdade nas ações anteriores (Toduro: missões horríveis, mas quem ficou mais forte? o PLAYER. Adryan: missões
 agradáveis, mas quem ganhou algo importante? ADRYAN). Rastros: encontrados, interpretados, conectados, revisitados,
 comparados; alguns parecem inúteis e ganham sentido depois; jogadores atentos devem poder teorizar sobre Adryan antes,
-sem ser óbvio. Sensação-alvo: **"CARALHO. TAVA NA MINHA CARA."**, nunca "isso surgiu do nada".
+sem ser óbvio. Sensação-alvo: **"NÃO ACREDITO. TAVA NA MINHA CARA."**, nunca "isso surgiu do nada".
 
 ## 49. Participação cruzada
 Adryan no Cap. 3, Toduro no 5, Fred antes do 6, Ravy antes do 7, Humanoider depois do 1, Approx depois do 5, Lry nos

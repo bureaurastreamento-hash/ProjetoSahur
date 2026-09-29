@@ -255,6 +255,7 @@ local function migrate(raw: any): DataConfig.Profile
 	end
 	if typeof(raw.story) == "table" then
 		local s = raw.story :: any
+		profile.story.rev = if typeof(s.rev) == "number" then s.rev else 1 -- sem rev = atos antigos (StoryService.migrate)
 		if typeof(s.chapter) == "string" then profile.story.chapter = s.chapter end
 		if typeof(s.act) == "number" and s.act >= 1 then profile.story.act = math.floor(s.act) end
 		if typeof(s.counters) == "table" then

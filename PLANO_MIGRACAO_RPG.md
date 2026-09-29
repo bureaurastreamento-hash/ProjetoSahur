@@ -8,7 +8,7 @@ Status: proposta técnica, sem mudanças destrutivas autorizadas.
 2. Construir o RPG ao lado do battlegrounds até o vertical slice ser melhor que o loop antigo.
 3. Toda progressão e recompensa continua autoritativa no servidor.
 4. Conteúdo narrativo é dirigido por configuração, não espalhado em Services.
-5. PvP vira atividade opt-in; exploração e evolução do player viram o loop principal.
+5. PvP aberto no mundo com proteções (zonas seguras, proteção de nível/respawn, combat log), Coliseu para ranking; a campanha dá propósito e o mundo (farm, sidequests, PvP, eventos) dá replay — ver `ESTRUTURA_JOGO.md`.
 6. Cada universo inspirado recebe identidade visual, nomes e personagens originais.
 
 ## Arquitetura alvo

@@ -21,6 +21,18 @@ export type Entry = {
 
 UpdateLogConfig.Versions = ({
 	{
+		Version = "2.1",
+		Title = "Capítulo 1: Primeira Fratura",
+		Date = "2026-09-29",
+		Items = {
+			"As ilhas ganharam seus nomes: Porto da Névoa, Deserto do Sol e Rota do Eclipse.",
+			"Nova campanha da Ilha 1: Humanoider_20, o objeto impossível e o Herdeiro da Névoa.",
+			"Deserto do Sol: Homens de Pedra na escavação, o Mestre da Respiração e o Sacerdote do Sol Negro na Câmara.",
+			"Rota do Eclipse: Caçadores de Recompensa, um registro antigo no templo e O Observador.",
+			"As rotas entre ilhas agora abrem conforme você derrota o chefe de cada ilha.",
+		},
+	},
+	{
 		Version = "2.0",
 		Title = "F/X: o mundo se abriu",
 		Date = "2026-09-28",
@@ -60,7 +72,7 @@ UpdateLogConfig.Versions = ({
 } :: { Entry })
 
 -- versão que "Publicar novidades" publica
-UpdateLogConfig.Current = "2.0"
+UpdateLogConfig.Current = "2.1"
 
 function UpdateLogConfig.Get(version: string): Entry?
 	for _, entry in UpdateLogConfig.Versions do

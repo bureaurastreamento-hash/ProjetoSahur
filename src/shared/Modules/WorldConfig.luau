@@ -5,6 +5,8 @@
 	desmontada; o chão das ilhas é Terrain (tools/studio/MontarMundo.luau, mesmos centros/raios de Islands abaixo).
 	Regiões futuras entram aqui apenas quando tiverem mapa e checkpoint reais.
 	Ids persistidos NÃO mudam: "arena_pvp" (antiga Ilha da Convergência) agora aponta para o Coliseu.
+	Nomes = BIBLIA_CAMPANHA_CAP1_v0.1.md (2026-09-29): ilha_tutorial = Porto da Névoa (Parte 1), ilha_pilares =
+	Deserto do Sol (Parte 2), ilha_sol_partido = Rota do Eclipse (Parte 3). Ids antigos ficam por causa dos saves.
 ]]
 
 local WorldConfig = {}
@@ -31,26 +33,26 @@ WorldConfig.Regions = {
 		Chapter = "cap1",
 		Pvp = true,
 		Available = true,
-		-- legado: centro da Ilha do Alvorecer
+		-- legado: centro do Porto da Névoa
 		Checkpoints = { chegada = { Position = Vector3.new(40, 2, 150), Yaw = 0 } },
 	},
 	ilha_tutorial = {
-		Id = "ilha_tutorial", Name = "Ilha do Alvorecer", Universe = "mundo_das_eras", Chapter = "cap1",
+		Id = "ilha_tutorial", Name = "Porto da Névoa", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { porto = { Position = Vector3.new(40, 2, 185), Yaw = 0 } },
 	},
 	arena_pvp = {
-		Id = "arena_pvp", Name = "Coliseu", Universe = "mundo_das_eras", Chapter = "cap1",
+		Id = "arena_pvp", Name = "Coliseu do Deserto", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { praca = { Position = Vector3.new(900, 2, -340), Yaw = 0 } },
 	},
 	ilha_pilares = {
-		Id = "ilha_pilares", Name = "Ilha dos Pilares", Universe = "mundo_das_eras", Chapter = "cap1",
+		Id = "ilha_pilares", Name = "Deserto do Sol", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { praia = { Position = Vector3.new(690, 2, -420), Yaw = -90 } },
 	},
 	ilha_sol_partido = {
-		Id = "ilha_sol_partido", Name = "Ilha do Sol Partido", Universe = "mundo_das_eras", Chapter = "cap1",
+		Id = "ilha_sol_partido", Name = "Rota do Eclipse", Universe = "mundo_das_eras", Chapter = "cap1",
 		Pvp = true, Available = true,
 		Checkpoints = { oasis = { Position = Vector3.new(1710, 2, -130), Yaw = -90 } },
 	},

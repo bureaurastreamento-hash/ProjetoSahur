@@ -46,6 +46,7 @@ export type WorldProgress = {
 	discovered: { [string]: boolean },
 }
 export type StoryProgress = {
+	rev: number, -- StoryConfig.Revision em que os índices de ato foram gravados (StoryService.migrate)
 	chapter: string,
 	act: number,
 	counters: { [string]: number },
@@ -93,7 +94,7 @@ function DataConfig.DefaultProfile(): Profile
 		achievements = { counters = {}, done = {}, season = { id = "", counters = {} } },
 		quests = { chapter = 1, active = false, counters = {}, done = {} }, -- QuestService (história em capítulos)
 		world = { region = "ilha_tutorial", checkpoint = "porto", discovered = { ilha_tutorial = true } },
-		story = { chapter = "cap1", act = 1, counters = {}, flags = {}, traces = {}, completed = {} },
+		story = { rev = 2, chapter = "cap1", act = 1, counters = {}, flags = {}, traces = {}, completed = {} },
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},

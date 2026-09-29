@@ -10909,6 +10909,679 @@
    ]
   },
   {
+   "name": "Historia",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "EscavacaoBorda0",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda0",
+      "Anchored": true,
+      "Position": [
+       1104.0,
+       1,
+       -490.0
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda1",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda1",
+      "Anchored": true,
+      "Position": [
+       1097.507,
+       1,
+       -470.015
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda2",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda2",
+      "Anchored": true,
+      "Position": [
+       1080.507,
+       1,
+       -457.664
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda3",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda3",
+      "Anchored": true,
+      "Position": [
+       1059.493,
+       1,
+       -457.664
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -18.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda4",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda4",
+      "Anchored": true,
+      "Position": [
+       1042.493,
+       1,
+       -470.015
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -54.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda5",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda5",
+      "Anchored": true,
+      "Position": [
+       1036.0,
+       1,
+       -490.0
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -90.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda6",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda6",
+      "Anchored": true,
+      "Position": [
+       1042.493,
+       1,
+       -509.985
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -126.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda7",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda7",
+      "Anchored": true,
+      "Position": [
+       1059.493,
+       1,
+       -522.336
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -162.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda8",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda8",
+      "Anchored": true,
+      "Position": [
+       1080.507,
+       1,
+       -522.336
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -198.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoBorda9",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoBorda9",
+      "Anchored": true,
+      "Position": [
+       1097.507,
+       1,
+       -509.985
+      ],
+      "Size": [
+       9,
+       2.5,
+       3
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       -234.0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "HomemDePedraDormindo0",
+     "className": "Part",
+     "properties": {
+      "Name": "HomemDePedraDormindo0",
+      "Anchored": true,
+      "Position": [
+       1058,
+       0.9,
+       -482
+      ],
+      "Size": [
+       4,
+       3,
+       11
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       20,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "HomemDePedraDormindo1",
+     "className": "Part",
+     "properties": {
+      "Name": "HomemDePedraDormindo1",
+      "Anchored": true,
+      "Position": [
+       1070,
+       0.9,
+       -512
+      ],
+      "Size": [
+       4,
+       3,
+       11
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       -35,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "HomemDePedraDormindo2",
+     "className": "Part",
+     "properties": {
+      "Name": "HomemDePedraDormindo2",
+      "Anchored": true,
+      "Position": [
+       1072,
+       0.9,
+       -472
+      ],
+      "Size": [
+       4,
+       3,
+       11
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       70,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "EscavacaoPad0",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoPad0",
+      "Anchored": true,
+      "Position": [
+       1060,
+       0.3,
+       -470
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EscavacaoPad1",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoPad1",
+      "Anchored": true,
+      "Position": [
+       1080,
+       0.3,
+       -495
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EscavacaoPad2",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoPad2",
+      "Anchored": true,
+      "Position": [
+       1040,
+       0.3,
+       -480
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "EscavacaoPad3",
+     "className": "Part",
+     "properties": {
+      "Name": "EscavacaoPad3",
+      "Anchored": true,
+      "Position": [
+       1100,
+       0.3,
+       -510
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "MestreSpot",
+     "className": "Part",
+     "properties": {
+      "Name": "MestreSpot",
+      "Anchored": true,
+      "Position": [
+       720,
+       0.3,
+       -470
+      ],
+      "Size": [
+       4,
+       0.3,
+       4
+      ],
+      "Color": [
+       0.74,
+       0.66,
+       0.5
+      ],
+      "Material": "Sand",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "DiscipuloPad",
+     "className": "Part",
+     "properties": {
+      "Name": "DiscipuloPad",
+      "Anchored": true,
+      "Position": [
+       735,
+       0.3,
+       -485
+      ],
+      "Size": [
+       6,
+       0.3,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.75,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "CamaraMarker",
+     "className": "Part",
+     "properties": {
+      "Name": "CamaraMarker",
+      "Anchored": true,
+      "Position": [
+       884,
+       0.8,
+       -575
+      ],
+      "Size": [
+       6,
+       1,
+       6
+      ],
+      "Color": [
+       0.35,
+       0.85,
+       1
+      ],
+      "Material": "Neon",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 0.55,
+      "CanCollide": false
+     }
+    },
+    {
+     "name": "SacerdoteSpawn",
+     "className": "Part",
+     "properties": {
+      "Name": "SacerdoteSpawn",
+      "Anchored": true,
+      "Position": [
+       900,
+       0.6,
+       -600
+      ],
+      "Size": [
+       8,
+       0.4,
+       8
+      ],
+      "Color": [
+       0.2,
+       0.18,
+       0.17
+      ],
+      "Material": "Basalt",
+      "Orientation": [
+       0,
+       0,
+       0
+      ],
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanCollide": false
+     }
+    }
+   ]
+  },
+  {
    "name": "Portais",
    "className": "Folder",
    "children": [

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ilha 3 do Capítulo 1 — Sol Partido (Parte 3: deserto egípcio, cânion, oásis e templo solar).
+"""Ilha 3 do Capítulo 1 — ROTA DO ECLIPSE (Parte 3; BIBLIA_CAMPANHA_CAP1_v0.1.md): trecho do deserto egípcio, cânion, oásis e templo.
 
 Layout do mundo (2026-09-28): o chão é Terrain (tools/studio/MontarMundo.luau); o bazar mesopotâmico
 (zigurate + mercado, vila SE da arena antiga) fica a oeste desta área (ArenaExtras.Destructible).

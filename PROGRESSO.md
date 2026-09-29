@@ -260,6 +260,51 @@ Pedidos, na ordem que ele escolheu: **1) menus** → 2) conquistas → 3) menu D
 - **Pergunta respondida ao dono**: id de animação da equipe substitui a procedural só se o clipe estiver
   marcado `team = true` em `ProcAnimDefs` (hoje a procedural manda mesmo com id, decisão dele de 17/09).
 
+## RETOMAR AQUI (2026-09-29) — bíblia do Cap. 1 + estrutura do jogo sincronizadas
+**Docs novos do dono**: `BIBLIA_CAMPANHA_CAP1_v0.1.md` (campanha do Cap. 1, missões 0–31, Ecos) e `ESTRUTURA_JOGO.md`
+(4 camadas: campanha / farm-loot / sidequests / PvP com bounty). Renomeados (o nome antigo tinha quebra de linha) e
+**sem palavrões** (eram só exemplo; também tirados da `LORE_FX_CANONE.md`). Regra do dono: **o que está no jogo e não bate
+com os arquivos muda para bater; o que der para juntar, junta.** Junções registradas em `BIZARRE_DIRECAO.md`
+(rota inicial Técnica/Arma/Manifestação + Flecha; raridade em 7 faixas sem pity; PvP aberto com proteções; Humanoider
+revela o nome de Carlos na Missão 18 e Adryan conta a "versão oficial" no Cap. 2; Ecos = flags `eco_*`).
+
+**Feito (29/09, código — análise estática limpa)**:
+- Ilhas renomeadas (ids mantidos): `ilha_tutorial` = **Porto da Névoa**, `ilha_pilares` = **Deserto do Sol**,
+  `ilha_sol_partido` = **Rota do Eclipse**, `arena_pvp` = Coliseu do Deserto. Tabela em `MAPA_CAPITULO_1.md`.
+- `StoryConfig` **revisão 2**: 14 atos do Cap. 1 com o número da missão da bíblia (`Mission`), `Region`, `Arrive`,
+  `UnlockFlag`, `Guide` (fala do Humanoider_20 ao entrar no ato, em qualquer ilha) e `Traces` com texto por rastro.
+  `StoryService` virou 100% dirigido por dados + **migração** (`profile.story.rev`; perfis sem rev passam de ato ≥5
+  para "Calor" com a rota da Ilha 2 aberta). Contadores genéricos (kills/parries) só valem **na ilha do ato**, pela
+  posição real (`StoryService.RegionOf`). O nome "Carlos" não aparece antes da Missão 18 ("Rastro encontrado").
+- Porto da Névoa: Guardião Fraturado → **Herdeiro da Névoa** (kit Dio); falas da bíblia; rastro "o objeto impossível".
+- **Deserto do Sol** (novo `DesertoDoSolService`, marcadores na pasta `Historia` do `FXPilaresIsland`, gerados por
+  `tools/gerar_ilha_pilares_fx.py` com alturas medidas por raycast): 4 Homens de Pedra (escavação a leste, 1070,-490),
+  Mestre da Respiração + discípulo (720,-470), símbolo na Câmara (santuário, 884,-575), **Sacerdote do Sol Negro** (900,-600).
+- **Rota do Eclipse** (`SolPartidoService` → `RotaEclipseService`): Caçadores de Recompensa, rastro "o homem que não
+  existe" no altar, **O Observador** (kit Jotaro).
+- Portais: Porto → Deserto só depois do Herdeiro (`ilha_pilares_unlocked`); Deserto → Rota só depois do Sacerdote
+  (`ilha_sol_partido_unlocked`). Voltar é livre. **O Coliseu agora fica atrás do tutorial.**
+- Log de novidades **2.1** ("Capítulo 1: Primeira Fratura"), `UpdateLogConfig.Current = "2.1"` (o DEV publica).
+
+**FALTA TESTAR no Play** (o Rojo caiu durante a sessão e foi religado; o Studio precisa clicar em Connect no plugin):
+ver a lista em "Como testar (29/09)" logo abaixo.
+
+### Como testar (29/09)
+1. Conversar com o Humanoider_20 → fala nova; HUD "Prove que consegue sobreviver".
+2. 3 Vagantes + 1 parry → rastro nas ruínas (toast "Rastro encontrado · O objeto impossível") → Herdeiro da Névoa.
+3. Portal NE antes do Herdeiro = "rota selada"; depois atravessa → ato "Os Homens de Pedra" + fala do Humanoider.
+4. Escavação a leste (4 Homens de Pedra) → Mestre (conversar) + 2 parries no discípulo → símbolo na Câmara →
+   Sacerdote no santuário → portal da praça abre para a Rota do Eclipse.
+5. Rota: 5 Caçadores + 2 parries → altar do templo (registro) → O Observador → "Rumo à Cidade Âmbar".
+6. Perfil antigo (quem já estava no Sol Partido) deve cair em "Calor" com o portal da Ilha 2 aberto.
+
+**PRÓXIMAS LEVAS** (ordem de 28/09 mantida, com a bíblia por cima):
+1. Chão das ilhas de **peças** (Deserto do Sol vira deserto árido com ruínas astecas + oásis na cachoeira).
+2. **Stands/raças/rota inicial** (ver junções em `BIZARRE_DIRECAO.md`) + inventário + raridade 7 faixas.
+3. HUD estilo Blox Fruits + menus na tela.
+4. Missões que faltam do Cap. 1 (0 "Acorde", 2 vila + escolha de rota, 4 Portador da Máscara, Ecos com escolha na tela,
+   13, 16–31), Echo Bosses, bounty/zonas seguras/combat log, eventos F/X. Depois places por capítulo e Server Authority.
+
 ## RETOMAR AQUI (fim da sessão 2026-09-28, noite) — ler isto primeiro
 **Direção**: Bizarre Showdown F/X = RPG open world (estrutura Blox Fruits) com o combate do Battlegrounds. História
 CANÔNICA = `LORE_FX_CANONE.md` (doc do dono; `HISTORIA_FX_PROPOSTA_v1.1.md` só complementa). Mapa = `MAPA_CAPITULO_1.md`.
