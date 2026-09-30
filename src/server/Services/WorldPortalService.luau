@@ -14,6 +14,13 @@ local WorldPortalService = {}
 -- Ordem da bíblia: Porto da Névoa → (Herdeiro da Névoa) → Deserto do Sol → (Sacerdote do Sol Negro) → Rota do Eclipse.
 -- Voltar é sempre livre. As flags são gravadas pelo `UnlockFlag` do ato em StoryConfig.
 local PORTALS = {
+	CostaToMare = { Region = "fortaleza_mare", Checkpoint = "chegada", RequiredFlag = "fortaleza_mare_unlocked", Locked = "Resolva o Eco da Costa Dourada para abrir esta rota." },
+	MareToCosta = { Region = "costa_dourada", Checkpoint = "chegada" },
+	AmbarToCosta = { Region = "costa_dourada", Checkpoint = "chegada", RequiredFlag = "costa_dourada_unlocked", Locked = "Resolva o Eco da Cidade Âmbar para abrir esta rota." },
+	CostaToAmbar = { Region = "cidade_ambar", Checkpoint = "chegada" },
+	SolPartidoToAmbar = { Region = "cidade_ambar", Checkpoint = "chegada", RequiredFlag = "cidade_ambar_unlocked",
+		Locked = "Derrote O Observador na Rota do Eclipse para abrir esta rota." },
+	AmbarToSolPartido = { Region = "ilha_sol_partido", Checkpoint = "oasis" },
 	TutorialToPilares = { Region = "ilha_pilares", Checkpoint = "praia", RequiredFlag = "ilha_pilares_unlocked",
 		Locked = "A ruptura para o Deserto do Sol está instável. Derrote o Herdeiro da Névoa nas ruínas ao norte." },
 	PilaresToTutorial = { Region = "ilha_tutorial", Checkpoint = "porto" },
@@ -33,6 +40,12 @@ local function bind(part: BasePart, destination)
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = part
 	prompt.Triggered:Connect(function(player: Player)
+		if not StoryService.CanInteract(player, part, 15) then return end
+		local target = WorldConfig.GetRegion(destination.Region)
+		if not target or not target.Available then
+			StoryService.Say(player, "A área de destino ainda não está disponível para travessia.")
+			return
+		end
 		if destination.RequiredFlag and not StoryService.HasFlag(player, destination.RequiredFlag) then
 			Remotes.GetEvent(Remotes.Events.NotifyStory):FireClient(player, "locked", { text = destination.Locked or "Rota selada." })
 			return

@@ -40,17 +40,33 @@ function MenuController.Init()
 	local gui = Instance.new("ScreenGui")
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "SideMenu", false, 6
 	gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-	local column = Instance.new("Frame")
-	column.Name = "Column"
-	column.AnchorPoint = Vector2.new(0, 0.5)
-	column.Position = UDim2.new(0, 12, 0.5, 10)
-	if game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled then
-		column.Position = UDim2.new(0, 12, 0.5, 60) -- toque: abaixo do status (que sobe), longe do analógico
-		local scale = Instance.new("UIScale"); scale.Scale = 0.8; scale.Parent = column
+	local container = Instance.new("Frame")
+	container.Name, container.BackgroundTransparency = "Menu", 1
+	container.AnchorPoint, container.Position = Vector2.new(0, 0.5), UDim2.new(0, 12, 0.5, 0)
+	container.Size = UDim2.fromOffset(132, 44)
+	container.Parent = gui
+	local bounds = Instance.new("UISizeConstraint")
+	bounds.MaxSize = Vector2.new(132, 400); bounds.Parent = container
+	local column = Instance.new("ScrollingFrame")
+	column.Name, column.Visible = "Column", false
+	column.Position, column.Size = UDim2.fromOffset(0, 50), UDim2.new(1, 0, 1, -50)
+	column.BackgroundColor3, column.BackgroundTransparency = BG, 0.05
+	column.BorderSizePixel, column.ScrollBarThickness = 0, 4
+	column.CanvasSize, column.AutomaticCanvasSize = UDim2.new(), Enum.AutomaticSize.Y
+	column.Parent = container
+	local menu = Instance.new("TextButton")
+	menu.Name, menu.Text = "Toggle", "MENU F/X"
+	menu.Size = UDim2.fromOffset(132, 44)
+	menu.BackgroundColor3, menu.TextColor3 = BG, ACCENT
+	menu.Font, menu.TextSize = Enum.Font.GothamBold, 14
+	menu.Parent = container
+	local border = Instance.new("UIStroke"); border.Color, border.Transparency, border.Parent = ACCENT, .4, menu
+	local function expand(show: boolean)
+		column.Visible = show
+		container.Size = if show then UDim2.new(0, 132, .7, -30) else UDim2.fromOffset(132, 44)
+		menu.Text = if show then "FECHAR MENU" else "MENU F/X"
 	end
-	column.Size = UDim2.fromOffset(92, #ITEMS * 44)
-	column.BackgroundTransparency = 1
-	column.Parent = gui
+	menu.Activated:Connect(function() expand(not column.Visible) end)
 	local layout = Instance.new("UIListLayout")
 	layout.Padding = UDim.new(0, 6)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -60,17 +76,17 @@ function MenuController.Init()
 		local b = Instance.new("TextButton")
 		b.Name = name
 		b.LayoutOrder = i
-		b.Size = UDim2.fromOffset(92, 38)
+		b.Size = UDim2.new(1, -6, 0, 44)
 		b.BackgroundColor3, b.BackgroundTransparency = BG, 0.15
 		b.AutoButtonColor = true
 		b.Text = ""
 		b.Parent = column
-		local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 8); c.Parent = b
+		local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 0); c.Parent = b
 		local s = Instance.new("UIStroke"); s.Color = ACCENT; s.Transparency = 0.6; s.Parent = b
 		local label = Instance.new("TextLabel")
 		label.BackgroundTransparency = 1
 		label.Position, label.Size = UDim2.fromOffset(10, 0), UDim2.new(1, -36, 1, 0)
-		label.Font, label.TextSize, label.TextColor3 = Enum.Font.GothamBold, 14, TEXT
+		label.Font, label.TextSize, label.TextColor3 = Enum.Font.GothamBold, 13, TEXT
 		label.TextXAlignment = Enum.TextXAlignment.Left
 		label.Text = name
 		label.Parent = b
@@ -85,6 +101,7 @@ function MenuController.Init()
 			k.Parent = b
 		end
 		b.Activated:Connect(function()
+			expand(false)
 			open(name)
 		end)
 	end

@@ -5,6 +5,7 @@
 	Mudou o formato? Suba SchemaVersion e trate a migração em DataService.migrate().
 ]]
 
+local StoryConfig = require(script.Parent.StoryConfig)
 local DataConfig = {}
 
 DataConfig.StoreName = "PlayerData"
@@ -16,6 +17,7 @@ DataConfig.AutosaveInterval = 90 -- segundos
 DataConfig.LoadRetries = 3
 DataConfig.SaveRetries = 3
 DataConfig.RetryBaseDelay = 1 -- segundos; dobra a cada tentativa
+DataConfig.SessionLeaseSeconds = 180 -- renova a cada autosave; sessão anterior não pode sobrescrever a nova
 
 -- DEBUG: força falha em todas as chamadas ao DataStore para testar o fallback.
 -- TODO(launch): manter false
@@ -60,6 +62,7 @@ export type StoryProgress = {
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
+	bounty: { points: number, recentVictims: { [string]: number } },
 	eventPoints: number, -- pontos ESPECIAIS de evento (mini eventos do Canion); só o vendedor aceita
 	unlockedCharacters: { string },
 	stats: Stats,
@@ -84,13 +87,16 @@ export type Profile = {
 	power: string, -- Stand ATIVO (CharacterDefs id com Access "stand"); "" = humano sem Stand
 	race: string, -- StandConfig.Races id ("Humano" por padrão)
 	inventory: { [string]: number }, -- itemId -> quantidade ("flecha", "stand:<id>", "raca:<id>")
+	build: { route: string, weapon: string, style: string, techniqueTier: number },
 	born: boolean, -- já passou pelo sorteio de nascimento ("abençoado")
+	receipts: { [string]: boolean }, -- PurchaseId já entregue (mesmo save da recompensa)
 }
 
 function DataConfig.DefaultProfile(): Profile
 	return {
 		schemaVersion = DataConfig.SchemaVersion,
 		coins = 0,
+		bounty = { points = 0, recentVictims = {} },
 		eventPoints = 0,
 		unlockedCharacters = { "Humano" },
 		stats = { wins = 0, losses = 0, kills = 0, deaths = 0, matches = 0, tournamentWins = 0 }, -- tournamentWins: "Último de pé" (D3); perfil antigo começa em 0 (a carga copia só chaves conhecidas)
@@ -101,7 +107,7 @@ function DataConfig.DefaultProfile(): Profile
 		achievements = { counters = {}, done = {}, season = { id = "", counters = {} } },
 		quests = { chapter = 1, active = false, counters = {}, done = {} }, -- QuestService (história em capítulos)
 		world = { region = "ilha_tutorial", checkpoint = "porto", discovered = { ilha_tutorial = true } },
-		story = { rev = 2, chapter = "cap1", act = 1, counters = {}, flags = {}, traces = {}, completed = {} },
+		story = { rev = StoryConfig.Revision, chapter = "cap1", act = 1, counters = {}, flags = {}, traces = {}, completed = {} },
 		cosmetics = { owned = {}, equipped = {} },
 		emotes = {},
 		mastery = {},
@@ -111,7 +117,9 @@ function DataConfig.DefaultProfile(): Profile
 		power = "",
 		race = "Humano",
 		inventory = {},
+		build = { route = "", weapon = "", style = "", techniqueTier = 0 },
 		born = false,
+		receipts = {},
 	}
 end
 

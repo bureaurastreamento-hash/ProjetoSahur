@@ -18,6 +18,24 @@ ProgressionConfig.XP = {
 	BossTopBonus = 60,
 }
 
+-- PvE da campanha. Só estes identificadores pagam: bonecos de treino e bots DEV não geram farm.
+export type NpcReward = { XP: number, Coins: number, Boss: boolean?, ArrowChance: number? }
+ProgressionConfig.Npcs = {
+	fx_tutorial_enemy = { XP = 10, Coins = 1 },
+	fx_pedra_enemy = { XP = 14, Coins = 1 },
+	fx_sol_enemy = { XP = 18, Coins = 2 },
+	fx_mascara_boss = { XP = 50, Coins = 3, Boss = true, ArrowChance = 0.03 },
+	fx_cap1_boss = { XP = 80, Coins = 5, Boss = true, ArrowChance = 0.05 },
+	fx_solnegro_boss = { XP = 100, Coins = 6, Boss = true, ArrowChance = 0.05 },
+	fx_mare_colapso_boss = { XP = 100, Coins = 6, Boss = true, ArrowChance = 0.05 },
+	fx_mare_avatar = { XP = 200, Coins = 12, Boss = true, ArrowChance = 0.05 },
+	fx_costa_guard = { XP = 22, Coins = 2 },
+	fx_costa_boss = { XP = 160, Coins = 10, Boss = true, ArrowChance = 0.05 },
+	fx_ambar_boss = { XP = 140, Coins = 9, Boss = true, ArrowChance = 0.05 },
+	fx_sol_boss = { XP = 120, Coins = 8, Boss = true, ArrowChance = 0.05 },
+} :: { [string]: NpcReward }
+ProgressionConfig.PveCredit = { MinDamageFraction = 0.05, Seconds = 30, Radius = 150 }
+
 --- XP necessário para sair do nível `level` e chegar em `level + 1`.
 function ProgressionConfig.XPForLevel(level: number): number
 	return 100 + (level - 1) * 40

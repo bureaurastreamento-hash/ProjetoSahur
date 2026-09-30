@@ -12,6 +12,10 @@
 
 local QuestConfig = {}
 
+-- Arco battlegrounds preservado como legado. A campanha ativa é StoryConfig (cânone F/X).
+-- Não expor a revelação antiga de Adryan nem alterar conquistas/recompensas já salvas.
+QuestConfig.Enabled = false
+
 export type Objective = { Kind: string, Goal: number, Desc: string, Max: boolean? }
 export type Reward = { EventPoints: number?, Coins: number?, XP: number?, Cosmetic: string?, Emote: string?, Title: string? }
 export type Spot = { Pos: Vector3, Yaw: number, Label: string }

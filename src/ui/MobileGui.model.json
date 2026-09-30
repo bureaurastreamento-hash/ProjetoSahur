@@ -101,10 +101,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -192,10 +189,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -283,10 +277,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -374,10 +365,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -466,10 +454,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -557,10 +542,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -648,10 +630,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -739,10 +718,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -830,10 +806,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -921,10 +894,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -1012,10 +982,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -1103,10 +1070,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -1194,10 +1158,7 @@
        "className": "UICorner",
        "properties": {
         "CornerRadius": {
-         "UDim": [
-          1,
-          0
-         ]
+         "UDim": [0, 0]
         }
        }
       },

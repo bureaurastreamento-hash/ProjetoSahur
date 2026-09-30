@@ -25,19 +25,18 @@ sempre livre. Portais em `WorldPortalService`, com as flags gravadas por `StoryC
 pilares/estátuas = "Homens de Pedra", Coliseu). Na leva do chão de peças, o bioma dela vira **deserto árido com
 ruínas astecas** e um oásis em volta da cachoeira, diferente do deserto claro e egípcio da Rota do Eclipse.
 
-## Implementado (atos em `StoryConfig`, 2026-09-29)
+## Implementado (atos em `StoryConfig`, atualizado em 2026-09-30)
 
-- **Porto da Névoa** (completa pela bíblia, 29/09): Missão 0 "Acorde" (praia ao lado do spawn: destroços, bolsa,
+- **Porto da Névoa** (base de campanha implementada): Missão 0 "Acorde" (praia ao lado do spawn: destroços, bolsa,
   estrutura enterrada que distorce a tela → "???: Interessante."), 1 (Humanoider na praça), 2 (chegar na Taberna),
   3 (3 Vagantes + parry, depois a fenda instável a oeste do treino com 2 sobreviventes) → **Eco 1** (carregar / levar
   quem anda / passagem estreita — esta só se achou a "Fenda estreita"), 4 (Portador da Máscara no altar das colinas
   a leste), 5 (Rastro nas ruínas), Herdeiro da Névoa → **Eco final** na capela (prisioneiros / arquivos / passagem —
-  esta só se achou a "Rachadura na parede" antes) → Flecha + portal. Falta: escolha de rota (espera armas/estilos).
+  esta só se achou a "Rachadura na parede" antes) → Flecha + portal. Escolha Técnica/Manifestação/Arma na Missão 2 e Técnica funcional na Missão 8 foram ligadas em 30/09; ver `PROGRESSO.md` para limites e testes.
 - **Deserto do Sol**: chegada (6), 4 Homens de Pedra na escavação a leste (7), Mestre da Respiração + discípulo, 2
-  parries (8), símbolo na Câmara (9), Sacerdote do Sol Negro (10). Falta: Eco final (selar/destruir/transferir),
-  alternância de épocas na luta do boss.
+  parries (8), símbolo na Câmara (9), Sacerdote do Sol Negro (10) → Eco final (selar/destruir/transferir; transferência exige puzzle II → I → III na Câmara). Falta: consequências visuais individuais e alternância de épocas na luta do boss.
 - **Rota do Eclipse**: chegada (11), 5 Caçadores de Recompensa + 2 parries (12), Rastro "o homem que não existe" no
-  altar do templo (14), O Observador (15). Falta: Missão 13 (O Viajante), porto/vilas/cidade, mansão.
+  altar do templo (14), O Observador (15); Missão 13 (O Viajante) ligada a NPC provisório perto da chegada em 30/09. Falta: porto/vilas/cidade, mansão e tutorial avançado de Manifestação.
 
 ## Layout físico (2026-09-28 — arena DESMONTADA, dono autorizou)
 

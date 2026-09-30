@@ -9,6 +9,11 @@ terreno etc. existem SÓ no place (montados via MCP/Studio), não em `src/`. Um 
 na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com o Rojo sincronizado, e só com o dono.
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
+## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
+Dono constrói no Studio com o Rojo DESCONECTADO, salva `.rbxl` e avisa; a IA roda
+`tools/capturar_mapa.sh <place.rbxl> [aplicar]` (`rojo syncback` só do mapa) ANTES de ele reconectar. Depois da
+captura o Studio é a fonte do mapa: não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
+
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código
 e pela parte de IA do projeto). Outras pessoas da equipe cuidam de modelagem 3D e animação,

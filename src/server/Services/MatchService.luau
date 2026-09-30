@@ -265,13 +265,13 @@ local function isMilestone(streak: number): boolean
 	return streak > last and (streak - last) % cfg.Every == 0
 end
 
-local function onDied(victim: Player, killer: Player?)
+local function onDied(victim: Player, killer: Player?, rewardEligible: boolean?)
 	if MatchConfig.FreeRoam then
 		DataService.RecordDeath(victim)
 		victim:SetAttribute("SessionDeaths", ((victim:GetAttribute("SessionDeaths") :: number?) or 0) + 1)
 		local victimStreak = (victim:GetAttribute("KillStreak") :: number?) or 0
 		victim:SetAttribute("KillStreak", 0)
-		if killer and killer ~= victim then
+		if killer and killer ~= victim and rewardEligible ~= false then
 			DataService.RecordKill(killer)
 			killer:SetAttribute("SessionKills", ((killer:GetAttribute("SessionKills") :: number?) or 0) + 1)
 			-- Kill streak: marcos anunciados + moedas; encerrar a sequência de alguém paga bônus

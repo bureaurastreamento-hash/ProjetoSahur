@@ -32,6 +32,7 @@ local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
+local PvpConfig = require(Modules:WaitForChild("PvpConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
@@ -726,6 +727,25 @@ function HUDController.Init()
 end
 
 function HUDController.Start()
+	local lastCombatWarning = -math.huge
+	localPlayer:GetAttributeChangedSignal("PvpCombatUntil"):Connect(function()
+		local expires = localPlayer:GetAttribute("PvpCombatUntil")
+		local now = Workspace:GetServerTimeNow()
+		if typeof(expires) == "number" and expires > now and now - lastCombatWarning > PvpConfig.CombatSeconds then
+			lastCombatWarning = now
+			showBanner(("Combate PvP: sair em até %ds após o último golpe custa %d%% das moedas (máximo %d).")
+				:format(PvpConfig.CombatSeconds, PvpConfig.LogoutCoinFraction * 100, PvpConfig.LogoutCoinCap), 7)
+		end
+	end)
+	localPlayer:GetAttributeChangedSignal("SafeZone"):Connect(function()
+		local zone = localPlayer:GetAttribute("SafeZone")
+		showBanner(if typeof(zone) == "string" then "Zona segura · " .. zone else "Você saiu da zona segura · PvP aberto", 3)
+	end)
+	localPlayer:GetAttributeChangedSignal("PvpProtected"):Connect(function()
+		if localPlayer:GetAttribute("PvpProtected") == true then
+			showBanner(("Proteção de retorno · %ds sem dar ou receber dano PvP"):format(PvpConfig.RespawnProtection), 3)
+		end
+	end)
 	-- anúncios da administração (global/servidor/só pra mim)
 	Remotes.GetEvent(Remotes.Events.NotifyAnnouncement).OnClientEvent:Connect(function(text: string, scope: string, from: string)
 		local prefix = if scope == "global" then "[GLOBAL] " elseif scope == "you" then "[Mensagem] " else ""
@@ -841,6 +861,12 @@ function HUDController.Start()
 			HUDController.ShowToast(("Maestria %d"):format(tonumber(data.level) or 0), tostring(data.characterId), Color3.fromRGB(90, 190, 255))
 		elseif event == "mission_done" then
 			HUDController.ShowToast("Missão concluída", ("%s · +%d pontos"):format(tostring(data.text), tonumber(data.coins) or 0))
+		elseif event == "bounty" then
+			HUDController.ShowToast(("Bounty +%d"):format(tonumber(data.gain) or 0),
+				("%s · %d%s"):format(tostring(data.title), tonumber(data.points) or 0,
+					if (tonumber(data.coins) or 0) > 0 then (" · +%d moedas"):format(data.coins) else ""))
+		elseif event == "npc_loot" then
+			HUDController.ShowToast(tostring(data.name), ("+%d moedas%s"):format(tonumber(data.coins) or 0, if data.arrow then " · +1 Flecha" else ""))
 		end
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)

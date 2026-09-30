@@ -9,6 +9,7 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local BotService = require(script.Parent:WaitForChild("BotService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
+local BuildService = require(script.Parent.BuildService)
 
 local DesertoDoSolService = {}
 local MASTER = "Mestre da Respiração"
@@ -43,10 +44,19 @@ local function spawnMaster(spot: BasePart, parent: Instance)
 	root.CFrame = spot.CFrame.Rotation + Vector3.new(spot.Position.X, spot.Position.Y + spot.Size.Y / 2 + 3, spot.Position.Z) -- pela raiz, em pé
 	npc.Parent = parent
 	prompt(root, "Conversar", MASTER, 0).Triggered:Connect(function(player: Player)
+		local character = player.Character
+		local playerRoot = character and character:FindFirstChild("HumanoidRootPart")
+		local playerHumanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if not playerRoot or not playerRoot:IsA("BasePart") or not playerHumanoid or playerHumanoid.Health <= 0
+			or (playerRoot.Position - root.Position).Magnitude > 14 then return end
 		if StoryService.Wants(player, "fx_mestre") then
 			StoryService.Say(player, "Você luta prendendo o ar. Quem prende o ar morre cansado. Respire com o golpe, não contra ele. "
 				.. "Meu discípulo vai atacar você: apare duas vezes (F na hora do golpe) e eu vejo se aprendeu.", MASTER)
 			StoryService.Progress(player, "fx_mestre", 1)
+		elseif StoryService.HasCompleted(player, "respira") and not StoryService.HasFlag(player, "tecnica_m8_aprendeu") then
+			BuildService.LearnTechnique(player)
+			StoryService.SetFlag(player, "tecnica_m8_aprendeu")
+			StoryService.Say(player, "Respire com o golpe, não contra ele. Você aprendeu a Técnica corporal.", MASTER)
 		else
 			StoryService.Say(player, "O corpo lembra o que a cabeça esquece. Volte quando quiser treinar.", MASTER)
 		end
@@ -75,12 +85,29 @@ local function populate(island: Model)
 	local chamber = story:FindFirstChild("CamaraMarker")
 	if chamber and chamber:IsA("BasePart") then
 		prompt(chamber, "Examinar", "Símbolo antigo", 1).Triggered:Connect(function(player: Player)
+			if not StoryService.CanInteract(player, chamber, 14) then return end
 			if StoryService.Wants(player, "fx_camara") then
 				StoryService.Progress(player, "fx_camara", 1)
 			else
-				StoryService.Say(player, "Parece a peça do Porto da Névoa... mas não é igual. Alguém estudou isto antes de nós.")
+				StoryService.Say(player, StoryService.DesertState(player))
 			end
+			StoryService.OfferDesertEco(player)
 		end)
+		-- Mecanismos provisórios em runtime; os modelos da Câmara permanecem intactos.
+		for index = 1, 3 do
+			local seal = Instance.new("Part")
+			seal.Name, seal.Size = "MecanismoCamara" .. index, Vector3.new(1.5, 1, 1.5)
+			seal.Anchored, seal.CanCollide = true, false
+			seal.Material, seal.Color = Enum.Material.Metal, Color3.fromRGB(110, 170, 190)
+			seal.CFrame = chamber.CFrame * CFrame.new((index - 2) * 4, 0, 4)
+			seal.Parent = story
+			local numeral = ({ "I", "II", "III" })[index]
+			prompt(seal, "Alinhar", "Mecanismo " .. numeral, 0.6).Triggered:Connect(function(player: Player)
+				if StoryService.AlignChamberSeal(player, index, seal) and StoryService.HasFlag(player, "camara_transferencia_preparada") then
+					StoryService.OfferDesertEco(player)
+				end
+			end)
+		end
 	end
 	local priest = story:FindFirstChild("SacerdoteSpawn")
 	if priest and priest:IsA("BasePart") then

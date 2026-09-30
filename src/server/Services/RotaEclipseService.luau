@@ -4,13 +4,39 @@
 	Hoje é o trecho do deserto egípcio (FXSolPartidoIsland; id "ilha_sol_partido" mantido). A rota cresce depois com
 	porto, vilas, cidade e a mansão. Missão 11 "Manifestação" = chegar (StoryService.ArriveRegion).
 ]]
+local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local BotService = require(script.Parent:WaitForChild("BotService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
 
 local RotaEclipseService = {}
 
+-- Personagem provisório R6 perto do spawn existente; sem editar assets do mapa/equipe.
+local function spawnTraveler(spot: BasePart, island: Model)
+	local ok, npc = pcall(function()
+		return Players:CreateHumanoidModelFromDescription(Instance.new("HumanoidDescription"), Enum.HumanoidRigType.R6)
+	end)
+	if not ok or not npc then warn("[RotaEclipse] não foi possível criar O Viajante"); return end
+	local humanoid = npc:FindFirstChildOfClass("Humanoid")
+	local root = npc:FindFirstChild("HumanoidRootPart")
+	if not humanoid or not root or not root:IsA("BasePart") then npc:Destroy(); return end
+	npc.Name, humanoid.DisplayName = "OViajante", "O Viajante"
+	for _, part in npc:GetDescendants() do
+		if part:IsA("BasePart") then part.CanCollide = false end
+	end
+	root.Anchored = true
+	root.CFrame = CFrame.new(spot.Position + Vector3.new(16, spot.Size.Y / 2 + 3, 0))
+	npc.Parent = island
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.ActionText, prompt.ObjectText = "Conversar", "O Viajante"
+	prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 0, 11, false
+	prompt.Parent = root
+	prompt.Triggered:Connect(function(player: Player) StoryService.TalkToTraveler(player, root) end)
+end
+
 local function populate(island: Model)
+	local spawn = island:FindFirstChild("SolPartidoSpawn", true)
+	if spawn and spawn:IsA("BasePart") then spawnTraveler(spawn, island) end
 	local pads = island:FindFirstChild("Inimigos")
 	if pads then
 		for _, pad in pads:GetChildren() do
@@ -25,7 +51,9 @@ local function populate(island: Model)
 		prompt.ActionText, prompt.ObjectText = "Ler", "Registro antigo"
 		prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 1, 10, false
 		prompt.Parent = marker
-		prompt.Triggered:Connect(function(player) StoryService.DiscoverTrace(player, "carlos_eclipse01") end)
+		prompt.Triggered:Connect(function(player)
+			if StoryService.CanInteract(player, marker, 14) then StoryService.DiscoverTrace(player, "carlos_eclipse01") end
+		end)
 	end
 	local boss = island:FindFirstChild("SolarBossSpawn", true)
 	if boss and boss:IsA("BasePart") then

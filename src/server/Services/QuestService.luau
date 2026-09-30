@@ -172,6 +172,7 @@ end
 
 --- Soma (ou, com `max`, guarda o maior) no contador do capítulo ATIVO. Só conta o que o capítulo pede.
 function QuestService.Progress(player: Player, kind: string, amount: number, max: boolean?)
+	if not QuestConfig.Enabled then return end
 	local _, q = questsOf(player)
 	if not q or not q.active then
 		return
@@ -260,6 +261,7 @@ local function dialog(player: Player, npcUserId: number, text: string, kind: str
 end
 
 local function onTalk(player: Player, npcId: any)
+	if not QuestConfig.Enabled then return end
 	local userId = tonumber(npcId)
 	local npc = userId and npcs[userId]
 	local character = player.Character
@@ -525,6 +527,7 @@ end
 
 function QuestService.Init()
 	notifyQuest = Remotes.GetEvent(Remotes.Events.NotifyQuest)
+	if not QuestConfig.Enabled then return end
 	Remotes.GetEvent(Remotes.Events.RequestQuestTalk).OnServerEvent:Connect(onTalk)
 	-- contadores gerais (kills, parries, duel_wins, boss_kills, bricks, playtime...)
 	AchievementService.OnProgress(function(player, kind, amount)
@@ -542,6 +545,7 @@ function QuestService.Init()
 end
 
 function QuestService.Start()
+	if not QuestConfig.Enabled then return end
 	-- Lojinha: NPC no tapete ao lado do vendedor, olhando para onde ele olha
 	local lojinha = Workspace:FindFirstChild("Lojinha")
 	local spotPart = lojinha and lojinha:FindFirstChild("VendedorSpot") :: BasePart?

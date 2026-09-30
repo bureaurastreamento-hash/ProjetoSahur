@@ -37,7 +37,7 @@ bar = node("Bar", "Frame", {
     "Size": ud(0, 380, 0, 62), "Position": ud(0.5, 0, 0, 92), "AnchorPoint": {"Vector2": [0.5, 0]},
     "BackgroundColor3": {"Color3": [0, 0, 0]}, "BackgroundTransparency": 0.28, "BorderSizePixel": 0, "Visible": False,
 }, [
-    node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 8]}}),
+    node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 0]}}),
     node("UIStroke", "UIStroke", {"Thickness": 1, "Color": {"Color3": WHITE}, "Transparency": 0.84, "ApplyStrokeMode": "Border"}),
     lbl("Title", ud(0, 220, 0, 20), ud(0, 12, 0, 6), 13, GOLD),
     lbl("Sub", ud(0, 250, 0, 18), ud(0, 12, 0, 28), 11, GREY, font="Gotham"),
@@ -47,7 +47,7 @@ bar = node("Bar", "Frame", {
         "Size": ud(0, 110, 0, 26), "Position": ud(1, -12, 0, 30), "AnchorPoint": {"Vector2": [1, 0]},
         "BackgroundColor3": {"Color3": [0.25, 0.55, 0.35]}, "Text": "ENTRAR", "Font": "GothamBold", "TextSize": 12,
         "TextColor3": {"Color3": WHITE}, "AutoButtonColor": True, "BorderSizePixel": 0, "Visible": False,
-    }, [node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 6]}})]),
+    }, [node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 0]}})]),
 ])
 
 gui = {"className": "ScreenGui", "properties": {"ResetOnSpawn": False, "IgnoreGuiInset": True, "ZIndexBehavior": "Sibling", "DisplayOrder": 4, "Enabled": True},

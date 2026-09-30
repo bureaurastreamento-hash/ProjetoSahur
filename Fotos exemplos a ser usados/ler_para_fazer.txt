@@ -1,0 +1,2 @@
+AS fotos de exemplos são para serem usadas como inspirações, não copiar exatamente, e sim refazer/transformar com o nosso tema.
+(tirar bordas arredondadas de menus/UI/GUI do jogo).

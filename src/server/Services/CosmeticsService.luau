@@ -401,6 +401,10 @@ function CosmeticsService.Init()
 	notifyEmote = Remotes.GetEvent(Remotes.Events.NotifyEmote)
 end
 
+function CosmeticsService.Refresh(player: Player)
+	apply(player)
+end
+
 function CosmeticsService.Start()
 	local ok, ShopService = pcall(require, script.Parent:WaitForChild("ShopService"))
 	if ok then

@@ -277,6 +277,7 @@ end
 -- ---------------------------------------------------------------------------
 
 function TraitorService.Init()
+	if not QuestConfig.Enabled then return end
 	notifyQuest = Remotes.GetEvent(Remotes.Events.NotifyQuest)
 	-- aceitar o capítulo final (ou voltar a falar com o traidor sem ter vencido) = ele aparece no santuário
 	QuestService.OnTalk(function(player: Player, ch: QuestConfig.Chapter, phase: string)
@@ -287,6 +288,7 @@ function TraitorService.Init()
 end
 
 function TraitorService.Start()
+	if not QuestConfig.Enabled then return end
 	findExtras()
 	if not spawnPart then
 		warn(("[TraitorService] Workspace.Sahur.ArenaExtras sem %s; o traidor nasce no spot Santuario"):format(CFG.SpawnPartName))

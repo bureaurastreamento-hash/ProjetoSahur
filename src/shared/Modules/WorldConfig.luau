@@ -3,7 +3,7 @@
 	WorldConfig — catálogo autoritativo dos mundos e regiões de F/X.
 	Arquipélago do Capítulo 1 (2026-09-28, MAPA_CAPITULO_1.md "Layout do mundo"): a arena fechada foi
 	desmontada; o chão das ilhas é Terrain (tools/studio/MontarMundo.luau, mesmos centros/raios de Islands abaixo).
-	Regiões futuras entram aqui apenas quando tiverem mapa e checkpoint reais.
+	Regiões futuras ficam indisponíveis e sem checkpoint até terem mapa validado.
 	Ids persistidos NÃO mudam: "arena_pvp" (antiga Ilha da Convergência) agora aponta para o Coliseu.
 	Nomes = BIBLIA_CAMPANHA_CAP1_v0.1.md (2026-09-29): ilha_tutorial = Porto da Névoa (Parte 1), ilha_pilares =
 	Deserto do Sol (Parte 2), ilha_sol_partido = Rota do Eclipse (Parte 3). Ids antigos ficam por causa dos saves.
@@ -28,6 +28,18 @@ WorldConfig.DefaultRegion = "ilha_tutorial"
 WorldConfig.DefaultCheckpoint = "porto"
 
 WorldConfig.Regions = {
+	fortaleza_mare = {
+		Id = "fortaleza_mare", Name = "Fortaleza Maré", Universe = "mundo_das_eras", Chapter = "cap1",
+		Pvp = true, Available = false, Checkpoints = {},
+	},
+	costa_dourada = {
+		Id = "costa_dourada", Name = "Costa Dourada", Universe = "mundo_das_eras", Chapter = "cap1",
+		Pvp = true, Available = false, Checkpoints = {},
+	},
+	cidade_ambar = {
+		Id = "cidade_ambar", Name = "Cidade Âmbar", Universe = "mundo_das_eras", Chapter = "cap1",
+		Pvp = true, Available = false, Checkpoints = {}, -- ativado somente pelo mapa validado
+	},
 	fx_origem = {
 		Id = "fx_origem",
 		Name = "Encruzilhada F/X",

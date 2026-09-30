@@ -1607,6 +1607,26 @@ function AbilityService.IsInForm(player: Fighter): boolean
 	return formPrevious[player] ~= nil
 end
 
+--- Regra comum da seleção e da mochila. Conferir ANTES de consumir qualquer item.
+function AbilityService.CanChangeCharacter(player: Player): (boolean, string)
+	if player:GetAttribute("InMatch") == true or player:GetAttribute("Tournament") == true or formPrevious[player] then
+		return false, "Você não pode trocar de poder durante uma partida ou transformação."
+	end
+	local character = player.Character
+	if not character or not HealthService.IsAlive(character) or player:GetAttribute("ChangingPower") == true then
+		return false, "Espere seu personagem estar pronto para trocar de poder."
+	end
+	if CombatService.IsStunned(player) or CombatService.IsGrabbed(character) or RagdollService.IsRagdolled(player)
+		or AbilityService.IsBusy(player) then
+		return false, "Você não pode trocar de poder durante uma ação de combate."
+	end
+	local since = HealthService.SecondsSinceDamaged(player)
+	if since < CharacterDefs.SwapOutOfCombatSeconds then
+		return false, ("Espere %d s fora de combate para trocar de poder."):format(math.ceil(CharacterDefs.SwapOutOfCombatSeconds - since))
+	end
+	return true, ""
+end
+
 local function onRequestSelectCharacter(player: Player, characterId: any)
 	if not selectLimiter:Allow(player) then
 		return
@@ -1618,8 +1638,8 @@ local function onRequestSelectCharacter(player: Player, characterId: any)
 	if state.characterId == characterId then
 		return
 	end
-	if player:GetAttribute("InMatch") == true or formPrevious[player] then
-		return -- troca só fora do round / fora da forma de boss
+	if not AbilityService.CanChangeCharacter(player) then
+		return
 	end
 	if not DataService.HasCharacter(player, characterId) then
 		Remotes.GetEvent(Remotes.Events.NotifyUnlockDenied):FireClient(player, characterId, "locked")

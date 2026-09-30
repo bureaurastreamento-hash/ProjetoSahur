@@ -37,7 +37,7 @@ def node(name, cls, props=None, children=None):
 
 
 def corner(r=6):
-    return node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, r]}})
+    return node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 0]}})
 
 
 def label(name, text, size, pos, text_size=13, color=WHITE, font="Gotham", align="Left"):

@@ -44,6 +44,7 @@ local function spawnGuide(spot: BasePart)
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = root
 	prompt.Triggered:Connect(function(player: Player)
+		if not StoryService.CanInteract(player, root, 15) then return end
 		StoryService.TalkToGuide(player)
 	end)
 end
@@ -85,6 +86,7 @@ local function staticNpc(spot: BasePart, name: string, lying: boolean, parent: I
 	local root = npc:FindFirstChild("HumanoidRootPart")
 	if not humanoid or not root or not root:IsA("BasePart") then npc:Destroy(); return end
 	npc.Name = name
+	npc:SetAttribute("FXStorySurvivor", if lying then "ferido" else "anda")
 	humanoid.DisplayName = name
 	for _, d in npc:GetDescendants() do
 		if d:IsA("BasePart") then d.CanCollide = false end

@@ -51,6 +51,7 @@ BotService.Config = {
 	BlockSeconds = 0.5,
 	CancelChancePerTick = 0.35, -- caído: chance por tick de ragdoll cancel
 	RespawnTime = CombatConfig.RespawnTime,
+	LeashRadius = 100, -- inimigos da campanha voltam ao território (bots DEV/trailer não mudam)
 }
 
 export type SpawnOptions = {
@@ -60,6 +61,7 @@ export type SpawnOptions = {
 	CFrame: CFrame?, -- padrão: perto do primeiro jogador
 	Behavior: string?, -- passive | aggressive | idle
 	Respawn: boolean?, -- padrão true
+	HomeMap: Model?, -- mapa opcional: não recriar bot depois de removê-lo do Workspace
 	Team: string?, -- TeamId (bots do mesmo time não se batem)
 	Attributes: { [string]: any }?, -- atributos extras no Model ANTES do SetupBot (MaxHealth, WalkSpeed, DamageMult, Traitor…)
 	Tuning: { [string]: number }?, -- override por bot de BotService.Config (SeekRadius, AbilityChancePerTick…)
@@ -275,6 +277,18 @@ end
 local function think(b: Bot)
 	local C = b.cfg
 	local now = os.clock()
+	if b.model:GetAttribute("FXEnemy") == true and not CombatService.IsGrabbed(b.model) then
+		local away = (b.root.Position - b.home.Position).Magnitude
+		if away > C.LeashRadius or b.humanoid:GetState() == Enum.HumanoidStateType.Swimming then
+			b.target = nil
+			b.aggroUntil = 0
+			b.model:PivotTo(b.home * CFrame.new(0, 3.05, 0))
+			b.root.AssemblyLinearVelocity = Vector3.zero
+			HealthService.Heal(b.model, b.humanoid.MaxHealth)
+			HealthService.ClearPveCredit(b.model)
+			return
+		end
+	end
 	local behavior = b.model:GetAttribute("Behavior")
 	if behavior == "idle" then
 		return
@@ -428,6 +442,7 @@ end
 local spawnAt: (opts: SpawnOptions, home: CFrame, index: number) -> Model?
 
 local function onBotDied(b: Bot)
+	local kind = b.model:GetAttribute("StoryKillKind")
 	b.alive = false
 	bots[b.model] = nil
 	task.delay(BotService.Config.RespawnTime, function()
@@ -435,7 +450,12 @@ local function onBotDied(b: Bot)
 		if model.Parent then
 			model:Destroy()
 		end
-		if b.opts.Respawn ~= false and BotService.Enabled then
+		if b.opts.Respawn ~= false and BotService.Enabled
+			and (not b.opts.HomeMap or b.opts.HomeMap:IsDescendantOf(Workspace)) then
+			if b.opts.Attributes and b.opts.Attributes.FXEnemy and typeof(kind) == "string" and kind:find("boss") then
+				local name = b.opts.Name or "Chefe"
+				if name:sub(1, 5) ~= "Eco: " then b.opts.Name = "Eco: " .. name end
+			end
 			spawnAt(b.opts, b.home, b.index)
 		end
 	end)

@@ -41,7 +41,7 @@ StandConfig.SlotUnlock = { [1] = 1, [2] = 2, [3] = 4, [4] = 6, [5] = 3 } :: { [n
 StandConfig.AwakenUnlock = 8
 
 -- Primeiro login: chance (0..1) de nascer "abençoado".
-StandConfig.Blessed = { Stand = 0.002, Race = 0.001 }
+StandConfig.Blessed = { Stand = 0.002, Race = 0 } -- raça inicial humana; outras raças somente por missões
 
 export type Race = { Id: string, Name: string, Access: string, Desc: string, Color: Color3 }
 StandConfig.Races = {
@@ -87,9 +87,34 @@ function StandConfig.RequiredMastery(characterId: string, slot: number): number?
 	return StandConfig.SlotUnlock[slot]
 end
 
+local function poolFor(tierIndex: number): { string }
+	for i = tierIndex, 1, -1 do
+		local pool = {}
+		for standId, rarityId in StandConfig.Stands do
+			if rarityId == StandConfig.Rarities[i].Id then table.insert(pool, standId) end
+		end
+		if #pool > 0 then table.sort(pool); return pool end
+	end
+	return { "Swift" }
+end
+
+--- Chances realmente obtíveis com o catálogo atual, incluindo faixas ainda vazias.
+function StandConfig.RollChances(): { [string]: number }
+	local chances: { [string]: number } = {}
+	for i, rarity in StandConfig.Rarities do
+		local pool = poolFor(i)
+		for _, id in pool do chances[id] = (chances[id] or 0) + rarity.Chance / #pool end
+	end
+	return chances
+end
+
 function StandConfig.ItemInfo(itemId: string, displayNameOf: ((string) -> string?)?): ItemInfo?
 	if itemId == "flecha" then
-		return { Id = itemId, Kind = "arrow", Name = "Flecha", Desc = "Sorteia um Stand (chance fixa por raridade).", Color = Color3.fromRGB(230, 190, 90) }
+		local chances, ids, parts = StandConfig.RollChances(), {}, {}
+		for id in chances do table.insert(ids, id) end
+		table.sort(ids)
+		for _, id in ids do table.insert(parts, ((displayNameOf and displayNameOf(id)) or id) .. (" %g%%"):format(chances[id])) end
+		return { Id = itemId, Kind = "arrow", Name = "Flecha", Desc = "Chance fixa: " .. table.concat(parts, " · "), Color = Color3.fromRGB(230, 190, 90) } :: ItemInfo
 	end
 	local kind, ref = itemId:match("^(%a+):(.+)$")
 	if kind == "stand" and ref and StandConfig.IsStand(ref) then
@@ -120,19 +145,8 @@ function StandConfig.Roll(rng: Random): string
 			break
 		end
 	end
-	for i = tierIndex, 1, -1 do -- faixa vazia cai para a de baixo
-		local pool = {}
-		for standId, rarityId in StandConfig.Stands do
-			if rarityId == StandConfig.Rarities[i].Id then
-				table.insert(pool, standId)
-			end
-		end
-		if #pool > 0 then
-			table.sort(pool)
-			return pool[rng:NextInteger(1, #pool)]
-		end
-	end
-	return "Swift"
+	local pool = poolFor(tierIndex)
+	return pool[rng:NextInteger(1, #pool)]
 end
 
 return StandConfig

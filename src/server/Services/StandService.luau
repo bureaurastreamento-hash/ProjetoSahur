@@ -28,6 +28,12 @@ local rng = Random.new()
 local useLimiter = RateLimiter.new(3, 1)
 local pendingRoll: { [Player]: string } = {} -- Stand sorteado (já guardado como disco) esperando "usar"/"guardar"
 
+local function canUse(player: Player): boolean
+	local allowed, reason = AbilityService.CanChangeCharacter(player)
+	if not allowed then notifyStand:FireClient(player, "denied", { text = reason }) end
+	return allowed
+end
+
 local function displayName(id: string): string?
 	local def = CharacterDefs.Get(id)
 	return def and def.DisplayName
@@ -47,7 +53,9 @@ local function applyPower(player: Player)
 	player:SetAttribute("Stand", if profile.power ~= "" then profile.power else nil)
 	player:SetAttribute("Race", profile.race)
 	if player:GetAttribute("CharacterId") ~= id then
+		player:SetAttribute("ChangingPower", true)
 		AbilityService.ForceCharacter(player, id)
+		player:SetAttribute("ChangingPower", nil)
 	end
 end
 
@@ -109,6 +117,7 @@ function StandService.UseItem(player: Player, itemId: any)
 	if not profile or (profile.inventory[itemId] or 0) < 1 then return end
 	local info = StandConfig.ItemInfo(itemId)
 	if not info then return end
+	if not canUse(player) then return end
 	if info.Kind == "arrow" then
 		useArrow(player)
 	elseif info.Kind == "stand" and info.Ref then
@@ -135,6 +144,7 @@ end
 function StandService.ArrowChoice(player: Player, choice: any)
 	local standId = pendingRoll[player]
 	if not standId or (choice ~= "usar" and choice ~= "guardar") then return end
+	if choice == "usar" and not canUse(player) then return end
 	pendingRoll[player] = nil
 	if choice == "usar" and DataService.TakeItem(player, "stand:" .. standId, 1) then
 		StandService.SetStand(player, standId)

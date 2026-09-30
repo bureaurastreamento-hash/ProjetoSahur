@@ -26,6 +26,8 @@ local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local CosmeticsService = require(script.Parent:WaitForChild("CosmeticsService"))
 local ShopNpcService = require(script.Parent:WaitForChild("ShopNpcService"))
+local ProfileStore = require(script.Parent.Parent.Modules.ProfileStore)
+local AbilityService = require(script.Parent:WaitForChild("AbilityService"))
 
 local TradeService = {}
 
@@ -38,6 +40,7 @@ type Trade = {
 	confirmed: { [Player]: boolean },
 	readyAt: number, -- os.clock() em que os dois ficaram prontos (0 = não)
 	closed: boolean,
+	executing: boolean?,
 }
 type Invite = { from: Player, target: Player }
 
@@ -49,6 +52,7 @@ local invitesByFrom: { [Player]: Invite } = {}
 local forceCharacter: ((Player, string) -> ())? = nil
 
 local function notify(player: Player, event: string, data: any)
+	if player.Parent ~= Players then return end
 	notifyTrade:FireClient(player, event, data)
 end
 
@@ -186,33 +190,31 @@ end
 -- Execução
 -- ---------------------------------------------------------------------------
 
-local function giveItem(from: Player, to: Player, it: TradeConfig.Item)
+local function giveItem(from: any, to: any, it: TradeConfig.Item)
 	if it.kind == "item" then
-		if DataService.TakeItem(from, it.id, 1) then
-			DataService.AddItem(to, it.id, 1)
-		end
+		local left = from.inventory[it.id] - 1
+		from.inventory[it.id] = if left > 0 then left else nil
+		to.inventory[it.id] = (to.inventory[it.id] or 0) + 1
 		return
 	end
 	if it.kind == "character" then
-		local profile = DataService.GetProfile(from)
-		if profile then
-			local index = table.find(profile.unlockedCharacters, it.id)
-			if index then
-				table.remove(profile.unlockedCharacters, index)
-				DataService.MarkDirty(from)
-			end
-		end
-		if from:GetAttribute("CharacterId") == it.id and forceCharacter then
-			forceCharacter(from, CharacterDefs.DefaultCharacter) -- perdeu o personagem em uso: volta ao inicial
-		end
-		DataService.GrantCharacter(to, it.id)
+		table.remove(from.unlockedCharacters, assert(table.find(from.unlockedCharacters, it.id)))
+		table.insert(to.unlockedCharacters, it.id)
+	elseif it.kind == "emote" then
+		table.remove(from.emotes, assert(table.find(from.emotes, it.id)))
+		table.insert(to.emotes, it.id)
 	else
-		CosmeticsService.Remove(from, it.id)
-		CosmeticsService.Grant(to, it.id, "trade")
+		table.remove(from.cosmetics.owned, assert(table.find(from.cosmetics.owned, it.id)))
+		table.insert(to.cosmetics.owned, it.id)
+		for category, id in from.cosmetics.equipped do
+			if id == it.id then from.cosmetics.equipped[category] = nil end
+		end
 	end
 end
 
 local function execute(trade: Trade): (boolean, string)
+	if not nearVendor(trade.a) or not nearVendor(trade.b) then return false, "far" end
+	if not AbilityService.CanChangeCharacter(trade.a) or not AbilityService.CanChangeCharacter(trade.b) then return false, "busy" end
 	local okA, reasonA = validOffer(trade.a, trade.b, trade.offers[trade.a])
 	if not okA then
 		return false, reasonA
@@ -221,24 +223,35 @@ local function execute(trade: Trade): (boolean, string)
 	if not okB then
 		return false, reasonB
 	end
+	local profiles = {
+		[trade.a] = ProfileStore.Copy(DataService.GetProfile(trade.a)),
+		[trade.b] = ProfileStore.Copy(DataService.GetProfile(trade.b)),
+	}
 	for _, pair in { { trade.a, trade.b }, { trade.b, trade.a } } do
 		local from, to = pair[1], pair[2]
 		local offer = trade.offers[from]
 		for _, it in offer.items do
-			giveItem(from, to, it)
+			giveItem(profiles[from], profiles[to], it)
 		end
 		if offer.points > 0 then
-			DataService.AddCoins(from, -offer.points)
-			DataService.AddCoins(to, offer.points)
+			profiles[from].coins -= offer.points
+			profiles[to].coins += offer.points
 		end
 		if offer.eventPoints > 0 then
-			DataService.AddEventPoints(from, -offer.eventPoints)
-			DataService.AddEventPoints(to, offer.eventPoints)
+			profiles[from].eventPoints -= offer.eventPoints
+			profiles[to].eventPoints += offer.eventPoints
 		end
 	end
-	-- salva os dois já; se um falhar, o autosave tenta de novo (a troca já aconteceu na memória dos dois)
-	task.spawn(DataService.SaveNow, trade.a, "trade")
-	task.spawn(DataService.SaveNow, trade.b, "trade")
+	local committed, reason = DataService.CommitTrade(trade.a, trade.b, profiles[trade.a], profiles[trade.b])
+	if not committed then return false, reason end
+	for _, player in { trade.a, trade.b } do
+		CosmeticsService.Refresh(player)
+		for _, it in trade.offers[player].items do
+			if it.kind == "character" and player:GetAttribute("CharacterId") == it.id and forceCharacter then
+				forceCharacter(player, CharacterDefs.DefaultCharacter)
+			end
+		end
+	end
 	Log.debug(("[TradeService] troca concluída: %s <-> %s"):format(trade.a.Name, trade.b.Name))
 	return true, "done"
 end
@@ -281,7 +294,7 @@ local function accept(player: Player)
 		return
 	end
 	local from = inv.from
-	if not from.Parent or trades[from] then
+	if from.Parent ~= Players or trades[from] or trades[player] then
 		return closeInvite(inv, "unavailable")
 	end
 	if not nearVendor(player) then
@@ -388,6 +401,7 @@ local function onRequest(player: Player, action: any, a: any, b: any)
 		return
 	end
 	local trade = trades[player]
+	if trade and trade.executing then return end
 	if not trade then
 		if action == "cancel" then
 			local inv = invitesByFrom[player]
@@ -420,7 +434,9 @@ local function onRequest(player: Player, action: any, a: any, b: any)
 		end
 		trade.confirmed[player] = true
 		if trade.confirmed[trade.a] and trade.confirmed[trade.b] then
+			trade.executing = true
 			local ok, reason = execute(trade)
+			trade.executing = false
 			if ok then
 				close(trade, "done")
 			else

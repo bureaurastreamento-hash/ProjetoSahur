@@ -15,10 +15,12 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
+local ProgressionConfig = require(Modules.ProgressionConfig)
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local RagdollRig = require(Modules:WaitForChild("RagdollRig"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
 local CharacterService = require(script.Parent:WaitForChild("CharacterService"))
+local PvpService = require(script.Parent.PvpService)
 
 local respawnLimiter = RateLimiter.new(1, 1)
 local timeLimiter = RateLimiter.new(2, 1)
@@ -49,6 +51,32 @@ HealthService.FighterDied = Instance.new("BindableEvent")
 HealthService.Damaged = Instance.new("BindableEvent")
 
 local bots: { [Model]: boolean } = {} -- bots registrados (regen/queda no vazio)
+local contributions: { [Model]: { [Player]: { damage: number, at: number } } } = setmetatable({}, { __mode = "k" }) :: any
+
+function HealthService.ClearPveCredit(model: Model)
+	contributions[model] = nil
+end
+
+--- Participação real e recente em chefe, com proximidade no momento da morte.
+function HealthService.PveParticipants(model: Model): { Player }
+	local result = {}
+	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	local root = model:FindFirstChild("HumanoidRootPart")
+	if not humanoid or not root or not root:IsA("BasePart") then return result end
+	local config = ProgressionConfig.PveCredit
+	local credits = contributions[model]
+	if not credits then return result end
+	for player, credit in credits do
+		local playerRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if player.Parent == Players and playerRoot and playerRoot:IsA("BasePart")
+			and credit.damage >= humanoid.MaxHealth * config.MinDamageFraction
+			and os.clock() - credit.at <= config.Seconds
+			and (playerRoot.Position - root.Position).Magnitude <= config.Radius then
+			table.insert(result, player)
+		end
+	end
+	return result
+end
 
 local ATTR_LAST_COMBAT_TIME = "LastCombatTime" -- deu OU levou dano (troca de personagem espera isto)
 
@@ -78,7 +106,7 @@ end
 
 --- Jogadores com atributo CanFight == false não dão nem recebem dano (ex.: lobby).
 function HealthService.CanFight(player: Fighter?): boolean
-	return player == nil or player:GetAttribute("CanFight") ~= false
+	return player == nil or (player:GetAttribute("CanFight") ~= false and player:GetAttribute("DataTransaction") ~= true)
 end
 
 -- ---------------------------------------------------------------------------
@@ -174,12 +202,14 @@ local function setupCharacter(player: Fighter, character: Model)
 			ragdoll(player, character, if typeof(lastId) == "number" then Combatant.ByUserId(lastId) else nil)
 		end
 		Log.debug(("[HealthService] %s morreu (killer: %s)"):format(player.Name, Combatant.Name(killer)))
+		local creditedPlayer = Combatant.PlayerOf(killer)
+		local openWorld = isPlayer and PvpService.OpenWorldKill(player :: Player, creditedPlayer)
 		HealthService.FighterDied:Fire(player, killer)
 		if isPlayer then
 			-- crédito/kill feed/progressão só entre jogadores: bot que mata não pontua, bot que morre não conta
 			local killerPlayer = Combatant.PlayerOf(killer)
 			notifyKill:FireAllClients(killerPlayer, player)
-			HealthService.Died:Fire(player, killerPlayer)
+			HealthService.Died:Fire(player, killerPlayer, PvpService.OnDeath(player :: Player, killerPlayer), openWorld)
 		end
 	end)
 
@@ -207,6 +237,8 @@ end
 --- vítima presa). Habilidades que "pegam" alguém (agarrão) devem checar antes de agarrar.
 function HealthService.IsInvulnerable(victim: Model, attacker: Fighter?): boolean
 	local victimFighter = Combatant.Of(victim)
+	local victimPlayer, attackerPlayer = Combatant.PlayerOf(victimFighter), Combatant.PlayerOf(attacker)
+	if victimPlayer and attackerPlayer and not PvpService.CanDamage(attackerPlayer, victimPlayer) then return true end
 	if victimFighter and victimFighter:GetAttribute("Invulnerable") == true then
 		return true -- modo deus (AdminService)
 	end
@@ -264,15 +296,22 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Figh
 		end
 	end
 
-	local before = humanoid.Health
-	humanoid.Health = math.max(0, before - amount)
-	local dealt = before - humanoid.Health
-
 	if attacker then
 		victim:SetAttribute(ATTR_LAST_ATTACKER, Combatant.UserId(attacker))
 		victim:SetAttribute(ATTR_LAST_ATTACK_TIME, os.clock())
 		victim:SetAttribute(ATTR_LAST_COMBAT_TIME, os.clock())
 	end
+	local attackerPlayer = Combatant.PlayerOf(attacker)
+	if attackerPlayer and victimPlayer then PvpService.RecordHit(attackerPlayer, victimPlayer) end
+	local before = humanoid.Health
+	if attackerPlayer and victim:GetAttribute("FXEnemy") == true then
+		local ledger = contributions[victim] or {}
+		local previous = ledger[attackerPlayer]
+		ledger[attackerPlayer] = { damage = (if previous then previous.damage else 0) + math.min(before, amount), at = os.clock() }
+		contributions[victim] = ledger
+	end
+	humanoid.Health = math.max(0, before - amount)
+	local dealt = before - humanoid.Health
 
 	if victimPlayer then
 		notifyHealth:FireClient(victimPlayer, humanoid.Health, humanoid.MaxHealth)

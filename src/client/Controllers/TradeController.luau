@@ -51,7 +51,8 @@ local GREEN = Color3.fromRGB(90, 205, 130)
 local MUTED = Color3.fromRGB(150, 150, 160)
 
 local DENY_TEXT: { [string]: string } = {
-	busy = "Você já está numa troca ou com convite aberto.",
+	busy = "Finalize o combate, a partida ou a troca atual antes de trocar itens.",
+	save_failed = "Não foi possível confirmar a troca. Seus itens serão reconciliados antes de continuar.",
 	target_busy = "Esse jogador está ocupado.",
 	far = "Vá até o vendedor para trocar.",
 	not_loaded = "Dados não carregados (ou sem salvar nesta sessão): sem troca.",

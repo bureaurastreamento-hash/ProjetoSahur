@@ -60,20 +60,22 @@ local function buildGui()
 	gui = mk("ScreenGui", { Name = "QuestGui", ResetOnSpawn = false, DisplayOrder = 6, IgnoreGuiInset = true }, playerGui) :: ScreenGui
 	-- chip do capítulo (canto direito, abaixo do topbar; discreto)
 	chip = mk("Frame", { Name = "Chip", Size = UDim2.fromOffset(250, 70), Position = UDim2.new(1, -262, 0, 60), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.35, BorderSizePixel = 0, Visible = false }, gui) :: Frame
-	mk("UICorner", { CornerRadius = UDim.new(0, 8) }, chip)
+	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, chip)
 	chipTitle = mk("TextLabel", { Size = UDim2.new(1, -16, 0, 20), Position = UDim2.fromOffset(8, 6), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, chip) :: TextLabel
 	chipLines = mk("TextLabel", { Size = UDim2.new(1, -16, 1, -30), Position = UDim2.fromOffset(8, 26), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Text = "" }, chip) :: TextLabel
 	-- diálogo (embaixo, centro)
-	dialogFrame = mk("Frame", { Name = "Dialog", Size = UDim2.fromOffset(620, 130), Position = UDim2.new(0.5, -310, 1, -190), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.15, BorderSizePixel = 0, Visible = false }, gui) :: Frame
-	mk("UICorner", { CornerRadius = UDim.new(0, 10) }, dialogFrame)
+	dialogFrame = mk("Frame", { Name = "Dialog", AnchorPoint = Vector2.new(0.5, 1), Size = UDim2.new(1, -24, 0, 190), Position = UDim2.new(0.5, 0, 1, -90), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.15, BorderSizePixel = 0, Visible = false }, gui) :: Frame
+	mk("UISizeConstraint", { MaxSize = Vector2.new(620, 190) }, dialogFrame)
+	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, dialogFrame)
 	mk("UIStroke", { Color = COLOR_TITLE, Thickness = 1.5, Transparency = 0.5 }, dialogFrame)
-	dialogImage = mk("ImageLabel", { Size = UDim2.fromOffset(96, 96), Position = UDim2.fromOffset(14, 17), BackgroundColor3 = Color3.fromRGB(40, 40, 50), BorderSizePixel = 0 }, dialogFrame) :: ImageLabel
-	mk("UICorner", { CornerRadius = UDim.new(1, 0) }, dialogImage)
-	dialogName = mk("TextLabel", { Size = UDim2.new(1, -140, 0, 24), Position = UDim2.fromOffset(124, 12), BackgroundTransparency = 1, Font = Enum.Font.GothamBlack, TextSize = 18, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, Text = "" }, dialogFrame) :: TextLabel
-	dialogText = mk("TextLabel", { Size = UDim2.new(1, -140, 0, 60), Position = UDim2.fromOffset(124, 38), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 15, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Text = "" }, dialogFrame) :: TextLabel
-	dialogSub = mk("TextLabel", { Size = UDim2.new(1, -140, 0, 20), Position = UDim2.new(0, 124, 1, -26), BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, TextSize = 12, TextColor3 = COLOR_SUB, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, dialogFrame) :: TextLabel
-	local close = mk("TextButton", { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -30, 0, 8), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 16, TextColor3 = COLOR_SUB, Text = "X" }, dialogFrame) :: TextButton
-	close.MouseButton1Click:Connect(function()
+	dialogImage = mk("ImageLabel", { Size = UDim2.fromOffset(64, 64), Position = UDim2.fromOffset(12, 16), BackgroundColor3 = Color3.fromRGB(40, 40, 50), BorderSizePixel = 0 }, dialogFrame) :: ImageLabel
+	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, dialogImage)
+	dialogName = mk("TextLabel", { Size = UDim2.new(1, -144, 0, 24), Position = UDim2.fromOffset(88, 12), BackgroundTransparency = 1, Font = Enum.Font.GothamBlack, TextSize = 18, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, Text = "" }, dialogFrame) :: TextLabel
+	local textScroll = mk("ScrollingFrame", { Name = "TextScroll", Size = UDim2.new(1, -104, 1, -82), Position = UDim2.fromOffset(88, 42), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 4, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y }, dialogFrame)
+	dialogText = mk("TextLabel", { Size = UDim2.new(1, -8, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, Position = UDim2.fromOffset(0, 0), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 15, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Text = "" }, textScroll) :: TextLabel
+	dialogSub = mk("TextLabel", { Size = UDim2.new(1, -24, 0, 24), Position = UDim2.new(0, 12, 1, -32), BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, TextSize = 12, TextColor3 = COLOR_SUB, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, dialogFrame) :: TextLabel
+	local close = mk("TextButton", { Size = UDim2.fromOffset(40, 40), Position = UDim2.new(1, -44, 0, 4), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 16, TextColor3 = COLOR_SUB, Text = "X" }, dialogFrame) :: TextButton
+	close.Activated:Connect(function()
 		dialogFrame.Visible = false
 	end)
 end
@@ -195,8 +197,9 @@ end
 local function showDialog(data: { [string]: any })
 	dialogToken += 1
 	local token = dialogToken
-	dialogName.Text = ("DEV %s"):format(tostring(data.npc))
+	dialogName.Text = tostring(data.npc or "Habitante")
 	dialogText.Text = tostring(data.text)
+	;(dialogFrame:FindFirstChild("TextScroll") :: ScrollingFrame).CanvasPosition = Vector2.zero
 	local sub = ""
 	if data.kind == "accept" then
 		sub = ("Capítulo aceito: %s"):format(tostring(data.title))
@@ -204,7 +207,7 @@ local function showDialog(data: { [string]: any })
 		sub = ("Recompensa: %s%s"):format(tostring(data.reward), if data.next then "   ·   " .. tostring(data.next) else "")
 		HUDController.ShowToast("Capítulo concluído", tostring(data.title), COLOR_OK)
 	elseif data.kind == "progress" then
-		sub = "Objetivos ainda em aberto — veja o chip no canto ou o mural da Taberna."
+		sub = "Campanha F/X · confira seus objetivos na tela."
 	end
 	dialogSub.Text = sub
 	dialogImage.Image = ""
@@ -220,7 +223,7 @@ local function showDialog(data: { [string]: any })
 		end)
 	end
 	dialogFrame.Visible = true
-	task.delay(if data.kind == "done" then 12 else 8, function()
+	task.delay(math.clamp(#dialogText.Text / 14, if data.kind == "done" then 12 else 8, 35), function()
 		if dialogToken == token then
 			dialogFrame.Visible = false
 		end
@@ -239,7 +242,7 @@ function QuestController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyQuest).OnClientEvent:Connect(function(event: string, data: any)
 		data = if typeof(data) == "table" then data else {}
 		if event == "state" then
-			onState(data)
+			if QuestConfig.Enabled then onState(data) end
 		elseif event == "dialog" then
 			showDialog(data)
 		elseif event == "toast" then

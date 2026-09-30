@@ -31,6 +31,7 @@ local AchievementService = require(script.Parent:WaitForChild("AchievementServic
 local ProgressionService = {}
 
 local notifyProgression: RemoteEvent
+local rng = Random.new()
 
 local function notify(player: Player, event: string, data: { [string]: any })
 	if player.Parent == Players then
@@ -186,22 +187,34 @@ function ProgressionService.Init()
 end
 
 function ProgressionService.Start()
-	HealthService.Died.Event:Connect(function(victim: Player, killer: Player?)
-		if killer and killer ~= victim and killer.Parent == Players then
+	HealthService.Died.Event:Connect(function(victim: Player, killer: Player?, rewardEligible: boolean?)
+		if killer and killer ~= victim and killer.Parent == Players and rewardEligible ~= false then
 			ProgressionService.AddXP(killer, ProgressionConfig.XP.Kill, "kill")
 			ProgressionService.AddMastery(killer, ProgressionConfig.Mastery.Kill, "kill")
 			ProgressionService.Progress(killer, "kills", 1)
 		end
 	end)
-	-- NPCs (mobs e chefes da campanha) também dão maestria ao Stand em uso
+	-- Mobs pagam ao vencedor; chefes pagam a quem participou de verdade, não só ao último golpe.
 	HealthService.FighterDied.Event:Connect(function(victim: any, killer: any)
 		local player = Combatant.PlayerOf(killer)
-		if not player or not Combatant.IsBot(victim) then
+		if not Combatant.IsBot(victim) or victim:GetAttribute("FXEnemy") ~= true then
 			return
 		end
 		local kind = victim:GetAttribute("StoryKillKind")
-		local boss = typeof(kind) == "string" and kind:find("boss") ~= nil
-		ProgressionService.AddMastery(player, if boss then ProgressionConfig.Mastery.NpcBoss else ProgressionConfig.Mastery.NpcKill, "npc")
+		local reward = if typeof(kind) == "string" then ProgressionConfig.Npcs[kind] else nil
+		if not reward then return end
+		local participants = if reward.Boss then HealthService.PveParticipants(victim) else (if player then { player } else {})
+		for _, participant in ipairs(participants) do
+			if not DataService.GetProfile(participant) then continue end
+			ProgressionService.AddXP(participant, reward.XP, "npc")
+			ProgressionService.AddMastery(participant, if reward.Boss then ProgressionConfig.Mastery.NpcBoss else ProgressionConfig.Mastery.NpcKill, "npc")
+			local coins = DataService.RewardCoins(participant, reward.Coins)
+			local arrow = false
+			if reward.ArrowChance and rng:NextNumber() < reward.ArrowChance then
+				arrow = DataService.AddItem(participant, "flecha", 1)
+			end
+			notify(participant, "npc_loot", { name = victim.Name, coins = coins, arrow = arrow })
+		end
 	end)
 	-- tempo jogado (minutos) para as conquistas de "playtime"
 	task.spawn(function()

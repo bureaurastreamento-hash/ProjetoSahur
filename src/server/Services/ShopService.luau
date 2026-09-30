@@ -160,8 +160,16 @@ local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseD
 	if not player or not product then
 		return Enum.ProductPurchaseDecision.NotProcessedYet -- tenta de novo quando o jogador voltar
 	end
-	if not DataService.GetProfile(player) or DataService.IsSessionOnly(player) then
+	local profile = DataService.GetProfile(player)
+	if not profile or DataService.IsSessionOnly(player) then
 		return Enum.ProductPurchaseDecision.NotProcessedYet -- sem DataStore não dá para garantir a entrega
+	end
+	local purchaseId = receipt.PurchaseId
+	if typeof(purchaseId) ~= "string" or purchaseId == "" then return Enum.ProductPurchaseDecision.NotProcessedYet end
+	if profile.receipts[purchaseId] then
+		-- Inclui retry na mesma sessão após falha de save: não conceder a recompensa de novo.
+		return if DataService.SaveNow(player, "purchase") then Enum.ProductPurchaseDecision.PurchaseGranted
+			else Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	if product.coins > 0 then
 		DataService.AddCoins(player, product.coins) -- compra: sem multiplicador
@@ -176,6 +184,8 @@ local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseD
 	if pending[player] then
 		pending[player][product.key] = nil
 	end
+	profile.receipts[purchaseId] = true
+	DataService.MarkDirty(player)
 	local saved = DataService.SaveNow(player, "purchase")
 	if not saved then
 		warn(("[ShopService] compra de %s por %s não salvou; Roblox vai reenviar o recibo"):format(product.key, player.Name))

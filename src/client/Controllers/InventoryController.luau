@@ -14,6 +14,8 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Controls = require(Modules:WaitForChild("Controls"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local StandConfig = require(Modules:WaitForChild("StandConfig"))
+local BuildConfig = require(Modules.BuildConfig)
+local InventoryView = require(Modules.InventoryView)
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 
@@ -31,9 +33,12 @@ local panel: Frame
 local header: TextLabel
 local list: ScrollingFrame
 local rollFrame: Frame
+local search: TextBox
+local selectedTab = "all"
+local tabButtons: { [string]: TextButton } = {}
 
-local function corner(parent: Instance, r: number)
-	local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, r); c.Parent = parent
+local function corner(parent: Instance, _r: number)
+	local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 0); c.Parent = parent
 end
 
 local function stroke(parent: Instance, color: Color3, transparency: number)
@@ -93,19 +98,37 @@ local function render()
 	header.Text = if power ~= ""
 		then ("Stand: %s  (%s)\n%s\nRaça: %s"):format(standName(power), rarity and rarity.Name or "?", masteryLine(power), race and race.Name or "Humano")
 		else ("Sem Stand (humano)\nUse uma Flecha para despertar um Stand.\nRaça: %s"):format(race and race.Name or "Humano")
+	local build = profile.build or {}
+	local weaponLevel = localPlayer:GetAttribute("WeaponMastery") or 1
+	local styleLevel = localPlayer:GetAttribute("StyleMastery") or 1
+	local weapon = if build.weapon == BuildConfig.WeaponId then ("%s · maestria %d"):format(BuildConfig.WeaponName, weaponLevel) else "Sem arma"
+	local style = if build.style == BuildConfig.StyleId then ("%s %d · maestria %d"):format(BuildConfig.StyleName, build.techniqueTier or 1, styleLevel) else "Sem estilo"
+	header.Text ..= "\n" .. weapon .. "\n" .. style
 	header.TextColor3 = if rarity then rarity.Color else TEXT
 	for _, child in list:GetChildren() do
 		if child:IsA("Frame") or child:IsA("TextLabel") then child:Destroy() end
 	end
+	for id, tab in tabButtons do
+		tab.BackgroundColor3 = if id == selectedTab then ACCENT else Color3.fromRGB(35, 45, 55)
+		tab.TextColor3 = if id == selectedTab then BG else TEXT
+	end
+	if selectedTab == "build" then
+		local equipped = label(list, weapon .. "\n\n" .. style .. "\n\nA arma de treino é equipada pela hotbar. Técnica e maestrias pertencem ao seu perfil.", 14, TEXT)
+		equipped.Size = UDim2.new(1, -8, 0, 130)
+		return
+	end
 	local ids = {}
 	for id, n in profile.inventory or {} do
-		if typeof(n) == "number" and n > 0 then table.insert(ids, id) end
+		if typeof(n) == "number" and n > 0 then
+			local info = StandConfig.ItemInfo(id, function(ref) return standName(ref) end)
+			if info and InventoryView.Matches(selectedTab, search.Text, id, info.Name, info.Kind) then table.insert(ids, id) end
+		end
 	end
 	table.sort(ids, function(a, b)
 		return (if a == "flecha" then "0" else a) < (if b == "flecha" then "0" else b)
 	end)
 	if #ids == 0 then
-		local empty = label(list, "Mochila vazia. Flechas vêm da história, de chefes, missões e trocas.", 13, MUTED)
+		local empty = label(list, "Nenhum item nesta aba/busca. Flechas vêm da história, de chefes, missões e trocas.", 13, MUTED)
 		empty.Size = UDim2.new(1, -8, 0, 40)
 		return
 	end
@@ -114,7 +137,8 @@ local function render()
 		if info then
 			local row = Instance.new("Frame")
 			row.LayoutOrder = i
-			row.Size = UDim2.new(1, -8, 0, 58)
+			local rowHeight = if id == "flecha" then 118 else 78
+			row.Size = UDim2.new(1, -8, 0, rowHeight)
 			row.BackgroundColor3 = Color3.fromRGB(22, 32, 42)
 			row.Parent = list
 			corner(row, 6)
@@ -122,7 +146,7 @@ local function render()
 			local name = label(row, ("%s  ×%d"):format(info.Name, profile.inventory[id]), 14, info.Color, true)
 			name.Position, name.Size = UDim2.fromOffset(10, 6), UDim2.new(1, -110, 0, 18)
 			local desc = label(row, info.Desc, 12, MUTED)
-			desc.Position, desc.Size = UDim2.fromOffset(10, 26), UDim2.new(1, -110, 0, 28)
+			desc.Position, desc.Size = UDim2.fromOffset(10, 26), UDim2.new(1, -110, 0, rowHeight - 30)
 			local use = button(row, "Usar", ACCENT)
 			use.Position, use.Size = UDim2.new(1, -90, 0.5, -15), UDim2.fromOffset(80, 30)
 			use.Activated:Connect(function()
@@ -157,11 +181,11 @@ local function showRoll(data: any)
 	rollFrame.Visible = true
 	;(rollFrame:FindFirstChildOfClass("UIStroke") :: UIStroke).Color = color
 	if data.equipped then
-		rollFrame.Size = UDim2.fromOffset(380, 110)
+		rollFrame.Size = UDim2.new(1, -24, 0, 110)
 		task.delay(4, function() rollFrame.Visible = false end)
 		return
 	end
-	rollFrame.Size = UDim2.fromOffset(380, 160)
+	rollFrame.Size = UDim2.new(1, -24, 0, 160)
 	local current = data.current or {}
 	local use = button(rollFrame, ("Usar agora (perde %s)"):format(tostring(current.name)), color)
 	use.Position, use.Size = UDim2.new(0, 14, 1, -52), UDim2.new(0.5, -20, 0, 38)
@@ -186,7 +210,10 @@ local function build()
 	panel = Instance.new("Frame")
 	panel.Visible = false
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
-	panel.Position, panel.Size = UDim2.fromScale(0.5, 0.5), UDim2.fromOffset(440, 470)
+	panel.Position, panel.Size = UDim2.fromScale(0.5, 0.5), UDim2.new(1, -24, 1, -80)
+	local bounds = Instance.new("UISizeConstraint")
+	bounds.MaxSize = Vector2.new(520, 560)
+	bounds.Parent = panel
 	panel.BackgroundColor3, panel.BackgroundTransparency = BG, 0.08
 	panel.Parent = gui
 	corner(panel, 10)
@@ -198,14 +225,43 @@ local function build()
 	close.Position, close.Size = UDim2.new(1, -44, 0, 10), UDim2.fromOffset(32, 28)
 	close.Activated:Connect(function() toggle(false) end)
 	header = label(panel, "", 14, TEXT, true)
-	header.Position, header.Size = UDim2.fromOffset(16, 42), UDim2.new(1, -32, 0, 64)
+	header.Position, header.Size = UDim2.fromOffset(16, 42), UDim2.new(1, -32, 0, 110)
+	local tabs = Instance.new("Frame")
+	tabs.Name, tabs.BackgroundTransparency = "Tabs", 1
+	tabs.Position, tabs.Size = UDim2.fromOffset(12, 158), UDim2.new(1, -24, 0, 44)
+	tabs.Parent = panel
+	for i, tab in InventoryView.Tabs do
+		local b = button(tabs, tab.Label, ACCENT)
+		b.Name, b.TextSize = tab.Id, 12
+		b.Position, b.Size = UDim2.new((i - 1) / #InventoryView.Tabs, 0, 0, 0), UDim2.new(1 / #InventoryView.Tabs, -4, 1, 0)
+		tabButtons[tab.Id] = b
+		b.Activated:Connect(function() selectedTab = tab.Id; render() end)
+	end
+	search = Instance.new("TextBox")
+	search.Name, search.PlaceholderText, search.Text = "Search", "Buscar item...", ""
+	search.ClearTextOnFocus = false
+	search.Font, search.TextSize, search.TextColor3 = Enum.Font.GothamMedium, 14, TEXT
+	search.BackgroundColor3 = Color3.fromRGB(22, 32, 42)
+	search.Position, search.Size = UDim2.fromOffset(12, 210), UDim2.new(1, -24, 0, 40)
+	search.Parent = panel
+	search:GetPropertyChangedSignal("Text"):Connect(render)
 	list = Instance.new("ScrollingFrame")
-	list.Position, list.Size = UDim2.fromOffset(12, 116), UDim2.new(1, -24, 1, -128)
+	list.Position, list.Size = UDim2.fromOffset(12, 258), UDim2.new(1, -24, 1, -270)
 	list.BackgroundTransparency = 1
 	list.ScrollBarThickness = 6
 	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	list.CanvasSize = UDim2.new()
 	list.Parent = panel
+	local function fit()
+		local compact = panel.AbsoluteSize.Y < 420
+		header.Visible = not compact
+		tabs.Position = UDim2.fromOffset(12, if compact then 46 else 158)
+		search.Position = UDim2.fromOffset(12, if compact then 98 else 210)
+		local y = if compact then 146 else 258
+		list.Position, list.Size = UDim2.fromOffset(12, y), UDim2.new(1, -24, 1, -y - 12)
+	end
+	panel:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
+	fit()
 	local layout = Instance.new("UIListLayout")
 	layout.Padding = UDim.new(0, 6)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -214,9 +270,12 @@ local function build()
 	rollFrame = Instance.new("Frame")
 	rollFrame.Visible = false
 	rollFrame.AnchorPoint = Vector2.new(0.5, 0)
-	rollFrame.Position, rollFrame.Size = UDim2.new(0.5, 0, 0, 90), UDim2.fromOffset(380, 160)
+	rollFrame.Position, rollFrame.Size = UDim2.new(0.5, 0, 0, 90), UDim2.new(1, -24, 0, 160)
 	rollFrame.BackgroundColor3, rollFrame.BackgroundTransparency = BG, 0.05
 	rollFrame.Parent = gui
+	local rollLimit = Instance.new("UISizeConstraint")
+	rollLimit.MaxSize = Vector2.new(380, 160)
+	rollLimit.Parent = rollFrame
 	corner(rollFrame, 10)
 	stroke(rollFrame, ACCENT, 0.2)
 end

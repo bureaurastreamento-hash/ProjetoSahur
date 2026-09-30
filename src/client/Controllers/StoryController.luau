@@ -13,6 +13,7 @@ local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 local title: TextLabel
 local body: TextLabel
 local choiceGui: ScreenGui
+local storyBounds: UISizeConstraint
 
 local function label(parent: Instance, size: UDim2, pos: UDim2, textSize: number, color: Color3): TextLabel
 	local item = Instance.new("TextLabel")
@@ -31,15 +32,24 @@ local function build()
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "FXStoryGui", false, 7
 	gui.Parent = playerGui
 	local frame = Instance.new("Frame")
-	frame.Size, frame.Position = UDim2.fromOffset(300, 112), UDim2.new(0, 16, 0, 72)
+	frame.Size, frame.Position = UDim2.new(1, -32, .4, 0), UDim2.new(0, 16, 0, 72)
+	storyBounds = Instance.new("UISizeConstraint")
+	storyBounds.MaxSize = Vector2.new(300, 180)
+	storyBounds.Parent = frame
 	frame.BackgroundColor3, frame.BackgroundTransparency = Color3.fromRGB(12, 20, 28), .2
 	frame.BorderSizePixel = 0
 	frame.Parent = gui
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 9); corner.Parent = frame
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 0); corner.Parent = frame
 	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(70, 205, 255); stroke.Transparency = .55; stroke.Parent = frame
 	title = label(frame, UDim2.new(1,-20,0,38), UDim2.fromOffset(10,8), 15, Color3.fromRGB(100,220,255))
 	title.Font = Enum.Font.GothamBold
-	body = label(frame, UDim2.new(1,-20,1,-48), UDim2.fromOffset(10,42), 13, Color3.fromRGB(235,240,245))
+	local scroll = Instance.new("ScrollingFrame")
+	scroll.Name, scroll.BackgroundTransparency, scroll.BorderSizePixel = "Objectives", 1, 0
+	scroll.Position, scroll.Size = UDim2.fromOffset(0, 48), UDim2.new(1, 0, 1, -52)
+	scroll.CanvasSize, scroll.AutomaticCanvasSize, scroll.ScrollBarThickness = UDim2.new(), Enum.AutomaticSize.Y, 4
+	scroll.Parent = frame
+	body = label(scroll, UDim2.new(1,-20,0,0), UDim2.fromOffset(10,0), 13, Color3.fromRGB(235,240,245))
+	body.AutomaticSize = Enum.AutomaticSize.Y
 end
 
 local function render(data: any)
@@ -50,6 +60,14 @@ local function render(data: any)
 		table.insert(lines, ("%s %s  %d/%d"):format(if item.progress >= item.goal then "✓" else "•", tostring(item.text), item.progress, item.goal))
 	end
 	body.Text = if #lines > 0 then table.concat(lines, "\n") else tostring(data.hint or "Explore a região atual.")
+	local optional = data.optional or {}
+	for _, quest in optional do
+		table.insert(lines, ("Opcional: %s%s"):format(tostring(quest.title), if quest.ready then " → entregue ao Humanoider" else ""))
+	end
+	if #optional > 0 then
+		body.Text ..= "\n\n" .. table.concat(lines, "\n", #lines - #optional + 1)
+	end
+	storyBounds.MaxSize = Vector2.new(300, math.min(300, 100 + #(data.objectives or {}) * 38 + #optional * 60))
 end
 
 -- ECO: escolha na tela. Opção trancada (não explorou) aparece apagada com "?" no lugar da descrição.
@@ -62,13 +80,19 @@ local function showChoice(data: any)
 	dim.Size, dim.BackgroundColor3, dim.BackgroundTransparency = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 0.45
 	dim.Parent = choiceGui
 	local options = if typeof(data.options) == "table" then data.options else {}
-	local panel = Instance.new("Frame")
+	local panel = Instance.new("ScrollingFrame")
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
-	panel.Size = UDim2.fromOffset(520, 150 + #options * 62)
+	local contentHeight = 150 + #options * 62
+	panel.Size = UDim2.new(1, -24, 1, -80)
+	panel.CanvasSize = UDim2.fromOffset(0, contentHeight)
+	panel.ScrollBarThickness = 5
+	local bounds = Instance.new("UISizeConstraint")
+	bounds.MaxSize = Vector2.new(520, contentHeight)
+	bounds.Parent = panel
 	panel.BackgroundColor3, panel.BackgroundTransparency = Color3.fromRGB(12, 20, 28), 0.04
 	panel.Parent = choiceGui
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 12); corner.Parent = panel
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 0); corner.Parent = panel
 	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(255, 170, 70); stroke.Thickness = 2; stroke.Parent = panel
 	local head = label(panel, UDim2.new(1, -32, 0, 30), UDim2.fromOffset(16, 14), 20, Color3.fromRGB(255, 190, 90))
 	head.Font = Enum.Font.GothamBlack
@@ -84,7 +108,7 @@ local function showChoice(data: any)
 		b.BackgroundColor3 = if o.enabled then Color3.fromRGB(34, 52, 68) else Color3.fromRGB(28, 30, 34)
 		b.Text = ""
 		b.Parent = panel
-		local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 8); bc.Parent = b
+		local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 0); bc.Parent = b
 		local name = label(b, UDim2.new(1, -20, 0, 22), UDim2.fromOffset(12, 6), 16, if o.enabled then Color3.new(1, 1, 1) else Color3.fromRGB(110, 115, 120))
 		name.Font = Enum.Font.GothamBold
 		name.Text = if o.enabled then tostring(o.label) else "???"

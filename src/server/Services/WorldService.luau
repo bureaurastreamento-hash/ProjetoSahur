@@ -18,15 +18,20 @@ end
 local function apply(player: Player)
 	local profile = DataService.GetProfile(player)
 	if not profile then return end
-	if not validDestination(profile.world.region, profile.world.checkpoint) then
+	local savedRegion = WorldConfig.GetRegion(profile.world.region)
+	local waitingForMap = savedRegion ~= nil and not savedRegion.Available
+	if not waitingForMap and not validDestination(profile.world.region, profile.world.checkpoint) then
 		profile.world.region = WorldConfig.DefaultRegion
 		profile.world.checkpoint = WorldConfig.DefaultCheckpoint
 		profile.world.discovered[WorldConfig.DefaultRegion] = true
 		DataService.MarkDirty(player)
 	end
-	player:SetAttribute("WorldRegion", profile.world.region)
-	player:SetAttribute("WorldCheckpoint", profile.world.checkpoint)
-	local cf = WorldConfig.CFrameOf(profile.world.region, profile.world.checkpoint)
+	-- Destino conhecido ainda indisponível: fallback só na sessão, sem apagar o checkpoint salvo.
+	local regionId = if waitingForMap then WorldConfig.DefaultRegion else profile.world.region
+	local checkpointId = if waitingForMap then WorldConfig.DefaultCheckpoint else profile.world.checkpoint
+	player:SetAttribute("WorldRegion", regionId)
+	player:SetAttribute("WorldCheckpoint", checkpointId)
+	local cf = WorldConfig.CFrameOf(regionId, checkpointId)
 	if cf then
 		player:SetAttribute("WorldSpawnX", cf.X)
 		player:SetAttribute("WorldSpawnY", cf.Y)
@@ -34,6 +39,10 @@ local function apply(player: Player)
 		local _, yaw = cf:ToOrientation()
 		player:SetAttribute("WorldSpawnYaw", math.deg(yaw))
 	end
+end
+
+function WorldService.Refresh(player: Player)
+	apply(player)
 end
 
 function WorldService.SetCheckpoint(player: Player, regionId: string, checkpointId: string): boolean
@@ -57,7 +66,11 @@ end
 
 function WorldService.SpawnCFrame(player: Player): CFrame?
 	local profile = DataService.GetProfile(player)
-	return if profile then WorldConfig.CFrameOf(profile.world.region, profile.world.checkpoint) else nil
+	if not profile then return nil end
+	if not validDestination(profile.world.region, profile.world.checkpoint) then
+		return WorldConfig.CFrameOf(WorldConfig.DefaultRegion, WorldConfig.DefaultCheckpoint)
+	end
+	return WorldConfig.CFrameOf(profile.world.region, profile.world.checkpoint)
 end
 
 function WorldService.Start()

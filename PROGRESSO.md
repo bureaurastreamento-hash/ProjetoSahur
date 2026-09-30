@@ -2,6 +2,224 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## PONTO DE RETOMADA — bounty persistente / mapa adiado — 2026-09-30
+
+**Na `main`, sem Studio e sem publicação. O dono adiou sua construção manual para o final e autorizou continuar o código. A próxima leva recomendada é contratos de caçador; a campanha do Capítulo 1 permanece preparada até Fortaleza, sem iniciar Capítulo 2 automaticamente.** Quando o dono avisar que modificou o mapa, capturar e conciliar o snapshot antes de reconectar Rojo, conforme `SINCRONIZACAO_MANUAL.md`.
+
+### Implementado nesta leva
+
+- `BountyConfig`/`BountyService`: vitórias válidas em PvP de mundo aberto dão **5.000 bounty**, sem multiplicador de passe. Exigem crédito de morte autoritativo, perfis carregados e diferença absoluta de até 10 níveis. Títulos: Procurado (50 mil), Perigoso (250 mil), Ameaça Regional (1 milhão), Calamidade (5 milhões), Anomalia (10 milhões). Valores iniciais ajustáveis, não balanceamento final.
+- Contexto de mundo aberto é capturado **antes de `FighterDied`** limpar dados da arena. Duelo, guerra, partida e torneio não geram bounty; zonas seguras também são excluídas. O evento anterior de crédito continua com seus três primeiros argumentos; quarto argumento interno identifica o contexto.
+- Mesmos alvos não rendem de novo durante 300 segundos. Histórico por UserId é salvo junto da bounty, protegendo reconexões/troca de servidor quando o save foi confirmado. Lista limitada a 256 alvos ativos; cheia recusa novos pagamentos, sem expulsar cooldown vigente. Não protege contra coalizões com muitas contas distintas. Falha de save/sessão privada mantém as limitações normais de persistência.
+- Perfil v5 ganha campo aditivo `bounty`, migrado/validado sem trocar DataStore/schema ou apagar progresso. Sem perda de bounty na morte: essa regra não está definida nos documentos. Derrotar alvo com bounty dá bônus de 1 moeda por 50 mil de bounty, teto de 20 base, além da recompensa PvP existente; multiplicadores normais de moeda continuam. Sem contratos pagos nesta fase.
+- Perfil mostra bounty/título na lista de estatísticas; HUD avisa ganho/bônus pelo canal existente. Atributos `Bounty`/`BountyTitle` expõem estado público, mas recompensa lê o perfil servidor, nunca esses atributos. Ranking global, nameplates e efeitos próprios ainda pendentes.
+- **Verificação:** 86 testes locais (76 anteriores + 10 bounty), análise estática, diff e auditoria aditiva do Rojo passaram. Avisos Font=100 antigos permanecem. Física/UI/replicação e DataStore real não verificados sem Studio. Não publicou, abriu Studio, alterou mapa/arte/manifest nem fez commit.
+
+### Próximas levas, nesta ordem
+
+1. Contratos de caçador: auditar serviços/UI existentes; alvo avisado, sem GPS; regras de aceitação, validade, crédito e recompensa servidor, respeitando PvP/cooldown.
+2. Kits definitivos dos chefes e fases reais do Avatar; concluir mecânica de Toduro. Usar assets existentes por referência, sem modificar arte da equipe.
+3. Ampliar farm/sidequests e consequências pessoais dos Ecos; classes sociais Hunter/Outlaw/Defender, eventos/invasões e apresentação das referências ainda pendentes.
+4. Construção manual do dono e conciliação dos arquivos com snapshot completo, antes de reconectar Rojo. Integração física de Cidade/Costa/Fortaleza e expansão do Eclipse, cenas/rotinas/NPCs ainda necessárias.
+5. Validação no Studio: toda campanha, sistemas econômicos, PvP/contratos, UI e dois clientes; depois publicação pelo dono no Studio. Capítulo 2 depende de mundo/place e conteúdo canônico próprios.
+
+### Testar bounty depois, sem exigir Studio agora
+
+- Dois jogadores fora de zonas seguras, proteção de respawn expirada, níveis próximos: vitória dá 5.000 bounty, perfil/toast e título nos limiares. Repetir antes de 5 minutos não paga; reconectar após save confirmado mantém bloqueio.
+- Gap acima de 10 níveis em ambos os sentidos, suicídio, NPC, zonas seguras e arenas/torneio não dão bounty. Bônus só contra alvo realmente procurado; título/coins/bounty persistem juntos e não reduzem bounty do derrotado.
+- Servidor privado/falha de load mantém aviso e progresso só de sessão. Conferir rolagem da estatística nova no perfil desktop/mobile/gamepad.
+
+## PONTO DE PARADA — Fortaleza Maré / entrega para construção manual — 2026-09-30
+
+**Registro histórico, supersedido pelo ponto de retomada acima: após esta leva o dono decidiu adiar a construção manual e continuar o código. A campanha permanece até o encerramento do Capítulo 1; não avançar automaticamente para Capítulo 2.** A captura/salvamento/sincronização reversível futura já está autorizada nesta conversa. Nenhuma captura do novo mapa foi feita nesta sessão, pois ele ainda será construído.
+
+### Implementado nesta leva (ainda não publicado)
+
+- **Fortaleza / M26–29:** chegada real, prisão, Eco civil/alto risco, abrir ala escolhida primeiro e outra depois com flag de atraso, duas anomalias distintas de repetição e último Rastro com registro parcial fiel à bíblia. Resultado principal comum; atrasos/informação são flags/falas pessoais, sem inventar sobreviventes específicos ou destruir/abrir arte global.
+- **M30:** dois fragmentos investigados, duas versões alteradas de chefes com contribuição/identidade distinta (farm do mesmo pad não conta como dois), pedido de ajuda/comunicação com Approx/Lry/Fred/Ravy, avaliação de Toduro e recepção de Adryan com resposta do jogador. Cenas iniciais por diálogos, não cutscenes completas.
+- **M31:** examinar ruptura, Avatar provisório e três âncoras distintas. Âncoras exigem participação recente real e Avatar vivo; matar antes de ativar três não conclui derrota para campanha. Pode completar após respawn de Eco, preservando âncoras já feitas. Loot continua por contribuição independentemente do objetivo de campanha.
+- **Escolha e execução finais:** Humanoider exige dois mecanismos; Toduro, três pontos internos; alternativo exige preparar dispositivo após Rastros das Ilhas 1/3/6, ativá-lo e registra assinatura do protagonista na F/X. Todos precisam confirmar estabilização, liberam a mesma passagem e seguem para despedida/oferta de Adryan e terminal “C-8 // RASTRO RECUPERADO / 1 DE ?”. Terminal marca `cap1_completed` e `cap2_unlocked`; sem revelar traidor/causa/origem verdadeira e sem teleportar para place inexistente.
+- **Migração rev7:** mantém os 39 atos rev6 e seus contadores/itens/flags; anexa Fortaleza após a antiga espera. Saves rev6 além do limite retornam à chegada 39, sem wipe de inventário/flags. DataStore/schema permanecem. Perfil ao fim fica em `cap2_aguarda` do Capítulo 1, aguardando próximo mundo real.
+- **Mapa seguro:** `FortalezaMareService` reutiliza registrador aditivo validado; exige mapa `FXFortalezaMare`, limites separados, todos os marcadores e chão dos pontos de combate/checkpoint. Região indisponível até validar; três bots provisórios só depois. Portal ida/volta validado; mapa removido desfaz registro/bots. Contrato em `FORTALEZA_MARE_INTEGRACAO.md`.
+- **Rojo / entrega:** manifest auditado aditivo; nenhuma alteração de `default.project.json`, mapa/arte/Terrain/`.rbxl`. README antigo que mandava abrir build incompleto substituído pelo fluxo com place existente. `tools/auditar_rojo.py` lista caminhos, mapas/propriedades controladas e confirma manifest; não exporta Studio. Tutorial e ordem de captura/reconciliação em `SINCRONIZACAO_MANUAL.md`.
+- **Verificação:** 76 testes locais passaram (66 anteriores + 10 Fortaleza), análise estática e `git diff --check` passaram; auditoria Rojo OK. Avisos antigos Font=100 continuam. Sem abrir Studio, publicar, fazer commit/reset ou exigir teste do dono nesta sessão.
+
+### Falta — ordem de retomada
+
+1. **Mapa do dono:** backup completo atual antes de construir; Rojo desconectado durante alterações conhecidas; cópia completa após construir. Ao avisar, ler snapshot/estado de edição, comparar/exportar alterações para arquivos, preservar Terrain/iluminação/arte e referências, conferir diff antes de reconectar. Não presumir que Rojo trouxe mudanças manuais para a pasta.
+2. **Validação jogável:** boot/Output, colisão/R6/chegadas, portais/checkpoints, toda campanha, builds/itens/trocas/recibos, PvP e UI desktop/mobile/gamepad; dois clientes para escolhas e contribuição. Sem essa etapa a base ainda não é certificada jogável.
+3. **Completar mapas/cenas:** Cidade/Costa/Fortaleza físicas, expansão do Eclipse, NPCs/rotinas/horários, tarefas encenadas, pistas, portas/alas pessoais, consequências visuais dos Ecos, loops temporais, fragmentos/colapso nas seis ilhas e presença/cutscenes dos Anciões.
+4. **Kits finais:** Homem Sem Sombra, Regente com artefatos de múltiplos mundos, versões alteradas e Avatar com quatro fases/alternância de regiões. Combate atual reutiliza kits provisórios. Método de Toduro ainda não simula dificuldade/quase morte; é sequência inicial de interações.
+5. **Camadas do RPG e referências:** catálogo maior de sidequests/dungeons/escoltas/tesouros, bounty/contratos/classes sociais/eventos/invasões; acabamento de HUD/mobile/mapas; eventual desenho da loja permanente compatível com regras aprovadas e IDs reais do dono. Não foram concluídos nesta leva.
+6. **Capítulo 2:** somente após conciliar o mapa/validar o Capítulo 1; planejar place separado, transição/persistência e campanha canônica de Adryan. Não há destino real nem troca automática de capítulo/place atualmente.
+
+### Testes específicos da Fortaleza para quando o mapa existir
+
+- Escolher cada ala; abrir selecionada, depois outra; reconectar sem repetir progresso. Conferir flags/falas pessoais e que não abre a ala de outro jogador globalmente.
+- Loops/Rastro distintos, colapso com dois pads; repetir um chefe não substitui o segundo. Toduro deve vir antes de Adryan, e nenhuma fala pode revelar causa/traidor.
+- Âncoras: espectador, longe, morto e Avatar morto não contam; contribuição recente + três marcadores distintos + derrota concluem. Matar cedo deve permitir recuperação no Eco seguinte.
+- Três métodos finais e reconexão no meio. Alternativo bloqueado sem Rastros/dispositivo; métodos não aceitam ações uns dos outros. Terminal conclui uma vez; nenhuma tentativa de teleporte para Capítulo 2.
+
+## Referências visuais + Costa Dourada — 2026-09-30 (Codex, main; ainda não publicado)
+
+- **Referências auditadas:** TXT e nove imagens lidos. Inspiração adaptada ao tema F/X, sem copiar assets/mapas/símbolos. Dez nomes de arquivo normalizados para ASCII/`_`, bytes preservados; índice com nomes originais e SHA-256. Aplicação por exemplo, limites e pendências em `REFERENCIAS_VISUAIS.md`.
+- **UI:** 278 UICorners dos modelos `src/ui` agora têm raio zero; construtores de menus e geradores correspondentes mantêm essa regra. TopbarPlus configurado nos containers do jogo, sem editar pacote/CoreGui. Menu lateral recolhível com lista rolável; mochila Tudo/Flechas/Discos/Raças/Build + busca literal, layout compacto para baixa altura. Uso de itens mantém os Requests/validação existentes. Diálogo responsivo com texto rolável, foto quadrada, identidade do NPC sem “DEV” e duração por extensão da fala. Objetivos de campanha/sidequests roláveis, com altura limitada pela tela.
+- **Costa Dourada:** chegada, Missões 21–25, Regente e Eco preparados. Lotes distintos → organização → escolha e execução da infiltração → registros → C-8/fala do Humanoider → chefe → Eco. Força exige três guardas PvE + entrada principal; furtividade exige duas passagens em ordem + entrada furtiva; social exige conversar, buscar entrega e retornar ao contato antes de escolher + entrada autorizada. Flags persistem e moradores/contato reconhecem o caminho por fala. Nenhum caminho exige outro caminho ou kill PvP.
+- **Eco e cânone:** destruir mercado / facção menos agressiva / monitorar gravam estado pessoal e resposta do guia, liberando a mesma rota. Nome correto da próxima ilha conferido/corrigido para **Fortaleza Maré**. C-8 identifica material de Carlos sem explicar causa/origem. Horários são descobertos por registros; rupturas físicas programadas não foram implementadas.
+- **Migração:** rev6 anexa atos após os 30 da rev5, mantém índices/contadores/itens/flags. `rumo_costa_dourada` agora espera chegada real; perfil antigo além do limite rev5 volta apenas à chegada. As migrações anteriores continuam e os saves existentes não são apagados; sem novo DataStore/schema.
+- **Mapa/combate:** catálogo da Costa indisponível/sem coordenadas até validar mapa real. Validação existente da Cidade foi extraída para `CampaignMapRegistration`, reutilizada e retestada. Exige limites separados, marcadores e chão em chegada/chefe/guardas/checkpoint; desfaz região e bots ao remover mapa. Portal recusa destino ausente. Kits provisórios Swift (guardas) e Kira (Regente), sem fingir que artefatos de múltiplos mundos estão prontos. Contrato em `COSTA_DOURADA_INTEGRACAO.md`; nenhuma arte da equipe/mapa/`.rbxl`/manifest editado.
+- **Verificação:** 66 testes locais (56 anteriores + 10 Costa), análise estática e `git diff --check` passaram. JSONs de UI e SHA-256 das referências conferidos. Avisos antigos Font=100 continuam; aparência/física/replicação não verificadas sem Studio. Nenhuma publicação.
+
+### Testar depois, sem exigir Studio agora
+
+1. Desktop/mobile em paisagem/retrato: painéis retos, menu recolhe/rola, abas e busca da mochila, cabeçalho compacto, usar/guardar Flecha sem perder eventos. Conferir controles/gamepad e legibilidade.
+2. Diálogo longo (Carlos/C-8), rolagem, fechar por toque/tecla e duração; HUD de objetivos com várias tarefas/sidequests sem cortar texto.
+3. Integrar Costa pelo contrato: ida/volta, checkpoint, chão R6 e segurança da chegada; ilha incompleta deve permanecer indisponível. Revalidar Âmbar após extração do registrador comum.
+4. Três soluções de infiltração com saves/jogadores distintos; acesso errado, morto ou distante não conta. Reconectar entre favor/entrega, entre passagens e antes de atravessar o acesso.
+5. Comparar registros, obter C-8, falar com Humanoider; chefe com contribuidores/espectador, loot/respawn/Eco; cada decisão mantém rota principal e comentário próprio.
+
+### Próxima continuidade
+
+- Fortaleza Maré / missões 26–31 e encerramento do Capítulo 1, após conferir objetivos/áreas existentes.
+- Mapas físicos da Cidade/Costa, kits próprios dos chefes, rotinas/horários, comerciantes, consequências visuais dos Ecos e conteúdo completo das tarefas permanecem pendentes.
+- Referências de porto/água/construção orientam modelagem futura. Seleção de classes sociais e loja de Flechas específicas/permanentes não foram adicionadas por uma imagem de inspiração: precisam de regras compatíveis com a direção aprovada e, para compras reais, IDs do dono.
+
+## Leva de Cidade Âmbar — 2026-09-30 (Codex, main; ainda não publicado)
+
+- **Campanha preparada:** chegada à Cidade Âmbar, Missões 16–20, O Homem Sem Sombra, Eco da cidade e espera pela Costa Dourada. Segue a bíblia: conhecer moradores/tarefa simples → desaparecimentos → fotografia/confronto → investigação/suspeito → ruptura controlada na casa → chefe → autoridades/Humanoider/interrogatório pessoal. Os três caminhos registram a informação principal sobre “um homem que conhecia as linhas”, sem revelar nome/causa/traidor, e liberam a flag da próxima rota.
+- **Revelação:** foto não identifica o rosto e não nomeia Carlos. Somente levar a foto ao Humanoider durante a Missão 18 grava `carlos_nome_revelado` e apresenta “Carlos. Ele era um de nós. ... Éramos oito. Agora somos sete.”; não informa a causa. O diálogo do ato seguinte não atropela essa fala.
+- **Investigação recuperável:** moradores/cenas distintos contam uma vez por ato. Padrão exige cenas + depoimento. Acusação sem vínculo adiciona uma contrapista obrigatória, sem avançar/travar/perder o save; após reinvestigar, pode escolher novamente, inclusive após outra acusação errada. Flags, contadores e pistas vistas persistem no perfil existente. Interações validam vida, distância, região, ato e rota no servidor.
+- **Migração rev5:** os 22 atos rev4 mantêm índices/identidade/contadores/flags/inventário; `rumo_cidade_ambar` passa a esperar chegada real. Atos novos são anexados. Save antigo além do último ato rev4 volta apenas à chegada, com contadores inválidos daquele limite limpos; itens, escolhas, Rastros e rotas permanecem. Sem novo DataStore/schema/wipe.
+- **Integração aditiva:** `CidadeAmbarConfig`/`CidadeAmbarService` aguardam mapa real `FXCidadeAmbar`, limites explícitos, marcadores ancorados e chão na chegada/boss. Região começa indisponível e sem checkpoint. Só após validar registra limites/checkpoint/zona segura e prompts, sem mover/clonar arte. Portal de ida aguarda região disponível; todos os portais agora também validam distância/vida. Remover o mapa desfaz o registro e impede respawn em mapa ausente. Checkpoint salvo de região conhecida indisponível usa chegada padrão só na sessão, sem apagar a escolha; registro/remoção do mapa atualiza atributos para o próximo respawn. Contrato completo em `CIDADE_AMBAR_INTEGRACAO.md`.
+- **Chefe/loot:** no mapa válido, chefe usa Swift provisoriamente; bot autoritativo e respawn como Eco existentes, crédito por contribuição, XP 140 base, 9 moedas base e Flecha 5% por tentativa. Kit próprio de ocultação/memória/duplicação espacial continua pendente; valores iniciais para balanceamento.
+- **Verificação:** 56 testes locais passaram (46 anteriores + 10 Cidade Âmbar), análise estática e `git diff --check` passaram. Teste de mapa usa raycast/instâncias simulados; física, interface e replicação não foram verificadas. Avisos Font=100 antigos permanecem. Sem abrir Studio, publicação ou edição de assets/`.rbxl`/manifest Rojo.
+
+### Validação jogável para depois
+
+1. Integrar mapa pelo contrato, conferir chão/espaço R6/limites/retorno/chegada segura e checkpoint. Sem mapa completo, ida deve permanecer indisponível; regiões anteriores continuam funcionando.
+2. Missões 16–18: repetir o mesmo morador/local não conta duas vezes; conversar com Humanoider antes da foto não revela nome. Foto + confronto revelam nome uma vez, sem causa; reconectar entre as duas interações.
+3. Missão 19: cenas + testemunha liberam padrão; escolher errado exige contrapista; reconectar, reinvestigar e escolher novamente sem travar. Jogadores diferentes mantêm contadores próprios.
+4. Casa → chefe com dois contribuidores → Eco; três decisões liberam informação/flag da Costa. Conferir loot e respawn de Eco; remover mapa em sessão de desenvolvimento deve desativar chegada e bots.
+5. Conferir HUD, diálogos e prompts mobile; ajustar posicionamento da fotografia, pistas, moradores e do chefe no mapa real.
+
+### Próximas levas
+
+- Costa Dourada / missões 21–25, depois Fortaleza Maré / missões 26–31 e final do Capítulo 1: auditar cânone/código antes de expandir.
+- Completar física/arte e conteúdo urbano da Cidade Âmbar, rotinas/horários, encenação das tarefas e kit específico do chefe; expansão física do Eclipse, sidequests e consequências visuais completas dos Ecos continuam pendentes.
+
+## Leva de consequências dos Ecos e investigações — 2026-09-30 (Codex, main; ainda não publicado)
+
+O dono autorizou continuar sem Studio e deixar sua validação jogável para depois. Essa validação não bloqueia o trabalho local; os limites abaixo permanecem registrados.
+
+- **Investigações opcionais:** `SidequestConfig`/`SidequestService` concretizam investigação e retorno aos Anciões previstos em `ESTRUTURA_JOGO.md`, usando resultados já definidos na bíblia, sem nova subtrama/revelação. “Revisar os arquivos preservados” fica disponível somente para quem recuperou arquivos no Eco da capela (inclusive passagem); investigar em `RachaduraCapela` e entregar ao Humanoider rende 25 XP base + 3 moedas. “Examinar a anomalia remanescente” exige transferência no Eco do Deserto; investigar em `CamaraMarker` e entregar no Porto rende 35 XP base + 4 moedas. Números iniciais para balanceamento posterior, com multiplicadores normais de XP/moeda do jogo.
+- **Progresso:** flags `side_<id>_inspected` / `side_<id>_done` no save existente da campanha; nenhum novo DataStore, schema ou índice de ato. Investigação e entrega conferem escolha, região, distância e vida no servidor. Recompensa é única e permanece junto de `done` no mesmo perfil; reconectar não permite repetir. Campanha/farm/PvP continuam independentes dessas atividades.
+- **Diálogos e HUD:** Humanoider comenta sobreviventes e resultado da capela conforme as flags reais. HUD da campanha lista somente investigações liberadas e ainda não concluídas, indicando entrega após investigar. Diálogos/toasts usam o canal já existente; quests legadas do traidor continuam desativadas.
+- **Apresentação pessoal:** `EcoController` oculta localmente o rig provisório do sobrevivente ferido quando ele foi deixado na fenda, inclusive na reconexão. Apenas rigs gerados pelo código e marcados `FXStorySurvivor` são afetados. Prompts opcionais aparecem somente quando a atividade está liberada; entrega aparece quando há investigação pronta. Servidor continua validando independentemente da visibilidade cliente. Atualização visual acontece quando flags relevantes mudam ou instâncias chegam, sem varrer o mapa a cada atualização de XP.
+- **Verificação:** 46 testes locais passaram (10 persistência, 13 gameplay, 8 builds, 8 expansão, 7 sidequests); análise estática e `git diff --check` passaram. Avisos antigos de Font=100 em assets binários permanecem. Sem publicação e sem alteração de mapa/arte/animações/`.rbxl`/manifest Rojo.
+
+### Validação jogável para depois (sem exigir teste agora)
+
+1. Eco da fenda: dois clientes com decisões diferentes; só quem deixou o ferido deixa de vê-lo. Reconectar e conferir nome/rig ocultos apenas nessa perspectiva.
+2. Capela: prisioneiros não libera arquivos; arquivos/passagem liberam. Investigar na rachadura, voltar ao Humanoider e entregar uma vez; reconectar e repetir sem ganhar novamente.
+3. Deserto: selar/destruir não libera anomalia; transferir libera. Investigar na Câmara e entregar no Porto; vida/distância/região erradas não avançam. Conferir duas investigações prontas juntas.
+4. HUD e prompts no mobile: textos opcionais e diálogos legíveis, atividades concluídas somem, campanha mantém seu ato. Em servidores privados, progresso permanece só na sessão, conforme DataService existente.
+
+### Próxima continuidade
+
+- Expandir Cidade Âmbar / missões 16–20 com os objetivos da bíblia e migração de campanha, após auditar os marcadores/áreas existentes. Permanecem a expansão física do Eclipse e as ilhas 5–6.
+- Esta leva cobre duas investigações iniciais e uma consequência visual pessoal; não fecha o catálogo de sidequests, NPCs posteriores, relocação dos resgatados, visual das ruínas/energia do Deserto ou as atividades completas de cada ilha.
+
+## Leva de campanha: Deserto e Viajante — 2026-09-30 (Codex, main; ainda não publicado)
+
+- **Eco do Deserto:** vencer o Sacerdote passa para “A entidade desperta”; escolhas selar / destruir a Câmara / transferir energia seguem a bíblia. Para perfis novos, a rota do Eclipse libera após resolver o Eco. Flags e falas registram preservação, perda de ruínas ou anomalia menor; o resultado principal continua ameaça resolvida. Não foi aplicada destruição global do mapa compartilhado.
+- **Puzzle opcional:** três mecanismos provisórios criados em runtime junto de `CamaraMarker`; a leitura da Câmara indica a sequência II → I → III. Sequência correta grava `camara_transferencia_preparada`, habilitando transferir. Erro reinicia apenas a tentativa; progresso é pessoal, persistido em flags e recuperável na reconexão. Distância, região e vida são validadas no servidor.
+- **Missão 13:** O Viajante é criado como NPC R6 provisório perto de `SolPartidoSpawn`; falar com ele demonstra o transporte de seres vivos entre realidades, sem revelar Carlos nem detalhes não definidos do mundo de origem. A missão antecede o Rastro da Missão 14; conversa não avança de longe, morto ou antes do ato correto. Saves antigos que passaram por esse ponto podem conversar e registrar a visita sem retroceder.
+- **Migração:** campanha rev4; ato antigo >=16 ganha +1 pelo Eco e >=18 ganha mais +1 pelo Viajante. Os 20 atos da rev3 preservam identidade e contadores; inventário, Rastros, flags, rotas e maestrias permanecem. Rev2 continua pela migração já existente antes desta. Rotas já abertas não são removidas; Eco faltante pode ser escolhido examinando a Câmara, sem alterar o ato atual. DataStore/schema continuam v5, sem wipe.
+- **Verificação:** 39 testes locais passaram (10 persistência, 13 gameplay, 8 builds, 8 expansão); análise estática e `git diff --check` passaram. Permanecem os avisos antigos de migração Font=100 nos assets binários. Nenhuma publicação, edição de assets da equipe, mapa versionado, `.rbxl` ou manifest Rojo.
+
+### Testar esta leva no Studio quando disponível
+
+1. Novo progresso no Deserto: vencer Sacerdote com dois participantes; conferir Eco, opções selar/destruir e rota bloqueada antes/aberta depois. Reconectar com escolha pendente.
+2. Câmara: examinar para ler II → I → III, errar e reiniciar, acertar; conferir transferir habilitado apenas para quem resolveu. Reconectar no meio/fim do puzzle e conferir que outro cliente não recebe suas flags.
+3. Eclipse: completar Caçados, conversar com Viajante perto da chegada, seguir para Rastro e Observador. Tentar interação fora de alcance/morto. Conferir posicionamento do rig, prompts, textos e mobile.
+4. Save rev3 nas Missões 10, 11, 12, 14 e 15: manter a mesma missão e contadores após carga; preservar rotas abertas. Voltar à Câmara para Eco faltante e ao Viajante para visita opcional sem retroceder nem repetir recompensas.
+
+### Pendências que esta leva não encerra
+
+- Consequências visuais por jogador dos Ecos, sidequests completas e puzzle/arte definitiva da Câmara.
+- Alternância de épocas na luta do Sacerdote, tutorial avançado de Manifestação e expansão física da Rota do Eclipse (porto/vilas/cidade/mansão). O mapa atual continua sendo o trecho de deserto/templo, não a rota inteira da bíblia.
+- Ilhas 4–6, missões 16–31, bounty/contratos, novos kits/raridades de Stand e validação jogável/performance.
+
+## Leva de builds iniciais — 2026-09-30 (Codex, main; ainda não publicado)
+
+- **Missão 2:** visitar a Taberna abre a escolha Técnica / Manifestação / Arma. Objetivos e escolha são validados no servidor; escolha repetida não concede recompensa. Nenhum ato foi inserido/reordenado: revisão da campanha permanece 3.
+- **Rotas:** Técnica aprende Técnica corporal; Arma recebe Espada de treino como Tool nativo, restaurado no respawn; Manifestação ganha uma Flecha na Missão 2. Técnica/Arma recebem sua Flecha no Eco final da Ilha 1; Manifestação recebe Técnica básica nesse final. Loot de Flecha continua independente. Perfis que já passaram pela Missão 2 recebem a escolha ao pedir estado/reconectar, sem voltar atos ou duplicar a Flecha já entregue pela capela.
+- **Combate:** espada equipada multiplica M1 por 1,15; Técnica básica por 1,10 e reduz dano recebido em 5%; evolução por 1,20 e reduz em 10%. Espada substitui o bônus ofensivo da Técnica, sem somá-los. Habilidades de Stand mantêm seu dano ofensivo original; proteção da Técnica também vale contra NPCs. Valores provisórios para balanceamento jogável. Tool usa a trava existente de troca fora de combate.
+- **Maestria:** cada acerto real de M1 não bloqueado soma 1 XP somente à arma equipada ou ao estilo desarmado, em `weapon:espada_inicial` / `style:tecnica_corporal`; maestrias dos Stands permanecem nas chaves anteriores. Mochila mostra arma, estilo, tier e níveis próprios. Equipar ou golpear vazio não dá XP.
+- **Missão 8:** conversar com o mestre e aparar dois golpes abre aprender/recusar. Aprender evolui a rota Técnica para tier 2; outras rotas aprendem tier 1. Recusar continua a campanha e permite aprender ao voltar fisicamente ao mestre; perfis antigos que já concluíram “Respira” também podem aprender nessa visita, sem repetir a missão. Distância e vida são conferidas no servidor.
+- **Persistência:** campo `build` carregado com valores padrão/IDs validados no mesmo DataStore v5, sem wipe. Nenhum mapa, asset de arte/animação, arquivo `.rbxl` ou manifest Rojo foi editado. Espada tem representação provisória de madeira criada em runtime e reutiliza os golpes/animações atuais; integração com modelo e animações de arma da equipe fica pendente.
+- **Verificação:** 31 testes locais passaram (10 persistência, 13 gameplay, 8 builds); análise estática sem erros de tipo/sintaxe ou avisos de variável sem uso; `git diff --check` passou. Avisos antigos de Font=100 em assets binários permanecem. Studio fechado: hotbar, física, input com Stand e apresentação ainda não validados. Não houve publicação.
+
+### Testar esta leva no Studio quando disponível
+
+1. Perfil novo, cada rota em dados de teste: a escolha só abre após visitar a Taberna; conferir Flecha cedo/tarde e exatamente uma recompensa de campanha. Reconectar antes/depois da escolha.
+2. Arma: equipar pela hotbar fora de combate, acertar/errar/bater em block; conferir bônus e maestria somente em acerto real. Guardar, morrer e reconectar; conferir uma espada e maestria preservada. Testar clique/toque e teclas 1–4 com Stand para conferir convivência com a hotbar nativa.
+3. Missão 8: mestre + dois parries, aprender com as três rotas (tier 2 só Técnica); recusar, continuar e voltar ao mestre. Conferir resistência contra mob/player e maestria na mochila.
+4. Perfil anterior a esta leva: permanecer no mesmo ato, escolher rota, preservar itens/Stand/XP e a Flecha já paga. Conferir dois clientes, mobile, troca persistente e reconexão em experiência de teste.
+
+### Próximas levas/fases (ordem de continuidade)
+
+1. **Fechar Deserto e Eclipse:** Eco após o Sacerdote (selar / destruir / transferir com pré-requisito previsto na bíblia), Missão 13 “O Viajante” e conclusão da Rota do Eclipse. Inserir atos somente com migração explícita dos índices antigos; manter Carlos sem nome até Missão 18.
+2. **Consequências e atividades opcionais:** ligar os Ecos já gravados a falas/recompensas/sidequests descritas no cânone; armas/estilos de outras rotas por fontes aprovadas e loot. Auditar NPCs/puzzles existentes antes de criar novos.
+3. **Ilhas 4–6:** Cidade Âmbar, Costa Dourada e Fortaleza Maré, missões 16–31 e final do Capítulo 1, seguindo a bíblia. Implementar serviços/objetivos/portais sobre os marcadores existentes; criação e validação da arte continuam com a equipe.
+4. **PvP e catálogo:** bounty, contratos e classes sociais sobre as proteções implementadas; preencher raridades de Stand quando kits originais estiverem definidos e assets disponíveis, sem renomear/inventar conteúdo canônico.
+5. **Validação e lançamento:** medir rede/FPS/mobile, balancear builds/economia, validar DataStore real e dois clientes. Publicar pelo Studio com place completo e dono, conforme AGENTS.md atual; nenhuma publicação por API nesta leva.
+
+## Correções da auditoria — 2026-09-29 (Codex, main; ainda não publicado)
+
+Esta seção descreve o checkout atual e prevalece sobre os registros históricos abaixo. História, textos das missões e assets da equipe foram preservados. Não declarar Ilha 1, builds ou Capítulo 1 completos.
+
+- **Entrada e campanha:** perfil novo usa a revisão atual e começa na Missão 0; perfis antigos mantêm migração. Vagantes contam `fx_tutorial_enemy`, nunca kills PvP; o contador antigo incorreto é descartado apenas nesse ato. Eco pendente reaparece ao cliente pedir o estado. Arco legado de quests/traidor desativado por `QuestConfig.Enabled=false`, preservando definições e dados antigos; diálogos da campanha continuam ativos.
+- **Troca de Stand:** disco, Flecha e essência verificam combate, morte, duelo/partida, torneio, forma temporária e estados de controle antes de consumir itens. Maestria permanece no perfil. Novos perfis nascem com raça humana. Sorteio de Stand mantém chances fixas e a distribuição anterior; mochila exibe as chances efetivas (Swift 55%, Jotaro 26%, Kira 17%, Dio 2%). Faixas sem conteúdo não foram preenchidas artificialmente.
+- **Dados:** mesmo DataStore/schema v5; posse de sessão com lease de 180s, snapshots independentes, revisão de alterações e renovação no autosave. Sessão concorrente não abre perfil padrão gravável. Servidores privados continuam sem persistência. `ProfileStore` é módulo puro em `src/server/Modules`.
+- **Trocas:** journal `PlayerData_trades_v1` (prefixo real vem de DataConfig.StoreName), preparação de ambos os perfis e decisão persistida; recuperação por commit/abort na reentrada. Resultado incerto congela acesso e pede reconexão; não retorna sucesso antes da decisão. Inventário/cosméticos são alterados em cópias. Bloqueados aceite sobre troca existente e comandos durante execução.
+- **Recibos:** PurchaseId persistido junto da recompensa; retry após save falho não repete concessão. Reset administrativo preserva recibos. Produtos continuam com IDs zerados; nenhuma monetização foi ativada.
+- **PvE:** mobs da campanha dão XP/moedas/maestria; chefes podem dar Flecha com chance fixa de 3% ou 5%, conforme ProgressionConfig. Chefes dão crédito de campanha/loot aos participantes próximos com pelo menos 5% de dano e golpe nos últimos 30s, não só ao último golpe. Respawns de chefes recebem prefixo “Eco:”. Inimigos da campanha voltam à origem ao passar 100 studs ou nadar, recuperando vida e limpando crédito. Números iniciais, ainda sujeitos a teste jogável/balanceamento.
+- **PvP:** zonas locais no Porto, Taberna, chegadas e Lojinha; proteção de retorno de 10s; sem recompensa por vítima mais de 10 níveis abaixo ou pela mesma vítima em 300s. Duelos/guerras compartilhados mantêm dano. Sair durante os 20s de combate PvP custa 10% das moedas, teto 50; shutdown não aplica essa penalidade. HUD avisa proteção, zona e custo de abandono. A proteção PvP não desliga PvE.
+- **UI e análise:** mochila/Ecos/sorteio adaptam largura à viewport; Eco tem rolagem. Correções de tipos e remoção de duas variáveis locais sem uso. Arte, animações, mapas e `default.project.json` não foram alterados.
+
+### Verificação e limites
+
+- 23 testes locais passaram: 10 de persistência e 13 de gameplay, usando módulos reais com serviços Roblox simulados. Incluem falhas de gravação, respostas perdidas, recuperação de troca, recibo repetido, tutorial, Eco, bloqueio de item, regras PvP, recompensa PvE, contribuição real e distribuição da Flecha.
+- Análise estática final concluída com código de saída 0, sem erros de tipo/sintaxe nem avisos de variável não usada. O Rojo ainda emite avisos preexistentes de migração Font=100 em assets binários; esses assets foram preservados. `git diff --check` passou.
+- Comandos: `lune run tests/profile_store.luau`, `lune run tests/gameplay.luau`, `bash tools/analisar.sh`. Detalhes em `tests/README.md`.
+- Studio fechado: não houve validação visual/física, teste de dois clientes ou DataStore real. Revalidar essas correções em ambiente de teste antes do rollout. A posse de sessão só protege servidores que executam o código novo; planejar encerramento dos servidores antigos no rollout, sem presumir que respeitam o lease.
+- **Publicação por API não realizada:** o dono autorizou esse caminho nesta conversa, mas a tentativa de obter o place completo `85844807133499` pela Asset Delivery API retornou HTTP 403. É necessária uma credencial com leitura autorizada do place atual, ou uma exportação completa e atual confirmada pelo dono. As cópias locais antigas não provam o estado atual. Não publicar `rojo build`: ele substituiria o mapa incompleto, repetindo o incidente da versão 422. Nenhum upload foi feito.
+
+### Testar no Studio quando disponível
+
+1. Perfil novo: Missão 0; três Vagantes + parry; matar jogador não avança. Reconectar em Eco pendente e conferir recompensa única.
+2. Tentar disco/Flecha/essência em combate, morto, agarrado e em duelo; recusar sem consumo. Fora de combate, equipar e conferir maestria.
+3. Dois clientes: troca com item/moeda, reconexão e falha injetada em dados de teste; conferir ambos os lados. Servidor privado não salva nem aceita compras/trocas persistentes.
+4. Mob e chefe com dois participantes e um espectador: XP/loot/crédito só para elegíveis; afastar inimigo e levá-lo ao mar, conferir retorno e crédito zerado.
+5. Conferir limites reais das zonas seguras, retorno após morte, recompensas repetidas e aviso/penalidade ao desconectar durante PvP; duelo permanece funcional.
+6. Emulador mobile: mochila, chances da Flecha, escolha de Stand e todas as opções dos Ecos acessíveis; textos e avisos legíveis.
+
+### Continuidade de conteúdo (ainda não implementada nesta correção)
+
+- Escolha das rotas da Missão 2 com arma e estilo funcionais e maestrias separadas; efeito real da Técnica ensinada na Missão 8.
+- Sidequests novas compatíveis com o cânone, consequências regionais dos Ecos, Eco final do Deserto, Missão 13/conclusão da Rota do Eclipse e expansão posterior às ilhas 4–6.
+- Novos Stands das faixas vazias, bounty/contratos e medição de performance. Não preencher essas pendências com história inventada ou assets da equipe modificados.
+
+## Auditoria de próximos passos — 2026-09-29 (Codex)
+
+- Relatório: `AUDITORIA_PROXIMOS_PASSOS_2026-09-29.md`. Somente análise e documentação; nenhum gameplay, asset ou place foi alterado/publicado.
+- Conferidos inventário do projeto e fluxos críticos. `tools/analisar.sh` falhou com dois erros distintos: `StandConfig:92` (ItemInfo) e `DataService:501` (number/nil), além de dois avisos de variável não usada.
+- Achados por leitura do código, ainda sem reprodução jogável nesta auditoria: perfil novo `story.rev=2` migra e pula a Missão 0; missão dos Vagantes pede `kills`, mas os bots emitem `fx_tutorial_enemy`; usar disco chama troca forçada sem trava de combate; arco legado do traidor continua ativo e conflita com o cânone F/X.
+- Saves/trocas precisam proteção contra gravações concorrentes/parciais. Mobs da campanha dão maestria, mas falta integrar XP/moeda/loot. PvP aberto ainda carece das proteções aprovadas. Catálogo da Flecha só possui quatro das sete faixas de raridade.
+- Recomendação: corrigir entrada/tutorial e dados, fechar o ciclo repetível da Ilha 1 e proteções, então expandir conteúdo. Ordem detalhada e testes no relatório; recomendação não substitui decisões do dono.
+- As seções anteriores que declaram “Ilha 1 completa” ou “análise limpa” são histórico, não validação do checkout atual. Visual, dois clientes, persistência com falhas e mobile continuam pendentes nesta auditoria.
+
 ## Direção atual — 2026-09-28
 
 - O projeto migra incrementalmente de Bizarre Showdown/battlegrounds para **F/X**, RPG open-world por regiões e sete capítulos. Combate e sistemas funcionais serão preservados; PvP vira atividade opt-in.

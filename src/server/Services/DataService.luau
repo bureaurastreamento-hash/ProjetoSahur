@@ -19,6 +19,8 @@ local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+local ProfileStore = require(script.Parent.Parent.Modules.ProfileStore)
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -26,6 +28,8 @@ local Log = require(Modules:WaitForChild("Log"))
 local DataConfig = require(Modules:WaitForChild("DataConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local StandConfig = require(Modules:WaitForChild("StandConfig"))
+local BuildConfig = require(Modules.BuildConfig)
+local BountyConfig = require(Modules.BountyConfig)
 local Controls = require(Modules:WaitForChild("Controls"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
@@ -39,11 +43,18 @@ type Session = {
 	dirty: boolean,
 	loaded: boolean,
 	saving: boolean,
+	owner: string,
+	revision: number,
+	transaction: boolean,
+	closing: boolean,
 }
 
 local sessions: { [Player]: Session } = {}
 local store: DataStore? = nil
+local persistence: any = nil
 local notifyProfile: RemoteEvent
+local shuttingDown = false
+DataService.BeforeLeave = function(_player: Player, _profile: DataConfig.Profile) end
 
 --- Disparado quando o perfil de um jogador termina de carregar: (player, profile, sessionOnly)
 DataService.ProfileLoaded = Instance.new("BindableEvent")
@@ -286,7 +297,18 @@ local function migrate(raw: any): DataConfig.Profile
 			end
 		end
 	end
+	if typeof(raw.build) == "table" then
+		local b = raw.build
+		if typeof(b.route) == "string" and BuildConfig.Routes[b.route] then profile.build.route = b.route end
+		if b.weapon == BuildConfig.WeaponId then profile.build.weapon = b.weapon end
+		if b.style == BuildConfig.StyleId then
+			profile.build.style = b.style
+			profile.build.techniqueTier = if b.techniqueTier == 2 then 2 else 1
+		end
+	end
+	profile.bounty = BountyConfig.Normalize(raw.bounty, os.time())
 	profile.born = raw.born == true
+	copyTrueFlags(raw.receipts, profile.receipts)
 	profile.schemaVersion = DataConfig.SchemaVersion
 	return profile
 end
@@ -296,6 +318,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function pushToClient(player: Player, session: Session)
+	if player.Parent ~= Players then return end
 	player:SetAttribute("Coins", session.profile.coins)
 	player:SetAttribute("EventPoints", session.profile.eventPoints)
 	notifyProfile:FireClient(player, session.profile, session.sessionOnly)
@@ -308,15 +331,28 @@ local function load(player: Player)
 		dirty = false,
 		loaded = false,
 		saving = false,
+		owner = HttpService:GenerateGUID(false),
+		revision = 0,
+		transaction = false,
+		closing = false,
 	}
 	sessions[player] = session
 
-	local ok, raw = withRetry("GetAsync " .. player.Name, DataConfig.LoadRetries, function()
+	local ok, raw = withRetry("Load " .. player.Name, DataConfig.LoadRetries, function()
 		assert(store, "DataStore indisponível")
-		return store:GetAsync(keyFor(player))
+		if game.PrivateServerId ~= "" then
+			local value = store:GetAsync(keyFor(player))
+			assert(type(value) ~= "table" or value._pendingTrade == nil, "trade_pending")
+			return value
+		end
+		assert(persistence, "Persistência indisponível")
+		return persistence:Acquire(keyFor(player), session.owner, DataConfig.DefaultProfile())
 	end)
 
 	if player.Parent ~= Players then
+		if persistence and game.PrivateServerId == "" then
+			pcall(function() persistence:Release(keyFor(player), session.owner) end)
+		end
 		sessions[player] = nil
 		return
 	end
@@ -332,6 +368,14 @@ local function load(player: Player)
 		Log.debug(("[DataService] %s carregado: %d moedas, %d personagens, %d vitórias"):format(
 			player.Name, session.profile.coins, #session.profile.unlockedCharacters, session.profile.stats.wins))
 	else
+		if persistence and game.PrivateServerId == "" then
+			pcall(function() persistence:Release(keyFor(player), session.owner) end)
+		end
+		if tostring(raw):find("session_locked") or tostring(raw):find("trade_") then
+			sessions[player] = nil
+			player:Kick("Seu progresso ainda está sendo finalizado. Aguarde alguns instantes e entre novamente.")
+			return
+		end
 		session.sessionOnly = true
 		warn(("[DataService] %s jogando com perfil TEMPORÁRIO (não será salvo): %s"):format(player.Name, tostring(raw)))
 	end
@@ -342,26 +386,33 @@ end
 
 local function save(player: Player, reason: string): boolean
 	local session = sessions[player]
-	if not session or not session.loaded or session.sessionOnly or session.saving then
+	if not session or not session.loaded or session.sessionOnly then
 		return false
 	end
-	if not session.dirty and reason ~= "leave" and reason ~= "close" then
-		return true
-	end
+	local release = reason == "leave" or reason == "close"
+	local deadline = os.clock() + 20
+	while (session.saving or session.transaction) and os.clock() < deadline do task.wait(0.1) end
+	if session.saving or session.transaction or session.sessionOnly then return false end
+	if session.closing then return false end
+	if release then session.closing = true end
+	-- Também renova a posse de perfis sem alterações no autosave.
+	if not persistence then return false end
 	session.saving = true
-	local snapshot = session.profile
+	local revision = session.revision
+	local snapshot = ProfileStore.Copy(session.profile)
 	local ok, err = withRetry(("UpdateAsync %s (%s)"):format(player.Name, reason), DataConfig.SaveRetries, function()
-		assert(store, "DataStore indisponível")
-		return store:UpdateAsync(keyFor(player), function(_old)
-			return snapshot
-		end)
+		return persistence:Save(keyFor(player), session.owner, snapshot, release)
 	end)
 	session.saving = false
 	if ok then
-		session.dirty = false
+		session.dirty = session.revision ~= revision
 		Log.debug(("[DataService] %s salvo (%s)"):format(player.Name, reason))
 	else
 		warn(("[DataService] %s NÃO salvo (%s): %s"):format(player.Name, reason, tostring(err)))
+		if tostring(err):find("session_lost") then
+			session.sessionOnly = true
+			player:Kick("Seu perfil foi aberto em outra sessão. Entre novamente para continuar com segurança.")
+		end
 	end
 	return ok
 end
@@ -372,7 +423,7 @@ end
 
 function DataService.GetProfile(player: Player): DataConfig.Profile?
 	local session = sessions[player]
-	return if session and session.loaded then session.profile else nil
+	return if session and session.loaded and not session.transaction and not session.closing then session.profile else nil
 end
 
 function DataService.IsSessionOnly(player: Player): boolean
@@ -384,6 +435,7 @@ local function touch(player: Player)
 	local session = sessions[player]
 	if session then
 		session.dirty = true
+		session.revision += 1
 		pushToClient(player, session)
 	end
 end
@@ -436,6 +488,52 @@ function DataService.SaveNow(player: Player, reason: string): boolean
 	end
 	session.dirty = true
 	return save(player, reason)
+end
+
+--- Troca recuperável: os perfis não podem ser gastos enquanto a decisão está sendo gravada.
+function DataService.CommitTrade(a: Player, b: Player, afterA: DataConfig.Profile, afterB: DataConfig.Profile): (boolean, string)
+	local sa, sb = sessions[a], sessions[b]
+	if not persistence or not sa or not sb or sa == sb then return false, "not_loaded" end
+	for _, session in { sa, sb } do
+		if not session.loaded or session.sessionOnly or session.transaction or session.closing then return false, "not_loaded" end
+	end
+	sa.transaction, sb.transaction = true, true
+	a:SetAttribute("DataTransaction", true); b:SetAttribute("DataTransaction", true)
+	local participants = {
+		{ key = keyFor(a), owner = sa.owner, before = ProfileStore.Copy(sa.profile), after = ProfileStore.Copy(afterA) },
+		{ key = keyFor(b), owner = sb.owner, before = ProfileStore.Copy(sb.profile), after = ProfileStore.Copy(afterB) },
+	}
+	local id = HttpService:GenerateGUID(false)
+	local baselineSaved = false
+	local ok, result = withRetry("Trade " .. id, DataConfig.SaveRetries, function()
+		local deadline = os.clock() + 15
+		while (sa.saving or sb.saving) and os.clock() < deadline do task.wait(0.1) end
+		assert(not sa.saving and not sb.saving, "save_busy")
+		if not baselineSaved then
+			for _, p in participants do persistence:Save(p.key, p.owner, p.before, false) end
+			baselineSaved = true
+		end
+		return { persistence:Trade(id, participants) }
+	end)
+	if ok then
+		local profiles = result[2]
+		sa.profile, sb.profile = migrate(profiles[1]), migrate(profiles[2])
+		sa.dirty, sb.dirty = false, false
+		sa.revision += 1; sb.revision += 1
+	elseif baselineSaved then
+		-- Resultado incerto nunca volta a ser gastável. A entrada seguinte resolve o journal.
+		sa.sessionOnly, sb.sessionOnly = true, true
+		for _, p in { a, b } do
+			local session = sessions[p]
+			if session then pcall(function() persistence:Release(keyFor(p), session.owner) end) end
+			p:Kick("Estamos recuperando uma troca interrompida. Aguarde alguns instantes e entre novamente; seus itens serão reconciliados.")
+		end
+		warn("[DataService] recuperação de troca pendente: " .. id .. ": " .. tostring(result))
+	end
+	sa.transaction, sb.transaction = false, false
+	a:SetAttribute("DataTransaction", nil); b:SetAttribute("DataTransaction", nil)
+	if ok then pushToClient(a, sa); pushToClient(b, sb) end
+	return ok and result[1] == true, if ok and result[1] then "done" else "save_failed"
 end
 
 --- [Admin] Define moedas direto.
@@ -498,7 +596,11 @@ function DataService.TakeItem(player: Player, itemId: string, amount: number): b
 	if not profile or amount <= 0 or have < amount then
 		return false
 	end
-	profile.inventory[itemId] = if have - amount > 0 then have - amount else nil
+	if have > amount then
+		profile.inventory[itemId] = have - amount
+	else
+		profile.inventory[itemId] = nil
+	end
 	touch(player)
 	return true
 end
@@ -509,7 +611,9 @@ function DataService.ResetProfile(player: Player)
 	if not session then
 		return
 	end
+	local receipts = session.profile.receipts
 	session.profile = DataConfig.DefaultProfile()
+	session.profile.receipts = receipts -- reset administrativo não torna recibos já entregues reutilizáveis
 	touch(player)
 end
 
@@ -630,6 +734,8 @@ function DataService.Init()
 	end)
 	if ok then
 		store = result
+		local journal = DataStoreService:GetDataStore(DataConfig.StoreName .. "_trades_v1")
+		persistence = ProfileStore.new(store, journal, os.time, DataConfig.SessionLeaseSeconds)
 	else
 		warn("[DataService] GetDataStore falhou; todos os jogadores ficarão com perfil temporário: " .. tostring(result))
 	end
@@ -657,6 +763,12 @@ function DataService.Start()
 	end
 
 	Players.PlayerRemoving:Connect(function(player)
+		local session = sessions[player]
+		if session and session.loaded and not session.sessionOnly and not session.transaction and not shuttingDown then
+			DataService.BeforeLeave(player, session.profile)
+			session.revision += 1
+			session.dirty = true
+		end
 		save(player, "leave")
 		sessions[player] = nil
 	end)
@@ -671,6 +783,7 @@ function DataService.Start()
 	end)
 
 	game:BindToClose(function()
+		shuttingDown = true
 		if RunService:IsStudio() and not store then
 			return
 		end

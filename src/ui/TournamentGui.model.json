@@ -61,10 +61,7 @@
      "properties": {
       "Name": "UICorner",
       "CornerRadius": {
-       "UDim": [
-        0,
-        8
-       ]
+       "UDim": [0, 0]
       }
      },
      "children": []
@@ -362,10 +359,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
+         "UDim": [0, 0]
         }
        },
        "children": []

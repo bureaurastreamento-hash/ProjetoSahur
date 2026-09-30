@@ -232,7 +232,7 @@ end
 --- Combo de 4 socos com finisher: A agressivo em B parado; B revida depois do primeiro combo.
 scenes.combo = function(myToken)
 	local S = stage()
-	local a = actor("A", "Jotaro", S + Vector3.new(-4, 0, 0), S + Vector3.new(4, 0, 0), "aggressive", "A")
+	actor("A", "Jotaro", S + Vector3.new(-4, 0, 0), S + Vector3.new(4, 0, 0), "aggressive", "A")
 	local b = actor("B", "Swift", S + Vector3.new(4, 0, 0), S + Vector3.new(-4, 0, 0), "idle", "B")
 	shot({ orbit = { "A", "B" }, radius = 12, height = 3.5, from = 200, to = 290, t = 7, fov = 58 })
 	title("COMBO", 2.5, "4 socos · o último derruba")

@@ -62,10 +62,7 @@
      "properties": {
       "Name": "UICorner",
       "CornerRadius": {
-       "UDim": [
-        0,
-        10
-       ]
+       "UDim": [0, 0]
       }
      }
     },
@@ -252,10 +249,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
+         "UDim": [0, 0]
         }
        }
       },
@@ -513,10 +507,7 @@
          "properties": {
           "Name": "UICorner",
           "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
+           "UDim": [0, 0]
           }
          }
         },
@@ -812,10 +803,7 @@
            "properties": {
             "Name": "UICorner",
             "CornerRadius": {
-             "UDim": [
-              0,
-              4
-             ]
+             "UDim": [0, 0]
             }
            }
           },
@@ -1075,10 +1063,7 @@
            "properties": {
             "Name": "UICorner",
             "CornerRadius": {
-             "UDim": [
-              0,
-              5
-             ]
+             "UDim": [0, 0]
             }
            }
           }
@@ -1152,10 +1137,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [
-          0,
-          6
-         ]
+         "UDim": [0, 0]
         }
        }
       },

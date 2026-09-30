@@ -26,6 +26,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
+local BountyConfig = require(Modules.BountyConfig)
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
@@ -33,6 +34,7 @@ local Controls = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("
 -- Gamepad: D-pad direita navega os ícones do topo (D-pad cima é o despertar)
 local IconAny: any = Icon
 IconAny.highlightKey = Controls.Gamepad.Menus
+IconAny.modifyBaseTheme({ { "IconCorners", "CornerRadius", UDim.new(0, 0) :: any } })
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 local CosmeticsController = require(script.Parent:WaitForChild("CosmeticsController"))
 
@@ -128,6 +130,13 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 	row.Text = ("K/D: %.2f"):format(kd)
 	row.Parent = statsList
 
+	local bounty = if typeof(profile.bounty) == "table" then tonumber(profile.bounty.points) or 0 else 0
+	local bountyRow = statsTemplate:Clone()
+	bountyRow.Visible = true
+	bountyRow.LayoutOrder = 100
+	bountyRow.Text = ("Bounty: %d · %s"):format(bounty, BountyConfig.Title(bounty))
+	bountyRow.Parent = statsList
+
 	-- Stands (29/09): um Stand ativo + raça; o resto está na mochila (M)
 	local standDef = if profile.power and profile.power ~= "" then CharacterDefs.Get(profile.power) else nil
 	profileCharacters.Text = ("Stand: %s · Raça: %s"):format(if standDef then standDef.DisplayName else "nenhum (humano)", tostring(profile.race or "Humano"))
@@ -146,6 +155,19 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 end
 
 function TopbarController.Init()
+	-- A biblioteca pode aplicar temas próprios nos dropdowns; manter somente nossos containers retos.
+	for _, container in IconAny.container do
+		local function square(descendant: Instance)
+			if not descendant:IsA("UICorner") then return end
+			local function apply()
+				if descendant.CornerRadius ~= UDim.new(0, 0) then descendant.CornerRadius = UDim.new(0, 0) end
+			end
+			apply()
+			descendant:GetPropertyChangedSignal("CornerRadius"):Connect(apply)
+		end
+		for _, descendant in container:GetDescendants() do square(descendant) end
+		container.DescendantAdded:Connect(square)
+	end
 	local profileGui = get(playerGui, "ProfileGui")
 	profilePanel = get(profileGui, "Panel") :: Frame
 	profileCoins = get(profilePanel, "Coins") :: TextLabel

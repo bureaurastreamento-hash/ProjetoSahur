@@ -12,3 +12,6 @@ sourcemap.json
 /copia/
 /scratch/
 .claude/worktrees/
+
+# Cópias do place (backups locais, ~2 MB cada; o mapa vai para src/ via tools/capturar_mapa.sh)
+*.rbxl

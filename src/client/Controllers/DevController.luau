@@ -100,7 +100,6 @@ local SERVER_STATUS: { [string]: (any) -> string? } = {
 local originalColors: { [TextButton]: Color3 } = {} -- cor de fábrica de cada botão (para voltar do ON/flash)
 local paint: (TextButton, string?) -> ()
 local strokes: { [TextButton]: UIStroke } = {}
-local lastServerState: any = nil
 
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
@@ -202,7 +201,6 @@ local function renderState(state: { [string]: any })
 		end
 	end
 	if typeof(state.server) == "table" then
-		lastServerState = state.server
 		for buttonName, fn in SERVER_STATUS do
 			local b = panel:FindFirstChild(buttonName, true) :: TextButton?
 			if b then

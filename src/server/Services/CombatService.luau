@@ -34,6 +34,7 @@ type Fighter = Combatant.Fighter
 -- AbilityService depende deste módulo; é carregado tardiamente em Start() para evitar ciclo.
 local ProgressionService: any = nil -- carregado no Start (evita ciclo Cosmetics→Combat→Progression)
 local AbilityService: any = nil
+local BuildService: any = nil
 
 type PlayerState = {
 	wantBlock: boolean, -- jogador está segurando o botão de block
@@ -458,6 +459,11 @@ function CombatService.ResolveHit(attacker: Fighter, attackerChar: Model, victim
 			damage *= AbilityService.GetIncomingMultiplier(victimFighter)
 		end
 	end
+	if BuildService then
+		local attackerPlayer = Combatant.PlayerOf(attacker)
+		if opts.IsM1 and attackerPlayer then damage *= BuildService.M1Multiplier(attackerPlayer) end
+		if victimPlayer then damage *= BuildService.IncomingMultiplier(victimPlayer) end
+	end
 	local devMult = attacker:GetAttribute("DevDamageMult")
 	if typeof(devMult) == "number" then
 		damage *= devMult -- menu de desenvolvedor
@@ -572,6 +578,10 @@ function CombatService.ResolveHit(attacker: Fighter, attackerChar: Model, victim
 		end
 	end
 	local landed = kind == "hit" or kind == "finisher" or kind == "crit" or kind == "blackflash"
+	local attackingPlayer = Combatant.PlayerOf(attacker)
+	if landed and dealt > 0 and opts.IsM1 and attackingPlayer and BuildService then
+		BuildService.OnM1Hit(attackingPlayer)
+	end
 	if landed and dealt > 0 and victimFighter and HealthService.IsAlive(victim) then
 		-- Prioridade do combo (dono, 2026-09-16): quem está no meio do combo de M1 (acertou há pouco e
 		-- ainda tem golpe vindo) não é interrompido pelo soco simples de um terceiro — o dano entra,
@@ -668,6 +678,8 @@ function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage:
 	if victimPlayer and AbilityService then
 		damage *= AbilityService.GetIncomingMultiplier(victimPlayer)
 	end
+	local victimOwner = Combatant.PlayerOf(victimPlayer)
+	if BuildService and victimOwner then damage *= BuildService.IncomingMultiplier(victimOwner) end
 	if victimState and victimState.blocking and blockCovers(victim, attackerChar) then
 		kind = "blocked"
 		damage *= CombatConfig.Block.DamageMultiplier
@@ -919,6 +931,7 @@ function CombatService.Init()
 end
 
 function CombatService.Start()
+	BuildService = (require :: any)(script.Parent:FindFirstChild("BuildService"))
 	pcall(function()
 		ProgressionService = (require :: any)(script.Parent:FindFirstChild("ProgressionService")) -- FindFirstChild: o analisador não vê ciclo
 	end)
