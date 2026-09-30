@@ -70,6 +70,7 @@ RemoteEvents.Events = ({
 	RequestStoryState = "RequestStoryState", -- () — pede novamente o estado da campanha F/X
 	RequestStoryChoice = "RequestStoryChoice", -- (choiceId: string, optionId: string) — resposta de um Eco da campanha (StoryService)
 	RequestUseItem = "RequestUseItem", -- (itemId: string) — usar item do inventário: Flecha, Disco de Stand, Essência (StandService)
+	RequestWorldShop = "RequestWorldShop", -- (kind: "merchant"|"forge", entryId: string) — comprar do Mercador Errante / forjar (WorldEventsService)
 	RequestArrowChoice = "RequestArrowChoice", -- (choice: "usar"|"guardar") — Stand sorteado quando já se tem um (StandService)
 
 	-- Notify: servidor -> cliente
@@ -114,6 +115,7 @@ RemoteEvents.Events = ({
 	NotifyTrade = "NotifyTrade", -- envolvidos: (event: "invite"|"invite_sent"|"invite_closed"|"start"|"state"|"end"|"denied", data: table)
 	NotifyStory = "NotifyStory", -- dono: (event: "state"|"act"|"trace"|"chapter"|"choice"|"distort"|"locked", data: table)
 	NotifyStand = "NotifyStand", -- dono: (event: "roll"|"equip"|"race"|"item"|"denied", data: table) (StandService)
+	NotifyWorldShop = "NotifyWorldShop", -- dono: (event: "open"|"close"|"result", data: table) — painel do Mercador Errante/forja (WorldEventsService)
 }) :: { [string]: string }
 
 -- RemoteFunctions (cliente -> servidor apenas)

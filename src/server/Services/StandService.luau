@@ -20,6 +20,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local StandConfig = require(Modules:WaitForChild("StandConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 local AbilityService = require(script.Parent:WaitForChild("AbilityService"))
+local BuildService = require(script.Parent:WaitForChild("BuildService"))
 
 local StandService = {}
 
@@ -128,6 +129,14 @@ function StandService.UseItem(player: Player, itemId: any)
 		if DataService.TakeItem(player, itemId, 1) then
 			StandService.SetStand(player, info.Ref)
 			notifyStand:FireClient(player, "equip", { stand = standPayload(info.Ref) })
+		end
+	elseif info.Kind == "weapon" and info.Ref then
+		if profile.build.weapon == info.Ref then
+			notifyStand:FireClient(player, "denied", { text = "Essa arma já está equipada." })
+			return
+		end
+		if DataService.TakeItem(player, itemId, 1) and not BuildService.EquipWeapon(player, info.Ref) then
+			DataService.AddItem(player, itemId, 1) -- não equipou: devolve
 		end
 	elseif info.Kind == "race" and info.Ref then
 		if profile.race == info.Ref then

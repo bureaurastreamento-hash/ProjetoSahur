@@ -218,6 +218,10 @@ mapa.section("WorldSection", "CENÁRIO / SERVIDOR")
 mapa.row([("RestoreDestructibles", "Restaurar cenário destrutível", GREEN, 2), ("StartEvent", "EVENTO no Canion", GREEN, 1), ("EndEvent", "Encerrar evento", RED, 1)])
 mapa.row([("RespawnDummies", "Recriar bonecos", None, 1), ("ToggleDummies", "Bonecos ON/OFF", None, 1), ("BringDummy", "Trazer boneco", None, 1), ("RefreshLeaderboard", "Atualizar placar", None, 1)])
 mapa.row([("ServerInfo", "Info servidor", None, 1), ("ListPlayers", "Listar online", None, 1), ("GetState", "Atualizar estado", None, 1)])
+mapa.gap()
+mapa.section("WorldEventsSection", "EVENTOS DO MUNDO  (mercador 6h · esferas 2h → Kame · obeliscos 4h à noite → Cânion)")
+mapa.row([("WorldSkipHour", "Pular +1 hora", None, 1), ("WorldMerchant", "Mercador agora", GREEN, 1), ("WorldOrbs", "Espalhar esferas", GREEN, 1)])
+mapa.row([("WorldKame", "Ilha Kame (abrir/fechar)", GREEN, 2), ("WorldCanyon", "Cânion (abrir/fechar)", GREEN, 2)])
 
 # ===== TESTE ===================================================================================
 teste = Page("Teste")

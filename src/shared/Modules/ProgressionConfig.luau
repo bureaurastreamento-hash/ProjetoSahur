@@ -30,6 +30,7 @@ ProgressionConfig.Npcs = {
 		Drops = { { Item = "mat:couro_capataz", Chance = 0.6, Min = 1, Max = 2 }, { Item = "mat:nevoa", Chance = 1, Min = 3, Max = 5 } } },
 	fx_pedra_enemy = { XP = 24, Coins = 2, Drops = { { Item = "mat:areia_negra", Chance = 0.3, Min = 1, Max = 1 } } },
 	fx_sol_enemy = { XP = 32, Coins = 2 },
+	fx_canion_espectro = { XP = 60, Coins = 4, Drops = { { Item = "mat:areia_negra", Chance = 0.6, Min = 1, Max = 2 } } }, -- Cânion Fantasma (WorldEventsService)
 	fx_mascara_boss = { XP = 90, Coins = 5, Boss = true, ArrowChance = 0.03, Drops = { { Item = "mat:lasca_mascara", Chance = 0.35, Min = 1, Max = 1 } } },
 	fx_cap1_boss = { XP = 160, Coins = 8, Boss = true, ArrowChance = 0.05, Drops = { { Item = "mat:lasca_mascara", Chance = 0.5, Min = 1, Max = 2 } } },
 	fx_solnegro_boss = { XP = 100, Coins = 6, Boss = true, ArrowChance = 0.05 },

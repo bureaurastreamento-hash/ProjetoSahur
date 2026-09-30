@@ -62,6 +62,7 @@ local SIMPLE_COMMANDS = {
 	"BotsPassive", "BotsAggressive", "BotsIdle", "BotsFill", "ClearBots",
 	"PublishUpdate",
 	"TournamentStart", "TournamentCancel",
+	"WorldSkipHour", "WorldMerchant", "WorldOrbs", "WorldKame", "WorldCanyon",
 }
 -- Ações perigosas: 1º clique arma ("Confirmar?"), 2º clique em CONFIRM_SECONDS envia
 local CONFIRM = { Kill = true, Kick = true, Ban = true, ResetData = true, ResetCosmetics = true, RevokeAll = true, KillBoss = true, DespawnBoss = true, KillTraitor = true, DespawnTraitor = true, ClearBots = true, EndEvent = true, TournamentCancel = true, EndBossForm = true, AnnounceGlobal = true, PublishUpdate = true }

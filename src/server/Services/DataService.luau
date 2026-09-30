@@ -300,7 +300,7 @@ local function migrate(raw: any): DataConfig.Profile
 	if typeof(raw.build) == "table" then
 		local b = raw.build
 		if typeof(b.route) == "string" and BuildConfig.Routes[b.route] then profile.build.route = b.route end
-		if b.weapon == BuildConfig.WeaponId then profile.build.weapon = b.weapon end
+		if typeof(b.weapon) == "string" and BuildConfig.Weapon(b.weapon) then profile.build.weapon = b.weapon end
 		if b.style == BuildConfig.StyleId then
 			profile.build.style = b.style
 			profile.build.techniqueTier = if b.techniqueTier == 2 then 2 else 1

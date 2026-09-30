@@ -101,7 +101,8 @@ local function render()
 	local build = profile.build or {}
 	local weaponLevel = localPlayer:GetAttribute("WeaponMastery") or 1
 	local styleLevel = localPlayer:GetAttribute("StyleMastery") or 1
-	local weapon = if build.weapon == BuildConfig.WeaponId then ("%s · maestria %d"):format(BuildConfig.WeaponName, weaponLevel) else "Sem arma"
+	local weaponDef = BuildConfig.Weapon(build.weapon or "")
+	local weapon = if weaponDef then ("%s (%s) · maestria %d"):format(weaponDef.Name, weaponDef.Rarity, weaponLevel) else "Sem arma"
 	local style = if build.style == BuildConfig.StyleId then ("%s %d · maestria %d"):format(BuildConfig.StyleName, build.techniqueTier or 1, styleLevel) else "Sem estilo"
 	header.Text ..= "\n" .. weapon .. "\n" .. style
 	header.TextColor3 = if rarity then rarity.Color else TEXT

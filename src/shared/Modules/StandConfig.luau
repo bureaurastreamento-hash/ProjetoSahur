@@ -124,6 +124,12 @@ function StandConfig.ItemInfo(itemId: string, displayNameOf: ((string) -> string
 		return { Id = itemId, Kind = "stand", Ref = ref, Name = "Disco de Stand: " .. name,
 			Desc = ("%s. Usar troca o seu Stand atual (o atual é perdido)."):format(rarity and rarity.Name or "?"),
 			Color = if rarity then rarity.Color else Color3.new(1, 1, 1) }
+	elseif kind == "arma" and ref then
+		local weapon = require(script.Parent:WaitForChild("BuildConfig")).Weapon(ref)
+		if weapon then
+			return { Id = itemId, Kind = "weapon", Ref = ref, Name = weapon.Name,
+				Desc = ("%s · dano ×%.2f · %s Usar = equipar (a atual volta para a mochila)."):format(weapon.Rarity, weapon.Damage, weapon.Desc), Color = weapon.Color }
+		end
 	elseif kind == "mat" and ref then
 		local mat = require(script.Parent:WaitForChild("MaterialConfig")).Get(ref)
 		if mat then

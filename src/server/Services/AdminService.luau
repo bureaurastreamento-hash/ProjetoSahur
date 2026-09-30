@@ -1020,6 +1020,44 @@ global.TestSounds = function()
 	return true, ("testando %d sons no cliente (veja o Output: [SoundProbe])"):format(#list), { testSounds = true }
 end
 
+--- Eventos do mundo (WorldEventsService): relógio do servidor e forçar cada evento.
+global.WorldSkipHour = function()
+	local W = lazyRequire("WorldEventsService")
+	if not W then
+		return false, "WorldEventsService não carregou"
+	end
+	W.Skip(3600)
+	return true, ("servidor agora em %.1f h"):format(W.Uptime() / 3600)
+end
+global.WorldMerchant = function()
+	local W = lazyRequire("WorldEventsService")
+	if not W then
+		return false, "WorldEventsService não carregou"
+	end
+	return W.ForceMerchant()
+end
+global.WorldOrbs = function()
+	local W = lazyRequire("WorldEventsService")
+	if not W then
+		return false, "WorldEventsService não carregou"
+	end
+	return W.ForceOrbs()
+end
+global.WorldKame = function()
+	local W = lazyRequire("WorldEventsService")
+	if not W then
+		return false, "WorldEventsService não carregou"
+	end
+	return W.ForceKame()
+end
+global.WorldCanyon = function()
+	local W = lazyRequire("WorldEventsService")
+	if not W then
+		return false, "WorldEventsService não carregou"
+	end
+	return W.ForceCanyon()
+end
+
 --- Evento no Canion (EventService): leva/traz todo mundo.
 global.StartEvent = function()
 	local EventService = lazyRequire("EventService")
