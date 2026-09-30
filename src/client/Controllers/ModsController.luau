@@ -58,11 +58,11 @@ local addRow: (any, number) -> ()
 local function buildGui()
 	gui = mk("ScreenGui", { Name = "ModsGui", ResetOnSpawn = false, DisplayOrder = 9, IgnoreGuiInset = false }, playerGui) :: ScreenGui
 	panel = mk("Frame", { Name = "Panel", Size = UDim2.fromOffset(560, 520), Position = UDim2.new(0.5, -280, 0.5, -260), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.06, BorderSizePixel = 0, Visible = false, Active = true }, gui) :: Frame
-	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, panel)
+	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, panel)
 	mk("TextLabel", { Size = UDim2.new(0, 200, 0, 30), Position = UDim2.fromOffset(14, 8), BackgroundTransparency = 1, Font = Enum.Font.GothamBlack, TextSize = 22, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, Text = "MODS" }, panel)
 	header = mk("TextLabel", { Size = UDim2.new(1, -240, 0, 30), Position = UDim2.fromOffset(90, 8), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = COLOR_SUB, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, panel) :: TextLabel
 	local close = mk("TextButton", { Size = UDim2.fromOffset(26, 26), Position = UDim2.new(1, -40, 0, 10), BackgroundColor3 = COLOR_ROW, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TEXT, Text = "X", BorderSizePixel = 0 }, panel) :: TextButton
-	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, close)
+	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, close)
 	close.MouseButton1Click:Connect(function()
 		ModsController.SetOpen(false)
 	end)
@@ -74,7 +74,7 @@ local function buildGui()
 	end
 	-- chip no HUD (embaixo do topbar, esquerda): créditos aos autores dos mods ativos
 	chip = mk("TextLabel", { Name = "ModsChip", Size = UDim2.fromOffset(420, 22), Position = UDim2.fromOffset(12, 48), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.4, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Visible = false, Text = "" }, gui) :: TextLabel
-	mk("UICorner", { CornerRadius = UDim.new(0, 0) }, chip)
+	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, chip)
 	mk("UIPadding", { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) }, chip)
 end
 
@@ -85,11 +85,11 @@ addRow = function(mod: any, i: number)
 	end
 	do
 		local row = mk("Frame", { Name = mod.Id, Size = UDim2.new(1, -8, 0, 54), BackgroundColor3 = COLOR_ROW, BorderSizePixel = 0, LayoutOrder = i }, list) :: Frame
-		mk("UICorner", { CornerRadius = UDim.new(0, 0) }, row)
+		mk("UICorner", { CornerRadius = UDim.new(0, 6) }, row)
 		mk("TextLabel", { Size = UDim2.new(1, -130, 0, 20), Position = UDim2.fromOffset(10, 6), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, Text = ("%s   <font color=\"#A5A5B2\">v%s · por %s</font>"):format(mod.Name, mod.Version, mod.Author), RichText = true, TextTruncate = Enum.TextTruncate.AtEnd }, row)
 		mk("TextLabel", { Size = UDim2.new(1, -130, 0, 24), Position = UDim2.fromOffset(10, 26), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = COLOR_SUB, TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true, Text = mod.Desc }, row)
 		local toggle = mk("TextButton", { Size = UDim2.fromOffset(100, 30), Position = UDim2.new(1, -110, 0, 12), BackgroundColor3 = COLOR_OFF, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TEXT, Text = "DESLIGADO", BorderSizePixel = 0, AutoButtonColor = true }, row) :: TextButton
-		mk("UICorner", { CornerRadius = UDim.new(0, 0) }, toggle)
+		mk("UICorner", { CornerRadius = UDim.new(0, 6) }, toggle)
 		toggle.MouseButton1Click:Connect(function()
 			if not state.canEdit then
 				HUDController.ShowToast("Mods", "Só o dono do servidor privado liga mods.", COLOR_SUB)

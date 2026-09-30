@@ -38,7 +38,7 @@ local selectedTab = "all"
 local tabButtons: { [string]: TextButton } = {}
 
 local function corner(parent: Instance, _r: number)
-	local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 0); c.Parent = parent
+	local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 6); c.Parent = parent
 end
 
 local function stroke(parent: Instance, color: Color3, transparency: number)

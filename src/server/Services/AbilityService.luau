@@ -1599,8 +1599,10 @@ function AbilityService.ForceCharacter(player: Player, characterId: string)
 	state.damageMultiplierUntil = 0
 	state.incomingMultiplierUntil = 0
 	player:SetAttribute("CharacterId", characterId)
-	grace(player, 3)
-	CharacterService.Load(player)
+	if player.Character then -- sem personagem ainda (entrando no jogo): o primeiro spawn já nasce com o kit novo
+		grace(player, 3)
+		CharacterService.Load(player)
+	end
 end
 
 function AbilityService.IsInForm(player: Fighter): boolean

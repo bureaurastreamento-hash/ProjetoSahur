@@ -32,6 +32,13 @@ local list: ScrollingFrame
 local openKind: string? = nil
 local openedAt: Vector3? = nil
 
+-- Canto levemente arredondado, igual ao resto da UI (6 px).
+local function corner(parent: Instance)
+	local c = Instance.new("UICorner")
+	c.CornerRadius = UDim.new(0, 6)
+	c.Parent = parent
+end
+
 local function label(parent: Instance, text: string, size: number, color: Color3, bold: boolean?): TextLabel
 	local l = Instance.new("TextLabel")
 	l.BackgroundTransparency = 1
@@ -64,6 +71,7 @@ local function render(data: any)
 		row.BackgroundColor3 = ROW
 		row.BorderSizePixel = 0
 		row.Parent = list
+		corner(row)
 		local s = Instance.new("UIStroke")
 		s.Color = if typeof(entry.color) == "Color3" then entry.color else ACCENT
 		s.Transparency = 0.5
@@ -82,6 +90,7 @@ local function render(data: any)
 		b.Text = ("%s · %d"):format(tostring(entry.action or "Comprar"), tonumber(entry.price) or 0)
 		b.Position, b.Size = UDim2.new(1, -134, 0.5, -16), UDim2.fromOffset(124, 32)
 		b.Parent = row
+		corner(b)
 		b.Activated:Connect(function()
 			if openKind then
 				Remotes.GetEvent(Remotes.Events.RequestWorldShop):FireServer(openKind, tostring(entry.id))
@@ -106,6 +115,7 @@ local function build()
 	panel.BorderSizePixel = 0
 	panel.Visible = false
 	panel.Parent = gui
+	corner(panel)
 	local limit = Instance.new("UISizeConstraint")
 	limit.MinSize, limit.MaxSize = Vector2.new(340, 300), Vector2.new(620, 620)
 	limit.Parent = panel
@@ -121,6 +131,7 @@ local function build()
 	x.BackgroundColor3, x.BorderSizePixel = ROW, 0
 	x.Position, x.Size = UDim2.new(1, -44, 0, 10), UDim2.fromOffset(34, 30)
 	x.Parent = panel
+	corner(x)
 	x.Activated:Connect(close)
 	list = Instance.new("ScrollingFrame")
 	list.BackgroundTransparency = 1

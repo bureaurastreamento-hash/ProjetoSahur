@@ -39,7 +39,7 @@ local function build()
 	frame.BackgroundColor3, frame.BackgroundTransparency = Color3.fromRGB(12, 20, 28), .2
 	frame.BorderSizePixel = 0
 	frame.Parent = gui
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 0); corner.Parent = frame
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = frame
 	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(70, 205, 255); stroke.Transparency = .55; stroke.Parent = frame
 	title = label(frame, UDim2.new(1,-20,0,38), UDim2.fromOffset(10,8), 15, Color3.fromRGB(100,220,255))
 	title.Font = Enum.Font.GothamBold
@@ -92,7 +92,7 @@ local function showChoice(data: any)
 	bounds.Parent = panel
 	panel.BackgroundColor3, panel.BackgroundTransparency = Color3.fromRGB(12, 20, 28), 0.04
 	panel.Parent = choiceGui
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 0); corner.Parent = panel
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = panel
 	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(255, 170, 70); stroke.Thickness = 2; stroke.Parent = panel
 	local head = label(panel, UDim2.new(1, -32, 0, 30), UDim2.fromOffset(16, 14), 20, Color3.fromRGB(255, 190, 90))
 	head.Font = Enum.Font.GothamBlack
@@ -108,7 +108,7 @@ local function showChoice(data: any)
 		b.BackgroundColor3 = if o.enabled then Color3.fromRGB(34, 52, 68) else Color3.fromRGB(28, 30, 34)
 		b.Text = ""
 		b.Parent = panel
-		local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 0); bc.Parent = b
+		local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 6); bc.Parent = b
 		local name = label(b, UDim2.new(1, -20, 0, 22), UDim2.fromOffset(12, 6), 16, if o.enabled then Color3.new(1, 1, 1) else Color3.fromRGB(110, 115, 120))
 		name.Font = Enum.Font.GothamBold
 		name.Text = if o.enabled then tostring(o.label) else "???"

@@ -1,18 +1,25 @@
 # Edição manual no Studio (dono/equipe de arte) → arquivos do Rojo (IA)
 
-Desde 30/09 **quase tudo do place está no Rojo** (segurança + histórico no git):
-- `Workspace.Sahur` → `src/workspace`; o resto do Workspace (Taberna, Móveis, Lojinha, `cav`, Kame, árvores/pedras soltas,
-  Barriers, Banheiro...) → `src/place/workspace`
-- `ServerStorage.Maps/ArenaReserva` → `src/maps`, `src/reserva`; o resto do ServerStorage (EventMaps/Cânion, BossModel,
-  Mods, backups de mapa) → `src/place/serverstorage`
+O que o **Rojo ao vivo** (`default.project.json`, `rojo serve`) gerencia — sempre dos arquivos, Studio segue o git:
+- Código/UI: `src/server`, `src/client`, `src/shared`, `src/ui`...
+- `Workspace.Sahur` → `src/workspace` (chão das ilhas, relevo, Vila Nova, Campos, arena...)
+- `ServerStorage.Maps/ArenaReserva` → `src/maps`, `src/reserva`
 - `Lighting` (Sky, Atmosphere, Bloom, Color) → `src/place/lighting`; `TextChatService` → `src/place/textchat`
-- Código/UI: `src/server`, `src/client`, `src/shared`, `src/ui`... (sempre dos arquivos, nunca do place)
 
-**Fora do Rojo (só no place):** o Terrain (mar) e `ServerStorage.Backup_Terreno_2026-09-29` — o Rojo não guarda Terrain.
+O que é só **backup/histórico no git** (capturado do `.rbxl`, o Rojo ao vivo NÃO empurra para o Studio):
+- o resto do Workspace (Taberna, Móveis, Lojinha, `cav`, Kame, árvores/pedras soltas, Barriers, Banheiro...) → `src/place/workspace`
+- o resto do ServerStorage (EventMaps/Cânion, BossModel, Mods, backups de mapa) → `src/place/serverstorage`
+
+> Por quê (30/09): com `"$path"` em Workspace/ServerStorage no `default.project.json` (serviço com `$path` + filhos
+> explícitos), o plugin do Rojo **duplicou** os 23 modelos desses serviços ao conectar, e a duplicata foi publicada.
+> Nunca pôr `$path` nesses dois serviços do projeto ao vivo. Restaurar um deles do backup = Insert from File do `.rbxm`
+> de `src/place/...` (ou a IA pelo MCP), nunca pelo Rojo ao vivo.
+
+**Fora de tudo (só no place):** o Terrain (mar) e `ServerStorage.Backup_Terreno_2026-09-29` — o Rojo não guarda Terrain.
 Guardar `.rbxl` de backup continua sendo a proteção deles.
 
-Como tudo isso agora é do Rojo, **qualquer edição feita no Studio volta ao que está nos arquivos se alguém reconectar
-o Rojo sem capturar antes.** Vale para o dono e para a equipe de arte.
+Edição no Studio de algo que o Rojo ao vivo gerencia (`Workspace.Sahur`, Lighting...) **volta ao que está nos arquivos
+se alguém reconectar o Rojo sem capturar antes.** Vale para o dono e para a equipe de arte.
 
 ## Parte do dono (ou de quem editar no Studio)
 

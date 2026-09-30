@@ -10,11 +10,20 @@ na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
 ## Regra: edição manual do dono x Rojo (2026-09-28)
-Desde 30/09 o Rojo também gerencia o resto do place (`src/place/*`: Taberna, `cav`, Lojinha, Kame, EventMaps, Lighting...);
-só o Terrain fica fora. Edição manual = fluxo de captura abaixo. Quando o dono editar à mão algo gerado
+O resto do place (`src/place/*`: Taberna, `cav`, Lojinha, Kame, EventMaps...) fica no git só como backup capturado;
+o Rojo ao vivo não mexe nele (ver seção abaixo). Edição manual = fluxo de captura abaixo. Quando o dono editar à mão algo gerado
 (ex.: uma ilha em `Workspace.Sahur`): fluxo de CAPTURA da seção abaixo (substitui o antigo "entregar a pasta"). Nunca rodar
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
+
+## ONDE PARAMOS (30/09, noite) — bug "nasço invisível tomando dano" CORRIGIDO; ler PROGRESSO "Correções 30/09 noite"
+- Causa 1: personagem nascia ANTES do perfil (no Porto) e era recriado ~1 s depois no checkpoint salvo (StandService →
+  `ForceCharacter`); no servidor real a câmera ficava no corpo destruído. Agora o 1º spawn espera o perfil (≤15 s) e
+  `ForceCharacter` sem personagem não recria. Causa 2: Caçadores (tier 4, agressivos) a 6 studs do checkpoint "oasis"
+  da ilha 3 → `BotService` zona segura (45 studs de checkpoint/Pescador) + 6 s de carência ao nascer (só p/ ESCOLHER alvo).
+- O Rojo DUPLICOU 23 modelos (Taberna, Kame, EventMaps...) no place publicado → `$path` saiu de Workspace/ServerStorage
+  do `default.project.json`; 2ª cópia já apagada no Studio (falta o dono publicar).
+- Cursor sem contorno/arredondado (cartoon); UICorner 6 px em toda UI (antes 0). Contexto p/ ChatGPT: `CONTEXTO_CHATGPT.md`.
 
 ## ONDE PARAMOS (30/09, fim) — o dono está TESTANDO; ao voltar, pedir/ler o feedback dele primeiro
 - Tudo commitado e no GitHub. Rojo: `rojo serve default.project.json` (o dono conecta). Place ainda NÃO publicado
@@ -30,10 +39,13 @@ a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 - Kame começa ESCONDIDA em runtime (ServerStorage.IlhaSecreta_Kame) — no modo edição ela continua no lugar.
 
 ## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
-QUASE TUDO do place está no Rojo desde 30/09 (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods, Lighting →
-`src/place/...`; só o Terrain fica fora). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA roda
-`tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar (o `.rbxl` tem que ser mais novo que a última
-sincronização). Não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
+O Rojo AO VIVO (`default.project.json`) só gerencia código/UI, `Workspace.Sahur` (`src/workspace`), `ServerStorage.Maps`/
+`ArenaReserva`, Lighting e TextChatService. O RESTO do place (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods →
+`src/place/workspace|serverstorage`) é só BACKUP/HISTÓRICO no git via `tools/capturar_mapa.sh` (NÃO sincroniza ao vivo:
+em 30/09 o `$path` nesses serviços fez o Rojo DUPLICAR os 23 modelos no place publicado — nunca pôr `$path` em
+Workspace/ServerStorage do `default.project.json`). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA
+roda `tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar. Não rodar `gerar_chao_ilhas.py`/
+`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
 
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código

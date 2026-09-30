@@ -253,10 +253,19 @@ function CharacterService.Init()
 	Players.RespawnTime = CombatConfig.RespawnTime
 
 	local function onPlayer(player: Player)
-		-- deixa os outros services conectarem CharacterAdded antes do primeiro spawn
+		-- deixa os outros services conectarem CharacterAdded antes do primeiro spawn. Espera o PERFIL (até 15 s):
+		-- nascer antes dele fazia o personagem nascer no Porto e ser recriado ~1 s depois no checkpoint salvo
+		-- (Stand/checkpoint chegam com o perfil); no servidor real a câmera do cliente ficava presa no primeiro
+		-- corpo, já destruído = "nasci invisível" (dono, 30/09).
 		task.defer(function()
-			task.wait()
-			CharacterService.Load(player)
+			local t0 = os.clock()
+			while player.Parent == Players and not DataService.GetProfile(player) and os.clock() - t0 < 15 do
+				task.wait(0.1)
+			end
+			task.wait() -- handlers do ProfileLoaded (WorldService: checkpoint; StandService: kit) rodam antes
+			if player.Parent == Players and not player.Character then
+				CharacterService.Load(player)
+			end
 		end)
 	end
 	Players.PlayerAdded:Connect(onPlayer)

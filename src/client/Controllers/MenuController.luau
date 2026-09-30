@@ -81,7 +81,7 @@ function MenuController.Init()
 		b.AutoButtonColor = true
 		b.Text = ""
 		b.Parent = column
-		local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 0); c.Parent = b
+		local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 6); c.Parent = b
 		local s = Instance.new("UIStroke"); s.Color = ACCENT; s.Transparency = 0.6; s.Parent = b
 		local label = Instance.new("TextLabel")
 		label.BackgroundTransparency = 1

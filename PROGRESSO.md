@@ -2,6 +2,27 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Correções 30/09 noite (Claude) — primeiro teste do dono no jogo publicado
+Dono: "quando entro no jogo eu spawno invisível, tomando uns danos aleatórios". Reproduzido no Play (MCP):
+- **Nascia 2 vezes**: `CharacterService` montava o personagem antes do perfil carregar (no Porto, perto da Taberna) e o
+  `StandService.applyPower` → `AbilityService.ForceCharacter` recriava ~1 s depois no checkpoint salvo. No servidor real a
+  câmera do cliente ficava no primeiro corpo (destruído) = invisível. **Fix**: 1º spawn espera `DataService.GetProfile`
+  (até 15 s); `ForceCharacter` sem personagem só troca o kit (o 1º spawn já nasce com ele). Testado: 1 spawn só.
+- **Dano**: checkpoint "oasis" (ilha 3, 1710,-130) tem Caçadores de Recompensa tier 4 AGRESSIVOS a 6 studs. **Fix**:
+  `BotService.protectedFromAggro` — inimigo não escolhe como alvo jogador a < 45 studs (XZ) de checkpoint/Pescador
+  (`WorldConfig.Regions`) nem nos 6 s após nascer; revide contra quem bate continua. Testado: 20 s, 100 HP.
+- **Rojo duplicou o place**: com `"$path"` em Workspace/ServerStorage (+ filhos explícitos) no `default.project.json`, o
+  plugin (7.3.1; CLI 7.7.0) criou uma 2ª cópia de 18 modelos do Workspace (Taberna, Moveis taverna, LojinhaDecor, Lojinha,
+  cav, CasasKame, House Trink, LocalInicial, humanoider_20, Arvore1-3, Pedra1-3, Barriers, Banheiro,
+  SpawnLocation_IlhotaKame) e 5 do ServerStorage (EventMaps, BossModel, Mods, Backup_Mapa_2026-09-28,
+  Backup_AltarGruta_antigo) — cópias idênticas (conferido). Publicado assim. **Fix**: `$path` removido desses 2 serviços
+  (src/place/workspace|serverstorage = só backup via captura). Lighting/TextChat com `$path` sozinho NÃO duplicaram.
+  2ª cópia APAGADA no Studio pelo MCP (30/09, com OK do dono); falta publicar.
+- **Cursor**: sem contorno; triângulo de cantos arredondados (raio 3) e V com traços em pílula (UICorner). **UI**: todos os
+  UICorner 0 → 6 px (283 em `src/ui`, controllers, geradores `tools/gerar_*.py`, TopbarPlus fixado em 6); painel do
+  Mercador/Ferreiro ganhou cantos.
+- Falta o dono: testar o cursor/cantos no cliente; publicar pelo Studio depois de apagar as duplicatas.
+
 ## "Prender o jogador" — leva de 30/09 (Claude; FALTA o dono testar no Play)
 Pedido do dono: eventos por tempo de servidor e ilhas secretas, vila maior, NPCs iniciais fracos/passivos, grind.
 - **Inimigos por nível** (`EnemyConfig`, tiers 1–5): tier 1–2 = HUMANOS passivos (só lutam se apanharem), sem ult/

@@ -10,10 +10,13 @@ na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
 ## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
-QUASE TUDO do place está no Rojo desde 30/09 (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods, Lighting →
-`src/place/...`; só o Terrain fica fora). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA roda
-`tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar (o `.rbxl` tem que ser mais novo que a última
-sincronização). Não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
+O Rojo AO VIVO (`default.project.json`) só gerencia código/UI, `Workspace.Sahur` (`src/workspace`), `ServerStorage.Maps`/
+`ArenaReserva`, Lighting e TextChatService. O RESTO do place (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods →
+`src/place/workspace|serverstorage`) é só BACKUP/HISTÓRICO no git via `tools/capturar_mapa.sh` (NÃO sincroniza ao vivo:
+em 30/09 o `$path` nesses serviços fez o Rojo DUPLICAR os 23 modelos no place publicado — nunca pôr `$path` em
+Workspace/ServerStorage do `default.project.json`). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA
+roda `tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar. Não rodar `gerar_chao_ilhas.py`/
+`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
 
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código

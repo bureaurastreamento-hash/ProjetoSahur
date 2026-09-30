@@ -42,8 +42,7 @@
       "Sahur": {
         "$path": "src/workspace",
         "$ignoreUnknownInstances": true
-      },
-      "$path": "src/place/workspace"
+      }
     },
     "ServerStorage": {
       "Maps": {
@@ -58,8 +57,7 @@
       "FerramentasStudio": {
         "$path": "tools/studio",
         "$ignoreUnknownInstances": true
-      },
-      "$path": "src/place/serverstorage"
+      }
     },
     "$ignoreUnknownInstances": true,
     "StarterGui": {

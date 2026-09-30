@@ -155,18 +155,18 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 end
 
 function TopbarController.Init()
-	-- A biblioteca pode aplicar temas próprios nos dropdowns; manter somente nossos containers retos.
+	-- A biblioteca pode aplicar temas próprios nos dropdowns; manter o mesmo canto levemente arredondado do resto da UI.
 	for _, container in IconAny.container do
-		local function square(descendant: Instance)
+		local function corner(descendant: Instance)
 			if not descendant:IsA("UICorner") then return end
 			local function apply()
-				if descendant.CornerRadius ~= UDim.new(0, 0) then descendant.CornerRadius = UDim.new(0, 0) end
+				if descendant.CornerRadius ~= UDim.new(0, 6) then descendant.CornerRadius = UDim.new(0, 6) end
 			end
 			apply()
 			descendant:GetPropertyChangedSignal("CornerRadius"):Connect(apply)
 		end
-		for _, descendant in container:GetDescendants() do square(descendant) end
-		container.DescendantAdded:Connect(square)
+		for _, descendant in container:GetDescendants() do corner(descendant) end
+		container.DescendantAdded:Connect(corner)
 	end
 	local profileGui = get(playerGui, "ProfileGui")
 	profilePanel = get(profileGui, "Panel") :: Frame

@@ -61,7 +61,7 @@
      "properties": {
       "Name": "UICorner",
       "CornerRadius": {
-       "UDim": [0, 0]
+       "UDim": [0, 6]
       }
      }
     },
@@ -395,7 +395,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [0, 0]
+         "UDim": [0, 6]
         }
        }
       },
@@ -553,7 +553,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [0, 0]
+         "UDim": [0, 6]
         }
        }
       },
@@ -711,7 +711,7 @@
        "properties": {
         "Name": "UICorner",
         "CornerRadius": {
-         "UDim": [0, 0]
+         "UDim": [0, 6]
         }
        }
       },

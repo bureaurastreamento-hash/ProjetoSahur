@@ -26,7 +26,7 @@ def button(name, text, size, x, y, color, text_size=16, side="right"):
         "BackgroundColor3": {"Color3": color}, "BackgroundTransparency": 0.35, "Text": text, "TextSize": text_size,
         "Font": "GothamBold", "TextColor3": {"Color3": [1, 1, 1]}, "AutoButtonColor": True, "BorderSizePixel": 0,
     }, "attributes": {"BaseX": x, "BaseY": y, "Side": side}, "children": [
-        {"name": "UICorner", "className": "UICorner", "properties": {"CornerRadius": {"UDim": [0, 0]}}},
+        {"name": "UICorner", "className": "UICorner", "properties": {"CornerRadius": {"UDim": [0, 6]}}},
         {"name": "UIStroke", "className": "UIStroke", "properties": {"Thickness": 2, "Color": {"Color3": [1, 1, 1]}, "Transparency": 0.6}},
     ]}
 

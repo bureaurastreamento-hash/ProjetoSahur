@@ -32,6 +32,7 @@ local Combatant = require(Modules:WaitForChild("Combatant"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local TeamConfig = require(Modules:WaitForChild("TeamConfig"))
+local WorldConfig = require(Modules:WaitForChild("WorldConfig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local RagdollService = require(script.Parent:WaitForChild("RagdollService"))
@@ -253,10 +254,49 @@ local function candidates(): { Instance }
 	return list
 end
 
+-- Zona segura (dono 30/09: "spawno tomando dano"): inimigo não ESCOLHE como alvo jogador perto de checkpoint/Pescador
+-- (onde se nasce) nem nos primeiros segundos depois de nascer. Quem ataca o bot continua levando o revide.
+local SAFE_RADIUS = 45
+local SPAWN_GRACE = 6
+local safePoints: { Vector3 } = {}
+for _, region in WorldConfig.Regions do
+	for _, cp in region.Checkpoints do
+		table.insert(safePoints, cp.Position)
+	end
+	if region.Fisher then
+		table.insert(safePoints, region.Fisher.Position)
+	end
+end
+local spawnedAt: { [Instance]: number } = {}
+
+local function protectedFromAggro(fighter: Instance): boolean
+	if not fighter:IsA("Player") then
+		return false
+	end
+	local character = fighter.Character
+	if not character then
+		return true
+	end
+	if os.clock() - (spawnedAt[character] or 0) < SPAWN_GRACE then
+		return true
+	end
+	local r = rootOf(fighter)
+	if not r then
+		return true
+	end
+	for _, p in safePoints do
+		local d = r.Position - p
+		if Vector3.new(d.X, 0, d.Z).Magnitude < SAFE_RADIUS then
+			return true
+		end
+	end
+	return false
+end
+
 local function nearestFighter(b: Bot, radius: number): Instance?
 	local best, bestDist = nil, radius
 	for _, fighter in candidates() do
-		if validTarget(b, fighter) then
+		if validTarget(b, fighter) and not protectedFromAggro(fighter) then
 			local r = rootOf(fighter)
 			local d = if r then (r.Position - b.root.Position).Magnitude else math.huge
 			if d < bestDist then
@@ -626,6 +666,21 @@ end
 function BotService.Init() end
 
 function BotService.Start()
+	-- carência de nascimento (zona segura acima)
+	local function watch(player: Player)
+		player.CharacterAdded:Connect(function(character)
+			spawnedAt[character] = os.clock()
+			character.AncestryChanged:Connect(function()
+				if not character.Parent then
+					spawnedAt[character] = nil
+				end
+			end)
+		end)
+	end
+	Players.PlayerAdded:Connect(watch)
+	for _, player in Players:GetPlayers() do
+		watch(player)
+	end
 	-- passive: apanhou → revida contra quem bateu; bater também renova o aggro
 	HealthService.Damaged.Event:Connect(function(victim: Model, _amount: number, attacker: Combatant.Fighter?)
 		local b = bots[victim]

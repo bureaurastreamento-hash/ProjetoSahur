@@ -46,7 +46,7 @@ def node(name, cls, props=None, children=None):
 
 
 def corner(r=6):
-    return node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 0]}})
+    return node("UICorner", "UICorner", {"CornerRadius": {"UDim": [0, 6]}})
 
 
 def stroke(t=LINE_T, thick=1, color=LINE):
