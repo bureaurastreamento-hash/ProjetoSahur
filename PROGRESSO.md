@@ -2,6 +2,22 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Mapa: captura + relevo + praias + sobreposições — 2026-09-30 (Claude, feito NO STUDIO via MCP; falta capturar)
+- Fluxo novo de edição manual: `SINCRONIZACAO_MANUAL.md` + `tools/capturar_mapa.sh` (`rojo syncback` só do mapa).
+  1ª captura feita (commit "Mapa: captura da construção do dono"): RochaTaberna, Molhada52, `Arena_Antiga` agora no Rojo.
+- **Vão embaixo das praias** (`tools/fechar_vao_praias.luau`): chão das ilhas descia só até -8 e as rampas até -6.5, com a
+  areia do mar em -12 → dava para nadar por baixo da ilha. 545 peças desceram até -13 e 436 rampas ganharam um "Pe*".
+  Conferido: 0 vãos em 2880 pontos das 4 ilhas.
+- **Relevo** (`tools/montar_relevo.luau` → `Workspace.Sahur.Relevo`): MontanhaSantuario (Sandstone) e RochaTaberna
+  (Slate, igual à `cav`) revestidas por fora — talude do chão até 25–30% da altura (areia/grama por cima), lascas em
+  estratos, ombro arredondado, topo com pedras/picos/grama. Núcleo original só mudou de cor. Porta da Taberna e
+  cachoeira/santuário em zonas livres; lasca que encostaria em qualquer coisa é pulada. Rodar de novo refaz do zero.
+  Atenção: os taludes (~50°) são andáveis — dá para subir um pouco nas duas.
+- **Sobreposições** (`tools/corrigir_sobreposicao.luau`): 1386 faces coplanares recuadas 0.04 (peça menor), a maioria
+  tijolos destrutíveis/pilares/props. Restam 24 pares só em `Arvore1-3`/`Pedra2-3` (possível arte, não mexi).
+- PRÓXIMO: dono salva `backups/place-relevo-30-09.rbxl` → `tools/capturar_mapa.sh ... aplicar` → commit do mapa →
+  dono reconecta o Rojo (proposta do plugin deve vir sem remoções).
+
 ## PONTO DE RETOMADA — bounty persistente / mapa adiado — 2026-09-30
 
 **Na `main`, sem Studio e sem publicação. O dono adiou sua construção manual para o final e autorizou continuar o código. A próxima leva recomendada é contratos de caçador; a campanha do Capítulo 1 permanece preparada até Fortaleza, sem iniciar Capítulo 2 automaticamente.** Quando o dono avisar que modificou o mapa, capturar e conciliar o snapshot antes de reconectar Rojo, conforme `SINCRONIZACAO_MANUAL.md`.
