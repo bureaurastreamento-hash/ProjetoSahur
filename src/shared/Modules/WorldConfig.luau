@@ -80,6 +80,8 @@ WorldConfig.Regions = {
 export type Island = { Id: string, Region: string?, Center: Vector3, RadiusX: number, RadiusZ: number }
 WorldConfig.Islands = {
 	{ Id = "alvorecer", Region = "ilha_tutorial", Center = Vector3.new(150, 0, -40), RadiusX = 330, RadiusZ = 290 },
+	-- Campos da Névoa (ilhota de farm da Ilha 1, ponte a oeste; tools/gerar_expansao_ilha1.py)
+	{ Id = "campos_nevoa", Region = "ilha_tutorial", Center = Vector3.new(-470, 0, -60), RadiusX = 190, RadiusZ = 230 },
 	{ Id = "pilares", Region = "ilha_pilares", Center = Vector3.new(910, 0, -500), RadiusX = 320, RadiusZ = 305 },
 	{ Id = "sol_partido", Region = "ilha_sol_partido", Center = Vector3.new(1700, 0, -130), RadiusX = 340, RadiusZ = 290 },
 	{ Id = "kame", Region = nil, Center = Vector3.new(-450, 0, 560), RadiusX = 300, RadiusZ = 140 }, -- easter egg do dono
