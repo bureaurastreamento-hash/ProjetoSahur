@@ -24,8 +24,22 @@ Pedido do dono: eventos por tempo de servidor e ilhas secretas, vila maior, NPCs
   farm com ponte em z -60; Clareira/Bosque/Acampamento bem separados + Capataz miniboss). Inimigos por marcador
   `MobPad` com atributos (`MobPadService`). Vagantes do treino espalhados.
 - **Cursor próprio** (`CursorController`): triângulo branco (mouse solto) / seta V vazada (shift lock).
-- PRÓXIMO: dono conecta o Rojo e testa (lista na resposta de 30/09); ajustar visual da Vila/Campos por screenshot;
-  depois: chefes com mecânica própria, mais sidequests por ilha, contratos de caçador (lista do Codex).
+- Verificado por Claude (30/09): servidor no Play sem erro do jogo (62 services); inimigos com tier/HP certos; mural,
+  ferreiro, 4 obeliscos, mercador, Cânion (6 espectros), 7 esferas, Kame aparece/some; screenshots da Vila Nova e dos
+  Campos OK. Corrigida corrida Kame/Cânion reabrindo enquanto sumiam. Cliente (cursor, painel da forja/mercador,
+  toasts) NÃO verificado — só o dono no Play.
+- **Tudo do place no Rojo** (`src/place/*`, ver SINCRONIZACAO_MANUAL.md); captura mantém arquivos ausentes no place.
+
+### TESTE DO DONO (30/09)
+1. Vagantes (treino e Campos) não atacam sozinhos; bater → revidam sem ult. Capataz reage perto do acampamento.
+2. Missão da Máscara antes do nível 5 → aviso "Nível 5 necessário…"; subir → "Você está pronto".
+3. Ponte até os Campos; inimigos soltam material (toast e aba Materiais da mochila).
+4. DEV → Mapa → EVENTOS DO MUNDO: Mercador agora (comprar), Espalhar esferas (pegar), Ilha Kame, Cânion (portal no
+   Deserto, baú, voltar), Pular +1 h. Mural na praça da Vila Nova.
+5. Ferreiro (Vila, x 100 z 160): painel de forja; Lâmina da Névoa com 15 Névoa + 2 Couro + 120 moedas (nível 5).
+6. Cursor: triângulo (mouse solto) / seta V (shift lock).
+7. Visual: Vila Nova, Campos, montanha/rocha novas; moradores andando; nada invadindo a Taberna/caverna.
+- DEPOIS do feedback: chefes com mecânica própria, mais sidequests por ilha, contratos de caçador (lista do Codex).
 
 ## Mapa: captura + relevo + praias + sobreposições — 2026-09-30 (Claude, feito NO STUDIO via MCP; falta capturar)
 - Fluxo novo de edição manual: `SINCRONIZACAO_MANUAL.md` + `tools/capturar_mapa.sh` (`rojo syncback` só do mapa).

@@ -42,7 +42,8 @@
       "Sahur": {
         "$path": "src/workspace",
         "$ignoreUnknownInstances": true
-      }
+      },
+      "$path": "src/place/workspace"
     },
     "ServerStorage": {
       "Maps": {
@@ -57,7 +58,8 @@
       "FerramentasStudio": {
         "$path": "tools/studio",
         "$ignoreUnknownInstances": true
-      }
+      },
+      "$path": "src/place/serverstorage"
     },
     "$ignoreUnknownInstances": true,
     "StarterGui": {
@@ -66,6 +68,14 @@
       "$properties": {
         "ShowDevelopmentGui": false
       }
+    },
+    "Lighting": {
+      "$path": "src/place/lighting",
+      "$ignoreUnknownInstances": true
+    },
+    "TextChatService": {
+      "$path": "src/place/textchat",
+      "$ignoreUnknownInstances": true
     }
   }
 }

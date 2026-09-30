@@ -3,19 +3,25 @@
 Direção aprovada: ler `BIZARRE_DIRECAO.md` antes de planejar novos sistemas; para mods/place de criação, ler `MODS_KIT.md` e `tools/place_criacao/LEIA-ME.md`. `PROGRESSO.md` e o código atual prevalecem para estado de implementação. Não refazer sistemas existentes por causa da mudança de nome/visão.
 
 ## ⚠️ NUNCA PUBLICAR O PLACE A PARTIR DOS ARQUIVOS (incidente 2026-09-28)
-O projeto Rojo é ADITIVO: Taberna, Hall, Lojinha, santuário, `ServerStorage.CharacterModels`/`Mods`, iluminação,
-terreno etc. existem SÓ no place (montados via MCP/Studio), não em `src/`. Um `rojo build` publicado pela Open Cloud
-(Place Publishing API) SUBSTITUI o place inteiro por esse build incompleto e apaga o mapa — foi o que aconteceu
+O projeto Rojo é ADITIVO e NÃO tem o Terrain (mar), configurações do jogo nem nada que o place tenha e os arquivos
+não. Um `rojo build` publicado pela Open Cloud (Place Publishing API) SUBSTITUI o place inteiro por esse build
+incompleto e apaga o que falta — foi o que aconteceu
 na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com o Rojo sincronizado, e só com o dono.
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
 ## Regra: edição manual do dono x Rojo (2026-09-28)
-O Rojo só sobrescreve o que vem de `src/` e `tools/studio/` (scripts, UI em StarterGui, `Workspace.Sahur.*`,
-`ServerStorage.Maps/ArenaReserva/FerramentasStudio`). Tudo fora disso (`Workspace.Taberna`, `cav`, Lojinha, ilhota Kame,
-peças soltas no Workspace, Terrain) é do place e o Rojo NÃO mexe. Quando o dono editar à mão algo gerado
+Desde 30/09 o Rojo também gerencia o resto do place (`src/place/*`: Taberna, `cav`, Lojinha, Kame, EventMaps, Lighting...);
+só o Terrain fica fora. Edição manual = fluxo de captura abaixo. Quando o dono editar à mão algo gerado
 (ex.: uma ilha em `Workspace.Sahur`): fluxo de CAPTURA da seção abaixo (substitui o antigo "entregar a pasta"). Nunca rodar
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
+
+## ONDE PARAMOS (30/09, fim) — o dono está TESTANDO; ao voltar, pedir/ler o feedback dele primeiro
+- Tudo commitado e no GitHub. Rojo: `rojo serve default.project.json` (o dono conecta). Place ainda NÃO publicado
+  (o dono publica pelo Studio depois de testar).
+- Lista do que ele vai testar: PROGRESSO "Prender o jogador" → "TESTE DO DONO". Feedback dele = próxima leva.
+- Screenshots: `tools/screenshot_studio.sh <arquivo.png>` (foca o Studio pelo KWin, recorta a viewport); câmera antes
+  pelo MCP (`CurrentCamera.CFrame` + `Focus`). Play de teste: `run_script_in_play_mode` (run_server), UMA sessão por vez.
 
 ## ONDE PARAMOS (30/09, tarde) — ler PROGRESSO "Prender o jogador"
 - Inimigos por nível (`EnemyConfig`), missões com `MinLevel`/XP/moedas, materiais/drops/forja/armas, eventos do mundo
@@ -24,9 +30,10 @@ a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 - Kame começa ESCONDIDA em runtime (ServerStorage.IlhaSecreta_Kame) — no modo edição ela continua no lugar.
 
 ## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
-Dono constrói no Studio com o Rojo DESCONECTADO, salva `.rbxl` e avisa; a IA roda
-`tools/capturar_mapa.sh <place.rbxl> [aplicar]` (`rojo syncback` só do mapa) ANTES de ele reconectar. Depois da
-captura o Studio é a fonte do mapa: não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
+QUASE TUDO do place está no Rojo desde 30/09 (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods, Lighting →
+`src/place/...`; só o Terrain fica fora). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA roda
+`tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar (o `.rbxl` tem que ser mais novo que a última
+sincronização). Não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
 
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código

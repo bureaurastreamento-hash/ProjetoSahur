@@ -521,6 +521,9 @@ local function hideKameAgain()
 	end
 	announce("A ilha fantasma está sumindo na névoa...")
 	task.delay(4.5, function()
+		if orbState == "island" then
+			return -- reabriu (DEV/esferas) enquanto sumia: não esconder a aparição nova
+		end
 		for _, player in Players:GetPlayers() do
 			local root = rootOf(player)
 			if root and inKame(root.Position) then
@@ -770,7 +773,7 @@ function WorldEventsService.OpenCanyon(): boolean
 				announce(("%s achou Aço Estelar no Cânion Fantasma!"):format(player.DisplayName))
 			end
 		end)
-		table.clear(canyonBots)
+		canyonBots = {}
 		for i = 1, Config.Obelisks.Enemies do
 			local at = spawns[((i - 1) % #spawns) + 1] * CFrame.new(rng:NextNumber(-14, 14), 0, rng:NextNumber(-14, 14))
 			local bot = BotService.Spawn(EnemyConfig.Options(4, { Name = "Espectro do Cânion", CFrame = at, Team = "fx_canion", HomeMap = clone,
@@ -795,6 +798,8 @@ local function closeCanyon()
 	end
 	announce("O Cânion Fantasma está se desfazendo...")
 	ghost({ c }, false, 4)
+	local oldBots = canyonBots
+	canyonBots = {}
 	task.delay(4.5, function()
 		local back = if canyonPortal then canyonPortal.Position + Vector3.new(6, -4, 0) else homeSpawn()
 		for _, player in Players:GetPlayers() do
@@ -804,16 +809,17 @@ local function closeCanyon()
 				toast(player, "O Cânion sumiu", "Você caiu de volta no Deserto do Sol.")
 			end
 		end
-		for _, bot in canyonBots do
+		for _, bot in oldBots do
 			BotService.Remove(bot)
 		end
-		table.clear(canyonBots)
-		c:Destroy()
-		canyon = nil
-		if canyonPortal then
-			canyonPortal:Destroy()
-			canyonPortal = nil
+		if canyon == c then
+			canyon = nil
+			if canyonPortal then
+				canyonPortal:Destroy()
+				canyonPortal = nil
+			end
 		end
+		c:Destroy()
 	end)
 end
 

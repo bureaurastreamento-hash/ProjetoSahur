@@ -10,9 +10,10 @@ na versão 422 (28/09, 21:49 UTC). Publicar só pelo Studio (File > Publish) com
 Nunca usar `ROBLOX_API_KEY` para publicar place; nunca rodar `rojo build` como fonte de publicação.
 
 ## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
-Dono constrói no Studio com o Rojo DESCONECTADO, salva `.rbxl` e avisa; a IA roda
-`tools/capturar_mapa.sh <place.rbxl> [aplicar]` (`rojo syncback` só do mapa) ANTES de ele reconectar. Depois da
-captura o Studio é a fonte do mapa: não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
+QUASE TUDO do place está no Rojo desde 30/09 (Taberna, cav, Lojinha, Kame, EventMaps, BossModel, Mods, Lighting →
+`src/place/...`; só o Terrain fica fora). Quem edita no Studio: Rojo DESCONECTADO, salva `.rbxl`, avisa; a IA roda
+`tools/capturar_mapa.sh <place.rbxl> [aplicar]` ANTES de reconectar (o `.rbxl` tem que ser mais novo que a última
+sincronização). Não rodar `gerar_chao_ilhas.py`/`gerar_ilha_*_fx.py`/`gerar_arena.py`/`MontarMundo`.
 
 ## Quem sou eu neste projeto
 Você é um engenheiro sênior de Roblox/Luau trabalhando comigo (o único responsável pelo código

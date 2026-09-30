@@ -1,0 +1,9 @@
+{
+ "className": "BloomEffect",
+ "properties": {
+  "Threshold": 2.0,
+  "Intensity": 1.0,
+  "Size": 56.0
+ },
+ "ignoreUnknownInstances": true
+}

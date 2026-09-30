@@ -4,6 +4,7 @@
     "$className": "DataModel",
     "$ignoreUnknownInstances": true,
     "Workspace": {
+      "$path": "src/place/workspace",
       "$ignoreUnknownInstances": true,
       "Sahur": {
         "$path": "src/workspace",
@@ -11,6 +12,7 @@
       }
     },
     "ServerStorage": {
+      "$path": "src/place/serverstorage",
       "$ignoreUnknownInstances": true,
       "Maps": {
         "$path": "src/maps",
@@ -20,6 +22,26 @@
         "$path": "src/reserva/ArenaReserva.rbxm",
         "$ignoreUnknownInstances": true
       }
+    },
+    "Lighting": {
+      "$path": "src/place/lighting",
+      "$ignoreUnknownInstances": true
+    },
+    "TextChatService": {
+      "$path": "src/place/textchat",
+      "$ignoreUnknownInstances": true
     }
+  },
+  "syncbackRules": {
+    "ignoreTrees": [
+      "Workspace/Terrain",
+      "Workspace/Camera",
+      "Workspace/EventosMundo",
+      "ServerStorage/RBX_ANIMSAVES",
+      "ServerStorage/__Rojo_SessionLock",
+      "ServerStorage/Backup_Terreno_2026-09-29",
+      "ServerStorage/IlhaSecreta_Kame",
+      "ServerStorage/FerramentasStudio"
+    ]
   }
 }
