@@ -4,6 +4,7 @@ local Modules = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):Wait
 local Config = require(Modules.CostaDouradaConfig)
 local WorldConfig = require(Modules.WorldConfig)
 local MapRegistration = require(script.Parent.Parent.Modules.CampaignMapRegistration)
+local EnemyConfig = require(Modules.EnemyConfig)
 local StoryService = require(script.Parent.StoryService)
 local DataService = require(script.Parent.DataService)
 local WorldService = require(script.Parent.WorldService)
@@ -97,12 +98,12 @@ function Service.BindMap(map: Model): boolean
 			and StoryService.RegionOf(player) == Config.Region and StoryService.HasFlag(player, "costa_dourada_unlocked") then WorldService.SetCheckpoint(player, Config.Region, "chegada") end
 	end))
 	for i = 1, 3 do
-		BotService.Spawn({ HomeMap = map, CharacterId = "Swift", Name = "Guarda da organização", CFrame = markers["CostaGuardPad" .. i].CFrame * CFrame.new(0, 3, 0),
-			Behavior = "aggressive", Team = "fx_costa", Attributes = { FXEnemy = true, StoryKillKind = "fx_costa_guard", MaxHealth = 180 }, Tuning = { SeekRadius = 35 } })
+		BotService.Spawn(EnemyConfig.Options(5, { HomeMap = map, CharacterId = "Swift", Name = "Guarda da organização", CFrame = markers["CostaGuardPad" .. i].CFrame * CFrame.new(0, 3, 0),
+			Behavior = "aggressive", Team = "fx_costa", Attributes = { FXEnemy = true, StoryKillKind = "fx_costa_guard" }, Tuning = { SeekRadius = 35 } }))
 	end
 	-- Kit provisório existente. Artefatos de múltiplos mundos próprios permanecem pendentes.
-	BotService.Spawn({ HomeMap = map, CharacterId = "Kira", Name = "Regente Dourado", CFrame = markers.CostaBossSpawn.CFrame * CFrame.new(0, 3, 0),
-		Behavior = "aggressive", Team = "fx_costa", Attributes = { FXEnemy = true, StoryKillKind = "fx_costa_boss", MaxHealth = 750, DamageMult = 1.6 }, Tuning = { SeekRadius = 55 } })
+	BotService.Spawn(EnemyConfig.Options(5, { HomeMap = map, CharacterId = "Kira", Name = "Regente Dourado", CFrame = markers.CostaBossSpawn.CFrame * CFrame.new(0, 3, 0),
+		Behavior = "aggressive", Team = "fx_costa", Attributes = { FXEnemy = true, StoryKillKind = "fx_costa_boss", MaxHealth = 750, DamageMult = 1.6 }, Tuning = { SeekRadius = 55 } }))
 	return true
 end
 function Service.Start()

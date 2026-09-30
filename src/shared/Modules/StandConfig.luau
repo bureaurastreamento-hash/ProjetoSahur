@@ -50,7 +50,8 @@ StandConfig.Races = {
 	{ Id = "HomemDePedra", Name = "Homem de Pedra", Access = "mission", Desc = "Despertou cedo demais. (efeitos em breve)", Color = Color3.fromRGB(150, 140, 120) },
 } :: { Race }
 
---- Itens do inventário: "flecha", "stand:<CharacterId>" (Disco de Stand), "raca:<RaceId>" (Essência).
+--- Itens do inventário: "flecha", "stand:<CharacterId>" (Disco de Stand), "raca:<RaceId>" (Essência),
+--- "mat:<id>" (material de forja, MaterialConfig).
 export type ItemInfo = { Id: string, Kind: string, Name: string, Desc: string, Color: Color3, Ref: string? }
 
 function StandConfig.RarityOf(standId: string): Rarity?
@@ -123,6 +124,11 @@ function StandConfig.ItemInfo(itemId: string, displayNameOf: ((string) -> string
 		return { Id = itemId, Kind = "stand", Ref = ref, Name = "Disco de Stand: " .. name,
 			Desc = ("%s. Usar troca o seu Stand atual (o atual é perdido)."):format(rarity and rarity.Name or "?"),
 			Color = if rarity then rarity.Color else Color3.new(1, 1, 1) }
+	elseif kind == "mat" and ref then
+		local mat = require(script.Parent:WaitForChild("MaterialConfig")).Get(ref)
+		if mat then
+			return { Id = itemId, Kind = "material", Ref = ref, Name = mat.Name, Desc = ("%s · %s"):format(mat.Rarity, mat.Desc), Color = mat.Color }
+		end
 	elseif kind == "raca" and ref then
 		local race = StandConfig.GetRace(ref)
 		if race then

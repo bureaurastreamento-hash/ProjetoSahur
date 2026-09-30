@@ -19,6 +19,7 @@ local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
 local StandService = require(script.Parent:WaitForChild("StandService"))
 local BuildService = require(script.Parent.BuildService)
+local ProgressionService = require(script.Parent.ProgressionService)
 
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
@@ -84,6 +85,22 @@ local function current(player: Player)
 	return profile, chapter, act
 end
 
+-- Nível mínimo do ato (dono 30/09: "prender"): abaixo dele o objetivo não conta e a dica manda treinar.
+local function levelLocked(profile: any, act: StoryConfig.Act?): boolean
+	return act ~= nil and act.MinLevel ~= nil and (profile.level or 1) < act.MinLevel
+end
+
+local TRAINING_HINT = {
+	ilha_tutorial = "Treine nos Campos da Névoa (oeste da vila, pela ponte): Vagantes e o Capataz.",
+	ilha_pilares = "Treine contra os Homens de Pedra do Deserto do Sol.",
+	ilha_sol_partido = "Treine contra os Caçadores de Recompensa da Rota do Eclipse.",
+}
+local function lockedHint(profile: any, act: StoryConfig.Act): string
+	return ("Nível %d necessário (você está no %d). %s"):format(act.MinLevel or 1, profile.level or 1,
+		TRAINING_HINT[act.Region or ""] or "Treine derrotando inimigos da região.")
+end
+local lockedWarned: { [Player]: number } = {}
+
 local function payload(player: Player): { [string]: any }?
 	local profile, chapter, act = current(player)
 	if not profile or not chapter then return nil end
@@ -95,8 +112,11 @@ local function payload(player: Player): { [string]: any }?
 				progress = math.min(profile.story.counters[objective.Kind] or 0, objective.Goal) })
 		end
 	end
+	local locked = levelLocked(profile, act)
 	return { chapter = chapter.Id, chapterTitle = chapter.Title, act = profile.story.act,
-		actId = act and act.Id, actTitle = act and act.Title or "Capítulo concluído", hint = act and act.Hint, objectives = objectives, optional = SidequestConfig.State(profile.story.flags) }
+		actId = act and act.Id, actTitle = act and act.Title or "Capítulo concluído",
+		hint = if locked then lockedHint(profile, act) else act and act.Hint, lockedLevel = if locked and act then act.MinLevel else nil,
+		objectives = objectives, optional = SidequestConfig.State(profile.story.flags) }
 end
 
 local function push(player: Player, event: string?)
@@ -165,6 +185,8 @@ local function offerChoice(player: Player, act: StoryConfig.Act?)
 end
 
 -- Fala de entrada do ato (Intro com IntroNpc, senão o Guide) — ou a escolha, se o ato for um Eco.
+-- O Ancião (Guide sem GuideNpc) só aparece em diálogo nos atos `Key`; nos outros a missão chega como aviso
+-- discreto (dono 30/09: "ancião ali, na próxima esquina outro ancião"). A fala continua no NPC dele na vila.
 local function introduce(player: Player, act: StoryConfig.Act?)
 	if not act then return end
 	local profile = DataService.GetProfile(player)
@@ -172,8 +194,13 @@ local function introduce(player: Player, act: StoryConfig.Act?)
 		offerChoice(player, act)
 	elseif act.Intro then
 		StoryService.Say(player, act.Intro, act.IntroNpc)
-	elseif act.Guide then
+	elseif act.Guide and (act.Key or act.GuideNpc ~= nil) then
 		StoryService.Say(player, act.Guide, act.GuideNpc)
+	elseif profile then
+		local first = act.Objectives[1]
+		local text = if levelLocked(profile, act) then lockedHint(profile, act)
+			elseif first then first.Text else (act.Hint or "Fale com o Humanoider_20 na vila.")
+		notifyQuest:FireClient(player, "toast", { title = ("Missão %s · %s"):format(act.Mission or "", act.Title), text = text })
 	end
 end
 
@@ -182,6 +209,9 @@ local function finishAct(player: Player, profile: any, act: StoryConfig.Act, sil
 	if act.UnlockFlag then profile.story.flags[act.UnlockFlag] = true end
 	if not profile.story.completed[act.Id] then
 		if act.Reward then StandService.Give(player, act.Reward, "story") end
+		-- toda missão paga algo na hora (dono 30/09: recompensa visível a cada passo)
+		if act.XP then ProgressionService.AddXP(player, act.XP, "story") end
+		if act.Coins then DataService.RewardCoins(player, act.Coins) end
 		if act.Id == "eco_capela" then
 			if profile.build.route ~= "manifestacao" then StandService.Give(player, { flecha = 1 }, "story") end
 			BuildService.CompleteIsland(player)
@@ -295,6 +325,14 @@ function StoryService.Progress(player: Player, kind: string, amount: number, sil
 	local wanted = false
 	for _, objective in act.Objectives do if objective.Kind == kind and (not objective.WhenFlag or profile.story.flags[objective.WhenFlag]) then wanted = true; break end end
 	if not wanted then return false end
+	if levelLocked(profile, act) then
+		local now = os.clock()
+		if (lockedWarned[player] or 0) < now then
+			lockedWarned[player] = now + 8
+			notifyQuest:FireClient(player, "toast", { title = "Ainda não", text = lockedHint(profile, act) })
+		end
+		return false
+	end
 	profile.story.counters[kind] = (profile.story.counters[kind] or 0) + amount
 	if objectivesDone(profile, act) then
 		if act.Choice then
@@ -311,7 +349,7 @@ end
 --- O ato atual tem objetivo `kind`? (para os services das ilhas darem feedback só quando conta)
 function StoryService.Wants(player: Player, kind: string): boolean
 	local profile, _chapter, act = current(player)
-	if not profile or not act then return false end
+	if not profile or not act or levelLocked(profile, act) then return false end
 	for _, objective in act.Objectives do
 		if objective.Kind == kind and (not objective.WhenFlag or profile.story.flags[objective.WhenFlag]) then return true end
 	end
@@ -470,6 +508,17 @@ end
 
 function StoryService.Start()
 	DataService.ProfileLoaded.Event:Connect(function(player: Player)
+		-- subiu de nível: atualiza a dica e avisa quando o ato travado liberou
+		local lastLevel = (DataService.GetProfile(player) or { level = 1 }).level
+		player:GetAttributeChangedSignal("Level"):Connect(function()
+			local profile, _c, act = current(player)
+			if not profile then return end
+			if act and act.MinLevel and lastLevel < act.MinLevel and profile.level >= act.MinLevel then
+				notifyQuest:FireClient(player, "toast", { title = "Você está pronto", text = ("Missão %s · %s"):format(act.Mission or "", act.Title) })
+			end
+			lastLevel = profile.level
+			push(player)
+		end)
 		apply(player)
 		local _p, _c, act = current(player)
 		if act and act.Choice then task.delay(4, function() offerChoice(player, act) end) end -- Eco pendente

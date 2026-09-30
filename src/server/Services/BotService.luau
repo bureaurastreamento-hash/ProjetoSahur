@@ -8,7 +8,10 @@
 	ragdoll, parry e cutscene do despertar iguais. Só não tem cliente (HUD/DataStore/crédito).
 	Comportamento (atributo Behavior):
 	  passive    (padrão, dono) — parado até APANHAR; aí revida contra quem bateu por AggroSeconds e volta a ficar quieto
+	  reactive   — como o passive, e também ataca quem chegar a menos de TerritoryRadius (território)
 	  aggressive — caça o lutador mais perto dentro de SeekRadius
+	Força/inteligência por nível da região: EnemyConfig (tiers) → Tuning (CanAwaken/CanCounter/UsePassive 0|1,
+	TerritoryRadius, AggroSeconds, Tick e as chances). Os iniciais são humanos passivos sem ult.
 	  idle       — nunca ataca (só serve de alvo; leva hitstun/ragdoll normalmente)
 	IA (tick 0,1 s): perto = combo de M1; meio = habilidade 1–4 pronta (chance por tick; desperto usa o kit
 	desperto e o dobro da chance); R quando está com menos de metade da vida; longe = dash/andar até o alvo;
@@ -52,6 +55,10 @@ BotService.Config = {
 	CancelChancePerTick = 0.35, -- caído: chance por tick de ragdoll cancel
 	RespawnTime = CombatConfig.RespawnTime,
 	LeashRadius = 100, -- inimigos da campanha voltam ao território (bots DEV/trailer não mudam)
+	TerritoryRadius = 0, -- reactive: ataca quem chegar a menos disto
+	CanAwaken = 1, -- 0 = nunca desperta/usa ult (EnemyConfig: iniciais)
+	CanCounter = 1, -- 0 = não usa o revide anti-2v1
+	UsePassive = 1, -- 0 = não usa o R
 }
 
 export type SpawnOptions = {
@@ -59,7 +66,7 @@ export type SpawnOptions = {
 	Name: string?,
 	UserId: number?, -- avatar (padrão: roda os membros da equipe)
 	CFrame: CFrame?, -- padrão: perto do primeiro jogador
-	Behavior: string?, -- passive | aggressive | idle
+	Behavior: string?, -- passive | reactive | aggressive | idle
 	Respawn: boolean?, -- padrão true
 	HomeMap: Model?, -- mapa opcional: não recriar bot depois de removê-lo do Workspace
 	Team: string?, -- TeamId (bots do mesmo time não se batem)
@@ -301,6 +308,12 @@ local function think(b: Bot)
 		if not b.target then
 			b.target = nearestFighter(b, C.SeekRadius)
 		end
+	elseif behavior == "reactive" and not b.target and C.TerritoryRadius > 0 then
+		-- território: quem chega perto demais vira alvo (e o aggro esfria como no passivo)
+		b.target = nearestFighter(b, C.TerritoryRadius)
+		if b.target then
+			b.aggroUntil = now + C.AggroSeconds
+		end
 	elseif now >= b.aggroUntil then
 		b.target = nil -- passive: esfriou
 	end
@@ -325,7 +338,7 @@ local function think(b: Bot)
 		return
 	end
 	-- anti-2v1: barra "Revide" cheia (2+ batendo nele) → contra-ataque 360° (sai até de dentro do hitstun)
-	if CounterService.IsReady(b.model) and dist <= CombatConfig.Counter.Radius and CounterService.Use(b.model) then
+	if C.CanCounter ~= 0 and CounterService.IsReady(b.model) and dist <= CombatConfig.Counter.Radius and CounterService.Use(b.model) then
 		b.holdUntil = now + CombatConfig.Counter.Delay + 0.4
 		return
 	end
@@ -357,14 +370,14 @@ local function think(b: Bot)
 	-- despertar / ult
 	local energy = AbilityService.GetEnergy(b.model)
 	local awakened = AbilityService.IsAwakened(b.model)
-	if energy >= CharacterDefs.Energy.Max and not awakened and dist <= 24 then
+	if C.CanAwaken ~= 0 and energy >= CharacterDefs.Energy.Max and not awakened and dist <= 24 then
 		AbilityService.Awaken(b.model)
 		return
 	end
 	local characterId = b.model:GetAttribute("CharacterId")
 	local def = if typeof(characterId) == "string" then CharacterDefs.Get(characterId) else nil
 	-- R (suporte): com menos de metade da vida, usa quando estiver pronto
-	if def and def.Passive and b.humanoid.Health < b.humanoid.MaxHealth * 0.5 and math.random() < C.AbilityChancePerTick then
+	if C.UsePassive ~= 0 and def and def.Passive and b.humanoid.Health < b.humanoid.MaxHealth * 0.5 and math.random() < C.AbilityChancePerTick then
 		AbilityService.Use(b.model, CharacterDefs.PASSIVE_SLOT, dir)
 		if AbilityService.IsBusy(b.model) then
 			b.holdUntil = now + def.Passive.CastTime + 0.2
@@ -549,7 +562,7 @@ function BotService.Clear(): number
 	return n
 end
 
---- Troca o comportamento de um bot (nil = todos): passive | aggressive | idle.
+--- Troca o comportamento de um bot (nil = todos): passive | reactive | aggressive | idle.
 function BotService.SetBehavior(model: Model?, behavior: string)
 	for m, b in bots do
 		if model == nil or m == model then
@@ -567,7 +580,7 @@ function BotService.Provoke(model: Model, fighter: Instance)
 	local b = bots[model]
 	if b then
 		b.target = fighter
-		b.aggroUntil = os.clock() + BotService.Config.AggroSeconds
+		b.aggroUntil = os.clock() + b.cfg.AggroSeconds
 	end
 end
 
@@ -620,12 +633,12 @@ function BotService.Start()
 			if not b.target or b.model:GetAttribute("Behavior") ~= "aggressive" then
 				b.target = attacker
 			end
-			b.aggroUntil = os.clock() + BotService.Config.AggroSeconds
+			b.aggroUntil = os.clock() + b.cfg.AggroSeconds
 		end
 		local attackerModel = Combatant.CharacterOf(attacker)
 		local mine = attackerModel and bots[attackerModel :: Model]
 		if mine then
-			mine.aggroUntil = os.clock() + BotService.Config.AggroSeconds
+			mine.aggroUntil = os.clock() + mine.cfg.AggroSeconds
 		end
 	end)
 	-- boss/traidor/boneco bateu num bot: o passivo revida contra o NPC
@@ -635,7 +648,7 @@ function BotService.Start()
 			if not b.target or b.model:GetAttribute("Behavior") ~= "aggressive" then
 				b.target = attackerChar
 			end
-			b.aggroUntil = os.clock() + BotService.Config.AggroSeconds
+			b.aggroUntil = os.clock() + b.cfg.AggroSeconds
 		end
 	end
 	Log.debug("[BotService] pronto (bots com o combate real; padrão: só revidam quando apanham)")

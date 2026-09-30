@@ -6,6 +6,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Config = require(Modules.CidadeAmbarConfig)
 local WorldConfig = require(Modules.WorldConfig)
 local MapRegistration = require(script.Parent.Parent.Modules.CampaignMapRegistration)
+local EnemyConfig = require(Modules.EnemyConfig)
 local StoryService = require(script.Parent.StoryService)
 local DataService = require(script.Parent.DataService)
 local WorldService = require(script.Parent.WorldService)
@@ -76,9 +77,9 @@ function Service.BindMap(map: Model): boolean
 		end
 	end))
 	-- Kit de combate provisório existente; ocultação/memória/duplicação próprias continuam pendentes.
-	BotService.Spawn({ HomeMap = map, CharacterId = "Swift", Name = "O Homem Sem Sombra", CFrame = markers.AmbarBossSpawn.CFrame * CFrame.new(0, 3, 0),
+	BotService.Spawn(EnemyConfig.Options(5, { HomeMap = map, CharacterId = "Swift", Name = "O Homem Sem Sombra", CFrame = markers.AmbarBossSpawn.CFrame * CFrame.new(0, 3, 0),
 		Behavior = "aggressive", Team = "fx_ambar", Attributes = { FXEnemy = true, StoryKillKind = "fx_ambar_boss", MaxHealth = 650, DamageMult = 1.5 },
-		Tuning = { SeekRadius = 55, AbilityChancePerTick = .22, BlockChancePerTick = .3 } })
+		Tuning = { SeekRadius = 55, AbilityChancePerTick = .22, BlockChancePerTick = .3 } }))
 
 	return true
 end

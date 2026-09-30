@@ -4,7 +4,7 @@ local View = {}
 View.Tabs = {
 	{ Id = "all", Label = "Tudo" }, { Id = "arrow", Label = "Flechas" },
 	{ Id = "stand", Label = "Discos" }, { Id = "race", Label = "Raças" },
-	{ Id = "build", Label = "Build" },
+	{ Id = "material", Label = "Materiais" }, { Id = "build", Label = "Build" },
 }
 function View.Matches(tab: string, query: string, id: string, name: string, kind: string): boolean
 	if tab == "build" or (tab ~= "all" and kind ~= tab) then return false end

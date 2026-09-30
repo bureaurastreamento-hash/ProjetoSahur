@@ -19,13 +19,19 @@ ProgressionConfig.XP = {
 }
 
 -- PvE da campanha. Só estes identificadores pagam: bonecos de treino e bots DEV não geram farm.
-export type NpcReward = { XP: number, Coins: number, Boss: boolean?, ArrowChance: number? }
+-- Drops = materiais (MaterialConfig) com chance POR participante; Min/Max = quantidade quando cai.
+export type Drop = { Item: string, Chance: number, Min: number, Max: number }
+export type NpcReward = { XP: number, Coins: number, Boss: boolean?, ArrowChance: number?, Drops: { Drop }? }
 ProgressionConfig.Npcs = {
-	fx_tutorial_enemy = { XP = 10, Coins = 1 },
-	fx_pedra_enemy = { XP = 14, Coins = 1 },
-	fx_sol_enemy = { XP = 18, Coins = 2 },
-	fx_mascara_boss = { XP = 50, Coins = 3, Boss = true, ArrowChance = 0.03 },
-	fx_cap1_boss = { XP = 80, Coins = 5, Boss = true, ArrowChance = 0.05 },
+	fx_tutorial_enemy = { XP = 12, Coins = 1, Drops = { { Item = "mat:nevoa", Chance = 0.35, Min = 1, Max = 1 } } },
+	fx_campos_enemy = { XP = 18, Coins = 1, Drops = { { Item = "mat:nevoa", Chance = 0.5, Min = 1, Max = 2 } } }, -- Campos da Névoa
+	fx_campos_forte = { XP = 30, Coins = 2, Drops = { { Item = "mat:nevoa", Chance = 0.7, Min = 1, Max = 3 }, { Item = "mat:couro_capataz", Chance = 0.08, Min = 1, Max = 1 } } },
+	fx_capataz = { XP = 120, Coins = 8, Boss = true, ArrowChance = 0.02, -- miniboss dos Campos (renasce)
+		Drops = { { Item = "mat:couro_capataz", Chance = 0.6, Min = 1, Max = 2 }, { Item = "mat:nevoa", Chance = 1, Min = 3, Max = 5 } } },
+	fx_pedra_enemy = { XP = 24, Coins = 2, Drops = { { Item = "mat:areia_negra", Chance = 0.3, Min = 1, Max = 1 } } },
+	fx_sol_enemy = { XP = 32, Coins = 2 },
+	fx_mascara_boss = { XP = 90, Coins = 5, Boss = true, ArrowChance = 0.03, Drops = { { Item = "mat:lasca_mascara", Chance = 0.35, Min = 1, Max = 1 } } },
+	fx_cap1_boss = { XP = 160, Coins = 8, Boss = true, ArrowChance = 0.05, Drops = { { Item = "mat:lasca_mascara", Chance = 0.5, Min = 1, Max = 2 } } },
 	fx_solnegro_boss = { XP = 100, Coins = 6, Boss = true, ArrowChance = 0.05 },
 	fx_mare_colapso_boss = { XP = 100, Coins = 6, Boss = true, ArrowChance = 0.05 },
 	fx_mare_avatar = { XP = 200, Coins = 12, Boss = true, ArrowChance = 0.05 },

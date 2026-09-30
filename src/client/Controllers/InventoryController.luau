@@ -147,11 +147,13 @@ local function render()
 			name.Position, name.Size = UDim2.fromOffset(10, 6), UDim2.new(1, -110, 0, 18)
 			local desc = label(row, info.Desc, 12, MUTED)
 			desc.Position, desc.Size = UDim2.fromOffset(10, 26), UDim2.new(1, -110, 0, rowHeight - 30)
-			local use = button(row, "Usar", ACCENT)
-			use.Position, use.Size = UDim2.new(1, -90, 0.5, -15), UDim2.fromOffset(80, 30)
-			use.Activated:Connect(function()
-				Remotes.GetEvent(Remotes.Events.RequestUseItem):FireServer(id)
-			end)
+			if info.Kind ~= "material" then -- material só serve na forja
+				local use = button(row, "Usar", ACCENT)
+				use.Position, use.Size = UDim2.new(1, -90, 0.5, -15), UDim2.fromOffset(80, 30)
+				use.Activated:Connect(function()
+					Remotes.GetEvent(Remotes.Events.RequestUseItem):FireServer(id)
+				end)
+			end
 		end
 	end
 end

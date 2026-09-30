@@ -6,6 +6,7 @@
 ]]
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local EnemyConfig = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("EnemyConfig"))
 local BotService = require(script.Parent:WaitForChild("BotService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
 
@@ -41,7 +42,7 @@ local function populate(island: Model)
 	if pads then
 		for _, pad in pads:GetChildren() do
 			if pad:IsA("BasePart") and pad.Name:match("^EnemyPad") then
-				BotService.Spawn({ CharacterId = "Swift", Name = "Caçador de Recompensa", CFrame = pad.CFrame * CFrame.new(0,3,0), Behavior = "aggressive", Team = "fx_sol", Attributes = { FXEnemy = true, StoryKillKind = "fx_sol_enemy", MaxHealth = 130 }, Tuning = { SeekRadius = 40, DashChancePerTick = .3 } })
+				BotService.Spawn(EnemyConfig.Options(4, { CharacterId = "Swift", Name = "Caçador de Recompensa", CFrame = pad.CFrame * CFrame.new(0,3,0), Team = "fx_sol", Attributes = { FXEnemy = true, StoryKillKind = "fx_sol_enemy" }, Tuning = { DashChancePerTick = .3 } }))
 			end
 		end
 	end
@@ -58,7 +59,7 @@ local function populate(island: Model)
 	local boss = island:FindFirstChild("SolarBossSpawn", true)
 	if boss and boss:IsA("BasePart") then
 		-- Missão 15: O Observador (usuário de manifestação espiritual; kit provisório do Jotaro)
-		BotService.Spawn({ CharacterId = "Jotaro", Name = "O Observador", CFrame = boss.CFrame * CFrame.new(0,3,0), Behavior = "aggressive", Team = "fx_sentinel", Attributes = { FXEnemy = true, StoryKillKind = "fx_sol_boss", MaxHealth = 550, DamageMult = 1.45 }, Tuning = { SeekRadius = 65, AbilityChancePerTick = .22, BlockChancePerTick = .3 } })
+		BotService.Spawn(EnemyConfig.Options(5, { CharacterId = "Jotaro", Name = "O Observador", CFrame = boss.CFrame * CFrame.new(0,3,0), Team = "fx_sentinel", Attributes = { FXEnemy = true, StoryKillKind = "fx_sol_boss", MaxHealth = 700, DamageMult = 1.3 }, Tuning = { SeekRadius = 65, AbilityChancePerTick = .22, BlockChancePerTick = .3 } }))
 	end
 end
 

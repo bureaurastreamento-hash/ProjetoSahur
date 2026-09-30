@@ -15,6 +15,9 @@
 	  Guide       — fala do Humanoider_20 quando o player conversa com ele durante este ato.
 	  Trace       — Rastro de Carlos ligado ao ato (texto em StoryConfig.Traces).
 	  Reward      — itens entregues ao CONCLUIR o ato ({ [itemId] = n }, StandService.Give; ex.: a Flecha).
+	  MinLevel    — nível mínimo para o objetivo contar (abaixo: dica de onde treinar; o ato destrava ao subir).
+	  XP/Coins    — pagos ao concluir o ato (toda missão dá algo na hora).
+	  Key         — o Ancião aparece (diálogo com foto) só nos atos-chave; o resto chega como aviso discreto.
 	  Intro/IntroNpc — fala automática ao ENTRAR no ato (padrão: Guide do Humanoider). IntroNpc "???" = sem foto.
 	  GuideNpc    — quem fala o Guide (padrão Humanoider_20).
 	  Choice      — ECO (BIBLIA_CAMPANHA_CAP1 "Ecos"): escolha na tela ao entrar no ato; escolher conclui o ato e grava
@@ -48,6 +51,10 @@ export type Act = {
 	Trace: string?,
 	Hint: string?,
 	Reward: { [string]: number }?,
+	MinLevel: number?, -- nível mínimo para o ato contar (antes disso: dica de treino; dono 30/09 "prender")
+	XP: number?, -- XP ao concluir o ato
+	Coins: number?, -- moedas ao concluir o ato
+	Key: boolean?, -- momento-chave: o Ancião fala em diálogo; nos outros atos a missão chega como aviso discreto
 	Intro: string?,
 	IntroNpc: string?,
 	GuideNpc: string?,
@@ -77,27 +84,27 @@ StoryConfig.Traces = {
 StoryConfig.Chapters = {
 	{ Id = "cap1", Order = 1, Elder = "Humanoider_20", World = "Mundo das Eras", Inspiration = "JoJo", Title = "Primeira Fratura", Acts = {
 		-- ILHA 1 — PORTO DA NÉVOA (Parte 1)
-		{ Id = "acorde", Mission = "0", Region = "ilha_tutorial", Title = "Acorde", Objectives = {
+		{ Id = "acorde", XP = 30, Mission = "0", Region = "ilha_tutorial", Title = "Acorde", Objectives = {
 			{ Kind = "fx_m0_destrocos", Goal = 1, Text = "Examine os destroços na praia" },
 			{ Kind = "fx_m0_pertence", Goal = 1, Text = "Recupere o que é seu" },
 			{ Kind = "fx_m0_estrutura", Goal = 1, Text = "Toque a estrutura enterrada" },
 		}, Guide = "(Ele observa você em silêncio. Talvez seja melhor olhar a praia primeiro.)", GuideNpc = "???" },
-		{ Id = "chegada", Mission = "1", Region = "ilha_tutorial", Title = "Você não deveria estar inteiro", Objectives = {},
+		{ Id = "chegada", Key = true, Mission = "1", Region = "ilha_tutorial", Title = "Você não deveria estar inteiro", Objectives = {},
 			Intro = "Interessante.", IntroNpc = "???",
 			Hint = "A voz veio da vila, ao norte do porto. Fale com quem estava olhando.",
 			Guide = "Você caiu de uma ruptura ativa... e ainda parece você. (Ele passa um aparelho em você. Falha. Tenta de novo. Falha.) Isso é novo. Me chamo Humanoider. Venha, você precisa ver onde está." },
-		{ Id = "porto_da_nevoa", Mission = "2", Region = "ilha_tutorial", Title = "Porto da Névoa", Objectives = {
+		{ Id = "porto_da_nevoa", XP = 40, Coins = 10, Key = true, Mission = "2", Region = "ilha_tutorial", Title = "Porto da Névoa", Objectives = {
 			{ Kind = "reach_taberna", Goal = 1, Text = "Conheça a Taberna (leste da vila): contratos e gente" },
 		}, Choice = { Id = "rota_inicial", Title = "SEU PRIMEIRO CAMINHO", Text = "Escolha como começar. Você poderá aprender outros caminhos depois.", Options = {
 			{ Id = "tecnica", Label = "Técnica", Desc = "Combate próximo e resistência. Recebe a Flecha no fim da ilha.", Flags = {}, Say = "Comece pelo corpo. A técnica pode acompanhar qualquer manifestação depois." },
 			{ Id = "manifestacao", Label = "Manifestação", Desc = "Recebe uma Flecha agora. Use na mochila (M) para sortear seu Stand.", Flags = {}, Say = "Tome esta Flecha. Ela desperta o que já existe em você; ninguém escolhe o que sai." },
 			{ Id = "arma", Label = "Arma", Desc = "Espada de treino na hotbar. Recebe a Flecha no fim da ilha.", Flags = {}, Say = "Uma arma é um começo. Não é o limite do que você pode aprender." },
 		} }, Guide = "Isto é o Porto da Névoa. Comerciantes, curandeiro, porto, e a Taberna a leste com o quadro de contratos. Uma coisa chamada F/X está fazendo as realidades se misturarem. É só o que você precisa saber por enquanto." },
-		{ Id = "primeiros_golpes", Mission = "3", Region = "ilha_tutorial", Title = "Prove que consegue sobreviver", Objectives = {
+		{ Id = "primeiros_golpes", XP = 60, Coins = 10, Mission = "3", Region = "ilha_tutorial", Title = "Prove que consegue sobreviver", Objectives = {
 			{ Kind = "fx_tutorial_enemy", Goal = 3, Text = "Derrote 3 Vagantes da Fratura (campo de treino, oeste)" },
 			{ Kind = "parries", Goal = 1, Text = "Apare 1 golpe (F na hora certa)" },
 		}, Guide = "Você aprende melhor quando existe alguma possibilidade real de morrer. Campo de treino, a oeste da vila." },
-		{ Id = "fenda_instavel", Mission = "3", Region = "ilha_tutorial", Title = "A zona instável", Objectives = {
+		{ Id = "fenda_instavel", XP = 40, Mission = "3", Region = "ilha_tutorial", Title = "A zona instável", Objectives = {
 			{ Kind = "reach_fenda", Goal = 1, Text = "Entre na fenda instável a oeste do treino" },
 		}, Guide = "Tem uma zona instável a oeste do campo de treino. Os outros precisam de proteção para entrar lá. Quero ver o que acontece com você." },
 		{ Id = "eco_sobreviventes", Mission = "3 · Eco", Region = "ilha_tutorial", Title = "A fenda está fechando", Objectives = {},
@@ -112,13 +119,13 @@ StoryConfig.Chapters = {
 					{ Id = "saida", Label = "Usar a passagem estreita", Desc = "Só se você achou outra saída lá dentro.", Flags = { "eco_m3_saida" },
 						RequiresFlag = "fenda_saida", Say = "Outra saída? Ninguém tinha visto aquilo. Os dois vivos, sem carregar ninguém." },
 				} } },
-		{ Id = "a_mascara", Mission = "4", Region = "ilha_tutorial", Title = "A Máscara", Objectives = {
+		{ Id = "a_mascara", MinLevel = 5, XP = 120, Coins = 20, Key = true, Mission = "4", Region = "ilha_tutorial", Title = "A Máscara", Objectives = {
 			{ Kind = "fx_mascara_boss", Goal = 1, Text = "Derrote o Portador da Máscara (colinas a leste)" },
 		}, Guide = "Gente anda sumindo nas colinas a leste. Um grupo está usando um artefato antigo por lá, e ele reage à F/X de um jeito que não devia." },
-		{ Id = "rastro_carlos_01", Mission = "5", Region = "ilha_tutorial", Title = "O objeto impossível", Objectives = {
+		{ Id = "rastro_carlos_01", XP = 60, Coins = 10, Mission = "5", Region = "ilha_tutorial", Title = "O objeto impossível", Objectives = {
 			{ Kind = "trace_carlos_era01", Goal = 1, Text = "Investigue o brilho nas ruínas ao norte" },
 		}, Trace = "carlos_era01", Guide = "A máscara pertence a esta realidade. Mas aquela energia não. Tem outro brilho nas ruínas ao norte. Vá ver." },
-		{ Id = "herdeiro_da_nevoa", Mission = "Final da Ilha 1", Region = "ilha_tutorial", Title = "O Herdeiro da Névoa", Objectives = {
+		{ Id = "herdeiro_da_nevoa", MinLevel = 8, XP = 200, Coins = 40, Key = true, Mission = "Final da Ilha 1", Region = "ilha_tutorial", Title = "O Herdeiro da Névoa", Objectives = {
 			{ Kind = "fx_cap1_boss", Goal = 1, Text = "Derrote o Herdeiro da Névoa nas ruínas" },
 		}, Guide = "Aquela peça... é de alguém que morreu. Esqueça isso por agora. Quem está usando a energia da máscara nas ruínas sabe que existem outros mundos. Pare ele." },
 		{ Id = "eco_capela", Mission = "Escolha da Ilha 1", Region = "ilha_tutorial", Title = "A capela está desabando", Objectives = {},
@@ -135,23 +142,23 @@ StoryConfig.Chapters = {
 						RequiresFlag = "passagem_capela", Say = "Você já conhecia a passagem. Todo mundo saiu, e ainda trouxe parte dos arquivos." },
 				} } },
 		-- ILHA 2 — DESERTO DO SOL (Parte 2)
-		{ Id = "calor", Mission = "6", Region = "ilha_pilares", Title = "Calor", Objectives = {}, Arrive = "ilha_pilares",
+		{ Id = "calor", Key = true, Mission = "6", Region = "ilha_pilares", Title = "Calor", Objectives = {}, Arrive = "ilha_pilares",
 			Hint = "Atravesse o portal a nordeste do Porto da Névoa até o Deserto do Sol.",
 			Guide = "Você sobreviveu. Sua rota não limita o que pode aprender. A mochila (M) guarda suas Flechas. Há uma ruptura ativa num deserto de outra época. Portal a nordeste." },
-		{ Id = "homens_de_pedra", Mission = "7", Region = "ilha_pilares", Title = "Os Homens de Pedra", Objectives = {
+		{ Id = "homens_de_pedra", MinLevel = 9, XP = 150, Coins = 20, Mission = "7", Region = "ilha_pilares", Title = "Os Homens de Pedra", Objectives = {
 			{ Kind = "fx_pedra_enemy", Goal = 4, Text = "Derrote 4 Homens de Pedra na escavação (leste)" },
 		}, Guide = "A escavação a leste acordou coisas que deviam dormir por mais alguns séculos. A F/X adiantou o relógio delas." },
-		{ Id = "respira", Mission = "8", Region = "ilha_pilares", Title = "Respira", Objectives = {
+		{ Id = "respira", XP = 150, Coins = 20, Mission = "8", Region = "ilha_pilares", Title = "Respira", Objectives = {
 			{ Kind = "fx_mestre", Goal = 1, Text = "Fale com o Mestre da Respiração (praça de chegada)" },
 			{ Kind = "parries", Goal = 2, Text = "Apare 2 golpes" },
 		}, Choice = { Id = "tecnica_m8", Title = "RESPIRA", Text = "Você pode aprender Técnica corporal ou continuar com sua build. Quem começou pela Técnica recebe sua evolução.", Options = {
 			{ Id = "aprender", Label = "Aprender Técnica", Desc = "Técnica básica ou evolução da rota Técnica; maestria preservada.", Flags = { "tecnica_m8_aprendeu" }, Say = "Respire com o golpe, não contra ele.", },
 			{ Id = "recusar", Label = "Continuar com minha build", Desc = "A campanha continua. Você pode voltar ao mestre para aprender depois.", Flags = { "tecnica_m8_recusou" }, Say = "O corpo lembra o que a cabeça esquece. Volte quando quiser treinar.", },
 		} }, Guide = "Tem um mestre perto da praça de chegada. Técnica deste mundo. Aprenda: nenhum sistema de poder é exclusivo de ninguém." },
-		{ Id = "a_camara", Mission = "9", Region = "ilha_pilares", Title = "A Câmara", Objectives = {
+		{ Id = "a_camara", MinLevel = 12, XP = 200, Coins = 25, Mission = "9", Region = "ilha_pilares", Title = "A Câmara", Objectives = {
 			{ Kind = "fx_camara", Goal = 1, Text = "Encontre o símbolo dentro do santuário (atrás da cachoeira)" },
 		}, Guide = "O santuário atrás da cachoeira é mais antigo que tudo nesta ilha. Procure o que brilha lá dentro." },
-		{ Id = "sol_negro", Mission = "10", Region = "ilha_pilares", Title = "Sol Negro", Objectives = {
+		{ Id = "sol_negro", MinLevel = 14, XP = 320, Coins = 50, Key = true, Mission = "10", Region = "ilha_pilares", Title = "Sol Negro", Objectives = {
 			{ Kind = "fx_solnegro_boss", Goal = 1, Text = "Derrote o Sacerdote do Sol Negro na Câmara" },
 		},
 			Guide = "Esse símbolo parece a peça do Porto... mas não é igual. Alguém estudou isto antes de nós. Agora foco: o Sacerdote quer usar a F/X para acordar o que dorme na Câmara." },
@@ -163,25 +170,25 @@ StoryConfig.Chapters = {
 				{ Id = "transferir", Label = "Transferir a energia", Desc = "Preserva parte das ruínas, mas deixa uma anomalia menor permanente.", Flags = { "eco_ilha2_transferiu" }, RequiresFlag = "camara_transferencia_preparada", Say = "A energia foi transferida. A entidade não despertará, mas uma anomalia menor permanece." },
 			} } },
 		-- ILHA 3 — ROTA DO ECLIPSE (Parte 3)
-		{ Id = "rota_do_eclipse", Mission = "11", Region = "ilha_sol_partido", Title = "Manifestação", Objectives = {}, Arrive = "ilha_sol_partido",
+		{ Id = "rota_do_eclipse", Key = true, Mission = "11", Region = "ilha_sol_partido", Title = "Manifestação", Objectives = {}, Arrive = "ilha_sol_partido",
 			Hint = "No Deserto do Sol, o portal da praça de chegada leva à Rota do Eclipse.",
 			Guide = "A próxima ruptura é uma rota inteira: portos, desertos, cidades. Aqui as manifestações espirituais são comuns. Vá pela praça de chegada." },
-		{ Id = "cacados", Mission = "12", Region = "ilha_sol_partido", Title = "Caçados", Objectives = {
+		{ Id = "cacados", MinLevel = 15, XP = 220, Coins = 25, Mission = "12", Region = "ilha_sol_partido", Title = "Caçados", Objectives = {
 			{ Kind = "fx_sol_enemy", Goal = 5, Text = "Derrote 5 Caçadores de Recompensa" },
 			{ Kind = "parries", Goal = 2, Text = "Apare 2 golpes" },
 		}, Guide = "Alguém pôs um preço na sua cabeça. E quem contratou sabe que você atravessa rupturas. Isso é específico demais." },
-		{ Id = "o_viajante", Mission = "13", Region = "ilha_sol_partido", Title = "O Viajante", Objectives = {
+		{ Id = "o_viajante", XP = 220, Coins = 25, Mission = "13", Region = "ilha_sol_partido", Title = "O Viajante", Objectives = {
 			{ Kind = "fx_viajante", Goal = 1, Text = "Converse com O Viajante perto da chegada da Rota do Eclipse" },
 		}, Guide = "Uma pessoa apareceu perto da chegada. Não veio de barco. Fale com ela.",
 			Hint = "O Viajante está perto do portal de chegada." },
-		{ Id = "homem_que_nao_existe", Mission = "14", Region = "ilha_sol_partido", Title = "O homem que não existe", Objectives = {
+		{ Id = "homem_que_nao_existe", MinLevel = 18, XP = 260, Coins = 30, Mission = "14", Region = "ilha_sol_partido", Title = "O homem que não existe", Objectives = {
 			{ Kind = "trace_carlos_eclipse01", Goal = 1, Text = "Leia o registro antigo no altar do templo" },
 		}, Trace = "carlos_eclipse01", Guide = "O templo ao norte guarda registros antigos. Muito antigos." },
-		{ Id = "eclipse", Mission = "15", Region = "ilha_sol_partido", Title = "Eclipse", Objectives = {
+		{ Id = "eclipse", MinLevel = 20, XP = 450, Coins = 60, Key = true, Mission = "15", Region = "ilha_sol_partido", Title = "Eclipse", Objectives = {
 			{ Kind = "fx_sol_boss", Goal = 1, Text = "Derrote O Observador no topo do templo" },
 		}, UnlockFlag = "cidade_ambar_unlocked",
 			Guide = "O Observador não quer poder. Quer saber quem está ligando os mundos. Isso o torna mais perigoso." },
-		{ Id = "rumo_cidade_ambar", Mission = "16 · chegada", Region = "cidade_ambar", Title = "Rumo à Cidade Âmbar", Objectives = {}, Arrive = "cidade_ambar",
+		{ Id = "rumo_cidade_ambar", Key = true, Mission = "16 · chegada", Region = "cidade_ambar", Title = "Rumo à Cidade Âmbar", Objectives = {}, Arrive = "cidade_ambar",
 			Hint = "A rota só abre quando a Cidade Âmbar tiver mapa e chegada seguros.",
 			Guide = "\"Você acredita que as rachaduras começaram recentemente?\" ... Não gosto de como ele disse isso. Nossa próxima parada é a Cidade Âmbar." },
 		-- ILHA 4 — CIDADE ÂMBAR. Marcadores reais ligados por CidadeAmbarService; sem criar/mover arte.
@@ -209,7 +216,7 @@ StoryConfig.Chapters = {
 		{ Id = "casa_vazia", Mission = "20", Region = "cidade_ambar", Title = "Casa Vazia", Objectives = {
 			{ Kind = "fx_ambar_casa", Goal = 1, Text = "Investigue a pequena ruptura na casa vazia" },
 		}, Guide = "A casa parece vazia. Examine o que restou lá dentro." },
-		{ Id = "homem_sem_sombra", Mission = "Boss da Ilha 4", Region = "cidade_ambar", Title = "O Homem Sem Sombra", Objectives = {
+		{ Id = "homem_sem_sombra", MinLevel = 24, XP = 600, Coins = 80, Key = true, Mission = "Boss da Ilha 4", Region = "cidade_ambar", Title = "O Homem Sem Sombra", Objectives = {
 			{ Kind = "fx_ambar_boss", Goal = 1, Text = "Derrote O Homem Sem Sombra" },
 		}, Guide = "Uma ruptura controlada. Parece artificial... alguém aprendeu a reproduzir os fenômenos da F/X. Ou já sabia antes. Pare quem está usando isso." },
 		{ Id = "eco_cidade", Mission = "Escolha da Ilha 4", Region = "cidade_ambar", Title = "Justiça e informação", Objectives = {}, UnlockFlag = "costa_dourada_unlocked",
@@ -218,7 +225,7 @@ StoryConfig.Chapters = {
 				{ Id = "humanoider", Label = "Humanoider interroga", Desc = "O Ancião obtém o relato para o grupo.", Flags = { "eco_ilha4_humanoider", "ambar_metodo_linhas" }, Say = "O interrogatório confirma o relato: um homem que conhecia as linhas lhe passou o método. Ele não deu nenhum nome." },
 				{ Id = "pessoal", Label = "Interrogar pessoalmente", Desc = "Você obtém o relato e compartilha com o grupo.", Flags = { "eco_ilha4_pessoal", "ambar_metodo_linhas" }, Say = "Você obteve e compartilhou o relato. O método veio de um homem que conhecia as linhas. Nenhum nome foi revelado." },
 			} } },
-		{ Id = "rumo_costa_dourada", Mission = "21 · chegada", Region = "costa_dourada", Title = "Rumo à Costa Dourada", Objectives = {}, Arrive = "costa_dourada",
+		{ Id = "rumo_costa_dourada", Key = true, Mission = "21 · chegada", Region = "costa_dourada", Title = "Rumo à Costa Dourada", Objectives = {}, Arrive = "costa_dourada",
 			Hint = "A rota aguarda mapa e chegada seguros da Costa Dourada.", Guide = "A informação chegou ao grupo. Nossa próxima rota é a Costa Dourada, quando estiver estável." },
 		{ Id = "contrabando", Mission = "21", Region = "costa_dourada", Title = "Contrabando", Objectives = {
 			{ Kind = "fx_costa_mercado", Goal = 2, Text = "Examine dois lotes de objetos de outras realidades" },
@@ -244,7 +251,7 @@ StoryConfig.Chapters = {
 			{ Kind = "fx_costa_c8", Goal = 1, Text = "Examine o carregamento marcado C-8" },
 			{ Kind = "fx_costa_c8_relato", Goal = 1, Text = "Mostre a identificação ao Humanoider" },
 		}, Guide = "Há um carregamento com uma identificação antiga. Traga o registro para mim." },
-		{ Id = "regente_dourado", Mission = "Boss da Ilha 5", Region = "costa_dourada", Title = "Regente Dourado", Objectives = {
+		{ Id = "regente_dourado", MinLevel = 28, XP = 700, Coins = 90, Key = true, Mission = "Boss da Ilha 5", Region = "costa_dourada", Title = "Regente Dourado", Objectives = {
 			{ Kind = "fx_costa_boss", Goal = 1, Text = "Derrote o chefe da organização" },
 		}, Guide = "O Regente Dourado reuniu artefatos de outras realidades. Não deixe que continue usando o tráfico para acumular poder." },
 		{ Id = "eco_costa", Mission = "Escolha da Ilha 5", Region = "costa_dourada", Title = "O futuro do mercado", Objectives = {}, UnlockFlag = "fortaleza_mare_unlocked",
@@ -253,7 +260,7 @@ StoryConfig.Chapters = {
 				{ Id = "faccao", Label = "Facção menos agressiva", Desc = "Entrega o controle a uma facção menos agressiva.", Flags = { "eco_ilha5_faccao" }, Say = "O controle foi entregue a uma facção menos agressiva. Isso não muda o que descobrimos." },
 				{ Id = "monitorar", Label = "Monitoramento de Humanoider", Desc = "Mantém o sistema para observar sua atividade.", Flags = { "eco_ilha5_monitorou" }, Say = "O sistema permanece sob meu monitoramento. Precisamos acompanhar a origem destes objetos." },
 			} } },
-		{ Id = "rumo_fortaleza_mare", Mission = "26 · chegada", Region = "fortaleza_mare", Title = "Rumo à Fortaleza Maré", Objectives = {}, Arrive = "fortaleza_mare",
+		{ Id = "rumo_fortaleza_mare", Key = true, Mission = "26 · chegada", Region = "fortaleza_mare", Title = "Rumo à Fortaleza Maré", Objectives = {}, Arrive = "fortaleza_mare",
 			Hint = "A rota aguarda mapa e chegada seguros da Fortaleza Maré.", Guide = "A prisão foi construída sobre uma zona extremamente instável. Quando a rota estiver segura, seguimos." },
 		{ Id = "prisioneiro", Mission = "26", Region = "fortaleza_mare", Title = "Prisioneiro", Objectives = {
 			{ Kind = "fx_mare_prisao", Goal = 1, Text = "Entre na fortaleza e examine a situação dos prisioneiros" },

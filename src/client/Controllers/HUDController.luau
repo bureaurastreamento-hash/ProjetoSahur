@@ -866,7 +866,12 @@ function HUDController.Start()
 				("%s · %d%s"):format(tostring(data.title), tonumber(data.points) or 0,
 					if (tonumber(data.coins) or 0) > 0 then (" · +%d moedas"):format(data.coins) else ""))
 		elseif event == "npc_loot" then
-			HUDController.ShowToast(tostring(data.name), ("+%d moedas%s"):format(tonumber(data.coins) or 0, if data.arrow then " · +1 Flecha" else ""))
+			local extra = if data.arrow then " · +1 Flecha" else ""
+			for _, drop in (if typeof(data.drops) == "table" then data.drops else {}) do
+				local info = StandConfig.ItemInfo(tostring(drop.item))
+				extra ..= (" · +%d %s"):format(tonumber(drop.n) or 1, if info then info.Name else tostring(drop.item))
+			end
+			HUDController.ShowToast(tostring(data.name), ("+%d moedas%s"):format(tonumber(data.coins) or 0, extra))
 		end
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)

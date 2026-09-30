@@ -8,6 +8,7 @@ local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
+local EnemyConfig = require(Modules:WaitForChild("EnemyConfig"))
 local BotService = require(script.Parent:WaitForChild("BotService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
 
@@ -145,9 +146,10 @@ local function populateStory(story: Instance)
 	if sobrevivente then staticNpc(sobrevivente, "Sobrevivente", false, story) end
 	local mascara = find("MascaraSpawn")
 	if mascara then
-		BotService.Spawn({ CharacterId = "Jotaro", Name = "Portador da Máscara", CFrame = mascara.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive",
-			Team = "fx_mascara", Attributes = { FXEnemy = true, StoryKillKind = "fx_mascara_boss", MaxHealth = 240, DamageMult = 1.1 },
-			Tuning = { SeekRadius = 40, AbilityChancePerTick = .15 } })
+		-- humano com um artefato (sem Stand, dono 30/09): reage só a quem invadir a clareira dele
+		BotService.Spawn(EnemyConfig.Options(2, { Name = "Portador da Máscara", CFrame = mascara.CFrame * CFrame.new(0, 3, 0), Behavior = "reactive",
+			Team = "fx_mascara", Attributes = { FXEnemy = true, StoryKillKind = "fx_mascara_boss", MaxHealth = 330, DamageMult = 0.8 },
+			Tuning = { TerritoryRadius = 26, BlockChancePerTick = 0.1 } }))
 	end
 end
 
@@ -162,14 +164,16 @@ local function populate(island: Model)
 	if training then
 		for _, pad in training:GetChildren() do
 			if pad:IsA("BasePart") and pad.Name:match("^VagantePad") then
-				BotService.Spawn({ CharacterId = "Swift", Name = "Vagante da Fratura", CFrame = pad.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_tutorial", Attributes = { FXEnemy = true, StoryKillKind = "fx_tutorial_enemy" }, Tuning = { SeekRadius = 32 } })
+				-- tier 1: humano passivo, só luta se apanhar (o jogador ainda não sabe nada)
+				BotService.Spawn(EnemyConfig.Options(1, { Name = "Vagante da Fratura", CFrame = pad.CFrame * CFrame.new(0, 3, 0), Team = "fx_tutorial", Attributes = { FXEnemy = true, StoryKillKind = "fx_tutorial_enemy" } }))
 			end
 		end
 	end
 	local bossSpot = island:FindFirstChild("GuardiaoSpawn", true)
 	if bossSpot and bossSpot:IsA("BasePart") then
 		-- Final da Ilha 1: o Herdeiro da Névoa (poder da máscara + F/X; kit provisório do Dio).
-		BotService.Spawn({ CharacterId = "Dio", Name = "Herdeiro da Névoa", CFrame = bossSpot.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_guardian", Attributes = { FXEnemy = true, StoryKillKind = "fx_cap1_boss", MaxHealth = 300, DamageMult = 1.25 }, Tuning = { SeekRadius = 55, AbilityChancePerTick = .18 } })
+		-- tier 3 (bloqueia, habilidades da máscara), ainda SEM ult: é o primeiro chefe de verdade
+		BotService.Spawn(EnemyConfig.Options(3, { CharacterId = "Dio", Name = "Herdeiro da Névoa", CFrame = bossSpot.CFrame * CFrame.new(0, 3, 0), Behavior = "reactive", Team = "fx_guardian", Attributes = { FXEnemy = true, StoryKillKind = "fx_cap1_boss", MaxHealth = 480, DamageMult = 1.0 }, Tuning = { TerritoryRadius = 34, AbilityChancePerTick = 0.1 } }))
 	end
 end
 

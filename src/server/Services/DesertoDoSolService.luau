@@ -7,6 +7,7 @@
 ]]
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local EnemyConfig = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("EnemyConfig"))
 local BotService = require(script.Parent:WaitForChild("BotService"))
 local StoryService = require(script.Parent:WaitForChild("StoryService"))
 local BuildService = require(script.Parent.BuildService)
@@ -71,16 +72,16 @@ local function populate(island: Model)
 	end
 	for _, pad in story:GetChildren() do
 		if pad:IsA("BasePart") and pad.Name:match("^EscavacaoPad") then
-			BotService.Spawn({ CharacterId = "Jotaro", Name = "Homem de Pedra", CFrame = pad.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_pedra",
-				Attributes = { FXEnemy = true, StoryKillKind = "fx_pedra_enemy", MaxHealth = 170 }, Tuning = { SeekRadius = 34 } })
+			BotService.Spawn(EnemyConfig.Options(3, { CharacterId = "Jotaro", Name = "Homem de Pedra", CFrame = pad.CFrame * CFrame.new(0, 3, 0), Team = "fx_pedra",
+				Attributes = { FXEnemy = true, StoryKillKind = "fx_pedra_enemy" } }))
 		end
 	end
 	local masterSpot = story:FindFirstChild("MestreSpot")
 	if masterSpot and masterSpot:IsA("BasePart") then spawnMaster(masterSpot, story) end
 	local disciple = story:FindFirstChild("DiscipuloPad")
 	if disciple and disciple:IsA("BasePart") then
-		BotService.Spawn({ CharacterId = "Swift", Name = "Discípulo da Respiração", CFrame = disciple.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_discipulo",
-			Attributes = { FXEnemy = true, MaxHealth = 220, DamageMult = .5 }, Tuning = { SeekRadius = 16 } })
+		BotService.Spawn(EnemyConfig.Options(3, { CharacterId = "Swift", Name = "Discípulo da Respiração", CFrame = disciple.CFrame * CFrame.new(0, 3, 0), Team = "fx_discipulo",
+			Attributes = { FXEnemy = true, MaxHealth = 220, DamageMult = .5 }, Tuning = { TerritoryRadius = 16 } }))
 	end
 	local chamber = story:FindFirstChild("CamaraMarker")
 	if chamber and chamber:IsA("BasePart") then
@@ -111,9 +112,9 @@ local function populate(island: Model)
 	end
 	local priest = story:FindFirstChild("SacerdoteSpawn")
 	if priest and priest:IsA("BasePart") then
-		BotService.Spawn({ CharacterId = "Kira", Name = "Sacerdote do Sol Negro", CFrame = priest.CFrame * CFrame.new(0, 3, 0), Behavior = "aggressive", Team = "fx_solnegro",
-			Attributes = { FXEnemy = true, StoryKillKind = "fx_solnegro_boss", MaxHealth = 450, DamageMult = 1.35 },
-			Tuning = { SeekRadius = 45, AbilityChancePerTick = .2, BlockChancePerTick = .25 } })
+		BotService.Spawn(EnemyConfig.Options(4, { CharacterId = "Kira", Name = "Sacerdote do Sol Negro", CFrame = priest.CFrame * CFrame.new(0, 3, 0), Team = "fx_solnegro",
+			Attributes = { FXEnemy = true, StoryKillKind = "fx_solnegro_boss", MaxHealth = 600, DamageMult = 1.2 },
+			Tuning = { SeekRadius = 45, AbilityChancePerTick = .2, BlockChancePerTick = .25 } }))
 	end
 end
 

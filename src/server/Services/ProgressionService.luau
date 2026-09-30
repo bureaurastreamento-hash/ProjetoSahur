@@ -213,7 +213,17 @@ function ProgressionService.Start()
 			if reward.ArrowChance and rng:NextNumber() < reward.ArrowChance then
 				arrow = DataService.AddItem(participant, "flecha", 1)
 			end
-			notify(participant, "npc_loot", { name = victim.Name, coins = coins, arrow = arrow })
+			local drops = {}
+			local dropList: { ProgressionConfig.Drop } = reward.Drops or {}
+			for _, drop in dropList do
+				if rng:NextNumber() < drop.Chance then
+					local n = rng:NextInteger(drop.Min, drop.Max)
+					if DataService.AddItem(participant, drop.Item, n) then
+						table.insert(drops, { item = drop.Item, n = n })
+					end
+				end
+			end
+			notify(participant, "npc_loot", { name = victim.Name, coins = coins, arrow = arrow, drops = drops })
 		end
 	end)
 	-- tempo jogado (minutos) para as conquistas de "playtime"

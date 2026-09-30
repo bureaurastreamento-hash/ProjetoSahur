@@ -1,6 +1,7 @@
 --!strict
 local Workspace = game:GetService("Workspace")
 local Modules = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules")
+local EnemyConfig = require(Modules.EnemyConfig)
 local Config = require(Modules.FortalezaMareConfig)
 local WorldConfig = require(Modules.WorldConfig)
 local Registration = require(script.Parent.Parent.Modules.CampaignMapRegistration)
@@ -106,12 +107,12 @@ function Service.BindMap(map: Model): boolean
 			and StoryService.RegionOf(player) == Config.Region and StoryService.HasFlag(player, "fortaleza_mare_unlocked") then WorldService.SetCheckpoint(player, Config.Region, "chegada") end
 	end))
 	for i, character in { "Jotaro", "Swift" } do
-		BotService.Spawn({ HomeMap = map, CharacterId = character, Name = "Eco alterado da Fratura", CFrame = markers["MareColapsoPad" .. i].CFrame * CFrame.new(0, 3, 0),
-			Behavior = "aggressive", Team = "fx_mare", Attributes = { FXEnemy = true, StoryKillKind = "fx_mare_colapso_boss", StoryObjectiveKey = "mare_colapso_" .. i, MaxHealth = 450, DamageMult = 1.3 }, Tuning = { SeekRadius = 40 } })
+		BotService.Spawn(EnemyConfig.Options(5, { HomeMap = map, CharacterId = character, Name = "Eco alterado da Fratura", CFrame = markers["MareColapsoPad" .. i].CFrame * CFrame.new(0, 3, 0),
+			Behavior = "aggressive", Team = "fx_mare", Attributes = { FXEnemy = true, StoryKillKind = "fx_mare_colapso_boss", StoryObjectiveKey = "mare_colapso_" .. i, MaxHealth = 450, DamageMult = 1.3 }, Tuning = { SeekRadius = 40 } }))
 	end
 	-- Combate provisório; quatro fases/alternância de regiões exigem kit e cena próprios, ainda pendentes.
-	BotService.Spawn({ HomeMap = map, CharacterId = "Jotaro", Name = "Avatar da Fratura", CFrame = markers.MareBossSpawn.CFrame * CFrame.new(0, 3, 0),
-		Behavior = "aggressive", Team = "fx_mare", Attributes = { FXEnemy = true, StoryKillKind = "fx_mare_avatar", MaxHealth = 1000, DamageMult = 1.7 }, Tuning = { SeekRadius = 65 } })
+	BotService.Spawn(EnemyConfig.Options(5, { HomeMap = map, CharacterId = "Jotaro", Name = "Avatar da Fratura", CFrame = markers.MareBossSpawn.CFrame * CFrame.new(0, 3, 0),
+		Behavior = "aggressive", Team = "fx_mare", Attributes = { FXEnemy = true, StoryKillKind = "fx_mare_avatar", MaxHealth = 1000, DamageMult = 1.7 }, Tuning = { SeekRadius = 65 } }))
 	return true
 end
 function Service.Start()
