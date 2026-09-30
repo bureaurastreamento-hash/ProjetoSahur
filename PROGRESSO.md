@@ -2,6 +2,31 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## "Prender o jogador" — leva de 30/09 (Claude; FALTA o dono testar no Play)
+Pedido do dono: eventos por tempo de servidor e ilhas secretas, vila maior, NPCs iniciais fracos/passivos, grind.
+- **Inimigos por nível** (`EnemyConfig`, tiers 1–5): tier 1–2 = HUMANOS passivos (só lutam se apanharem), sem ult/
+  habilidade/revide; tier 3 reativo (território) com bloqueio e habilidades; tier 4+ agressivo, Stand e ult.
+  `BotService`: comportamento `reactive` + travas por bot (CanAwaken/CanCounter/UsePassive/TerritoryRadius).
+  Todas as ilhas convertidas (Ilha 1 = tiers 1–3, Deserto 3–4, Rota 4–5, ilhas 4–6 = 5).
+- **Missões com nível mínimo e recompensa** (`StoryConfig`: `MinLevel`/`XP`/`Coins`/`Key`): Máscara nv 5, Herdeiro
+  nv 8, Deserto 9–14, Rota 15–20... Abaixo do nível o objetivo não conta e a dica manda treinar; ao subir, aviso
+  "Você está pronto". O Ancião só aparece em diálogo nos atos `Key`; o resto chega como aviso discreto.
+- **Materiais e drops** (`MaterialConfig`, item `mat:<id>`, aba Materiais na mochila; `ProgressionConfig.Npcs[].Drops`).
+- **Armas** (`BuildConfig.Weapons`: espada de treino, Lâmina da Névoa, **Katana da Fratura**); arma extra = item
+  `arma:<id>` (Usar = equipar; a anterior volta para a mochila). Forja no **Ferreiro** da vila.
+- **Eventos do mundo** (`WorldEventsService`/`WorldEventsConfig`, relógio = tempo de servidor de pé):
+  Mercador Errante (6 h, depois a cada 3 h; Aço Estelar 25%); Esferas Estreladas (2 h, 7 pelas ilhas) → **Ilhota do
+  Mestre (Kame) como ilha fantasma** 30 min (começa ESCONDIDA); Obeliscos do Sol (4 h, só à noite, os 4 juntos) →
+  **Cânion Fantasma** 30 min com portal no Deserto, Espectros tier 4 e baú; **Mural de Rumores** na praça com dicas e
+  contagens. Anúncios na tela. DEV → Mapa → EVENTOS DO MUNDO (pular +1 h, forçar cada um).
+- **Ilha 1 maior** (`tools/gerar_expansao_ilha1.py` → `FXVilaNova` e `FXCamposNevoa`): Vila Nova (praça do mercado,
+  10 casas, postes, bancos; 7 moradores andando — `VillagerService`, não são lutadores) e Campos da Névoa (ilhota de
+  farm com ponte em z -60; Clareira/Bosque/Acampamento bem separados + Capataz miniboss). Inimigos por marcador
+  `MobPad` com atributos (`MobPadService`). Vagantes do treino espalhados.
+- **Cursor próprio** (`CursorController`): triângulo branco (mouse solto) / seta V vazada (shift lock).
+- PRÓXIMO: dono conecta o Rojo e testa (lista na resposta de 30/09); ajustar visual da Vila/Campos por screenshot;
+  depois: chefes com mecânica própria, mais sidequests por ilha, contratos de caçador (lista do Codex).
+
 ## Mapa: captura + relevo + praias + sobreposições — 2026-09-30 (Claude, feito NO STUDIO via MCP; falta capturar)
 - Fluxo novo de edição manual: `SINCRONIZACAO_MANUAL.md` + `tools/capturar_mapa.sh` (`rojo syncback` só do mapa).
   1ª captura feita (commit "Mapa: captura da construção do dono"): RochaTaberna, Molhada52, `Arena_Antiga` agora no Rojo.

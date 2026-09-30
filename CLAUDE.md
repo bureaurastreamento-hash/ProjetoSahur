@@ -17,6 +17,12 @@ peças soltas no Workspace, Terrain) é do place e o Rojo NÃO mexe. Quando o do
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 
+## ONDE PARAMOS (30/09, tarde) — ler PROGRESSO "Prender o jogador"
+- Inimigos por nível (`EnemyConfig`), missões com `MinLevel`/XP/moedas, materiais/drops/forja/armas, eventos do mundo
+  por tempo de servidor (`WorldEventsService`: mercador 6 h, Kame fantasma, Cânion fantasma, mural), Vila Nova +
+  Campos da Névoa (`tools/gerar_expansao_ilha1.py`), moradores. Nada testado no Play ainda.
+- Kame começa ESCONDIDA em runtime (ServerStorage.IlhaSecreta_Kame) — no modo edição ela continua no lugar.
+
 ## Construção manual do dono → arquivos (2026-09-30) — ler `SINCRONIZACAO_MANUAL.md`
 Dono constrói no Studio com o Rojo DESCONECTADO, salva `.rbxl` e avisa; a IA roda
 `tools/capturar_mapa.sh <place.rbxl> [aplicar]` (`rojo syncback` só do mapa) ANTES de ele reconectar. Depois da
