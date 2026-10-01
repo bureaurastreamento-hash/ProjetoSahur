@@ -55,7 +55,7 @@ local SIMPLE_COMMANDS = {
 	"GrantAll", "RevokeAll", "Teleport", "Bring", "Kick", "ResetData",
 	"RespawnDummies", "ToggleDummies", "BringDummy", "RefreshLeaderboard", "ServerInfo", "ListPlayers", "GetState", "TestSounds",
 	"Fly", "Awaken", "Ragdoll", "ClearAntiExploit", "GrantCosmetics", "ResetCosmetics", "SummonBoss", "DespawnBoss", "InspectBoss",
-	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerStop",
+	"SetDay", "SetNight", "TimeAuto", "GiveArrow", "RespawnArrow", "BecomeBoss", "EndBossForm", "Trailer", "TrailerV", "TrailerStop",
 	"TeleportArena", "Spectate", "GetReports", "StartEvent", "EndEvent",
 	"SummonBossStrong", "KillBoss", "RestoreDestructibles", "TakeArrow",
 	"SummonTraitor", "KillTraitor", "DespawnTraitor",
@@ -70,16 +70,17 @@ local CONFIRM_SECONDS = 3
 local TABS = { "Adm", "Mapa", "Teste" }
 -- Botão -> comando que manda o texto da caixa "Message" (e os dias da caixa "BanDays" no Ban)
 local TEXT_COMMANDS = { "AnnounceGlobal", "AnnounceServer", "Announce", "Ban", "Unban", "JoinPlayerServer", "GetReportsByName" }
--- Cenas do trailer como botões (dono, 2026-09-23): "Scene_<cena>" e "SceneAbil_<id>" / "SceneUlt_<id>"; o toggle
--- "SceneWithMe" (só no cliente) manda `me = true` = o jogador fica na cena em vez de ser estacionado.
-local sceneWithMe = false
+-- Cenas do trailer v3 como botões (dono, 2026-10-01): "Scene_<cena>"; o toggle "SceneVertical" (só no cliente)
+-- manda `v = true` = a cena sai no enquadramento 9:16.
+local sceneVertical = false
 local TOGGLE_BUTTONS: { [string]: string } = { InfiniteEnergy = "infiniteEnergy", NoCooldown = "noCooldown", God = "god", Fly = "fly" }
 -- Botões pintados pelo estado do SERVIDOR (state.server): "on" (verde + contorno) / "sel" (azul) / nil (cor original).
 -- Dono (2026-09-23): "não sei quais estão ativos" — todo toggle/ação com estado mostra aqui.
 local SERVER_STATUS: { [string]: (any) -> string? } = {
 	ToggleDummies = function(sv) return if sv.dummies then "on" else nil end,
 	Trailer = function(sv) return if sv.trailer then "on" else nil end,
-	SceneWithMe = function() return if sceneWithMe then "on" else nil end,
+	TrailerV = function(sv) return if sv.trailer then "on" else nil end,
+	SceneVertical = function() return if sceneVertical then "on" else nil end,
 	TrailerStop = function(sv) return if sv.trailer then "sel" else nil end,
 	SummonBoss = function(sv) return if sv.boss == "Fighting" then "on" elseif sv.boss == "Cooldown" then "sel" else nil end,
 	SummonBossStrong = function(sv) return if sv.boss == "Fighting" then "on" else nil end,
@@ -657,31 +658,21 @@ function DevController.Start()
 			})
 		end)
 	end
-	-- cenas do trailer (predefinições)
+	-- cenas do trailer (uma de cada vez)
 	for _, child in panel:GetDescendants() do
 		if child:IsA("TextButton") then
 			local scene = child.Name:match("^Scene_(%w+)$")
-			local abil = child.Name:match("^SceneAbil_(%w+)$")
-			local ult = child.Name:match("^SceneUlt_(%w+)$")
 			if scene then
 				bindButton(child.Name, function()
-					send("TrailerScene", { scene = scene, me = sceneWithMe })
-				end)
-			elseif abil then
-				bindButton(child.Name, function()
-					send("TrailerScene", { scene = "abilities", id = abil, me = sceneWithMe })
-				end)
-			elseif ult then
-				bindButton(child.Name, function()
-					send("TrailerScene", { scene = "ult", id = ult, me = sceneWithMe })
+					send("TrailerScene", { scene = scene, v = sceneVertical })
 				end)
 			end
 		end
 	end
-	local withMe = get(panel, "SceneWithMe") :: TextButton
-	withMe.MouseButton1Click:Connect(function()
-		sceneWithMe = not sceneWithMe
-		paint(withMe, if sceneWithMe then "on" else nil)
+	local vertical = get(panel, "SceneVertical") :: TextButton
+	vertical.MouseButton1Click:Connect(function()
+		sceneVertical = not sceneVertical
+		paint(vertical, if sceneVertical then "on" else nil)
 	end)
 	local botBox = get(panel, "BotCharacter") :: TextBox
 	for _, command in { "SpawnBotPassive", "SpawnBotAggressive", "SpawnBotIdle" } do

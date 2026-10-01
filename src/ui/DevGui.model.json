@@ -7039,7 +7039,7 @@
         ],
         [
          0,
-         614
+         564
         ]
        ]
       },
@@ -8889,7 +8889,7 @@
          ]
         },
         "BackgroundTransparency": 1,
-        "Text": "TRAILER  (cenas com bots reais \u00b7 grave a tela)",
+        "Text": "TRAILER v3  (EN, sem m\u00fasica \u00b7 contagem 3 s \u00b7 grave a tela)",
         "TextSize": 11,
         "Font": "GothamBold",
         "TextColor3": {
@@ -8940,7 +8940,74 @@
           0.35
          ]
         },
-        "Text": "TRAILER COMPLETO (~95 s)",
+        "Text": "TRAILER 16:9 (~115 s)",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "TrailerV",
+       "className": "TextButton",
+       "properties": {
+        "Name": "TrailerV",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           294
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           354
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.25,
+          0.55,
+          0.35
+         ]
+        },
+        "Text": "TRAILER 9:16 (~60 s)",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -8980,7 +9047,7 @@
          "UDim2": [
           [
            0,
-           143
+           294
           ],
           [
            0,
@@ -8992,11 +9059,11 @@
          "UDim2": [
           [
            0,
-           314
+           12
           ],
           [
            0,
-           354
+           386
           ]
          ]
         },
@@ -9039,10 +9106,323 @@
        ]
       },
       {
-       "name": "SceneWithMe",
+       "name": "SceneVertical",
        "className": "TextButton",
        "properties": {
-        "Name": "SceneWithMe",
+        "Name": "SceneVertical",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           294
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           386
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Cenas em 9:16",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "SceneSection",
+       "className": "TextLabel",
+       "properties": {
+        "Name": "SceneSection",
+        "Size": {
+         "UDim2": [
+          [
+           1,
+           -24
+          ],
+          [
+           0,
+           16
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           418
+          ]
+         ]
+        },
+        "BackgroundTransparency": 1,
+        "Text": "CENA AVULSA",
+        "TextSize": 11,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          0.35,
+          0.65,
+          1.0
+         ]
+        },
+        "TextXAlignment": "Left",
+        "TextTruncate": "AtEnd"
+       },
+       "children": []
+      },
+      {
+       "name": "Scene_open",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_open",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           436
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Abertura",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "Scene_beach",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_beach",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           163
+          ],
+          [
+           0,
+           436
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Praia",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "Scene_world",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_world",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           314
+          ],
+          [
+           0,
+           436
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Mundo",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "Scene_arrow",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_arrow",
         "Size": {
          "UDim2": [
           [
@@ -9063,7 +9443,7 @@
           ],
           [
            0,
-           354
+           436
           ]
          ]
         },
@@ -9074,7 +9454,7 @@
           0.17
          ]
         },
-        "Text": "Comigo na cena",
+        "Text": "Flecha",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9130,7 +9510,7 @@
           ],
           [
            0,
-           386
+           468
           ]
          ]
         },
@@ -9197,7 +9577,7 @@
           ],
           [
            0,
-           386
+           468
           ]
          ]
         },
@@ -9208,7 +9588,7 @@
           0.17
          ]
         },
-        "Text": "Parry \u00b7 Black Flash",
+        "Text": "Black Flash",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9264,7 +9644,7 @@
           ],
           [
            0,
-           386
+           468
           ]
          ]
         },
@@ -9275,7 +9655,7 @@
           0.17
          ]
         },
-        "Text": "Dash = hit",
+        "Text": "Dash",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9307,10 +9687,10 @@
        ]
       },
       {
-       "name": "Scene_brawl",
+       "name": "Scene_rush",
        "className": "TextButton",
        "properties": {
-        "Name": "Scene_brawl",
+        "Name": "Scene_rush",
         "Size": {
          "UDim2": [
           [
@@ -9331,7 +9711,7 @@
           ],
           [
            0,
-           386
+           468
           ]
          ]
         },
@@ -9342,7 +9722,141 @@
           0.17
          ]
         },
-        "Text": "Briga (4 bots)",
+        "Text": "Stands",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "Scene_timestop",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_timestop",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           12
+          ],
+          [
+           0,
+           500
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Tempo parado",
+        "TextSize": 12,
+        "Font": "GothamBold",
+        "TextColor3": {
+         "Color3": [
+          1,
+          1,
+          1
+         ]
+        },
+        "AutoButtonColor": true,
+        "BorderSizePixel": 0,
+        "Visible": true
+       },
+       "children": [
+        {
+         "name": "UICorner",
+         "className": "UICorner",
+         "properties": {
+          "Name": "UICorner",
+          "CornerRadius": {
+           "UDim": [
+            0,
+            6
+           ]
+          }
+         },
+         "children": []
+        }
+       ]
+      },
+      {
+       "name": "Scene_ult",
+       "className": "TextButton",
+       "properties": {
+        "Name": "Scene_ult",
+        "Size": {
+         "UDim2": [
+          [
+           0,
+           143
+          ],
+          [
+           0,
+           28
+          ]
+         ]
+        },
+        "Position": {
+         "UDim2": [
+          [
+           0,
+           163
+          ],
+          [
+           0,
+           500
+          ]
+         ]
+        },
+        "BackgroundColor3": {
+         "Color3": [
+          0.13,
+          0.13,
+          0.17
+         ]
+        },
+        "Text": "Despertar",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9394,324 +9908,11 @@
          "UDim2": [
           [
            0,
-           12
-          ],
-          [
-           0,
-           418
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Boss no santu\u00e1rio",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "Scene_abilities",
-       "className": "TextButton",
-       "properties": {
-        "Name": "Scene_abilities",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           163
-          ],
-          [
-           0,
-           418
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Habilidades (todos)",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneAbilSection",
-       "className": "TextLabel",
-       "properties": {
-        "Name": "SceneAbilSection",
-        "Size": {
-         "UDim2": [
-          [
-           1,
-           -24
-          ],
-          [
-           0,
-           16
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           12
-          ],
-          [
-           0,
-           450
-          ]
-         ]
-        },
-        "BackgroundTransparency": 1,
-        "Text": "HABILIDADES 1..3 por personagem",
-        "TextSize": 11,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          0.35,
-          0.65,
-          1.0
-         ]
-        },
-        "TextXAlignment": "Left",
-        "TextTruncate": "AtEnd"
-       },
-       "children": []
-      },
-      {
-       "name": "SceneAbil_Jotaro",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneAbil_Jotaro",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           12
-          ],
-          [
-           0,
-           468
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Jotaro",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneAbil_Swift",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneAbil_Swift",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           163
-          ],
-          [
-           0,
-           468
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Bruno Gollini",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneAbil_Dio",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneAbil_Dio",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
            314
           ],
           [
            0,
-           468
+           500
           ]
          ]
         },
@@ -9722,7 +9923,7 @@
           0.17
          ]
         },
-        "Text": "Dio",
+        "Text": "Boss",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9754,10 +9955,10 @@
        ]
       },
       {
-       "name": "SceneAbil_Kira",
+       "name": "Scene_portal",
        "className": "TextButton",
        "properties": {
-        "Name": "SceneAbil_Kira",
+        "Name": "Scene_portal",
         "Size": {
          "UDim2": [
           [
@@ -9778,73 +9979,6 @@
           ],
           [
            0,
-           468
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Kira",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneAbil_Rick",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneAbil_Rick",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           12
-          ],
-          [
-           0,
            500
           ]
          ]
@@ -9856,7 +9990,7 @@
           0.17
          ]
         },
-        "Text": "Rick",
+        "Text": "Portal",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -9888,19 +10022,19 @@
        ]
       },
       {
-       "name": "SceneUltSection",
-       "className": "TextLabel",
+       "name": "Scene_poses",
+       "className": "TextButton",
        "properties": {
-        "Name": "SceneUltSection",
+        "Name": "Scene_poses",
         "Size": {
          "UDim2": [
           [
-           1,
-           -24
+           0,
+           143
           ],
           [
            0,
-           16
+           28
           ]
          ]
         },
@@ -9916,51 +10050,6 @@
           ]
          ]
         },
-        "BackgroundTransparency": 1,
-        "Text": "DESPERTAR + ULT por personagem",
-        "TextSize": 11,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          0.35,
-          0.65,
-          1.0
-         ]
-        },
-        "TextXAlignment": "Left",
-        "TextTruncate": "AtEnd"
-       },
-       "children": []
-      },
-      {
-       "name": "SceneUlt_Jotaro",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneUlt_Jotaro",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           12
-          ],
-          [
-           0,
-           550
-          ]
-         ]
-        },
         "BackgroundColor3": {
          "Color3": [
           0.13,
@@ -9968,7 +10057,7 @@
           0.17
          ]
         },
-        "Text": "Jotaro",
+        "Text": "Poses",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -10000,10 +10089,10 @@
        ]
       },
       {
-       "name": "SceneUlt_Swift",
+       "name": "Scene_tbc",
        "className": "TextButton",
        "properties": {
-        "Name": "SceneUlt_Swift",
+        "Name": "Scene_tbc",
         "Size": {
          "UDim2": [
           [
@@ -10024,7 +10113,7 @@
           ],
           [
            0,
-           550
+           532
           ]
          ]
         },
@@ -10035,7 +10124,7 @@
           0.17
          ]
         },
-        "Text": "Bruno Gollini",
+        "Text": "To Be Cont.",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {
@@ -10067,10 +10156,10 @@
        ]
       },
       {
-       "name": "SceneUlt_Dio",
+       "name": "Scene_logo",
        "className": "TextButton",
        "properties": {
-        "Name": "SceneUlt_Dio",
+        "Name": "Scene_logo",
         "Size": {
          "UDim2": [
           [
@@ -10091,7 +10180,7 @@
           ],
           [
            0,
-           550
+           532
           ]
          ]
         },
@@ -10102,141 +10191,7 @@
           0.17
          ]
         },
-        "Text": "Dio",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneUlt_Kira",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneUlt_Kira",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           465
-          ],
-          [
-           0,
-           550
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Kira",
-        "TextSize": 12,
-        "Font": "GothamBold",
-        "TextColor3": {
-         "Color3": [
-          1,
-          1,
-          1
-         ]
-        },
-        "AutoButtonColor": true,
-        "BorderSizePixel": 0,
-        "Visible": true
-       },
-       "children": [
-        {
-         "name": "UICorner",
-         "className": "UICorner",
-         "properties": {
-          "Name": "UICorner",
-          "CornerRadius": {
-           "UDim": [
-            0,
-            6
-           ]
-          }
-         },
-         "children": []
-        }
-       ]
-      },
-      {
-       "name": "SceneUlt_Rick",
-       "className": "TextButton",
-       "properties": {
-        "Name": "SceneUlt_Rick",
-        "Size": {
-         "UDim2": [
-          [
-           0,
-           143
-          ],
-          [
-           0,
-           28
-          ]
-         ]
-        },
-        "Position": {
-         "UDim2": [
-          [
-           0,
-           12
-          ],
-          [
-           0,
-           582
-          ]
-         ]
-        },
-        "BackgroundColor3": {
-         "Color3": [
-          0.13,
-          0.13,
-          0.17
-         ]
-        },
-        "Text": "Rick",
+        "Text": "Logo",
         "TextSize": 12,
         "Font": "GothamBold",
         "TextColor3": {

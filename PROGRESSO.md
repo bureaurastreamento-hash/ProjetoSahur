@@ -2,6 +2,19 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Auditoria da publicada e conciliação com Claude — 01/10 (Codex)
+
+- Conferida diretamente no Studio a publicada **85844807133499, versão 489**: trailer V3 e modelos CC0 presentes,
+  mas MusicController, Assets.Sounds.Music, NpcAppearance, HudLayout, facções, caçadas, portos e puzzles ausentes.
+  BotService da publicada não usava NpcAppearance. Isto explica música ausente e inimigos com skins antigas.
+- A leva RPG estava somente em `codex/hud-pve-portos-cc0`; o checkout principal usado pelo Claude permanecia
+  na base `edb70e0`. Conciliados os 102 arquivos da leva no checkout principal, preservando sete arquivos de
+  trailer/DEV do Claude, seu PROGRESSO, CLAUDE.md e capas. Mudanças do trailer também incorporadas nesta branch.
+- Rojo agora serve o **checkout principal conciliado** em `127.0.0.1:34872`. Nova leitura no Studio confirmou todos
+  os dez grupos de sistemas presentes, BotService usando NpcAppearance, três músicas e trailer V3 preservado.
+- Análise estática da combinação passou. Publicada ainda é v489: somente o dono publica pelo Studio.
+  Não foi usada API de publicação nem build Rojo para substituir a place.
+
 ## Backup e envio ao GitHub — 30/09, 23:55 (Codex)
 
 - A pedido do dono, todas as mudanças desta leva foram registradas no commit `653ab99` e enviadas a
