@@ -2,6 +2,128 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## HUD, música, importação CC0, portos e ciclo de NPCs — 30/09 (Codex; Studio conectado)
+
+**Estado atual:** Rojo servindo `127.0.0.1:34872`, conectado à place **85844807133499** pelo Studio do dono.
+Esta entrada supersede os estados “Studio fechado / assets ainda sem importação” da leva abaixo. Sem publicação,
+sem `rojo build`, sem alterações no manifest aditivo ou nos modelos/terreno de arte da equipe. Adições de mapa
+são de runtime. Não salvar o Play como snapshot de construção.
+
+- **HUD:** moedas, nível, XP, vida e despertar maiores e legíveis; botões amarelos Mochila/Perfil/Objetivos/Menu
+  sempre visíveis, slots de habilidades maiores e requisitos de maestria escritos. Menu de facção acompanha a
+  apresentação. O indicador azul é **despertar**, não uma energia nova. Arte de ícones dos kits ainda pendente.
+- **Primeiros passos:** painel da missão mostra dica mesmo quando há objetivos, requisito de nível e recompensa;
+  orientação com direção/distância para o próximo objetivo obrigatório ou farm necessário. Espera de chefe mostra
+  contagem de respawn. Puzzles opcionais não recebem GPS. Não remove os requisitos de nível da campanha.
+- **NPCs:** roupa/cabelo/acessórios de catálogo oficial gratuito Roblox, validados por tipo/criador/preço; cinto/
+  bolsa próprios. Moradores também ganharam cabelo/roupa. Skins dos Anciões e assets da equipe preservados.
+  Treinos pretos desligados (`DummyService.Enabled=false`); pads técnicos específicos invisíveis/sem colisão.
+- **Retorno e regeneração:** inimigo comum sai do raio de 100 studs e volta **andando**, com pathfinding, sem
+  teleporte ou cura instantânea. Após 15 s sem hit, cura 2% da vida máxima/s; chefe aguarda 30 s e cura 0,35%/s.
+  Big C.H.O.P. usa retorno a 180 studs e a mesma política lenta de cura. Vida só fica cheia após regenerar.
+  NPC contra NPC continua bloqueado no servidor; aliados de combate ainda não implementados.
+- **Respawn:** mobs 20 s, overrides limitados a 10–30 s; Capataz/Máscara 10 min; Herdeiro/Sol Negro/Sol/Âmbar/
+  Colapso 15 min; Costa/Avatar 30 min. Big C.H.O.P. 30 min, mantendo condição noturna existente.
+  Sem acelerar os eventos raros Mercador/Esferas/Obeliscos, que têm regras separadas.
+- **Forja e segredos:** quatro armas adicionais (Sabre Portuário, Espada Caramujo, Lâmina das Marés e Espada do
+  Sol Selado), seis receitas no total; quantidades/fontes no menu Objetivos. Fibra rara em farm forte; Núcleo Marinho
+  pelo puzzle das três lentes (Lua → Sol → Névoa), Selo Solar pela Câmara existente. Sequência e recompensa por
+  jogador, distância/vida/perfil persistente validados, recompensa única, recuperação de saves antigos da Câmara.
+  Modelos das armas são provisórios; não representam quatro kits definitivos de combate.
+- **Áudio/VFX:** três músicas CC0 (vila/mar/chefe), crossfade/volume configurável; passos, cliques e transformação
+  do navio centralizados em FX. Poeira/esteira/Strength/brasa e 12 sprites CC0 por nome, respeitando tetos do FX.
+  Os **14 sons usados** (3 músicas + 11 SFX) carregaram no cliente real. `footstep_carpet_000` foi rejeitado pela
+  moderação e removido das referências; não tocar nem reutilizar seu ID.
+- **Importação concluída da seleção:** 56 uploads de assets no grupo **9835819**, **55 Approved / 1 Rejected**,
+  registrados em `ASSETS_ROBLOX_IMPORTADOS.json`. Inclui 18 mapas PBR de 6 materiais, 12 sprites, 12 SFX (11 usados),
+  7 modelos Nature/Furniture, 3 músicas, 3 embarcações e 1 paleta. Dez modelos persistentes em EnvironmentModels.
+  Importação remove scripts/PackageLinks; somente dados/imagens/áudios/malhas selecionados, sem instalar plugins/
+  scripts de packs. Biblioteca completa e packs extras baixados não foram todos importados.
+- **Cenário e portos:** materiais PBR configurados; água com ondas/cor/reflexo; flora, pedras, móveis e acabamentos
+  com meshes reais. Três extensões portuárias de 168×80 studs, 49 blocos físicos de chão só onde não havia terra,
+  construções novas detalhadas sem mover/substituir as da equipe. Detalhes locais têm teto e opção de desligar.
+  Expansão integral das ilhas continua pendente; portos não equivalem a novas ilhas completas.
+- **Strength:** três portos com capitão orangotango próprio/provisório; remo gratuito, lancha 60 moedas, cruzeiro
+  350 moedas. Aluguel/posse/entrada/campanha/moedas/colisão autoritativos; W/S aceleram, A/D viram, R libera,
+  T desembarca perto de porto liberado. Cruzeiro tem seis assentos de passageiro; viajar sentado. Um navio por dono,
+  limpeza após 180 s vazio, reembarque perto do mesmo porto sem nova cobrança. Módulo e preços ajustáveis.
+- **Verificação local:** **107 testes passaram**, análise estática sem TypeError, diff e manifest aditivo conferidos.
+  Testes novos cobrem políticas/inputs/puzzle/recompensa única/rota obrigatória sem revelar segredo. Avisos antigos
+  Font=100 permanecem. **Seis verificações no Studio passaram:** retorno caminhando, regen de mob e chefe,
+  bloqueio NPC contra NPC, 49 blocos de chão/sem dummies, aluguel inválido recusado e cruzeiro com cobrança
+  única/controle real cliente → servidor/desembarque sem arrastar casco. 14 sons usados carregados.
+  Instrumentação temporária de Studio usa perfil simulado para aluguel, sem gastar dinheiro
+  nem dar itens/reputação ao dono. Play encerrado e os três scripts temporários removidos em Edit pelo MCP.
+
+### O que ainda falta e ordem de continuação
+
+1. **Mapa físico Cidade Âmbar / Costa Dourada / Fortaleza Maré:** serviços recusam mapas ausentes/incompletos;
+   campanha hoje para na chegada à Cidade no place atual. Código até o final do Capítulo 1 não basta para jogar
+   essas regiões. Integrar modelos/marcadores/chão pelo contrato dos documentos, sem substituir place por build.
+2. Arte definitiva de capitão/armas/chefes, ícones dos kits, mecanismos próprios dos bosses e fases do Avatar/Toduro.
+   Casas/props novos não substituem a necessidade de acabamento das construções da equipe.
+3. Testar facções/honra/bounty/contratos com **dois clientes**, passageiros de outro jogador, reembarque, colisão,
+   mobile/gamepad/FPS, campanha desde perfil novo e save/reconexão reais. Respawns de 10–30 minutos foram
+   conferidos por política/testes locais, não por esperar cada ciclo inteiro no Studio.
+4. Expandir ilhas completas e variedade de exploração/sidequests/dungeons após integração física. Cap.2 não iniciado.
+5. Dono revisar no Play e publicar **pelo Studio** quando aprovar. Não foi publicado nesta sessão.
+
+### Teste rápido do dono
+
+- Play: HUD legível, menu/facção, Música em Configurações, mochila/objetivos e direção da missão inicial.
+- Campos: inimigos sem skins dos Anciões, sem pads/treinos pretos; puxar longe e ver retorno caminhando;
+  bater, parar 15 s e conferir cura gradual. Boss cura menos após 30 s. Não brigam entre si.
+- Porto da Névoa: remo gratuito ou cruzeiro 350; W/S/A/D; retornar ao porto e T para desembarcar; R para liberar.
+  Conferir flores/móveis/texturas/água e ligar/desligar Detalhes do cenário.
+- Ferreiro/lentes/Câmara: materiais/receitas/dicas; recompensa de puzzle não repete ao reconectar.
+
+## NPCs, facções, caçadas, objetivos e cenário — 30/09 (Codex; Studio fechado)
+
+- **NPCs:** `BotService` parou de sortear os avatares da equipe/Anciões, inclusive quando recebe UserId legado.
+  `NpcAppearance` cria variações R6 de pele/roupa, cinto e bolsa sem assets externos. Roupa não colide. Anciões de
+  quest e arte da equipe não foram alterados. Bots e chefes por peças só escolhem jogadores; `NpcCombatRules` e
+  `ResolveNpcHit` bloqueiam dano/empurrão entre NPCs no servidor. NPC aliado de combate continua para depois.
+  Proteção de aggro agora consulta checkpoints atuais, incluindo registros posteriores de Cidade/Costa/Fortaleza.
+- **Facções:** menu inicial persistente Fora da Lei/Governo; perfil pendente protegido de dano até escolher.
+  Fora da Lei ganha bounty; Governo ganha honra contra Fora da Lei. Crédito/gap/cooldown/contexto existentes
+  continuam. Novos campos `faction`/`honor` são aditivos ao perfil v5, sem wipe/novo DataStore. Bounty antiga é
+  preservada. Perfil e toasts mostram reputação adequada; estatísticas ganharam rolagem/texto quebrado.
+- **Contratos de caçador:** menu Caçadas; alvo Fora da Lei no servidor, bounty ≥50 mil, nível próximo, aviso sem
+  GPS. Dez minutos, um contrato por caçador/até três por alvo; recusa morto/combate/arena/ID inválido/cooldown.
+  Vitória validada pelo sinal interno de reputação paga 20 moedas + 80 XP base uma vez; cancelamento/saída/
+  expiração não pagam. Contratos são de sessão; reputação/cooldown persistentes continuam protegendo reconexão.
+- **Retenção concreta:** menu Objetivos mostra XP/nível, próxima habilidade real do Stand, forja com materiais e
+  fontes/quantidades, próximo título e exploração opcional. Sem duplicar recompensas ou forçar campanha/diárias.
+  Pesquisa e aplicação de loops do Blox Fruits descritas, com fontes/limites, em `RETENCAO_E_ASSETS.md`.
+- **Cenário:** `EnvironmentService` existente preservado, inclusive dia/noite e API DEV. Auxiliar
+  `EnvironmentMaterials` aplica materiais nativos nos cenários procedurais conhecidos, conservando física; água
+  ganha cor/reflexo/transparência/ondas em runtime, sem editar volume de Terrain. PBR só liga após configurar IDs.
+  Cliente acrescenta capim, peitoris/vasos, sacaria, travessas/aros; teto 420 peças, reserva para construções,
+  todas sem colisão, opção Configurações → Detalhes do cenário. Moradores da vila: 7 → 12. Sem mudar arquivos de
+  mapa/arte/place nem manifest Rojo. A aparência/colisão/FPS ainda exigem inspeção no Play.
+- **Assets externos:** 12 packs CC0 oficiais na biblioteca local `asset_library/` (fora do Rojo/Git), hashes/origem/
+  licenças no inventário versionado. 2.583 imagens, 230 áudios decodificados inteiros e 469 OBJ verificados;
+  4.694 hashes conferidos, zero erro. Seleção de 56 arquivos para importação, incluindo seis PBR 1K. Areia clara
+  Ground093A substitui material marrom descartado após revisão visual. Nenhum script/plugin/place externo instalado.
+  Imagens/sons ainda precisam de IDs/acesso ao universo; modelos, importação no Studio. Arquivos baixados não
+  foram declarados já presentes no jogo. Detalhes e procedimento em `RETENCAO_E_ASSETS.md`.
+- **Testes antigos reparados:** preparação real de progressão, sinal de atributo no player simulado, nível suficiente
+  nos testes de sequência e representação atual da espada (cabo/lâmina/solda). Requisitos do jogo não foram removidos.
+  Suíte passou com 100 testes (86 anteriores + 14 de facções/contratos/NPCs/objetivos/nível); análise estática, diff e
+  auditoria aditiva passaram. Avisos antigos Font=100 permanecem. Sem validação de Studio/DataStore real/publicação.
+- **Próximo teste do dono:** facção/retorno com save confirmado; dois clientes para honra/bounty/caçada e cooldown;
+  NPCs genéricos sem briga entre si/boss; Objetivos/Mochila/Perfil em tela baixa; cenário e toggle/FPS. Checklist
+  detalhado em `RETENCAO_E_ASSETS.md`. Continuam pendentes mapas físicos Cidade/Costa/Fortaleza, encenação/cenas,
+  kits finais de chefes/Toduro, mais sidequests/dungeons e importação/validação visual dos assets. Cap.2 não iniciado.
+
+## Retomada e auditoria dos testes — 30/09 (Codex)
+
+- Conferidas no código as correções recentes de primeiro spawn aguardando perfil, `ForceCharacter` sem respawn antes do primeiro corpo e proteção de aggro perto dos checkpoints/por 6 s após nascer. Manifest continua sem `$path` em Workspace/ServerStorage; auditoria aditiva passou.
+- `tools/analisar.sh` passou (avisos antigos Font=100 continuam). Persistência (10), sidequests (7), Fortaleza (10) e bounty (10) passaram: 37 testes dessas quatro suítes.
+- A suíte completa **não está verde após a leva recente**: gameplay/builds chamam a progressão real sem inicializar seu remote; story_expansion encontra player simulado sem `GetAttributeChangedSignal`; Cidade/Costa testam derrota de chefe com perfil nível 1, agora abaixo dos mínimos 24/28. Corrigir preparação dos testes e repetir todas as suítes antes de reutilizar o registro histórico de 86 testes aprovados. Não desativar requisitos do jogo para satisfazer testes antigos.
+- Logs locais mais recentes encontrados são de Studio encerrado em 30/09 às 18:27 UTC; não demonstram o teste atual do dono. Verificação ao vivo depende de conexão disponível ao Studio ou Output da sessão atual. Sem alteração de gameplay, mapa, arte ou publicação nesta auditoria.
+- Prioridade do teste do dono: spawn/câmera/HP parado; NPCs passivos e revide; drops/mochila/forja; eventos pelo DEV; cursor/shift lock e painéis. Depois: campanha e PvP com dois clientes. Pendências de conteúdo seguem contratos de caçador, kits finais dos chefes e integração física Cidade/Costa/Fortaleza.
+
 ## Correções 30/09 noite (Claude) — primeiro teste do dono no jogo publicado
 Dono: "quando entro no jogo eu spawno invisível, tomando uns danos aleatórios". Reproduzido no Play (MCP):
 - **Nascia 2 vezes**: `CharacterService` montava o personagem antes do perfil carregar (no Porto, perto da Taberna) e o

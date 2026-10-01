@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  1,
+                  1,
+                  1
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "rbxassetid://70871606143749",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://98105457352134",
+                "Material": "Plastic",
+                "CFrame": [
+                  0,
+                  44.66900634765625,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  47.599998474121094,
+                  89.3380126953125,
+                  212.8000030517578
+                ]
+              },
+              "name": "ship-ocean-liner",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "ship-ocean-liner_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_ship-ocean-liner",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

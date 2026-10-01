@@ -42,6 +42,13 @@ lugares importantes), sem bounty/recompensa contra quem está muito abaixo na pr
 morrer para player e combate marcado (sair do servidor em combate tem penalidade). O Coliseu continua sendo a arena
 de duelo/ranking/torneio.
 
+## Facções aprovadas pelo dono — 30/09/2026
+
+Menu de entrada para **Fora da Lei** ou **Governo**. Fora da Lei progride em bounty; Governo em honra contra
+Fora da Lei. Campanha/rotas/builds continuam disponíveis aos dois. Skins dos Anciões são exclusivas: inimigos
+genéricos não usam os avatares da equipe. NPCs e chefes não brigam entre si; aliados de combate ficam para depois.
+Implementação, retenção/objetivos, pesquisa de assets CC0 e limites de importação em `RETENCAO_E_ASSETS.md`.
+
 ## Raridade (itens, poderes, Stands, raças)
 
 Comum → Incomum → Raro → Épico → Lendário → Relíquia → **Anômalo** (versão alterada pela Fratura, com drop
@@ -89,3 +96,19 @@ revisão; só os aprovados entram no catálogo, e apenas em servidores privados.
 instrução privilegiada.
 
 Slogan provisório: "Where anime battlegrounds evolve beyond the arena."
+
+## Pedidos aprovados de HUD, PvE e navegação — 30/09/2026
+
+HUD visível com moeda/nível/XP/vida e menus na tela, tendo a imagem de Blox Fruits como referência de
+legibilidade. A barra azul atual mostra despertar; não inventar uma energia independente só pela referência.
+Trilhas sonoras e texturas/props externos com licença de uso verificada. Anciões mantêm skins exclusivas.
+
+Mobs reaparecem em 10–30 s; chefes em 10/15/30 min conforme tipo. Ao sair da área, voltam andando,
+sem teleporte/cura instantânea. Depois de 15 s sem hit, mobs regeneram pouco a pouco; chefes demoram
+mais e regeneram menos. Treinos pretos aleatórios removidos do runtime.
+
+Cada porto tem capitão orangotango com Strength e aluguel de cruzeiro em moeda do jogo, além dos barcos
+menores. O pedido explícito do dono autoriza essa referência de JoJo, usando arte própria/CC0, sem baixar
+assets proprietários do anime. Três portos existem nas ilhas disponíveis; construção integral/novas ilhas
+ainda pendente. Quatro armas/receitas novas e puzzles únicos ampliam metas de várias sessões; modelos
+das armas/capitão e kits de chefes continuam provisórios. Ver estado verificado em PROGRESSO.md.

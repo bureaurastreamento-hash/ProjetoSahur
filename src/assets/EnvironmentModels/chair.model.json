@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.8962264,
+                  0.6015712,
+                  0.3931559
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://109160047676167",
+                "Material": "Plastic",
+                "CFrame": [
+                  1,
+                  2.3499999046325684,
+                  -1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  2,
+                  4.699999809265137,
+                  2
+                ]
+              },
+              "name": "chair",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "chair_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_chair",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

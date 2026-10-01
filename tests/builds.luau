@@ -5,7 +5,9 @@ local function campaign(act)
 	local rt = Runtime.new()
 	local player = rt:player(1)
 	rt.profiles[player].story.act = act or 3
-	local story = rt:load("src/server/Services/StoryService")
+	rt.profiles[player].level = 50 -- teste da sequência; o bloqueio por nível tem teste próprio
+	player:SetAttribute("Level", 50)
+	local story = rt:loadStory()
 	story.Init(); story.Start()
 	return rt, player, rt.profiles[player], story
 end
@@ -111,11 +113,11 @@ test("arma retorna após respawn sem duplicar concessão ou perder maestria", fu
 	player.backpack = {}
 	local build = rt:load("src/server/Services/BuildService")
 	build.SelectRoute(player, "arma"); build.Start()
-	assert(#rt.instances == 2)
+	assert(#rt.instances == 4)
 	profile.mastery["weapon:espada_inicial"] = 30
 	rt.instances[1].Parent = nil
 	player.CharacterAdded:Fire()
-	assert(#rt.instances == 4 and rt.instances[3].Parent == player.backpack)
+	assert(#rt.instances == 8 and rt.instances[5].Parent == player.backpack)
 	assert(profile.mastery["weapon:espada_inicial"] == 30)
 end)
 

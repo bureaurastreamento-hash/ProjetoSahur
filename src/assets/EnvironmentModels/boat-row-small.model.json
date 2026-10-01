@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  1,
+                  1,
+                  1
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "rbxassetid://70871606143749",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://126697629276978",
+                "Material": "Plastic",
+                "CFrame": [
+                  0,
+                  4.23847770690918,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  27.485380172729492,
+                  8.47695541381836,
+                  23.721460342407227
+                ]
+              },
+              "name": "boat-row-small",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "boat-row-small_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_boat-row-small",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

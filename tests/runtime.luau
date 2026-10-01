@@ -111,10 +111,14 @@ function Runtime.new()
 		local env = {
 			Instance = { new = function(class)
 				if class ~= "BindableEvent" then
-					assert(class == "Tool" or class == "Part" or class == "ProximityPrompt")
-					local item = { ClassName = class, Equipped = Runtime.Signal(), Unequipped = Runtime.Signal(), Triggered = Runtime.Signal() }
+					assert(class == "Folder" or class == "Tool" or class == "Part" or class == "ProximityPrompt" or class == "WeldConstraint" or class == "HumanoidDescription" or class == "PointLight")
+					local item = { CFrame = roblox.CFrame.new(), ClassName = class, Equipped = Runtime.Signal(), Unequipped = Runtime.Signal(), Triggered = Runtime.Signal() }
 					table.insert(rt.instances, item)
-					function item:SetAttribute() end
+					local attrs = {}
+					function item:SetAttribute(key, value) attrs[key] = value end
+					function item:GetAttribute(key) return attrs[key] end
+					function item:IsA(name) return name == self.ClassName or (name == "BasePart" and self.ClassName == "Part") end
+					function item:IsDescendantOf(ancestor) local parent = self.Parent; while parent do if parent == ancestor then return true end; parent = parent.Parent end; return false end
 					function item:Destroy() self.Parent = nil end
 					return item
 				end
@@ -134,18 +138,32 @@ function Runtime.new()
 		self.loaded[path] = value
 		return value
 	end
+	-- Campanha concede XP: reproduzir Init da progressão como no boot real.
+	function rt:loadStory()
+		self:load("src/server/Services/ProgressionService").Init()
+		return self:load("src/server/Services/StoryService")
+	end
 	function rt:player(id, position)
 		local attributes = { Level = 1 }
+		local attributeSignals = {}
 		local root = { Position = position or roblox.Vector3.new(150, 2, -40), IsA = function(_, name) return name == "BasePart" end }
 		local player = {
-			Name = "Player" .. id, UserId = id, Parent = playerService, isPlayer = true,
+			Name = "Player" .. id, DisplayName = "Player" .. id, UserId = id, Parent = playerService, isPlayer = true,
 			CharacterAdded = Runtime.Signal(),
 			Character = { FindFirstChild = function() return root end, FindFirstChildOfClass = function() return { Health = if rt.flags.dead then 0 else 100 } end },
 		}
+		function player:IsA(class) return class == "Player" end
 		function player:FindFirstChildOfClass(class) return if class == "Backpack" then self.backpack else nil end
 		function player:WaitForChild() return self.backpack end
 		function player:GetAttribute(key) return attributes[key] end
-		function player:SetAttribute(key, value) attributes[key] = value end
+		function player:GetAttributeChangedSignal(key)
+			if not attributeSignals[key] then attributeSignals[key] = Runtime.Signal() end
+			return attributeSignals[key]
+		end
+		function player:SetAttribute(key, value)
+			local previous = attributes[key]; attributes[key] = value
+			if previous ~= value and attributeSignals[key] then attributeSignals[key]:Fire() end
+		end
 		table.insert(self.players, player)
 		self.profiles[player] = self:load("src/shared/Modules/DataConfig").DefaultProfile()
 		return player, root

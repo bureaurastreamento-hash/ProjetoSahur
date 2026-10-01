@@ -4,6 +4,8 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
@@ -14,6 +16,8 @@ local title: TextLabel
 local body: TextLabel
 local choiceGui: ScreenGui
 local storyBounds: UISizeConstraint
+local navigation: any = nil
+local compass: TextLabel
 
 local function label(parent: Instance, size: UDim2, pos: UDim2, textSize: number, color: Color3): TextLabel
 	local item = Instance.new("TextLabel")
@@ -32,15 +36,15 @@ local function build()
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "FXStoryGui", false, 7
 	gui.Parent = playerGui
 	local frame = Instance.new("Frame")
-	frame.Size, frame.Position = UDim2.new(1, -32, .4, 0), UDim2.new(0, 16, 0, 72)
+	frame.AnchorPoint = Vector2.new(1, 0)
+	frame.Size, frame.Position = UDim2.new(.36, 0, .4, 0), UDim2.new(1, -18, 0, 76)
 	storyBounds = Instance.new("UISizeConstraint")
-	storyBounds.MaxSize = Vector2.new(300, 180)
+	storyBounds.MaxSize = Vector2.new(340, 260)
 	storyBounds.Parent = frame
-	frame.BackgroundColor3, frame.BackgroundTransparency = Color3.fromRGB(12, 20, 28), .2
+	frame.BackgroundColor3, frame.BackgroundTransparency = Color3.fromRGB(18, 25, 35), .12
 	frame.BorderSizePixel = 0
 	frame.Parent = gui
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = frame
-	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(70, 205, 255); stroke.Transparency = .55; stroke.Parent = frame
+	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(238, 193, 78); stroke.Thickness = 2; stroke.Parent = frame
 	title = label(frame, UDim2.new(1,-20,0,38), UDim2.fromOffset(10,8), 15, Color3.fromRGB(100,220,255))
 	title.Font = Enum.Font.GothamBold
 	local scroll = Instance.new("ScrollingFrame")
@@ -50,11 +54,16 @@ local function build()
 	scroll.Parent = frame
 	body = label(scroll, UDim2.new(1,-20,0,0), UDim2.fromOffset(10,0), 13, Color3.fromRGB(235,240,245))
 	body.AutomaticSize = Enum.AutomaticSize.Y
+	compass = label(gui, UDim2.new(.5, 0, 0, 44), UDim2.new(.25, 0, 0, 46), 15, Color3.fromRGB(248, 230, 170))
+	compass.Name, compass.TextXAlignment, compass.TextStrokeTransparency = "Direction", Enum.TextXAlignment.Center, .1
 end
 
 local function render(data: any)
-	title.Text = ("F/X · %s\n%s"):format(tostring(data.chapterTitle), tostring(data.actTitle))
+	navigation = data.navigation
+	title.Text = ("MISSÃO · %s"):format(tostring(data.actTitle))
 	local lines = {}
+	if data.hint and data.hint ~= "" then table.insert(lines, tostring(data.hint)) end
+	if data.lockedLevel then table.insert(lines, "Os objetivos só contam a partir do nível indicado.") end
 	for _, objective in data.objectives or {} do
 		local item = objective :: any
 		table.insert(lines, ("%s %s  %d/%d"):format(if item.progress >= item.goal then "✓" else "•", tostring(item.text), item.progress, item.goal))
@@ -67,7 +76,10 @@ local function render(data: any)
 	if #optional > 0 then
 		body.Text ..= "\n\n" .. table.concat(lines, "\n", #lines - #optional + 1)
 	end
-	storyBounds.MaxSize = Vector2.new(300, math.min(300, 100 + #(data.objectives or {}) * 38 + #optional * 60))
+	if (tonumber(data.xp) or 0) > 0 or (tonumber(data.coins) or 0) > 0 then
+		body.Text ..= ("\n\nRecompensa: %d XP · %d moedas"):format(tonumber(data.xp) or 0, tonumber(data.coins) or 0)
+	end
+	storyBounds.MaxSize = Vector2.new(340, math.min(340, 140 + #(data.objectives or {}) * 38 + #optional * 60))
 end
 
 -- ECO: escolha na tela. Opção trancada (não explorou) aparece apagada com "?" no lugar da descrição.
@@ -148,6 +160,26 @@ end
 
 function StoryController.Init() build() end
 function StoryController.Start()
+	local elapsed = 0
+	RunService.Heartbeat:Connect(function(dt)
+		elapsed += dt
+		if elapsed < .2 then return end
+		elapsed = 0
+		local character = Players.LocalPlayer.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		local camera = Workspace.CurrentCamera
+		if not navigation or typeof(navigation.position) ~= "Vector3" or not root or not root:IsA("BasePart") or not camera then compass.Text = ""; return end
+		local delta = navigation.position - root.Position
+		local flat = Vector3.new(delta.X, 0, delta.Z)
+		local forward = camera.CFrame.LookVector
+		local toward = flat:Dot(Vector3.new(forward.X, 0, forward.Z))
+		local side = flat:Dot(camera.CFrame.RightVector)
+		local arrow = if flat.Magnitude < 12 then "◆" elseif math.abs(side) > math.abs(toward) then (if side > 0 then "→" else "←") else (if toward > 0 then "↑" else "↓")
+		local deadline = if typeof(navigation.kind) == "string" then Workspace:GetAttribute("NpcRespawn_" .. navigation.kind) else nil
+		local remaining = if typeof(deadline) == "number" then math.max(0, math.ceil(deadline - Workspace:GetServerTimeNow())) else 0
+		compass.Text = if remaining > 0 then ("%s  %s · retorna em %d:%02d"):format(arrow, tostring(navigation.label), math.floor(remaining / 60), remaining % 60)
+			else ("%s  %s · %d m"):format(arrow, tostring(navigation.label), math.floor(flat.Magnitude * .28))
+	end)
 	Remotes.GetEvent(Remotes.Events.NotifyStory).OnClientEvent:Connect(function(event: string, data: any)
 		if event == "trace" then
 			HUDController.ShowToast(tostring(data.title), tostring(data.text), Color3.fromRGB(80,210,255))

@@ -25,7 +25,7 @@ export type NpcReward = { XP: number, Coins: number, Boss: boolean?, ArrowChance
 ProgressionConfig.Npcs = {
 	fx_tutorial_enemy = { XP = 12, Coins = 1, Drops = { { Item = "mat:nevoa", Chance = 0.35, Min = 1, Max = 1 } } },
 	fx_campos_enemy = { XP = 18, Coins = 1, Drops = { { Item = "mat:nevoa", Chance = 0.5, Min = 1, Max = 2 } } }, -- Campos da Névoa
-	fx_campos_forte = { XP = 30, Coins = 2, Drops = { { Item = "mat:nevoa", Chance = 0.7, Min = 1, Max = 3 }, { Item = "mat:couro_capataz", Chance = 0.08, Min = 1, Max = 1 } } },
+	fx_campos_forte = { XP = 30, Coins = 2, Drops = { { Item = "mat:nevoa", Chance = 0.7, Min = 1, Max = 3 }, { Item = "mat:couro_capataz", Chance = 0.08, Min = 1, Max = 1 }, { Item = "mat:fibra_antiga", Chance = 0.035, Min = 1, Max = 1 } } },
 	fx_capataz = { XP = 120, Coins = 8, Boss = true, ArrowChance = 0.02, -- miniboss dos Campos (renasce)
 		Drops = { { Item = "mat:couro_capataz", Chance = 0.6, Min = 1, Max = 2 }, { Item = "mat:nevoa", Chance = 1, Min = 3, Max = 5 } } },
 	fx_pedra_enemy = { XP = 24, Coins = 2, Drops = { { Item = "mat:areia_negra", Chance = 0.3, Min = 1, Max = 1 } } },

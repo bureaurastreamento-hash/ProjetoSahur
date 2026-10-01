@@ -1,0 +1,89 @@
+{
+  "className": "Folder",
+  "children": [
+    {
+      "className": "StringValue",
+      "name": "circle_01",
+      "properties": {
+        "Value": "rbxassetid://88932588522251"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "circle_02",
+      "properties": {
+        "Value": "rbxassetid://91328608050793"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "circle_03",
+      "properties": {
+        "Value": "rbxassetid://103410102366344"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "circle_04",
+      "properties": {
+        "Value": "rbxassetid://85198888576671"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "circle_05",
+      "properties": {
+        "Value": "rbxassetid://102675005815427"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "dirt_01",
+      "properties": {
+        "Value": "rbxassetid://124137204544937"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "dirt_02",
+      "properties": {
+        "Value": "rbxassetid://99391328586075"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "dirt_03",
+      "properties": {
+        "Value": "rbxassetid://88523081050825"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "fire_01",
+      "properties": {
+        "Value": "rbxassetid://109875320986341"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "fire_02",
+      "properties": {
+        "Value": "rbxassetid://121421328126467"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "flame_01",
+      "properties": {
+        "Value": "rbxassetid://90071262237477"
+      }
+    },
+    {
+      "className": "StringValue",
+      "name": "flame_02",
+      "properties": {
+        "Value": "rbxassetid://103284202244502"
+      }
+    }
+  ]
+}

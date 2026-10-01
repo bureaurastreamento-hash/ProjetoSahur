@@ -17,6 +17,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
+local NpcCombatRules = require(Modules.NpcCombatRules)
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
@@ -672,6 +673,7 @@ CombatService.NpcHitHook = nil :: ((attackerChar: Model, victim: Model, dealt: n
 
 --- Acerto de um NPC (boss) em um jogador: respeita block (sem parry), avisa os clientes e empurra.
 function CombatService.ResolveNpcHit(attackerChar: Model, victim: Model, damage: number, knockback: Knockback?): number
+	if not NpcCombatRules.CanDamage(Combatant.Of(attackerChar) or attackerChar, Combatant.Of(victim) or victim) then return 0 end
 	local victimPlayer = Combatant.Of(victim) -- Player ou bot
 	local victimState = victimPlayer and states[victimPlayer]
 	local kind = "hit"

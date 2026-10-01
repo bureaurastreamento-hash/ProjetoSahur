@@ -8,7 +8,7 @@ local camara = Vector3.new(884, 1, -575)
 local function setup()
 	local rt = Runtime.new(); local player, root = rt:player(1, porto)
 	local profile = rt.profiles[player]
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	local story = rt:loadStory(); story.Init(); story.Start()
 	local progression = rt:load("src/server/Services/ProgressionService"); progression.Init()
 	local service = rt:load("src/server/Services/SidequestService")
 	return rt, player, profile, service, root

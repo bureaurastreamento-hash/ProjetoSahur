@@ -27,6 +27,7 @@ local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local ModRegistry = require(Modules:WaitForChild("ModRegistry"))
 local BountyConfig = require(Modules.BountyConfig)
+local FactionConfig = require(Modules.FactionConfig)
 local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local Log = require(Modules:WaitForChild("Log"))
 local Icon = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Icon"))
@@ -44,7 +45,7 @@ local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
 local profilePanel: Frame
-local statsList: Frame
+local statsList: ScrollingFrame
 local statsTemplate: TextLabel
 local profileCoins: TextLabel
 local profileWarning: TextLabel
@@ -134,7 +135,12 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 	local bountyRow = statsTemplate:Clone()
 	bountyRow.Visible = true
 	bountyRow.LayoutOrder = 100
-	bountyRow.Text = ("Bounty: %d · %s"):format(bounty, BountyConfig.Title(bounty))
+	local government = profile.faction == FactionConfig.Government
+	local reputation = if government then (profile.honor and profile.honor.points or 0) else bounty
+	bountyRow.TextWrapped, bountyRow.AutomaticSize, bountyRow.Size = true, Enum.AutomaticSize.Y, UDim2.new(1, -8, 0, 18)
+	bountyRow.Text = ("%s\n%s: %d · %s"):format(FactionConfig.Name(profile.faction or ""),
+		if government then "Honra" else "Bounty", reputation,
+		if government then FactionConfig.HonorTitle(reputation) else BountyConfig.Title(reputation))
 	bountyRow.Parent = statsList
 
 	-- Stands (29/09): um Stand ativo + raça; o resto está na mochila (M)
@@ -175,7 +181,7 @@ function TopbarController.Init()
 	profileCharacters = get(profilePanel, "Characters") :: TextLabel
 	profileTop = get(profilePanel, "Top") :: TextLabel
 	profileTopRating = get(profilePanel, "TopRating") :: TextLabel
-	statsList = get(profilePanel, "Stats") :: Frame
+	statsList = get(profilePanel, "Stats") :: ScrollingFrame
 	statsTemplate = get(statsList, "Template") :: TextLabel
 	profileLevel = get(profilePanel, "Level") :: TextLabel
 	xpFill = get(get(profilePanel, "XPBar"), "Fill") :: Frame

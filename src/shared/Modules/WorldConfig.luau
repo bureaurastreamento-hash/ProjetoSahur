@@ -9,6 +9,7 @@
 	Deserto do Sol (Parte 2), ilha_sol_partido = Rota do Eclipse (Parte 3). Ids antigos ficam por causa dos saves.
 ]]
 
+local Districts = require(script.Parent.PortDistrictConfig)
 local WorldConfig = {}
 
 export type Checkpoint = { Position: Vector3, Yaw: number }
@@ -89,6 +90,11 @@ WorldConfig.Islands = {
 
 --- Ilha em que o ponto (x, z) está (nil = mar).
 function WorldConfig.IslandAt(position: Vector3): Island?
+	for _, district in Districts.Districts do
+		if Districts.Contains(district, position) then
+			return { Id = district.Name, Region = district.Region, Center = district.Center, RadiusX = Districts.Width / 2, RadiusZ = Districts.Depth / 2 }
+		end
+	end
 	for _, island in WorldConfig.Islands do
 		local dx = (position.X - island.Center.X) / island.RadiusX
 		local dz = (position.Z - island.Center.Z) / island.RadiusZ

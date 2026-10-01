@@ -1,0 +1,103 @@
+{
+  "className": "Part",
+  "properties": {
+    "Anchored": true,
+    "CanCollide": false,
+    "CanTouch": false,
+    "CanQuery": false,
+    "Transparency": 1,
+    "Size": [
+      1,
+      1,
+      1
+    ]
+  },
+  "attributes": {
+    "Lifetime": 2.3
+  },
+  "children": [
+    {
+      "name": "Emitter",
+      "className": "ParticleEmitter",
+      "properties": {
+        "Texture": "rbxassetid://88523081050825",
+        "Rate": 0,
+        "Lifetime": {
+          "NumberRange": [
+            1.4,
+            2
+          ]
+        },
+        "Speed": {
+          "NumberRange": [
+            8.399999999999999,
+            12
+          ]
+        },
+        "SpreadAngle": [
+          160,
+          160
+        ],
+        "LightEmission": 0.15,
+        "Color": {
+          "ColorSequence": {
+            "keypoints": [
+              {
+                "time": 0,
+                "color": [
+                  0.75,
+                  0.82,
+                  0.88
+                ]
+              },
+              {
+                "time": 1,
+                "color": [
+                  0.75,
+                  0.82,
+                  0.88
+                ]
+              }
+            ]
+          }
+        },
+        "Size": {
+          "NumberSequence": {
+            "keypoints": [
+              {
+                "time": 0,
+                "value": 6.0,
+                "envelope": 0
+              },
+              {
+                "time": 1,
+                "value": 20,
+                "envelope": 0
+              }
+            ]
+          }
+        },
+        "Transparency": {
+          "NumberSequence": {
+            "keypoints": [
+              {
+                "time": 0,
+                "value": 0.2,
+                "envelope": 0
+              },
+              {
+                "time": 1,
+                "value": 1,
+                "envelope": 0
+              }
+            ]
+          }
+        },
+        "Enabled": true
+      },
+      "attributes": {
+        "EmitCount": 30
+      }
+    }
+  ]
+}

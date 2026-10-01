@@ -40,6 +40,9 @@ local RemoteEvents = {}
 -- RemoteEvents
 RemoteEvents.Events = ({
 	-- Request: cliente -> servidor
+	RequestVesselInput = "RequestVesselInput", -- (throttle, steer), ambos normalizados; posse/lemes validados no servidor
+	RequestHunt = "RequestHunt", -- (action: "refresh"|"accept"|"cancel", targetUserId: number?)
+	RequestFaction = "RequestFaction", -- (factionId: string) — escolha inicial persistente
 	RequestAttack = "RequestAttack", -- (attackId: string)
 	RequestBlock = "RequestBlock", -- (active: boolean)
 	RequestRespawn = "RequestRespawn", -- ()
@@ -74,6 +77,9 @@ RemoteEvents.Events = ({
 	RequestArrowChoice = "RequestArrowChoice", -- (choice: "usar"|"guardar") — Stand sorteado quando já se tem um (StandService)
 
 	-- Notify: servidor -> cliente
+	NotifyVessel = "NotifyVessel", -- (model, cruise), transformação visual
+	NotifyHunt = "NotifyHunt", -- (event: "state"|"warning"|"closed"|"denied"|"completed", data: table)
+	NotifyFaction = "NotifyFaction", -- (event: "chosen", data: table)
 	NotifyAttack = "NotifyAttack", -- all: (attacker: Model, attackId: "M1"|"Downslam"|"Uppercut", comboIndex: number)
 	NotifyDamage = "NotifyDamage", -- all: (attacker: Model?, victim: Model, amount: number, kind: "hit"|"blocked"|"parry"|"guardbreak"|"finisher"|"crit"|"blackflash"|"wallsplat")
 	NotifyHealth = "NotifyHealth", -- vítima: (current: number, max: number)

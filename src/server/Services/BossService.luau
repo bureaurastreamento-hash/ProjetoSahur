@@ -27,6 +27,8 @@ local BossConfig = require(Modules:WaitForChild("BossConfig"))
 local Hitbox = require(Modules:WaitForChild("Hitbox"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
 local BossRigs = require(Modules:WaitForChild("BossRigs"))
+local NpcLifecycle = require(Modules.NpcLifecycleConfig)
+local Navigation = require(script.Parent.Parent.Modules.NpcNavigation)
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
@@ -52,8 +54,13 @@ type Fight = {
 	enrageReadyAt: number,
 	roam: boolean, -- à solta (todos desde 2026-09-23): centro = onde está, alcance = mapa, sem lugar para voltar
 	nextRoamAt: number, -- os.clock() do próximo passo de vagar (sem alvo)
+	home: Vector3,
+	returning: boolean,
+	navigation: Navigation.State,
+	lastRegenAt: number,
 }
 
+local autoSpawnAt = os.clock() + BossConfig.AutoSpawnMinutes * 60
 local state = "Ready" -- Ready | Fighting | Cooldown | Missing
 local fight: Fight? = nil
 local spawnPart: BasePart? = nil
@@ -154,10 +161,10 @@ local function roamSpawnPosition(): Vector3?
 end
 
 --- Jogadores vivos e aptos dentro da arena, do mais perto ao mais longe do ponto.
--- jogadores E bots (Combatant.All): o boss caça e bate em bots do mesmo jeito (trailer/testes)
+-- Chefes só perseguem jogadores; NPCs aliados ainda não estão habilitados.
 local function playersNear(from: Vector3, radius: number): { { player: Combatant.Fighter, root: BasePart, dist: number } }
 	local out = {}
-	for _, player in Combatant.All() do
+	for _, player in Players:GetPlayers() do
 		local character = Combatant.CharacterOf(player)
 		local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 		if root and HealthService.IsAlive(character) and HealthService.CanFight(player) and player:GetAttribute("InMatch") ~= true then
@@ -436,6 +443,7 @@ local function endFight(f: Fight, defeated: boolean)
 		f.model:Destroy()
 	end)
 	state = "Cooldown"
+	autoSpawnAt = os.clock() + BossConfig.Cooldown
 	task.delay(BossConfig.Cooldown, function()
 		if state == "Cooldown" then
 			state = "Ready"
@@ -469,6 +477,27 @@ local function aiLoop(f: Fight)
 	while not f.finished and f.humanoid.Health > 0 and f.model.Parent do
 		if f.model:GetAttribute("Grabbed") == true then
 			task.wait(0.1) -- preso num agarrão (Rick): nem anda nem bate até soltar
+			continue
+		end
+		local now = os.clock()
+		local lastDamage = f.model:GetAttribute("LastDamageReceived")
+		if now - f.lastRegenAt >= 1 then
+			f.lastRegenAt = now
+			if typeof(lastDamage) ~= "number" or now - lastDamage >= NpcLifecycle.BossRegen.Delay then
+				HealthService.Heal(f.model, f.humanoid.MaxHealth * NpcLifecycle.BossRegen.Fraction)
+				if f.humanoid.Health >= f.humanoid.MaxHealth then table.clear(f.damageBy) end
+			end
+		end
+		if (f.root.Position - f.home).Magnitude > BossConfig.LeashRadius then f.returning = true end
+		if f.returning then
+			f.target = nil
+			f.model:SetAttribute("ReturningHome", true)
+			local delta = f.root.Position - f.home
+			if Vector3.new(delta.X, 0, delta.Z).Magnitude < 6 and math.abs(delta.Y) < 10 then
+				f.returning = false
+				f.model:SetAttribute("ReturningHome", nil)
+			else Navigation.Home(f.humanoid, f.root, f.home, f.navigation) end
+			task.wait(.15)
 			continue
 		end
 		-- à solta: o "centro" é onde o boss ESTÁ e o alcance é o mapa; preso: BossArena + ArenaRadius
@@ -535,7 +564,6 @@ local function aiLoop(f: Fight)
 			doAttack(f, "Roar", f.root)
 		end
 		-- enrage: levou golpes demais em pouco tempo (combo estendido) -> ruge, cura parte, fica mais forte
-		local now = os.clock()
 		local e = BossConfig.Enrage
 		if not isEnraged(f) and now >= f.enrageReadyAt then
 			local count, taken = 0, 0
@@ -612,6 +640,10 @@ local function summon(player: Player, byName: string?, power: number?)
 
 	local f: Fight = {
 		model = model,
+		home = spawnPos + Vector3.new(0, lift, 0),
+		returning = false,
+		navigation = Navigation.New(),
+		lastRegenAt = os.clock(),
 		humanoid = humanoid,
 		root = root,
 		summoner = player,
@@ -697,16 +729,14 @@ local function autoSpawnLoop()
 		return
 	end
 	while true do
-		task.wait(minutes * 60 - BossConfig.AutoSpawnWarning)
-		if state == "Ready" and not fight and #Players:GetPlayers() > 0 then
+		task.wait(1)
+		if not fight and #Players:GetPlayers() > 0 and os.clock() >= autoSpawnAt - BossConfig.AutoSpawnWarning then
 			broadcast("warning", { seconds = BossConfig.AutoSpawnWarning, name = BossConfig.Name })
-			task.wait(BossConfig.AutoSpawnWarning)
+			task.wait(math.max(0, autoSpawnAt - os.clock()))
 			local any = Players:GetPlayers()[1]
-			if state == "Ready" and not fight and any then
-				summon(any, "o Santuário")
-			end
-		else
-			task.wait(BossConfig.AutoSpawnWarning)
+			if state == "Ready" and not fight and any then summon(any, "o Santuário") end
+			-- Invocação pode ser recusada de dia; tenta na próxima noite sem avisos repetidos.
+			autoSpawnAt = os.clock() + BossConfig.AutoSpawnMinutes * 60
 		end
 	end
 end

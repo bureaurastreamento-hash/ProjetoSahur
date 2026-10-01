@@ -1,0 +1,98 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.172549,
+                  0.8470588,
+                  0.7215686
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://117196988092985",
+                "Material": "Plastic",
+                "CFrame": [
+                  0.014164090156555176,
+                  1.9122400283813477,
+                  -0.15392684936523438,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  1.323411226272583,
+                  0.0010000000474974513,
+                  1.2973700761795044
+                ]
+              },
+              "name": "rock_smallA",
+              "className": "MeshPart"
+            },
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.8862745,
+                  0.5137255,
+                  0.3411765
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://129769357667375",
+                "Material": "Plastic",
+                "CFrame": [
+                  0,
+                  0.9561200141906738,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  3.6080000400543213,
+                  1.9122400283813477,
+                  3.6080000400543213
+                ]
+              },
+              "name": "rock_smallA2",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "rock_smallA_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_rock_smallA",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

@@ -6,7 +6,9 @@ local position = Vector3.new(3500, 2, 0)
 local function setup(act)
 	local rt = Runtime.new(); local player, root = rt:player(1, position)
 	local p = rt.profiles[player]; p.story.act = act or 30
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	p.level = 50 -- teste da sequência; o bloqueio por nível tem teste próprio
+	player:SetAttribute("Level", 50)
+	local story = rt:loadStory(); story.Init(); story.Start()
 	local config = rt:load("src/shared/Modules/WorldConfig")
 	config.Regions.costa_dourada.Available = true
 	table.insert(config.Islands, { Id = "costa", Region = "costa_dourada", Center = position, RadiusX = 100, RadiusZ = 100 })
@@ -22,7 +24,7 @@ test("migração rev5 preserva os 30 atos e não pula chegada após limite antig
 		local rt = Runtime.new(); local player = rt:player(1)
 		local p = rt.profiles[player]; p.story.rev, p.story.act = 5, i
 		p.story.counters.keep = 7; p.inventory.flecha = 2; p.story.flags.carlos_nome_revelado = true
-		local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+		local story = rt:loadStory(); story.Init(); story.Start()
 		assert(p.story.act == math.min(i, 30) and p.story.rev == 7)
 		assert(i == 31 or p.story.counters.keep == 7)
 		assert(p.inventory.flecha == 2 and p.story.flags.carlos_nome_revelado)

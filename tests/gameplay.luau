@@ -6,7 +6,7 @@ local function test(name, fn) fn(); count += 1; print("OK " .. name) end
 test("perfil novo permanece na Missão 0 após Start real do StoryService", function()
 	local rt = Runtime.new()
 	local player = rt:player(1)
-	local story = rt:load("src/server/Services/StoryService")
+	local story = rt:loadStory()
 	story.Init(); story.Start()
 	assert(rt.profiles[player].story.act == 1)
 	assert(rt.profiles[player].story.rev == rt:load("src/shared/Modules/StoryConfig").Revision)
@@ -15,7 +15,7 @@ end)
 test("migração rev2 preserva posição relativa de perfil antigo", function()
 	local rt = Runtime.new(); local player = rt:player(1)
 	rt.profiles[player].story.rev = 2; rt.profiles[player].story.act = 4
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	local story = rt:loadStory(); story.Init(); story.Start()
 	assert(rt.profiles[player].story.act == 9)
 end)
 
@@ -23,7 +23,7 @@ test("kill PvP não substitui Vagantes; três eventos PvE e parry avançam", fun
 	local rt = Runtime.new(); local player = rt:player(1)
 	local state = rt.profiles[player].story
 	state.act = 4; state.counters.kills = 3
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	local story = rt:loadStory(); story.Init(); story.Start()
 	rt.achievementProgress(player, "kills", 100)
 	rt.achievementProgress(player, "parries", 1)
 	assert(state.act == 4)
@@ -35,7 +35,7 @@ end)
 test("Eco bloqueado é recusado, desbloqueado entrega Flecha uma vez", function()
 	local rt = Runtime.new(); local player = rt:player(1)
 	local profile = rt.profiles[player]; profile.story.act = 10
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	local story = rt:loadStory(); story.Init(); story.Start()
 	assert(not story.Choose(player, "eco_ilha1", "passagem"))
 	story.SetFlag(player, "passagem_capela")
 	assert(story.Choose(player, "eco_ilha1", "passagem"))

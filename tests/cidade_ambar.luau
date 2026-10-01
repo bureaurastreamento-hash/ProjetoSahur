@@ -6,7 +6,9 @@ local position = Vector3.new(2700, 2, 0)
 local function setup(act)
 	local rt = Runtime.new(); local player, root = rt:player(1, position)
 	local profile = rt.profiles[player]; profile.story.act = act or 22
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	profile.level = 50 -- teste da sequência; o bloqueio por nível tem teste próprio
+	player:SetAttribute("Level", 50)
+	local story = rt:loadStory(); story.Init(); story.Start()
 	local world = rt:load("src/shared/Modules/WorldConfig")
 	world.Regions.cidade_ambar.Available = true
 	table.insert(world.Islands, { Id = "ambar", Region = "cidade_ambar", Center = position, RadiusX = 100, RadiusZ = 100 })
@@ -22,7 +24,7 @@ test("rev4 conserva os 22 atos, itens e contadores; limite antigo não salta che
 		local rt = Runtime.new(); local player = rt:player(1)
 		local p = rt.profiles[player]; p.story.act, p.story.rev = i, 4
 		p.story.counters.keep = 2; p.story.flags.keep = true; p.inventory.flecha = 3
-		local s = rt:load("src/server/Services/StoryService"); s.Init(); s.Start()
+		local s = rt:loadStory(); s.Init(); s.Start()
 		assert(p.story.rev == 7 and p.story.act == math.min(i, 22))
 		assert(p.story.flags.keep and p.inventory.flecha == 3)
 		assert(i > 22 or p.story.counters.keep == 2)

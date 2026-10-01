@@ -13,4 +13,6 @@ qdbus6 org.kde.KWin "/Scripting/Script$id" org.kde.kwin.Script.run >/dev/null 2>
 sleep 1.2
 spectacle -b -n -a -o "$OUT" >/dev/null 2>&1
 rm -f "$JS"
+if [ "${2:-}" != "--full" ]; then
 python3 -c "from PIL import Image; Image.open('$OUT').crop((286,170,1574,640)).save('$OUT')" 2>/dev/null || true
+fi

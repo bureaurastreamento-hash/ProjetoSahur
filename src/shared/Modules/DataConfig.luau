@@ -62,6 +62,8 @@ export type StoryProgress = {
 export type Profile = {
 	schemaVersion: number,
 	coins: number,
+	faction: string, -- vazio = escolha inicial pendente; não altera campanha/build
+	honor: { points: number, recentVictims: { [string]: number } },
 	bounty: { points: number, recentVictims: { [string]: number } },
 	eventPoints: number, -- pontos ESPECIAIS de evento (mini eventos do Canion); só o vendedor aceita
 	unlockedCharacters: { string },
@@ -96,6 +98,8 @@ function DataConfig.DefaultProfile(): Profile
 	return {
 		schemaVersion = DataConfig.SchemaVersion,
 		coins = 0,
+		faction = "",
+		honor = { points = 0, recentVictims = {} },
 		bounty = { points = 0, recentVictims = {} },
 		eventPoints = 0,
 		unlockedCharacters = { "Humano" },

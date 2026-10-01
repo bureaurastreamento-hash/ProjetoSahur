@@ -12,6 +12,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
+local NpcCombatRules = require(Modules.NpcCombatRules)
+local NpcLifecycle = require(Modules.NpcLifecycleConfig)
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
@@ -238,6 +240,9 @@ end
 function HealthService.IsInvulnerable(victim: Model, attacker: Fighter?): boolean
 	local victimFighter = Combatant.Of(victim)
 	local victimPlayer, attackerPlayer = Combatant.PlayerOf(victimFighter), Combatant.PlayerOf(attacker)
+	if not NpcCombatRules.CanDamage(attacker, victimFighter or victim) then return true end
+	if (victimPlayer and victimPlayer:GetAttribute("FactionPending") == true)
+		or (attackerPlayer and attackerPlayer:GetAttribute("FactionPending") == true) then return true end
 	if victimPlayer and attackerPlayer and not PvpService.CanDamage(attackerPlayer, victimPlayer) then return true end
 	if victimFighter and victimFighter:GetAttribute("Invulnerable") == true then
 		return true -- modo deus (AdminService)
@@ -312,6 +317,7 @@ function HealthService.ApplyDamage(victim: Model, amount: number, attacker: Figh
 	end
 	humanoid.Health = math.max(0, before - amount)
 	local dealt = before - humanoid.Health
+	if dealt > 0 then victim:SetAttribute("LastDamageReceived", os.clock()) end
 
 	if victimPlayer then
 		notifyHealth:FireClient(victimPlayer, humanoid.Health, humanoid.MaxHealth)
@@ -389,9 +395,13 @@ function HealthService.Start()
 					continue
 				end
 				if character and humanoid and humanoid.Health > 0 and humanoid.Health < humanoid.MaxHealth then
-					local lastHit = character:GetAttribute(ATTR_LAST_ATTACK_TIME)
-					if typeof(lastHit) ~= "number" or now - lastHit >= CombatConfig.Regen.Delay then
-						HealthService.Heal(character, CombatConfig.Regen.PerSecond)
+					local npc = character:GetAttribute("FXEnemy") == true
+					local regen = if NpcLifecycle.IsBoss(character:GetAttribute("StoryKillKind")) then NpcLifecycle.BossRegen else NpcLifecycle.MobRegen
+					local lastHit = character:GetAttribute("LastDamageReceived") or character:GetAttribute(ATTR_LAST_ATTACK_TIME)
+					local delay = if npc then regen.Delay else CombatConfig.Regen.Delay
+					if typeof(lastHit) ~= "number" or now - lastHit >= delay then
+						HealthService.Heal(character, if npc then humanoid.MaxHealth * regen.Fraction else CombatConfig.Regen.PerSecond)
+						if npc and humanoid.Health >= humanoid.MaxHealth then HealthService.ClearPveCredit(character) end
 					end
 				end
 			end
