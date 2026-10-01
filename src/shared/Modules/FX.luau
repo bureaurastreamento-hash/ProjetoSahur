@@ -28,6 +28,7 @@ export type ProcAnimHook = {
 	Wants: (key: string, hasTeamId: boolean, character: Model?) -> boolean,
 	Play: (character: Model, key: string, looped: boolean?, fitSeconds: number?) -> boolean,
 	Stop: (character: Model, key: string) -> (),
+	Hitstop: (character: Model, seconds: number) -> (),
 }
 FX.ProcAnim = nil :: ProcAnimHook?
 
@@ -941,9 +942,14 @@ end
 -- ---------------------------------------------------------------------------
 
 local hitstopToken: { [Model]: number } = {}
+local hitstopSpeeds: { [Model]: { [AnimationTrack]: number } } = {}
+local hitstopUntil: { [Model]: number } = {}
 
 --- Congela as animações do personagem por `seconds` (hitstop). Só visual.
 function FX.Hitstop(character: Model, seconds: number)
+	if FX.ProcAnim then
+		FX.ProcAnim.Hitstop(character, seconds)
+	end
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
 	if not animator then
@@ -952,17 +958,26 @@ function FX.Hitstop(character: Model, seconds: number)
 	local token = (hitstopToken[character] or 0) + 1
 	hitstopToken[character] = token
 	local tracks = animator:GetPlayingAnimationTracks()
+	local speeds: { [AnimationTrack]: number } = hitstopSpeeds[character] or {}
+	hitstopSpeeds[character] = speeds
+	local untilAt = math.max(hitstopUntil[character] or 0, os.clock() + seconds)
+	hitstopUntil[character] = untilAt
 	for _, track in tracks do
+		if speeds[track] == nil then
+			speeds[track] = track.Speed
+		end
 		track:AdjustSpeed(0)
 	end
-	task.delay(seconds, function()
+	task.delay(math.max(0, untilAt - os.clock()), function()
 		if hitstopToken[character] ~= token then
 			return
 		end
 		hitstopToken[character] = nil
-		for _, track in tracks do
+		hitstopSpeeds[character] = nil
+		hitstopUntil[character] = nil
+		for track, speed in speeds do
 			if track.IsPlaying then
-				track:AdjustSpeed(1)
+				track:AdjustSpeed(speed)
 			end
 		end
 	end)

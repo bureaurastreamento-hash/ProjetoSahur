@@ -58,6 +58,8 @@ type CharState = {
 	basePhase: number,
 	baseUpdatedAt: number,
 	moveDirection: Vector3,
+	pauseUntil: number,
+	pauseUpdatedAt: number,
 	animateOff: boolean,
 }
 local chars: { [Model]: CharState } = {}
@@ -106,6 +108,8 @@ local function stateFor(character: Model): CharState?
 		basePhase = 0,
 		baseUpdatedAt = 0,
 		moveDirection = Vector3.new(0, 0, -1),
+		pauseUntil = 0,
+		pauseUpdatedAt = 0,
 		animateOff = false,
 	}
 	chars[character] = s
@@ -223,6 +227,18 @@ function ProcAnimController.Stop(character: Model, key: string)
 		s.blendOutFrom = s.last
 		s.blendOutAt = os.clock()
 	end
+end
+
+function ProcAnimController.Hitstop(character: Model, seconds: number)
+	local s = chars[character]
+	if not s then
+		return
+	end
+	local now = os.clock()
+	if s.pauseUntil <= now then
+		s.pauseUpdatedAt = now
+	end
+	s.pauseUntil = math.max(s.pauseUntil, now + seconds)
 end
 
 --- Alguma coisa procedural tocando (ação ou loop)?
@@ -383,6 +399,20 @@ local function step()
 			chars[character] = nil
 			continue
 		end
+		local paused = math.max(0, math.min(now, s.pauseUntil) - s.pauseUpdatedAt)
+		if paused > 0 then
+			for _, active in { s.action, s.held, s.base } do
+				if active then
+					active.startedAt += math.min(paused, math.max(0, math.min(now, s.pauseUntil) - active.startedAt))
+				end
+			end
+			s.baseUpdatedAt = now
+			s.blendOutAt += paused
+			s.pauseUpdatedAt = now
+		end
+		if now < s.pauseUntil then
+			continue
+		end
 		if character:GetAttribute("ProcAnimHold") == true then
 			-- alguém está posando este rig por fora (cutscene do despertar): não encostar nas juntas
 			s.base, s.baseName, s.basePose = nil, nil, {}
@@ -464,6 +494,7 @@ function ProcAnimController.Init()
 		end,
 		Play = ProcAnimController.Play,
 		Stop = ProcAnimController.Stop,
+		Hitstop = ProcAnimController.Hitstop,
 	}
 end
 

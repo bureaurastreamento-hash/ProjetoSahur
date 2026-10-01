@@ -14,6 +14,7 @@ lune run tests/fortaleza_mare.luau
 lune run tests/bounty.luau
 lune run tests/factions_hunts.luau
 lune run tests/npc_relics_navigation.luau
+lune run tests/launch_access.luau
 bash tools/analisar.sh
 ```
 
@@ -57,3 +58,7 @@ removidos em Edit após Stop: `ServerScriptService.VerificacaoStudioTemporaria`,
 `ServerScriptService.VerificacaoServicosIsolados`, `StarterPlayerScripts.VerificacaoClienteTemporaria`.
 O harness oculta o menu de facção para a captura sem escolher/salvar facção. Desloca o personagem para testar
 embarque/desembarque e repõe sua posição; não concede moedas, itens ou reputação ao perfil real.
+
+`launch_access.luau` executa LaunchService real: jogador comum não escapa do lobby; admin alterna
+lobby/kit/mundo, restaura kit sem salvar o teste e limpa LobbyTest; combate, argumentos inválidos,
+pré-lançamento desativado e excesso de chamadas bloqueiam troca. Física/UI são verificadas no Studio.

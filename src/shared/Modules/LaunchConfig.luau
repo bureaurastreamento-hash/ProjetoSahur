@@ -5,7 +5,8 @@
 	cliente de quem clicou) e depois fica no LOBBY DE TESTES no Coliseu do Deserto — testa o combate e os Stands
 	contra bonecos, vê o que vem aí e pode doar Robux para o desenvolvimento. O resto do mapa fica fechado (quem sai do
 	Coliseu volta), história/facção/objetivos ficam desligados. Devs (AdminConfig) jogam normal; o botão DEV
-	"Ver como jogador" liga o modo para o próprio dev testar.
+	"Ver como jogador" liga o modo para o próprio dev testar. A tela inicial também aparece para devs,
+	com acesso ao mundo e ao lobby; o servidor valida a alternância pelo RequestLaunch.
 	Lançou → PreLaunch = false e o jogo inteiro volta, sem mais nada para mudar.
 	Nada daqui mexe no perfil salvo: o Stand de teste vale só na sessão.
 ]]

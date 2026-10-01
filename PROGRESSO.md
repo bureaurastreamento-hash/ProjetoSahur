@@ -15,12 +15,16 @@ Memória entre sessões. Atualizar depois de cada mudança.
   não foram editados. Swings M1 1/2 espelhados, vento inicia na preparação do golpe; impactos em fases.
 - FX de packs respeita EmitDelay e EmitDuration, com checagem de destruição e duração limitada ao
   lifetime. Sons de socos/defesa mantêm fade, entrada 15 ms/saída 60 ms; demais sons mantêm 150/300 ms.
+- Hitstop agora pausa/retoma também clipes procedurais; animação nativa restaura velocidade original
+  e pausas sobrepostas conservam o maior prazo. Ambos os casos passaram no cliente real do Studio.
 - Studio real: título de admin, entrada/kit/saída/restauração/atalho e sequência VFX/limpeza passaram
   no cliente real pelo remote. Script temporário instalado só para teste, removido ao encerrar Play.
   Arquivos finais conferidos no Studio. Análise estática sem TypeError, 14 testes de facções + 10 de
-  Cidade Âmbar passaram. Aparência de strafe/swings e mixagem ainda pedem revisão visual/auditiva do dono.
+  Cidade Âmbar + 8 builds + 4 novos de acesso ao pré-lançamento passaram (36 testes).
+  Instrumentação de hitstop também retirada em Edit. Aparência de strafe/swings e mixagem ainda pedem revisão visual/auditiva do dono.
 - Rojo 34872 confirmado servindo ESTE worktree integrado, ligado ao Studio. Intro/Launch/Trailer/config
-  estavam idênticos aos arquivos recentes do Claude antes das mudanças. Trailer, doações e Cidade
+  estavam idênticos aos arquivos recentes do Claude antes das mudanças. Checkout principal atualizado
+  por fast-forward para o mesmo histórico integrado, sem duas versões divergentes. Trailer, doações e Cidade
   preservados. Sem publicação ou API de place, sem reexecutar geradores nem importar scripts de packs.
 - Levas continuam: seleção/importação de mais SFX/meshes, acabamento completo das ações básicas,
   identidade dos kits/despertares/chefes e depois construções/Costas/Fortaleza. Não declarar a reforma
