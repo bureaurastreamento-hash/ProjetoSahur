@@ -153,9 +153,11 @@ local function setDashCollision(character: Model, dashing: boolean)
 	if not CombatConfig.Dash.NoPlayerCollision then
 		return
 	end
+	local owner = Players:GetPlayerFromCharacter(character)
+	local lobby = (owner and owner:GetAttribute("PreLaunchLocked") == true) or character:GetAttribute("LobbyBot") == true
 	for _, d in character:GetDescendants() do
-		if d:IsA("BasePart") and (d.CollisionGroup == PLAYERS_GROUP or d.CollisionGroup == DASH_GROUP or d.CollisionGroup == "Default") then
-			d.CollisionGroup = if dashing then DASH_GROUP else PLAYERS_GROUP
+		if d:IsA("BasePart") and (d.CollisionGroup == "PreLaunchPlayers" or d.CollisionGroup == "PreLaunchDash" or d.CollisionGroup == PLAYERS_GROUP or d.CollisionGroup == DASH_GROUP or d.CollisionGroup == "Default") then
+			d.CollisionGroup = if lobby then (if dashing then "PreLaunchDash" else "PreLaunchPlayers") else (if dashing then DASH_GROUP else PLAYERS_GROUP)
 		end
 	end
 end

@@ -504,6 +504,33 @@
       "moderation": {
         "moderationState": "Approved"
       }
+    },
+    "asset_library/kenney_rpg-audio/Audio/knifeSlice.ogg": {
+      "sha256": "4cd96dc630bed9840c15f1dd2306da2cc56a4da26a5d3f1a03c5a7265ac5e54f",
+      "type": "Audio",
+      "operation": "operations/b9d190c3-0cf2-4d19-91e8-9605f9d5d47b",
+      "assetId": "130933442018816",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/kenney_rpg-audio/Audio/knifeSlice2.ogg": {
+      "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def",
+      "type": "Audio",
+      "operation": "operations/415932a8-a54f-463b-b7fc-05903ab6dffb",
+      "assetId": "136466827083531",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/kenney_rpg-audio/Audio/drawKnife1.ogg": {
+      "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb",
+      "type": "Audio",
+      "operation": "operations/6ab0bd5d-bfe4-4b3a-9b5a-f4ecbf04a4f8",
+      "assetId": "132323906120108",
+      "moderation": {
+        "moderationState": "Approved"
+      }
     }
   }
 }

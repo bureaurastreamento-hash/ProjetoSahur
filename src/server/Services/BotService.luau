@@ -155,7 +155,7 @@ local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, 
 			d.Anchored = false
 			d.CanCollide = d.Name ~= "HumanoidRootPart" and d:GetAttribute("NpcClothing") ~= true
 			if d.CollisionGroup == "Default" then
-				d.CollisionGroup = "Players" -- mesmo grupo dos jogadores (dash não empurra, entulho não empurra)
+				d.CollisionGroup = if opts.Attributes and opts.Attributes.LobbyBot then "PreLaunchPlayers" else "Players" -- vale também no respawn
 			end
 		elseif d:IsA("Script") or d:IsA("LocalScript") then
 			d:Destroy()

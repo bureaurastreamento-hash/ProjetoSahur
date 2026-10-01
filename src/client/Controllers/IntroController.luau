@@ -159,7 +159,7 @@ local showLobby: () -> ()
 -- Hotbar padrão do Roblox (Tools) escondida no lobby: ficava por cima dos slots de habilidade e no meio do título.
 local function applyBackpack()
 	pcall(function()
-		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, player:GetAttribute("PreLaunchLocked") ~= true)
+		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 	end)
 end
 
@@ -173,6 +173,7 @@ local function hideForTitle(g: Instance)
 	end
 end
 local function hideOthersForTitle()
+	player:SetAttribute("LaunchTitleVisible", true)
 	for _, g in playerGui:GetChildren() do
 		hideForTitle(g)
 	end
@@ -181,6 +182,7 @@ local function hideOthersForTitle()
 	end
 end
 local function restoreAfterTitle()
+	player:SetAttribute("LaunchTitleVisible", false)
 	if titleAddedConn then
 		titleAddedConn:Disconnect()
 		titleAddedConn = nil

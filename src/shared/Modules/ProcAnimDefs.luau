@@ -89,6 +89,23 @@ C["Shared/M1_4"] = { -- finisher: direto pesado com o corpo inteiro (empurra)
 		P(0.5, GUARD, "inout"),
 	},
 }
+-- Lâmina: quatro cortes com antecipação, contato aos 0,15 s e recuperação contínua.
+local bladeGuard: { [string]: JointPose } = { RA = { rot = V(45, 0, -22) }, LA = { rot = V(30, 0, -12) }, Root = { rot = V(-3, 12, 0) } }
+for i = 1, 4 do
+	local side = if i % 2 == 0 then -1 else 1
+	local overhead = i == 4
+	C["Weapon/Swing_" .. i] = {
+		duration = if overhead then .5 else .45,
+		frames = {
+			P(0, bladeGuard),
+			P(.07, { RA = { rot = V(if overhead then 160 else 70, -35 * side, -65 * side) }, LA = { rot = V(25, 0, -20) }, Root = { rot = V(3, 30 * side, -3 * side) } }, "in"),
+			P(.15, { RA = { rot = V(if overhead then 75 else 95, 30 * side, 40 * side) }, LA = { rot = V(45, 0, -14) }, Root = { rot = V(-10, -30 * side, 4 * side), off = V(0, -.12, -.25) } }, "out"),
+			P(.25, { RA = { rot = V(if overhead then 45 else 65, 38 * side, 55 * side) }, Root = { rot = V(-6, -22 * side, 2 * side) } }, "out"),
+			P(if overhead then .5 else .45, bladeGuard, "inout"),
+		},
+	}
+end
+
 C["Shared/Uppercut"] = { -- soco subindo: braço vem de baixo e sobe; corpo estica
 	duration = 0.5,
 	team = true, -- "ataque 1" da equipe (112109080090418) toca no lugar (dono confirma se é o lugar certo)

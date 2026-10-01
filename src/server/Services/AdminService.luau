@@ -594,9 +594,19 @@ perTarget.Kick = function(admin, target, args)
 end
 
 perTarget.ResetData = function(_, target)
-	DataService.ResetProfile(target)
+	if not DataService.ResetProfile(target) then
+		return false, "Perfil ocupado ou ainda carregando. Tente novamente."
+	end
+	for _, attr in { "DevInfiniteEnergy", "DevNoCooldown", "DevDamageMult", "DevSpeed", "DevFly", "AllCharacters", "Invulnerable", "KillStreak" } do
+		target:SetAttribute(attr, nil)
+	end
+	AdminService.ResetCooldowns(target)
+	AdminService.ResetDash(target)
 	AdminService.ForceCharacter(target, CharacterDefs.DefaultCharacter)
-	return true, ("dados de %s zerados (salva no próximo autosave)"):format(target.Name)
+	CharacterService.Load(target) -- corpo/Tools/spawn novos, mesmo se já era humano
+	local saved = DataService.SaveNow(target, "admin_reset")
+	return true, ("%s: personagem reiniciado; admin mantido. %s"):format(target.Name,
+		if saved then "Reset salvo." else "Reset ainda não salvo; confira o estado do perfil antes de sair.")
 end
 
 perTarget.ClearFlags = function(_, target)

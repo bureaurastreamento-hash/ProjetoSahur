@@ -13,6 +13,7 @@ local function setup(developer)
 	rt.mocks.FactionService = { Refresh = function() end }
 	rt.mocks.BotService = { Spawn = function() return nil end }
 	rt.mocks.ShopService = {}
+	rt.mocks.LaunchContainment = { Init = function() end, Start = function() end, Refresh = function() end }
 	rt.mocks.RemoteEvents.Functions = { FetchLaunch = "FetchLaunch" }
 	rt.mocks.RemoteEvents.GetFunction = function() return {} end
 	local config = rt:load("src/shared/Modules/LaunchConfig")
@@ -45,6 +46,16 @@ test("admin alterna lobby/kit/mundo e restaura kit sem salvar o teste", function
 	request.OnServerEvent:Fire(p, "view", false)
 	assert(p:GetAttribute("PreLaunchLocked") == false and p:GetAttribute("LobbyTest") == nil)
 	assert(p:GetAttribute("CharacterId") == "Humano" and rt.profiles[p].characterId == originalProfile)
+end)
+test("reset no lobby descarta o kit antigo ao voltar ao mundo", function()
+	local rt, p, request = setup(true)
+	p:SetAttribute("CharacterId", "Kira")
+	request.OnServerEvent:Fire(p, "view", true)
+	request.OnServerEvent:Fire(p, "kit", "Swift")
+	rt.mocks.DataService.ProfileLoaded.Event:Fire(p, rt.profiles[p], false, "reset")
+	assert(p:GetAttribute("LobbyTest") == nil)
+	request.OnServerEvent:Fire(p, "view", false)
+	assert(p:GetAttribute("CharacterId") == "Humano")
 end)
 test("troca bloqueada por combate e argumento inválido não altera modo", function()
 	local rt, p, request = setup(true)

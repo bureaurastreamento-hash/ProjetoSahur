@@ -31,6 +31,9 @@ local AbilityService = require(Services:WaitForChild("AbilityService"))
 local AntiExploitService = require(Services:WaitForChild("AntiExploitService"))
 local BotService = require(Services:WaitForChild("BotService"))
 local ShopService = require(Services:WaitForChild("ShopService"))
+local DataService = require(Services:WaitForChild("DataService"))
+
+local Containment = require(script.Parent.Parent.Modules.LaunchContainment)
 
 local LaunchService = {}
 
@@ -55,6 +58,7 @@ local function applyLock(player: Player)
 	end
 	WorldService.Refresh(player)
 	FactionService.Refresh(player)
+	Containment.Refresh(player)
 end
 
 -- ---------------------------------------------------------------------------
@@ -178,6 +182,9 @@ local function spawnLobbyBots()
 			Tuning = { LeashRadius = 30 },
 		})
 		if model then
+			for _, part in model:GetDescendants() do
+				if part:IsA("BasePart") and part.CollisionGroup == "Players" then part.CollisionGroup = "PreLaunchPlayers" end
+			end
 			table.insert(lobbyBots, model)
 		end
 	end
@@ -238,7 +245,7 @@ local function leash()
 			continue
 		end
 		local d = root.Position - LaunchConfig.LobbyCenter
-		if d.X * d.X + d.Z * d.Z > r2 or root.Position.Y < LaunchConfig.LobbyCenter.Y - 40 then
+		if d.X * d.X + d.Z * d.Z > r2 or root.Position.Y < LaunchConfig.LobbyCenter.Y - 40 or root.Position.Y > LaunchConfig.LobbyCenter.Y + 85 then
 			AntiExploitService.Grace(player, 2)
 			root.AssemblyLinearVelocity = Vector3.zero
 			root.CFrame = lobbySpawn()
@@ -251,6 +258,7 @@ end
 -- ---------------------------------------------------------------------------
 
 function LaunchService.Init()
+	Containment.Init()
 	notify = Remotes.GetEvent(Remotes.Events.NotifyLaunch)
 	if game.PlaceId ~= 0 then
 		pcall(function()
@@ -262,11 +270,19 @@ function LaunchService.Init()
 end
 
 function LaunchService.Start()
+	Containment.Start()
+	DataService.ProfileLoaded.Event:Connect(function(player: Player, _profile, _sessionOnly, reason: string?)
+		if reason == "reset" then
+			if LaunchConfig.Locked(player) then worldKits[player] = CharacterDefs.DefaultCharacter else worldKits[player] = nil end
+			player:SetAttribute("LobbyTest", nil)
+		end
+	end)
 	Remotes.GetEvent(Remotes.Events.RequestLaunch).OnServerEvent:Connect(onRequest)
 	Remotes.GetFunction(Remotes.Functions.FetchLaunch).OnServerInvoke = function(player: Player)
 		return { board = boardCache, donated = donated[player.UserId] or 0, preLaunch = LaunchConfig.PreLaunch }
 	end
 	local function setup(player: Player)
+		player.CharacterAdded:Connect(function() Containment.Refresh(player) end)
 		applyLock(player)
 		player:GetAttributeChangedSignal("IsDeveloper"):Connect(function()
 			applyLock(player)

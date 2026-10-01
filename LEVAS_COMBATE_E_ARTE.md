@@ -69,3 +69,13 @@ Backup manual recebido: backups/place-manual-2026-10-01.rbxl. Captura aplicada s
 estado do Studio nos arquivos de mapa/place. Rojo aditivo: nunca publicar build/API para substituir a place.
 Teste da primeira correção: andar/correr em curva, variar velocidade e entrar/sair do dash repetidamente;
 observar se o ciclo das pernas fica contínuo. Conferir ação, block, pulo e ragdoll sem interferência nova.
+
+## Leva 2 implementada — 01/10
+
+Carregamento seletivo, 1–4 habilidades + X/click para Tools, menus secundários pelo topo e TopbarPlus
+padrão. Contenção invisível só para o pré-lançamento com leash/bots reativos. Menu de reset completo,
+novo modelo da Lâmina da Névoa, quatro cortes/VFX e três sons Kenney CC0 aprovados. Descarte de VFX distantes.
+
+Próxima leva: tratar telegraphs, preparação/impacto/recuperação e mixagem de um kit de Stand por vez;
+começar Swift/Jotaro, comparar no Coliseu contra treino. Em seguida avançar os demais kits e a leitura visual
+no mapa manual preservado. Animações/modelos da equipe serão referenciados, sem mover/apagar arte.

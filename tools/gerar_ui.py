@@ -459,8 +459,8 @@ HELP = "\n".join([
     "DASH PRA FRENTE / PISCAR = hit ao chegar; bem de frente = empurra longe",
     "CARGA — dar golpe +4, receber +2, parry +7",
     "VIDA — regenera após 6 s sem dano",
-    "PERSONAGENS — V · LOJA — L · COSMÉTICOS — K · EMOTES/CENAS — B (roda) · PERFIL — P · PLACAR — Tab · DUELO — J · CLÃ — C",
-    "BOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã (C) > GUERRA: dominação A/B/C, 2 clãs, 5 min",
+    "EQUIPAMENTOS — X alterna armas/Tools; clique ou toque na barra equipa · MOCHILA — M · EMOTES/CENAS — B · PLACAR — Tab; personagens, loja, cosméticos, perfil, duelo e clã pelos botões do topo",
+    "BOSS — segure E no altar; anel vermelho = saia da área · GUERRA DE CLÃ — Clã no topo > GUERRA: dominação A/B/C, 2 clãs, 5 min",
     "CONTROLE: B soco (segurar = combo) · X block · Y dash/levantar · LB LT RT RB = 1 2 3 4 · D-pad ← suporte (R) · D-pad ↑ ultimate · D-pad ↓ emotes · R3 shift lock · Back placar · D-pad → menus do topo · A pulo",
     "CELULAR: botões na tela (SOCO segurar = combo, BLOCK, DASH, 1-4, R, ULT, EMOTE, LOCK, CORRER); joystick = direção do dash",
 ])

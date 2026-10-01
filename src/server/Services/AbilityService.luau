@@ -365,7 +365,8 @@ local function attachVictim(attacker: Fighter, attackerRoot: BasePart, victim: M
 	for _, part in victim:GetDescendants() do
 		if part:IsA("BasePart") then
 			collisions[part] = { Group = part.CollisionGroup, Massless = part.Massless }
-			part.CollisionGroup = GRAB_COLLISION_GROUP
+			local owner = Players:GetPlayerFromCharacter(victim)
+			part.CollisionGroup = if (owner and owner:GetAttribute("PreLaunchLocked") == true) or victim:GetAttribute("LobbyBot") == true then "PreLaunchGrabbed" else GRAB_COLLISION_GROUP
 			part.Massless = true
 		end
 	end

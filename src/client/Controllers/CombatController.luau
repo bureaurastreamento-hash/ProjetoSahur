@@ -76,20 +76,26 @@ local function playAttackFx(attackerChar: Model, attackId: string, comboIndex: n
 		end
 		return
 	end
+	local attackerPlayer = Players:GetPlayerFromCharacter(attackerChar)
+	local armed = attackerPlayer and typeof(attackerPlayer:GetAttribute("EquippedWeapon")) == "string"
 	if crit then
 		-- golpe crítico armado pelo parry: soco pesado próprio (dono, 2026-09-21) + rastro do finisher
 		FX.PlayAnimation(attackerChar, SHARED, "CritPunch", false, nil, fit)
 		FX.SpawnVFX(attackerChar, SHARED, "Swing_4", true)
+	elseif armed then
+		FX.PlayAnimation(attackerChar, "Weapon", ("Swing_%d"):format(comboIndex), false, nil, fit)
+		FX.SpawnVFX(attackerChar, "Weapon", ("Swing_%d"):format(comboIndex), true)
 	else
 		FX.PlayAnimation(attackerChar, SHARED, ("%s_%d"):format(attackId, comboIndex), false, nil, fit)
 		FX.SpawnVFX(attackerChar, SHARED, ("Swing_%d"):format(comboIndex), true) -- rastro do braço (VFXLibrary)
 	end
-	local attackerPlayer = Players:GetPlayerFromCharacter(attackerChar)
 	local awakenedUntil = if attackerPlayer then attackerPlayer:GetAttribute("AwakenedUntil") else attackerChar:GetAttribute("AwakenedUntil") -- bot: no Model
 	if typeof(awakenedUntil) == "number" and awakenedUntil > Workspace:GetServerTimeNow() then
 		FX.SpawnVFX(attackerChar, SHARED, "AwakenedSwing", true) -- modo despertado: faíscas na cor
 	end
-	if attackDef and comboIndex >= attackDef.ComboLength then
+	if armed then
+		FX.PlaySoundAt(attackerChar, "Weapon", "Slice")
+	elseif attackDef and comboIndex >= attackDef.ComboLength then
 		-- Finisher: som mais pesado + rajada de vento (cai no Punch_Whoosh se o som não existir)
 		if not FX.PlaySoundAt(attackerChar, SHARED, "Finisher_Whoosh") then
 			FX.PlaySoundAt(attackerChar, SHARED, "Punch_Whoosh")

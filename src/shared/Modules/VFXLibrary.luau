@@ -277,6 +277,21 @@ E["Shared/Swing_4"] = {
 		emit("Lines", WHITE, 8, { size = { 0.8, 1.8 }, life = { 0.15, 0.25 }, speed = { 30, 50 }, spread = { 12, 12 }, orient = "VelocityParallel", offset = Vector3.new(0, 0.5, -2), direction = "forward", light = 0.8 }),
 	},
 }
+-- Cortes de arma: arco fino, pequeno rastro de névoa e finisher mais amplo.
+for i = 1, 4 do
+	local side = if i % 2 == 0 then -1 else 1
+	local heavy = i == 4
+	E["Weapon/Swing_" .. i] = {
+		lifetime = .65,
+		layers = {
+			mesh("SlashWide", Color3.fromRGB(175, 205, 225), 2, if heavy then 8 else 6, .2,
+				{ delay = .09, offset = CFrame.new(.4 * side, .7, -2.4) * CFrame.Angles(0, 0, math.rad(if heavy then 85 else -35 * side)), tr0 = .25, ease = "Quart" }),
+			emit("Lines", WHITE, if heavy then 7 else 4, { delay = .12, size = { .3, .8 }, life = { .1, .18 }, speed = { 20, 32 }, offset = Vector3.new(0, .5, -2), direction = "forward", light = .7 }),
+			smokePuff(3, { delay = .15, size = { .3, .8 }, life = { .15, .3 }, speed = { 2, 4 }, offset = Vector3.new(0, .5, -2) }),
+		},
+	}
+end
+
 E["Shared/Uppercut"] = {
 	lifetime = 0.9,
 	layers = {

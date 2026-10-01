@@ -100,6 +100,27 @@
       "source": "https://kenney.nl/assets/watercraft-kit",
       "license": "CC0",
       "sha256": "311138350e74e35c5497a1bd8076a01740b7c302bed11027639fa553459a68de"
+    },
+    {
+      "path": "asset_library/kenney_rpg-audio/Audio/knifeSlice.ogg",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sourceUrl": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "4cd96dc630bed9840c15f1dd2306da2cc56a4da26a5d3f1a03c5a7265ac5e54f"
+    },
+    {
+      "path": "asset_library/kenney_rpg-audio/Audio/knifeSlice2.ogg",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sourceUrl": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def"
+    },
+    {
+      "path": "asset_library/kenney_rpg-audio/Audio/drawKnife1.ogg",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sourceUrl": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb"
     }
   ]
 }

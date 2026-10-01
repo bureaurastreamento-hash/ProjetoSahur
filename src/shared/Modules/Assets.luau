@@ -259,7 +259,7 @@ Assets.FixedSounds = {
 --- Som por nome. Variações `Nome2`, `Nome3`, ... (com SoundId) entram no sorteio junto com `Nome`,
 --- para o mesmo golpe não repetir sempre o mesmo som (exceto Assets.FixedSounds).
 function Assets.GetSound(folder: string, name: string): Sound?
-	local inst = find("Sounds", folder, name)
+	local inst = if folder == "Weapon" then find("WeaponSounds", name) else find("Sounds", folder, name)
 	if not (inst and inst:IsA("Sound") and inst.SoundId ~= "") then
 		warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
 		return nil
@@ -269,7 +269,7 @@ function Assets.GetSound(folder: string, name: string): Sound?
 	end
 	local options = { inst }
 	for i = 2, 6 do
-		local alt = find("Sounds", folder, name .. i)
+		local alt = if folder == "Weapon" then find("WeaponSounds", name .. i) else find("Sounds", folder, name .. i)
 		if alt and alt:IsA("Sound") and alt.SoundId ~= "" then
 			table.insert(options, alt)
 		else
@@ -289,6 +289,12 @@ function Assets.HasVFX(folder: string, name: string): boolean
 		return false
 	end
 	return (if alias:find("/") then findPath(alias) else findPackVFX(alias)) ~= nil
+end
+
+--- Modelo visual licenciado; clonagem ocorre pelo serviço que cria a Tool.
+function Assets.GetCombatModel(name: string): Model?
+	local model = find("CombatModels", name)
+	return if model and model:IsA("Model") then model else nil
 end
 
 return Assets

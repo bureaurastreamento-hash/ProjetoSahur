@@ -89,6 +89,7 @@ function Runtime.new()
 		Of = function(v) return v end,
 		UserId = function(v) return v.UserId end,
 	}
+	rt.mocks.Assets = { GetCombatModel = function() return nil end }
 	rt.mocks.StandService = { Give = function(player, items)
 		for id, count in items do rt.mocks.DataService.AddItem(player, id, count) end
 	end }

@@ -74,6 +74,13 @@
     "TextChatService": {
       "$path": "src/place/textchat",
       "$ignoreUnknownInstances": true
+    },
+    "ReplicatedFirst": {
+      "$ignoreUnknownInstances": true,
+      "Loading": {
+        "$path": "src/loading",
+        "$ignoreUnknownInstances": true
+      }
     }
   }
 }

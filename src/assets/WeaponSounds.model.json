@@ -1,0 +1,39 @@
+{
+ "name": "WeaponSounds",
+ "className": "Folder",
+ "children": [
+  {
+   "name": "Slice",
+   "className": "Sound",
+   "properties": {
+    "SoundId": "rbxassetid://130933442018816",
+    "Volume": 0.75,
+    "RollOffMaxDistance": 90,
+    "RollOffMinDistance": 8,
+    "RollOffMode": "InverseTapered"
+   }
+  },
+  {
+   "name": "Slice2",
+   "className": "Sound",
+   "properties": {
+    "SoundId": "rbxassetid://136466827083531",
+    "Volume": 0.75,
+    "RollOffMaxDistance": 90,
+    "RollOffMinDistance": 8,
+    "RollOffMode": "InverseTapered"
+   }
+  },
+  {
+   "name": "Draw",
+   "className": "Sound",
+   "properties": {
+    "SoundId": "rbxassetid://132323906120108",
+    "Volume": 0.55,
+    "RollOffMaxDistance": 90,
+    "RollOffMinDistance": 8,
+    "RollOffMode": "InverseTapered"
+   }
+  }
+ ]
+}

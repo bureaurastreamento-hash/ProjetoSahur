@@ -2,6 +2,47 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Leva 2: carregamento, equipamentos, contenção e lâmina — 01/10 (Codex)
+
+- ReplicatedFirst.Loading exibe tela antes do boot dos controllers, pré-carrega seletivamente assets
+  compartilhados de combate/UI, meshes da lâmina e sons de arma. Progresso por instâncias preparadas;
+  continuar em segundo plano após 12 s e liberação aos 30 s evitam bloqueio por rede/asset privado.
+  Não faz preload do Workspace inteiro. ClientAssetsReady/ClientLoading coordenam o boot (fallback 35 s).
+- 1–4 ficam reservados às habilidades. Backpack nativo desligado; EquipmentController usa Tools nativas,
+  X para alternar/desequipar e barra clicável/toque. Mobile posiciona barra acima do joystick. Mochila M,
+  emotes B e placar Tab mantidos; personagens/loja/perfil/cosméticos/duelo/clã pelo topo, sem V/L/P/K/J/C.
+  Trailer e cutscenes restauram CoreGui mantendo Backpack desligado. HelpGui e gerador atualizados.
+- TopbarPlus voltou ao tema padrão: removida alteração global de cantos e listener que impunha 6 px.
+- LaunchContainment cria 32 paredes invisíveis + teto no runtime, sem editar Coliseu/mapa da equipe.
+  Só PreLaunchPlayers/Dash/Grabbed colidem; mundo normal passa. Leash autoritativo retorna ao Coliseu
+  se ultrapassar raio, cair ou subir acima do teto. Bots do lobby continuam passive e mantêm grupo ao respawn.
+- ResetData agora é RESETAR TUDO DO PERSONAGEM, com o segundo clique já existente. Recusa sessão ocupada;
+  repõe DefaultProfile (missões, inventário, builds, maestrias, moedas etc.), preserva recibos e acesso admin,
+  notifica serviços, limpa modificadores, recarrega humano e solicita SaveNow. Reset no lobby descarta o kit
+  antigo salvo para retorno ao mundo. Opção de menu escolhida: dados reais do dono não foram apagados.
+- Novo MistBlade: 2 meshes do KatanaModelAdmin do pack Rova licenciado; fonte/hash em
+  ASSETS_COMBATE_MODELOS.json. Arquivos/arte existentes não alterados. BuildService usa o novo visual na
+  Lâmina da Névoa, com fallback. Armas equipadas usam quatro cortes procedurais com antecipação/contato/
+  recuperação e VFX em fases (arco, linhas, névoa); dano/cooldown/alcance continuam autoritativos existentes.
+- 3 sons Kenney RPG Audio CC0 importados no grupo 9835819 e Approved: knifeSlice 130933442018816,
+  knifeSlice2 136466827083531, drawKnife1 132323906120108. WeaponSounds separado preserva Sounds existente;
+  Assets.GetSound("Weapon", ...) resolve centralmente. Cortes alternam amostra; equipar toca saque.
+  Sons de arma usam fades curtos. Importador aceita --only com validação de seleção/licença para retomar
+  apenas novas entradas; inventários de origem/sha/moderação atualizados. Nenhuma API de place usada.
+- FX descarta composições/templates a mais de 240 studs da câmera antes de clonar; tetos existentes mantidos.
+  Isso reduz trabalho de lutas distantes; preload não é promessa de aumentar FPS. Revisão de mapa/perfil de
+  desempenho e todos os kits continuam nas próximas levas (LEVAS_COMBATE_E_ARTE.md).
+- Sincronização: servidor Rojo já conectado não expôs o novo serviço de manifest ao vivo. Loading foi
+  instalado/atualizado aditivamente pela ponte no Studio, com fonte idêntica a src/loading; conexão preservada.
+  default.project.json registra ReplicatedFirst para próximas sessões, sem $path em Workspace/ServerStorage.
+- Validação: análise estática sem TypeError/SyntaxError; 8 builds, 5 acesso/lobby (inclui reset/kit),
+  14 facções e 10 persistência passaram. Studio: carregamento 67 instâncias/0 falhas, título de admin,
+  mundo/lobby/mundo, Backpack desligado/barra visível no mundo, TopbarPlus redondo, menu reset, clipes de arma,
+  VFX distante descartado, Tool real isolada da Névoa orientada/soldada, grupos de colisão/4 bots e leash passaram.
+  ResetProfile real também passou numa cópia isolada (perfil ocupado recusado, dados padrão, recibos/admin
+  preservados, ProfileLoaded e dirty). Instrumentação temporária removida ao encerrar Play. Revisão visual/
+  auditiva e mobile ainda devem ser feitas pelo dono. Publicação continua exclusivamente pelo dono no Studio.
+
 ## Pré-lançamento para admin e primeira leva de combate — 01/10 (Codex)
 
 - Causa do menu ausente: IntroController só montava tela para `PreLaunchLocked`; admins entram

@@ -197,7 +197,7 @@ function CharacterService.LoadModel(player: Player, model: Model, cf: CFrame): b
 	-- ninguém pelo corpo; acessórios que chegarem depois entram no grupo também
 	local function toPlayersGroup(d: Instance)
 		if d:IsA("BasePart") and d.CollisionGroup == "Default" then
-			d.CollisionGroup = "Players"
+			d.CollisionGroup = if player:GetAttribute("PreLaunchLocked") == true then "PreLaunchPlayers" else "Players"
 		end
 	end
 	for _, d in model:GetDescendants() do

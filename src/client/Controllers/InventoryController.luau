@@ -114,7 +114,7 @@ local function render()
 		tab.TextColor3 = if id == selectedTab then BG else TEXT
 	end
 	if selectedTab == "build" then
-		local equipped = label(list, weapon .. "\n\n" .. style .. "\n\nA arma de treino é equipada pela hotbar. Técnica e maestrias pertencem ao seu perfil.", 14, TEXT)
+		local equipped = label(list, weapon .. "\n\n" .. style .. "\n\nEquipe os itens pela barra de equipamentos (clique/toque ou X). Técnica e maestrias pertencem ao seu perfil.", 14, TEXT)
 		equipped.Size = UDim2.new(1, -8, 0, 130)
 		return
 	end

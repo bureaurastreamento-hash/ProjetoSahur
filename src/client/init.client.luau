@@ -7,6 +7,13 @@
 	Um erro em um controller não impede os demais de subir.
 ]]
 
+-- O ReplicatedFirst prepara os assets essenciais antes de apresentar menus e combate.
+local player = game:GetService("Players").LocalPlayer
+local loadingDeadline = os.clock() + 35
+while player:GetAttribute("ClientAssetsReady") ~= true and os.clock() < loadingDeadline do
+	task.wait(.1)
+end
+
 local controllersFolder = script:WaitForChild("Controllers")
 local loaded: { [string]: any } = {}
 

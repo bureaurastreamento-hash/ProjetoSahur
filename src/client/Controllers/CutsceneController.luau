@@ -400,6 +400,7 @@ end
 local function showHud()
 	pcall(function()
 		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, true)
+		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 	end)
 	for _, g in hiddenGuis do
 		if g.Parent then

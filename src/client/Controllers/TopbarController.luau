@@ -35,7 +35,6 @@ local Controls = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("
 -- Gamepad: D-pad direita navega os ícones do topo (D-pad cima é o despertar)
 local IconAny: any = Icon
 IconAny.highlightKey = Controls.Gamepad.Menus
-IconAny.modifyBaseTheme({ { "IconCorners", "CornerRadius", UDim.new(0, 0) :: any } })
 local HUDController = require(script.Parent:WaitForChild("HUDController"))
 local CosmeticsController = require(script.Parent:WaitForChild("CosmeticsController"))
 
@@ -161,19 +160,6 @@ local function renderProfile(profile: any, sessionOnly: boolean)
 end
 
 function TopbarController.Init()
-	-- A biblioteca pode aplicar temas próprios nos dropdowns; manter o mesmo canto levemente arredondado do resto da UI.
-	for _, container in IconAny.container do
-		local function corner(descendant: Instance)
-			if not descendant:IsA("UICorner") then return end
-			local function apply()
-				if descendant.CornerRadius ~= UDim.new(0, 6) then descendant.CornerRadius = UDim.new(0, 6) end
-			end
-			apply()
-			descendant:GetPropertyChangedSignal("CornerRadius"):Connect(apply)
-		end
-		for _, descendant in container:GetDescendants() do corner(descendant) end
-		container.DescendantAdded:Connect(corner)
-	end
 	local profileGui = get(playerGui, "ProfileGui")
 	profilePanel = get(profileGui, "Panel") :: Frame
 	profileCoins = get(profilePanel, "Coins") :: TextLabel
@@ -337,13 +323,13 @@ function TopbarController.Start()
 		end
 	end
 
-	local duelItem = item("Duelo", "Desafiar alguém para 1v1", Enum.KeyCode.J, duelPanel, 1)
-	local clanItem = item("Clã", "Fundar ou entrar em um clã", Enum.KeyCode.C, clanPanel, 2)
+	local duelItem = item("Duelo", "Desafiar alguém para 1v1", nil, duelPanel, 1)
+	local clanItem = item("Clã", "Fundar ou entrar em um clã", nil, clanPanel, 2)
 	local scoreItem = item("Placar", "Kills da sessão", Enum.KeyCode.Tab, scoreboard, 3)
 	scoreItem:bindToggleKey(Controls.Gamepad.Scoreboard)
 
-	local cosmeticsItem = item("Cosméticos", "Skins, capas, auras e emotes (roda: B)", Enum.KeyCode.K, CosmeticsController.GetPanel(), 0)
-	local profileItem = item("Perfil", "Estatísticas e pontos", Enum.KeyCode.P, profilePanel, 1)
+	local cosmeticsItem = item("Cosméticos", "Skins, capas, auras e emotes (roda: B)", nil, CosmeticsController.GetPanel(), 0)
+	local profileItem = item("Perfil", "Estatísticas e pontos", nil, profilePanel, 1)
 	local settingsItem = item("Configurações", "Ajustes (salvam no perfil)", nil, settingsPanel, 0)
 	local helpItem = item("Controles", "Como jogar", nil, helpPanel, 1)
 
@@ -351,8 +337,6 @@ function TopbarController.Start()
 	charactersIcon = Icon.new()
 		:setLabel("Personagens")
 		:setCaption("Trocar personagem")
-		:setCaptionHint(Enum.KeyCode.V)
-		:bindToggleKey(Enum.KeyCode.V)
 		:setOrder(0)
 	local characterList = {}
 	for _, id in CharacterDefs.Order do
@@ -392,7 +376,7 @@ function TopbarController.Start()
 		:setOrder(1)
 		:setDropdown({ duelItem, clanItem, scoreItem })
 
-	shopIcon = item("Loja", "Pontos e passes", Enum.KeyCode.L, shopPanel, 2)
+	shopIcon = item("Loja", "Pontos e passes", nil, shopPanel, 2)
 
 	profileIcon = Icon.new()
 		:setLabel("Perfil")

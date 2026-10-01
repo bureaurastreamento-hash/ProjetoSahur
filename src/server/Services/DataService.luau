@@ -608,16 +608,18 @@ function DataService.TakeItem(player: Player, itemId: string, amount: number): b
 	return true
 end
 
---- [Admin] Volta o perfil ao padrão (salva no próximo autosave/saída).
-function DataService.ResetProfile(player: Player)
+--- [Admin] Volta o perfil ao padrão e notifica os serviços; o comando solicita SaveNow.
+function DataService.ResetProfile(player: Player): boolean
 	local session = sessions[player]
-	if not session then
-		return
+	if not session or not session.loaded or session.saving or session.transaction or session.closing then
+		return false
 	end
 	local receipts = session.profile.receipts
 	session.profile = DataConfig.DefaultProfile()
-	session.profile.receipts = receipts -- reset administrativo não torna recibos já entregues reutilizáveis
+	session.profile.receipts = receipts -- recibos já entregues não podem ser reutilizados
 	touch(player)
+	DataService.ProfileLoaded:Fire(player, session.profile, session.sessionOnly, "reset")
+	return true
 end
 
 function DataService.HasCharacter(player: Player, characterId: string): boolean

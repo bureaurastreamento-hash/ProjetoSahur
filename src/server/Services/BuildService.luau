@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local BuildConfig = require(Modules.BuildConfig)
+local Assets = require(Modules.Assets)
 local Remotes = require(Modules.RemoteEvents)
 local ProgressionConfig = require(Modules.ProgressionConfig)
 local DataService = require(script.Parent.DataService)
@@ -54,7 +55,26 @@ local function restoreWeapon(player: Player)
 	weld.Part0, weld.Part1 = handle, blade
 	weld.Parent = blade
 	blade.Parent = tool
-	if def.Glow then
+	-- Novo visual da Névoa; outros modelos/armas da equipe continuam intactos.
+	local visual = if weaponId == "lamina_nevoa" then Assets.GetCombatModel("MistBlade") else nil
+	if visual then
+		blade:Destroy()
+		handle.Transparency = 1
+		local clone = visual:Clone()
+		clone.Name = "VisualLamina"
+		for _, part in clone:GetDescendants() do
+			if part:IsA("BasePart") then
+				part.CFrame = handle.CFrame * part.CFrame
+				part.Anchored, part.CanCollide, part.CanTouch, part.Massless = false, false, false, true
+				local joint = Instance.new("WeldConstraint")
+				joint.Part0, joint.Part1 = handle, part
+				joint.Parent = part
+			end
+		end
+		clone.Parent = tool
+		tool:SetAttribute("CombatVisual", "MistBlade")
+	end
+	if def.Glow and not visual then
 		local light = Instance.new("PointLight")
 		light.Color, light.Brightness, light.Range = def.Color, 1.5, 8
 		light.Parent = blade

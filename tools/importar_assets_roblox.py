@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--key-file", required=True)
     parser.add_argument("--group", required=True)
     parser.add_argument("--limit", type=int, default=1)
+    parser.add_argument("--only", action="append", help="Restringe às entradas já selecionadas no inventário (repetível)")
     parser.add_argument("--refresh", action="store_true", help="Atualiza moderação das operações já registradas, sem reenviar assets")
     args = parser.parse_args()
     key = Path(args.key_file).read_text().strip()
@@ -30,6 +31,9 @@ def main():
     # GLBs convertidos de OBJs verificados e músicas verificadas entram na lista separada.
     extra = ROOT / "ASSETS_CC0_EXTRAS.json"
     if extra.exists(): selected += [v["path"] for v in json.loads(extra.read_text())["files"]]
+    if args.only:
+        if set(args.only) - set(selected): raise ValueError("Asset não está na seleção licenciada")
+        selected = args.only
     state = json.loads(STATE.read_text()) if STATE.exists() else {"groupId": args.group, "files": {}}
     if state["groupId"] != args.group: raise ValueError("Grupo diferente do inventário")
     def save(): STATE.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n")

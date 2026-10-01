@@ -21,6 +21,7 @@ Controls.Keyboard = ({
 	Attack = Enum.UserInputType.MouseButton1,
 	Block = Enum.KeyCode.F,
 	Dash = Enum.KeyCode.Q, -- também levanta do ragdoll
+	ToolCycle = Enum.KeyCode.X, -- itens/Tools; números ficam exclusivos das habilidades
 	Slot1 = Enum.KeyCode.One,
 	Slot2 = Enum.KeyCode.Two,
 	Slot3 = Enum.KeyCode.Three,

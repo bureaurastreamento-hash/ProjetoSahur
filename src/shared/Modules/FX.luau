@@ -33,9 +33,15 @@ export type ProcAnimHook = {
 FX.ProcAnim = nil :: ProcAnimHook?
 
 FX.MaxActiveVFX = 12
+FX.MaxVFXDistance = 240
 FX.MaxEmitPerEmitter = 30
 FX.MaxActiveSounds = 16
 FX.VFXLifetime = 2
+
+local function nearCamera(position: Vector3): boolean
+	local camera = Workspace.CurrentCamera
+	return not RunService:IsClient() or not camera or (camera.CFrame.Position - position).Magnitude <= FX.MaxVFXDistance
+end
 
 local activeVFX = 0
 local activeSounds = 0
@@ -567,6 +573,7 @@ function FX.PlayComposed(character: Model, effect: VFXLibrary.Effect, at: Vector
 	if not root and not at then
 		return
 	end
+	if not nearCamera(at or (root :: BasePart).Position) then return end
 	local primary = characterColor(character)
 	-- origem: posição + só o giro horizontal (efeito não tomba com o ragdoll)
 	local origin: CFrame
@@ -787,6 +794,7 @@ function FX.SpawnVFXTemplate(character: Model, template: Instance, at: Vector3?)
 	if not template or (not root and not at) then
 		return
 	end
+	if not nearCamera(at or (root :: BasePart).Position) then return end
 	local cframe = if at then CFrame.new(at) else (root :: BasePart).CFrame
 	local lifetimeAttr = template:GetAttribute("Lifetime")
 	local lifetime = if typeof(lifetimeAttr) == "number" then lifetimeAttr else FX.VFXLifetime
@@ -1156,7 +1164,8 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 	local sound = template:Clone()
 	local target = template.Volume
 	local transient = not template.Looped and (template.Name:sub(1, 5) == "Punch" or template.Name:sub(-4) == "_Hit"
-		or template.Name == "Block" or template.Name == "Parry" or template.Name == "GuardBreak")
+		or template.Name == "Block" or template.Name == "Parry" or template.Name == "GuardBreak"
+		or template.Name:sub(1, 5) == "Slice" or template.Name == "Draw")
 	local fadeIn = if transient then 0.015 else FX.SoundFadeIn
 	local fadeOutSeconds = if transient then 0.06 else FX.SoundFadeOut
 	-- socos/acertos: leve variação de tom para não soar "metralhadora" igual

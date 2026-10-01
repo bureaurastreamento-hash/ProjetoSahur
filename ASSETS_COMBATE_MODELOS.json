@@ -1,0 +1,18 @@
+{
+  "models": [
+    {
+      "name": "MistBlade",
+      "output": "src/assets/CombatModels/MistBlade.rbxm",
+      "sha256": "55b0cc8aa023acf38100f1cfd9da70a064664c4f91577a9cc7f10401d7658aa0",
+      "sourcePack": "packs/ParaImportar/Modelos/SBG_Weapons.rbxm",
+      "sourceSha256": "1b8565f9b0bcab56a11acc1b12e9ee91917fa38750b73d3222359b29ed1766eb",
+      "sourceModel": "WeaponsFolder.KatanaModelAdmin",
+      "permission": "Pack Rova licenciado, uso autorizado pelo dono (2026-09-15).",
+      "parts": [
+        "Tsuka",
+        "Tsuba And Sori"
+      ],
+      "notes": "Nova cópia visual isolada, sem bainha, scripts ou juntas de demonstração. Originais e arte da equipe preservados."
+    }
+  ]
+}
