@@ -908,6 +908,29 @@ E["Boss/Roar_Hit"] = E["Shared/Hit"]
 
 -- ---- REDESIGN B (2026-09-24): habilidades novas reaproveitam os VFX compostos existentes até ganharem os próprios.
 -- Basta definir E["<Char>/<Id>"] acima deste bloco (ou um VFX de pack em Assets.luau) para substituir o alias.
+-- Leva 4: os dois ataques deixam de reutilizar um projétil mágico/ombro genérico.
+E["Swift/WindBlade"]={ lifetime=.7,layers={
+ emit("Glow",BLUE,1,{size=2,life={.12,.18},speed={0,0},offset=Vector3.new(1,1,-1)}),
+ mesh("Slash",BLUE,2,8,.24,{delay=.18,offset=CFrame.new(0,1,-2),spin=Vector3.new(0,420,0),tr0=.2}),
+ emit("Lines",WHITE,10,{delay=.23,size={.15,.5},life={.12,.23},speed={35,55},spread={8,8},direction="forward",offset=Vector3.new(0,1,-3)}),
+}}
+E["Swift/TwinBlades"]=E["Swift/WindBlade"]
+E["Swift/WindBlade_Hit"]={ lifetime=.45,layers={
+ emit("Sparks",BLUE,10,{size={.15,.4},life={.12,.22},speed={10,22},spread={55,55}}),
+ mesh("ShockRing",BLUE,1,5,.18,{tr0=.2}),
+}}
+E["Swift/TwinBlades_Hit"]=E["Swift/WindBlade_Hit"]
+E["Jotaro/StarFinger"]={ lifetime=.65,layers={
+ emit("Glow",ORANGE,1,{size=1.5,life={.15,.2},speed={0,0},offset=Vector3.new(1,1,-1)}),
+ emit("Lines",ORANGE,12,{delay=.2,size={.12,.35},life={.1,.2},speed={45,65},spread={4,4},direction="forward",offset=Vector3.new(0,1,-2)}),
+ emit("Star",WHITE,2,{delay=.3,size={.6,1.1},life={.1,.18},speed={2,5},offset=Vector3.new(0,1,-4)}),
+}}
+E["Jotaro/StarFingerMax"]=E["Jotaro/StarFinger"]
+E["Jotaro/StarFinger_Hit"]={ lifetime=.45,layers={
+ emit("Star",ORANGE,5,{size={.4,1},life={.15,.25},speed={12,20},spread={50,50}}),
+ emit("Glow",WHITE,1,{size=3,life={.1,.14},speed={0,0}}),
+}}
+E["Jotaro/StarFingerMax_Hit"]=E["Jotaro/StarFinger_Hit"]
 local ALIASES: { [string]: string } = {
 	["Jotaro/OraRush"] = "Sahur/Ritmo",
 	["Jotaro/OraRush_Hit"] = "Shared/Hit",

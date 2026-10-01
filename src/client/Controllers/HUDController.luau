@@ -191,6 +191,7 @@ function HUDController.ShowToast(title: string, sub: string?, color: Color3?)
 	t.Parent = toasts
 	TweenService:Create(t, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 0.25 }):Play()
 	task.delay(3.5, function()
+		if not t.Parent then return end
 		local tween = TweenService:Create(t, TweenInfo.new(0.4), { BackgroundTransparency = 1 })
 		for _, d in t:GetDescendants() do
 			if d:IsA("TextLabel") then
@@ -203,14 +204,14 @@ function HUDController.ShowToast(title: string, sub: string?, color: Color3?)
 		tween.Completed:Wait()
 		t:Destroy()
 	end)
-	-- no máximo 4 na tela
+	-- Espaço de avisos comporta dois; não invadir atalhos de combate.
 	local alive = {}
 	for _, c in toasts:GetChildren() do
 		if c:IsA("Frame") and c ~= toastTemplate then
 			table.insert(alive, c)
 		end
 	end
-	if #alive > 4 then
+	if #alive > 2 then
 		table.sort(alive, function(a, b)
 			return a.LayoutOrder < b.LayoutOrder
 		end)

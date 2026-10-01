@@ -91,3 +91,14 @@ Swift/Jotaro ganham poses próprias para WindBlade/StarFinger, transição da ra
 Depois da validação visual deste conjunto: finalizar antecipação/impacto/SFX dos kits Swift/Jotaro,
 seguir os demais Stands, e só então avançar detalhes/construções nas ilhas preservadas. Para animações
 publicadas da equipe ou KFS licenciados, manter fluxo de publicação pelo dono/IDs e prioridade por nome.
+
+## Entrega complementar — Leva 4 (01/10)
+
+Corrigidos os bloqueios relatados de interação, barcos/facção e sobreposição de menus.
+Portos usam o chão existente; portais recebem arcos/runas e exigem missão mais descoberta ou item,
+preservando atalhos antigos. WindBlade/TwinBlades e StarFinger ganham VFX/impactos próprios em fases
+e fallback SFX CC0. Detalhes de validação em PROGRESSO.md.
+
+Próxima sequência de combate: terminar as demais habilidades de Swift/Jotaro (despertares/reação da vítima),
+depois revisar um kit completo por vez e chefes. Modelos/animações da equipe continuam prioritários.
+A revisão visual dos portos e diálogos desta entrega vem antes de expandir construções.

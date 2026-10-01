@@ -59,10 +59,10 @@ end
 local function buildGui()
 	gui = mk("ScreenGui", { Name = "QuestGui", ResetOnSpawn = false, DisplayOrder = 6, IgnoreGuiInset = true }, playerGui) :: ScreenGui
 	-- chip do capítulo (canto direito, abaixo do topbar; discreto)
-	chip = mk("Frame", { Name = "Chip", Size = UDim2.fromOffset(250, 70), Position = UDim2.new(1, -262, 0, 60), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.35, BorderSizePixel = 0, Visible = false }, gui) :: Frame
+	chip = mk("Frame", { Name = "Chip", Size = UDim2.fromOffset(300, 20), Position = UDim2.fromOffset(18,58), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.35, BorderSizePixel = 0, Visible = false }, gui) :: Frame
 	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, chip)
-	chipTitle = mk("TextLabel", { Size = UDim2.new(1, -16, 0, 20), Position = UDim2.fromOffset(8, 6), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, chip) :: TextLabel
-	chipLines = mk("TextLabel", { Size = UDim2.new(1, -16, 1, -30), Position = UDim2.fromOffset(8, 26), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Text = "" }, chip) :: TextLabel
+	chipTitle = mk("TextLabel", { Size = UDim2.new(1, -16, 0, 20), Position = UDim2.fromOffset(8, 0), BackgroundTransparency = 1, Font = Enum.Font.GothamBold, TextSize = 14, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Text = "" }, chip) :: TextLabel
+	chipLines = mk("TextLabel", { Visible=false, Size = UDim2.new(1, -16, 1, -30), Position = UDim2.fromOffset(8, 26), BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = COLOR_TEXT, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Text = "" }, chip) :: TextLabel
 	-- diálogo (embaixo, centro)
 	dialogFrame = mk("Frame", { Name = "Dialog", AnchorPoint = Vector2.new(0.5, 1), Size = UDim2.new(1, -24, 0, 190), Position = UDim2.new(0.5, 0, 1, -90), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.15, BorderSizePixel = 0, Visible = false }, gui) :: Frame
 	mk("UISizeConstraint", { MaxSize = Vector2.new(620, 190) }, dialogFrame)

@@ -10,6 +10,8 @@ local function configure(item: Instance)
 	item.GamepadKeyCode = Enum.KeyCode.None
 	item.Exclusivity = Enum.ProximityPromptExclusivity.AlwaysShow
 	item.ClickablePrompt = true
+	-- O cliente exige mira/visibilidade no alvo; o pivô do NPC fica encoberto pelo próprio corpo.
+	item.RequiresLineOfSight = false
 end
 function Service.Init()
 	for _, item in Workspace:GetDescendants() do configure(item) end

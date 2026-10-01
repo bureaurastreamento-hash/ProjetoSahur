@@ -73,7 +73,7 @@ local function buildGui()
 		addRow(mod, i)
 	end
 	-- chip no HUD (embaixo do topbar, esquerda): créditos aos autores dos mods ativos
-	chip = mk("TextLabel", { Name = "ModsChip", Size = UDim2.fromOffset(420, 22), Position = UDim2.fromOffset(12, 48), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.4, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Visible = false, Text = "" }, gui) :: TextLabel
+	chip = mk("TextLabel", { Name = "ModsChip", Size = UDim2.fromOffset(420, 22), AnchorPoint=Vector2.new(1,0),Position = UDim2.new(1,-18,0,188), BackgroundColor3 = COLOR_BG, BackgroundTransparency = 0.4, BorderSizePixel = 0, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = COLOR_TITLE, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Visible = false, Text = "" }, gui) :: TextLabel
 	mk("UICorner", { CornerRadius = UDim.new(0, 6) }, chip)
 	mk("UIPadding", { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) }, chip)
 end

@@ -258,10 +258,15 @@ Assets.FixedSounds = {
 
 --- Som por nome. Variações `Nome2`, `Nome3`, ... (com SoundId) entram no sorteio junto com `Nome`,
 --- para o mesmo golpe não repetir sempre o mesmo som (exceto Assets.FixedSounds).
+local abilitySoundFallbacks: { [string]: string } = {
+ ["Swift/WindBlade"]="Slice",["Swift/TwinBlades"]="Slice",["Swift/CrossCut"]="Draw",["Jotaro/StarFinger"]="Slice",["Jotaro/StarFingerMax"]="Slice",
+}
 function Assets.GetSound(folder: string, name: string): Sound?
 	local inst = if folder == "Weapon" then find("WeaponSounds", name) else find("Sounds", folder, name)
 	if not (inst and inst:IsA("Sound") and inst.SoundId ~= "") then
-		warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
+  local alias=abilitySoundFallbacks[folder.."/"..name]
+  if alias then return Assets.GetSound("Weapon",alias) end
+  warnOnce(("Sounds.%s.%s (sem SoundId)"):format(folder, name))
 		return nil
 	end
 	if Assets.FixedSounds[name] then

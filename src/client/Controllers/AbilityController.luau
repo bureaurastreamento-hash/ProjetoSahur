@@ -21,7 +21,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
-local ProximityPromptService = game:GetService("ProximityPromptService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
@@ -59,7 +58,6 @@ end
 local requestAbility: RemoteEvent
 local requestAwaken: RemoteEvent
 local requestCounter: RemoteEvent
-local promptShown = 0 -- ProximityPrompts na tela (E é deles primeiro: o Revide só sai sem prompt)
 local grabConn: RBXScriptConnection? = nil -- eu estou sendo carregado por um agarrão
 
 local grabbedTrackRef: { track: AnimationTrack? } = { track = nil }
@@ -493,10 +491,10 @@ function AbilityController.CounterReady(): boolean
 	return typeof(charge) == "number" and charge >= CombatConfig.Counter.Threshold
 end
 
---- Pede o contra-ataque anti-2v1 (E / L3 / botão de toque). Só quando a barra está cheia e não há
---- ProximityPrompt na tela (E é a tecla dos prompts: NPC de quest, vendedor, altar).
+--- Pede o contra-ataque anti-2v1 (E / L3 / botão de toque), com carga e sem menu aberto.
 function AbilityController.Counter()
-	if promptShown > 0 or not AbilityController.CounterReady() then
+	if localPlayer:GetAttribute("MenuOpen") == true then return end
+	if not AbilityController.CounterReady() then
 		return
 	end
 	requestCounter:FireServer()
@@ -504,11 +502,13 @@ end
 
 --- Pede o Awakening (G / botão de toque). O servidor confere a carga.
 function AbilityController.Awaken()
+	if localPlayer:GetAttribute("MenuOpen") == true then return end
 	requestAwaken:FireServer()
 end
 
 --- Pede a habilidade do slot ao servidor (teclado, gamepad ou botão de toque).
 function AbilityController.Use(slot: number)
+	if localPlayer:GetAttribute("MenuOpen") == true then return end
 	local character = localPlayer.Character
 	local direction = if character then MovementController.MoveDirection(character) else nil
 	requestAbility:FireServer(slot, direction)
@@ -543,12 +543,6 @@ function AbilityController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityCooldown).OnClientEvent:Connect(onNotifyAbilityCooldown)
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityDenied).OnClientEvent:Connect(onNotifyAbilityDenied)
 	UserInputService.InputBegan:Connect(onInputBegan)
-	ProximityPromptService.PromptShown:Connect(function(prompt)
-		if prompt.KeyboardKeyCode == Controls.Keyboard.Counter then promptShown += 1 end
-	end)
-	ProximityPromptService.PromptHidden:Connect(function(prompt)
-		if prompt.KeyboardKeyCode == Controls.Keyboard.Counter then promptShown = math.max(0, promptShown - 1) end
-	end)
 
 	local function onCharacter(character: Model)
 		table.clear(cooldowns)

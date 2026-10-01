@@ -44,6 +44,7 @@ test('mapa move peças uma vez e preserva Cidade Âmbar e rotação',function()
  local originalA,originalB,originalC=a.CFrame,b.CFrame,c.CFrame
  local attrs={}
  local scene={}
+ function scene:FindFirstChild()return nil end
  function scene:GetAttribute(k)return attrs[k] end
  function scene:SetAttribute(k,v)attrs[k]=v end
  function scene:GetDescendants()return {a,b,c} end

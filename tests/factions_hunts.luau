@@ -153,4 +153,15 @@ test("bloqueio de nível mantém objetivo sem avançar e subida emite aviso", fu
 	for _, message in rt.messages do if message.data and message.data.title == "Você está pronto" then ready = true end end
 	assert(ready and story.Progress(a, objective, 1))
 end)
+test("escolha enviada antes do load é aplicada uma única vez ao carregar", function()
+ local rt,a,_,faction=setup()
+ local profile=rt.profiles[a];rt.profiles[a]=nil
+ rt.mocks.RemoteEvents.GetEvent("RequestFaction").OnServerEvent:Fire(a,"governo")
+ assert(profile.faction==nil or profile.faction=="")
+ rt.profiles[a]=profile
+ rt.mocks.DataService.ProfileLoaded.Event:Fire(a,profile,false)
+ assert(profile.faction=="governo" and a:GetAttribute("FactionReady"))
+ rt.mocks.DataService.ProfileLoaded.Event:Fire(a,profile,false)
+ assert(profile.faction=="governo")
+end)
 print(("%d testes de facções, contratos e NPCs passaram"):format(count))

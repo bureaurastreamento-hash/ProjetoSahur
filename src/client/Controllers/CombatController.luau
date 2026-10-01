@@ -487,6 +487,7 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 		return
 	end
 	local action = Controls.ActionOf(input)
+	if localPlayer:GetAttribute("MenuOpen") == true then return end
 	if action == "Attack" then
 		if InteractionController.TryInteract() then return end
 		CombatController.SetAttackHeld(true)
@@ -516,6 +517,12 @@ function CombatController.Init()
 end
 
 function CombatController.Start()
+	localPlayer:GetAttributeChangedSignal("MenuOpen"):Connect(function()
+		if localPlayer:GetAttribute("MenuOpen") then
+			CombatController.SetAttackHeld(false)
+			if blockHeld then blockHeld = false; requestBlock:FireServer(false) end
+		end
+	end)
 	Remotes.GetEvent(Remotes.Events.NotifyAttack).OnClientEvent:Connect(onNotifyAttack)
 	Remotes.GetEvent(Remotes.Events.NotifyDamage).OnClientEvent:Connect(onNotifyDamage)
 	Remotes.GetEvent(Remotes.Events.NotifyBlock).OnClientEvent:Connect(onNotifyBlock)

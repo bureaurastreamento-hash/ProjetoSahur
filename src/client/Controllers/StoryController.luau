@@ -34,19 +34,22 @@ end
 local function build()
 	local gui = Instance.new("ScreenGui")
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "FXStoryGui", false, 7
+ gui.IgnoreGuiInset=true
+ gui.ScreenInsets=Enum.ScreenInsets.None
 	gui.Parent = playerGui
 	local frame = Instance.new("Frame")
-	frame.AnchorPoint = Vector2.new(1, 0)
-	frame.Size, frame.Position = UDim2.new(.36, 0, .4, 0), UDim2.new(1, -18, 0, 76)
+	frame.Name = "MissionTracker"
+	frame.AnchorPoint = Vector2.zero
+	frame.Size, frame.Position = UDim2.fromOffset(300, 210), UDim2.fromOffset(18, 82)
 	storyBounds = Instance.new("UISizeConstraint")
-	storyBounds.MaxSize = Vector2.new(340, 260)
+	storyBounds.MaxSize = Vector2.new(300, 210)
 	storyBounds.Parent = frame
 	frame.BackgroundColor3, frame.BackgroundTransparency = Color3.fromRGB(18, 25, 35), .12
 	frame.BorderSizePixel = 0
 	frame.Parent = gui
 	local stroke = Instance.new("UIStroke"); stroke.Color = Color3.fromRGB(238, 193, 78); stroke.Thickness = 2; stroke.Parent = frame
-	title = label(frame, UDim2.new(1,-20,0,38), UDim2.fromOffset(10,8), 15, Color3.fromRGB(100,220,255))
-	title.Font = Enum.Font.GothamBold
+	title = label(frame, UDim2.new(1,-20,0,38), UDim2.fromOffset(10,8), 15, Color3.fromRGB(238,193,78))
+	title.Font = Enum.Font.GothamBlack
 	local scroll = Instance.new("ScrollingFrame")
 	scroll.Name, scroll.BackgroundTransparency, scroll.BorderSizePixel = "Objectives", 1, 0
 	scroll.Position, scroll.Size = UDim2.fromOffset(0, 48), UDim2.new(1, 0, 1, -52)
@@ -79,7 +82,6 @@ local function render(data: any)
 	if (tonumber(data.xp) or 0) > 0 or (tonumber(data.coins) or 0) > 0 then
 		body.Text ..= ("\n\nRecompensa: %d XP · %d moedas"):format(tonumber(data.xp) or 0, tonumber(data.coins) or 0)
 	end
-	storyBounds.MaxSize = Vector2.new(340, math.min(340, 140 + #(data.objectives or {}) * 38 + #optional * 60))
 end
 
 -- ECO: escolha na tela. Opção trancada (não explorou) aparece apagada com "?" no lugar da descrição.
@@ -95,6 +97,7 @@ local function showChoice(data: any)
 	dim.Parent = choiceGui
 	local options = if typeof(data.options) == "table" then data.options else {}
 	local panel = Instance.new("ScrollingFrame")
+	panel.Name = "Panel"
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 	local contentHeight = 150 + #options * 62

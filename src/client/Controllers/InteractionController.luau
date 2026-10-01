@@ -7,7 +7,8 @@ local Controller = {}
 local player = Players.LocalPlayer
 local shown: { [ProximityPrompt]: boolean } = {}
 local gui: ScreenGui
-local hint: TextButton
+local hint: TextLabel
+local marker: BillboardGui
 local panel: Frame
 local title: TextLabel
 local rows: Frame
@@ -21,12 +22,30 @@ local function anchor(prompt: ProximityPrompt): BasePart?
 	if p and p:IsA("Model") then return p.PrimaryPart end
 	return nil
 end
+local function visibleTarget(at: BasePart): boolean
+ local camera=workspace.CurrentCamera
+ if not camera then return false end
+ local params=RaycastParams.new()
+ params.FilterType=Enum.RaycastFilterType.Exclude
+ params.FilterDescendantsInstances=if player.Character then {player.Character} else {}
+ local delta=at.Position-camera.CFrame.Position
+ local hit=workspace:Raycast(camera.CFrame.Position,delta,params)
+ if not hit or hit.Instance==at then return true end
+ local model=at.Parent
+ if model and model:IsA("Model") and hit.Instance:IsDescendantOf(model) then
+  local _,size=model:GetBoundingBox()
+  return model:FindFirstChildOfClass("Humanoid")~=nil or math.max(size.X,size.Y,size.Z)<=32
+ end
+ return false
+end
 local function eligible(prompt: ProximityPrompt): boolean
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local at = anchor(prompt)
 	return prompt.Enabled and prompt:IsDescendantOf(workspace) and root ~= nil and at ~= nil
 		and (root.Position - at.Position).Magnitude <= prompt.MaxActivationDistance
+		and (player:GetAttribute("MenuOpen") ~= true or player:GetAttribute("InteractionDialogOpen") == true)
 		and player:GetAttribute("ClientLoading") ~= true and player:GetAttribute("LaunchTitleVisible") ~= true
+  and visibleTarget(at :: BasePart)
 end
 local function close()
 	openedAt = nil
@@ -83,7 +102,12 @@ function Controller.TryInteract(): boolean
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	params.FilterDescendantsInstances = if player.Character then { player.Character } else {}
 	local hit = workspace:Raycast(ray.Origin, ray.Direction * 24, params)
-	if not hit then return false end
+	if marker.Enabled and current and eligible(current) then
+  local projected, visible = camera:WorldToScreenPoint((anchor(current) :: BasePart).Position + marker.StudsOffsetWorldSpace)
+  local point = if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter then camera.ViewportSize/2 + game:GetService("GuiService"):GetGuiInset() else pos
+  if visible and math.abs(point.X-projected.X)<=120 and math.abs(point.Y-projected.Y)<=23 then interact(current);return true end
+ end
+ if not hit then return false end
 	for prompt in shown do
 		if not eligible(prompt) then continue end
 		local at = anchor(prompt) :: BasePart
@@ -102,12 +126,19 @@ function Controller.Init()
 	gui = Instance.new("ScreenGui")
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "InteractionGui", false, 45
 	gui.Parent = player:WaitForChild("PlayerGui")
-	hint = button(gui, "", 0)
-	hint.AnchorPoint, hint.Position, hint.Size = Vector2.new(.5, 1), UDim2.new(.5, 0, 1, -145), UDim2.fromOffset(340, 38)
-	hint.Visible = false
-	hint.Activated:Connect(function() if current then interact(current) end end)
+ marker = Instance.new("BillboardGui")
+ marker.Name, marker.Size, marker.StudsOffsetWorldSpace = "TargetHint", UDim2.fromOffset(240,46), Vector3.new(0,3.6,0)
+ marker.AlwaysOnTop, marker.MaxDistance, marker.Enabled, marker.Parent = false, 22, false, gui
+ hint = Instance.new("TextLabel")
+ hint.Size, hint.BackgroundColor3, hint.BackgroundTransparency = UDim2.fromScale(1,1), Color3.fromRGB(18,25,35), .12
+ hint.BorderSizePixel, hint.TextColor3, hint.Font, hint.TextSize, hint.TextWrapped = 0, Color3.fromRGB(238,193,78), Enum.Font.GothamBold, 13, true
+ hint.Parent = marker
+ local outline = Instance.new("UIStroke");outline.Color, outline.Thickness, outline.Parent = Color3.fromRGB(238,193,78), 1, hint
+
 	panel = Instance.new("Frame")
-	panel.AnchorPoint, panel.Position = Vector2.new(.5, .5), UDim2.fromScale(.5, .65)
+	panel.Name = "Panel"
+	panel:GetPropertyChangedSignal("Visible"):Connect(function() if not panel.Visible then close() end end)
+	panel.AnchorPoint, panel.Position = Vector2.new(.5, .5), UDim2.fromScale(.5, .5)
 	panel.BackgroundColor3, panel.Visible, panel.Parent = Color3.fromRGB(18, 20, 29), false, gui
 	title = Instance.new("TextLabel")
 	title.Size, title.BackgroundTransparency = UDim2.new(1, -20, 0, 44), 1
@@ -141,8 +172,13 @@ function Controller.Start()
 			end
 		end
 		if openedAt and (not current or anchor(current) ~= openedAt) then close() end
-		hint.Visible = current ~= nil and not panel.Visible
-		if current then hint.Text = "CLIQUE · " .. current.ObjectText .. " · " .. current.ActionText end
+		marker.Enabled = current ~= nil and not panel.Visible
+		player:SetAttribute("InteractionTargetPresent", marker.Enabled)
+		if current then marker.Adornee = anchor(current) :: BasePart end
+		if current then
+   local at=anchor(current);local h=at and at.Parent and at.Parent:FindFirstChildOfClass("Humanoid")
+   hint.Text=(if h then h.DisplayName else current.ObjectText).."\nCLIQUE PARA INTERAGIR"
+  end
 	end)
 	player.CharacterAdded:Connect(close)
 end

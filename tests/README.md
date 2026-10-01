@@ -16,6 +16,7 @@ lune run tests/factions_hunts.luau
 lune run tests/npc_relics_navigation.luau
 lune run tests/launch_access.luau
 lune run tests/island_layout.luau
+lune run tests/travel_access.luau
 bash tools/analisar.sh
 ```
 
@@ -65,3 +66,7 @@ lobby/kit/mundo, restaura kit sem salvar o teste e limpa LobbyTest; combate, arg
 pré-lançamento desativado e excesso de chamadas bloqueiam troca. Física/UI são verificadas no Studio.
 
 `island_layout.luau` confere distância, alinhamento entre porto/checkpoint/Coliseu/zona segura, região nova, rotação preservada, aplicação única e exclusão da Cidade Âmbar. O mapa manual não é regenerado.
+
+`travel_access.luau` usa a validação real de portais: missão obrigatória, descoberta por viagem,
+Selo Solar sem consumo, atalhos de saves existentes e rejeição antes de carregar o perfil. A escolha de
+facção enviada antes de ProfileLoaded também é coberta em `factions_hunts.luau`.

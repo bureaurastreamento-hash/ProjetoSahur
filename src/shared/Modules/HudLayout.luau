@@ -22,7 +22,11 @@ local function border(frame: GuiObject, color: Color3)
 	stroke.Parent = frame
 end
 function Layout.Apply(hud: ScreenGui): (TextLabel, TextLabel)
-	local vitals = hud:WaitForChild("Vitals") :: Frame
+	local notifications = hud:FindFirstChild("Toasts") :: Frame?
+ if notifications then notifications.AnchorPoint=Vector2.new(1,0);notifications.Position=UDim2.new(1,-18,0,218);notifications.Size=UDim2.fromOffset(300,220) end
+ local feed = hud:FindFirstChild("KillFeed") :: Frame?
+ if feed then feed.AnchorPoint=Vector2.new(1,0);feed.Position=UDim2.new(1,-18,0,58);feed.Size=UDim2.fromOffset(300,128) end
+ local vitals = hud:WaitForChild("Vitals") :: Frame
 	vitals.Size, vitals.Position = UDim2.fromOffset(320, 242), UDim2.new(0, 18, 1, -20)
 	vitals.BackgroundTransparency = 1
 	local coins = hud:WaitForChild("Coins") :: TextLabel

@@ -53,6 +53,7 @@ function Controller.Init()
 	gui = Instance.new("ScreenGui")
 	gui.Name, gui.DisplayOrder, gui.ResetOnSpawn, gui.Parent = "HuntGui", 25, false, Players.LocalPlayer:WaitForChild("PlayerGui")
 	panel = Instance.new("Frame")
+	panel.Name = "Panel"
 	panel.AnchorPoint, panel.Position, panel.Size = Vector2.new(.5, .5), UDim2.fromScale(.5, .5), UDim2.fromScale(.9, .8)
 	panel.BackgroundColor3, panel.BorderSizePixel, panel.Visible, panel.Parent = Color3.fromRGB(12, 21, 30), 0, false, gui
 	local bounds = Instance.new("UISizeConstraint"); bounds.MaxSize, bounds.Parent = Vector2.new(650, 580), panel

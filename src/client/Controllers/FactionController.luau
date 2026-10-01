@@ -68,12 +68,6 @@ function Controller.Init()
 			selected = entry.Id
 			status.Text = "Salvando sua escolha…"
 			Remotes.GetEvent(Remotes.Events.RequestFaction):FireServer(entry.Id)
-			task.delay(3, function()
-				if gui.Enabled and selected then
-					selected = nil
-					status.Text = "Aguardando o perfil. Você pode tentar novamente."
-				end
-			end)
 		end)
 		table.insert(buttons, button)
 	end
@@ -83,7 +77,8 @@ end
 function Controller.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(refresh)
 	Remotes.GetEvent(Remotes.Events.NotifyFaction).OnClientEvent:Connect(function(event, data)
-		if event == "chosen" then refresh({ faction = data.id }) end
+		if event == "chosen" then refresh({ faction = data.id })
+		elseif event == "waiting" then status.Text = "Preparando seu personagem… sua escolha será aplicada ao carregar." end
 	end)
 	player:GetAttributeChangedSignal("Faction"):Connect(function() refresh(nil) end)
 	Remotes.GetEvent(Remotes.Events.RequestProfile):FireServer()

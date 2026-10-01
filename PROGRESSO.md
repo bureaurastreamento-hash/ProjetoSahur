@@ -2,6 +2,45 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Leva 4: portos, interação no alvo, rotas e organização da interface — 01/10 (Codex)
+
+- InteractionGui não tem botão fixo para interagir: um BillboardGui acompanha o NPC/objeto próximo.
+  Mouse1 no corpo/objeto compacto ou na área do indicador aciona o callback nativo; escolhas ficam num
+  diálogo central. O cliente confere alvo visível e distância; o servidor conserva suas validações.
+  RequiresLineOfSight=false corrige o prompt oculto no torso do capitão. Todos os prompts continuam
+  Custom/hold zero/sem tecla, inclusive os do leme. E fica exclusivamente com revide.
+- VesselService busca cinco berços antes de cobrar e informa as recusas (perfil carregando, distância,
+  saldo, sessão sem persistência, barco existente e berços ocupados). Convés do cruzeiro foi baixado para
+  perto do casco; três modelos da equipe continuam intactos. Cais com postes e props existentes em terra.
+  PortDistrictService deixa de fabricar bairros de blocos/grama sobre água; WorldConfig deixa de tratar
+  a área daqueles bairros removidos como chão de ilha. Não foram reexecutados os geradores de mapa.
+- WorldLayout ancora somente Workspace.cav.Part3 no runtime: bloco de 51×26×11 identificado na
+  auditoria perto da Taberna. Nenhum modelo da equipe foi movido/editado no arquivo de arte.
+- Escolha de facção recebida antes de ProfileLoaded aguarda em fila por jogador e é aplicada uma vez.
+  O cliente mostra carregamento, em vez de pedir outro clique após três segundos. Saída limpa a fila.
+- Portais recebem arcos de pedra/runas sem colisão, com pulso dourado por jogador quando liberados.
+  Missões continuam obrigatórias. Primeiras rotas de Deserto/Eclipse exigem descoberta do destino:
+  desembarcar registra portal_attuned; Selo Solar também estabiliza Eclipse depois da missão, sem consumo.
+  Saves que já descobriram o destino conservam atalhos; retorno permanece livre. Só o Pescador salva spawn.
+- MenuLayoutController centraliza e aplica paleta/tipografia do HUD aos painéis existentes, incluindo loja,
+  vendedor, mochila, metas, caçadas, mods, clã, perfil e diálogos; um painel por vez. TopbarPlus preservado.
+  Combate/habilidades param durante menu; mouse solta. Missões à esquerda acima do status, avisos/killfeed
+  à direita, diária compacta no topo; missões saem durante menu/interação. Em toque, tracker compacto à
+  direita e status à esquerda; menus pequenos ocultam status temporariamente. Atalhos antigos removidos dos rótulos.
+- Combate: WindBlade/TwinBlades e StarFinger/despertado ganham composições próprias em fases e impactos
+  próprios, dentro dos tetos de FX. SFX ausentes recorrem às amostras CC0 de arma já aprovadas; sons da
+  equipe com SoundId permanecem prioritários. Arte/animações publicadas da equipe não foram substituídas.
+- Verificação: análise estática sem erros; 58 testes passaram (viagens, facções, layout, NPCs, campanha,
+  sidequests, builds e acesso). Studio: fontes idênticas ao Rojo, 63 prompts configurados, bloco ancorado,
+  dez menus centrais com missões ocultas. Remo/lancha/Strength alugados pelos prompts nativos, piloto
+  sentado, navegação e desembarque passaram; preços 0/60/350 debitados só em carteira fictícia.
+  Saldo real preservado. Quatro composições e SFX carregados, sete portais completos/sem colisão e exclusão mútua dos menus
+  também passaram. Instrumentação removida após Stop.
+- Teste do dono: no mundo livre, clicar no capitão com/sem Shift Lock e escolher os três barcos;
+  pilotar até outro porto e desembarcar pelo leme. Conferir mini diálogos, lojas/mochila e missão sem
+  sobreposição. Comparar WindBlade/StarFinger no treino. Avaliação estética, passageiros com dois clientes
+  e Device Emulator ainda precisam de teste visual. Não houve publicação do place.
+
 ## Leva 3: clique, cursores prontos, ilhas e combate — 01/10 (Codex)
 
 - Cursor Pack oficial Kenney (CC0): PNGs Basic/Double pointer_d e navigation_s importados e aprovados

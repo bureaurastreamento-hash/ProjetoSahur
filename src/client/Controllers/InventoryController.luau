@@ -211,6 +211,7 @@ local function build()
 	gui.Parent = localPlayer:WaitForChild("PlayerGui")
 
 	panel = Instance.new("Frame")
+	panel.Name = "Panel"
 	panel.Visible = false
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position, panel.Size = UDim2.fromScale(0.5, 0.5), UDim2.new(1, -24, 1, -80)

@@ -18,13 +18,13 @@ local MenuController = {}
 local ITEMS: { { string } } = {
 	{ "Mochila", "M" },
 	{ "Objetivos", "" },
-	{ "Loja", "L" },
-	{ "Visual", "K" },
-	{ "Perfil", "P" },
+	{ "Loja", "" },
+	{ "Visual", "" },
+	{ "Perfil", "" },
 	{ "Conquistas", "" },
-	{ "Duelo", "J" },
+	{ "Duelo", "" },
 	{ "Caçadas", "" },
-	{ "Clã", "C" },
+	{ "Clã", "" },
 	{ "Placar", "Tab" },
 }
 
@@ -51,7 +51,7 @@ function MenuController.Init()
 	local container = Instance.new("Frame")
 	container.Name, container.BackgroundTransparency = "Menu", 1
 	container.AnchorPoint, container.Position = Vector2.new(0, 1), UDim2.new(0, 18, 1, -276)
-	container.Size = UDim2.fromOffset(310, 98)
+	container.Size = UDim2.fromOffset(310, 44)
 	container.Parent = gui
 	local scale = Instance.new("UIScale"); scale.Parent = container
 	local column = Instance.new("ScrollingFrame")
@@ -65,17 +65,18 @@ function MenuController.Init()
 	local function button(parent: Instance, name: string, key: string): TextButton
 		local item = Instance.new("TextButton")
 		item.Name, item.Text = name, name .. (if key ~= "" then "  [" .. key .. "]" else "")
-		item.Size = UDim2.fromOffset(150, 44)
+		item.Size = UDim2.new(1, -16, 0, 44)
 		item.BackgroundColor3, item.TextColor3, item.BorderSizePixel = Gold, Ink, 0
 		item.Font, item.TextSize, item.Selectable = Enum.Font.GothamBlack, 16, true
 		item.Parent = parent
 		local stroke = Instance.new("UIStroke"); stroke.Color, stroke.Thickness, stroke.ApplyStrokeMode, stroke.Parent = Ink, 2, Enum.ApplyStrokeMode.Border, item
 		return item
 	end
-	local names = { { "Mochila", "M" }, { "Perfil", "P" }, { "Objetivos", "" }, { "Menu", "" } }
+	local names = { { "Mochila", "M" }, { "Perfil", "" }, { "Objetivos", "" }, { "Menu", "" } }
 	for index, row in names do
 		local item = button(container, row[1], row[2])
-		item.Position = UDim2.fromOffset(((index - 1) % 2) * 160, math.floor((index - 1) / 2) * 54)
+		item.Size, item.TextSize = UDim2.fromOffset(74, 38), 12
+		item.Position = UDim2.fromOffset((index-1)*78,0)
 		item.Activated:Connect(function()
 			FX.PlaySoundUI("CC0", "click_001")
 			if row[1] == "Menu" then column.Visible = not column.Visible

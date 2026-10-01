@@ -2,7 +2,11 @@
 local Layout = require(game:GetService("ReplicatedStorage").Shared.Modules.IslandLayout)
 local Module = {}
 function Module.Apply(world: Workspace)
-	if world:GetAttribute("IslandLayoutVersion") == Layout.Version then return end
+	-- Correção específica do bloco estrutural solto identificado perto da Taberna.
+ local cave = world:FindFirstChild("cav")
+ local wall = cave and cave:FindFirstChild("Part3")
+ if wall and wall:IsA("BasePart") then wall.Anchored = true end
+ if world:GetAttribute("IslandLayoutVersion") == Layout.Version then return end
 	local parts: { { part: BasePart, cf: CFrame, offset: Vector3 } } = {}
 	local pivots: { { model: Model, cf: CFrame, offset: Vector3 } } = {}
 	for _, item in world:GetDescendants() do
