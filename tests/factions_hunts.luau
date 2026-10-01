@@ -3,6 +3,7 @@ local count = 0
 local function test(name, fn) fn(); count += 1; print("OK " .. name) end
 local function setup()
 	local rt = Runtime.new(); local a = rt:player(1); local b = rt:player(2)
+	rt:load("src/shared/Modules/LaunchConfig").PreLaunch = false -- o lobby de pré-lançamento tem teste próprio
 	rt:load("src/server/Services/ProgressionService").Init()
 	local faction = rt:load("src/server/Services/FactionService"); faction.Init(); faction.Start()
 	local bounty = rt:load("src/server/Services/BountyService"); bounty.Start()

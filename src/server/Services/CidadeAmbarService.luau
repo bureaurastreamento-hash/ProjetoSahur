@@ -1,5 +1,6 @@
 --!strict
 -- Não monta cidade nem desloca a reserva. Aguarda mapa/limites/chão/marcadores reais.
+local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
@@ -49,6 +50,42 @@ local function prompt(marker: BasePart, action: string, title: string, callback:
 	return p
 end
 
+-- Pessoas paradas nos marcadores (o prompt continua no marcador). R6, ancoradas, sem colisão, dentro do mapa:
+-- somem junto com ele. Humanoider usa o avatar do guia; os demais, roupa de cor neutra.
+local PEOPLE = {
+	AmbarHumanoider = { Name = "Humanoider_20 · Ancião", Guide = true },
+	AmbarMorador1 = { Name = "Moradora", Torso = Color3.fromRGB(150, 60, 60), Legs = Color3.fromRGB(70, 60, 50) },
+	AmbarMorador2 = { Name = "Feirante", Torso = Color3.fromRGB(90, 120, 70), Legs = Color3.fromRGB(60, 70, 90) },
+	AmbarTestemunha = { Name = "Testemunha", Torso = Color3.fromRGB(180, 150, 90), Legs = Color3.fromRGB(50, 50, 60) },
+} :: { [string]: { Name: string, Guide: boolean?, Torso: Color3?, Legs: Color3? } }
+
+local function standPerson(marker: BasePart, info: { Name: string, Guide: boolean?, Torso: Color3?, Legs: Color3? }, map: Model)
+	local ok, npc = pcall(function()
+		local desc = if info.Guide then Players:GetHumanoidDescriptionFromUserId(StoryService.GuideUserId) else Instance.new("HumanoidDescription")
+		if not info.Guide then
+			local skin = Color3.fromRGB(198, 150, 110)
+			desc.HeadColor, desc.LeftArmColor, desc.RightArmColor = skin, skin, skin
+			desc.TorsoColor = info.Torso or skin
+			desc.LeftLegColor, desc.RightLegColor = info.Legs or skin, info.Legs or skin
+			desc.Shirt, desc.Pants = 3670737444, 398633812
+		end
+		return Players:CreateHumanoidModelFromDescription(desc, Enum.HumanoidRigType.R6)
+	end)
+	if not ok or not npc then warn("[CidadeAmbar] NPC não criado em " .. marker.Name); return end
+	local humanoid = npc:FindFirstChildOfClass("Humanoid")
+	local root = npc:FindFirstChild("HumanoidRootPart")
+	if not humanoid or not root or not root:IsA("BasePart") then npc:Destroy(); return end
+	npc.Name, humanoid.DisplayName = marker.Name .. "_NPC", info.Name
+	humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff
+	for _, d in npc:GetDescendants() do
+		if d:IsA("BasePart") then d.CanCollide = false elseif d:IsA("Script") or d:IsA("LocalScript") then d:Destroy() end
+	end
+	root.Anchored = true
+	-- pela RAIZ, em pé sobre o topo do marcador (PivotTo enterra: o pivô não é a raiz)
+	root.CFrame = marker.CFrame.Rotation + marker.Position + Vector3.new(0, marker.Size.Y / 2 + 3, 0)
+	npc.Parent = map
+end
+
 -- Limites explícitos do mapa, não inferidos da arte. Área elíptica em XZ como as ilhas anteriores.
 function Service.BindMap(map: Model): boolean
 	if active or map.Name ~= Config.Map or not map:IsDescendantOf(Workspace) then return false end
@@ -64,6 +101,10 @@ function Service.BindMap(map: Model): boolean
 	end)
 	if not markers then return false end
 	active = map
+	for name, info in PEOPLE do
+		local marker = markers[name]
+		if marker then task.spawn(standPerson, marker, info, map) end
+	end
 	for name, marker in markers do
 		local action = Config.Interactions[name]
 		if action or name == "AmbarHumanoider" then

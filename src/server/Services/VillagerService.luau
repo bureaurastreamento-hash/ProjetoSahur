@@ -22,17 +22,24 @@ local CLOTH = { Color3.fromRGB(150, 60, 60), Color3.fromRGB(60, 90, 140), Color3
 
 local rng = Random.new()
 
-local function waypoints(): { Vector3 }
-	local out = {}
+-- Pontos agrupados pelo Model de cada ilha/vila (filho de Workspace.Sahur): morador só anda entre os pontos do próprio
+-- mapa (senão sorteava um ponto em outra ilha e saía andando pelo mar). `VillagerCount` no Model muda a quantidade.
+local function waypointGroups(): { [Instance]: { Vector3 } }
+	local groups: { [Instance]: { Vector3 } } = {}
 	local sahur = Workspace:FindFirstChild("Sahur")
 	if sahur then
 		for _, d in sahur:GetDescendants() do
 			if d:IsA("BasePart") and d.Name == "VilaWaypoint" then
-				table.insert(out, d.Position)
+				local top: Instance = d
+				while top.Parent and top.Parent ~= sahur do
+					top = top.Parent
+				end
+				groups[top] = groups[top] or {}
+				table.insert(groups[top], d.Position)
 			end
 		end
 	end
-	return out
+	return groups
 end
 
 local function makeVillager(i: number, at: Vector3): (Model?, Humanoid?)
@@ -101,17 +108,24 @@ end
 function VillagerService.Start()
 	task.defer(function()
 		task.wait(4)
-		local points = waypoints()
-		if #points < 2 then
-			return
-		end
-		for i = 1, VillagerService.Count do
-			local model, humanoid = makeVillager(i, points[rng:NextInteger(1, #points)])
-			if model and humanoid then
-				task.spawn(wander, model, humanoid, points)
+		local total = 0
+		for map, points in waypointGroups() do
+			if #points < 2 then
+				continue
+			end
+			local count = map:GetAttribute("VillagerCount")
+			if typeof(count) ~= "number" then
+				count = VillagerService.Count
+			end
+			for i = 1, math.clamp(math.floor(count :: number), 0, 30) do
+				local model, humanoid = makeVillager(i, points[rng:NextInteger(1, #points)])
+				if model and humanoid then
+					total += 1
+					task.spawn(wander, model, humanoid, points)
+				end
 			end
 		end
-		Log.debug(("[VillagerService] %d moradores na vila (%d pontos)"):format(VillagerService.Count, #points))
+		Log.debug(("[VillagerService] %d moradores"):format(total))
 	end)
 end
 

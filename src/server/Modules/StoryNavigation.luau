@@ -8,6 +8,10 @@ local MARKERS = {
 	fx_tutorial_enemy = "VagantePad0", fx_campos_enemy = "MobPad_Clareira0", fx_mascara_boss = "MascaraSpawn",
 	fx_cap1_boss = "GuardiaoSpawn", fx_pedra_enemy = "EscavacaoPad0", fx_solnegro_boss = "SacerdoteSpawn",
 	fx_sol_enemy = "EnemyPad0", fx_sol_boss = "SolarBossSpawn", fx_ambar_boss = "AmbarBossSpawn",
+	fx_ambar_morador = "AmbarMorador1", fx_ambar_tarefa = "AmbarTarefa",
+	fx_ambar_desaparecimento = "AmbarDesaparecimento1", fx_ambar_foto = "AmbarFotografia", fx_ambar_confrontar = "AmbarHumanoider",
+	fx_ambar_cena = "AmbarCena1", fx_ambar_depoimento = "AmbarTestemunha", fx_ambar_padrao = "AmbarPadrao",
+	fx_ambar_contrapista = "AmbarContrapista", fx_ambar_casa = "AmbarCasa",
 	fx_costa_boss = "CostaBossSpawn", fx_mare_avatar = "MareBossSpawn", trace_carlos_era01 = "RastroCarlos01",
 } :: { [string]: string }
 local cache: { [string]: BasePart } = {}

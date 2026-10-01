@@ -1,6 +1,6 @@
 # Cidade Âmbar — contrato de integração do mapa
 
-Código preparado em 2026-09-30, na `main`; mapa não montado e conteúdo não publicado. Fonte dos eventos: `BIBLIA_CAMPANHA_CAP1_v0.1.md`, missões 16–20, boss e Eco da Ilha 4.
+Código preparado em 2026-09-30, na `main`. **Mapa montado em 2026-10-01** por `tools/gerar_cidade_ambar.py` (`src/workspace/FXCidadeAmbar.model.json`); conteúdo ainda não publicado. Fonte dos eventos: `BIBLIA_CAMPANHA_CAP1_v0.1.md`, missões 16–20, boss e Eco da Ilha 4.
 
 `CidadeAmbarService` aguarda um **Model `FXCidadeAmbar`** dentro do Workspace (pode ficar em `Sahur`). Não clona/move `ParqueB_reserva`, nem altera arte. O mapa deve ter atributos numéricos finitos e positivos `FXRadiusX` e `FXRadiusZ`; `AmbarCentro.Position` define o centro da elipse em XZ. A área precisa ficar fora dos retângulos de limites das ilhas existentes. Todos os marcadores abaixo são BaseParts ancorados dentro dessa elipse, com nomes únicos.
 

@@ -16,6 +16,11 @@ o Rojo ao vivo não mexe nele (ver seção abaixo). Edição manual = fluxo de c
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 
+## ONDE PARAMOS (01/10, noite) — CIDADE ÂMBAR montada; ler PROGRESSO "Cidade Âmbar (Ilha 4)"
+- `tools/gerar_cidade_ambar.py` → `FXCidadeAmbar` (ilha a leste da Rota, centro 2330,−120); testado no Play via MCP.
+  Falta o dono ver/aprovar e publicar. Próximo: Costa Dourada (Ilha 5) pelo `COSTA_DOURADA_INTEGRACAO.md`.
+- MCP: se `run_code` travar, a ponte 44755 morreu → subir `rbx-studio-mcp --stdio` primário em segundo plano.
+
 ## ONDE PARAMOS (01/10, tarde) — PRÉ-LANÇAMENTO + montanhas low-poly; ler PROGRESSO "Pré-lançamento"
 - `LaunchConfig.PreLaunch = true`: não-devs presos ao lobby no Coliseu (título → intro local → lobby com teste de
   Stand, bonecos, doação 10–1000 R$ com placar). Ids dos Developer Products = 0 até o dono criar. Lançou → false.

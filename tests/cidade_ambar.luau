@@ -152,6 +152,7 @@ test("checkpoint salvo em mapa indisponível usa fallback sem apagar escolha", f
 	local rt = Runtime.new(); local player = rt:player(1)
 	local p = rt.profiles[player]
 	p.world.region, p.world.checkpoint = "cidade_ambar", "chegada"
+	rt:load("src/shared/Modules/LaunchConfig").PreLaunch = false -- o lobby de pré-lançamento tem teste próprio
 	local world = rt:load("src/server/Services/WorldService"); world.Start()
 	local config = rt:load("src/shared/Modules/WorldConfig")
 	assert(p.world.region == "cidade_ambar" and p.world.checkpoint == "chegada")

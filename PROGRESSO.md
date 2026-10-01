@@ -2,6 +2,28 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Cidade Âmbar (Ilha 4) — mapa montado — 01/10, noite (Claude; Studio conectado via Rojo/MCP)
+
+- `tools/gerar_cidade_ambar.py` → `src/workspace/FXCidadeAmbar.model.json` (Workspace.Sahur.FXCidadeAmbar, 653 peças,
+  só SmoothPlastic/Neon). Ilha própria a LESTE da Rota do Eclipse, centro (2330, −120), `FXRadiusX/Z` 230/200; chão
+  com topo/praia/areia molhada/rampas no esquema do `gerar_chao_ilhas.py` (que continua proibido de rodar). Cais + píer
+  a oeste (chegada, marco do checkpoint, portais `AmbarToSolPartido` e `AmbarToCosta`), avenida L–O + rua N–S, praça
+  com fonte (= `AmbarCentro`), ~25 casas, café, feira, Posto da Guarda (quadro de pistas), escola, parque de outono,
+  Casa Vazia oca (ruptura neon dentro) e pátio do chefe no leste. Todos os 17 marcadores do contrato; portal de ida
+  `SolPartidoToAmbar` na pasta `PortalRota` (1695, 8, −152), ao lado do portal para o Deserto. Rodar o gerador de
+  novo SOBRESCREVE edição manual dentro desse Model.
+- `CidadeAmbarService`: NPCs R6 parados em `AmbarHumanoider` (avatar do guia), `AmbarMorador1/2`, `AmbarTestemunha`
+  (dentro do mapa; o prompt continua no marcador). `StoryNavigation`: GPS dos objetivos `fx_ambar_*`.
+- `VillagerService`: pontos `VilaWaypoint` agrupados pelo Model de cada mapa (antes misturava tudo → morador andaria
+  pelo mar); `VillagerCount` no Model (Âmbar = 9, padrão 12).
+- Testes `cidade_ambar` e `factions_hunts` quebravam desde o pré-lançamento (`PreLaunch = true` manda para o lobby /
+  esconde facção) → desligam o `PreLaunch` no setup. 13 suítes OK; análise estática limpa.
+- Play (MCP, servidor): região disponível, chegada (2170, 0.35, −120), 4 NPCs, 17 prompts, portal de ida com prompt,
+  O Homem Sem Sombra no pátio, 9 moradores na cidade + 12 na Vila Nova, `IslandAt` = cidade_ambar. Prints do visual OK.
+- **Falta o dono**: ver/andar na cidade (DEV → teleporte ou flag `cidade_ambar_unlocked`), aprovar o visual, publicar
+  pelo Studio. Ainda pendente do contrato: kit próprio do chefe (ocultação/memória/duplicação), rotinas por horário,
+  escola/esgoto/segredos, encenação das tarefas.
+
 ## Pré-lançamento + montanhas low-poly — 01/10, tarde (Claude; Studio conectado via Rojo/MCP)
 
 **Pedido do dono:** jogo publicado NÃO jogável até o lançamento: entra → "Play intro" (trailer) → lobby de testes
