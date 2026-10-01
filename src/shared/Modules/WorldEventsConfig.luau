@@ -82,4 +82,5 @@ function WorldEventsConfig.FormatDuration(seconds: number): string
 	return ("%d min"):format(math.max(1, m))
 end
 
+require(script.Parent.IslandLayout).TranslateTable(WorldEventsConfig)
 return WorldEventsConfig

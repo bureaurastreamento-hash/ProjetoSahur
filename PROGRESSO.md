@@ -2,6 +2,39 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Leva 3: clique, cursores prontos, ilhas e combate — 01/10 (Codex)
+
+- Cursor Pack oficial Kenney (CC0): PNGs Basic/Double pointer_d e navigation_s importados e aprovados
+  no grupo (99188820457992 / 114333535796954). CursorController usa ImageLabels de 32 px com
+  antialiasing, sem triângulos desenhados com Frames. Fonte/hash/licença nos inventários; preload inclui Cursors.
+- InteractionService aplica Style.Custom, HoldDuration=0 e teclado/gamepad None a todos os prompts,
+  inclusive criados posteriormente. Preserva callbacks/validações do servidor. InteractionController
+  permite clicar no NPC/objeto compacto próximo ou no botão contextual; várias ações no mesmo alvo
+  abrem mini diálogo com preço/ação e saída. Clique no alvo é consumido antes do soco.
+  Mouse desbloqueia durante escolhas/interações sem perder estado do Shift Lock; E fica livre para revide.
+  O controller rastreia prompts do mapa/streaming e valida distância/Enabled diretamente, sem depender
+  de PromptShown durante preload; Begin/End do clique ficam em frames separados.
+- CaptainAppearance posiciona o rig inteiro antes de criar detalhes ancorados. Assets.GetEnvironmentModel
+  busca o modelo nas pastas homônimas existentes, preservando os assets da equipe. Instruções do leme
+  passaram a clique/diálogo (pilotagem continua W/S/A/D, salto para sair).
+- IslandLayout/WorldLayout afastam Deserto em Z−1100, Eclipse em X+300/Z−1400 e Kame em X−300/Z+500
+  somente no Play/runtime, antes do boot dos serviços. Tutorial/Campos/Cidade Âmbar preservados;
+  peças conservam rotação e o mapa manual/arquivos de arte não são regenerados. Configs de região,
+  checkpoint, porto, PvP, quests, eventos, distrito, Coliseu e trailer recebem a mesma translação.
+  Entre tutorial/Deserto ficam >1600 studs; entre Deserto/Eclipse >1000. No Edit permanecem as posições originais.
+- Próxima leva de combate iniciada em Swift/Jotaro: poses próprias com preparação, contato e recuperação
+  para StarFinger e WindBlade (incluindo versões despertas), transição intermediária da rasteira,
+  camadas VFX de Blink/rasteira/ShoulderBash distribuídas no tempo. Animações publicadas da equipe continuam prioritárias.
+- Verificação: análise estática sem TypeError/SyntaxError; 62 testes de layout/acesso/builds/gameplay/campanha/
+  sidequests/Cidade/NPCs passaram. Fixtures de campanha usam as coordenadas novas. Studio confirma
+  boot dos 70 serviços/44 controllers, 63 prompts sem hold/tecla, três portos/capitães e ambos cursores.
+  Strength alugou por 350 moedas fictícias, sentou piloto, navegou 18 studs e desembarcou; saldo real preservado.
+  Clique no capitão abriu diálogo; MouseBehavior voltou a Default; InputHoldBegin/End com None acionou callback
+  no servidor, sem concessão de recompensa. Instrumentação removida após Stop.
+- Testar visualmente: entrar no mundo livre, clicar no capitão com Shift Lock, escolher remo/lancha/Strength,
+  pilotar, voltar ao porto e usar escolhas do leme. Conferir cliques em NPCs, altar e objetos de investigação;
+  comparar StarFinger/WindBlade/rasteira no treino. Sem publicação; manter main e worktree alinhados por fast-forward.
+
 ## Leva 2: carregamento, equipamentos, contenção e lâmina — 01/10 (Codex)
 
 - ReplicatedFirst.Loading exibe tela antes do boot dos controllers, pré-carrega seletivamente assets

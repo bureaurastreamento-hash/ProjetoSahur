@@ -2,8 +2,8 @@ local Runtime = require("./runtime")
 local Vector3 = require("@lune/roblox").Vector3
 local count = 0
 local function test(name, fn) fn(); count += 1; print("OK " .. name) end
-local chamberPosition = Vector3.new(884, 1, -575)
-local eclipsePosition = Vector3.new(1726, 4, -130)
+local chamberPosition = Vector3.new(884, 1, -1675)
+local eclipsePosition = Vector3.new(2026, 4, -1530)
 local function setup(act, position)
 	local rt = Runtime.new(); local player, root = rt:player(1, position)
 	local profile = rt.profiles[player]; profile.story.act = act or 1

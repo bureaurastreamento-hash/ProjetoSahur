@@ -12,7 +12,8 @@ function Appearance.Create(at: CFrame): Model?
 	model.Name = "Capitão Forever"
 	local root = model:FindFirstChild("HumanoidRootPart") :: BasePart
 	local head = model:FindFirstChild("Head") :: BasePart
-	root.CFrame, root.Anchored = at, true
+	root.Anchored = true
+	model:PivotTo(at) -- move também a cabeça antes de criar os detalhes ancorados
 	for _, item in model:GetDescendants() do if item:IsA("BasePart") then item.CanCollide = false end end
 	local face = head:FindFirstChild("face"); if face then face:Destroy() end
 	local function piece(name: string, size: Vector3, offset: Vector3, color: Color3, ball: boolean)

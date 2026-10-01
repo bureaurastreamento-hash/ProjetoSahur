@@ -296,6 +296,7 @@ C["Swift/SweepKick"] = { -- rasteira: gira o corpo com a perna esticada (0,4 s, 
 	duration = 0.55,
 	frames = {
 		P(0, { Root = { rot = V(-10, -40, 0), off = V(0, -0.4, 0) }, RA = { rot = V(30, 0, 40) }, LA = { rot = V(30, 0, -40) } }),
+		P(0.09, { Root = { rot = V(-14, -20, 0), off = V(0, -.65, 0) }, RL = { rot = V(35, 0, 18) }, LL = { rot = V(30, 0, -12) }, RA = { rot = V(10, 0, 50) }, LA = { rot = V(35, 0, -45) } }, "in"),
 		P(0.2, { Root = { rot = V(-18, 60, 0), off = V(0, -0.9, 0) }, RL = { rot = V(80, 0, 30) }, LL = { rot = V(60, 0, -20) }, RA = { rot = V(-20, 0, 60) }, LA = { rot = V(40, 0, -60) }, Neck = { rot = V(0, 30, 0) } }, "out"),
 		P(0.38, { Root = { rot = V(-14, 110, 0), off = V(0, -0.8, 0) }, RL = { rot = V(70, 0, 30) }, LL = { rot = V(60, 0, -20) }, RA = { rot = V(-10, 0, 50) }, LA = { rot = V(30, 0, -50) } }),
 		P(0.55, GUARD, "inout"),
@@ -607,6 +608,30 @@ C["Trailer/Reach"] = hold({ -- estende a mão para tocar a estrutura
 -- REDESIGN B (2026-09-24): habilidades novas reaproveitam clipes parecidos até ganharem os próprios
 -- (defina C["<Char>/<Id>"] acima para substituir; a arte manda sobre tudo isso pelo Animations.model.json).
 -- ---------------------------------------------------------------------------
+-- Leva 3: identidade de ataque própria, mantendo o tempo de contato do servidor.
+C["Jotaro/StarFinger"] = {
+	duration = .6,
+	frames = {
+		P(0, GUARD),
+		P(.12, { Root = { rot = V(-8, 24, 0) }, RA = { rot = V(15, 0, 24) }, LA = { rot = V(45, 0, -15) } }, "in"),
+		P(.3, { Root = { rot = V(-17, -24, 0), off = V(0, -.1, -.5) }, RA = { rot = V(104, 0, -4) }, LA = { rot = V(30, 0, -20) } }, "out"),
+		P(.42, { Root = { rot = V(-12, -18, 0) }, RA = { rot = V(97, 0, -2) } }, "out"),
+		P(.6, GUARD, "inout"),
+	},
+}
+C["Jotaro/StarFingerMax"] = C["Jotaro/StarFinger"]
+C["Swift/WindBlade"] = {
+	duration = .45,
+	frames = {
+		P(0, { Root = { rot = V(-5, 20, 0) }, RA = { rot = V(50, 0, -40) }, LA = { rot = V(25, 0, -18) } }),
+		P(.1, { Root = { rot = V(-8, 40, 0) }, RA = { rot = V(75, -20, -60) } }, "in"),
+		P(.22, { Root = { rot = V(-12, -35, 0), off = V(0, -.1, -.2) }, RA = { rot = V(85, 25, 50) }, LA = { rot = V(40, 0, -25) } }, "out"),
+		P(.34, { Root = { rot = V(-7, -20, 0) }, RA = { rot = V(55, 30, 65) } }, "out"),
+		P(.45, GUARD, "inout"),
+	},
+}
+C["Swift/TwinBlades"] = C["Swift/WindBlade"]
+
 local CLIP_ALIASES: { [string]: string } = {
 	["Jotaro/OraRush"] = "Sahur/Ritmo",
 	["Jotaro/OraOraOra"] = "Sahur/Ritmo",

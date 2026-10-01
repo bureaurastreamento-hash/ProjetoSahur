@@ -4,7 +4,7 @@ local Vector3 = roblox.Vector3
 local count = 0
 local function test(name, fn) fn(); count += 1; print("OK " .. name) end
 local porto = Vector3.new(150, 2, -40)
-local camara = Vector3.new(884, 1, -575)
+local camara = Vector3.new(884, 1, -1675)
 local function setup()
 	local rt = Runtime.new(); local player, root = rt:player(1, porto)
 	local profile = rt.profiles[player]

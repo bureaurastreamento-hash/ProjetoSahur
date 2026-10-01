@@ -529,9 +529,9 @@ E["Shared/Transform"] = { -- virando o boss (2,5 s)
 E["Jotaro/ShoulderBash"] = {
 	lifetime = 0.9,
 	layers = {
-		mesh("WindGrow", ORANGE, 3, 10, 0.4, { offset = CFrame.new(0, 0, 1.5) * CFrame.Angles(math.rad(90), 0, 0), spin = Vector3.new(0, 0, 700), tr0 = 0.4 }),
-		emit("Lines", ORANGE, 14, { size = { 0.8, 1.8 }, life = { 0.2, 0.35 }, speed = { 30, 55 }, spread = { 15, 15 }, orient = "VelocityParallel", offset = Vector3.new(0, 0, 2), direction = "back" }),
-		smokePuff(6, { ground = true }),
+		mesh("WindGrow", ORANGE, 3, 10, 0.4, { delay = 0, offset = CFrame.new(0, 0, 1.5) * CFrame.Angles(math.rad(90), 0, 0), spin = Vector3.new(0, 0, 700), tr0 = 0.4 }),
+		emit("Lines", ORANGE, 14, { delay = 0.06, size = { 0.8, 1.8 }, life = { 0.2, 0.35 }, speed = { 30, 55 }, spread = { 15, 15 }, orient = "VelocityParallel", offset = Vector3.new(0, 0, 2), direction = "back" }),
+		smokePuff(6, { delay = 0.12, ground = true }),
 	},
 }
 E["Jotaro/ShoulderBash_Hit"] = {
@@ -623,18 +623,18 @@ E["Jotaro/Rampage_Hit"] = E["Shared/FinisherHit"]
 E["Swift/Blink"] = {
 	lifetime = 0.9,
 	layers = {
-		mesh("GlitchBall", BLUE, 6, 1, 0.3, { camera = true, tr0 = 0.2 }),
-		emit("Lines", BLUE, 16, { size = { 0.5, 1.4 }, life = { 0.15, 0.3 }, speed = { 30, 60 }, orient = "VelocityParallel" }),
-		emit("Glow", WHITE, 1, { size = 6, sizeSeq = { { 0, 6 }, { 1, 0 } }, life = { 0.25, 0.25 }, speed = { 0, 0 }, light = 1 }),
-		light(BLUE, 4, 14, 0.25),
+		mesh("GlitchBall", BLUE, 6, 1, 0.3, { delay = 0.02, camera = true, tr0 = 0.2 }),
+		emit("Lines", BLUE, 16, { delay = 0.05, size = { 0.5, 1.4 }, life = { 0.15, 0.3 }, speed = { 30, 60 }, orient = "VelocityParallel" }),
+		emit("Glow", WHITE, 1, { delay = 0.08, size = 6, sizeSeq = { { 0, 6 }, { 1, 0 } }, life = { 0.25, 0.25 }, speed = { 0, 0 }, light = 1 }),
+		light(BLUE, 4, 14, 0.25, { delay = 0.08 }),
 	},
 }
 E["Swift/SweepKick"] = {
 	lifetime = 0.8,
 	layers = {
-		mesh("Slash", BLUE, 4, 12, 0.3, { offset = CFrame.new(0, -1.5, -2) * CFrame.Angles(0, 0, 0), spin = Vector3.new(0, 500, 0), tr0 = 0.3, up = true }),
-		mesh("ShockRing", BLUE, 3, 10, 0.3, { ground = true, up = true, tr0 = 0.2 }),
-		emit("Lines", BLUE, 10, { size = { 0.6, 1.4 }, life = { 0.15, 0.25 }, speed = { 25, 45 }, spread = { 30, 30 }, orient = "VelocityParallel", offset = Vector3.new(0, -1, -2), direction = "forward" }),
+		mesh("Slash", BLUE, 4, 12, 0.3, { delay = 0.1, offset = CFrame.new(0, -1.5, -2) * CFrame.Angles(0, 0, 0), spin = Vector3.new(0, 500, 0), tr0 = 0.3, up = true }),
+		mesh("ShockRing", BLUE, 3, 10, 0.3, { delay = 0.16, ground = true, up = true, tr0 = 0.2 }),
+		emit("Lines", BLUE, 10, { delay = 0.2, size = { 0.6, 1.4 }, life = { 0.15, 0.25 }, speed = { 25, 45 }, spread = { 30, 30 }, orient = "VelocityParallel", offset = Vector3.new(0, -1, -2), direction = "forward" }),
 	},
 }
 E["Swift/SweepKick_Hit"] = E["Shared/Hit"]

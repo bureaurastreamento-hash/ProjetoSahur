@@ -11,6 +11,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("RemoteEvents"))
 
+-- Mapa e marcadores precisam estar juntos antes dos Init/Start criarem NPCs e registrarem regiões.
+require(script.Modules.WorldLayout).Apply(workspace)
+
 -- Remotes precisam existir antes de qualquer serviço rodar Init()
 Remotes.Init()
 

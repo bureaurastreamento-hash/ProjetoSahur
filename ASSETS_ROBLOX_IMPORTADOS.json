@@ -531,6 +531,24 @@
       "moderation": {
         "moderationState": "Approved"
       }
+    },
+    "asset_library/kenney_cursor-pack/PNG/Basic/Double/navigation_s.png": {
+      "sha256": "85408c41aae862323e3c7a235a0934ceeb36808a0ed77d9689aa0c38110885a6",
+      "type": "Image",
+      "operation": "operations/4cd92bfb-0c4a-4890-bf19-68e04716ea66",
+      "assetId": "114333535796954",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/kenney_cursor-pack/PNG/Basic/Double/pointer_d.png": {
+      "sha256": "9bab95729a45eca4a36b95a458a20e7e9d52cf8fc7ca497891709a3ce8b0efa8",
+      "type": "Image",
+      "operation": "operations/d797f39a-ca09-4034-b0c0-c2ead40682ff",
+      "assetId": "99188820457992",
+      "moderation": {
+        "moderationState": "Approved"
+      }
     }
   }
 }

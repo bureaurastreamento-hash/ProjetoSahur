@@ -122,4 +122,5 @@ function WorldConfig.CFrameOf(regionId: string, checkpointId: string): CFrame?
 	return CFrame.new(checkpoint.Position) * CFrame.Angles(0, math.rad(checkpoint.Yaw), 0)
 end
 
+require(script.Parent.IslandLayout).TranslateTable(WorldConfig)
 return WorldConfig

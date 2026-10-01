@@ -121,6 +121,20 @@
       "provider": "Kenney",
       "sourceUrl": "https://kenney.nl/assets/rpg-audio",
       "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb"
+    },
+    {
+      "path": "asset_library/kenney_cursor-pack/PNG/Basic/Double/navigation_s.png",
+      "provider": "Kenney",
+      "license": "CC0",
+      "sourceUrl": "https://kenney.nl/assets/cursor-pack",
+      "sha256": "85408c41aae862323e3c7a235a0934ceeb36808a0ed77d9689aa0c38110885a6"
+    },
+    {
+      "path": "asset_library/kenney_cursor-pack/PNG/Basic/Double/pointer_d.png",
+      "provider": "Kenney",
+      "license": "CC0",
+      "sourceUrl": "https://kenney.nl/assets/cursor-pack",
+      "sha256": "9bab95729a45eca4a36b95a458a20e7e9d52cf8fc7ca497891709a3ce8b0efa8"
     }
   ]
 }

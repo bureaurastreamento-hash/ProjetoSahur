@@ -12,4 +12,5 @@ function Config.Contains(district: any, position: Vector3): boolean
 	local offset = position - district.Center
 	return math.abs(offset:Dot(right)) <= Config.Width / 2 and math.abs(offset:Dot(district.Outward)) <= Config.Depth / 2
 end
+require(script.Parent.IslandLayout).TranslateTable(Config)
 return Config

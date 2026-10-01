@@ -88,6 +88,8 @@ local function showChoice(data: any)
 	choiceGui = Instance.new("ScreenGui")
 	choiceGui.Name, choiceGui.ResetOnSpawn, choiceGui.DisplayOrder = "FXChoiceGui", false, 20
 	choiceGui.Parent = playerGui
+	Players.LocalPlayer:SetAttribute("StoryDialogOpen", true)
+	choiceGui.Destroying:Connect(function() Players.LocalPlayer:SetAttribute("StoryDialogOpen", false) end)
 	local dim = Instance.new("Frame")
 	dim.Size, dim.BackgroundColor3, dim.BackgroundTransparency = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 0.45
 	dim.Parent = choiceGui

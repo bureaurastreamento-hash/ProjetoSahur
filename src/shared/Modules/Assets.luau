@@ -297,4 +297,20 @@ function Assets.GetCombatModel(name: string): Model?
 	return if model and model:IsA("Model") then model else nil
 end
 
+--- Procura todas as pastas homônimas existentes no place aditivo, sem mover/apagar arte.
+function Assets.GetEnvironmentModel(name: string): Model?
+	local root = ReplicatedStorage:FindFirstChild(ROOT)
+	if not root then return nil end
+	for _, folder in root:GetChildren() do
+		if folder.Name == "EnvironmentModels" then
+			local model = folder:FindFirstChild(name)
+			if model and model:IsA("Model") then return model end
+		end
+	end
+	return nil
+end
+function Assets.GetCursor(name: string): string
+	local icon = find("Cursors", name)
+	return if icon and icon:IsA("ImageLabel") then icon.Image else ""
+end
 return Assets

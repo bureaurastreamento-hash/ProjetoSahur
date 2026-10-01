@@ -15,6 +15,7 @@ lune run tests/bounty.luau
 lune run tests/factions_hunts.luau
 lune run tests/npc_relics_navigation.luau
 lune run tests/launch_access.luau
+lune run tests/island_layout.luau
 bash tools/analisar.sh
 ```
 
@@ -62,3 +63,5 @@ embarque/desembarque e repõe sua posição; não concede moedas, itens ou reput
 `launch_access.luau` executa LaunchService real: jogador comum não escapa do lobby; admin alterna
 lobby/kit/mundo, restaura kit sem salvar o teste e limpa LobbyTest; combate, argumentos inválidos,
 pré-lançamento desativado e excesso de chamadas bloqueiam troca. Física/UI são verificadas no Studio.
+
+`island_layout.luau` confere distância, alinhamento entre porto/checkpoint/Coliseu/zona segura, região nova, rotação preservada, aplicação única e exclusão da Cidade Âmbar. O mapa manual não é regenerado.

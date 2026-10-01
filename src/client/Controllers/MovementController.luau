@@ -495,7 +495,7 @@ local function applyShiftLock(active: boolean)
 		if not hum or not root or hum.Health <= 0 or localPlayer:GetAttribute("Ragdolled") == true then
 			return
 		end
-		if CutsceneController.IsPlaying() then
+		if CutsceneController.IsPlaying() or localPlayer:GetAttribute("InteractionDialogOpen") == true or localPlayer:GetAttribute("StoryDialogOpen") == true then
 			-- cutscene com a câmera: não virar o boneco nem prender o mouse (senão a cena roda junto)
 			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 			hum.CameraOffset = Vector3.zero

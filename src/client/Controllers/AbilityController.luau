@@ -543,11 +543,11 @@ function AbilityController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityCooldown).OnClientEvent:Connect(onNotifyAbilityCooldown)
 	Remotes.GetEvent(Remotes.Events.NotifyAbilityDenied).OnClientEvent:Connect(onNotifyAbilityDenied)
 	UserInputService.InputBegan:Connect(onInputBegan)
-	ProximityPromptService.PromptShown:Connect(function()
-		promptShown += 1
+	ProximityPromptService.PromptShown:Connect(function(prompt)
+		if prompt.KeyboardKeyCode == Controls.Keyboard.Counter then promptShown += 1 end
 	end)
-	ProximityPromptService.PromptHidden:Connect(function()
-		promptShown = math.max(0, promptShown - 1)
+	ProximityPromptService.PromptHidden:Connect(function(prompt)
+		if prompt.KeyboardKeyCode == Controls.Keyboard.Counter then promptShown = math.max(0, promptShown - 1) end
 	end)
 
 	local function onCharacter(character: Model)

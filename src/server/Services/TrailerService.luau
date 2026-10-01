@@ -56,6 +56,8 @@ local MARKS: { [string]: Vector3 } = {
 	Portal = V(36, 0, 150), -- praça do Porto (spawn), portal virado para o sul
 }
 
+require(Modules.IslandLayout).TranslateTable(MARKS)
+
 -- ---------------------------------------------------------------------------
 -- Estado
 -- ---------------------------------------------------------------------------

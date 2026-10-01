@@ -32,6 +32,8 @@ local SettingsController = require(script.Parent:WaitForChild("SettingsControlle
 local RigAnimController = require(script.Parent:WaitForChild("RigAnimController"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
+local InteractionController = require(script.Parent.InteractionController)
+
 local CombatController = {}
 
 local localPlayer = Players.LocalPlayer
@@ -486,6 +488,7 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	end
 	local action = Controls.ActionOf(input)
 	if action == "Attack" then
+		if InteractionController.TryInteract() then return end
 		CombatController.SetAttackHeld(true)
 	elseif input.UserInputType == ATTACK_TOUCH and CombatController.TouchAttackEnabled then
 		CombatController.SetAttackHeld(true)

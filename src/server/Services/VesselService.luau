@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Config = require(Modules.VesselConfig)
+local Assets = require(Modules.Assets)
 local Remotes = require(Modules.RemoteEvents)
 local RateLimiter = require(Modules.RateLimiter)
 local Data = require(script.Parent.DataService)
@@ -78,8 +79,7 @@ function Service.Rent(player: Player, key: string, marker: BasePart): boolean
 		Story.Say(player, "Seu barco ainda está no mar. Aproxime-o deste porto ou libere-o pelo leme antes de alugar outro.", "Forever"); return false
 	end
 	if profile.coins < offer.Price then Story.Say(player, ("O aluguel custa %d moedas. O barco a remo é gratuito."):format(offer.Price), "Forever"); return false end
-	local assets = ReplicatedStorage.Assets:FindFirstChild("EnvironmentModels")
-	local template = assets and assets:FindFirstChild(offer.Asset)
+	local template = Assets.GetEnvironmentModel(offer.Asset)
 	if not template or not template:IsA("Model") then Story.Say(player, "Esta embarcação está indisponível no momento.", "Forever"); return false end
 	local model = template:Clone()
 	local _, originalSize = model:GetBoundingBox()
@@ -148,7 +148,7 @@ function Service.Rent(player: Player, key: string, marker: BasePart): boolean
 		task.defer(function() if helm.Parent and humanoid.Parent then helm:Sit(humanoid) end end)
 	end
 	Remotes.GetEvent(Remotes.Events.NotifyVessel):FireAllClients(model, offer.Cruise)
-	Story.Say(player, if offer.Cruise then "Strength transformou o barco no seu cruzeiro. W/S aceleram, A/D manobram. Salte para sair do leme; R libera o navio. Leve passageiros sentados durante a viagem." else "W/S aceleram, A/D manobram. Salte para sair e use o leme para voltar a pilotar. R libera o barco.", "Forever")
+	Story.Say(player, if offer.Cruise then "Strength transformou o barco no seu cruzeiro. W/S aceleram, A/D manobram. Salte para sair do leme; clique no leme para desembarcar ou liberar o navio. Leve passageiros sentados durante a viagem." else "W/S aceleram, A/D manobram. Salte para sair e use o leme para voltar a pilotar. Clique no leme para desembarcar ou liberar o barco.", "Forever")
 	return true
 end
 function Service.Input(player: Player, throttle: any, steer: any)

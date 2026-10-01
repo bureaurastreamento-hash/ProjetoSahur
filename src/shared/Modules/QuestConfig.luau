@@ -194,4 +194,5 @@ function QuestConfig.Get(index: number): Chapter?
 	return QuestConfig.Chapters[index]
 end
 
+require(script.Parent.IslandLayout).TranslateTable(QuestConfig)
 return QuestConfig

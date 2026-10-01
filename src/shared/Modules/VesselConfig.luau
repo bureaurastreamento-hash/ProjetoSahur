@@ -16,4 +16,5 @@ function Config.ValidInput(throttle: any, steer: any): boolean
 	return typeof(throttle) == "number" and throttle == throttle and math.abs(throttle) <= 1
 		and typeof(steer) == "number" and steer == steer and math.abs(steer) <= 1
 end
+require(script.Parent.IslandLayout).TranslateTable(Config)
 return Config

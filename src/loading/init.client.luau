@@ -94,6 +94,7 @@ task.spawn(function()
 	include(vfx and vfx:FindFirstChild("Shared"))
 	include(vfx and vfx:FindFirstChild("CC0"))
 	include(assets:FindFirstChild("UI"))
+	include(assets:FindFirstChild("Cursors"))
 	include(assets:FindFirstChild("CombatModels"))
 	include(assets:FindFirstChild("WeaponSounds"))
 	local completed, failures = 0, 0

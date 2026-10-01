@@ -79,3 +79,15 @@ novo modelo da Lâmina da Névoa, quatro cortes/VFX e três sons Kenney CC0 apro
 Próxima leva: tratar telegraphs, preparação/impacto/recuperação e mixagem de um kit de Stand por vez;
 começar Swift/Jotaro, comparar no Coliseu contra treino. Em seguida avançar os demais kits e a leitura visual
 no mapa manual preservado. Animações/modelos da equipe serão referenciados, sem mover/apagar arte.
+
+## Leva 3 implementada — 01/10
+
+Cursores prontos Kenney Cursor Pack CC0 (fonte https://kenney.nl/assets/cursor-pack), importados no grupo.
+Interações por clique e mini diálogo para múltiplas ações, mouse liberado nas escolhas. Capitão com rig e
+adereços alinhados e busca robusta dos modelos de barco. Ilhas afastadas por translação no runtime,
+com portos/checkpoints/Coliseu/zonas seguras alinhados, sem regenerar mapa nem tocar arte salva.
+Swift/Jotaro ganham poses próprias para WindBlade/StarFinger, transição da rasteira e fases de VFX.
+
+Depois da validação visual deste conjunto: finalizar antecipação/impacto/SFX dos kits Swift/Jotaro,
+seguir os demais Stands, e só então avançar detalhes/construções nas ilhas preservadas. Para animações
+publicadas da equipe ou KFS licenciados, manter fluxo de publicação pelo dono/IDs e prioridade por nome.

@@ -18,4 +18,5 @@ function PvpConfig.LevelsRewardable(killerLevel: number, victimLevel: number): b
 	return killerLevel - victimLevel <= PvpConfig.MaxLevelGap
 end
 
+require(script.Parent.IslandLayout).TranslateTable(PvpConfig)
 return PvpConfig

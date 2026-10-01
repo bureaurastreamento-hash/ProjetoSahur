@@ -1,0 +1,21 @@
+{
+ "className": "Folder",
+ "children": [
+  {
+   "className": "ImageLabel",
+   "name": "Pointer",
+   "properties": {
+    "Image": "rbxassetid://99188820457992",
+    "BackgroundTransparency": 1
+   }
+  },
+  {
+   "className": "ImageLabel",
+   "name": "MouseLock",
+   "properties": {
+    "Image": "rbxassetid://114333535796954",
+    "BackgroundTransparency": 1
+   }
+  }
+ ]
+}

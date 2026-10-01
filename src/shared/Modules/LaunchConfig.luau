@@ -87,4 +87,5 @@ function LaunchConfig.DonationByProduct(productId: number): Donation?
 	return nil
 end
 
+require(script.Parent.IslandLayout).TranslateTable(LaunchConfig)
 return LaunchConfig
