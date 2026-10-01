@@ -8,7 +8,7 @@ local function setup(id)
 	local cfg = rt:load("src/shared/Modules/StoryConfig")
 	local function index(key) for i, act in cfg.Chapters[1].Acts do if act.Id == key then return i end end error(key) end
 	local p = rt.profiles[player]; p.story.act = index(id or "rumo_fortaleza_mare")
-	local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+	local story = rt:loadStory(); story.Init(); story.Start()
 	local world = rt:load("src/shared/Modules/WorldConfig"); world.Regions.fortaleza_mare.Available = true
 	table.insert(world.Islands, { Id = "mare", Region = "fortaleza_mare", Center = position, RadiusX = 100, RadiusZ = 100 })
 	p.story.flags.fortaleza_mare_unlocked = true
@@ -26,7 +26,7 @@ test("migração rev6 preserva 39 atos e limita perfil além do fim à chegada",
 		local rt = Runtime.new(); local player = rt:player(1)
 		local p = rt.profiles[player]; p.story.rev, p.story.act = 6, i
 		p.story.counters.keep = 4; p.inventory.flecha = 3; p.story.flags.keep = true
-		local story = rt:load("src/server/Services/StoryService"); story.Init(); story.Start()
+		local story = rt:loadStory(); story.Init(); story.Start()
 		assert(p.story.rev == 7 and p.story.act == math.min(i, 39))
 		assert(i == 40 or p.story.counters.keep == 4)
 		assert(p.inventory.flecha == 3 and p.story.flags.keep)

@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.172549,
+                  0.8470588,
+                  0.7215686
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://76843339311047",
+                "Material": "Plastic",
+                "CFrame": [
+                  -0.08299601078033447,
+                  1.2699999809265137,
+                  -0.4324740171432495,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  3.8107399940490723,
+                  2.5399999618530273,
+                  3.921828031539917
+                ]
+              },
+              "name": "grass",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "grass_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_grass",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

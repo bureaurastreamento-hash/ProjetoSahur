@@ -508,6 +508,85 @@ C["Emotes/scene_storm"] = { -- cena: tempestade (braços ao céu, gira o tronco,
 }
 
 -- ---------------------------------------------------------------------------
+-- TRAILER v3 (dono, 2026-10-01): poses JoJo e poses de cena. "Segura": entra em 0,35 s, fica parado até
+-- `duration - 0,3` e volta ao neutro (TrailerService pede com a duração do plano).
+-- ---------------------------------------------------------------------------
+local function hold(target: { [string]: JointPose }, duration: number, enter: number?): Clip
+	local e = enter or 0.35
+	return {
+		duration = duration,
+		blendOut = 0.3,
+		frames = {
+			P(0, {}),
+			P(e, target, "out"),
+			P(duration - 0.3, target),
+			P(duration, {}, "inout"),
+		},
+	}
+end
+C["Trailer/Pose_Point"] = hold({ -- aponta para a câmera; o outro braço alto atrás da cabeça; base aberta
+	Root = { rot = V(6, -22, 0), off = V(0, -0.1, 0) },
+	Neck = { rot = V(-8, 20, 0) },
+	RA = { rot = V(92, 0, -14) },
+	LA = { rot = V(160, 0, -34) },
+	RL = { rot = V(0, 0, 12) },
+	LL = { rot = V(-16, 0, -12) },
+}, 6)
+C["Trailer/Pose_Lean"] = hold({ -- inclinado para trás, um braço ao céu, o outro aberto
+	Root = { rot = V(26, 0, 10), off = V(0, -0.15, 0.2) },
+	Neck = { rot = V(18, -12, 0) },
+	RA = { rot = V(125, 0, 58) },
+	LA = { rot = V(20, 0, -80) },
+	RL = { rot = V(16, 0, 10) },
+	LL = { rot = V(-10, 0, -16) },
+}, 6)
+C["Trailer/Pose_Twist"] = hold({ -- tronco torcido, braço cruzando o peito, o outro reto para cima
+	Root = { rot = V(-4, 34, -8) },
+	Neck = { rot = V(0, -34, 10) },
+	RA = { rot = V(72, 0, -68) },
+	LA = { rot = V(176, 0, -8) },
+	RL = { rot = V(0, 0, 6) },
+	LL = { rot = V(22, 0, -12) },
+}, 6)
+C["Trailer/Pose_Hand"] = hold({ -- corpo de lado, mão espalmada na frente do rosto, pernas cruzadas
+	Root = { rot = V(-8, -16, 14) },
+	Neck = { rot = V(-10, 16, -14) },
+	RA = { rot = V(118, 0, -34) },
+	LA = { rot = V(-14, 0, -36) },
+	RL = { rot = V(0, 0, -9) },
+	LL = { rot = V(0, 0, 9) },
+}, 6)
+C["Trailer/Pose_Side"] = hold({ -- inclinação lateral extrema, braço horizontal
+	Root = { rot = V(0, 8, -24), off = V(0.2, -0.1, 0) },
+	Neck = { rot = V(0, 0, 16) },
+	RA = { rot = V(160, 0, 64) },
+	LA = { rot = V(90, 0, -90) },
+	RL = { rot = V(0, 0, 18) },
+	LL = { rot = V(0, 0, -4) },
+}, 6)
+C["Trailer/TimeStop"] = hold({ -- mão aberta para a frente: "o tempo para"
+	Root = { rot = V(6, 0, 0) },
+	Neck = { rot = V(-4, 0, 0) },
+	RA = { rot = V(100, 0, 8) },
+	LA = { rot = V(-10, 0, -20) },
+	RL = { rot = V(0, 0, 10) },
+	LL = { rot = V(0, 0, -10) },
+}, 6, 0.25)
+C["Trailer/Pierced"] = hold({ -- atingido pela Flecha: arqueia para trás, braços abertos
+	Root = { rot = V(24, 0, 0), off = V(0, 0.1, 0) },
+	Neck = { rot = V(34, 0, 0) },
+	RA = { rot = V(40, 0, 62) },
+	LA = { rot = V(40, 0, -62) },
+	RL = { rot = V(0, 0, 8) },
+	LL = { rot = V(0, 0, -8) },
+}, 3, 0.15)
+C["Trailer/Reach"] = hold({ -- estende a mão para tocar a estrutura
+	Root = { rot = V(-10, 0, 0) },
+	Neck = { rot = V(-10, 0, 0) },
+	RA = { rot = V(86, 0, -4) },
+}, 3, 0.6)
+
+-- ---------------------------------------------------------------------------
 -- REDESIGN B (2026-09-24): habilidades novas reaproveitam clipes parecidos até ganharem os próprios
 -- (defina C["<Char>/<Id>"] acima para substituir; a arte manda sobre tudo isso pelo Animations.model.json).
 -- ---------------------------------------------------------------------------

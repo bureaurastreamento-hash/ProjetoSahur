@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.8962264,
+                  0.6015712,
+                  0.3931559
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://119007709263900",
+                "Material": "Plastic",
+                "CFrame": [
+                  4.207439422607422,
+                  1.6336699724197388,
+                  -2.2368664741516113,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  8.414878845214844,
+                  3.2673399448394775,
+                  4.473732948303223
+                ]
+              },
+              "name": "table",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "table_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_table",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

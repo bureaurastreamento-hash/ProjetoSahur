@@ -2,7 +2,7 @@
 --[[
 	BotService (servidor)
 	BOTS com o combate REAL (dono, 2026-09-23: trailer/testes com ataques e ults de verdade, sem depender de
-	segundo jogador). Um bot é um Model R6 (avatar de um membro da equipe ou rig liso) com atributo `Bot`
+	segundo jogador). Um bot é um Model R6 com aparência genérica própria com atributo `Bot`
 	(Combatant.Fighter): ele passa pelos MESMOS caminhos do jogador — CombatService.Attack/Block,
 	MovementService.Dash/Sprint, AbilityService.Use/Awaken — com estado, cooldowns, carga de ult, hitstun,
 	ragdoll, parry e cutscene do despertar iguais. Só não tem cliente (HUD/DataStore/crédito).
@@ -31,7 +31,9 @@ local Log = require(Modules:WaitForChild("Log"))
 local Combatant = require(Modules:WaitForChild("Combatant"))
 local CombatConfig = require(Modules:WaitForChild("CombatConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
-local TeamConfig = require(Modules:WaitForChild("TeamConfig"))
+local NpcAppearance = require(Modules.NpcAppearance)
+local NpcLifecycle = require(Modules.NpcLifecycleConfig)
+local Navigation = require(script.Parent.Parent.Modules.NpcNavigation)
 local WorldConfig = require(Modules:WaitForChild("WorldConfig"))
 local HealthService = require(script.Parent:WaitForChild("HealthService"))
 local CombatService = require(script.Parent:WaitForChild("CombatService"))
@@ -65,10 +67,11 @@ BotService.Config = {
 export type SpawnOptions = {
 	CharacterId: string?, -- padrão: próximo da lista
 	Name: string?,
-	UserId: number?, -- avatar (padrão: roda os membros da equipe)
+	UserId: number?, -- legado: ignorado; inimigos nunca usam avatares da equipe
 	CFrame: CFrame?, -- padrão: perto do primeiro jogador
 	Behavior: string?, -- passive | reactive | aggressive | idle
 	Respawn: boolean?, -- padrão true
+	RespawnSeconds: number?, -- campanha: mobs 10–30 s; chefes 10–30 min
 	HomeMap: Model?, -- mapa opcional: não recriar bot depois de removê-lo do Workspace
 	Team: string?, -- TeamId (bots do mesmo time não se batem)
 	Attributes: { [string]: any }?, -- atributos extras no Model ANTES do SetupBot (MaxHealth, WalkSpeed, DamageMult, Traitor…)
@@ -88,13 +91,13 @@ type Bot = {
 	blockUntil: number,
 	holdUntil: number, -- usou habilidade: não emenda soco/dash até aqui (CastTime + folga)
 	alive: boolean,
+	returning: boolean,
+	navigation: Navigation.State,
 }
 
 local bots: { [Model]: Bot } = {}
 local nextIndex = 0
 local castIndex = 0
-local avatarIndex = 0
-local descriptionCache: { [number]: HumanoidDescription } = {}
 
 -- ---------------------------------------------------------------------------
 -- Rig
@@ -116,34 +119,9 @@ local function nextCharacterId(): string
 	return ids[((castIndex - 1) % #ids) + 1]
 end
 
-local function nextAvatarUserId(): number?
-	local members = TeamConfig.Members
-	if #members == 0 then
-		return nil
-	end
-	avatarIndex += 1
-	return members[((avatarIndex - 1) % #members) + 1].UserId
-end
-
-local function describe(userId: number?): HumanoidDescription
-	if userId and descriptionCache[userId] then
-		return descriptionCache[userId]:Clone()
-	end
-	if userId then
-		local ok, desc = pcall(function()
-			return Players:GetHumanoidDescriptionFromUserId(userId)
-		end)
-		if ok and desc then
-			descriptionCache[userId] = desc
-			return desc:Clone()
-		end
-	end
-	return Instance.new("HumanoidDescription")
-end
-
 local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, BasePart?)
 	local ok, model = pcall(function()
-		return Players:CreateHumanoidModelFromDescription(describe(opts.UserId), Enum.HumanoidRigType.R6)
+		return Players:CreateHumanoidModelFromDescription(NpcAppearance.Description(index), Enum.HumanoidRigType.R6)
 	end)
 	if not ok or not model then
 		warn("[BotService] não consegui criar o rig: " .. tostring(model))
@@ -155,6 +133,7 @@ local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, 
 		model:Destroy()
 		return nil, nil, nil
 	end
+	NpcAppearance.Dress(model)
 	local name = opts.Name or ("Bot %d"):format(index)
 	model.Name = name
 	if not humanoid:FindFirstChildOfClass("Animator") then
@@ -174,7 +153,7 @@ local function buildRig(opts: SpawnOptions, index: number): (Model?, Humanoid?, 
 	for _, d in model:GetDescendants() do
 		if d:IsA("BasePart") then
 			d.Anchored = false
-			d.CanCollide = d.Name ~= "HumanoidRootPart"
+			d.CanCollide = d.Name ~= "HumanoidRootPart" and d:GetAttribute("NpcClothing") ~= true
 			if d.CollisionGroup == "Default" then
 				d.CollisionGroup = "Players" -- mesmo grupo dos jogadores (dash não empurra, entulho não empurra)
 			end
@@ -212,19 +191,9 @@ local function rootOf(fighter: Instance?): BasePart?
 	return character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 end
 
---- Chefe NPC que o bot pode caçar (boss por peças) — não é lutador, mas leva golpe. O traidor v2 é um BOT
---- (Combatant) e entra pelo caminho normal.
-local function isBossNpc(inst: Instance?): boolean
-	return inst ~= nil and inst:IsA("Model") and inst:GetAttribute(Combatant.ATTR_BOT) ~= true
-		and (inst:GetAttribute("BossRig") ~= nil or inst:GetAttribute("Traitor") == true)
-end
-
 local function validTarget(b: Bot, fighter: Instance?): boolean
-	if not fighter or fighter == b.model then
+	if not fighter or not fighter:IsA("Player") then
 		return false
-	end
-	if isBossNpc(fighter) then
-		return fighter.Parent ~= nil and HealthService.IsAlive(fighter :: Model)
 	end
 	if not Combatant.IsPresent(fighter) then
 		return false
@@ -240,17 +209,10 @@ local function validTarget(b: Bot, fighter: Instance?): boolean
 	return true
 end
 
---- Lutadores + chefes NPC (boss/traidor) para a caça do agressivo.
+--- Inimigos só escolhem jogadores como alvo.
 local function candidates(): { Instance }
 	local list: { Instance } = {}
-	for _, f in Combatant.All() do
-		table.insert(list, f)
-	end
-	for _, m in CollectionService:GetTagged("Combatant") do
-		if isBossNpc(m) then
-			table.insert(list, m)
-		end
-	end
+	for _, player in Players:GetPlayers() do table.insert(list, player) end
 	return list
 end
 
@@ -258,15 +220,6 @@ end
 -- (onde se nasce) nem nos primeiros segundos depois de nascer. Quem ataca o bot continua levando o revide.
 local SAFE_RADIUS = 45
 local SPAWN_GRACE = 6
-local safePoints: { Vector3 } = {}
-for _, region in WorldConfig.Regions do
-	for _, cp in region.Checkpoints do
-		table.insert(safePoints, cp.Position)
-	end
-	if region.Fisher then
-		table.insert(safePoints, region.Fisher.Position)
-	end
-end
 local spawnedAt: { [Instance]: number } = {}
 
 local function protectedFromAggro(fighter: Instance): boolean
@@ -284,11 +237,15 @@ local function protectedFromAggro(fighter: Instance): boolean
 	if not r then
 		return true
 	end
-	for _, p in safePoints do
-		local d = r.Position - p
-		if Vector3.new(d.X, 0, d.Z).Magnitude < SAFE_RADIUS then
-			return true
-		end
+	local function near(position: Vector3): boolean
+		local delta = r.Position - position
+		return Vector3.new(delta.X, 0, delta.Z).Magnitude < SAFE_RADIUS
+	end
+	-- Ler registros atuais: Cidade/Costa/Fortaleza podem ser registradas depois do boot.
+	for _, region in WorldConfig.Regions do
+		if not region.Available then continue end
+		for _, cp in region.Checkpoints do if near(cp.Position) then return true end end
+		if region.Fisher and near(region.Fisher.Position) then return true end
 	end
 	return false
 end
@@ -327,12 +284,23 @@ local function think(b: Bot)
 	if b.model:GetAttribute("FXEnemy") == true and not CombatService.IsGrabbed(b.model) then
 		local away = (b.root.Position - b.home.Position).Magnitude
 		if away > C.LeashRadius or b.humanoid:GetState() == Enum.HumanoidStateType.Swimming then
+			b.returning = true
+			b.model:SetAttribute("ReturningHome", true)
+		end
+		if b.returning then
 			b.target = nil
 			b.aggroUntil = 0
-			b.model:PivotTo(b.home * CFrame.new(0, 3.05, 0))
-			b.root.AssemblyLinearVelocity = Vector3.zero
-			HealthService.Heal(b.model, b.humanoid.MaxHealth)
-			HealthService.ClearPveCredit(b.model)
+			CombatService.Block(b.model, false)
+			MovementService.Sprint(b.model, false)
+			local delta = b.root.Position - b.home.Position
+			if Vector3.new(delta.X, 0, delta.Z).Magnitude <= 5 and math.abs(delta.Y) < 9 then
+				-- Não cura nem perde contribuição durante golpes; a regeneração é do HealthService.
+				b.returning = false
+				b.model:SetAttribute("ReturningHome", nil)
+				b.humanoid:MoveTo(b.root.Position)
+			elseif not CombatService.IsStunned(b.model) and not RagdollService.IsRagdolled(b.model) then
+				Navigation.Home(b.humanoid, b.root, b.home.Position + Vector3.new(0, 3, 0), b.navigation)
+			end
 			return
 		end
 	end
@@ -396,7 +364,7 @@ local function think(b: Bot)
 	if CombatService.IsBlocking(b.model) then
 		CombatService.Block(b.model, false)
 	end
-	if dist <= 9 and not isBossNpc(target) and CombatService.IsAttacking(target) and math.random() < C.BlockChancePerTick then
+	if dist <= 9 and CombatService.IsAttacking(target) and math.random() < C.BlockChancePerTick then
 		b.root.CFrame = CFrame.lookAt(b.root.Position, b.root.Position + dir)
 		CombatService.Block(b.model, true)
 		b.blockUntil = now + C.BlockSeconds
@@ -498,14 +466,20 @@ local function onBotDied(b: Bot)
 	local kind = b.model:GetAttribute("StoryKillKind")
 	b.alive = false
 	bots[b.model] = nil
-	task.delay(BotService.Config.RespawnTime, function()
+	local delaySeconds = if b.model:GetAttribute("FXEnemy") == true then NpcLifecycle.Respawn(kind, b.opts.RespawnSeconds) else b.cfg.RespawnTime
+	if typeof(kind) == "string" and NpcLifecycle.IsBoss(kind) and b.opts.Respawn ~= false then
+		Workspace:SetAttribute("NpcRespawn_" .. kind, Workspace:GetServerTimeNow() + delaySeconds)
+	end
+	-- O cadáver não fica no mapa pelo tempo inteiro do respawn do chefe.
+	task.delay(5, function() if b.model.Parent then b.model:Destroy() end end)
+	task.delay(delaySeconds, function()
 		local model = b.model
 		if model.Parent then
 			model:Destroy()
 		end
 		if b.opts.Respawn ~= false and BotService.Enabled
 			and (not b.opts.HomeMap or b.opts.HomeMap:IsDescendantOf(Workspace)) then
-			if b.opts.Attributes and b.opts.Attributes.FXEnemy and typeof(kind) == "string" and kind:find("boss") then
+			if b.opts.Attributes and b.opts.Attributes.FXEnemy and NpcLifecycle.IsBoss(kind) then
 				local name = b.opts.Name or "Chefe"
 				if name:sub(1, 5) ~= "Eco: " then b.opts.Name = "Eco: " .. name end
 			end
@@ -520,6 +494,8 @@ spawnAt = function(opts: SpawnOptions, home: CFrame, index: number): Model?
 		return nil
 	end
 	local m: Model, h: Humanoid, r: BasePart = model, humanoid, root
+	local kind = m:GetAttribute("StoryKillKind")
+	if typeof(kind) == "string" and NpcLifecycle.IsBoss(kind) then Workspace:SetAttribute("NpcRespawn_" .. kind, nil) end
 	m:PivotTo(home * CFrame.new(0, 3.05, 0))
 	m.Parent = Workspace -- direto no Workspace: o ProcAnimController anima quem está aqui
 	pcall(function()
@@ -545,6 +521,8 @@ spawnAt = function(opts: SpawnOptions, home: CFrame, index: number): Model?
 		blockUntil = 0,
 		holdUntil = 0,
 		alive = true,
+		returning = false,
+		navigation = Navigation.New(),
 	}
 	bots[m] = b
 	h.Died:Once(function()
@@ -563,9 +541,6 @@ function BotService.Spawn(options: SpawnOptions?): Model?
 	if not CharacterDefs.Get(opts.CharacterId :: string) then
 		warn(("[BotService] personagem '%s' não existe"):format(tostring(opts.CharacterId)))
 		return nil
-	end
-	if opts.UserId == nil then
-		opts.UserId = nextAvatarUserId()
 	end
 	nextIndex += 1
 	local home = opts.CFrame or defaultCFrame()
@@ -615,10 +590,10 @@ function BotService.SetBehavior(model: Model?, behavior: string)
 	end
 end
 
---- Faz o bot revidar contra `fighter` agora (passive ganha aggro). Aceita boss/traidor também.
+--- Faz o bot revidar contra um jogador (passive ganha aggro).
 function BotService.Provoke(model: Model, fighter: Instance)
 	local b = bots[model]
-	if b then
+	if b and validTarget(b, fighter) then
 		b.target = fighter
 		b.aggroUntil = os.clock() + b.cfg.AggroSeconds
 	end
@@ -696,16 +671,6 @@ function BotService.Start()
 			mine.aggroUntil = os.clock() + mine.cfg.AggroSeconds
 		end
 	end)
-	-- boss/traidor/boneco bateu num bot: o passivo revida contra o NPC
-	CombatService.NpcHitHook = function(attackerChar: Model, victim: Model, _dealt: number)
-		local b = bots[victim]
-		if b and isBossNpc(attackerChar) then
-			if not b.target or b.model:GetAttribute("Behavior") ~= "aggressive" then
-				b.target = attackerChar
-			end
-			b.aggroUntil = os.clock() + b.cfg.AggroSeconds
-		end
-	end
 	Log.debug("[BotService] pronto (bots com o combate real; padrão: só revidam quando apanham)")
 end
 

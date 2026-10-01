@@ -232,6 +232,10 @@ local function forgeEntries(player: Player): { any }
 	for _, r in MaterialConfig.Recipes do
 		local weapon = BuildConfig.Weapon(r.Weapon)
 		local parts, ok = {}, profile ~= nil and profile.level >= r.MinLevel and profile.coins >= r.Coins
+		if r.RequiresFlag and (not profile or not profile.story.flags[r.RequiresFlag]) then
+			ok = false
+			table.insert(parts, r.SecretHint or "Descubra o projeto secreto.")
+		end
 		for item, need in r.Needs do
 			local have = if profile then profile.inventory[item] or 0 else 0
 			if have < need then
@@ -318,6 +322,9 @@ local function forge(player: Player, id: string)
 	end
 	if profile.level < recipe.MinLevel then
 		return toast(player, "Ferreiro", ("Volte no nível %d. Essa lâmina não perdoa quem não aguenta."):format(recipe.MinLevel))
+	end
+	if recipe.RequiresFlag and not profile.story.flags[recipe.RequiresFlag] then
+		return toast(player, "Projeto incompleto", recipe.SecretHint or "Resolva o enigma antes de forjar.")
 	end
 	if profile.coins < recipe.Coins then
 		return toast(player, "Ferreiro", ("Faltam %d moedas."):format(recipe.Coins - profile.coins))

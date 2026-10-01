@@ -24,6 +24,7 @@ local ProgressionService = require(script.Parent.ProgressionService)
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
 local StoryService = {}
+local StoryNavigation = require(script.Parent.Parent.Modules.StoryNavigation)
 local notifyStory: RemoteEvent
 local choiceLimiter = RateLimiter.new(3, 1)
 local notifyQuest: RemoteEvent
@@ -116,6 +117,7 @@ local function payload(player: Player): { [string]: any }?
 	return { chapter = chapter.Id, chapterTitle = chapter.Title, act = profile.story.act,
 		actId = act and act.Id, actTitle = act and act.Title or "Capítulo concluído",
 		hint = if locked then lockedHint(profile, act) else act and act.Hint, lockedLevel = if locked and act then act.MinLevel else nil,
+		navigation = StoryNavigation.Next(act, objectives, locked), xp = act and act.XP or 0, coins = act and act.Coins or 0,
 		objectives = objectives, optional = SidequestConfig.State(profile.story.flags) }
 end
 
@@ -417,7 +419,14 @@ function StoryService.AlignChamberSeal(player: Player, seal: number, marker: Bas
 	local profile = DataService.GetProfile(player)
 	if not profile or not StoryService.CanInteract(player, marker, 14) or StoryService.RegionOf(player) ~= "ilha_pilares" then return false end
 	if seal ~= 1 and seal ~= 2 and seal ~= 3 then return false end
-	if profile.story.flags.camara_transferencia_preparada then return true end
+	if profile.story.flags.camara_transferencia_preparada then
+		if not profile.story.flags.relic_camara_rewarded then
+			profile.story.flags.relic_camara_rewarded = true
+			DataService.AddItem(player, "mat:selo_solar", 1)
+			DataService.MarkDirty(player)
+		end
+		return true
+	end
 	local flags = profile.story.flags
 	local step = if flags.camara_puzzle_etapa_2 then 3 elseif flags.camara_puzzle_etapa_1 then 2 else 1
 	local sequence = { 2, 1, 3 }
@@ -429,6 +438,10 @@ function StoryService.AlignChamberSeal(player: Player, seal: number, marker: Bas
 	end
 	if step == 3 then
 		flags.camara_transferencia_preparada = true
+		if not flags.relic_camara_rewarded then
+			flags.relic_camara_rewarded = true
+			DataService.AddItem(player, "mat:selo_solar", 1)
+		end
 		StoryService.Say(player, "Os mecanismos estão alinhados. A transferência de energia está preparada.")
 	else
 		flags["camara_puzzle_etapa_" .. step] = true

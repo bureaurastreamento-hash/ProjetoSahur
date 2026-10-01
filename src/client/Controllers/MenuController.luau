@@ -9,21 +9,21 @@ local Players = game:GetService("Players")
 local InventoryController = require(script.Parent:WaitForChild("InventoryController"))
 local TopbarController = require(script.Parent:WaitForChild("TopbarController"))
 
+local HuntController = require(script.Parent.HuntController)
+local GoalsController = require(script.Parent.GoalsController)
+local FX = require(game:GetService("ReplicatedStorage").Shared.Modules.FX)
 local MenuController = {}
-
-local BG = Color3.fromRGB(14, 22, 30)
-local ACCENT = Color3.fromRGB(70, 205, 255)
-local TEXT = Color3.fromRGB(235, 240, 245)
-local KEY = Color3.fromRGB(255, 210, 90)
 
 -- ordem de cima para baixo: nome, tecla (só o texto), ação
 local ITEMS: { { string } } = {
 	{ "Mochila", "M" },
+	{ "Objetivos", "" },
 	{ "Loja", "L" },
 	{ "Visual", "K" },
 	{ "Perfil", "P" },
 	{ "Conquistas", "" },
 	{ "Duelo", "J" },
+	{ "Caçadas", "" },
 	{ "Clã", "C" },
 	{ "Placar", "Tab" },
 }
@@ -31,80 +31,72 @@ local ITEMS: { { string } } = {
 local function open(name: string)
 	if name == "Mochila" then
 		InventoryController.Toggle()
+	elseif name == "Objetivos" then
+		GoalsController.Toggle()
+	elseif name == "Caçadas" then
+		HuntController.Toggle()
 	else
 		TopbarController.Toggle(name)
 	end
 end
 
 function MenuController.Init()
+	local UserInputService = game:GetService("UserInputService")
+	local Workspace = game:GetService("Workspace")
+	local Ink = Color3.fromRGB(18, 25, 35)
+	local Gold = Color3.fromRGB(238, 193, 78)
 	local gui = Instance.new("ScreenGui")
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "SideMenu", false, 6
 	gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 	local container = Instance.new("Frame")
 	container.Name, container.BackgroundTransparency = "Menu", 1
-	container.AnchorPoint, container.Position = Vector2.new(0, 0.5), UDim2.new(0, 12, 0.5, 0)
-	container.Size = UDim2.fromOffset(132, 44)
+	container.AnchorPoint, container.Position = Vector2.new(0, 1), UDim2.new(0, 18, 1, -276)
+	container.Size = UDim2.fromOffset(310, 98)
 	container.Parent = gui
-	local bounds = Instance.new("UISizeConstraint")
-	bounds.MaxSize = Vector2.new(132, 400); bounds.Parent = container
+	local scale = Instance.new("UIScale"); scale.Parent = container
 	local column = Instance.new("ScrollingFrame")
-	column.Name, column.Visible = "Column", false
-	column.Position, column.Size = UDim2.fromOffset(0, 50), UDim2.new(1, 0, 1, -50)
-	column.BackgroundColor3, column.BackgroundTransparency = BG, 0.05
+	column.Name, column.Visible = "More", false
+	column.AnchorPoint, column.Position, column.Size = Vector2.new(0, 1), UDim2.fromOffset(326, 98), UDim2.fromOffset(176, 320)
+	column.BackgroundColor3, column.BackgroundTransparency = Ink, .05
 	column.BorderSizePixel, column.ScrollBarThickness = 0, 4
 	column.CanvasSize, column.AutomaticCanvasSize = UDim2.new(), Enum.AutomaticSize.Y
 	column.Parent = container
-	local menu = Instance.new("TextButton")
-	menu.Name, menu.Text = "Toggle", "MENU F/X"
-	menu.Size = UDim2.fromOffset(132, 44)
-	menu.BackgroundColor3, menu.TextColor3 = BG, ACCENT
-	menu.Font, menu.TextSize = Enum.Font.GothamBold, 14
-	menu.Parent = container
-	local border = Instance.new("UIStroke"); border.Color, border.Transparency, border.Parent = ACCENT, .4, menu
-	local function expand(show: boolean)
-		column.Visible = show
-		container.Size = if show then UDim2.new(0, 132, .7, -30) else UDim2.fromOffset(132, 44)
-		menu.Text = if show then "FECHAR MENU" else "MENU F/X"
+	local layout = Instance.new("UIListLayout"); layout.Padding, layout.SortOrder, layout.Parent = UDim.new(0, 8), Enum.SortOrder.LayoutOrder, column
+	local function button(parent: Instance, name: string, key: string): TextButton
+		local item = Instance.new("TextButton")
+		item.Name, item.Text = name, name .. (if key ~= "" then "  [" .. key .. "]" else "")
+		item.Size = UDim2.fromOffset(150, 44)
+		item.BackgroundColor3, item.TextColor3, item.BorderSizePixel = Gold, Ink, 0
+		item.Font, item.TextSize, item.Selectable = Enum.Font.GothamBlack, 16, true
+		item.Parent = parent
+		local stroke = Instance.new("UIStroke"); stroke.Color, stroke.Thickness, stroke.ApplyStrokeMode, stroke.Parent = Ink, 2, Enum.ApplyStrokeMode.Border, item
+		return item
 	end
-	menu.Activated:Connect(function() expand(not column.Visible) end)
-	local layout = Instance.new("UIListLayout")
-	layout.Padding = UDim.new(0, 6)
-	layout.SortOrder = Enum.SortOrder.LayoutOrder
-	layout.Parent = column
-	for i, entry in ITEMS do
-		local name, key = entry[1], entry[2]
-		local b = Instance.new("TextButton")
-		b.Name = name
-		b.LayoutOrder = i
-		b.Size = UDim2.new(1, -6, 0, 44)
-		b.BackgroundColor3, b.BackgroundTransparency = BG, 0.15
-		b.AutoButtonColor = true
-		b.Text = ""
-		b.Parent = column
-		local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 6); c.Parent = b
-		local s = Instance.new("UIStroke"); s.Color = ACCENT; s.Transparency = 0.6; s.Parent = b
-		local label = Instance.new("TextLabel")
-		label.BackgroundTransparency = 1
-		label.Position, label.Size = UDim2.fromOffset(10, 0), UDim2.new(1, -36, 1, 0)
-		label.Font, label.TextSize, label.TextColor3 = Enum.Font.GothamBold, 13, TEXT
-		label.TextXAlignment = Enum.TextXAlignment.Left
-		label.Text = name
-		label.Parent = b
-		if key ~= "" then
-			local k = Instance.new("TextLabel")
-			k.BackgroundTransparency = 1
-			k.AnchorPoint = Vector2.new(1, 0.5)
-			k.Position, k.Size = UDim2.new(1, -8, 0.5, 0), UDim2.fromOffset(28, 18)
-			k.Font, k.TextSize, k.TextColor3 = Enum.Font.GothamBlack, 12, KEY
-			k.TextXAlignment = Enum.TextXAlignment.Right
-			k.Text = key
-			k.Parent = b
-		end
-		b.Activated:Connect(function()
-			expand(false)
-			open(name)
+	local names = { { "Mochila", "M" }, { "Perfil", "P" }, { "Objetivos", "" }, { "Menu", "" } }
+	for index, row in names do
+		local item = button(container, row[1], row[2])
+		item.Position = UDim2.fromOffset(((index - 1) % 2) * 160, math.floor((index - 1) / 2) * 54)
+		item.Activated:Connect(function()
+			FX.PlaySoundUI("CC0", "click_001")
+			if row[1] == "Menu" then column.Visible = not column.Visible
+			else column.Visible = false; open(row[1]) end
 		end)
 	end
+	for i, row in ITEMS do
+		if row[1] == "Mochila" or row[1] == "Perfil" or row[1] == "Objetivos" then continue end
+		local item = button(column, row[1], row[2]); item.Size, item.LayoutOrder = UDim2.new(1, -8, 0, 44), i
+		item.Activated:Connect(function()
+			FX.PlaySoundUI("CC0", "click_001"); column.Visible = false; open(row[1]) end)
+	end
+	local function responsive()
+		local camera = Workspace.CurrentCamera
+		if not camera then return end
+		local touch = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+		scale.Scale = if touch then math.clamp(camera.ViewportSize.Y / 760, .65, .9) else math.clamp(camera.ViewportSize.X / 1440, .78, 1.1)
+		container.Position = if touch then UDim2.fromOffset(14, 92 + 242 * scale.Scale + 110 * scale.Scale) else UDim2.new(0, 18, 1, -20 - 252 * scale.Scale)
+	end
+	responsive()
+	if Workspace.CurrentCamera then Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(responsive) end
 end
 
 return MenuController

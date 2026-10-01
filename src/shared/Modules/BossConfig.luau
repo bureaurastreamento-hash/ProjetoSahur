@@ -14,8 +14,9 @@ BossConfig.Name = "Big C.H.O.P."
 -- VIRAR o boss. `StrongPower` = multiplicador do boss invocado pela flecha.
 BossConfig.StrongPower = 3
 BossConfig.SummonCost = 0 -- moedas cobradas de quem invoca (0 = grátis por enquanto)
-BossConfig.Cooldown = 45 -- s entre uma luta e a próxima invocação
-BossConfig.AutoSpawnMinutes = 120 -- além do altar: o boss nasce sozinho a cada 2 h em força NORMAL (dono, 2026-09-20)
+BossConfig.Cooldown = 1800 -- 30 min após a luta; dono: limitar superfarm
+BossConfig.AutoSpawnMinutes = 30
+BossConfig.LeashRadius = 180
 BossConfig.AutoSpawnWarning = 30 -- s de aviso antes do spawn automático
 BossConfig.MaxHealth = 1500
 -- Modelo: rig por PEÇAS do Roblox (BossRigs, sem mesh externo) — ver BossConfig.Form.RigId.

@@ -955,6 +955,144 @@
      }
     }
    ]
+  },
+  {
+   "name": "Music",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Village",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://128439170003826",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "Sea",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://77549450727989",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "Boss",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://82020666810385",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    }
+   ]
+  },
+  {
+   "name": "CC0",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "footstep_carpet_001",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://114662421683868",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "footstep_carpet_002",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://74726568845130",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "footstep_carpet_003",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://107413212766906",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "footstep_carpet_004",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://137198243185268",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "footstep_concrete_000",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://102808002164819",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "back_001",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://139456171767246",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "back_002",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://120685053547191",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "back_003",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://76923789101333",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "back_004",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://134270233970620",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "bong_001",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://111982223143011",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    },
+    {
+     "name": "click_001",
+     "className": "Sound",
+     "properties": {
+      "SoundId": "rbxassetid://78161550467780",
+      "Volume": 0.3,
+      "RollOffMaxDistance": 65
+     }
+    }
+   ]
   }
  ]
 }

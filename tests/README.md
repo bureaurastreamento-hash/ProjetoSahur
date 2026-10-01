@@ -12,6 +12,8 @@ lune run tests/cidade_ambar.luau
 lune run tests/costa_dourada.luau
 lune run tests/fortaleza_mare.luau
 lune run tests/bounty.luau
+lune run tests/factions_hunts.luau
+lune run tests/npc_relics_navigation.luau
 bash tools/analisar.sh
 ```
 
@@ -33,4 +35,25 @@ bash tools/analisar.sh
 
 Esses testes não executam física, replicação, interface, DataStore da Roblox ou compras reais. Não substituem testes com dois clientes e validação visual no Studio. Não usam credenciais nem modificam dados de produção.
 
+`factions_hunts.luau` verifica escolha de facção/estado do menu, conservação de progresso, honra contra Fora da Lei,
+deduplicação, aceitação e pagamento real de contratos por sinal de reputação, ausência de GPS, cancelamento/saída/
+expiração, limites/validação de vida/números, bloqueio servidor de NPC contra NPC, aparência genérica e metas reais
+de forja/maestria/títulos. Confere também que o requisito de nível da campanha permanece e dispara aviso ao subir.
+
+O adaptador inicializa a progressão ao preparar campanha e simula sinais de atributos como o boot real. Testes de
+sequência avançada usam nível suficiente; não removem requisitos do código para avançar artificialmente.
+
 `bounty.luau` verifica títulos/limiares, crédito/contexto, níveis pelo perfil, cooldown migrado após reconexão, rejeição de valores inválidos, limites, bônus único e replicação de atributos. Usa serviços reais de bounty/PvP com morte e persistência simuladas; não verifica o ciclo de morte completo do Studio nem save de produção.
+
+`npc_relics_navigation.luau` verifica tempos de respawn/regen por tipo de NPC, rejeição de entradas inválidas
+no navio, sequência das lentes, recompensa única/reconexão/independência entre jogadores, distância/vida/fallback,
+marcador forjado e orientação da campanha sem revelar segredos opcionais. A expansão da campanha também cobre o
+Selo Solar único e a recuperação de saves que já resolveram a Câmara.
+
+Verificação no Studio: em Edit, executar `tools/studio/preparar_verificacao.luau` pelo MCP; depois iniciar Play.
+Os módulos de aluguel usam perfil simulado (1.000 moedas), mantendo o perfil do dono. O cliente controla o
+assento de teste pelo remote real. Os scripts temporários ficam fora da árvore de código do Rojo e DEVEM ser
+removidos em Edit após Stop: `ServerScriptService.VerificacaoStudioTemporaria`,
+`ServerScriptService.VerificacaoServicosIsolados`, `StarterPlayerScripts.VerificacaoClienteTemporaria`.
+O harness oculta o menu de facção para a captura sem escolher/salvar facção. Desloca o personagem para testar
+embarque/desembarque e repõe sua posição; não concede moedas, itens ou reputação ao perfil real.

@@ -1,0 +1,59 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  1,
+                  1,
+                  1
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "rbxassetid://70871606143749",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://125469707154415",
+                "Material": "Plastic",
+                "CFrame": [
+                  0,
+                  7.5,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  17.850000381469727,
+                  15,
+                  33.70000076293945
+                ]
+              },
+              "name": "boat-speed-a",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "boat-speed-a_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_boat-speed-a",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

@@ -17,6 +17,7 @@ local Workspace = game:GetService("Workspace")
 
 local Log = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules"):WaitForChild("Log"))
 
+local EnvironmentMaterials = require(script.Parent.Parent.Modules.EnvironmentMaterials)
 local EnvironmentService = {}
 
 EnvironmentService.Enabled = true
@@ -242,6 +243,7 @@ function EnvironmentService.Start()
 	if not EnvironmentService.Enabled then
 		return
 	end
+	EnvironmentMaterials.Start()
 	applyProperties(Lighting, CONFIG.Lighting)
 	for _, def in CONFIG.Effects do
 		if Lighting:FindFirstChild(def.Name) then

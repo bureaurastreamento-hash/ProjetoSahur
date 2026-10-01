@@ -35,6 +35,7 @@ local ProgressionConfig = require(Modules:WaitForChild("ProgressionConfig"))
 local PvpConfig = require(Modules:WaitForChild("PvpConfig"))
 local MatchConfig = require(Modules:WaitForChild("MatchConfig"))
 local FX = require(Modules:WaitForChild("FX"))
+local HudLayout = require(Modules.HudLayout)
 local AbilityController = require(script.Parent:WaitForChild("AbilityController"))
 local MovementController = require(script.Parent:WaitForChild("MovementController"))
 
@@ -95,6 +96,8 @@ local queueButton: TextButton
 local coinsLabel: TextLabel
 local levelValue: TextLabel -- selo de nível (HUD estilo Blox Fruits, 29/09)
 local xpFill: Frame
+local xpText: TextLabel
+local reputationText: TextLabel
 local selectCoinsLabel: TextLabel
 local characterButtons: { [string]: TextButton } = {}
 local profile: any = nil
@@ -296,7 +299,7 @@ local function updateCooldowns()
 		local lock = masteryLock(characterId, i)
 		if lock then -- trancada por maestria do Stand
 			(slot:FindFirstChild("Cooldown") :: Frame).Size = UDim2.fromScale(1, 1);
-			(slot:FindFirstChild("CooldownText") :: TextLabel).Text = ("M%d"):format(lock)
+			(slot:FindFirstChild("CooldownText") :: TextLabel).Text = ("Maestria\n%d"):format(lock)
 		end
 	end
 	-- Ultimate (G): trancada até a carga encher; no Awakening mostra o tempo restante do modo
@@ -311,7 +314,7 @@ local function updateCooldowns()
 		ultText.Text = ("%d"):format(math.ceil(awakenedUntil - now))
 	elseif ultLock then
 		ultOverlay.Size = UDim2.fromScale(1, 1)
-		ultText.Text = ("M%d"):format(ultLock)
+		ultText.Text = ("Maestria\n%d"):format(ultLock)
 	elseif charged then
 		ultOverlay.Size = UDim2.fromScale(1, 0)
 		ultText.Text = ""
@@ -476,7 +479,7 @@ local function refreshMatchUI()
 		end
 	end
 	local coins = localPlayer:GetAttribute("Coins")
-	local coinsText = if typeof(coins) == "number" then ("%d pontos"):format(coins) else ""
+	local coinsText = if typeof(coins) == "number" then ("$ %d"):format(coins) else ""
 	coinsLabel.Text = coinsText
 	selectCoinsLabel.Text = coinsText
 	refreshScoreboard()
@@ -653,7 +656,7 @@ function HUDController.Init()
 	topBar.Visible = not MatchConfig.FreeRoam -- no mapa livre não há round/timer para mostrar
 	coinsLabel = get(hud, "Coins") :: TextLabel
 
-	local vitals = get(hud, "Vitals")
+	local vitals = get(hud, "Vitals") :: Frame
 	local health = get(vitals, "Health")
 	healthFill = get(health, "Fill") :: Frame
 	healthText = get(health, "Text") :: TextLabel
@@ -667,12 +670,37 @@ function HUDController.Init()
 	levelValue = get(get(vitals, "LevelBadge"), "Value") :: TextLabel
 	-- toque: o canto inferior esquerdo é do analógico virtual → status sobe (embaixo do painel da missão)
 	if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-		(vitals :: Frame).AnchorPoint = Vector2.new(0, 0);
-		(vitals :: Frame).Position = UDim2.new(0, 16, 0, 196)
+		vitals.AnchorPoint = Vector2.new(0, 0);
+		vitals.Position = UDim2.new(0, 16, 0, 196)
 		coinsLabel.AnchorPoint = Vector2.new(0, 0)
 		coinsLabel.Position = UDim2.new(0, 16, 0, 270)
 	end
 	xpFill = get(get(vitals, "XP"), "Fill") :: Frame
+	xpText, reputationText = HudLayout.Apply(hud)
+	local function layoutForDevice()
+		local camera = Workspace.CurrentCamera
+		if not camera then return end
+		local touch = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+		local scale = if touch then math.clamp(camera.ViewportSize.Y / 760, .65, .9) else math.clamp(camera.ViewportSize.X / 1440, .78, 1.1)
+		local uiScale = vitals:FindFirstChild("HudScale") :: UIScale?
+		if not uiScale then
+			local created = Instance.new("UIScale")
+			created.Name, created.Parent = "HudScale", vitals
+			uiScale = created
+		end
+		(uiScale :: UIScale).Scale = scale
+		vitals.AnchorPoint = if touch then Vector2.zero else Vector2.new(0, 1)
+		vitals.Position = if touch then UDim2.fromOffset(14, 92) else UDim2.new(0, 18, 1, -20)
+	end
+	layoutForDevice()
+	if Workspace.CurrentCamera then Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(layoutForDevice) end
+	local function reputation()
+		local government = localPlayer:GetAttribute("Faction") == "governo"
+		local points = tonumber(localPlayer:GetAttribute(if government then "Honor" else "Bounty")) or 0
+		reputationText.Text = ("%s · %d"):format(if government then "HONRA" else "BOUNTY", points)
+	end
+	for _, attr in { "Faction", "Honor", "Bounty" } do localPlayer:GetAttributeChangedSignal(attr):Connect(reputation) end
+	reputation()
 
 	local abilities = get(hud, "Abilities")
 	local dashChips = get(vitals, "DashChips")
@@ -831,6 +859,7 @@ function HUDController.Start()
 	-- Servidor -> HUD
 	Remotes.GetEvent(Remotes.Events.NotifyHealth).OnClientEvent:Connect(function(current: number, max: number)
 		setBar(healthFill, healthText, current, max)
+		healthText.Text = "VIDA  " .. healthText.Text
 	end)
 	Remotes.GetEvent(Remotes.Events.NotifyMatchState).OnClientEvent:Connect(onNotifyMatchState)
 	Remotes.GetEvent(Remotes.Events.NotifyKill).OnClientEvent:Connect(onNotifyKill)
@@ -861,8 +890,8 @@ function HUDController.Start()
 			HUDController.ShowToast(("Maestria %d"):format(tonumber(data.level) or 0), tostring(data.characterId), Color3.fromRGB(90, 190, 255))
 		elseif event == "mission_done" then
 			HUDController.ShowToast("Missão concluída", ("%s · +%d pontos"):format(tostring(data.text), tonumber(data.coins) or 0))
-		elseif event == "bounty" then
-			HUDController.ShowToast(("Bounty +%d"):format(tonumber(data.gain) or 0),
+		elseif event == "bounty" or event == "honor" then
+			HUDController.ShowToast(("%s +%d"):format(if event == "honor" then "Honra" else "Bounty", tonumber(data.gain) or 0),
 				("%s · %d%s"):format(tostring(data.title), tonumber(data.points) or 0,
 					if (tonumber(data.coins) or 0) > 0 then (" · +%d moedas"):format(data.coins) else ""))
 		elseif event == "npc_loot" then
@@ -877,9 +906,10 @@ function HUDController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(function(data: any, sessionOnly: boolean)
 		profile = data
 		if typeof(data) == "table" and typeof(data.level) == "number" then
-			levelValue.Text = tostring(data.level)
+			levelValue.Text = "Nv. " .. tostring(data.level)
 			local need = ProgressionConfig.XPForLevel(data.level)
 			xpFill.Size = UDim2.fromScale(math.clamp((tonumber(data.xp) or 0) / need, 0, 1), 1)
+			xpText.Text = ("%d / %d XP"):format(tonumber(data.xp) or 0, need)
 		end
 		if sessionOnly then
 			showBanner("Sem conexão com os dados: progresso desta sessão não será salvo", 6)
@@ -936,7 +966,7 @@ function HUDController.Start()
 		local e = localPlayer:GetAttribute("Energy")
 		local energy = if typeof(e) == "number" then e else 0
 		setBar(energyFill, energyText, energy, CharacterDefs.Energy.Max)
-		energyText.Text = ("ULT %d%%"):format(math.floor(100 * energy / CharacterDefs.Energy.Max + 0.5))
+		energyText.Text = ("DESPERTAR  %d%%"):format(math.floor(100 * energy / CharacterDefs.Energy.Max + 0.5))
 		-- Ult pronta: barra dourada pulsando + flash no slot da ult + som (uma vez por carga)
 		local full = energy >= CharacterDefs.Energy.Max
 		if full and not wasFull then

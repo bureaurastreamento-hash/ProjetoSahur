@@ -30,6 +30,7 @@ local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local StandConfig = require(Modules:WaitForChild("StandConfig"))
 local BuildConfig = require(Modules.BuildConfig)
 local BountyConfig = require(Modules.BountyConfig)
+local FactionConfig = require(Modules.FactionConfig)
 local Controls = require(Modules:WaitForChild("Controls"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 
@@ -306,6 +307,8 @@ local function migrate(raw: any): DataConfig.Profile
 			profile.build.techniqueTier = if b.techniqueTier == 2 then 2 else 1
 		end
 	end
+	profile.faction = if FactionConfig.Valid(raw.faction) then raw.faction else ""
+	profile.honor = BountyConfig.Normalize(raw.honor, os.time())
 	profile.bounty = BountyConfig.Normalize(raw.bounty, os.time())
 	profile.born = raw.born == true
 	copyTrueFlags(raw.receipts, profile.receipts)

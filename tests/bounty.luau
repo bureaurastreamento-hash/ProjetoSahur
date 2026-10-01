@@ -6,6 +6,7 @@ local function setup()
 	local rt = Runtime.new()
 	local killer, root = rt:player(1)
 	local victim = rt:player(2)
+	rt.profiles[killer].faction, rt.profiles[victim].faction = "fora_da_lei", "fora_da_lei"
 	local bounty = rt:load("src/server/Services/BountyService")
 	local pvp = rt:load("src/server/Services/PvpService")
 	bounty.Start()

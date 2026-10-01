@@ -43,6 +43,8 @@ local function spawnPad(pad: BasePart)
 		return
 	end
 	spawned[pad] = true
+	-- Marcador técnico não faz parte da decoração visível.
+	pad.Transparency, pad.CanCollide, pad.CanTouch, pad.CanQuery = 1, false, false, false
 	local tier = pad:GetAttribute("MobTier")
 	local attributes: { [string]: any } = { FXEnemy = true, StoryKillKind = kind }
 	local health, damage = pad:GetAttribute("MobHealth"), pad:GetAttribute("MobDamage")
@@ -66,6 +68,7 @@ local function spawnPad(pad: BasePart)
 		Behavior = if typeof(behavior) == "string" then behavior else nil,
 		Team = "fx_" .. kind,
 		HomeMap = topModel(pad),
+		RespawnSeconds = pad:GetAttribute("MobRespawn") :: number?,
 		Attributes = attributes,
 		Tuning = tuning,
 	}))

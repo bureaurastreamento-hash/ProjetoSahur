@@ -127,6 +127,8 @@ end
 
 export type SettingDef = { Default: number | boolean, Options: { number }?, Label: string, Hint: string }
 Controls.Settings = ({
+	MusicVolume = { Default = .35, Options = { 0, .2, .35, .6, 1 }, Label = "Volume da trilha sonora", Hint = "vila, navegação e chefes; 0 desliga" },
+	EnvironmentDetails = { Default = true, Label = "Detalhes do cenário", Hint = "vegetação e objetos locais; desative para reduzir custo visual" },
 	-- dono (2026-09-20): "ser o personagem escolhido" = nascer com o MODELO do personagem
 	-- (ServerStorage.CharacterModels.<Id>, feito pela arte) em vez da própria skin; desligado = sua skin
 	CharacterModel = { Default = false, Label = "Ser o personagem escolhido", Hint = "usa o modelo dele em vez da sua skin" },
@@ -140,7 +142,7 @@ Controls.Settings = ({
 	-- dono (2026-09-21): membros do MESMO clã aparecem através das paredes (contorno na cor do clã)
 	ClanHighlight = { Default = true, Label = "Ver membros do clã através das coisas", Hint = "contorno nos aliados" },
 } :: { [string]: SettingDef })
-Controls.SettingsOrder = { "CharacterModel", "AttackHold", "BlockToggle", "ClanHighlight", "ScreenShake", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
+Controls.SettingsOrder = { "CharacterModel", "AttackHold", "BlockToggle", "ClanHighlight", "ScreenShake", "MusicVolume", "EnvironmentDetails", "Haptics", "TouchScale", "TouchOpacity", "TouchMirror" }
 
 --- Valor válido para a configuração (nil = inválido).
 function Controls.ValidateSetting(key: any, value: any): (number | boolean)?

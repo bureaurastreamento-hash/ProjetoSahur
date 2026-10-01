@@ -80,9 +80,9 @@ local function toastAll(title: string, text: string)
 	end
 end
 
---- Algum lutador vivo (jogador ou outro bot) a até `radius` do traidor?
+--- Algum jogador vivo a até `radius` do traidor?
 local function anyoneNear(f: Fight, radius: number): boolean
-	for _, fighter in Combatant.All() do
+	for _, fighter in Players:GetPlayers() do
 		local character = Combatant.CharacterOf(fighter)
 		local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 		if character ~= f.model and root and HealthService.IsAlive(character) and (root.Position - f.root.Position).Magnitude <= radius then

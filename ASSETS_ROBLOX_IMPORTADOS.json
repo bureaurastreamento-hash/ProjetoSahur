@@ -1,0 +1,509 @@
+{
+  "groupId": "9835819",
+  "files": {
+    "asset_library/para_importar/materiais/Grass001/Grass001_1K-JPG_Color.jpg": {
+      "sha256": "b9b6d61bc3b6137b868a3447eef18737896acd26d58fe2f4b83ce8c0e9d3f8ad",
+      "type": "Image",
+      "operation": "operations/e3193a7c-e0e7-4c25-9fe2-8838cd7cfe20",
+      "assetId": "78530402633298",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Grass001/Grass001_1K-JPG_NormalGL.jpg": {
+      "sha256": "eef0b56db5f00a6fcb3d0e0f8463e4e141e88aa85b26527a04d617b75a4ab5d2",
+      "type": "Image",
+      "operation": "operations/7c18a3cd-c7b6-4242-a7e9-625b21cb3e45",
+      "assetId": "102051815664477",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Grass001/Grass001_1K-JPG_Roughness.jpg": {
+      "sha256": "8810effd44756341170d551501b7d0c645dc2395dbce46a8c7f1e61045258a06",
+      "type": "Image",
+      "operation": "operations/950425fd-8e99-453e-add6-196c6b82cab3",
+      "assetId": "94418273695890",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground037/Ground037_1K-JPG_Color.jpg": {
+      "sha256": "d92bec8a35b9cb16ec79b421ca0f572a7400286eae109beafa266629ef49a6cf",
+      "type": "Image",
+      "operation": "operations/114a7f82-094c-479c-af21-d5f45e4bff6b",
+      "assetId": "124729655648235",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground037/Ground037_1K-JPG_NormalGL.jpg": {
+      "sha256": "ea59dbdcfa5bf2f28bdd4aa896d4e5f96c4cce5939100dcc6db4bbbcdebfe38d",
+      "type": "Image",
+      "operation": "operations/d48ee8f7-f4de-4135-91f6-dd7a5d9e1e71",
+      "assetId": "135513835202855",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground037/Ground037_1K-JPG_Roughness.jpg": {
+      "sha256": "3786b088e981aae562f06b6477972d379cffd09a5cc542ab42f9ffd94f9bcb0e",
+      "type": "Image",
+      "operation": "operations/07c62e59-6a5f-4dcb-bd57-1f43cb2e7914",
+      "assetId": "95816162640208",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground093A/Ground093A_1K-JPG_Color.jpg": {
+      "sha256": "02c975ea6ffecaa4cc1201a1a5a0455470137eaa01b64677700d7ac91ca41ab0",
+      "type": "Image",
+      "operation": "operations/0a5a09a7-bdae-485b-a991-6d1addc5be85",
+      "assetId": "86053575375802",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground093A/Ground093A_1K-JPG_NormalGL.jpg": {
+      "sha256": "6a388280962e8fa8fb412669fbf0a35a4903211ca750bd81407a99e76a3cc768",
+      "type": "Image",
+      "operation": "operations/0cbf7ff4-c58a-4a01-a0d0-645a94324742",
+      "assetId": "78011571088066",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Ground093A/Ground093A_1K-JPG_Roughness.jpg": {
+      "sha256": "eca4f98d12f968b8221ad9756464be5c402e8e19423a1edb061625f7fd702908",
+      "type": "Image",
+      "operation": "operations/48ae1090-73a7-4728-8d5b-649bd13501d1",
+      "assetId": "107794939267673",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/WoodFloor007/WoodFloor007_1K-JPG_Color.jpg": {
+      "sha256": "a1ce308af9b0117c7d33fb83c810a3672ae06fa3aab0a1e60ec9f22571399a11",
+      "type": "Image",
+      "operation": "operations/dae59e2f-12ff-493e-9697-e7f6088c3f95",
+      "assetId": "109255658926451",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/WoodFloor007/WoodFloor007_1K-JPG_NormalGL.jpg": {
+      "sha256": "f0567f9fd90548c9a233cf63846354d9e485ec1b0e7fadead7f6d9df52996be2",
+      "type": "Image",
+      "operation": "operations/1ea39593-fddd-4abc-8b75-c7072ec8ddd0",
+      "assetId": "109538589648835",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/WoodFloor007/WoodFloor007_1K-JPG_Roughness.jpg": {
+      "sha256": "de8a819df2f2f35bccc7a6fe009ce5c5ce072e73b0092d910cef43e6982e7b46",
+      "type": "Image",
+      "operation": "operations/621da59e-2b21-4408-8de9-2b95af08ffa9",
+      "assetId": "83987883373638",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Bricks001/Bricks001_1K-JPG_Color.jpg": {
+      "sha256": "496f6cfc9c1a7c7750e00927ede215de279a2b28833c51e97fdb8f1f71175a0a",
+      "type": "Image",
+      "operation": "operations/d5c56204-cbc3-4d8a-b6c1-010c343c87a0",
+      "assetId": "122291970445335",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Bricks001/Bricks001_1K-JPG_NormalGL.jpg": {
+      "sha256": "e6203542a4c068cfac844a1a84b07d559b3d3a31c14bd6eb617d549c4dfdc0d5",
+      "type": "Image",
+      "operation": "operations/d00963ff-36d7-4c55-a065-35806065116b",
+      "assetId": "75487825203627",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Bricks001/Bricks001_1K-JPG_Roughness.jpg": {
+      "sha256": "caefa4bfd4b8fd88e57fd92a857b18ba45bf2cb8ed4d12dd1bfbaf1641625a8b",
+      "type": "Image",
+      "operation": "operations/8fcd0d75-744e-4634-96a0-56e20a027618",
+      "assetId": "71773326671245",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Rock030/Rock030_1K-JPG_Color.jpg": {
+      "sha256": "1dca8a336518ce0adca4b5cbe2ab30819c8769388f1c15278082a99f022c615a",
+      "type": "Image",
+      "operation": "operations/f1405413-e30b-436c-97ce-1a1433b32d5b",
+      "assetId": "79182887938259",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Rock030/Rock030_1K-JPG_NormalGL.jpg": {
+      "sha256": "8fd1d22eb6c7b6e4a374196c0de791f724538b8b86eb9c7a946fec1f5834cb94",
+      "type": "Image",
+      "operation": "operations/602334e5-0713-4c16-9ff2-3c28a2ed3401",
+      "assetId": "70426301248713",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/materiais/Rock030/Rock030_1K-JPG_Roughness.jpg": {
+      "sha256": "f37850f72994458994716d084683d80611528d1685264bde3071569e8ca53489",
+      "type": "Image",
+      "operation": "operations/a4040abe-fff8-4753-b830-de7bd69a2722",
+      "assetId": "91961913994001",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_carpet_000.ogg": {
+      "sha256": "b9524658b52a99a20590f8feefc103088637fd13ea8ec35811aee785e1f2f330",
+      "type": "Audio",
+      "operation": "operations/221e0d88-388e-4a1f-adfb-f040148237fd",
+      "assetId": "87134932225726",
+      "moderation": {
+        "moderationState": "Rejected"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_carpet_001.ogg": {
+      "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781",
+      "type": "Audio",
+      "operation": "operations/21e84784-542a-4a5a-855d-999cee881871",
+      "assetId": "114662421683868",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_carpet_002.ogg": {
+      "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781",
+      "type": "Audio",
+      "operation": "operations/1769b0e3-caaa-4dd7-a01d-cadf0011bf46",
+      "assetId": "74726568845130",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_carpet_003.ogg": {
+      "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c",
+      "type": "Audio",
+      "operation": "operations/4c3a36c6-28b2-47dd-a736-9880e67993eb",
+      "assetId": "107413212766906",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_carpet_004.ogg": {
+      "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c",
+      "type": "Audio",
+      "operation": "operations/9629b876-ef25-4a52-b1e3-92cb18129d1b",
+      "assetId": "137198243185268",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_impact-sounds/footstep_concrete_000.ogg": {
+      "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe",
+      "type": "Audio",
+      "operation": "operations/b3b15234-edb9-4928-8ff9-d3e95cfa4273",
+      "assetId": "102808002164819",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/back_001.ogg": {
+      "sha256": "07db973f79f6ae0f2edc34561e7592e24d0577455919fb602cb8ecc0da991dcf",
+      "type": "Audio",
+      "operation": "operations/8dc517b6-53ed-4963-9d7e-ad469a0bac95",
+      "assetId": "139456171767246",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/back_002.ogg": {
+      "sha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+      "type": "Audio",
+      "operation": "operations/ab46b4f3-c60f-4bf2-acc8-59ec8880e72b",
+      "assetId": "120685053547191",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/back_003.ogg": {
+      "sha256": "ff5e87de1230b1a5f1fa83e5a4ba9d7eb1c07154267ac34b510a17d4caa03cef",
+      "type": "Audio",
+      "operation": "operations/82d19bf8-fbfc-48e2-a28c-ba515bea92a4",
+      "assetId": "76923789101333",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/back_004.ogg": {
+      "sha256": "c22e3c49f42c2a5ba6748e91283efe124f32822469c1258c3e5d7b3d7ab9361c",
+      "type": "Audio",
+      "operation": "operations/b05e28e7-ca3d-4afb-83fe-42ac37ee367d",
+      "assetId": "134270233970620",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/bong_001.ogg": {
+      "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710",
+      "type": "Audio",
+      "operation": "operations/60dfcc9f-5fd4-4096-8664-69b21d719b3a",
+      "assetId": "111982223143011",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/sons/kenney_interface-sounds/click_001.ogg": {
+      "sha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9",
+      "type": "Audio",
+      "operation": "operations/33ef2698-63b6-45bb-bf00-12b313df3726",
+      "assetId": "78161550467780",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/circle_01.png": {
+      "sha256": "4b2d03683bf0fe4a946567adc3bd86b8ba045da84cee58dc2cf8aef63bbfaa06",
+      "type": "Image",
+      "operation": "operations/9f42ce7b-c363-4ab9-bc85-cd8602e966a6",
+      "assetId": "88932588522251",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/circle_02.png": {
+      "sha256": "8a2112a6a5610c7cdcbfe8af0a5162b42dfb3431c63f494743945337b7981e51",
+      "type": "Image",
+      "operation": "operations/ef91fcc7-7ed0-4d9d-bca8-0fb994af008a",
+      "assetId": "91328608050793",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/circle_03.png": {
+      "sha256": "ed6c6f082e666c16bcaca89f15aefb55df9bf69450090518bcae1d3d61f82936",
+      "type": "Image",
+      "operation": "operations/fe1d4947-7e05-408d-a5a0-e9c7c915bc94",
+      "assetId": "103410102366344",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/circle_04.png": {
+      "sha256": "742da1a1b96b93ae446700f6085385d1f62844352da870c89427307b7b7cf03b",
+      "type": "Image",
+      "operation": "operations/072c683c-3cbb-42ff-8d84-4faba3b687b4",
+      "assetId": "85198888576671",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/circle_05.png": {
+      "sha256": "925b8ac284436f74f9cadf0ecd058da1c08fba65c098e4e34fd220603022f02e",
+      "type": "Image",
+      "operation": "operations/c4f53d45-d62a-44e4-80d7-571a79d4c8e1",
+      "assetId": "102675005815427",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/dirt_01.png": {
+      "sha256": "6827a0a32a293ec9570fb98d63963b8dd6e6aaba9e1096afad932e93a378bea9",
+      "type": "Image",
+      "operation": "operations/aaff29ac-2902-4150-95d8-d729a273147d",
+      "assetId": "124137204544937",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/dirt_02.png": {
+      "sha256": "fcecc70b561f80568b3391c3dc1180126d86ce4fbd4d1b01518e6045203e10a3",
+      "type": "Image",
+      "operation": "operations/8e12f89a-6dc8-43b2-9704-872ff042bf77",
+      "assetId": "99391328586075",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/dirt_03.png": {
+      "sha256": "427d6dcad5a8d16b8143d412a5a48ce859716150a074ea5bb36eca577c0ae541",
+      "type": "Image",
+      "operation": "operations/a9e3f503-21e3-4a9b-8381-6dcbb68a0b8e",
+      "assetId": "88523081050825",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/fire_01.png": {
+      "sha256": "9727a9743ac6ab8dd4dd79f5fc5b0266290efae45f4d4452279eb5e4bcf3a978",
+      "type": "Image",
+      "operation": "operations/03174b7a-017f-4539-9e03-8bdbcf7150e8",
+      "assetId": "109875320986341",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/fire_02.png": {
+      "sha256": "e2677330b0668033b0744276da74de605164aa5d58203bf251a8ec84e62c2108",
+      "type": "Image",
+      "operation": "operations/67dc3da3-499b-45f4-8c44-37fa804bad1a",
+      "assetId": "121421328126467",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/flame_01.png": {
+      "sha256": "92a70bcb90b1e21c57b2dae42843135703b2e988abee97433f84c3119723d144",
+      "type": "Image",
+      "operation": "operations/68d2276d-35e0-45bb-ad96-2bae161eda93",
+      "assetId": "90071262237477",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/particulas/flame_02.png": {
+      "sha256": "7afff66979a5a30319d4fa491b13a9027223ebbdadfa38fae4ae76e31d05d9c5",
+      "type": "Image",
+      "operation": "operations/960f61cf-c54d-40b2-a3f5-0a2715209fa2",
+      "assetId": "103284202244502",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_furniture-kit/bookcaseClosed.glb": {
+      "sha256": "d4d3e25b821233a3ea27bd41df777dd6af4f12e764de937d2751acf95a6d8b51",
+      "type": "Model",
+      "operation": "operations/1f62bba0-3c1b-49ea-ae36-0ee840c392fc",
+      "assetId": "95098288309064",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_furniture-kit/chair.glb": {
+      "sha256": "3b5aa452be30366bd003cf1f26c956d74b1f0e2f33689f0521eb0eff53a209b6",
+      "type": "Model",
+      "operation": "operations/8a2f4fd8-3dd2-445a-97ab-6cfe0d289443",
+      "assetId": "110404845357017",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_furniture-kit/table.glb": {
+      "sha256": "81bc7b7619135812c26afa27200617eb94432dcd373942d42ca26a7f13eedcb2",
+      "type": "Model",
+      "operation": "operations/cea1006e-bc96-4f4e-bc03-62b9ab2a8955",
+      "assetId": "95930305770366",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_nature-kit/flower_redA.glb": {
+      "sha256": "9bd5bf05be26e6de1f1a544c699cf1df0c01d0daac8e13327d6980fe890e3eb6",
+      "type": "Model",
+      "operation": "operations/79890675-ed0d-41ea-b412-4fe7b61f5832",
+      "assetId": "81989885210046",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_nature-kit/grass.glb": {
+      "sha256": "0120bd1cb36407af5d8af1feb87792db34931a04577fee1902765fea7fb5f4b6",
+      "type": "Model",
+      "operation": "operations/99b1097b-9b8e-49f4-8500-df0f6d598c0d",
+      "assetId": "113450962422701",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_nature-kit/rock_smallA.glb": {
+      "sha256": "3cdca5a75fc1eb83bc80529361e2ed3d14cb563a8d2bbfba489b701b9a5a46a6",
+      "type": "Model",
+      "operation": "operations/daf6814b-7ba0-4d0c-b72c-f6482947f8ba",
+      "assetId": "88287860157468",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/kenney_nature-kit/tree_small.glb": {
+      "sha256": "4ceb09b1e3b12d3e2fc19439601a2db73d8721aa3dd87bfe121147d964c44593",
+      "type": "Model",
+      "operation": "operations/38f275a6-e01d-4dc3-b13b-738fc788f353",
+      "assetId": "122521087433356",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/musicas/Village.ogg": {
+      "sha256": "23acde1424663d18a0a231c16e5183ef521fc3ba0b54c9bd8e834fe028fe7a3d",
+      "type": "Audio",
+      "operation": "operations/399dc078-a88c-4020-9f09-cdbf553189f4",
+      "assetId": "128439170003826",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/musicas/Boss.ogg": {
+      "sha256": "62fdc89e6faa3e92131fc571c4d0725c33fa0af099a6cca0a4d2cce0472f79d6",
+      "type": "Audio",
+      "operation": "operations/bca913e6-b7be-4e27-a9ec-11b2e6c960fa",
+      "assetId": "82020666810385",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/musicas/Sea.ogg": {
+      "sha256": "1911c8738cb295682c5951c7900068dcda6efcf267eee32cb209b8730613554e",
+      "type": "Audio",
+      "operation": "operations/316ecaf6-f7ed-4299-b657-229a545e5c7e",
+      "assetId": "77549450727989",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/embarcacoes/ship-ocean-liner.glb": {
+      "sha256": "b692c3858cf017ceac79bdecf3ba5f73a79092d6cc523b16387172bb1845543e",
+      "type": "Model",
+      "operation": "operations/accbf864-58ed-4608-9d7a-3de7f21f612f",
+      "assetId": "84710281897900",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/embarcacoes/boat-speed-a.glb": {
+      "sha256": "52d103d6ee4d44fe879f0c132a7325e5318089625484ff02d4a359389826ebbd",
+      "type": "Model",
+      "operation": "operations/cf6a0f01-a6f8-4f03-acd2-50f5eb355729",
+      "assetId": "94207452050463",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/embarcacoes/boat-row-small.glb": {
+      "sha256": "f6b17b01aa0faf34838d4dc212e24e73ce096d08ec1e1c01c8ddc1e961d96247",
+      "type": "Model",
+      "operation": "operations/d99df844-71d4-47c7-86f3-7f0152ebe259",
+      "assetId": "91806077781344",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    },
+    "asset_library/para_importar/modelos/embarcacoes/colormap.png": {
+      "sha256": "311138350e74e35c5497a1bd8076a01740b7c302bed11027639fa553459a68de",
+      "type": "Image",
+      "operation": "operations/03e0ced8-2f2e-4489-9485-7cf107ed28d4",
+      "assetId": "70871606143749",
+      "moderation": {
+        "moderationState": "Approved"
+      }
+    }
+  }
+}

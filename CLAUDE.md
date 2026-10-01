@@ -16,6 +16,10 @@ o Rojo ao vivo não mexe nele (ver seção abaixo). Edição manual = fluxo de c
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 
+## ONDE PARAMOS (01/10) — TRAILER v3 feito, falta o dono gravar; ler `TRAILER_V3.md`
+- `TrailerService`/`TrailerController` reescritos (16:9 + 9:16, inglês, sem música, contagem 3 s, sets em `MARKS` /
+  `Workspace.TrailerMarks.<Nome>`). Feedback do dono sobre câmeras/sets/poses = próxima leva.
+
 ## ONDE PARAMOS (30/09, noite) — bug "nasço invisível tomando dano" CORRIGIDO; ler PROGRESSO "Correções 30/09 noite"
 - Causa 1: personagem nascia ANTES do perfil (no Porto) e era recriado ~1 s depois no checkpoint salvo (StandService →
   `ForceCharacter`); no servidor real a câmera ficava no corpo destruído. Agora o 1º spawn espera o perfil (≤15 s) e

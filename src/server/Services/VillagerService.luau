@@ -14,7 +14,7 @@ local Log = require(Modules:WaitForChild("Log"))
 
 local VillagerService = {}
 
-VillagerService.Count = 7
+VillagerService.Count = 12
 local NAMES = { "Moradora", "Morador", "Pescador", "Lavadeira", "Carpinteiro", "Vendedora de peixe", "Aprendiz", "Velho do porto" }
 local SKIN = { Color3.fromRGB(234, 192, 160), Color3.fromRGB(198, 150, 110), Color3.fromRGB(150, 104, 72), Color3.fromRGB(110, 76, 52) }
 local CLOTH = { Color3.fromRGB(150, 60, 60), Color3.fromRGB(60, 90, 140), Color3.fromRGB(90, 120, 70), Color3.fromRGB(180, 150, 90),
@@ -42,6 +42,8 @@ local function makeVillager(i: number, at: Vector3): (Model?, Humanoid?)
 	desc.TorsoColor = CLOTH[rng:NextInteger(1, #CLOTH)]
 	local legs = CLOTH[rng:NextInteger(1, #CLOTH)]
 	desc.LeftLegColor, desc.RightLegColor = legs, legs
+	desc.HairAccessory = if i % 2 == 0 then "376548738" else "63690008"
+	desc.Shirt, desc.Pants = 3670737444, 398633812
 	local ok, model = pcall(function()
 		return Players:CreateHumanoidModelFromDescription(desc, Enum.HumanoidRigType.R6)
 	end)

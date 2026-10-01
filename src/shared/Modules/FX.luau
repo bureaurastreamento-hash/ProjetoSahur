@@ -1217,4 +1217,61 @@ function FX.PlaySoundUI(folder: string, name: string)
 	end
 end
 
+--- Som de UI que precisa PARAR num momento exato (loops): devolve a função que para (com fade).
+function FX.PlaySoundUIStoppable(folder: string, name: string): (() -> ())?
+	local template = Assets.GetSound(folder, name)
+	if template then
+		return (playClone(template, SoundService))
+	end
+	return nil
+end
+
+function FX.PlaySoundAtPosition(position: Vector3, folder: string, name: string)
+	local template = Assets.GetSound(folder, name)
+	if not template then return end
+	local anchor = Instance.new("Part")
+	anchor.Name, anchor.Size, anchor.Position, anchor.Transparency = "FXAudio", Vector3.one, position, 1
+	anchor.Anchored, anchor.CanCollide, anchor.CanTouch, anchor.CanQuery = true, false, false, false
+	anchor.Parent = Workspace
+	playClone(template, anchor)
+	task.delay(math.max(5, template.TimeLength + 1), function() anchor:Destroy() end)
+end
+
+local music: Sound? = nil
+local musicName = ""
+local musicGeneration = 0
+-- Duas vozes no máximo durante a transição; categoria separada dos 16 SFX.
+function FX.SetMusic(name: string, volume: number)
+	volume = math.clamp(volume, 0, 1)
+	if name == musicName and music and music.Parent then
+		TweenService:Create(music, TweenInfo.new(1), { Volume = volume * .55 }):Play()
+		return
+	end
+	musicGeneration += 1
+	local generation = musicGeneration
+	local previous = music
+	music = nil
+	musicName = name
+	if previous then
+		TweenService:Create(previous, TweenInfo.new(1.2), { Volume = 0 }):Play()
+		task.delay(1.3, function() previous:Destroy() end)
+	end
+	if name == "" or volume <= 0 then return end
+	local template = Assets.GetSound("Music", name)
+	if not template then return end
+	local sound = template:Clone()
+	sound.Name, sound.Looped, sound.Volume, sound.Parent = "FXSoundtrack", true, 0, SoundService
+	music = sound
+	task.spawn(function()
+		local ok = pcall(function() game:GetService("ContentProvider"):PreloadAsync({ sound }) end)
+		if generation ~= musicGeneration or not sound.Parent then return end
+		if not ok or not sound.IsLoaded then
+			warn("[FX] trilha indisponível: " .. name)
+			sound:Destroy(); music = nil; musicName = ""
+			return
+		end
+		sound:Play()
+		TweenService:Create(sound, TweenInfo.new(1.2), { Volume = volume * .55 }):Play()
+	end)
+end
 return FX

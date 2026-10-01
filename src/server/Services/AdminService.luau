@@ -23,7 +23,7 @@
 	  RefreshLeaderboard, SetTime {amount}, ServerInfo, SummonBoss, SummonBossStrong (x3 à solta), KillBoss,
 	  DespawnBoss, RestoreDestructibles, TakeArrow, SummonTraitor/KillTraitor/DespawnTraitor (capítulo final),
 	  SetQuestChapter {amount} (por alvo), SpawnBotPassive/Aggressive/Idle {id}, BotsPassive/Aggressive/Idle,
-	  BotsFill, ClearBots (BotService: bots com o combate real), Trailer (tudo), TrailerScene {text} (uma cena),
+	  BotsFill, ClearBots (BotService: bots com o combate real), Trailer (16:9) / TrailerV (9:16), TrailerScene {scene, v} (uma cena),
 	  TournamentOpen {mode, coins, eventPoints, xp, cosmetic} / TournamentStart / TournamentCancel (Último de pé)
 	Flags viram atributos no Player: Invulnerable, DevInfiniteEnergy, DevNoCooldown,
 	  DevDamageMult, DevSpeed, DevFly (lidos por HealthService/AbilityService/CombatService/AntiExploit).
@@ -977,26 +977,27 @@ global.Trailer = function()
 	if not TrailerService then
 		return false, "TrailerService não carregou"
 	end
-	local ok, msg = TrailerService.Run("all")
-	return ok, msg
+	return TrailerService.Run("all")
 end
 
---- Uma cena só: args { scene = "combo"|"parry"|"dash"|"abilities"|"ult"|"boss"|"brawl", id = personagem?,
---- me = true (você fica na cena, não é estacionado) }.
+global.TrailerV = function()
+	local TrailerService = lazyRequire("TrailerService")
+	if not TrailerService then
+		return false, "TrailerService não carregou"
+	end
+	return TrailerService.Run("all v")
+end
+
+--- Uma cena só: args { scene = "open"|"beach"|"world"|"arrow"|"combo"|"parry"|"dash"|"rush"|"timestop"|"ult"|"boss"|
+--- "portal"|"poses"|"tbc"|"logo", v = true (enquadramento 9:16) }.
 global.TrailerScene = function(_, args)
 	local TrailerService = lazyRequire("TrailerService")
 	if not TrailerService then
 		return false, "TrailerService não carregou"
 	end
 	local scene = if typeof(args) == "table" and typeof(args.scene) == "string" then args.scene else "combo"
-	local parts = { scene }
-	if typeof(args) == "table" and typeof(args.id) == "string" and args.id ~= "" then
-		table.insert(parts, args.id)
-	end
-	if typeof(args) == "table" and args.me == true then
-		table.insert(parts, "me")
-	end
-	return TrailerService.Run(table.concat(parts, " "))
+	local vertical = typeof(args) == "table" and args.v == true
+	return TrailerService.Run(scene .. (if vertical then " v" else ""))
 end
 
 global.TrailerStop = function()

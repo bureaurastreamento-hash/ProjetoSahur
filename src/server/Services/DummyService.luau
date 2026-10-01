@@ -36,7 +36,7 @@ local ATTACK_DAMAGE = 3
 
 local DummyService = {}
 
-DummyService.Enabled = true
+DummyService.Enabled = false -- dono: retirar os bonecos pretos soltos; DEV pode habilitar para teste
 local RESPAWN_SECONDS = 4
 local LEASH_RADIUS = 20 -- studs do ponto de spawn: além disso o boneco volta sozinho
 local LEASH_CHECK = 0.4

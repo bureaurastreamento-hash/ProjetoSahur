@@ -1,0 +1,98 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.172549,
+                  0.8470588,
+                  0.7215686
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://137470382573565",
+                "Material": "Plastic",
+                "CFrame": [
+                  -0.2498573660850525,
+                  0.9125000238418579,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  1.5909751653671265,
+                  1.8250000476837158,
+                  1.8105906248092651
+                ]
+              },
+              "name": "flower_redA",
+              "className": "MeshPart"
+            },
+            {
+              "children": [],
+              "properties": {
+                "CanQuery": false,
+                "CanCollide": false,
+                "Color": [
+                  0.8784314,
+                  0.2901961,
+                  0.3137255
+                ],
+                "Anchored": true,
+                "CanTouch": false,
+                "TextureID": "",
+                "CollisionFidelity": "Box",
+                "MeshId": "rbxassetid://131624856404151",
+                "Material": "Plastic",
+                "CFrame": [
+                  0.045625001192092896,
+                  2.375,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "Size": [
+                  0.8199999928474426,
+                  1.0999999046325684,
+                  0.8199999928474426
+                ]
+              },
+              "name": "flower_redA2",
+              "className": "MeshPart"
+            }
+          ],
+          "properties": {},
+          "name": "flower_redA_Node",
+          "className": "Model"
+        }
+      ],
+      "properties": {},
+      "name": "FX_CC0_flower_redA",
+      "className": "Model"
+    }
+  ],
+  "properties": {},
+  "className": "Model"
+}

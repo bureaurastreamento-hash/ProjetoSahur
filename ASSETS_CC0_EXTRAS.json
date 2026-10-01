@@ -1,0 +1,105 @@
+{
+  "files": [
+    {
+      "path": "asset_library/para_importar/modelos/kenney_furniture-kit/bookcaseClosed.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_furniture-kit/bookcaseClosed.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "d4d3e25b821233a3ea27bd41df777dd6af4f12e764de937d2751acf95a6d8b51"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_furniture-kit/chair.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_furniture-kit/chair.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "3b5aa452be30366bd003cf1f26c956d74b1f0e2f33689f0521eb0eff53a209b6"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_furniture-kit/table.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_furniture-kit/table.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "81bc7b7619135812c26afa27200617eb94432dcd373942d42ca26a7f13eedcb2"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_nature-kit/flower_redA.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_nature-kit/flower_redA.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "9bd5bf05be26e6de1f1a544c699cf1df0c01d0daac8e13327d6980fe890e3eb6"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_nature-kit/grass.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_nature-kit/grass.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "0120bd1cb36407af5d8af1feb87792db34931a04577fee1902765fea7fb5f4b6"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_nature-kit/rock_smallA.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_nature-kit/rock_smallA.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "3cdca5a75fc1eb83bc80529361e2ed3d14cb563a8d2bbfba489b701b9a5a46a6"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/kenney_nature-kit/tree_small.glb",
+      "sourceFile": "asset_library/para_importar/modelos/kenney_nature-kit/tree_small.obj",
+      "license": "CC0",
+      "provider": "Kenney",
+      "sha256": "4ceb09b1e3b12d3e2fc19439601a2db73d8721aa3dd87bfe121147d964c44593"
+    },
+    {
+      "path": "asset_library/para_importar/musicas/Village.ogg",
+      "author": "Juhani Junkala",
+      "source": "https://opengameart.org/content/jrpg-pack-2-towns",
+      "license": "CC0",
+      "sha256": "23acde1424663d18a0a231c16e5183ef521fc3ba0b54c9bd8e834fe028fe7a3d"
+    },
+    {
+      "path": "asset_library/para_importar/musicas/Boss.ogg",
+      "author": "Juhani Junkala",
+      "source": "https://opengameart.org/content/boss-battle-music",
+      "license": "CC0",
+      "sha256": "62fdc89e6faa3e92131fc571c4d0725c33fa0af099a6cca0a4d2cce0472f79d6"
+    },
+    {
+      "path": "asset_library/para_importar/musicas/Sea.ogg",
+      "author": "Umplix",
+      "source": "https://opengameart.org/content/deep-sea",
+      "license": "CC0",
+      "sha256": "1911c8738cb295682c5951c7900068dcda6efcf267eee32cb209b8730613554e"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/embarcacoes/ship-ocean-liner.glb",
+      "sourceFile": "asset_library/kenney_watercraft/Models/OBJ format/ship-ocean-liner.obj",
+      "provider": "Kenney",
+      "source": "https://kenney.nl/assets/watercraft-kit",
+      "license": "CC0",
+      "sha256": "b692c3858cf017ceac79bdecf3ba5f73a79092d6cc523b16387172bb1845543e"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/embarcacoes/boat-speed-a.glb",
+      "sourceFile": "asset_library/kenney_watercraft/Models/OBJ format/boat-speed-a.obj",
+      "provider": "Kenney",
+      "source": "https://kenney.nl/assets/watercraft-kit",
+      "license": "CC0",
+      "sha256": "52d103d6ee4d44fe879f0c132a7325e5318089625484ff02d4a359389826ebbd"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/embarcacoes/boat-row-small.glb",
+      "sourceFile": "asset_library/kenney_watercraft/Models/OBJ format/boat-row-small.obj",
+      "provider": "Kenney",
+      "source": "https://kenney.nl/assets/watercraft-kit",
+      "license": "CC0",
+      "sha256": "f6b17b01aa0faf34838d4dc212e24e73ce096d08ec1e1c01c8ddc1e961d96247"
+    },
+    {
+      "path": "asset_library/para_importar/modelos/embarcacoes/colormap.png",
+      "provider": "Kenney",
+      "source": "https://kenney.nl/assets/watercraft-kit",
+      "license": "CC0",
+      "sha256": "311138350e74e35c5497a1bd8076a01740b7c302bed11027639fa553459a68de"
+    }
+  ]
+}
