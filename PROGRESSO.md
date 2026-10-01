@@ -2,6 +2,18 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Backup e envio ao GitHub — 30/09, 23:55 (Codex)
+
+- A pedido do dono, todas as mudanças desta leva foram registradas no commit `653ab99` e enviadas a
+  `origin/codex/hud-pve-portos-cc0`. O checkout anterior estava em detached HEAD; a branch preserva o trabalho.
+- Place completa salva pelo **Studio → Arquivo → Baixar uma cópia** em
+  `backups/place-hud-portos-2026-10-01.rbxl` (2.239.299 bytes, 26.781 instâncias). Backup local ignorado pelo git,
+  conforme política do projeto. Não é `rojo build`, não substitui a place e não foi publicado.
+- Arquivo lido/verificado: Terrain, Taberna/cav, embarcação importada e serviços novos presentes; nenhum dos
+  três scripts temporários de verificação. SHA-256:
+  `739ab309cb13d9515f413a92e9abeda9f2ad827dd8210328d90e6be9ffd470a9`.
+- Studio em Edit, Rojo conectado. O dono publicará a sessão atual pelo Studio. Publicação não executada pela IA.
+
 ## HUD, música, importação CC0, portos e ciclo de NPCs — 30/09 (Codex; Studio conectado)
 
 **Estado atual:** Rojo servindo `127.0.0.1:34872`, conectado à place **85844807133499** pelo Studio do dono.
