@@ -14,6 +14,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
@@ -113,8 +114,10 @@ local function startOrbit()
 	local t0 = os.clock()
 	local c = LaunchConfig.LobbyCenter + Vector3.new(0, 10, 0)
 	orbitConn = RunService.RenderStepped:Connect(function()
-		local a = (os.clock() - t0) * 0.05
-		camera.CFrame = CFrame.lookAt(c + Vector3.new(math.cos(a) * 120, 55, math.sin(a) * 120), c)
+		-- vai-e-vem lento POR FORA, no lado norte: Coliseu inteiro com a montanha do santuário ao fundo
+		-- (por dentro a câmera passava no meio das colunas; pelo sul a montanha tapa a vista)
+		local a = math.rad(80 + 45 * math.sin((os.clock() - t0) * 0.06))
+		camera.CFrame = CFrame.lookAt(c + Vector3.new(math.cos(a) * 230, 60, math.sin(a) * 230), c + Vector3.new(0, 5, 0))
 	end)
 end
 
@@ -149,6 +152,43 @@ local function ground(p: Vector3): Vector3
 end
 
 local showLobby: () -> ()
+
+-- Hotbar padrão do Roblox (Tools) escondida no lobby: ficava por cima dos slots de habilidade e no meio do título.
+local function applyBackpack()
+	pcall(function()
+		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, player:GetAttribute("PreLaunchLocked") ~= true)
+	end)
+end
+
+-- Telas do jogo (HUD, topbar...) escondidas só enquanto a tela de título está aberta; voltam ao ir para o lobby.
+local hiddenForTitle: { ScreenGui } = {}
+local titleAddedConn: RBXScriptConnection? = nil
+local function hideForTitle(g: Instance)
+	if g:IsA("ScreenGui") and g.Name ~= "LaunchGui" and g.Enabled then
+		g.Enabled = false
+		table.insert(hiddenForTitle, g)
+	end
+end
+local function hideOthersForTitle()
+	for _, g in playerGui:GetChildren() do
+		hideForTitle(g)
+	end
+	if not titleAddedConn then
+		titleAddedConn = playerGui.ChildAdded:Connect(hideForTitle) -- HUD criado depois do título
+	end
+end
+local function restoreAfterTitle()
+	if titleAddedConn then
+		titleAddedConn:Disconnect()
+		titleAddedConn = nil
+	end
+	for _, g in hiddenForTitle do
+		if g.Parent and not (STORY_GUIS[g.Name] and player:GetAttribute("PreLaunchLocked") == true) then
+			g.Enabled = true
+		end
+	end
+	table.clear(hiddenForTitle)
+end
 
 local function playIntro()
 	if playingIntro or TrailerController.IsActive() then
@@ -384,13 +424,14 @@ local function buildGui(): ScreenGui
 	skip.Position = UDim2.new(0.5, 0, 0.56, 58)
 	text(tf, table.concat(LaunchConfig.Notice, "\n"), FONT_BODY, 14, SUB, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -24), Size = UDim2.new(0.9, 0, 0, 48) })
 	titleFrame = tf
+	task.defer(hideOthersForTitle) -- depois que o HUD dos outros controllers já existe
 
 	-- Faixa do lobby
 	local bar = Instance.new("Frame")
 	bar.Name = "LobbyBar"
 	bar.AnchorPoint = Vector2.new(0.5, 0)
 	bar.Position = UDim2.new(0.5, 0, 0, 10)
-	bar.Size = UDim2.new(0, 470, 0, 44)
+	bar.Size = UDim2.new(0, 560, 0, 44)
 	bar.BackgroundColor3 = PANEL
 	bar.BackgroundTransparency = 0.15
 	bar.Visible = false
@@ -414,6 +455,8 @@ end
 
 showLobby = function()
 	stopOrbit()
+	restoreAfterTitle()
+	applyBackpack() -- a intro (TrailerController) religa toda a CoreGui no fim
 	if titleFrame then
 		titleFrame.Visible = false
 	end
@@ -445,6 +488,7 @@ local function guard(g: Instance)
 end
 
 local function refreshLock()
+	applyBackpack()
 	if locked() then
 		if not gui then
 			gui = buildGui()
@@ -458,6 +502,7 @@ local function refreshLock()
 	elseif gui then
 		playingIntro = false
 		stopOrbit()
+		restoreAfterTitle()
 		gui:Destroy()
 		gui, titleFrame, lobbyBar, panel, boardList, donatedLabel = nil, nil, nil, nil, nil, nil
 		for _, g in playerGui:GetChildren() do
@@ -502,6 +547,18 @@ function IntroController.Start()
 	end)
 	player:GetAttributeChangedSignal("PreLaunchLocked"):Connect(refreshLock)
 	player:GetAttributeChangedSignal("Donated"):Connect(updateDonated)
+	-- Só no Studio: o teste automático (MCP) abre lobby/painel sem clique — atributo IntroDebug = "lobby" | "panel"
+	if RunService:IsStudio() then
+		player:GetAttributeChangedSignal("IntroDebug"):Connect(function()
+			local mode = player:GetAttribute("IntroDebug")
+			if gui and (mode == "lobby" or mode == "panel") then
+				showLobby()
+				if panel then
+					panel.Visible = mode == "panel"
+				end
+			end
+		end)
+	end
 	refreshLock()
 	task.spawn(function()
 		local ok, res = pcall(function()

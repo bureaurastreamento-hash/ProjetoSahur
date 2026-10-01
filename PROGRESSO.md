@@ -2,6 +2,17 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Revisão do lobby de pré-lançamento — 01/10, noite (Claude; Play via MCP como jogador)
+
+- Tela de título: escondia nada → agora esconde HUD/topbar/hotbar enquanto aberta (volta ao ir para o lobby); câmera
+  em vai-e-vem POR FORA do Coliseu, lado norte (montanha ao fundo) — por dentro passava no meio das colunas.
+- Lobby: hotbar padrão do Roblox (Tools) escondida enquanto preso (ficava por cima dos slots 1–4/R/G); faixa do lobby
+  mais larga (texto numa linha). Painel APOIAR/SOBRE conferido em print.
+- Studio-only: atributo `IntroDebug` = "lobby" | "panel" abre lobby/painel sem clique (teste automático pelo MCP).
+- Dica da missão "Rumo à Cidade Âmbar" atualizada (portal âmbar ao lado do Pescador da Rota).
+- Developer Products de doação: a chave `ROBLOX_API_KEY` não tem o escopo `developer-product:read/write` → dono
+  libera no Creator Hub (Open Cloud → API Keys, sistema developer-products, universo 10766480907) e a IA cria pela API.
+
 ## Cidade Âmbar (Ilha 4) — mapa montado — 01/10, noite (Claude; Studio conectado via Rojo/MCP)
 
 - `tools/gerar_cidade_ambar.py` → `src/workspace/FXCidadeAmbar.model.json` (Workspace.Sahur.FXCidadeAmbar, 653 peças,

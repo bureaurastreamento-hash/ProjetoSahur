@@ -189,7 +189,7 @@ StoryConfig.Chapters = {
 		}, UnlockFlag = "cidade_ambar_unlocked",
 			Guide = "O Observador não quer poder. Quer saber quem está ligando os mundos. Isso o torna mais perigoso." },
 		{ Id = "rumo_cidade_ambar", Key = true, Mission = "16 · chegada", Region = "cidade_ambar", Title = "Rumo à Cidade Âmbar", Objectives = {}, Arrive = "cidade_ambar",
-			Hint = "A rota só abre quando a Cidade Âmbar tiver mapa e chegada seguros.",
+			Hint = "Use o portal âmbar ao lado do Pescador da Rota do Eclipse para atravessar até a Cidade Âmbar.",
 			Guide = "\"Você acredita que as rachaduras começaram recentemente?\" ... Não gosto de como ele disse isso. Nossa próxima parada é a Cidade Âmbar." },
 		-- ILHA 4 — CIDADE ÂMBAR. Marcadores reais ligados por CidadeAmbarService; sem criar/mover arte.
 		{ Id = "uma_cidade_normal", Mission = "16", Region = "cidade_ambar", Title = "Uma Cidade Normal", Objectives = {
