@@ -70,6 +70,7 @@ local cc: ColorCorrectionEffect? = nil
 local bloom: BloomEffect? = nil
 local dof: DepthOfFieldEffect? = nil
 local hiddenModels: { [Model]: boolean } = {}
+local hideHumanoids = false -- modo LOCAL (intro do pré-lançamento): todo personagem/NPC some só nesta tela
 local savedNameDisplay: { [Humanoid]: Enum.HumanoidDisplayDistanceType } = {}
 local savedBillboards: { [BillboardGui]: boolean } = {}
 local frozen: { [Model]: Model } = {}
@@ -823,7 +824,7 @@ local function refreshHidden(m: Instance)
 	if m:FindFirstChildOfClass("Humanoid") then
 		quietModel(m)
 	end
-	local hide = m:GetAttribute("TrailerHidden") == true and not frozen[m]
+	local hide = (m:GetAttribute("TrailerHidden") == true or (hideHumanoids and m:FindFirstChildOfClass("Humanoid") ~= nil)) and not frozen[m]
 	if hide and not hiddenModels[m] then
 		hiddenModels[m] = true
 		setModelVisible(m, false)
@@ -1410,6 +1411,7 @@ local function begin(data: any)
 	end
 	active = true
 	format = if data.format == "v" then "v" else "h"
+	hideHumanoids = data.hideHumanoids == true
 	local camera = Workspace.CurrentCamera
 	if camera then
 		savedCameraType = camera.CameraType
@@ -1486,6 +1488,7 @@ local function finish()
 		return
 	end
 	active = false
+	hideHumanoids = false
 	stopShot()
 	for _, c in conns do
 		c:Disconnect()
@@ -1634,6 +1637,32 @@ local handlers: { [string]: (data: any) -> () } = {
 		StandSilhouette.Show(m, color, tonumber(data.seconds) or 3, { punch = data.punch == true, rate = tonumber(data.rate) or 0.1, style = aw.Stand, scale = tonumber(data.scale) })
 	end,
 }
+
+--- Roda um evento do trailer SÓ neste cliente (mesmo formato do NotifyTrailer): intro do pré-lançamento
+--- (IntroController). "begin" com hideHumanoids = true esconde todos os personagens/NPCs só nesta tela.
+function TrailerController.Dispatch(event: string, data: any?)
+	local d = if typeof(data) == "table" then data else {}
+	if event == "begin" then
+		begin(d)
+		return
+	elseif event == "end" then
+		finish()
+		return
+	end
+	local h = handlers[event]
+	if active and h then
+		local ok, err = pcall(function()
+			h(d)
+		end)
+		if not ok then
+			warn(("[TrailerController] %s: %s"):format(event, tostring(err)))
+		end
+	end
+end
+
+function TrailerController.IsActive(): boolean
+	return active
+end
 
 function TrailerController.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyTrailer).OnClientEvent:Connect(function(event: string, data: any)

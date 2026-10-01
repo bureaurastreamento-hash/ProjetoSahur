@@ -534,7 +534,8 @@ function StoryService.Start()
 		end)
 		apply(player)
 		local _p, _c, act = current(player)
-		if act and act.Choice then task.delay(4, function() offerChoice(player, act) end) end -- Eco pendente
+		-- Eco pendente (fora do lobby do pré-lançamento)
+		if act and act.Choice and player:GetAttribute("PreLaunchLocked") ~= true then task.delay(4, function() offerChoice(player, act) end) end
 	end)
 	-- objetivos "reach_<lugar>": confere a posição a cada meio segundo
 	task.spawn(function()

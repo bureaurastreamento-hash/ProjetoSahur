@@ -21,6 +21,7 @@ local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local Remotes = require(Modules:WaitForChild("RemoteEvents"))
 local Log = require(Modules:WaitForChild("Log"))
 local ShopConfig = require(Modules:WaitForChild("ShopConfig"))
+local LaunchConfig = require(Modules:WaitForChild("LaunchConfig"))
 local CharacterDefs = require(Modules:WaitForChild("CharacterDefs"))
 local RateLimiter = require(Modules:WaitForChild("RateLimiter"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
@@ -29,6 +30,8 @@ local ShopService = {}
 
 --- (player, product) -> entregou? Preenchido por CosmeticsService (giros / pick).
 ShopService.CosmeticHook = nil :: ((Player, any) -> boolean)?
+--- Doação (LaunchService.RecordDonation): (userId, amount, purchaseId) -> gravou?
+ShopService.DonationHook = nil :: ((number, number, string) -> boolean)?
 
 local shopLimiter = RateLimiter.new(3, 1)
 local notifyShop: RemoteEvent
@@ -155,6 +158,16 @@ local function passByAssetId(gamepassId: number): ShopConfig.Pass?
 end
 
 local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseDecision
+	-- Doação do pré-lançamento (LaunchService): não depende do perfil nem do jogador estar no servidor
+	local donation = LaunchConfig.DonationByProduct(receipt.ProductId)
+	if donation then
+		local hook = ShopService.DonationHook
+		local purchaseId = receipt.PurchaseId
+		if hook and typeof(purchaseId) == "string" and purchaseId ~= "" and hook(receipt.PlayerId, donation.amount, purchaseId) then
+			return Enum.ProductPurchaseDecision.PurchaseGranted
+		end
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	end
 	local player = Players:GetPlayerByUserId(receipt.PlayerId)
 	local product = productByAssetId(receipt.ProductId)
 	if not player or not product then

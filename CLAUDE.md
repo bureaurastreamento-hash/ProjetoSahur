@@ -16,6 +16,12 @@ o Rojo ao vivo não mexe nele (ver seção abaixo). Edição manual = fluxo de c
 `MontarMundo` de novo sem perguntar (apaga edições manuais no terreno). Iluminação: o `EnvironmentService` aplica
 a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 
+## ONDE PARAMOS (01/10, tarde) — PRÉ-LANÇAMENTO + montanhas low-poly; ler PROGRESSO "Pré-lançamento"
+- `LaunchConfig.PreLaunch = true`: não-devs presos ao lobby no Coliseu (título → intro local → lobby com teste de
+  Stand, bonecos, doação 10–1000 R$ com placar). Ids dos Developer Products = 0 até o dono criar. Lançou → false.
+- Montanhas: casca low-poly em `Workspace.Sahur.RelevoLowPoly` (só no Studio) aguardando o dono aprovar; depois
+  trocar `src/workspace/Relevo.rbxm`. Próximo da fila: Cidade Âmbar (Ilha 4) pelo contrato `CIDADE_AMBAR_INTEGRACAO.md`.
+
 ## ONDE PARAMOS (01/10) — TRAILER v3 feito, falta o dono gravar; ler `TRAILER_V3.md`
 - `TrailerService`/`TrailerController` reescritos (16:9 + 9:16, inglês, sem música, contagem 3 s, sets em `MARKS` /
   `Workspace.TrailerMarks.<Nome>`). Feedback do dono sobre câmeras/sets/poses = próxima leva.

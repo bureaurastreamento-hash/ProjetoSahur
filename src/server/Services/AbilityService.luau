@@ -1293,7 +1293,7 @@ end
 local function masteryMissing(player: Fighter, characterId: string, slot: number): number?
 	local required = StandConfig.RequiredMastery(characterId, slot)
 	local owner = Combatant.PlayerOf(player)
-	if not required or not owner or player:GetAttribute("DevNoCooldown") == true then
+	if not required or not owner or player:GetAttribute("DevNoCooldown") == true or owner:GetAttribute("LobbyTest") == true then
 		return nil
 	end
 	local profile = DataService.GetProfile(owner)

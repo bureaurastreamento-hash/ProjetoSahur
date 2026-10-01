@@ -1000,6 +1000,13 @@ global.TrailerScene = function(_, args)
 	return TrailerService.Run(scene .. (if vertical then " v" else ""))
 end
 
+--- Pré-lançamento (LaunchConfig): o dev passa a ver/jogar como jogador comum (preso ao lobby) e volta.
+global.PreLaunchView = function(admin)
+	local on = admin:GetAttribute("PreLaunchView") ~= true
+	admin:SetAttribute("PreLaunchView", if on then true else nil)
+	return true, if on then "vendo como jogador (lobby do pré-lançamento)" else "modo dev de novo (mapa inteiro)"
+end
+
 global.TrailerStop = function()
 	local TrailerService = lazyRequire("TrailerService")
 	if TrailerService then

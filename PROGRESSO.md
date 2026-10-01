@@ -2,6 +2,38 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Pré-lançamento + montanhas low-poly — 01/10, tarde (Claude; Studio conectado via Rojo/MCP)
+
+**Pedido do dono:** jogo publicado NÃO jogável até o lançamento: entra → "Play intro" (trailer) → lobby de testes
+(testar coisas, ver features, DOAR Robux). Deixar claro que as imagens são feitas com IA por enquanto e que a ideia é
+original. Decisões (dono): lobby = **Coliseu do Deserto**; intro **ao vivo só no cliente**; doações **10/50/100/500/1000**
+com placar e tag de Apoiador. WAREA ignorado.
+- `LaunchConfig` (shared): `PreLaunch = true`, lobby, kits de teste, doações (productId 0 = "em breve" — **o dono cria
+  os 5 Developer Products no Creator Hub do GRUPO e cola os ids**), textos de transparência e "o que vem aí".
+  `LaunchConfig.Locked(player)` = pré-lançamento e não dev (ou dev com DEV → Teste → "Ver como jogador (lobby)").
+- `LaunchService`: atributo `PreLaunchLocked`; spawn no Coliseu (`WorldService` só na sessão, checkpoint salvo
+  intacto); fora do raio 112 ou caiu → volta ao centro; sem menu de facção (`FactionService.Refresh`, senão sem dano);
+  Eco pendente não abre; 4 bonecos "Treino" (bots passivos, sem XP/loot); kit de teste só na sessão com todas as teclas
+  (`LobbyTest` pula a maestria no `AbilityService`). Doação: `ShopService.processReceipt` → `DonationHook` →
+  `RecordDonation` (DataStore `Donations_v1` com PurchaseIds = idempotente, OrderedDataStore `DonationsTop_v1`),
+  atributos `Supporter`/`Donated`. Remotes `RequestLaunch`/`NotifyLaunch`/`FetchLaunch`.
+- `IntroController`: tela de título (órbita no Coliseu, PLAY INTRO / IR PARA O LOBBY, aviso de IA embaixo); intro de
+  ~33 s ao vivo (`TrailerController.Dispatch` com `hideHumanoids`: Porto → 4 lugares → Coliseu "THE ARROW CHOOSES." →
+  santuário à noite → logo); faixa do lobby + painel APOIAR/SOBRE (testar Stand, doar, placar, o que vem aí, sobre,
+  ver a intro de novo); esconde FXStoryGui/FXChoiceGui/GoalsGui/HuntGui/FactionGui/QuestGui enquanto preso.
+- Testado no Play (MCP): trava/destrava, spawn e volta ao Coliseu, 4 bonecos, gancho de doação; cliente sobe sem erro.
+  **Falta o dono ver a tela de título/intro/painel** (não tirei print: o dono estava em outro jogo).
+- Lançou → `LaunchConfig.PreLaunch = false`.
+- **Montanhas** (dono: "estranhas, muitas partes, feia, exagerada → simples mas bonita"): `tools/studio/
+  MontarRelevoLowPoly.luau` (ModuleScript em ServerStorage.FerramentasStudio) gera uma casca LOW-POLY (triângulos de 2
+  WedgeParts, SmoothPlastic, faixas pé/rocha/topo com sombreado por face) que embrulha o núcleo: contorno radial justo
+  (0 cantos do núcleo furando), pé recua para não tocar Coliseu/templos/tijolos/parque, faces que encostariam em algo
+  são puladas, zonas abertas (porta da Taberna/`cav`, cachoeira). Gerado no Studio em `Workspace.Sahur.RelevoLowPoly`
+  (~200 peças cada, antes 209/295 lascas); o `Relevo` antigo está só ESCONDIDO na tela de edição. **Falta o dono
+  aprovar visualmente** → depois: trocar `src/workspace/Relevo.rbxm` pelo novo e apagar o antigo. NÃO publicar antes.
+- Bateria offline: 11 suítes de `tests/` passaram; análise estática limpa. MCP: a ponte 44755 tinha morrido (meu
+  servidor ficou em modo proxy) → subi um `rbx-studio-mcp --stdio` primário em segundo plano.
+
 ## Auditoria da publicada e conciliação com Claude — 01/10 (Codex)
 
 - Conferida diretamente no Studio a publicada **85844807133499, versão 489**: trailer V3 e modelos CC0 presentes,

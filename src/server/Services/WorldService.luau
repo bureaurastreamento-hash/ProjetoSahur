@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Modules = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Modules")
 local WorldConfig = require(Modules:WaitForChild("WorldConfig"))
+local LaunchConfig = require(Modules:WaitForChild("LaunchConfig"))
 local DataService = require(script.Parent:WaitForChild("DataService"))
 
 local WorldService = {}
@@ -29,6 +30,10 @@ local function apply(player: Player)
 	-- Destino conhecido ainda indisponível: fallback só na sessão, sem apagar o checkpoint salvo.
 	local regionId = if waitingForMap then WorldConfig.DefaultRegion else profile.world.region
 	local checkpointId = if waitingForMap then WorldConfig.DefaultCheckpoint else profile.world.checkpoint
+	-- Pré-lançamento (LaunchConfig): nasce no lobby de testes; o checkpoint salvo não muda.
+	if LaunchConfig.Locked(player) then
+		regionId, checkpointId = LaunchConfig.LobbyRegion, LaunchConfig.LobbyCheckpoint
+	end
 	player:SetAttribute("WorldRegion", regionId)
 	player:SetAttribute("WorldCheckpoint", checkpointId)
 	local cf = WorldConfig.CFrameOf(regionId, checkpointId)
@@ -67,6 +72,9 @@ end
 function WorldService.SpawnCFrame(player: Player): CFrame?
 	local profile = DataService.GetProfile(player)
 	if not profile then return nil end
+	if LaunchConfig.Locked(player) then
+		return WorldConfig.CFrameOf(LaunchConfig.LobbyRegion, LaunchConfig.LobbyCheckpoint)
+	end
 	if not validDestination(profile.world.region, profile.world.checkpoint) then
 		return WorldConfig.CFrameOf(WorldConfig.DefaultRegion, WorldConfig.DefaultCheckpoint)
 	end

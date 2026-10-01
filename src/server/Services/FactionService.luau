@@ -2,6 +2,7 @@
 local Players = game:GetService("Players")
 local Modules = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Modules")
 local Config = require(Modules.FactionConfig)
+local LaunchConfig = require(Modules.LaunchConfig)
 local Remotes = require(Modules.RemoteEvents)
 local RateLimiter = require(Modules.RateLimiter)
 local DataService = require(script.Parent.DataService)
@@ -11,8 +12,10 @@ local function reflect(player: Player)
 	local profile = DataService.GetProfile(player)
 	if not profile then return end
 	player:SetAttribute("Faction", profile.faction)
-	player:SetAttribute("FactionPending", not Config.Valid(profile.faction))
+	-- pré-lançamento: sem menu de facção no lobby (pendente = sem dano, e o lobby é para testar o combate)
+	player:SetAttribute("FactionPending", not LaunchConfig.Locked(player) and not Config.Valid(profile.faction))
 end
+Service.Refresh = reflect
 function Service.Choose(player: Player, id: any): boolean
 	local profile = DataService.GetProfile(player)
 	if player.Parent ~= Players or not profile or not Config.Valid(id) or Config.Valid(profile.faction) then return false end
@@ -29,7 +32,7 @@ function Service.Init()
 end
 function Service.Start()
 	local function waiting(player: Player)
-		player:SetAttribute("FactionPending", true)
+		player:SetAttribute("FactionPending", not LaunchConfig.Locked(player))
 		reflect(player)
 	end
 	Players.PlayerAdded:Connect(waiting)
