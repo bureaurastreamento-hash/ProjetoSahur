@@ -55,6 +55,9 @@ type CharState = {
 	base: Active?, -- Idle/Walk/Run tocando
 	baseName: string?,
 	basePose: RigPose.Pose,
+	basePhase: number,
+	baseUpdatedAt: number,
+	moveDirection: Vector3,
 	animateOff: boolean,
 }
 local chars: { [Model]: CharState } = {}
@@ -100,6 +103,9 @@ local function stateFor(character: Model): CharState?
 		base = nil,
 		baseName = nil,
 		basePose = {},
+		basePhase = 0,
+		baseUpdatedAt = 0,
+		moveDirection = Vector3.new(0, 0, -1),
 		animateOff = false,
 	}
 	chars[character] = s
@@ -302,7 +308,9 @@ local function locomotionFor(character: Model, s: CharState): (string?, number)
 	if speed < LOCO.WalkThreshold then
 		return "Idle", 1
 	end
-	if speed >= LOCO.RunThreshold then
+	-- Margem evita alternar Walk/Run a cada frame perto do limite.
+	local runThreshold = if s.baseName == "Run" then LOCO.RunThreshold - 1.5 else LOCO.RunThreshold
+	if speed >= runThreshold then
 		return "Run", math.clamp(speed / LOCO.RunReference, 0.6, 1.8)
 	end
 	return "Walk", math.clamp(speed / LOCO.WalkReference, 0.55, 1.6)
@@ -328,15 +336,39 @@ local function updateBase(character: Model, s: CharState, now: number)
 			s.basePose = {}
 			return
 		end
+		local previous = s.base
+		local phase = if previous then (s.basePhase % previous.clip.duration) / previous.clip.duration else 0
 		s.baseName = name
+		s.basePhase = if previous and name ~= "Idle" and previous.key ~= "Shared/Idle" then phase * clip.duration else 0
+		s.baseUpdatedAt = now
 		s.base = { key = "Shared/" .. name, clip = clip, startedAt = now, from = s.basePose, blendIn = 0.2, loop = true, speed = rate }
 	end
 	local base = s.base
 	if not base then
 		return
 	end
+	-- Integra o ciclo: mudar a velocidade não reposiciona todos os passos anteriores.
+	local dt = now - s.baseUpdatedAt
+	s.basePhase += dt * base.speed
+	s.baseUpdatedAt = now
 	base.speed = rate
-	local pose = poseAt(base, (now - base.startedAt) * base.speed)
+	local pose = poseAt(base, s.basePhase)
+	if name ~= "Idle" and s.root then
+		local velocity = s.root.CFrame:VectorToObjectSpace(s.root.AssemblyLinearVelocity)
+		local flat = Vector3.new(velocity.X, 0, velocity.Z)
+		if flat.Magnitude > 0.1 then
+			s.moveDirection = s.moveDirection:Lerp(flat.Unit, 1 - math.exp(-12 * dt))
+		end
+		local forward = -s.moveDirection.Z
+		local sideways = s.moveDirection.X
+		for _, joint in { "Right Hip", "Left Hip" } do
+			local jp = pose[joint]
+			if jp and jp.rot then
+				local r = jp.rot
+				pose[joint] = { rot = Vector3.new(r.X * forward, r.Y, r.Z - r.X * sideways * 0.65), off = jp.off }
+			end
+		end
+	end
 	local t = now - base.startedAt
 	if base.from and t < base.blendIn then
 		pose = RigPose.Lerp(base.from, pose, t / base.blendIn)

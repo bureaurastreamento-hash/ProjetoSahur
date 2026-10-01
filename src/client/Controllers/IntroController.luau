@@ -49,6 +49,9 @@ local panel: Frame? = nil
 local boardList: Frame? = nil
 local donatedLabel: TextLabel? = nil
 local orbitConn: RBXScriptConnection? = nil
+local developerTitlePending = true
+local developerShortcut: ScreenGui? = nil
+local refreshLock: () -> ()
 local playingIntro = false
 local boardData: { { name: string, amount: number } } = {}
 
@@ -422,6 +425,18 @@ local function buildGui(): ScreenGui
 	end)
 	skip.AnchorPoint = Vector2.new(0.5, 0.5)
 	skip.Position = UDim2.new(0.5, 0, 0.56, 58)
+	if player:GetAttribute("IsDeveloper") == true then
+		local world = button(tf, "JOGAR NO MUNDO", PANEL2, UDim2.new(0, 280, 0, 42), function()
+			developerTitlePending = false
+			if player:GetAttribute("PreLaunchLocked") == true then
+				requestLaunch:FireServer("view", false)
+			else
+				refreshLock()
+			end
+		end)
+		world.AnchorPoint = Vector2.new(0.5, 0.5)
+		world.Position = UDim2.new(0.5, 0, 0.56, 108)
+	end
 	text(tf, table.concat(LaunchConfig.Notice, "\n"), FONT_BODY, 14, SUB, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -24), Size = UDim2.new(0.9, 0, 0, 48) })
 	titleFrame = tf
 	task.defer(hideOthersForTitle) -- depois que o HUD dos outros controllers já existe
@@ -447,6 +462,13 @@ local function buildGui(): ScreenGui
 	end)
 	open.Position = UDim2.new(1, -156, 0, 6)
 	open.TextSize = 14
+	if player:GetAttribute("IsDeveloper") == true then
+		local world = button(bar, "VOLTAR AO MUNDO", PANEL2, UDim2.new(0, 180, 0, 32), function()
+			developerTitlePending = false
+			requestLaunch:FireServer("view", false)
+		end)
+		world.Position = UDim2.new(0.5, -90, 1, 6)
+	end
 	lobbyBar = bar
 
 	buildPanel(sg)
@@ -454,6 +476,10 @@ local function buildGui(): ScreenGui
 end
 
 showLobby = function()
+	developerTitlePending = false
+	if player:GetAttribute("IsDeveloper") == true and player:GetAttribute("PreLaunchLocked") ~= true then
+		requestLaunch:FireServer("view", true)
+	end
 	stopOrbit()
 	restoreAfterTitle()
 	applyBackpack() -- a intro (TrailerController) religa toda a CoreGui no fim
@@ -487,9 +513,26 @@ local function guard(g: Instance)
 	sg:GetPropertyChangedSignal("Enabled"):Connect(apply)
 end
 
-local function refreshLock()
+refreshLock = function()
+	local developer = player:GetAttribute("IsDeveloper") == true
+	if developer and not developerShortcut then
+		local shortcut = Instance.new("ScreenGui")
+		shortcut.Name = "LaunchAccessGui"
+		shortcut.ResetOnSpawn = false
+		shortcut.DisplayOrder = 41
+		shortcut.Parent = playerGui
+		local access = button(shortcut, "PRÉ-LANÇAMENTO", GOLD, UDim2.new(0, 170, 0, 36), function()
+			requestLaunch:FireServer("view", true)
+		end)
+		access.AnchorPoint = Vector2.new(1, 1)
+		access.Position = UDim2.new(1, -16, 1, -100)
+		developerShortcut = shortcut
+	end
+	if developerShortcut then
+		developerShortcut.Enabled = developer and not locked() and not developerTitlePending
+	end
 	applyBackpack()
-	if locked() then
+	if locked() or (developer and developerTitlePending) then
 		if not gui then
 			gui = buildGui()
 			startOrbit()
@@ -546,6 +589,7 @@ function IntroController.Start()
 		end
 	end)
 	player:GetAttributeChangedSignal("PreLaunchLocked"):Connect(refreshLock)
+	player:GetAttributeChangedSignal("IsDeveloper"):Connect(refreshLock)
 	player:GetAttributeChangedSignal("Donated"):Connect(updateDonated)
 	-- Só no Studio: o teste automático (MCP) abre lobby/painel sem clique — atributo IntroDebug = "lobby" | "panel"
 	if RunService:IsStudio() then

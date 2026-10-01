@@ -1,0 +1,1933 @@
+{
+  "license": "CC0-1.0",
+  "packs": [
+    {
+      "name": "kenney_particle-pack",
+      "source": "https://kenney.nl/assets/particle-pack",
+      "license_url": "https://kenney.nl/assets/particle-pack",
+      "download": "https://kenney.nl/media/pages/assets/particle-pack/f8fe0f8cb8-1677578741/kenney_particle-pack.zip",
+      "archive_sha256": "b631d4b07f7002549fdcf155f01141ad482f79f3440e4e301eed49ce5f1d8958",
+      "files": [
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/circle_01.png",
+          "bytes": 69755,
+          "sha256": "4b2d03683bf0fe4a946567adc3bd86b8ba045da84cee58dc2cf8aef63bbfaa06"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/circle_02.png",
+          "bytes": 43380,
+          "sha256": "8a2112a6a5610c7cdcbfe8af0a5162b42dfb3431c63f494743945337b7981e51"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/circle_03.png",
+          "bytes": 72952,
+          "sha256": "ed6c6f082e666c16bcaca89f15aefb55df9bf69450090518bcae1d3d61f82936"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/circle_04.png",
+          "bytes": 59557,
+          "sha256": "742da1a1b96b93ae446700f6085385d1f62844352da870c89427307b7b7cf03b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/circle_05.png",
+          "bytes": 65336,
+          "sha256": "925b8ac284436f74f9cadf0ecd058da1c08fba65c098e4e34fd220603022f02e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/dirt_01.png",
+          "bytes": 47313,
+          "sha256": "6827a0a32a293ec9570fb98d63963b8dd6e6aaba9e1096afad932e93a378bea9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/dirt_02.png",
+          "bytes": 54060,
+          "sha256": "fcecc70b561f80568b3391c3dc1180126d86ce4fbd4d1b01518e6045203e10a3"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/dirt_03.png",
+          "bytes": 114937,
+          "sha256": "427d6dcad5a8d16b8143d412a5a48ce859716150a074ea5bb36eca577c0ae541"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/fire_01.png",
+          "bytes": 99891,
+          "sha256": "9727a9743ac6ab8dd4dd79f5fc5b0266290efae45f4d4452279eb5e4bcf3a978"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/fire_02.png",
+          "bytes": 88453,
+          "sha256": "e2677330b0668033b0744276da74de605164aa5d58203bf251a8ec84e62c2108"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_01.png",
+          "bytes": 54099,
+          "sha256": "92a70bcb90b1e21c57b2dae42843135703b2e988abee97433f84c3119723d144"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_02.png",
+          "bytes": 68498,
+          "sha256": "7afff66979a5a30319d4fa491b13a9027223ebbdadfa38fae4ae76e31d05d9c5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_03.png",
+          "bytes": 49857,
+          "sha256": "366678a08a7d22ebb87baa7b42005aaaeb0fd51ab751f2d4e7c9edfa61a33e38"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_04.png",
+          "bytes": 70731,
+          "sha256": "71deb274feea6ae5e6bb82c802a6e4d22f168397aa36b7a9e89de863948f3cf5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_05.png",
+          "bytes": 13395,
+          "sha256": "4c5cc587260010e4bb58b03cc2561ca0e96409e7db25ea4183cd3fb1d0237dc8"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flame_06.png",
+          "bytes": 15971,
+          "sha256": "fc95ac4d0e61b22d079aeb5feabf2914d380858ad95852e5b1638ad820526948"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/flare_01.png",
+          "bytes": 42886,
+          "sha256": "254f5bd4f0548612bf29305d27899efdee8cb8d8306292761ebbddebd3e57935"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/light_01.png",
+          "bytes": 93470,
+          "sha256": "caedcc5df5bcac4470244d2520d6a64b45b20c1ccf4d918da516c55e3fa365a6"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/light_02.png",
+          "bytes": 93415,
+          "sha256": "f1bdb57478703fec539f7b8eeceb494c4a23664652b296389f310104be80cfe0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/light_03.png",
+          "bytes": 100114,
+          "sha256": "b68627734d08aab3eaf3f94718521553628c75aace1de6c74de28501c1a4c147"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/magic_01.png",
+          "bytes": 81687,
+          "sha256": "398479ea280c8161d0b6d509ca97eefb27e989c7832b404abcb65faae3e922ff"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/magic_02.png",
+          "bytes": 86500,
+          "sha256": "6443e90834abcae4c3848d7ebca99ff0d9fcad19a07f49f77ad64710a3e39b36"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/magic_03.png",
+          "bytes": 58093,
+          "sha256": "c2ef5fe86cd2fd08e5b9768389ab6580b346c391db3c7c09fc9b0a63e00ec4ce"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/magic_04.png",
+          "bytes": 50082,
+          "sha256": "8255a4a3bd9209a0d3a45f0636524ff0d2953adc7d6819041703107379ab63ba"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/magic_05.png",
+          "bytes": 74794,
+          "sha256": "92fb8c7a1d9bc14e052526c0505502c3e5b37d27502fa3d36d2c80b4565b62ef"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/muzzle_01.png",
+          "bytes": 81811,
+          "sha256": "08f650f6a615b65024b48d8da32178158d74307d7c235f214f0c075b7aa688b9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/muzzle_02.png",
+          "bytes": 58365,
+          "sha256": "96164063353cc0386b3d3ad0d64b9be6c369e1d5d8510f84fcf33604b4729084"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/muzzle_03.png",
+          "bytes": 57240,
+          "sha256": "579983452d263ebeca78080714b6dd55a0f95fca7452f309e91a9d466de6c058"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/muzzle_04.png",
+          "bytes": 62593,
+          "sha256": "2acbc729b7bf38330b7e829cb0b13dcf922fec4b163f7eb2965b7b2932f89aeb"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/muzzle_05.png",
+          "bytes": 54088,
+          "sha256": "bc2d012c3bee75e668cc7800f965692b47af6edd6d3584081089a70abbe30a47"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/flame_05_rotated.png",
+          "bytes": 12155,
+          "sha256": "08afb8deef9edbfb47571805a2f5b1316c5c99d5056f23b13d060eece3a752de"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/flame_06_rotated.png",
+          "bytes": 14979,
+          "sha256": "c72289cfe6e25d2763eef9db9b55a38f04d027ba0ca7fe6d4830b2ebd9b63dce"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/muzzle_01_rotated.png",
+          "bytes": 75703,
+          "sha256": "6b0bae33c25ef54702f40272d121412131e8f089ae03c958533f4887288d8f59"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/muzzle_02_rotated.png",
+          "bytes": 49401,
+          "sha256": "6bca0de7b38b9bc7ea7ad38940720ebfe138363155848cfb7bf15e56681defe9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/muzzle_03_rotated.png",
+          "bytes": 48054,
+          "sha256": "3a625935b4b2a89beb0f2aefb3db3a50c062f2bd3a99cf2a8aaf3f53cef437bb"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/muzzle_04_rotated.png",
+          "bytes": 51171,
+          "sha256": "76a51de75e489e5007d4e0140824120c7eda19877127d78e6531cfb0166df279"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/muzzle_05_rotated.png",
+          "bytes": 44504,
+          "sha256": "c86c85323f6a2ad0e0d1349f17bc88b3951b8ac653c4b0bc133fb0baa28eaae9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/spark_05_rotated.png",
+          "bytes": 56533,
+          "sha256": "9bceb2b1a8a46d9eaffb4c77d5c4114ff7af8fcd36e586feb1f91bfe2af0e671"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/spark_06_rotated.png",
+          "bytes": 41431,
+          "sha256": "1c47a5d892ac1816c8eb18ebddb1ecf7769a35bbdd5a6671677b565006623936"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_01_rotated.png",
+          "bytes": 28417,
+          "sha256": "6832399b81f21dfb9379159e25ea2efab85258f24a03a2eb7a3f9285829f98d4"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_02_rotated.png",
+          "bytes": 31249,
+          "sha256": "81c30ba255eacd9ff29b5c0b8028b2714a375d6dc7cd11133f515bc37123f0e3"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_03_rotated.png",
+          "bytes": 34894,
+          "sha256": "0037f0c659d2a546b0de452b9ea2d910626c3994154395fb84bf28b9c249c2e1"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_04_rotated.png",
+          "bytes": 36918,
+          "sha256": "857d9fe44e1af7123c1d1006caac5a3707588412997bc8f16591f01a2f73f6e9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_05_rotated.png",
+          "bytes": 36725,
+          "sha256": "513aca6608ab2c3a677aacc99ad1055a200cd9a703b247c69fabce9695cce2e0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_06_rotated.png",
+          "bytes": 30533,
+          "sha256": "098bd782fbbac098e30357acdef764184e601ccdf05d109f3dcfb698e5a7ea60"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/Rotated/trace_07_rotated.png",
+          "bytes": 27368,
+          "sha256": "fdfcc20aa9a194f8eee4081bf0f8de21fef48abcba4f073c183a406cdeb45f86"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/scorch_01.png",
+          "bytes": 60598,
+          "sha256": "ea72697696638786ccd4795a346d177b1b6a904331b5536a7e85a7ed927b93a5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/scorch_02.png",
+          "bytes": 74485,
+          "sha256": "b36daaabbe0480b74e1e8d6b0b2e9a2d01974109b42b8a39c430af7739a953a1"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/scorch_03.png",
+          "bytes": 91921,
+          "sha256": "531956355c8adcf6fbe0111788e68630c4b16209f9d7a6136978361a308202ec"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/scratch_01.png",
+          "bytes": 65462,
+          "sha256": "7dc0b16a5240738273684bfdf423eefd8a135356af1fee759217cdd560a4a935"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/slash_01.png",
+          "bytes": 25465,
+          "sha256": "cb4787978122bb863866a1681af22a7dec39a4566f08c400f233740eb1d3730c"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/slash_02.png",
+          "bytes": 38224,
+          "sha256": "a79a9e297790e6126b78d41015a3045cda3f1863b421c88321d2442ed6f9032e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/slash_03.png",
+          "bytes": 16634,
+          "sha256": "c77e40ef75084e880f2ea69acf70af4419518f489acda00d29b668a64805608e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/slash_04.png",
+          "bytes": 17889,
+          "sha256": "1beed6d30b8b3fc0874cca12f57de073360f0b11fc6f4cd99a24b7e033784c47"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_01.png",
+          "bytes": 97452,
+          "sha256": "e8724c219e8d35859167fc0a7e207e13c72ccf0c29704909b9bb3d3dc71c6cf7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_02.png",
+          "bytes": 96825,
+          "sha256": "c405cc0ceb31a239dfd873fffdfdfe3ff2056eebd5fcc77dfba1d9fdfed585c7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_03.png",
+          "bytes": 39737,
+          "sha256": "a71f8abcac64f8d73a94625cc9a10033dbeafa7eaea750560cba0daa73fe8752"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_04.png",
+          "bytes": 97568,
+          "sha256": "2db2f69874cdb1e5203f2f86803d5debde30402590cf50a810afaba882184616"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_05.png",
+          "bytes": 83445,
+          "sha256": "e88c8416bd8da1b3f9f19e615dcebdf42f71045799cb4c41f545cb16dd835e35"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_06.png",
+          "bytes": 62156,
+          "sha256": "d988b03bb46797be913333f06b26ff2aad55ec082cfb7d3d18ce86ccb71559b5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_07.png",
+          "bytes": 77838,
+          "sha256": "f7419fa4f11e346d0fb36a17ecbf616083c6962633c7847d92119c994ed9b4e4"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_08.png",
+          "bytes": 90424,
+          "sha256": "eae1d92c205a2654254281d470ee70cce86cf4e8e849db29e4d5edff0f67c695"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_09.png",
+          "bytes": 87963,
+          "sha256": "7c66cf05c52aefb1f3e37c54917289a11d9268a995dbc4effc8ca80242a4122b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/smoke_10.png",
+          "bytes": 90497,
+          "sha256": "35d1082a87de7558aeeab210fecb43997c958e162ede896587d1930f66e6ae67"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_01.png",
+          "bytes": 95070,
+          "sha256": "5902da3a324cad0a4b5a88ce1e3c9cc18fee50922c358ce93d8c9f1ad7708f0a"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_02.png",
+          "bytes": 101613,
+          "sha256": "f7c5f1f849657eed79fd7b663be5a57829450a1e4fdc4a062049a05b9a406e89"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_03.png",
+          "bytes": 79574,
+          "sha256": "90f322bebe5facea2f60afe88d98dd80a21479ed3212e605d61e88a896f3e1db"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_04.png",
+          "bytes": 83811,
+          "sha256": "3cba35b80a97c12283a8ecd41780a0412194de14562cbffc7f04e9157183f772"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_05.png",
+          "bytes": 64808,
+          "sha256": "9624ea2017b8b2767a9d3b82e978b7fdf5154d83e6756cd919da51447bb97138"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_06.png",
+          "bytes": 46347,
+          "sha256": "fe6d473393d3b9350c7a654b7cb5fbd343766b5b5b11d3e4aba476832d4a6d3f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/spark_07.png",
+          "bytes": 40968,
+          "sha256": "216101e7b54c627b4aa780649a21f0ef9146d2566f52699284d091ef00825a26"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_01.png",
+          "bytes": 42118,
+          "sha256": "3ba3999c944a0767677449412d306c1f230daa1743b31f929533cf77a22ecf5d"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_02.png",
+          "bytes": 49897,
+          "sha256": "a0b7624a2e6f6825a3e93ddec685728c4d3de03b77bbf2a2e425b7a6d3d0215b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_03.png",
+          "bytes": 56622,
+          "sha256": "dac75aa35e5191de1917ec076d47f3b43a47b80d9aae6eefffb920c5ceba3601"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_04.png",
+          "bytes": 30613,
+          "sha256": "6485ac16c773663bd39346f3bedae04465ac14c661eb47cc5cfa935cdbf6c2ec"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_05.png",
+          "bytes": 62216,
+          "sha256": "1e8ab968178e507824ab28353c0ffffa918ae3adbcf89513d3db50a17b7bc8a2"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_06.png",
+          "bytes": 35453,
+          "sha256": "65d3ff5aa87ec0770c11fe1293fdc70cdc5ccf0eabc2e2fd6a1ead922051035e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_07.png",
+          "bytes": 32369,
+          "sha256": "d3bc9b8f1960baab452e8a5e816b9edeee4420dbed5ddd7ebe174519860a451a"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_08.png",
+          "bytes": 26479,
+          "sha256": "05f24d1ee76c1464074cbca58155e4be517fefd34a7001bb012561647cc3dec3"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/star_09.png",
+          "bytes": 50142,
+          "sha256": "4255985e312a0058dc0c4f8b5befc902da17e6be5e5252007f3c7b02bb150157"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/symbol_01.png",
+          "bytes": 9088,
+          "sha256": "3eb3988f3e80acf3fda9df07733f49c3585eafa7d6a7ce5b31765fe180dd6d9c"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/symbol_02.png",
+          "bytes": 7608,
+          "sha256": "1582e947d6793ec74fafabe587750af1b2655d1cd4ffe65bce1967c85b362ba8"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_01.png",
+          "bytes": 38406,
+          "sha256": "34de69bc3f665b23fe9bed15f388efd8e8e4dc1a99f2fc5db9ba8715c525711f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_02.png",
+          "bytes": 39395,
+          "sha256": "8c224d6d4544d8437bce5ee51452957b31f5479e337c5f432dc1b55b1e2f9685"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_03.png",
+          "bytes": 42254,
+          "sha256": "a8c05800698cd502c3416a1f2335292544d52b3c8624c3c829a534c52b364860"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_04.png",
+          "bytes": 47104,
+          "sha256": "ca69d82709295663ef1d9fcd90d346319fef5389a15dd63e3b71b4527e620cd8"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_05.png",
+          "bytes": 42174,
+          "sha256": "3f3d687bd2c70b10add33bdbd4616deda28f0138f757d358f9f0b78fb38bde6e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_06.png",
+          "bytes": 36247,
+          "sha256": "22c61c0e280db28b6cb6033c015dde4360a124b3488302ea708566b7f36fd900"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/trace_07.png",
+          "bytes": 33145,
+          "sha256": "4e5f177b7717d291464f01538756eb2f471961b09b39ea82ea72447210af7110"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/twirl_01.png",
+          "bytes": 51060,
+          "sha256": "ba3f4996a5a91ea3cba6817a9b4770a385a82ef0b9350cbda5c0f140d182af7e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/twirl_02.png",
+          "bytes": 76886,
+          "sha256": "3963633f6b2395a3fa95b9f4f65f22a4d38a2c561d9312dfff4646b71c7aa6e2"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/twirl_03.png",
+          "bytes": 81463,
+          "sha256": "69baaab4bc68473e9f926dc249a1d1b58f759c88906e10ac859bf43ac3cfbc8b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/window_01.png",
+          "bytes": 33759,
+          "sha256": "373747a996fcfc320c76d093bde08252db2adde8d29672aca98430e521e702fa"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/window_02.png",
+          "bytes": 39286,
+          "sha256": "2b430446f1527409d00b418370975f7b08572282aea732503f9a22837055d54d"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/window_03.png",
+          "bytes": 16860,
+          "sha256": "452680cff9e62da90a4b3bff96dd7634d05624ee2d58fd5db7d89f48a60cdf8c"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Transparent)/window_04.png",
+          "bytes": 52143,
+          "sha256": "096be5e6f21547f16f302747a607020b2f1214842618de7a078587f6b8f1956e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/License.txt",
+          "bytes": 651,
+          "sha256": "f9e70b81d8cc07c4e07c9f2eff1d94fd371a06070b18cb67c651c41158ec2975"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/Preview.png",
+          "bytes": 91674,
+          "sha256": "37b1b04371116a4ed3b2316056880034b0db7f59605a50c9058591de01b716e0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/circle_01.png",
+          "bytes": 35915,
+          "sha256": "06f7db17cccbe850f22c937669fd4dc262e066f8cdbd2ae44fc54891c83062a4"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/circle_02.png",
+          "bytes": 30403,
+          "sha256": "697e6fa5948cc35cc779ae0b22995f5b17f0e02746406d05ec8548921e82ad1b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/circle_03.png",
+          "bytes": 47065,
+          "sha256": "ecd5e1328a591878c9ad6055e551ff76a390ed5ca1a5bebee28dd850f875c00e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/circle_04.png",
+          "bytes": 30231,
+          "sha256": "bc666371666459a513bedf2824c9fe9b420f2ca05fd1936d318ad2672373e274"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/circle_05.png",
+          "bytes": 27583,
+          "sha256": "05e87b80ad4e65ddc0904f91f8520bb22059ca05c053ec7f5c780118e1294012"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/dirt_01.png",
+          "bytes": 46644,
+          "sha256": "2bfbb14d4f99982db4712d224bcef3157e7035d09d3b76cb09b64e19946be6d7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/dirt_02.png",
+          "bytes": 53980,
+          "sha256": "64c4d7d7f529e9ce78929ebf5b312b664ac177cfb63b943f5f2fa2b9bffe9452"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/dirt_03.png",
+          "bytes": 113946,
+          "sha256": "48d4d27e804be46f6031652820987d92567eaa66da924260cd0cc9aa179f4e2f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/fire_01.png",
+          "bytes": 96339,
+          "sha256": "35fc73c16895d11e6782aba8d4a9b374cd09fad914429cef12d1f6612a38851b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/fire_02.png",
+          "bytes": 86394,
+          "sha256": "79e656b11d3a0ac9caee1c5961295f1590b9281c53b7ed624d8fff3b888d5681"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_01.png",
+          "bytes": 35189,
+          "sha256": "dc6b5decd0e7e99900b0493fa1496f80e34d272f5603081634d0e99235ea9d2b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_02.png",
+          "bytes": 45366,
+          "sha256": "ba416e354fb714a45dc665640b8df00d3f5458f45474eeb0db223a78fce0fda9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_03.png",
+          "bytes": 34261,
+          "sha256": "195f614a39a40b3e03961887e2d817f19bf4ec47f7091a42977c9923b55d8ccf"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_04.png",
+          "bytes": 43388,
+          "sha256": "abc25d707440796489d42e53315b89aa3da54b1b72338e0a0b708ccde78fc0a7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_05.png",
+          "bytes": 11404,
+          "sha256": "3c3dcda87c882027e268cc7dbae9aa121eb6af6ef24a51b140a794a7212d183a"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flame_06.png",
+          "bytes": 13722,
+          "sha256": "174a44ab516a969b1b4bf4dfa75d9bb370de5b567bf8fb64966bf89862d6a45f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/flare_01.png",
+          "bytes": 17953,
+          "sha256": "439a58c4e3486031996af880a841067961218cb7f7cc513ded25dc480f50f840"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/light_01.png",
+          "bytes": 60764,
+          "sha256": "c9e0e947892b87cb71e110e60d85798810142b11aed154542c50b17dc93033b0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/light_02.png",
+          "bytes": 60327,
+          "sha256": "9ec3befd7a9fa4ef78d503fbb90a633a52a504eee1d57c5859a93226e09e9ddc"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/light_03.png",
+          "bytes": 62268,
+          "sha256": "adbef8446fe55f8a5ad1fe8423e2683f8102bca792164c95f276ab77abefeb5f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/magic_01.png",
+          "bytes": 60113,
+          "sha256": "ba25d57c52ba4bfe83953acac9ef697135ecdf75aa27b75811380f9771070c36"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/magic_02.png",
+          "bytes": 68717,
+          "sha256": "5aa9465da6c2ca15620e4f1f8f94cf141feb02b8274689d6ae36796484339ae5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/magic_03.png",
+          "bytes": 43622,
+          "sha256": "d6d41342a586c223c057d0f4000725e639787d31d8ec9ec72c58948b58177c75"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/magic_04.png",
+          "bytes": 31286,
+          "sha256": "db52cb9014be1bb580eaca82ae17e7e01fa28ee29c7325d68274d98152f02baa"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/magic_05.png",
+          "bytes": 48663,
+          "sha256": "1342389b347925ebbc395e0e7c1ef7fef030d2303ff020c6b9ffa07d2a206b63"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/muzzle_01.png",
+          "bytes": 80802,
+          "sha256": "93bc6bad029daf7a67f4933f3ece8c306a0ab62cafc454cad25bcf512bd0a7a4"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/muzzle_02.png",
+          "bytes": 59278,
+          "sha256": "1ecabf57a7f1a2ddfe51c778b3cbdea1da6806b4f8e630816b06ee82a73e8993"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/muzzle_03.png",
+          "bytes": 58467,
+          "sha256": "8ba49dd9cf63449496fcaecf8d552f15e7704c243714bf80309c9a6512fcd9f6"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/muzzle_04.png",
+          "bytes": 56666,
+          "sha256": "19bd7d025ff03bf5ab026bc8bbbabdddf564392abb9fc37ce37c918bb3642c4b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/muzzle_05.png",
+          "bytes": 56402,
+          "sha256": "4573dfd3e030dfd3257455b26fd4be8483cdf374df0c4aecff0e8176f607dfe9"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/flame_05_rotated.png",
+          "bytes": 10589,
+          "sha256": "78041de912b217f6e469dbb1bec7b821bfee782603d0398f36e8a97f759a2100"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/flame_06_rotated.png",
+          "bytes": 13447,
+          "sha256": "04e14241aad849fe084df36e74fe85bc2c5f96138fbbff0245f616f6bf33be79"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/muzzle_01_rotated.png",
+          "bytes": 85709,
+          "sha256": "0191539cec7b244fcd90698c884a3ba4bde6c19613adbe9dd743f8a47efb0549"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/muzzle_02_rotated.png",
+          "bytes": 65767,
+          "sha256": "c814178e21f530013586e8b3c20f7f82b430ac2c51d5a85a8605671e0006012e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/muzzle_03_rotated.png",
+          "bytes": 64602,
+          "sha256": "fd0099a2b8f48d8e5ea92c4995cfa17da7e0dfb3295ec6b1376b11ad95af5cda"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/muzzle_04_rotated.png",
+          "bytes": 42701,
+          "sha256": "70b66e9638ee2d4694f3feb87c3612d74fc282d007c0d01ab0b878af760cd2b0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/muzzle_05_rotated.png",
+          "bytes": 62527,
+          "sha256": "8b7f4b75842578319a02becef5b63c3139730a85c15ea4833f51ef5d3c533923"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/spark_05_rotated.png",
+          "bytes": 40995,
+          "sha256": "798550b7ae007f4a6554c316611d4d33a02512a46404f7fffe71377ee49ed8eb"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/spark_06_rotated.png",
+          "bytes": 38886,
+          "sha256": "6a0386a1e0a539619d445cf5a9145dcf297a5196f5fe2e971f2b487f7c253695"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_01_rotated.png",
+          "bytes": 24462,
+          "sha256": "69ce491f37b39f30c37624b6b26d3e1f3d1aca8f151e19f8af45b391dd95083f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_02_rotated.png",
+          "bytes": 29626,
+          "sha256": "cc567959227740493c7684eb86157bf71ecdbfe3079662ef4ee35a4d43242ffe"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_03_rotated.png",
+          "bytes": 33115,
+          "sha256": "004bfe05aee43567dfc09c282d6ba4674daad36946a80a86a00b72e88620eaf1"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_04_rotated.png",
+          "bytes": 34091,
+          "sha256": "55802b7eddd3ee42d36d558ec3f24ef001414de5d51e16af82cc50d11b2b90ee"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_05_rotated.png",
+          "bytes": 32863,
+          "sha256": "a287604657664c3143d991727cffd909eb6f58884bf1c57cba6a33971a82bc40"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_06_rotated.png",
+          "bytes": 17003,
+          "sha256": "78897a32080c608f4f37fea77500e3866d0ac3f7958eb744a3853ed2502983a7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/Rotated/trace_07_rotated.png",
+          "bytes": 12758,
+          "sha256": "5d369cb6dd89b2f93913e308437213e78350de23b77f46e77b6eec08734360ce"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/scorch_01.png",
+          "bytes": 59486,
+          "sha256": "bae15192478d1db2cf6da8bccc3e7fad43a87d4354725d66e7d8d33987b8802c"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/scorch_02.png",
+          "bytes": 71227,
+          "sha256": "7c2422ab6a6e2ea940b8feec702058ee6500d8fb881461323d20677700c42ab0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/scorch_03.png",
+          "bytes": 88181,
+          "sha256": "38898576e04201b6cd211fa87616e4a0f73596a37958b5ef24b541ad208b1fdc"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/scratch_01.png",
+          "bytes": 48136,
+          "sha256": "967678017abda8e0e55e320a268e166e293efa231f71ff774b523b282556caa0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/slash_01.png",
+          "bytes": 16775,
+          "sha256": "09d9e92bafef8d20d08f58b181bc3daebbe0396afd90cee3e5c7b1a4dff23e49"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/slash_02.png",
+          "bytes": 28122,
+          "sha256": "4c226fe5bcc428ad8859f49832c1a933e31450dc0bafca8ab33610d15d3ea876"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/slash_03.png",
+          "bytes": 14700,
+          "sha256": "4769866a5afc40b61835c4b9f8ee910b2560893a506802a57d35286a03b66a9f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/slash_04.png",
+          "bytes": 13373,
+          "sha256": "74a2c6f8c91a237287ceca611d6710c88f226ed1a6784bae7aaa34eddcee721b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_01.png",
+          "bytes": 86344,
+          "sha256": "288b7a29b659030fe7da333159c641e2325e41e704c05b8c6db1531b59c09897"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_02.png",
+          "bytes": 86644,
+          "sha256": "34e8306ddf2ab493e58ea36b0e83db2b621a6296fe6ee72aa7ebb4f4554e099e"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_03.png",
+          "bytes": 33642,
+          "sha256": "588255cfa015d2fd44488cf9a03d15edd73b2f5777dbf0301f431835b49eacc4"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_04.png",
+          "bytes": 77863,
+          "sha256": "5a529ca033f2ea99f49cead4cb6618acf534d19d4472ca34e879776bd18c9cd3"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_05.png",
+          "bytes": 67943,
+          "sha256": "d45c9fb99de978e0558492e0a3517ca5f3d8fb4530724c22b1ede6c2f85b16b2"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_06.png",
+          "bytes": 50927,
+          "sha256": "ec06cf39f6fa8b22d9e1cb5e5612c14405e49b0cf38fa9c1aa72f26bd8d287e5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_07.png",
+          "bytes": 64564,
+          "sha256": "86016557bd1de779f1b31871fbcdb82630b913956ad8ac10fbe053a9a5ca5872"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_08.png",
+          "bytes": 81734,
+          "sha256": "92626d94181ca1cc46cf14530367d1795c75a2b147cdd2ef640c6724c4eb6319"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_09.png",
+          "bytes": 79871,
+          "sha256": "fa5ab12d6bbc90eea4a2d003ff340bfadbe7225708a855874586146ef3687108"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/smoke_10.png",
+          "bytes": 84879,
+          "sha256": "4fb5b971673011934150c5aa8342918ef0f764ad178daaf996d5eed408384d40"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_01.png",
+          "bytes": 82487,
+          "sha256": "d74634d80aed77812c69e071c92f6ea7e81e54b86e8d4310407a15fcc8a0afb7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_02.png",
+          "bytes": 100419,
+          "sha256": "13950760bbc53b24d70226c55b9dd658278806f0cc0a03370af1af6b54466998"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_03.png",
+          "bytes": 72740,
+          "sha256": "89c6159f0a532c3d2409e20e36f9885435ceaa42817da40f5f37112527ffd869"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_04.png",
+          "bytes": 77451,
+          "sha256": "542198dcb07aab51469cdb6211c87583ebc2516e6b03238fafbf92c6c8966707"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_05.png",
+          "bytes": 44785,
+          "sha256": "173bcf3e75969a08d8db3e64ec4f5e78ffe11fee156186e30076baea649f673d"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_06.png",
+          "bytes": 42423,
+          "sha256": "b615e988e12bbff49ad061c59d8d08f976fab9f72ceac0224b67b4558e336857"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/spark_07.png",
+          "bytes": 27522,
+          "sha256": "1f1f798a6f969349da9cdbc87738ab8bc26542149f3a421cf9b64726491e01e1"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_01.png",
+          "bytes": 29258,
+          "sha256": "fa4440aefefcf5eea5cb816194a216d865e241fc1c8794ed526dc006ac9bd397"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_02.png",
+          "bytes": 37858,
+          "sha256": "48b61d81a78523361d51a0c190ead189851501ef752e441c2c63c8a0335ec33c"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_03.png",
+          "bytes": 32321,
+          "sha256": "28b6321aa328c31d7aed18d866e9adaa35965cd168e32b66b3b10d6bbe94d620"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_04.png",
+          "bytes": 21740,
+          "sha256": "4c8429d19fb97165a3702ac7ff7e7b41d292c8fb9956d674db7028243d86c8f3"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_05.png",
+          "bytes": 39630,
+          "sha256": "3c017dd5e0d6f81b6a18ca5541de30216398aaaec1929cbfbf235497a5eb91aa"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_06.png",
+          "bytes": 25156,
+          "sha256": "4b55a5f4e03ab541b3d6b81a1b0f41c1e30f700144e1fcf204e4bec31fa1ae73"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_07.png",
+          "bytes": 25846,
+          "sha256": "ae3e59099231a3daf031a56b5e0c841aad60ec2fb7549df79412da4c75bb3bcf"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_08.png",
+          "bytes": 22840,
+          "sha256": "83e451b6a931f968216196f39e00949c26bfeccea5257f859a944d735266d48d"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/star_09.png",
+          "bytes": 32629,
+          "sha256": "e7536e5457e7b45f6c8e45201c0de4c9109fbc747a9666e99db11e975383c580"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/symbol_01.png",
+          "bytes": 3849,
+          "sha256": "97c8874aba170cd014c8a58067c4f49bbb941151180e20c1dbcd2c889b3e2e13"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/symbol_02.png",
+          "bytes": 3546,
+          "sha256": "1775280fa2bb713e08f528d6460a9708c39e821fd5ec8c89f22c694f4ce93fbe"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_01.png",
+          "bytes": 17369,
+          "sha256": "fb5857094cacdfaed6886ab48f545a13a64d6fe646030b124b2e334705d7f408"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_02.png",
+          "bytes": 20280,
+          "sha256": "590bf09870a76e840068cd84333d14cde0666d1816e5636efac6201440dc66c7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_03.png",
+          "bytes": 24429,
+          "sha256": "1226d3973ec9c785a40e89bedc5abc282edc2bb403f756c1a60ef3c694687cf5"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_04.png",
+          "bytes": 24865,
+          "sha256": "a7c0e60352eebe0cdbb7a02e98b14c4558097bda5c86a7a2ae58eede56798143"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_05.png",
+          "bytes": 22660,
+          "sha256": "89ec5d9a02676f5fe83f398a1b869c15e91dc65bef01d2c5f7c67b59bd2a9d8b"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_06.png",
+          "bytes": 21552,
+          "sha256": "b65687a581ee9f8f653378da7c98b97647fc5186661f6be69e6b1eee130e1705"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/trace_07.png",
+          "bytes": 18802,
+          "sha256": "f7c49230d65b38613493a9eea60950a76e7378e7a42ca34f60288ae18a837cc7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/twirl_01.png",
+          "bytes": 31267,
+          "sha256": "18137131f93a9f97dbe9ba6f405a6c89236759875635c97be8c4859617a6a5f7"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/twirl_02.png",
+          "bytes": 45770,
+          "sha256": "e74be64a75891e88188f4f8e3726835d796837972ab0571d7de88086d7df8ac0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/twirl_03.png",
+          "bytes": 53410,
+          "sha256": "15ebed5f15d88caf66a199b05a378f8d2b89a1852d26cb09be5941a545562965"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/window_01.png",
+          "bytes": 13573,
+          "sha256": "e6da81a1fc24e12574ca44c5f55d9e2543cd3aae5732825ed031dd10c01f387f"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/window_02.png",
+          "bytes": 14062,
+          "sha256": "79e979150edad3cbbe5bd40086b1cad04992a04584ad5d06900143e2bf4466e0"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/window_03.png",
+          "bytes": 6760,
+          "sha256": "a450384ec385498922162a794f02035bc1c6c998d90d30f3aaf7690778ef8291"
+        },
+        {
+          "path": "asset_library/kenney_particle-pack/PNG (Black background)/window_04.png",
+          "bytes": 30772,
+          "sha256": "6f7d53b5cfa732b1e73ccf5e0c7de8c11f6574564b5826a4fd78e5bec1310ffd"
+        }
+      ],
+      "skipped": [
+        "Unity samples/particlePack_samples.unitypackage"
+      ]
+    },
+    {
+      "name": "kenney_impact-sounds",
+      "source": "https://kenney.nl/assets/impact-sounds",
+      "license_url": "https://kenney.nl/assets/impact-sounds",
+      "download": "https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip",
+      "archive_sha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+      "files": [
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_carpet_000.ogg",
+          "bytes": 6353,
+          "sha256": "b9524658b52a99a20590f8feefc103088637fd13ea8ec35811aee785e1f2f330"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_carpet_001.ogg",
+          "bytes": 6411,
+          "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_carpet_002.ogg",
+          "bytes": 6411,
+          "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_carpet_003.ogg",
+          "bytes": 6301,
+          "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_carpet_004.ogg",
+          "bytes": 6301,
+          "sha256": "4ae7454338d57c7d102145919ae653c7d010eb542797c4f25a1c7470be3a7e4c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_concrete_000.ogg",
+          "bytes": 5808,
+          "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_concrete_001.ogg",
+          "bytes": 6308,
+          "sha256": "507a75eb19b897087855a3be3cf11a12d7fa37d143ad535eeebe0b8031c7325d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_concrete_002.ogg",
+          "bytes": 6255,
+          "sha256": "b21fa546d74941196b25da8a20b7010abd8c05c4fcf93545d1f344e66a664e13"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_concrete_003.ogg",
+          "bytes": 5805,
+          "sha256": "8b513c2f0316324060b9174b8f28df6c2147418c506e6a53b77f18e149a5547b"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_concrete_004.ogg",
+          "bytes": 5912,
+          "sha256": "24dd8db2413e5b81ad181e1205c12a1c7801da5f85715d471b92a4b2f632e45e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_grass_000.ogg",
+          "bytes": 8290,
+          "sha256": "9d49497777405d78d7cf7f2888e28277f3a23192300cfd1d79d54876b20f479f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_grass_001.ogg",
+          "bytes": 8313,
+          "sha256": "fb28781bd22b2eefdc14077f1adf5c94d7fe9c3a130194633b55f3e0d39d9f04"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_grass_002.ogg",
+          "bytes": 8278,
+          "sha256": "73a520139f5be716a403bfe9c80e0e94d1e61d8e9de04a354b336392164b53dc"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_grass_003.ogg",
+          "bytes": 8129,
+          "sha256": "0546e1d8ab2def714425701a18bd34c5ee2794b12e858e5b595aabcf38a34137"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_grass_004.ogg",
+          "bytes": 7800,
+          "sha256": "086fd4ab3546a507ea5f5c759a9a10e535c95ade13705c238bc0eeffd7d4e8ba"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_snow_000.ogg",
+          "bytes": 7880,
+          "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_snow_001.ogg",
+          "bytes": 7794,
+          "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_snow_002.ogg",
+          "bytes": 7694,
+          "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_snow_003.ogg",
+          "bytes": 7860,
+          "sha256": "68272e3f1cabcabd02d328fd344454d7c04cb58b5a86972fcdd858f845e3d007"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_snow_004.ogg",
+          "bytes": 7630,
+          "sha256": "7fe9ce5f5732aaa0a50ef02bb1ac162c27f6bd85214e86aaea6e13e7a41dbc00"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_wood_000.ogg",
+          "bytes": 5949,
+          "sha256": "5f1c252942a220d658121bd9417448cd19649ded9fff2ff15f6e50899373ce8e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_wood_001.ogg",
+          "bytes": 5929,
+          "sha256": "e4f68e1c9fd55b4dc8ca89ed2bbab6f200171bc54bdc18aa96b80d8e7336f462"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_wood_002.ogg",
+          "bytes": 5895,
+          "sha256": "9ff095b05cee5eec40b081defe3f0eef7232bb16d4865ce03b9f6dbab875cfdd"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_wood_003.ogg",
+          "bytes": 6207,
+          "sha256": "2a68a083daa9eda08fed0ea5da5280dfbe0de226196c576be02f95259dd139d9"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/footstep_wood_004.ogg",
+          "bytes": 5799,
+          "sha256": "b33e0854e2b3f6b6492e25c25ef8f90447a332f7c6bb25dd02edced9581d3441"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactBell_heavy_000.ogg",
+          "bytes": 13915,
+          "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactBell_heavy_001.ogg",
+          "bytes": 15577,
+          "sha256": "9df61e3ae9a83dc65e5a1fd3ed19d480876f3b22b963a1b9ef6fa293592dcec4"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactBell_heavy_002.ogg",
+          "bytes": 9252,
+          "sha256": "a4171ed1a4a17fb858a38de1c59b5b42e50d8f046c525706c0e3ac8671f189f5"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactBell_heavy_003.ogg",
+          "bytes": 9429,
+          "sha256": "5572ccdeb3b62373b86fa955355b3a222c36e815f0636ba16165189a21cf2514"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactBell_heavy_004.ogg",
+          "bytes": 6529,
+          "sha256": "49fe4fafa2001bd0d312976796824571ca8429851f285997e1327d17bb34fd00"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGeneric_light_000.ogg",
+          "bytes": 5827,
+          "sha256": "f0e982611e97512fee5f777986b67e8b435434b601f94992ec044f7e89fb5acb"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGeneric_light_001.ogg",
+          "bytes": 5636,
+          "sha256": "c3cd1c073d186ae8fa35788ba94de581f1826e7427a7bb26490b2695fac18efa"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGeneric_light_002.ogg",
+          "bytes": 5795,
+          "sha256": "d0bf60905b59ff630ffe01eb0edeeacd2504eaa8fb6523aeef7d2458b78264d3"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGeneric_light_003.ogg",
+          "bytes": 5792,
+          "sha256": "0e8896706130f6bc88cdf1f0157aaacdbe88dce86cf0330f9136e44eb1209e81"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGeneric_light_004.ogg",
+          "bytes": 5747,
+          "sha256": "f906fa3a37acc4372787b496efcedefa2856045d5ec9456a3bd6c303c0eabb41"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_heavy_000.ogg",
+          "bytes": 7403,
+          "sha256": "b44b39a940e8948e74b9bd3776bff980df43cf220abdaf0d467dc4c43c0244a5"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_heavy_001.ogg",
+          "bytes": 8946,
+          "sha256": "58686e0e562612cc566791844a10e269f8d1921f4766c14ba43976fd0a429f4e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_heavy_002.ogg",
+          "bytes": 7661,
+          "sha256": "4978654ac840ad519692d5d5ba48a8101cabce13b9a577be73ad589185e5e9ed"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_heavy_003.ogg",
+          "bytes": 6956,
+          "sha256": "aed07b154f24410c17e5262bbef832842fb275d41fe297f721af7501d0e9c23a"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_heavy_004.ogg",
+          "bytes": 8300,
+          "sha256": "c7742b0e33c1733ddaf902aa68464a4f5364e4d4cb6ff11b76a7aa4151a138dd"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_light_000.ogg",
+          "bytes": 6526,
+          "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_light_001.ogg",
+          "bytes": 6544,
+          "sha256": "05e513fbd42829060eb37855f8c3866722ec5c39a8937c9bfde518cc609effa2"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_light_002.ogg",
+          "bytes": 6562,
+          "sha256": "710db7451bb7857b9140dfe6afe4621ea2188ad65eda3919c569d1bb285b933d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_light_003.ogg",
+          "bytes": 6618,
+          "sha256": "765290ce32fa108c939a0dbd6fbacbcd05abde622b57b708eb8a64058ef4225a"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_light_004.ogg",
+          "bytes": 6641,
+          "sha256": "f535b7cb7835400d8d28bcf9e1cf047ce3c0eb7a6456bdb1a4a27acbec1ed2cb"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_medium_000.ogg",
+          "bytes": 8400,
+          "sha256": "9252d50bfb85edb17d6073c4a7806e10cdb9de56d3dbfc93a4b9727146d2df6d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_medium_001.ogg",
+          "bytes": 8605,
+          "sha256": "d3d806cb3012c9ddd87010b30295ccb74d6d8b690077d19e67afd09a9d8feb03"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_medium_002.ogg",
+          "bytes": 8341,
+          "sha256": "48616f22c95589ed9fe55babf0fd012721d7b2ef1b9e85c2ad6408a2cd7c164f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_medium_003.ogg",
+          "bytes": 8596,
+          "sha256": "dccea1ecc3d942ee5fd217c684632638f6c039c97cd3ae59c75ab15d0c3f0b59"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactGlass_medium_004.ogg",
+          "bytes": 8397,
+          "sha256": "853fe77ad46bd0cf106e40e741b039e15b90f73edecd92cde524fbad9e3ebe00"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_heavy_000.ogg",
+          "bytes": 6110,
+          "sha256": "e07045693e4a2b3d165c424e3dab4c781d9ff8880a386880ac89a51315d7f831"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_heavy_001.ogg",
+          "bytes": 7279,
+          "sha256": "83554049f81f4db9209379e103c30bfa63f65c42189a03f300b045c2c82e23ae"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_heavy_002.ogg",
+          "bytes": 5634,
+          "sha256": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_heavy_003.ogg",
+          "bytes": 6209,
+          "sha256": "b0f2ba4dabde9a87eb9c188a19d31e0c2300fd321adeba08d3b9b8aa011d7037"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_heavy_004.ogg",
+          "bytes": 5788,
+          "sha256": "6d65b463c0555dd5be16b8db6d2cbe23a94e07a4637779b8ad17d0db3e500a87"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_light_000.ogg",
+          "bytes": 7651,
+          "sha256": "33b5e6e37c6e9d54e07bf5a89b12c76e879f40c1ea83cdd82714df1d6f9fec6d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_light_001.ogg",
+          "bytes": 6967,
+          "sha256": "fba69c467ddd85da7b1d82e259f936b876d9ba6a3d6f1b24bdd10468e46bfe08"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_light_002.ogg",
+          "bytes": 6804,
+          "sha256": "25a96f90a9a1f88a531e824e126f0519504625e5635e65a72e4f31611428db29"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_light_003.ogg",
+          "bytes": 9023,
+          "sha256": "92d5db6bfc672d9dc1b4f390b2900504f013187fa36335472554fafefa9050b1"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_light_004.ogg",
+          "bytes": 6675,
+          "sha256": "9b1c35820fba507081261f19ab5f461f69a5e2627a7d91acdb73ca3cfc997979"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_medium_000.ogg",
+          "bytes": 7117,
+          "sha256": "a96f879fec0864a8938e0c745b6996a6c5679c16a234ce31a01cc995e8401003"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_medium_001.ogg",
+          "bytes": 6151,
+          "sha256": "e8a9eaba7c4d27422e4eeb3e6c7100d5d7dc0f83e005efc98c960adcc5265337"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_medium_002.ogg",
+          "bytes": 5857,
+          "sha256": "7e89ce2ca0dbda95ea2b78d4b50791cab35c10d20e9f5ccd45dd0b00e99ff548"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_medium_003.ogg",
+          "bytes": 6964,
+          "sha256": "2a185e2e57211d02c1bdd33b872d6b6a2fe83e6c14f4e56f426a95e717acf08e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMetal_medium_004.ogg",
+          "bytes": 5744,
+          "sha256": "03e10f800199c7166208e41c11cf4acfac6cc265467f02357da71972bc967295"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMining_000.ogg",
+          "bytes": 12035,
+          "sha256": "36b4ea107222d073c67ca64dde26944975609202d5090b2f2021213c1a7e35cd"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMining_001.ogg",
+          "bytes": 11481,
+          "sha256": "61235a18de3f3d92118235398222dbf51d448f1be70b1c8bc962b10b86f2d9c6"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMining_002.ogg",
+          "bytes": 11235,
+          "sha256": "059558ec751115ca6b1441e00f0adc837c1a3eeb0a066b109e0fd879fc5d0b0c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMining_003.ogg",
+          "bytes": 12160,
+          "sha256": "4237fa2cd80364ad81cd0af44f67d7497f1c5edcc7bdb02cd22be2ba4580c83d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactMining_004.ogg",
+          "bytes": 11668,
+          "sha256": "8ca3a99d85d845751ad8ce7b40509da58263a62e48cde70e5a30b5ccef4c9a3b"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlank_medium_000.ogg",
+          "bytes": 12016,
+          "sha256": "8403cd7a043f0391574c88c55dd205743725b5363d2407f6de145f201690b68f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlank_medium_001.ogg",
+          "bytes": 12082,
+          "sha256": "d7c304319f8beac616231b62041fa8da74045b62d7155965516efb9b19303df4"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlank_medium_002.ogg",
+          "bytes": 12313,
+          "sha256": "f6a14da45994229676b4f29e6a35f504b5c2ec2b8166fb1a3b1aa004bc6911ef"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlank_medium_003.ogg",
+          "bytes": 12138,
+          "sha256": "0602a7b3eab5f53484f10fe775ee4204e7a2ba9703c886b302e012f7f6fab8de"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlank_medium_004.ogg",
+          "bytes": 12084,
+          "sha256": "6a51318c1c63821ea757622b57fafbf44c16c28129f6d39406a784260d87c447"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_heavy_000.ogg",
+          "bytes": 10032,
+          "sha256": "112d4f93ddcc370b410630f971c0f5d991856102da9c76bc5c5540d388e75aaa"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_heavy_001.ogg",
+          "bytes": 8713,
+          "sha256": "142fd6c77f13d25f318265901163f70f8dfe12f87829169a570025be43de7011"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_heavy_002.ogg",
+          "bytes": 10188,
+          "sha256": "b0cab75d1befa32b4cf215d8ee7e1c400a39182e8b105963b8e310f825b198a1"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_heavy_003.ogg",
+          "bytes": 8490,
+          "sha256": "59775f8979a396c8a793b0a1db206d5bdc651eae808d858e9acaee8ebda5bc6d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_heavy_004.ogg",
+          "bytes": 11092,
+          "sha256": "e31bfec90630155bcc6af541d1d14ae8202c435c52b42e6b6183fdb6ffb248b0"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_light_000.ogg",
+          "bytes": 10474,
+          "sha256": "6e797cf8a5bfc52d7ed5eb47c227974c1cf2a674954fec5b539cea7d62c7282c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_light_001.ogg",
+          "bytes": 11730,
+          "sha256": "947915c2eb6ac57ee08fd3a48b297fd108d69abc72076e79882c21cad0eef56e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_light_002.ogg",
+          "bytes": 9932,
+          "sha256": "8ac5869ea434cf0d364872774efe70b2d666a4f02ba35ddfc1e051d336721be8"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_light_003.ogg",
+          "bytes": 10626,
+          "sha256": "dbfb7c1d002576696df3e9a43d6639ee3f342068398b5e7b55bc2389d20508a9"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_light_004.ogg",
+          "bytes": 11928,
+          "sha256": "9cb33b0c0cce948313f078b60769d2f8e4075472494fc8f8129aa4a23c951897"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_medium_000.ogg",
+          "bytes": 10921,
+          "sha256": "b670d30452983369771081319c268475edaaafe782bf4e8d70bd7eef09d8823c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_medium_001.ogg",
+          "bytes": 11491,
+          "sha256": "68ba7701b71ef620f498f3038e832157d71ac8db7ad59424545890b250ceb24e"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_medium_002.ogg",
+          "bytes": 10250,
+          "sha256": "68762e1ed49bb59ae6602fad6ce2ebac61958478ddb2668de9106f010cd4b6b0"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_medium_003.ogg",
+          "bytes": 11616,
+          "sha256": "964c5fcfb91e7710e2af25c2243c8b7160756b223b0984bacc9eb25bfeea057b"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPlate_medium_004.ogg",
+          "bytes": 10803,
+          "sha256": "f0e8164081190839caff6c2958361b22780ffba5617f77f2d4ee3a4275b318bf"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_heavy_000.ogg",
+          "bytes": 11617,
+          "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_heavy_001.ogg",
+          "bytes": 10861,
+          "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_heavy_002.ogg",
+          "bytes": 9025,
+          "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_heavy_003.ogg",
+          "bytes": 10029,
+          "sha256": "4ab53b26f4ea575120dcc1348526c9e0db2afc6af7a442aa0489bdead2ca80b6"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_heavy_004.ogg",
+          "bytes": 10452,
+          "sha256": "f4c0c3eb8ab6517583b8218ed03f28923d1b687379aab4c1d5a6d4c10cf8e500"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_medium_000.ogg",
+          "bytes": 8800,
+          "sha256": "486988aa2d6440ffc4c62a0e8ccf3c23673ba84424bd4723378d451b7255eb5c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_medium_001.ogg",
+          "bytes": 8701,
+          "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_medium_002.ogg",
+          "bytes": 10399,
+          "sha256": "6492f9ccbc8d24dcef607bb1b48790b7870961474561f7fe5601e1c73a3018ef"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_medium_003.ogg",
+          "bytes": 9509,
+          "sha256": "2d7c719c05999e0532f4384e1018e04cd916db715140bf16dee2dff3f820e908"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactPunch_medium_004.ogg",
+          "bytes": 10032,
+          "sha256": "4a256878a3afb994ec9a4399336687748e68c7c136872c08c9c797d8c4e2464a"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_heavy_000.ogg",
+          "bytes": 6570,
+          "sha256": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_heavy_001.ogg",
+          "bytes": 6689,
+          "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_heavy_002.ogg",
+          "bytes": 6749,
+          "sha256": "d130ae541951243d3f6ed963d0057450a445ffe117fbf9a084d34eb1635cb563"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_heavy_003.ogg",
+          "bytes": 6665,
+          "sha256": "d00286a2dc62ee5cb4d42bf56120e7050a855f69e655fc1294410aadd337eba3"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_heavy_004.ogg",
+          "bytes": 6478,
+          "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_medium_000.ogg",
+          "bytes": 5351,
+          "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_medium_001.ogg",
+          "bytes": 5506,
+          "sha256": "7642a4fd43e547afe4f7adfadb3dabb681c0ff512f52c1674bae30a726841faf"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_medium_002.ogg",
+          "bytes": 5358,
+          "sha256": "5069e3571a77d7f7aae9ef71d0364aa245fb7d64a7c8cc9956f221d03088c089"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_medium_003.ogg",
+          "bytes": 5392,
+          "sha256": "5c4a1f35fde7e14046931da7bc3d1b23736541b7190ba107e08a379c4ca43cd6"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactSoft_medium_004.ogg",
+          "bytes": 5438,
+          "sha256": "b0a4dea90eed47accf50b768beff1166f2f1486fb139e4d025b2427637624bca"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactTin_medium_000.ogg",
+          "bytes": 6509,
+          "sha256": "f4bbee66ca191ec744b84fc07ac9ed2a6fda955d51cfed8360f12b62815d3cbd"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactTin_medium_001.ogg",
+          "bytes": 6603,
+          "sha256": "84253095543c094d83cd749f42ecfbc96e356b60385f18a192c18eafb25b3cc6"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactTin_medium_002.ogg",
+          "bytes": 6156,
+          "sha256": "c1d2c4f9910d4529581ae56a9a9a01454c4619fbb7d6da7616221d8ec58cc0c4"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactTin_medium_003.ogg",
+          "bytes": 6541,
+          "sha256": "0d18737d93ba7aa0669f751094cbc1671bbebac4fe207783922938ce75e24334"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactTin_medium_004.ogg",
+          "bytes": 6362,
+          "sha256": "fd53e24efec3d5c1cee5a46fee70f97efd4bd01e53ac5d9b5f3b6719dfe9f5aa"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_heavy_000.ogg",
+          "bytes": 6233,
+          "sha256": "15ff82332f342c30e469215539e1cc57e11b221aa2cf7e11e811d313a9927f3d"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_heavy_001.ogg",
+          "bytes": 6239,
+          "sha256": "f1b07a53ac10c615fff9ba470511fdeb722b5902e1a8520759fc20ad6f546015"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_heavy_002.ogg",
+          "bytes": 6146,
+          "sha256": "ce1e06f2a05f2634c645cb72f6a1623e64bc2d92be34917430a61031fb6597d4"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_heavy_003.ogg",
+          "bytes": 6181,
+          "sha256": "af07511902b309b3f6d8f0e1fafbe93869127fb88099ebdc0aa6a00a98dc3cb0"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_heavy_004.ogg",
+          "bytes": 6253,
+          "sha256": "2c647ae6bd29c72ae2523f7e16e325d8d331b75cc99ab4f637c48a0e11c34677"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_light_000.ogg",
+          "bytes": 6343,
+          "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_light_001.ogg",
+          "bytes": 6373,
+          "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_light_002.ogg",
+          "bytes": 6366,
+          "sha256": "b183cf7a5bd783817e0e4b82af34ac6658fa1927049089dadc8b15c2ecc771dc"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_light_003.ogg",
+          "bytes": 6381,
+          "sha256": "cdfbe8af2fe7ff9ee28f337a0a989deee0f327620da456c8413644880e9d0004"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_light_004.ogg",
+          "bytes": 6395,
+          "sha256": "e10009f67ddaeb3a59a3e1129cfc1615d84ba60ab578eae07e7092ac223f099c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_medium_000.ogg",
+          "bytes": 6575,
+          "sha256": "1723a9fd25103ed41af06054814e84e65f4a772bac86ab2dc927da93d9592ff5"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_medium_001.ogg",
+          "bytes": 6555,
+          "sha256": "15271dbe8e2872dbb0ff1aeb7b12b2d2b92b7c1951c88532b9ab9158c36dfc73"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_medium_002.ogg",
+          "bytes": 6607,
+          "sha256": "3f3f1917428b828f733a963167833c707bf88296ff158e1559c57c5cb813d799"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_medium_003.ogg",
+          "bytes": 6598,
+          "sha256": "635c37cfcd854b187d643d450ff0397798dcc29ae94da32192b814fae6bd854c"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/Audio/impactWood_medium_004.ogg",
+          "bytes": 6481,
+          "sha256": "7ba48f2f99c91c71be420841a91f1e69c0cbc4fe887fcd7213144d67bb87b13a"
+        },
+        {
+          "path": "asset_library/kenney_impact-sounds/License.txt",
+          "bytes": 608,
+          "sha256": "b49aa9c56b04528b95913de13e506a0f7c5e807b9925db9bfef86af1f91120db"
+        }
+      ],
+      "skipped": [
+        "Kenney.url",
+        "Patreon.url"
+      ]
+    },
+    {
+      "name": "kenney_rpg-audio",
+      "source": "https://kenney.nl/assets/rpg-audio",
+      "license_url": "https://kenney.nl/assets/rpg-audio",
+      "download": "https://kenney.nl/media/pages/assets/rpg-audio/8e99002d76-1677590336/kenney_rpg-audio.zip",
+      "archive_sha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+      "files": [
+        {
+          "path": "asset_library/kenney_rpg-audio/License.txt",
+          "bytes": 478,
+          "sha256": "5735dfd72cb64cbbceda4ebc00c380c41ca680edb82ff153aa7c9ab97614c539"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Preview.ogg",
+          "bytes": 321120,
+          "sha256": "631d554d100779c7896699bb4727807d4ca365ca850dc79216157cf31dae4b6a"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/beltHandle1.ogg",
+          "bytes": 10820,
+          "sha256": "2ef665bd8b65dbe669f4560be38a6d8f04a162e618b15a49e3e71b58e558aab0"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/beltHandle2.ogg",
+          "bytes": 15410,
+          "sha256": "f3b692d5c83263c25bce779805b212dbab515d18a603c695fc6a1e8650cf5366"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookClose.ogg",
+          "bytes": 9292,
+          "sha256": "81e976532565f4372abd14e83d2684195fa548d0a28d345de221e56052454f32"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookFlip1.ogg",
+          "bytes": 18248,
+          "sha256": "fa81ac2fedc8c641661b87e349630a36c9800e795e0c800e029214efdbe26a7d"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookFlip2.ogg",
+          "bytes": 12393,
+          "sha256": "3409042acbfaebc24c1a6327dc073e36f9250841712e96c5040da566a97df73c"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookFlip3.ogg",
+          "bytes": 9077,
+          "sha256": "c85db5dceb3f1df073e960630277eaa88a5afda0477c1ddd68dad707621767be"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookOpen.ogg",
+          "bytes": 8273,
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookPlace1.ogg",
+          "bytes": 9901,
+          "sha256": "26f3ce60fbde85b678b0ad7f6624d80535fe540d88232ad1e38e47a96662d977"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookPlace2.ogg",
+          "bytes": 11185,
+          "sha256": "831874e8fd142d4d0a03ff009f1f83966338a7878c0f6f38c613ae5b80dd731e"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/bookPlace3.ogg",
+          "bytes": 9570,
+          "sha256": "b1afa711e1cabfe5b2c56e20e20e0f9d82142d067727447fa992ddc43dbdb06e"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/chop.ogg",
+          "bytes": 9370,
+          "sha256": "d00c2b3c9fff07e376145c8c8c45c90e5084ec192f6ce0387db233f7b86f1486"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/cloth1.ogg",
+          "bytes": 16508,
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/cloth2.ogg",
+          "bytes": 11787,
+          "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/cloth3.ogg",
+          "bytes": 12432,
+          "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/cloth4.ogg",
+          "bytes": 11043,
+          "sha256": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/clothBelt.ogg",
+          "bytes": 21491,
+          "sha256": "f29560a2aea95bbfeb643e1e8f56ec2b6f7e32f32ce4e140645a36db81de3253"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/clothBelt2.ogg",
+          "bytes": 20013,
+          "sha256": "d545b1d9f20e6188140aaf551a96f1e82fe0d15f7ca066fac8b065e1231e0038"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/creak1.ogg",
+          "bytes": 15761,
+          "sha256": "8a346186fd297254248cab8e8117060a52a5cf2a84f603153a762108550ea95e"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/creak2.ogg",
+          "bytes": 19012,
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/creak3.ogg",
+          "bytes": 10408,
+          "sha256": "f9638787f95004b9d2d06f8eff8e99d4e594c21b51947daf562856fbcec905d1"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorClose_1.ogg",
+          "bytes": 18564,
+          "sha256": "834d29c60a8a8bfb50b158cdb6b7dfa8f02812a408a1ee9703d038dfab0b1aeb"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorClose_2.ogg",
+          "bytes": 17598,
+          "sha256": "4aa4fe79836c53cd6d0cb0b22ddc33b9901429463ae1bb75131f072683f63f21"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorClose_3.ogg",
+          "bytes": 20889,
+          "sha256": "d0a2540e5e1639bc2fbeef34e76f28e9f9cb8a151736a0ac4c13859994328d0e"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorClose_4.ogg",
+          "bytes": 16902,
+          "sha256": "fd21c0e7a9d0317375d2561590f0770dd3380ee35507d064862cb44d6f71595b"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorOpen_1.ogg",
+          "bytes": 22848,
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/doorOpen_2.ogg",
+          "bytes": 30280,
+          "sha256": "68962fb0458c9bac59dec3adefa9849703c7c89d34712de03dd0075d095e79e9"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/drawKnife1.ogg",
+          "bytes": 11134,
+          "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/drawKnife2.ogg",
+          "bytes": 12395,
+          "sha256": "d5df6a4130cbb016f97b4883769a418917b9629cb4c21717030b186e0c73281a"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/drawKnife3.ogg",
+          "bytes": 12726,
+          "sha256": "a11ae62fb1a628425769d11a9de394980ad8909c31f4c9a4316f226963e21caf"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/dropLeather.ogg",
+          "bytes": 11695,
+          "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep00.ogg",
+          "bytes": 9475,
+          "sha256": "6fe61ef1fc3bcf0e253bf2eb64759db6cb69e2fe452f4d88cc597ecf78a3d601"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep01.ogg",
+          "bytes": 9900,
+          "sha256": "313472dba31fd0c855376069fa368bb5a198c27251cc8398ef464578b7047a4c"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep02.ogg",
+          "bytes": 9528,
+          "sha256": "2d9575b7dead6e1217ca113991fc5229e9b6d998ea0726ebbb277e7398ab888f"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep03.ogg",
+          "bytes": 10559,
+          "sha256": "a86756b9af9f370455ab47844239bb07fd1bee7a113068c91f0fcd9b72703fae"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep04.ogg",
+          "bytes": 11303,
+          "sha256": "fd264d72a7cd622b82abde202f4ed09fa7de95d34c36473ee938ce66cdf39830"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep05.ogg",
+          "bytes": 10288,
+          "sha256": "817957e1f95d97fd36870064c41673895575cde17bccb245f50364c86ed10198"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep06.ogg",
+          "bytes": 9885,
+          "sha256": "6cabfe7ae95d227a84066c6e17014ac31cc7c89b14ef51d7877e98352d4a64fb"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep07.ogg",
+          "bytes": 10264,
+          "sha256": "42924cdbf998d5b3db180a339fd74afc94c570d594a536687e337ef1bdfdb346"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep08.ogg",
+          "bytes": 9242,
+          "sha256": "668f14dc1254d0d0f33025e9c7dbcdf2c2f00462ed0e07fb8f099c1d711c1337"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/footstep09.ogg",
+          "bytes": 9356,
+          "sha256": "9324ebb9b2c5bcd078dcb523c6518d38a9f34081069d511602c2efb14ce06ce2"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/handleCoins.ogg",
+          "bytes": 25394,
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/handleCoins2.ogg",
+          "bytes": 13094,
+          "sha256": "4b857968d64f9ac9336a10ffac6694d7547e1f01566ad6857b30bc8db3ee6c32"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/handleSmallLeather.ogg",
+          "bytes": 10492,
+          "sha256": "ae3cbf695aa0a8b98b5a80a835be5a3ccbd5446a24db2235cd4c3cd6fc92ed96"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/handleSmallLeather2.ogg",
+          "bytes": 10028,
+          "sha256": "a66f6db5918ad016c28a9f2768f127a7f39b5fa04481e5a3b4e78ebe2a1c282d"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/knifeSlice.ogg",
+          "bytes": 15532,
+          "sha256": "4cd96dc630bed9840c15f1dd2306da2cc56a4da26a5d3f1a03c5a7265ac5e54f"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/knifeSlice2.ogg",
+          "bytes": 15099,
+          "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/metalClick.ogg",
+          "bytes": 13615,
+          "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/metalLatch.ogg",
+          "bytes": 10208,
+          "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/metalPot1.ogg",
+          "bytes": 31619,
+          "sha256": "159def979e8e386c2c539f5e99cc30a080eb2dcb6c911fa2e4ccc0785b2522fd"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/metalPot2.ogg",
+          "bytes": 22471,
+          "sha256": "8e1f820d217d380fde10e969d109db34303e3f4d11c3951926eddef813d04ae2"
+        },
+        {
+          "path": "asset_library/kenney_rpg-audio/Audio/metalPot3.ogg",
+          "bytes": 23142,
+          "sha256": "d306e5b848f6843332d0ca19f8f7dfe5796aeb56d8273902b085df463273f1dc"
+        }
+      ],
+      "skipped": [
+        "Visit Kenney.url",
+        "Visit Patreon.url"
+      ]
+    }
+  ]
+}

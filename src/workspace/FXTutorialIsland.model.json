@@ -10,6 +10,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -24,21 +37,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -47,6 +47,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -61,21 +74,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -84,6 +84,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -98,21 +111,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -121,6 +121,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -135,21 +148,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -158,6 +158,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -172,21 +185,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -195,6 +195,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -209,21 +222,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -232,6 +232,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       18.0,
+       1.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        40.0,
        0.5,
@@ -246,21 +259,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       18.0,
-       1.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -269,6 +269,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -283,22 +297,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -307,6 +307,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -321,22 +335,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -345,6 +345,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -359,22 +373,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -383,6 +383,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -397,22 +411,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -421,6 +421,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -435,22 +449,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -459,6 +459,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -473,22 +487,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -497,6 +497,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        32.0,
        -4.0,
@@ -511,22 +525,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -538,20 +538,34 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 60.0,
         "Color": [
          0.6000000238418579,
          0.8999999761581421,
          1.0
         ],
-        "Brightness": 4.0
+        "Brightness": 4.0,
+        "Range": 60.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Shape": "Ball",
+      "Size": [
+       6.0,
+       5.0,
+       6.0
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        89,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        36.5,
@@ -566,22 +580,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        89,
-        216,
-        255
-       ]
-      },
-      "Shape": "Ball",
-      "Size": [
-       6.0,
-       5.0,
-       6.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -590,6 +590,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -604,22 +618,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -628,6 +628,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -642,22 +656,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -666,6 +666,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -680,22 +694,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -704,6 +704,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -718,22 +732,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -742,6 +742,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -756,22 +770,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -780,6 +780,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -794,22 +808,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -818,6 +818,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       12.0,
+       1.399999976158142,
+       1.399999976158142
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        48.0,
        -4.0,
@@ -832,22 +846,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       12.0,
-       1.399999976158142,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -856,6 +856,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       30.0,
+       14.0,
+       14.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        198,
+        188,
+        168
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        19.0,
@@ -870,22 +884,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        198,
-        188,
-        168
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       30.0,
-       14.0,
-       14.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -897,20 +897,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        31.0,
        9.600000381469727,
@@ -925,21 +938,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -948,6 +948,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        31.0,
        4.5,
@@ -962,22 +977,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -986,6 +997,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       4.0,
+       20.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        2.0,
@@ -1000,22 +1025,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       4.0,
-       20.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1024,6 +1035,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        31.0,
        4.5,
@@ -1038,22 +1064,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1062,6 +1084,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       2.0,
+       14.399999618530273,
+       14.399999618530273
+      ],
+      "Color": {
+       "Color3uint8": [
+        140,
+        30,
+        30
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        10.0,
@@ -1076,22 +1112,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        140,
-        30,
-        30
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       2.0,
-       14.399999618530273,
-       14.399999618530273
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1100,6 +1122,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       2.0,
+       14.399999618530273,
+       14.399999618530273
+      ],
+      "Color": {
+       "Color3uint8": [
+        140,
+        30,
+        30
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        28.0,
@@ -1114,22 +1150,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        140,
-        30,
-        30
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       2.0,
-       14.399999618530273,
-       14.399999618530273
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1141,20 +1163,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        31.0,
        9.600000381469727,
@@ -1169,21 +1204,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1192,6 +1214,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       2.0,
+       14.399999618530273,
+       14.399999618530273
+      ],
+      "Color": {
+       "Color3uint8": [
+        140,
+        30,
+        30
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        19.0,
@@ -1206,22 +1242,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        140,
-        30,
-        30
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       2.0,
-       14.399999618530273,
-       14.399999618530273
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1230,6 +1252,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       9.0,
+       1.0,
+       9.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -40.0,
        34.0,
@@ -1244,21 +1279,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       9.0,
-       1.0,
-       9.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }
@@ -1283,6 +1305,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.5,
+       68.0,
+       68.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        40.0,
        0.25,
@@ -1297,22 +1334,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.5,
-       68.0,
-       68.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1321,6 +1354,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       30.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        198,
+        188,
+        168
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        94.50199890136719,
        15.0,
@@ -1335,21 +1381,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        198,
-        188,
-        168
-       ]
-      },
-      "Size": [
-       22.0,
-       30.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1358,6 +1391,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        94.50199890136719,
        31.5,
@@ -1372,21 +1419,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1395,6 +1439,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       20.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        73.26699829101562,
        10.0,
@@ -1409,21 +1466,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       22.0,
-       20.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1432,6 +1476,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        73.26699829101562,
        21.5,
@@ -1446,21 +1504,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1469,6 +1524,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       20.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        198,
+        188,
+        168
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        6.732999801635742,
        10.0,
@@ -1483,21 +1551,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        198,
-        188,
-        168
-       ]
-      },
-      "Size": [
-       22.0,
-       20.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1506,6 +1561,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        6.732999801635742,
        21.5,
@@ -1520,21 +1589,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1543,6 +1609,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       30.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -14.501999855041504,
        15.0,
@@ -1557,21 +1636,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       22.0,
-       30.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1580,6 +1646,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        -14.501999855041504,
        31.5,
@@ -1594,21 +1674,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1617,6 +1694,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       20.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        198,
+        188,
+        168
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -14.501999855041504,
        10.0,
@@ -1631,21 +1721,8 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        198,
-        188,
-        168
-       ]
-      },
-      "Size": [
-       22.0,
-       20.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1654,6 +1731,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        -14.501999855041504,
        21.5,
@@ -1668,21 +1759,18 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1691,6 +1779,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       20.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        6.732999801635742,
        10.0,
@@ -1705,21 +1806,8 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       22.0,
-       20.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1728,6 +1816,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        6.732999801635742,
        21.5,
@@ -1742,21 +1844,18 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1765,6 +1864,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       8.0,
+       0.4000000059604645,
+       8.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        89,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.6499999761581421,
       "CFrame": [
        40.0,
        0.699999988079071,
@@ -1779,23 +1893,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.6499999761581421,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        89,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       8.0,
-       0.4000000059604645,
-       8.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -1804,6 +1903,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        100.13999938964844,
        34.0,
@@ -1818,21 +1931,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1841,6 +1951,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        39.75299835205078,
        0.15000000596046448,
@@ -1855,21 +1979,18 @@
        0.0,
        0.9987486004829407
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1881,20 +2002,34 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        18.78700065612793,
        9.600000381469727,
@@ -1909,21 +2044,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.403,
+        "friction": 0.25,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1935,20 +2067,34 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        61.2130012512207,
        9.600000381469727,
@@ -1963,21 +2109,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.403,
+        "friction": 0.25,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -1985,8 +2128,21 @@
      "name": "Janela0_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        85.95099639892578,
        18.0,
@@ -2001,21 +2157,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2024,6 +2167,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        40.29199981689453,
        0.1300000101327896,
@@ -2038,21 +2195,18 @@
        0.0,
        0.9984216690063477
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2061,6 +2215,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -4.396999835968018,
        0.1300000101327896,
@@ -2075,21 +2243,18 @@
        0.0,
        0.9997350573539734
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2101,20 +2266,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        85.95099639892578,
        8.0,
@@ -2129,21 +2307,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2152,6 +2317,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        73.26699829101562,
        31.5,
@@ -2166,21 +2345,18 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2189,6 +2365,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        39.67499923706055,
        0.15000000596046448,
@@ -2203,21 +2393,18 @@
        0.0,
        0.9982163310050964
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2226,6 +2413,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        68.0479965209961,
        4.0,
@@ -2240,21 +2441,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2263,6 +2461,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -33.78300094604492,
        0.15000000596046448,
@@ -2277,21 +2489,18 @@
        0.0,
        0.9989119172096252
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2303,20 +2512,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        11.95199966430664,
        8.0,
@@ -2331,21 +2553,8 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2354,6 +2563,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        76.70899963378906,
        34.0,
@@ -2368,21 +2591,18 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2391,6 +2611,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        17.01300048828125,
        0.15000000596046448,
@@ -2405,21 +2639,18 @@
        0.0,
        0.9997304081916809
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2428,6 +2659,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        3.2909998893737793,
        24.0,
@@ -2442,21 +2687,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2464,8 +2706,21 @@
      "name": "Janela0_2",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        85.95099639892578,
        28.0,
@@ -2480,21 +2735,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2503,6 +2745,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        31.386999130249023,
        0.15000000596046448,
@@ -2517,21 +2773,18 @@
        0.0,
        0.9991992115974426
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2540,6 +2793,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        3.2909998893737793,
        24.0,
@@ -2554,21 +2821,18 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2577,6 +2841,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2200000286102295,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        10.579999923706055,
        0.11000001430511475,
@@ -2591,21 +2869,18 @@
        0.0,
        0.9999936819076538
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2200000286102295,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2614,6 +2889,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -38.63100051879883,
        0.1300000101327896,
@@ -2628,21 +2917,18 @@
        0.0,
        0.9994586110115051
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2654,20 +2940,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        85.95099639892578,
        8.0,
@@ -2682,21 +2981,8 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2708,20 +2994,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        68.0479965209961,
        8.0,
@@ -2736,21 +3035,8 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2759,6 +3045,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        -20.139999389648438,
        34.0,
@@ -2773,21 +3073,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2799,20 +3096,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -5.951000213623047,
        8.0,
@@ -2827,21 +3137,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2849,8 +3146,21 @@
      "name": "Janela6_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        68.0479965209961,
        18.0,
@@ -2865,21 +3175,8 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -2888,6 +3185,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        19.993999481201172,
        0.15000000596046448,
@@ -2902,21 +3213,18 @@
        0.0,
        0.9963933229446411
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2925,6 +3233,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        100.13999938964844,
        24.0,
@@ -2939,21 +3261,18 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -2961,8 +3280,21 @@
      "name": "Janela6_2",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        68.0479965209961,
        28.0,
@@ -2977,21 +3309,8 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3003,20 +3322,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        11.95199966430664,
        8.0,
@@ -3031,21 +3363,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3054,6 +3373,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       30.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        198,
+        188,
+        168
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        73.26699829101562,
        15.0,
@@ -3068,21 +3400,8 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        198,
-        188,
-        168
-       ]
-      },
-      "Size": [
-       22.0,
-       30.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3094,20 +3413,34 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        18.78700065612793,
        9.600000381469727,
@@ -3122,21 +3455,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.403,
+        "friction": 0.25,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3148,20 +3478,34 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 22.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 1.399999976158142
+        "Brightness": 1.399999976158142,
+        "Range": 22.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       1.7999999523162842,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        61.2130012512207,
        9.600000381469727,
@@ -3176,21 +3520,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       1.7999999523162842,
-       1.399999976158142
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.403,
+        "friction": 0.25,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3198,8 +3539,21 @@
      "name": "Janela2_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        11.95199966430664,
        18.0,
@@ -3214,21 +3568,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3237,6 +3578,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        -20.139999389648438,
        24.0,
@@ -3251,21 +3606,18 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3274,6 +3626,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        11.95199966430664,
        4.0,
@@ -3288,21 +3654,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3311,6 +3674,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.78499984741211,
        0.15000000596046448,
@@ -3325,21 +3702,18 @@
        0.0,
        0.9964233040809631
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3348,6 +3722,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       3.0,
+       7.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        76.70899963378906,
        24.0,
@@ -3362,21 +3750,18 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       3.0,
-       7.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 1.922,
+        "friction": 0.8,
+        "elasticity": 0.15,
+        "frictionWeight": 0.3,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.35
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3385,6 +3770,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        68.0479965209961,
        4.0,
@@ -3399,21 +3798,18 @@
        0.0,
        -0.8191519379615784
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3422,6 +3818,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -21.63800048828125,
        0.15000000596046448,
@@ -3436,21 +3846,18 @@
        0.0,
        0.9978275299072266
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3458,8 +3865,21 @@
      "name": "Janela4_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -5.951000213623047,
        18.0,
@@ -3474,21 +3894,8 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3500,20 +3907,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -5.951000213623047,
        8.0,
@@ -3528,21 +3948,8 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3551,6 +3958,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.58300018310547,
        0.1300000101327896,
@@ -3565,21 +3986,18 @@
        0.0,
        0.9989696741104126
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3587,8 +4005,21 @@
      "name": "Janela7_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        85.95099639892578,
        18.0,
@@ -3603,21 +4034,8 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3626,6 +4044,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -9.70199966430664,
        0.15000000596046448,
@@ -3640,21 +4072,18 @@
        0.0,
        0.9989407062530518
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3663,6 +4092,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        85.95099639892578,
        4.0,
@@ -3677,21 +4120,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3700,6 +4140,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        18.78700065612793,
        4.5,
@@ -3714,22 +4169,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3738,6 +4189,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        -5.951000213623047,
        4.0,
@@ -3752,21 +4217,18 @@
        -0.0,
        -0.3420201241970062
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3775,6 +4237,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -27.413000106811523,
        0.15000000596046448,
@@ -3789,21 +4265,18 @@
        0.0,
        0.9983912110328674
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3812,6 +4285,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       24.0,
+       3.0,
+       20.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        56,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Brick",
       "CFrame": [
        94.50199890136719,
        21.5,
@@ -3826,21 +4313,18 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Slate",
-      "Color": {
-       "Color3uint8": [
-        56,
-        30,
-        33
-       ]
-      },
-      "Size": [
-       24.0,
-       3.0,
-       20.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.4,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.03
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3849,6 +4333,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        25.197999954223633,
        0.15000000596046448,
@@ -3863,21 +4361,18 @@
        0.0,
        0.9995095133781433
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3886,6 +4381,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.893001556396484,
        0.15000000596046448,
@@ -3900,21 +4409,18 @@
        0.0,
        0.9985138177871704
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3922,8 +4428,21 @@
      "name": "Janela1_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        68.0479965209961,
        18.0,
@@ -3938,21 +4457,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -3961,6 +4467,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.89699935913086,
        0.1300000101327896,
@@ -3975,21 +4495,18 @@
        0.0,
        0.9999803900718689
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -3998,6 +4515,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        -5.951000213623047,
        4.0,
@@ -4012,21 +4543,18 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4035,6 +4563,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.88800048828125,
        0.15000000596046448,
@@ -4049,21 +4591,18 @@
        0.0,
        0.997515082359314
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4072,6 +4611,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        61.2130012512207,
        4.5,
@@ -4086,22 +4640,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4110,6 +4660,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        18.78700065612793,
        4.5,
@@ -4124,22 +4689,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4148,6 +4709,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        0.3709999918937683,
        0.15000000596046448,
@@ -4162,21 +4737,18 @@
        0.0,
        0.9998956918716431
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4185,6 +4757,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       2.0,
+       12.0,
+       12.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        56.0,
        1.0,
@@ -4199,22 +4785,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       2.0,
-       12.0,
-       12.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4223,6 +4795,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       0.699999988079071,
+       0.699999988079071
+      ],
+      "Color": {
+       "Color3uint8": [
+        30,
+        30,
+        33
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        61.2130012512207,
        4.5,
@@ -4237,22 +4824,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Metal",
-      "Color": {
-       "Color3uint8": [
-        30,
-        30,
-        33
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       0.699999988079071,
-       0.699999988079071
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 7.85,
+        "friction": 0.4,
+        "elasticity": 0.25,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.1
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4261,6 +4844,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -12.281000137329102,
        0.15000000596046448,
@@ -4275,21 +4872,18 @@
        0.0,
        0.9997568726539612
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4298,6 +4892,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        -18.466999053955078,
        0.1300000101327896,
@@ -4312,21 +4920,18 @@
        0.0,
        0.9991044998168945
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4338,20 +4943,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 14.0,
         "Color": [
          1.0,
          0.75,
          0.44999998807907104
         ],
-        "Brightness": 0.800000011920929
+        "Brightness": 0.800000011920929,
+        "Range": 14.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        68.0479965209961,
        8.0,
@@ -4366,21 +4984,8 @@
        0.0,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4389,6 +4994,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        7.630000114440918,
        0.1300000101327896,
@@ -4403,21 +5022,18 @@
        0.0,
        0.9992555975914001
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4425,8 +5041,21 @@
      "name": "Janela3_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -5.951000213623047,
        18.0,
@@ -4441,21 +5070,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4463,8 +5079,21 @@
      "name": "Janela5_1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        11.95199966430664,
        18.0,
@@ -4479,21 +5108,8 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4502,6 +5118,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2200000286102295,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        39.444000244140625,
        0.11000001430511475,
@@ -4516,21 +5146,18 @@
        0.0,
        0.9963600635528564
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2200000286102295,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4539,6 +5166,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       22.0,
+       20.0,
+       18.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        107,
+        56,
+        45
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        94.50199890136719,
        10.0,
@@ -4553,21 +5193,8 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Brick",
-      "Color": {
-       "Color3uint8": [
-        107,
-        56,
-        45
-       ]
-      },
-      "Size": [
-       22.0,
-       20.0,
-       18.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4576,6 +5203,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.30000001192092896,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        38.8390007019043,
        0.15000000596046448,
@@ -4590,21 +5231,18 @@
        0.0,
        0.9979252219200134
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.30000001192092896,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4612,8 +5250,21 @@
      "name": "Janela3_2",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       8.0,
+       3.5,
+       0.5
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        242,
+        204,
+        114
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -5.951000213623047,
        28.0,
@@ -4628,21 +5279,8 @@
        0.0,
        0.34202003479003906
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        242,
-        204,
-        114
-       ]
-      },
-      "Size": [
-       8.0,
-       3.5,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4651,6 +5289,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.4000000059604645,
+       10.0,
+       10.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        76,
+        140,
+        178
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.30000001192092896,
       "CFrame": [
        56.0,
        2.0999999046325684,
@@ -4665,23 +5318,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.30000001192092896,
-      "BottomSurface": "Smooth",
       "Material": "Glass",
-      "Color": {
-       "Color3uint8": [
-        76,
-        140,
-        178
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.4000000059604645,
-       10.0,
-       10.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4690,6 +5328,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       12.0,
+       0.2600000202655792,
+       15.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Ground",
       "CFrame": [
        35.819000244140625,
        0.1300000101327896,
@@ -4704,21 +5356,18 @@
        0.0,
        0.9994468688964844
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       12.0,
-       0.2600000202655792,
-       15.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4727,6 +5376,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        11.95199966430664,
        4.0,
@@ -4741,21 +5404,18 @@
        -0.0,
        -0.8191520571708679
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -4764,6 +5424,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Wood",
       "CFrame": [
        85.95099639892578,
        4.0,
@@ -4778,21 +5452,18 @@
        0.0,
        -0.34202006459236145
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 0.35,
+        "friction": 0.48,
+        "elasticity": 0.2,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.25
+       }
+      }
      },
      "ignoreUnknownInstances": true
     }
@@ -4817,6 +5488,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.4000000059604645,
+       84.0,
+       84.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        158,
+        142,
+        112
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -60.0,
        0.20000000298023224,
@@ -4831,22 +5516,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Sand",
-      "Color": {
-       "Color3uint8": [
-        158,
-        142,
-        112
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.4000000059604645,
-       84.0,
-       84.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4855,6 +5526,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -29.256999969482422,
        4.0,
@@ -4869,22 +5554,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4893,6 +5564,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -98.0,
        4.0,
@@ -4907,22 +5592,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4931,10 +5602,25 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.30000001192092896,
+       6.0,
+       6.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.5,
       "CFrame": [
-       -60,
+       -60.0,
        0.44999998807907104,
-       -104,
+       -104.0,
        -4.371138828673793e-08,
        -1.0,
        0.0,
@@ -4945,23 +5631,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.5,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.30000001192092896,
-       6.0,
-       6.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -4970,10 +5641,25 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.30000001192092896,
+       6.0,
+       6.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.5,
       "CFrame": [
-       -35,
+       -35.0,
        0.44999998807907104,
-       -62,
+       -62.0,
        -4.371138828673793e-08,
        -1.0,
        0.0,
@@ -4984,23 +5670,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.5,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.30000001192092896,
-       6.0,
-       6.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5009,6 +5680,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -71.74299621582031,
        4.0,
@@ -5023,22 +5708,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5050,20 +5721,33 @@
        "name": "Light",
        "className": "PointLight",
        "properties": {
-        "Range": 26.0,
         "Color": [
          1.0,
          0.5,
          0.20000000298023224
         ],
-        "Brightness": 2.0
+        "Brightness": 2.0,
+        "Range": 26.0
        },
        "ignoreUnknownInstances": true
       }
      ],
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       4.0,
+       1.0,
+       4.0
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        255,
+        114,
+        38
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -60.0,
        0.699999988079071,
@@ -5078,21 +5762,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        255,
-        114,
-        38
-       ]
-      },
-      "Size": [
-       4.0,
-       1.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5101,6 +5772,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -22.0,
        4.0,
@@ -5115,22 +5800,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5139,6 +5810,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -48.25699996948242,
        4.0,
@@ -5153,22 +5838,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5177,10 +5848,25 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.30000001192092896,
+       6.0,
+       6.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.5,
       "CFrame": [
-       -85,
+       -85.0,
        0.44999998807907104,
-       -62,
+       -62.0,
        -4.371138828673793e-08,
        -1.0,
        0.0,
@@ -5191,23 +5877,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.5,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.30000001192092896,
-       6.0,
-       6.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5216,6 +5887,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -29.256999969482422,
        4.0,
@@ -5230,22 +5915,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5254,6 +5925,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -71.74299621582031,
        4.0,
@@ -5268,22 +5953,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5292,6 +5963,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       9.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -90.74299621582031,
        4.0,
@@ -5306,22 +5991,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       9.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5330,6 +6001,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -48.25699996948242,
        4.0,
@@ -5344,22 +6029,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5368,6 +6039,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       2.799999952316284,
+       2.799999952316284
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -90.74299621582031,
        4.0,
@@ -5382,22 +6067,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       2.799999952316284,
-       2.799999952316284
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }
@@ -5422,6 +6093,20 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       0.6000000238418579,
+       90.0,
+       90.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -20.0,
        0.30000001192092896,
@@ -5436,22 +6121,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.6000000238418579,
-       90.0,
-       90.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5460,6 +6131,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       19.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        16.0,
        9.5,
@@ -5474,22 +6160,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       19.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5498,6 +6180,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        11.177000045776367,
        3.5,
@@ -5512,22 +6209,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5536,6 +6229,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -2.0,
        5.5,
@@ -5550,22 +6258,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5574,6 +6278,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -20.0,
        5.5,
@@ -5588,22 +6307,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5612,6 +6327,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -38.0,
        3.5,
@@ -5626,22 +6356,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5650,6 +6376,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       15.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -51.176998138427734,
        7.5,
@@ -5664,22 +6405,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       15.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5688,6 +6425,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       15.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -56.0,
        7.5,
@@ -5702,22 +6454,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       15.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5726,6 +6474,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       19.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -51.176998138427734,
        9.5,
@@ -5740,22 +6503,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       19.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5764,6 +6523,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       7.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -38.0,
        3.5,
@@ -5778,22 +6552,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       7.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5802,6 +6572,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       19.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -20.0,
        9.5,
@@ -5816,22 +6601,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       19.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5840,6 +6621,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       11.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        -2.0,
        5.5,
@@ -5854,22 +6650,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       11.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5878,6 +6670,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       19.0,
+       4.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
+      "MaterialVariant": "FX_CC0_Rock",
       "CFrame": [
        11.177000045776367,
        9.5,
@@ -5892,22 +6699,18 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       19.0,
-       4.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth",
+      "CustomPhysicalProperties": {
+       "PhysicalProperties": {
+        "density": 2.691,
+        "friction": 0.5,
+        "elasticity": 0.17,
+        "frictionWeight": 1.0,
+        "elasticityWeight": 1.0,
+        "acousticAbsorption": 0.45
+       }
+      }
      },
      "ignoreUnknownInstances": true
     },
@@ -5916,6 +6719,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       5.0,
+       1.0,
+       5.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        89,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -20.0,
        1.100000023841858,
@@ -5930,23 +6748,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        89,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       5.0,
-       1.0,
-       5.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5955,6 +6758,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       10.0,
+       2.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        16.0,
        20.0,
@@ -5969,21 +6785,8 @@
        0.0,
        -4.371138828673793e-08
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       10.0,
-       2.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -5992,6 +6795,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       10.0,
+       2.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        11.177000045776367,
        20.0,
@@ -6006,21 +6822,8 @@
        0.0,
        -0.49999991059303284
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       10.0,
-       2.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6029,6 +6832,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       8.0,
+       34.0,
+       8.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -6.0,
        17.0,
@@ -6043,21 +6859,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       8.0,
-       34.0,
-       8.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6066,6 +6869,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       10.0,
+       2.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -51.176998138427734,
        20.0,
@@ -6080,21 +6896,8 @@
        -0.0,
        -0.5000000596046448
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       10.0,
-       2.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6102,8 +6905,22 @@
      "name": "Rosacea",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Shape": "Cylinder",
+      "Size": [
+       8.0,
+       8.0,
+       0.6000000238418579
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        51,
+        63
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -20.0,
        15.0,
@@ -6118,22 +6935,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        51,
-        63
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       8.0,
-       8.0,
-       0.6000000238418579
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6142,6 +6945,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       26.0,
+       22.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -20.0,
        11.0,
@@ -6156,21 +6972,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       26.0,
-       22.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6179,6 +6982,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       8.0,
+       0.4000000059604645,
+       8.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.44999998807907104,
       "CFrame": [
        -20.0,
        0.800000011920929,
@@ -6193,23 +7011,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.44999998807907104,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       8.0,
-       0.4000000059604645,
-       8.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6218,6 +7021,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       10.0,
+       2.0,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -20.0,
        20.0,
@@ -6232,21 +7048,8 @@
        0.0,
        -1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       10.0,
-       2.0,
-       3.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }
@@ -6271,6 +7074,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       10.0,
+       16.0,
+       2.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        380.0,
        8.0,
@@ -6285,21 +7101,8 @@
        0.0,
        0.7071067690849304
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       10.0,
-       16.0,
-       2.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6308,6 +7111,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       7.0,
+       12.0,
+       1.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        89,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.25,
       "CFrame": [
        380.0,
        8.0,
@@ -6322,23 +7140,8 @@
        0.0,
        0.7071067690849304
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.25,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        89,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       7.0,
-       12.0,
-       1.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }
@@ -6362,15 +7165,9 @@
      "name": "TutorialSpawn",
      "className": "SpawnLocation",
      "properties": {
+      "CanCollide": false,
       "TopSurface": "Smooth",
       "Transparency": 1.0,
-      "Size": [
-       10.0,
-       1.0,
-       10.0
-      ],
-      "Enabled": false,
-      "Anchored": true,
       "CFrame": [
        40.0,
        1.0,
@@ -6385,7 +7182,12 @@
        0.0,
        1.0
       ],
-      "BottomSurface": "Smooth",
+      "Size": [
+       10.0,
+       1.0,
+       10.0
+      ],
+      "Anchored": true,
       "Color": {
        "Color3uint8": [
         51,
@@ -6393,7 +7195,8 @@
         102
        ]
       },
-      "CanCollide": false
+      "Enabled": false,
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }
@@ -6418,6 +7221,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       0.4000000059604645,
+       1.2000000476837158
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        72.0,
        0.10000000149011612,
@@ -6432,21 +7248,8 @@
        0.11251172423362732,
        0.9374036192893982
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       0.4000000059604645,
-       1.2000000476837158
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6455,6 +7258,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       0.4000000059604645,
+       1.2000000476837158
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        75.0,
        0.10000000149011612,
@@ -6469,21 +7285,8 @@
        0.01699128746986389,
        0.8171566128730774
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       0.4000000059604645,
-       1.2000000476837158
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6492,6 +7295,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       0.4000000059604645,
+       1.2000000476837158
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        69.5,
        0.10000000149011612,
@@ -6506,21 +7322,8 @@
        0.02385811135172844,
        0.34118691086769104
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       0.4000000059604645,
-       1.2000000476837158
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6529,6 +7332,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       0.4000000059604645,
+       1.2000000476837158
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        73.0,
        0.10000000149011612,
@@ -6543,21 +7359,8 @@
        0.06324207782745361,
        0.9937680959701538
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       5.0,
-       0.4000000059604645,
-       1.2000000476837158
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6566,6 +7369,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       7.0,
+       1.5,
+       7.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        73,
+        43
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 1.0,
       "CFrame": [
        72.0,
        0.6000000238418579,
@@ -6580,23 +7398,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 1.0,
-      "BottomSurface": "Smooth",
       "Material": "WoodPlanks",
-      "Color": {
-       "Color3uint8": [
-        109,
-        73,
-        43
-       ]
-      },
-      "Size": [
-       7.0,
-       1.5,
-       7.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6605,6 +7408,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       1.600000023841858,
+       1.2000000476837158,
+       1.100000023841858
+      ],
+      "Color": {
+       "Color3uint8": [
+        114,
+        76,
+        51
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        58.0,
        0.44999998807907104,
@@ -6619,21 +7435,8 @@
        0.0,
        0.8660253882408142
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        114,
-        76,
-        51
-       ]
-      },
-      "Size": [
-       1.600000023841858,
-       1.2000000476837158,
-       1.100000023841858
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6642,6 +7445,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       5.0,
+       7.0,
+       4.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        96.0,
        1.5,
@@ -6656,21 +7472,8 @@
        0.18607711791992188,
        0.8619499206542969
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       5.0,
-       7.0,
-       4.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6678,8 +7481,21 @@
      "name": "M0_EstruturaRacha",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       0.30000001192092896,
+       5.5,
+       2.200000047683716
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        96.19999694824219,
        1.7999999523162842,
@@ -6694,21 +7510,8 @@
        0.18607711791992188,
        0.8619499206542969
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.30000001192092896,
-       5.5,
-       2.200000047683716
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6716,8 +7519,24 @@
      "name": "FendaInstavel",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Shape": "Cylinder",
+      "Size": [
+       0.11999999731779099,
+       14.0,
+       14.0
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.3499999940395355,
       "CFrame": [
        -115.0,
        0.019999999552965164,
@@ -6732,24 +7551,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.3499999940395355,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Shape": "Cylinder",
-      "Size": [
-       0.11999999731779099,
-       14.0,
-       14.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6757,8 +7560,23 @@
      "name": "FendaCaco0",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       3.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -107.0,
        1.5,
@@ -6773,23 +7591,8 @@
        0.2548869848251343,
        0.9659258127212524
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       3.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6797,8 +7600,23 @@
      "name": "FendaCaco1",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       4.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -111.0,
        1.5,
@@ -6813,23 +7631,8 @@
        0.2778272330760956,
        0.48296287655830383
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       4.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6837,8 +7640,23 @@
      "name": "FendaCaco2",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       5.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -119.0,
        1.5,
@@ -6853,23 +7671,8 @@
        0.02294023334980011,
        -0.482962965965271
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       5.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6877,8 +7680,23 @@
      "name": "FendaCaco3",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       3.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -123.0,
        1.5,
@@ -6893,23 +7711,8 @@
        -0.25488701462745667,
        -0.9659258127212524
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       3.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6917,8 +7720,23 @@
      "name": "FendaCaco4",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       4.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -119.0,
        1.5,
@@ -6933,23 +7751,8 @@
        -0.2778272032737732,
        -0.48296281695365906
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       4.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6957,8 +7760,23 @@
      "name": "FendaCaco5",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       0.5,
+       5.0,
+       1.399999976158142
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        140,
+        216,
+        255
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.20000000298023224,
       "CFrame": [
        -111.0,
        1.5,
@@ -6973,23 +7791,8 @@
        -0.022940129041671753,
        0.4829632639884949
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.20000000298023224,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        140,
-        216,
-        255
-       ]
-      },
-      "Size": [
-       0.5,
-       5.0,
-       1.399999976158142
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -6998,6 +7801,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       3.0,
+       0.20000000298023224,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 1.0,
       "CFrame": [
        -122.0,
        0.05000000074505806,
@@ -7012,23 +7830,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 1.0,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       3.0,
-       0.20000000298023224,
-       3.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7037,6 +7840,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       3.0,
+       0.20000000298023224,
+       3.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 1.0,
       "CFrame": [
        -108.0,
        0.05000000074505806,
@@ -7051,23 +7869,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 1.0,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       3.0,
-       0.20000000298023224,
-       3.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7075,8 +7878,22 @@
      "name": "FendaSaida",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       1.399999976158142,
+       4.0,
+       0.4000000059604645
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        76,
+        127,
+        178
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 0.30000001192092896,
       "CFrame": [
        -138.0,
        2.0,
@@ -7091,22 +7908,8 @@
        0.07982642203569412,
        0.8191519975662231
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 0.30000001192092896,
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        76,
-        127,
-        178
-       ]
-      },
-      "Size": [
-       1.399999976158142,
-       4.0,
-       0.4000000059604645
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7115,6 +7918,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       8.0,
+       2.0,
+       5.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        109,
+        112,
+        117
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        180.0,
        0.8500000238418579,
@@ -7129,21 +7945,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Cobblestone",
-      "Color": {
-       "Color3uint8": [
-        109,
-        112,
-        117
-       ]
-      },
-      "Size": [
-       8.0,
-       2.0,
-       5.0
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7152,6 +7955,19 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "Size": [
+       1.600000023841858,
+       2.0,
+       0.5
+      ],
+      "Color": {
+       "Color3uint8": [
+        216,
+        209,
+        183
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        180.0,
        2.9000000953674316,
@@ -7166,21 +7982,8 @@
        -0.1736481934785843,
        0.9848077297210693
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "SmoothPlastic",
-      "Color": {
-       "Color3uint8": [
-        216,
-        209,
-        183
-       ]
-      },
-      "Size": [
-       1.600000023841858,
-       2.0,
-       0.5
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7189,6 +7992,21 @@
      "className": "Part",
      "properties": {
       "Anchored": true,
+      "CanCollide": false,
+      "Size": [
+       6.0,
+       0.30000001192092896,
+       6.0
+      ],
+      "Color": {
+       "Color3uint8": [
+        40,
+        45,
+        53
+       ]
+      },
+      "TopSurface": "Smooth",
+      "Transparency": 1.0,
       "CFrame": [
        180.0,
        0.10000000149011612,
@@ -7203,23 +8021,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "Transparency": 1.0,
-      "BottomSurface": "Smooth",
       "Material": "Basalt",
-      "Color": {
-       "Color3uint8": [
-        40,
-        45,
-        53
-       ]
-      },
-      "Size": [
-       6.0,
-       0.30000001192092896,
-       6.0
-      ],
-      "CanCollide": false
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     },
@@ -7227,8 +8030,21 @@
      "name": "RachaduraCapela",
      "className": "Part",
      "properties": {
-      "CastShadow": false,
       "Anchored": true,
+      "Size": [
+       0.4000000059604645,
+       5.0,
+       1.600000023841858
+      ],
+      "CastShadow": false,
+      "Color": {
+       "Color3uint8": [
+        178,
+        63,
+        76
+       ]
+      },
+      "TopSurface": "Smooth",
       "CFrame": [
        -34.0,
        3.0,
@@ -7243,21 +8059,8 @@
        0.0,
        1.0
       ],
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
       "Material": "Neon",
-      "Color": {
-       "Color3uint8": [
-        178,
-        63,
-        76
-       ]
-      },
-      "Size": [
-       0.4000000059604645,
-       5.0,
-       1.600000023841858
-      ]
+      "BottomSurface": "Smooth"
      },
      "ignoreUnknownInstances": true
     }

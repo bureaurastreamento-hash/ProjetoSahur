@@ -257,17 +257,17 @@ VFXLibrary.Effects = E
 
 -- ---- Socos --------------------------------------------------------------------------
 -- rastro do braço nos socos 1-3 (leve), 4º mais pesado
-local function swing(strength: number): Effect
+local function swing(strength: number, mirrored: boolean?): Effect
 	return {
 		lifetime = 0.6,
 		layers = {
-			mesh("SlashWide", WHITE, 3 * strength, 6.5 * strength, 0.22, { offset = CFrame.new(0.8, 0.6, -2.4) * CFrame.Angles(0, math.rad(20), math.rad(-35)), tr0 = 0.45, ease = "Quad" }),
-			emit("Lines", WHITE, math.floor(4 * strength), { size = { 0.6, 1.4 }, life = { 0.12, 0.2 }, speed = { 25, 40 }, spread = { 10, 10 }, orient = "VelocityParallel", offset = Vector3.new(0, 0.5, -2), direction = "forward", light = 0.6 }),
+			mesh("SlashWide", WHITE, 3 * strength, 6.5 * strength, 0.22, { offset = CFrame.new(if mirrored then -0.8 else 0.8, 0.6, -2.4) * CFrame.Angles(0, math.rad(if mirrored then -20 else 20), math.rad(if mirrored then 35 else -35)), delay = 0.06, tr0 = 0.45, ease = "Quad" }),
+			emit("Lines", WHITE, math.floor(4 * strength), { size = { 0.6, 1.4 }, life = { 0.12, 0.2 }, speed = { 25, 40 }, spread = { 10, 10 }, orient = "VelocityParallel", offset = Vector3.new(0, 0.5, -2), direction = "forward", light = 0.6, delay = 0.08 }),
 		},
 	}
 end
 E["Shared/Swing_1"] = swing(1)
-E["Shared/Swing_2"] = swing(1)
+E["Shared/Swing_2"] = swing(1, true)
 E["Shared/Swing_3"] = swing(1.15)
 E["Shared/Swing_4"] = {
 	lifetime = 0.8,
@@ -301,8 +301,8 @@ E["Shared/Hit"] = {
 	layers = {
 		impactStar("$primary", 5.5, 0.2),
 		flash(WHITE, 4, 0.12),
-		sparks("$primary", 10),
-		emit("Lines", WHITE, 6, { size = { 0.5, 1.2 }, life = { 0.12, 0.2 }, speed = { 28, 45 }, spread = { 180, 180 }, orient = "VelocityParallel" }),
+		sparks("$primary", 10, { delay = 0.025 }),
+		emit("Lines", WHITE, 6, { size = { 0.5, 1.2 }, life = { 0.12, 0.2 }, speed = { 28, 45 }, spread = { 180, 180 }, orient = "VelocityParallel", delay = 0.04 }),
 		light("$primary", 3, 12, 0.25),
 	},
 }

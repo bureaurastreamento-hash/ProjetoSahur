@@ -2,6 +2,57 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Pré-lançamento para admin e primeira leva de combate — 01/10 (Codex)
+
+- Causa do menu ausente: IntroController só montava tela para `PreLaunchLocked`; admins entram
+  desbloqueados, independentemente de já terem jogado. Agora o título também aparece para admin:
+  Jogar no mundo / Ir para o lobby, atalho Pré-lançamento no mundo e Voltar ao mundo no lobby.
+- RequestLaunch aceita `view` somente para IsDeveloper no servidor, com rate limit e checagem de
+  combate/partida/transformação. Jogador comum continua preso ao pré-lançamento. Guarda/restaura kit
+  de sessão ao sair do lobby; limpa LobbyTest; teleporte com Grace e velocidades zeradas.
+- Locomoção procedural: fase contínua ao variar velocidade e trocar Walk/Run, margem para não oscilar
+  na velocidade limite, pernas orientadas para strafe/recuo com suavização. Clipes e modelos da equipe
+  não foram editados. Swings M1 1/2 espelhados, vento inicia na preparação do golpe; impactos em fases.
+- FX de packs respeita EmitDelay e EmitDuration, com checagem de destruição e duração limitada ao
+  lifetime. Sons de socos/defesa mantêm fade, entrada 15 ms/saída 60 ms; demais sons mantêm 150/300 ms.
+- Studio real: título de admin, entrada/kit/saída/restauração/atalho e sequência VFX/limpeza passaram
+  no cliente real pelo remote. Script temporário instalado só para teste, removido ao encerrar Play.
+  Arquivos finais conferidos no Studio. Análise estática sem TypeError, 14 testes de facções + 10 de
+  Cidade Âmbar passaram. Aparência de strafe/swings e mixagem ainda pedem revisão visual/auditiva do dono.
+- Rojo 34872 confirmado servindo ESTE worktree integrado, ligado ao Studio. Intro/Launch/Trailer/config
+  estavam idênticos aos arquivos recentes do Claude antes das mudanças. Trailer, doações e Cidade
+  preservados. Sem publicação ou API de place, sem reexecutar geradores nem importar scripts de packs.
+- Levas continuam: seleção/importação de mais SFX/meshes, acabamento completo das ações básicas,
+  identidade dos kits/despertares/chefes e depois construções/Costas/Fortaleza. Não declarar a reforma
+  visual inteira concluída por estas correções de base.
+
+Teste do dono: Stop/Play; título também como admin → Jogar no mundo; botão Pré-lançamento → lobby;
+selecionar kit → Voltar ao mundo; conferir kit anterior. Andar W/S/A/D com câmera travada, alternar
+andar/correr/dash, socos 1–4/parry/block; ouvir ataque/acerto e conferir efeitos e FPS reduzidos.
+
+
+## Retomada de combate/arte e preservação manual — 01/10 (Codex)
+
+- Prioridade do dono: levas maiores de animações/fluidez/VFX/SFX/modelos de combate, depois mapa.
+  Auditoria e sequência concreta em `LEVAS_COMBATE_E_ARTE.md`; kits/efeitos novos ainda pendentes.
+- Ponte MCP local 44755 ligada, Studio respondeu em Edit; place 85844807133499, versão 505.
+  Rojo aditivo iniciado em 127.0.0.1:34872 após captura/análise. IDs de 173 animações/sons
+  conferidos com o Studio, sem diferenças. Conexão pelo plugin ainda depende do dono.
+  Dono informou edições manuais e salvou `backups/place-manual-2026-10-01.rbxl` (2.228.241 bytes).
+  Captura aplicada por `tools/capturar_mapa.sh`, 17 arquivos atualizados, zero remoções.
+  Mudanças grandes nos JSON incluem serialização do syncback; arte não foi remodelada pela IA.
+- Primeira correção: `ProcAnimController` acumula fase do ciclo por tempo/velocidade, evitando
+  reposicionar passos anteriores ao acelerar/desacelerar. Não altera clipes/modelos/IDs da equipe.
+  Análise estática passou; fluidez visual ainda requer Play.
+- Três packs Kenney CC0 preparados na biblioteca local: partículas, impactos e RPG Audio (378 arquivos
+  incluindo metadados). Origem e SHA-256 em `ASSETS_COMBATE_CC0_MANIFEST.json`. Os novos arquivos não
+  foram enviados ao Roblox/integrados. IDs de uploads antigos preservados.
+- Studio contém duas pastas Assets.EnvironmentModels homônimas; não removidas. Investigar duplicação
+  antes de mudar referências/importar modelos adicionais. Pré-lançamento segue ligado.
+- Teste inicial do dono: andar/correr mudando velocidade/direção e alternando dash; conferir continuidade
+  das pernas e transição para M1/block/pulo/ragdoll. Leva visual completa e testes de dois clientes pendentes.
+
+
 ## Revisão do lobby de pré-lançamento — 01/10, noite (Claude; Play via MCP como jogador)
 
 - Tela de título: escondia nada → agora esconde HUD/topbar/hotbar enquanto aberta (volta ao ir para o lobby); câmera

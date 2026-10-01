@@ -434,7 +434,7 @@ end
 ---   Model:           OriginRelative (Position das Parts = offset do spawn), Lifetime (s),
 ---                    Follow (emissores/luzes vão para o HRP e acompanham o personagem)
 ---   BasePart:        TweenScale + TweenTime (cresce e some)
----   ParticleEmitter: EmitCount (rajada única), EmitDuration (fica ligado N s)
+---   ParticleEmitter: EmitCount (rajada única), EmitDelay (espera N s), EmitDuration (fica ligado N s)
 ---   PointLight:      FadeTime (apaga em N s)
 function FX.SpawnVFX(character: Model, folder: string, name: string, exact: boolean?, at: Vector3?)
 	-- 1) composição por código (VFXLibrary): tem prioridade sobre packs/alias
@@ -890,16 +890,30 @@ function FX.SpawnVFXTemplate(character: Model, template: Instance, at: Vector3?)
 		local count = emitter:GetAttribute("EmitCount")
 		local burst = if typeof(count) == "number" then count else math.clamp(math.floor(emitter.Rate * 0.5), 8, FX.MaxEmitPerEmitter)
 		local duration = emitter:GetAttribute("EmitDuration")
-		if typeof(duration) == "number" then
-			-- Aura: emissão contínua limitada, com teto de partículas por segundo
-			emitter.Rate = math.min(emitter.Rate > 0 and emitter.Rate or burst, FX.MaxEmitPerEmitter)
-			emitter.Enabled = true
-			task.delay(duration, function()
-				emitter.Enabled = false
-			end)
+		local delayAttr = emitter:GetAttribute("EmitDelay")
+		local delay = if typeof(delayAttr) == "number" then math.clamp(delayAttr, 0, lifetime) else 0
+		emitter.Enabled = false
+		local function emitNow()
+			if not emitter.Parent or not clone.Parent or delay >= lifetime then
+				return
+			end
+			if typeof(duration) == "number" and duration > 0 then
+				-- Respeita a sequência do pack, limitada ao tempo de vida do efeito.
+				emitter.Rate = math.min(emitter.Rate > 0 and emitter.Rate or burst, FX.MaxEmitPerEmitter)
+				emitter.Enabled = true
+				task.delay(math.min(duration, lifetime - delay), function()
+					if emitter.Parent then
+						emitter.Enabled = false
+					end
+				end)
+			else
+				emitter:Emit(math.clamp(burst, 0, FX.MaxEmitPerEmitter))
+			end
+		end
+		if delay > 0 then
+			task.delay(delay, emitNow)
 		else
-			emitter.Enabled = false
-			emitter:Emit(math.min(FX.MaxEmitPerEmitter, burst))
+			emitNow()
 		end
 		if emitter.Parent == root then
 			table.insert(followed, emitter)
@@ -1112,11 +1126,11 @@ end
 FX.SoundFadeIn = 0.15
 FX.SoundFadeOut = 0.3
 
-local function fadeOut(sound: Sound)
+local function fadeOut(sound: Sound, seconds: number?)
 	if not sound.Parent or not sound.IsPlaying then
 		return
 	end
-	TweenService:Create(sound, TweenInfo.new(FX.SoundFadeOut, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Volume = 0 }):Play()
+	TweenService:Create(sound, TweenInfo.new(seconds or FX.SoundFadeOut, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Volume = 0 }):Play()
 end
 
 --- Toca um clone do som; devolve uma função que o interrompe (com fade) ou nil se o teto foi atingido.
@@ -1126,6 +1140,10 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 	end
 	local sound = template:Clone()
 	local target = template.Volume
+	local transient = not template.Looped and (template.Name:sub(1, 5) == "Punch" or template.Name:sub(-4) == "_Hit"
+		or template.Name == "Block" or template.Name == "Parry" or template.Name == "GuardBreak")
+	local fadeIn = if transient then 0.015 else FX.SoundFadeIn
+	local fadeOutSeconds = if transient then 0.06 else FX.SoundFadeOut
 	-- socos/acertos: leve variação de tom para não soar "metralhadora" igual
 	if template.Name:sub(1, 5) == "Punch" or template.Name:sub(-4) == "_Hit" then
 		sound.PlaybackSpeed = template.PlaybackSpeed * (0.94 + math.random() * 0.12)
@@ -1145,7 +1163,7 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 	sound.Stopped:Once(finish)
 	sound.Volume = 0
 	sound:Play()
-	TweenService:Create(sound, TweenInfo.new(FX.SoundFadeIn, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Volume = target }):Play()
+	TweenService:Create(sound, TweenInfo.new(fadeIn, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Volume = target }):Play()
 	task.spawn(function()
 		-- TimeLength só existe depois de carregar; espera no máximo 3 s
 		if not sound.IsLoaded then
@@ -1158,9 +1176,9 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 			return
 		end
 		local length = sound.TimeLength / math.max(sound.PlaybackSpeed, 0.01)
-		if length > FX.SoundFadeIn + FX.SoundFadeOut and not sound.Looped then
-			local wait = length - sound.TimePosition / math.max(sound.PlaybackSpeed, 0.01) - FX.SoundFadeOut
-			task.delay(math.max(wait, 0), fadeOut, sound)
+		if length > fadeIn + fadeOutSeconds and not sound.Looped then
+			local wait = length - sound.TimePosition / math.max(sound.PlaybackSpeed, 0.01) - fadeOutSeconds
+			task.delay(math.max(wait, 0), fadeOut, sound, fadeOutSeconds)
 		end
 		-- segurança se Ended nunca disparar (id inválido / som em loop)
 		if not sound.Looped then
@@ -1169,8 +1187,8 @@ local function playClone(template: Sound, parent: Instance): ((() -> ())?, Sound
 	end)
 	return function()
 		if not done then
-			fadeOut(sound)
-			task.delay(FX.SoundFadeOut + 0.05, finish)
+			fadeOut(sound, fadeOutSeconds)
+			task.delay(fadeOutSeconds + 0.05, finish)
 		end
 	end, sound
 end

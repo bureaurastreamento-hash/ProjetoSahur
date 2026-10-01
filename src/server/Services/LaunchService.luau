@@ -41,6 +41,7 @@ local board: OrderedDataStore? = nil
 local boardCache: { { name: string, amount: number } } = {}
 local donated: { [number]: number } = {} -- userId -> total (cache da sessão)
 local lobbyBots: { Model } = {}
+local worldKits: { [Player]: string } = {}
 
 local function lobbySpawn(): CFrame
 	return CFrame.new(LaunchConfig.LobbyCenter + Vector3.new(0, 6, 0))
@@ -183,7 +184,21 @@ local function spawnLobbyBots()
 end
 
 local function onRequest(player: Player, action: any, arg: any)
-	if not limiter:Allow(player) or not LaunchConfig.Locked(player) then
+	if not limiter:Allow(player) then
+		return
+	end
+	if action == "view" then
+		if LaunchConfig.PreLaunch and player:GetAttribute("IsDeveloper") == true and typeof(arg) == "boolean" then
+			local ok, why = AbilityService.CanChangeCharacter(player)
+			if not ok then
+				notify:FireClient(player, "info", { text = why })
+				return
+			end
+			player:SetAttribute("PreLaunchView", if arg then true else nil)
+		end
+		return
+	end
+	if not LaunchConfig.Locked(player) then
 		return
 	end
 	if action == "kit" then
@@ -257,9 +272,27 @@ function LaunchService.Start()
 			applyLock(player)
 		end)
 		player:GetAttributeChangedSignal("PreLaunchView"):Connect(function()
+			local entering = LaunchConfig.Locked(player)
+			if entering and not worldKits[player] then
+				local current = player:GetAttribute("CharacterId")
+				if typeof(current) == "string" then
+					worldKits[player] = current
+				end
+			end
 			applyLock(player)
+			if not entering and worldKits[player] then
+				local previous = worldKits[player]
+				worldKits[player] = nil
+				AbilityService.ForceCharacter(player, previous)
+			end
 			if player.Character then
-				player.Character:PivotTo(if LaunchConfig.Locked(player) then lobbySpawn() else (WorldService.SpawnCFrame(player) or lobbySpawn()))
+				AntiExploitService.Grace(player, 3)
+				local root = player.Character:FindFirstChild("HumanoidRootPart")
+				if root and root:IsA("BasePart") then
+					root.AssemblyLinearVelocity = Vector3.zero
+					root.AssemblyAngularVelocity = Vector3.zero
+				end
+				player.Character:PivotTo(if entering then lobbySpawn() else (WorldService.SpawnCFrame(player) or lobbySpawn()))
 			end
 		end)
 		task.spawn(loadDonated, player)
@@ -270,6 +303,7 @@ function LaunchService.Start()
 	end
 	Players.PlayerRemoving:Connect(function(player)
 		donated[player.UserId] = nil
+		worldKits[player] = nil
 	end)
 	if LaunchConfig.PreLaunch then
 		task.delay(3, spawnLobbyBots)
