@@ -12,7 +12,9 @@ Memória entre sessões. Atualizar depois de cada mudança.
   trailer/DEV do Claude, seu PROGRESSO, CLAUDE.md e capas. Mudanças do trailer também incorporadas nesta branch.
 - Rojo agora serve o **checkout principal conciliado** em `127.0.0.1:34872`. Nova leitura no Studio confirmou todos
   os dez grupos de sistemas presentes, BotService usando NpcAppearance, três músicas e trailer V3 preservado.
-- Análise estática da combinação passou. Publicada ainda é v489: somente o dono publica pelo Studio.
+- Play da combinação confirmado: NPCs gerados com camisa, calça e acessório próprios; trilha Village carregada,
+  tocando (`IsLoaded=true`, `IsPlaying=true`, 90 s, volume 0,1925). Análise estática passou.
+- Publicada ainda é v489: somente o dono publica pelo Studio.
   Não foi usada API de publicação nem build Rojo para substituir a place.
 
 ## Backup e envio ao GitHub — 30/09, 23:55 (Codex)
