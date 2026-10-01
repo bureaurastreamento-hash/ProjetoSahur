@@ -30,7 +30,11 @@ com placar e tag de Apoiador. WAREA ignorado.
   (0 cantos do núcleo furando), pé recua para não tocar Coliseu/templos/tijolos/parque, faces que encostariam em algo
   são puladas, zonas abertas (porta da Taberna/`cav`, cachoeira). Gerado no Studio em `Workspace.Sahur.RelevoLowPoly`
   (~200 peças cada, antes 209/295 lascas); o `Relevo` antigo está só ESCONDIDO na tela de edição. **Falta o dono
-  aprovar visualmente** → depois: trocar `src/workspace/Relevo.rbxm` pelo novo e apagar o antigo. NÃO publicar antes.
+  aprovar visualmente**.
+- **Dono reprovou ("ficou ruim") → tiradas as DUAS capas** (lascas de 30/09 e a low-poly): `src/workspace/Relevo.rbxm`
+  apagado (Rojo removeu `Workspace.Sahur.Relevo`) e `RelevoLowPoly` apagado no Studio. Montanhas = só os núcleos
+  originais de blocos (MontanhaSantuario em ChaoIlhas, RochaTaberna em PecasArena). O dono vai refazer depois, à mão.
+  Não rodar `montar_relevo.luau` nem `MontarRelevoLowPoly` de novo sem ele pedir.
 - Bateria offline: 11 suítes de `tests/` passaram; análise estática limpa. MCP: a ponte 44755 tinha morrido (meu
   servidor ficou em modo proxy) → subi um `rbx-studio-mcp --stdio` primário em segundo plano.
 
