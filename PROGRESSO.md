@@ -10,8 +10,9 @@ Memória entre sessões. Atualizar depois de cada mudança.
   mais larga (texto numa linha). Painel APOIAR/SOBRE conferido em print.
 - Studio-only: atributo `IntroDebug` = "lobby" | "panel" abre lobby/painel sem clique (teste automático pelo MCP).
 - Dica da missão "Rumo à Cidade Âmbar" atualizada (portal âmbar ao lado do Pescador da Rota).
-- Developer Products de doação: a chave `ROBLOX_API_KEY` não tem o escopo `developer-product:read/write` → dono
-  libera no Creator Hub (Open Cloud → API Keys, sistema developer-products, universo 10766480907) e a IA cria pela API.
+- **Developer Products de doação CRIADOS** (dono liberou `developer-products` na chave) por `tools/criar_doacoes.py`:
+  Apoiar 10/50/100/500/1000 = 3715867985 / 3715867991 / 3715867993 / 3715868000 / 3715868004 (à venda, preço = valor),
+  gravados em `LaunchConfig.Donations` e sincronizados no Studio. Falta só o dono PUBLICAR pelo Studio.
 
 ## Cidade Âmbar (Ilha 4) — mapa montado — 01/10, noite (Claude; Studio conectado via Rojo/MCP)
 

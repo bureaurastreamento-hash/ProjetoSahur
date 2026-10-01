@@ -19,6 +19,8 @@ a do código no Play; mudança manual no Lighting tem que ir para o CONFIG dele.
 ## ONDE PARAMOS (01/10, noite) — CIDADE ÂMBAR montada; ler PROGRESSO "Cidade Âmbar (Ilha 4)"
 - `tools/gerar_cidade_ambar.py` → `FXCidadeAmbar` (ilha a leste da Rota, centro 2330,−120); testado no Play via MCP.
   Falta o dono ver/aprovar e publicar. Próximo: Costa Dourada (Ilha 5) pelo `COSTA_DOURADA_INTEGRACAO.md`.
+- 01/10 noite: lobby revisado (título/hotbar/faixa) e 5 Developer Products de doação criados (ids no LaunchConfig).
+  Dono publica pelo Studio. Depois: Costa Dourada.
 - MCP: se `run_code` travar, a ponte 44755 morreu → subir `rbx-studio-mcp --stdio` primário em segundo plano.
 
 ## ONDE PARAMOS (01/10, tarde) — PRÉ-LANÇAMENTO + montanhas low-poly; ler PROGRESSO "Pré-lançamento"

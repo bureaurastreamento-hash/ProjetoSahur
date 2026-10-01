@@ -27,11 +27,11 @@ LaunchConfig.TestKits = { "Humano", "Swift", "Jotaro", "Kira", "Dio" }
 -- Doações (Developer Products do GRUPO: o dono cria no Creator Hub e cola o id; 0 = "em breve")
 export type Donation = { key: string, amount: number, productId: number }
 LaunchConfig.Donations = {
-	{ key = "donate_10", amount = 10, productId = 0 },
-	{ key = "donate_50", amount = 50, productId = 0 },
-	{ key = "donate_100", amount = 100, productId = 0 },
-	{ key = "donate_500", amount = 500, productId = 0 },
-	{ key = "donate_1000", amount = 1000, productId = 0 },
+	{ key = "donate_10", amount = 10, productId = 3715867985 },
+	{ key = "donate_50", amount = 50, productId = 3715867991 },
+	{ key = "donate_100", amount = 100, productId = 3715867993 },
+	{ key = "donate_500", amount = 500, productId = 3715868000 },
+	{ key = "donate_1000", amount = 1000, productId = 3715868004 },
 } :: { Donation }
 LaunchConfig.DonationStore = "Donations_v1" -- total por jogador + recibos (idempotente)
 LaunchConfig.DonationBoard = "DonationsTop_v1" -- OrderedDataStore do placar
