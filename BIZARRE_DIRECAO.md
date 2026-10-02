@@ -44,6 +44,10 @@ de duelo/ranking/torneio.
 
 ## Facções aprovadas pelo dono — 30/09/2026
 
+Atualização do dono (01/10): escolher facção a cada entrada no servidor e poder trocar pelo menu
+a qualquer momento. Campanha/inventário/moedas são preservados; honra e bounty permanecem salvas
+em seus contadores separados. A confirmação de entrada vale só durante aquela sessão.
+
 Menu de entrada para **Fora da Lei** ou **Governo**. Fora da Lei progride em bounty; Governo em honra contra
 Fora da Lei. Campanha/rotas/builds continuam disponíveis aos dois. Skins dos Anciões são exclusivas: inimigos
 genéricos não usam os avatares da equipe. NPCs e chefes não brigam entre si; aliados de combate ficam para depois.

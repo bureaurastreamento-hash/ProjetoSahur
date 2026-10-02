@@ -2,6 +2,19 @@
 
 Memória entre sessões. Atualizar depois de cada mudança.
 
+## Ajuste rápido: Mouse1 exclusivo e facção livre — 01/10 (Codex)
+
+- ClickablePrompt nativo desativado: interação só é enviada pelo controller após MouseButton1.
+  TryInteract rejeita botão direito/teclado antes de tocar GUI ou prompt; botão direito permanece para câmera.
+- Facção é escolhida a cada entrada, mesmo com perfil salvo. Estado de confirmação é só da sessão,
+  separado do perfil; troca pelo Menu → Facção, com cancelamento após a escolha inicial.
+  Missões/itens/moedas/build não resetam; honra e bounty conservam seus contadores separados.
+  Escolha aparece após o título, inclusive no lobby; a proteção FactionPending continua só no mundo.
+  Mouse/combate respeitam o modal da facção.
+- Verificação: análise estática sem erros; 17 testes de facções/contratos/NPCs/interação e cinco de
+  pré-lançamento passaram, incluindo repetição de troca e nova escolha na reconexão.
+- Commit/push solicitados pelo dono. Publicação do place continua exclusivamente pelo dono no Studio.
+
 ## Leva 4: portos, interação no alvo, rotas e organização da interface — 01/10 (Codex)
 
 - InteractionGui não tem botão fixo para interagir: um BillboardGui acompanha o NPC/objeto próximo.

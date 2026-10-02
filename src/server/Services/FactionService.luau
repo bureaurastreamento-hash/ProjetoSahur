@@ -9,18 +9,22 @@ local DataService = require(script.Parent.DataService)
 local limiter = RateLimiter.new(2, 1)
 local Service = {}
 local queued: { [Player]: string } = {}
+local chosenThisSession: { [Player]: boolean } = {}
 local function reflect(player: Player)
 	local profile = DataService.GetProfile(player)
 	if not profile then return end
 	player:SetAttribute("FactionReady", true)
 	player:SetAttribute("Faction", profile.faction)
-	-- pré-lançamento: sem menu de facção no lobby (pendente = sem dano, e o lobby é para testar o combate)
-	player:SetAttribute("FactionPending", not LaunchConfig.Locked(player) and not Config.Valid(profile.faction))
+	local required = not chosenThisSession[player] or not Config.Valid(profile.faction)
+	player:SetAttribute("FactionChoiceRequired", required)
+	-- Escolha por sessão; a proteção pendente não bloqueia o combate de teste no lobby.
+	player:SetAttribute("FactionPending", not LaunchConfig.Locked(player) and required)
 end
 Service.Refresh = reflect
 function Service.Choose(player: Player, id: any): boolean
 	local profile = DataService.GetProfile(player)
-	if player.Parent ~= Players or not profile or not Config.Valid(id) or Config.Valid(profile.faction) then return false end
+	if player.Parent ~= Players or not profile or not Config.Valid(id) then return false end
+	chosenThisSession[player] = true
 	profile.faction = id
 	reflect(player)
 	DataService.MarkDirty(player)
@@ -41,6 +45,7 @@ end
 function Service.Start()
 	local function waiting(player: Player)
 		player:SetAttribute("FactionReady", false)
+		player:SetAttribute("FactionChoiceRequired", true)
 		player:SetAttribute("FactionPending", not LaunchConfig.Locked(player))
 		reflect(player)
 	end
@@ -50,7 +55,7 @@ function Service.Start()
   local id = queued[player];queued[player] = nil
   if id then Service.Choose(player,id) end
  end)
- Players.PlayerRemoving:Connect(function(player) queued[player] = nil end)
+ Players.PlayerRemoving:Connect(function(player) queued[player] = nil; chosenThisSession[player] = nil end)
 	for _, player in Players:GetPlayers() do waiting(player) end
 end
 return Service

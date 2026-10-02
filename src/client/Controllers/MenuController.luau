@@ -9,6 +9,7 @@ local Players = game:GetService("Players")
 local InventoryController = require(script.Parent:WaitForChild("InventoryController"))
 local TopbarController = require(script.Parent:WaitForChild("TopbarController"))
 
+local FactionController = require(script.Parent.FactionController)
 local HuntController = require(script.Parent.HuntController)
 local GoalsController = require(script.Parent.GoalsController)
 local FX = require(game:GetService("ReplicatedStorage").Shared.Modules.FX)
@@ -21,6 +22,7 @@ local ITEMS: { { string } } = {
 	{ "Loja", "" },
 	{ "Visual", "" },
 	{ "Perfil", "" },
+	{ "Facção", "" },
 	{ "Conquistas", "" },
 	{ "Duelo", "" },
 	{ "Caçadas", "" },
@@ -33,6 +35,8 @@ local function open(name: string)
 		InventoryController.Toggle()
 	elseif name == "Objetivos" then
 		GoalsController.Toggle()
+	elseif name == "Facção" then
+		FactionController.Toggle()
 	elseif name == "Caçadas" then
 		HuntController.Toggle()
 	else

@@ -489,7 +489,7 @@ local function onInputBegan(input: InputObject, gameProcessed: boolean)
 	local action = Controls.ActionOf(input)
 	if localPlayer:GetAttribute("MenuOpen") == true then return end
 	if action == "Attack" then
-		if InteractionController.TryInteract() then return end
+		if InteractionController.TryInteract(input.UserInputType) then return end
 		CombatController.SetAttackHeld(true)
 	elseif input.UserInputType == ATTACK_TOUCH and CombatController.TouchAttackEnabled then
 		CombatController.SetAttackHeld(true)

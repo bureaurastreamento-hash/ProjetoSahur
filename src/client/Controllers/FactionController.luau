@@ -10,6 +10,7 @@ local gui: ScreenGui
 local status: TextLabel
 local buttons: { TextButton } = {}
 local selected: string? = nil
+local manualOpen = false
 local function text(parent: Instance, value: string, size: number): TextLabel
 	local label = Instance.new("TextLabel")
 	label.BackgroundTransparency, label.TextColor3 = 1, Color3.fromRGB(238, 238, 230)
@@ -17,21 +18,26 @@ local function text(parent: Instance, value: string, size: number): TextLabel
 	label.Text, label.Parent = value, parent
 	return label
 end
-local function refresh(profile: any)
-	local id = if profile then profile.faction else player:GetAttribute("Faction")
-	gui.Enabled = not Config.Valid(id)
-	if gui.Enabled then
-		selected = nil
-		status.Text = "Sua escolha fica salva. As duas facções podem explorar toda a campanha."
-		for _, button in buttons do button.Active = true; button.AutoButtonColor = true end
-	elseif GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(gui) then
-		GuiService.SelectedObject = nil
-	end
+local function refresh(_profile: any)
+ gui.Enabled = (manualOpen or player:GetAttribute("FactionChoiceRequired") == true)
+  and player:GetAttribute("LaunchTitleVisible") ~= true
+ player:SetAttribute("FactionMenuOpen", gui.Enabled)
+ if gui.Enabled then
+  if not selected then status.Text = "Seu progresso fica salvo nas duas facções. Pode trocar pelo Menu → Facção." end
+  for _, button in buttons do button.Active = selected == nil; button.AutoButtonColor = selected == nil end
+ elseif GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(gui) then
+  GuiService.SelectedObject = nil
+ end
+end
+function Controller.Toggle()
+ manualOpen = not manualOpen
+ selected = nil
+ refresh(nil)
 end
 function Controller.Init()
 	gui = Instance.new("ScreenGui")
 	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder, gui.IgnoreGuiInset = "FactionGui", false, 80, true
-	gui.Enabled = true
+	gui.Enabled = false
 	gui.Parent = player:WaitForChild("PlayerGui")
 	local backdrop = Instance.new("Frame")
 	backdrop.Size, backdrop.BackgroundColor3 = UDim2.fromScale(1, 1), Color3.fromRGB(8, 14, 22)
@@ -71,17 +77,27 @@ function Controller.Init()
 		end)
 		table.insert(buttons, button)
 	end
+ local close = Instance.new("TextButton")
+ close.Size, close.Position, close.Text = UDim2.fromOffset(44,44), UDim2.new(1,-56,0,12), "×"
+ close.BackgroundTransparency, close.TextColor3, close.TextSize, close.Parent = 1, Color3.fromRGB(238,193,78), 26, backdrop
+ close.Activated:Connect(function()
+  if player:GetAttribute("FactionChoiceRequired") == true then return end
+  manualOpen, selected = false, nil
+  refresh(nil)
+ end)
 	status = text(panel, "Carregando seu perfil…", 14)
 	status.Size, status.LayoutOrder = UDim2.new(1, -8, 0, 66), 5
 end
 function Controller.Start()
 	Remotes.GetEvent(Remotes.Events.NotifyProfile).OnClientEvent:Connect(refresh)
 	Remotes.GetEvent(Remotes.Events.NotifyFaction).OnClientEvent:Connect(function(event, data)
-		if event == "chosen" then refresh({ faction = data.id })
+		if event == "chosen" then manualOpen, selected = false, nil; refresh(nil)
 		elseif event == "waiting" then status.Text = "Preparando seu personagem… sua escolha será aplicada ao carregar." end
 	end)
-	player:GetAttributeChangedSignal("Faction"):Connect(function() refresh(nil) end)
+ for _, attribute in {"FactionChoiceRequired", "LaunchTitleVisible"} do
+  player:GetAttributeChangedSignal(attribute):Connect(function() refresh(nil) end)
+ end
 	Remotes.GetEvent(Remotes.Events.RequestProfile):FireServer()
-	if Config.Valid(player:GetAttribute("Faction")) then refresh(nil) end
+	refresh(nil)
 end
 return Controller

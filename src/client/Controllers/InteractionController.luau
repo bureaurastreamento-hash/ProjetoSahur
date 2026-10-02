@@ -92,7 +92,8 @@ local function interact(prompt: ProximityPrompt)
 	UIS.MouseBehavior = Enum.MouseBehavior.Default
 end
 -- Chamado pelo CombatController antes de começar socos; não há disputa entre dois listeners.
-function Controller.TryInteract(): boolean
+function Controller.TryInteract(inputType: Enum.UserInputType): boolean
+ if inputType ~= Enum.UserInputType.MouseButton1 then return false end
 	if panel and panel.Visible then return true end
 	local camera = workspace.CurrentCamera
 	if not camera then return false end

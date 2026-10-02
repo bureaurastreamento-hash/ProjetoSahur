@@ -66,7 +66,7 @@ local function dockHud()
 end
 local function refresh()
  dockHud()
- local opened=false
+ local opened=player:GetAttribute("FactionMenuOpen") == true
  for panel in panels do if panel.Parent and panel.Visible and (panel:FindFirstAncestorOfClass("ScreenGui") :: ScreenGui).Enabled then opened=true end end
  player:SetAttribute("MenuOpen",opened)
  if opened then UIS.MouseBehavior=Enum.MouseBehavior.Default end
@@ -122,6 +122,7 @@ function Controller.Start()
  end)
  local camera=workspace.CurrentCamera
  if camera then camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()for panel,width in panels do if panel.Parent then layout(panel,width) end end;refresh()end) end
+ player:GetAttributeChangedSignal("FactionMenuOpen"):Connect(refresh)
  player:GetAttributeChangedSignal("InteractionTargetPresent"):Connect(refresh)
  player:GetAttributeChangedSignal("LaunchTitleVisible"):Connect(refresh)
  player:GetAttributeChangedSignal("PreLaunchLocked"):Connect(refresh)

@@ -15,14 +15,15 @@ test("escolha validada, inicial protegida e persistente sem resetar itens ou cam
 	p.inventory.flecha = 2; p.story.act = 8; p.bounty.points = 123
 	assert(a:GetAttribute("FactionPending") and not faction.Choose(a, "inventada"))
 	assert(faction.Choose(a, "governo") and not a:GetAttribute("FactionPending"))
-	assert(not faction.Choose(a, "fora_da_lei") and p.faction == "governo")
+	assert(faction.Choose(a, "fora_da_lei") and p.faction == "fora_da_lei")
 	assert(p.inventory.flecha == 2 and p.story.act == 8 and p.bounty.points == 123)
 end)
-test("load existente resolve menu, load incompleto não aceita escolha", function()
+test("perfil salvo ainda exige escolha nesta sessão, load incompleto não aceita escolha", function()
 	local rt, a, _, faction = setup()
 	rt.profiles[a].faction = "fora_da_lei"
 	rt.mocks.DataService.ProfileLoaded.Event:Fire(a, rt.profiles[a], false)
-	assert(not a:GetAttribute("FactionPending") and a:GetAttribute("Faction") == "fora_da_lei")
+	assert(a:GetAttribute("FactionPending") and a:GetAttribute("Faction") == "fora_da_lei")
+	assert(faction.Choose(a, "fora_da_lei") and not a:GetAttribute("FactionPending"))
 	rt.profiles[a] = nil; assert(not faction.Choose(a, "governo"))
 end)
 test("Governo ganha honra contra Fora da Lei; bounty antiga fica preservada", function()
@@ -164,4 +165,23 @@ test("escolha enviada antes do load é aplicada uma única vez ao carregar", fun
  rt.mocks.DataService.ProfileLoaded.Event:Fire(a,profile,false)
  assert(profile.faction=="governo")
 end)
-print(("%d testes de facções, contratos e NPCs passaram"):format(count))
+
+test("troca livre preserva ambas reputações e exige nova escolha na reconexão", function()
+ local rt,a,_,faction=setup();local p=rt.profiles[a]
+ p.honor.points=5000;p.bounty.points=8000;p.coins=250;p.inventory.flecha=2;p.story.act=9
+ assert(faction.Choose(a,"governo") and faction.Choose(a,"fora_da_lei") and faction.Choose(a,"governo"))
+ assert(p.honor.points==5000 and p.bounty.points==8000 and p.coins==250 and p.inventory.flecha==2 and p.story.act==9)
+ rt.services.Players.PlayerRemoving:Fire(a)
+ rt.services.Players.PlayerAdded:Fire(a)
+ assert(a:GetAttribute("FactionPending") and a:GetAttribute("FactionChoiceRequired"))
+ assert(faction.Choose(a,"governo") and not a:GetAttribute("FactionPending") and not a:GetAttribute("FactionChoiceRequired"))
+end)
+
+test("clique direito e teclado nunca entram na interação de Mouse1", function()
+ local rt=Runtime.new()
+ local interaction=rt:load("src/client/Controllers/InteractionController")
+ local E=require("@lune/roblox").Enum
+ assert(not interaction.TryInteract(E.UserInputType.MouseButton2))
+ assert(not interaction.TryInteract(E.UserInputType.Keyboard))
+end)
+print(count .. " testes de facções, contratos, NPCs e interação passaram")

@@ -9,7 +9,8 @@ local function configure(item: Instance)
 	item.KeyboardKeyCode = Enum.KeyCode.None
 	item.GamepadKeyCode = Enum.KeyCode.None
 	item.Exclusivity = Enum.ProximityPromptExclusivity.AlwaysShow
-	item.ClickablePrompt = true
+	-- Só o controller envia InputHoldBegin após Mouse1; clique nativo não captura a câmera.
+	item.ClickablePrompt = false
 	-- O cliente exige mira/visibilidade no alvo; o pivô do NPC fica encoberto pelo próprio corpo.
 	item.RequiresLineOfSight = false
 end
